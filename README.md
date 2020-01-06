@@ -30,3 +30,4 @@ Run `UnityXREnable.exe` and follow the instalation. On the third step, make sure
 5. Have either SteamVR or Oculus app running;
 6. Get the puke bucket ready;
 7. Launch the game through `OWML.Launcher.exe`.
+8. If you can't see / do anything in VR, look at your computer screen, there might be some button prompt or something that needs attention but doesn't work in VR yet.
