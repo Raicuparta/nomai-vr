@@ -64,6 +64,10 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.VRModule">
       <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
