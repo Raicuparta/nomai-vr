@@ -1,4 +1,10 @@
-# NomaiVR
+# NomaiVR - Outer Wilds VR Mod
+
+The aim of this mod is to enable VR mode in Outer Wilds, and eventually fix the problems that come with forcing VR in a game that's obviously not prepared for it.
+
+## YOU WILL HAVE A BAD TIME
+
+While the game is playable at a surprisingly decent level, a lot of things range from mildly glitchy to completely broken. Expect low performance, crashes, blue screen, house fires, big explosions visibe from space. Have a look at the [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) to have an idea of some of the stuff that needs fixing.
  
 ## Installing
 
