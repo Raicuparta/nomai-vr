@@ -2,28 +2,51 @@
 using OWML.ModHelper;
 using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR;
+using UnityEngine.SceneManagement;
 
 namespace OWML.NomaiVR
 {
     public class NomaiVR : ModBehaviour
     {
-        private void Start() {
+        void Start() {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            MoveMainMenuToWorldSpace();
+        }
+
+        void OnDisable() {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            MovePauseMenuToWorldSpace();
+        }
+
+        void MoveMainMenuToWorldSpace() {
             Canvas[] canvases = Object.FindObjectsOfType<Canvas>();
 
-            ModHelper.Console.WriteLine("found " + canvases.Length + " canvases.");
             foreach (Canvas canvas in canvases) {
                 canvas.renderMode = RenderMode.WorldSpace;
+                Transform originalParent = canvas.transform.parent;
                 canvas.transform.parent = Object.FindObjectOfType<Camera>().transform;
-                canvas.transform.localPosition = new Vector3(-50, -30, 200);
+                canvas.transform.localPosition = new Vector3(0, 0, 1);
                 canvas.transform.localRotation = new Quaternion(0, 0, 0, 1);
-                canvas.transform.localScale = Vector3.one * 0.2f;
-                canvas.transform.parent = null;
+                canvas.transform.localScale = Vector3.one * 0.0005f;
             }
         }
 
-        private void Update() {
+        void MovePauseMenuToWorldSpace() {
+            GameObject pauseMenu = GameObject.Find("PauseMenu");
+            Canvas[] canvases = pauseMenu.GetComponentsInChildren<Canvas>();
+            Camera playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+
+            foreach (Canvas canvas in canvases) {
+                canvas.renderMode = RenderMode.WorldSpace;
+            }
+
+            pauseMenu.transform.parent = playerCamera.transform;
+            pauseMenu.transform.localPosition = new Vector3(-0.6f, -0.5f, 1);
+            pauseMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
+            pauseMenu.transform.localScale = Vector3.one * 0.001f;
         }
 
     }
