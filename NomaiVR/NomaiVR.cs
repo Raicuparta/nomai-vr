@@ -6,7 +6,7 @@ namespace OWML.NomaiVR
 {
     public class NomaiVR : ModBehaviour
     {
-        public static IModHelper Helper
+        public static IModHelper Helper;
         static NomaiVR _instance;
 
         public static void Log(string s) {
@@ -14,9 +14,10 @@ namespace OWML.NomaiVR
         }
 
         void Start() {
+            _instance = this;
+
             Log("Start Main");
 
-            _instance = this;
             Helper = ModHelper;
 
             // Add all modules here.
