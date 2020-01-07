@@ -9,9 +9,9 @@ namespace OWML.NomaiVR
 
         // List all the canvas elements that need to be moved to world space during gameplay.
         static readonly CanvasInfo[] _canvasInfos = {
-            new CanvasInfo("PauseMenu", new Vector3(-0.6f, -0.5f, 1)),
+            new CanvasInfo("PauseMenu", 0.0005f),
             new CanvasInfo("DialogueCanvas"),
-            new CanvasInfo("ScreenPromptCanvas"),
+            new CanvasInfo("ScreenPromptCanvas", 0.0015f),
         };
 
         void Start() {
@@ -33,20 +33,6 @@ namespace OWML.NomaiVR
             FixGameCanvases();
         }
 
-        void MoveAllCanvasesToWorldSpace() {
-            Canvas[] canvases = Object.FindObjectsOfType<Canvas>();
-
-            foreach (Canvas canvas in canvases) {
-                NomaiVR.Log("found " + canvas.name);
-                canvas.renderMode = RenderMode.WorldSpace;
-                Transform originalParent = canvas.transform.parent;
-                canvas.transform.parent = Object.FindObjectOfType<Camera>().transform;
-                canvas.transform.localPosition = new Vector3(0, 0, 1);
-                canvas.transform.localRotation = new Quaternion(0, 0, 0, 1);
-                canvas.transform.localScale = Vector3.one * 0.0005f;
-            }
-        }
-
         void MoveCanvasToWorldSpace(CanvasInfo canvasInfo) {
             GameObject canvas = GameObject.Find(canvasInfo.name);
 
@@ -60,16 +46,19 @@ namespace OWML.NomaiVR
 
             foreach (Canvas subCanvas in subCanvases) {
                 subCanvas.renderMode = RenderMode.WorldSpace;
+                subCanvas.transform.localPosition = Vector3.zero;
+                subCanvas.transform.localRotation = Quaternion.identity;
+                subCanvas.transform.localScale = Vector3.one;
             }
 
             canvas.transform.parent = _camera.transform;
             canvas.transform.localPosition = canvasInfo.offset;
             canvas.transform.localEulerAngles = new Vector3(0, 0, 0);
-            canvas.transform.localScale = Vector3.one * 0.001f;
+            canvas.transform.localScale = Vector3.one * canvasInfo.scale;
         }
 
         void FixMainMenuCanvas() {
-            MoveCanvasToWorldSpace(new CanvasInfo("TitleCanvas"));
+            MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
         }
 
         void FixGameCanvases() {
@@ -81,14 +70,19 @@ namespace OWML.NomaiVR
         {
             public string name;
             public Vector3 offset;
+            public float scale;
+            const float _defaultScale = 0.001f;
 
-            public CanvasInfo(string _name, Vector3 _offset) {
+            public CanvasInfo(string _name, Vector3 _offset, float _scale = _defaultScale) {
                 name = _name;
                 offset = _offset;
+                scale = _scale;
             }
-            public CanvasInfo(string _name) {
+
+            public CanvasInfo(string _name, float _scale = _defaultScale) {
                 name = _name;
                 offset = new Vector3(0, 0, 1);
+                scale = _scale;
             }
         }
     }
