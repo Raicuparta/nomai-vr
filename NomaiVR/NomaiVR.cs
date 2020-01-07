@@ -13,7 +13,7 @@ namespace OWML.NomaiVR
         Rigidbody _playerBody;
         Camera _mainCamera;
         GameObject _cameraParent;
-        Vector3 _headPosition;
+        Transform _playerHead;
         bool _isAwake;
 
         Vector3 _prevCameraPosition;
@@ -48,7 +48,7 @@ namespace OWML.NomaiVR
                 playerCameraController.enabled = false;
             }
 
-            _prevCameraPosition = _playerBody.transform.position - _mainCamera.transform.position;
+            _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
 
             //_initialAngles = _mainCamera.transform.eulerAngles;
         }
@@ -60,8 +60,8 @@ namespace OWML.NomaiVR
 
             _playerBody = GameObject.Find("Player_Body").GetComponent<Rigidbody>();
             //_playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
-            _headPosition = GameObject.FindObjectOfType<ToolModeUI>().transform.position;
-            Vector3 movement = _headPosition - _mainCamera.transform.position;
+            _playerHead = GameObject.FindObjectOfType<ToolModeUI>().transform;
+            Vector3 movement = _playerHead.position - _mainCamera.transform.position;
             _cameraParent.transform.position += movement;
             ModHelper.Console.WriteLine("movement " + movement);
         }
@@ -127,14 +127,14 @@ namespace OWML.NomaiVR
                 //_cameraParent.transform.eulerAngles -= Vector3.up * yAngleOffset;
                 //_playerCamera.transform.localEulerAngles = _playerBody.transform.localEulerAngles;
 
-                Vector3 movement = _prevCameraPosition - (_playerBody.transform.position - _mainCamera.transform.position);
+                Vector3 movement = _prevCameraPosition - (_playerHead.position - _mainCamera.transform.position);
                 _playerBody.transform.localPosition += movement;
 
 
 
                 //_playerBody.MovePosition(_playerBody.transform.localPosition + movement);
 
-                _prevCameraPosition = _playerBody.transform.position - _mainCamera.transform.position;
+                _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
             }
 
             if (Input.GetKeyDown(KeyCode.P)) {
