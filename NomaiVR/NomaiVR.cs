@@ -128,7 +128,8 @@ namespace OWML.NomaiVR
                 //_playerCamera.transform.localEulerAngles = _playerBody.transform.localEulerAngles;
 
                 Vector3 movement = _prevCameraPosition - (_playerHead.position - _mainCamera.transform.position);
-                _playerBody.transform.localPosition += movement;
+                _playerBody.transform.position += movement;
+                _cameraParent.transform.position -= movement;
 
 
 
