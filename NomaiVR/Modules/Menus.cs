@@ -5,11 +5,23 @@ namespace OWML.NomaiVR
 {
     public class Menus : MonoBehaviour
     {
+        Camera _camera;
+
+        // List all the canvas elements that need to be moved to world space during gameplay.
+        static readonly CanvasInfo[] _canvasInfos = {
+            new CanvasInfo("PauseMenu", 0.0005f),
+            new CanvasInfo("DialogueCanvas"),
+            new CanvasInfo("ScreenPromptCanvas", 0.0015f),
+        };
+
         void Start() {
             NomaiVR.Log("Start Menus");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
-            MoveAllCanvasesToWorldSpace();
+
+            // Main menu camera
+            _camera = GameObject.FindObjectOfType<Camera>();
+            FixMainMenuCanvas();
         }
 
         void OnDisable() {
@@ -17,37 +29,61 @@ namespace OWML.NomaiVR
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            MovePauseMenuToWorldSpace();
+            _camera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+            FixGameCanvases();
         }
 
-        void MoveAllCanvasesToWorldSpace() {
-            Canvas[] canvases = Object.FindObjectsOfType<Canvas>();
+        void MoveCanvasToWorldSpace(CanvasInfo canvasInfo) {
+            GameObject canvas = GameObject.Find(canvasInfo.name);
 
-            foreach (Canvas canvas in canvases) {
-                canvas.renderMode = RenderMode.WorldSpace;
-                Transform originalParent = canvas.transform.parent;
-                canvas.transform.parent = Object.FindObjectOfType<Camera>().transform;
-                canvas.transform.localPosition = new Vector3(0, 0, 1);
-                canvas.transform.localRotation = new Quaternion(0, 0, 0, 1);
-                canvas.transform.localScale = Vector3.one * 0.0005f;
-            }
-        }
-
-        void MovePauseMenuToWorldSpace() {
-            GameObject pauseMenu = GameObject.Find("PauseMenu");
-            NomaiVR.Helper.Console.WriteLine("pauseMenu: " + pauseMenu.name);
-            Canvas[] canvases = pauseMenu.GetComponentsInChildren<Canvas>();
-            Camera playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
-
-            foreach (Canvas canvas in canvases) {
-                canvas.renderMode = RenderMode.WorldSpace;
+            if (canvas == null) {
+                NomaiVR.Log("Couldn't find canvas with name: " + canvasInfo.name);
+                return;
             }
 
-            pauseMenu.transform.parent = playerCamera.transform;
-            pauseMenu.transform.localPosition = new Vector3(-0.6f, -0.5f, 1);
-            pauseMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
-            pauseMenu.transform.localScale = Vector3.one * 0.001f;
+            Canvas[] subCanvases = canvas.GetComponentsInChildren<Canvas>();
+            NomaiVR.Log("subcanvases: " + subCanvases.Length);
+
+            foreach (Canvas subCanvas in subCanvases) {
+                subCanvas.renderMode = RenderMode.WorldSpace;
+                subCanvas.transform.localPosition = Vector3.zero;
+                subCanvas.transform.localRotation = Quaternion.identity;
+                subCanvas.transform.localScale = Vector3.one;
+            }
+
+            canvas.transform.parent = _camera.transform;
+            canvas.transform.localPosition = canvasInfo.offset;
+            canvas.transform.localEulerAngles = new Vector3(0, 0, 0);
+            canvas.transform.localScale = Vector3.one * canvasInfo.scale;
         }
 
+        void FixMainMenuCanvas() {
+            MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
+        }
+
+        void FixGameCanvases() {
+            foreach (CanvasInfo canvasInfo in _canvasInfos) {
+                MoveCanvasToWorldSpace(canvasInfo);
+            }
+        }
+        protected class CanvasInfo
+        {
+            public string name;
+            public Vector3 offset;
+            public float scale;
+            const float _defaultScale = 0.001f;
+
+            public CanvasInfo(string _name, Vector3 _offset, float _scale = _defaultScale) {
+                name = _name;
+                offset = _offset;
+                scale = _scale;
+            }
+
+            public CanvasInfo(string _name, float _scale = _defaultScale) {
+                name = _name;
+                offset = new Vector3(0, 0, 1);
+                scale = _scale;
+            }
+        }
     }
 }
