@@ -53,6 +53,9 @@ namespace OWML.NomaiVR
             // Set initial camera position to player head.
             Vector3 movement = _playerHead.position - _mainCamera.transform.position;
             _cameraParent.transform.position += movement;
+
+            // Move helmet forward so it is easier to look at the HUD in VR
+            FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
         }
 
         void OnDisable() {
