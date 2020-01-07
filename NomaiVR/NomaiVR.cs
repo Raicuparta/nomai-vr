@@ -15,19 +15,14 @@ namespace OWML.NomaiVR
         GameObject _cameraParent;
         Transform _playerHead;
         bool _isAwake;
-
         Vector3 _prevCameraPosition;
 
         void Start() {
-            ModHelper.Console.WriteLine("Rai Mod Start");
-
             SceneManager.sceneLoaded += OnSceneLoaded;
-            MoveMainMenuToWorldSpace();
+            MoveAllCanvasesToWorldSpace();
 
             ModHelper.Events.Subscribe<Flashlight>(Events.AfterStart);
             ModHelper.Events.OnEvent += OnWakeUp;
-
-            updateMainCamera();
         }
 
         private void updateMainCamera() {
@@ -47,27 +42,17 @@ namespace OWML.NomaiVR
             if (playerCameraController) {
                 playerCameraController.enabled = false;
             }
-
-            _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
-
-            //_initialAngles = _mainCamera.transform.eulerAngles;
         }
 
         private void OnWakeUp(MonoBehaviour behaviour, Events ev) {
-            ModHelper.Console.WriteLine("Wake up");
-
             _isAwake = true;
 
             _playerBody = GameObject.Find("Player_Body").GetComponent<Rigidbody>();
-            //_playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
-            _playerHead = GameObject.FindObjectOfType<ToolModeUI>().transform;
+            _playerHead = FindObjectOfType<ToolModeUI>().transform;
+
+            // Set initial camera position to player head.
             Vector3 movement = _playerHead.position - _mainCamera.transform.position;
             _cameraParent.transform.position += movement;
-            ModHelper.Console.WriteLine("movement " + movement);
-        }
-
-        void debug () {
-            //ModHelper.Console.WriteLine(_playerCamera.transform.eulerAngles.ToString());
         }
 
         void OnDisable() {
@@ -75,12 +60,11 @@ namespace OWML.NomaiVR
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            ModHelper.Console.WriteLine("Scene Loaded: " + scene.name);
-            updateMainCamera();
             MovePauseMenuToWorldSpace();
+            updateMainCamera();
         }
 
-        void MoveMainMenuToWorldSpace() {
+        void MoveAllCanvasesToWorldSpace() {
             Canvas[] canvases = Object.FindObjectsOfType<Canvas>();
 
             foreach (Canvas canvas in canvases) {
@@ -95,6 +79,7 @@ namespace OWML.NomaiVR
 
         void MovePauseMenuToWorldSpace() {
             GameObject pauseMenu = GameObject.Find("PauseMenu");
+            ModHelper.Console.WriteLine("pauseMenu: " + pauseMenu.name);
             Canvas[] canvases = pauseMenu.GetComponentsInChildren<Canvas>();
             Camera playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
 
@@ -108,42 +93,22 @@ namespace OWML.NomaiVR
             pauseMenu.transform.localScale = Vector3.one * 0.001f;
         }
 
+        void MovePlayerBodyToCamera() {
+            // Move player to camera position.
+            Vector3 movement = _prevCameraPosition - (_playerHead.position - _mainCamera.transform.position);
+            _playerBody.transform.localPosition += movement;
+
+            // Since camera is a child of player body, we need to adjust it now.
+            Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
+            cameraMovement.y = 0;
+            _cameraParent.transform.localPosition -= cameraMovement;
+
+            _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
+        }
+
         void Update() {
             if (_isAwake) {
-                Vector3 playerAngles = _playerBody.transform.eulerAngles;
-                Vector3 mainAngles = _mainCamera.transform.eulerAngles;
-                //Vector3 parentAngles = _cameraParent.transform.eulerAngles;
-
-                //float yAngleOffset = mainAngles.y - _initialAngles.y;
-
-                //Vector3 newAngles = new Vector3(playerAngles.x, playerAngles.x + yAngleOffset, playerAngles.z);
-
-
-                //_playerBody.MoveRotation(Quaternion.Euler(newAngles));
-                //_playerBody.transform.eulerAngles = newAngles;
-                //_playerBody.transform.RotateAround(_playerBody.position, _playerBody.transform.up, 0.1f);
-                //_playerBody.transform.Rotate(_playerBody.transform.up, 0.1f);
-                //_playerBody.MoveRotation(Quaternion.LookRotation(_mainCamera.transform.forward, _playerBody.transform.up));
-                //_cameraParent.transform.eulerAngles -= Vector3.up * yAngleOffset;
-                //_playerCamera.transform.localEulerAngles = _playerBody.transform.localEulerAngles;
-
-                Vector3 movement = _prevCameraPosition - (_playerHead.position - _mainCamera.transform.position);
-                _playerBody.transform.localPosition += movement;
-                Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
-                cameraMovement.y = 0;
-                _cameraParent.transform.localPosition -= cameraMovement;
-
-
-
-                //_playerBody.MovePosition(_playerBody.transform.localPosition + movement);
-
-                _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
-            }
-
-            if (Input.GetKeyDown(KeyCode.P)) {
-                _isAwake = !_isAwake;
-                ModHelper.Console.WriteLine("_prevCameraPosition " + _prevCameraPosition);
-                ModHelper.Console.WriteLine("_mainCamera.transform.localPosition " + _mainCamera.transform.localPosition);
+                MovePlayerBodyToCamera();
             }
         }
 
