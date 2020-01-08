@@ -22,6 +22,26 @@ namespace OWML.NomaiVR
             NomaiVR.Helper.Events.OnEvent += OnWakeUp;
         }
 
+        private void OnWakeUp(MonoBehaviour behaviour, Events ev) {
+            _isAwake = true;
+
+            _playerBody = GameObject.Find("Player_Body").GetComponent<Rigidbody>();
+            _playerHead = FindObjectOfType<ToolModeUI>().transform;
+
+            MoveCameraToPlayerHead();
+
+            // Move helmet forward so it is easier to look at the HUD in VR
+            FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
+        }
+
+        void OnDisable() {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            updateMainCamera();
+        }
+
         private void updateMainCamera() {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             NomaiVR.Helper.Console.WriteLine("Main camera: " + _mainCamera.name);
@@ -41,26 +61,16 @@ namespace OWML.NomaiVR
             }
         }
 
-        private void OnWakeUp(MonoBehaviour behaviour, Events ev) {
-            _isAwake = true;
-
-            _playerBody = GameObject.Find("Player_Body").GetComponent<Rigidbody>();
-            _playerHead = FindObjectOfType<ToolModeUI>().transform;
-
-            // Set initial camera position to player head.
+        void MoveCameraToPlayerHead(bool ignoreVerticalAxis = false) {
             Vector3 movement = _playerHead.position - _mainCamera.transform.position;
-            _cameraParent.transform.position += movement;
+            float localY = _cameraParent.transform.localPosition.y;
+            Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
 
-            // Move helmet forward so it is easier to look at the HUD in VR
-            FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
-        }
+            if (ignoreVerticalAxis) {
+                cameraMovement.y = 0;
+            }
 
-        void OnDisable() {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            updateMainCamera();
+            _cameraParent.transform.localPosition += cameraMovement;
         }
 
         void MovePlayerBodyToCamera() {
@@ -68,11 +78,16 @@ namespace OWML.NomaiVR
             Vector3 movement = _prevCameraPosition - (_playerHead.position - _mainCamera.transform.position);
             _playerBody.transform.localPosition += movement;
 
-            // Since camera is a child of player body, we need to adjust it now.
-            Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
-            cameraMovement.y = 0;
-            _cameraParent.transform.localPosition -= cameraMovement;
+            // Since camera is a child of player body, it also moves when we move the camera.
+            // So we need to move the camera to the player's head again.
+            MoveCameraToPlayerHead(true);
+            //Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
+            //cameraMovement.y = 0;
+            //_cameraParent.transform.localPosition -= cameraMovement;
 
+            //Vector3 cameraMovement = _playerHead.position - _mainCamera.transform.position;
+            //_cameraParent.transform.position += cameraMovement;
+            
             _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
         }
 
