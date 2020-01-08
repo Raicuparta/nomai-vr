@@ -81,12 +81,6 @@ namespace OWML.NomaiVR
             // Since camera is a child of player body, it also moves when we move the camera.
             // So we need to move the camera to the player's head again.
             MoveCameraToPlayerHead(true);
-            //Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
-            //cameraMovement.y = 0;
-            //_cameraParent.transform.localPosition -= cameraMovement;
-
-            //Vector3 cameraMovement = _playerHead.position - _mainCamera.transform.position;
-            //_cameraParent.transform.position += cameraMovement;
             
             _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
         }
