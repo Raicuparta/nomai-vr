@@ -1,6 +1,9 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
 using OWML.ModHelper.Events;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.SpatialTracking;
 
 namespace OWML.NomaiVR
 {
@@ -23,6 +26,11 @@ namespace OWML.NomaiVR
             // Add all modules here.
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<PlayerBodyPosition>();
+        }
+
+        void Update() {
+            //_transform.
+            //_obj.transform.parent = null;
         }
     }
 }
