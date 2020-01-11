@@ -96,7 +96,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetPath)" "C:\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR\NomaiVR.dll"</PostBuildEvent>
+    <PostBuildEvent>copy /y "$(TargetPath)" "C:\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR-7-0-3-1578741349\NomaiVR.dll"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

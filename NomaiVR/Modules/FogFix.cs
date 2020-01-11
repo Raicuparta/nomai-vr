@@ -1,9 +1,26 @@
 ﻿using OWML.Common;
 using UnityEngine;
 using OWML.ModHelper.Events;
+using UnityEngine.XR;
+using System.Reflection;
 
 namespace Raicuparta.NomaiVR
 {
+    internal static class Patches
+    {
+        static bool _isEvenFrame = true;
+
+        static bool PatchResetFog() {
+            _isEvenFrame = !_isEvenFrame;
+            return _isEvenFrame;
+        }
+        static bool PatchUpdateFog() {
+            return _isEvenFrame;
+        }
+        static bool PatchOverrideFog() {
+            return !_isEvenFrame;
+        }
+    }
     public class FogFix : MonoBehaviour
     {
         OWEvent<OWCamera> _onAnyPostRender;
@@ -12,9 +29,6 @@ namespace Raicuparta.NomaiVR
         int _after;
 
         private void Start() {
-            NomaiVR.Helper.Events.Subscribe<PlanetaryFogController>(Events.BeforeEnable);
-            NomaiVR.Helper.Events.Subscribe<PlanetaryFogController>(Events.AfterEnable);
-
             //NomaiVR.Helper.Events.Subscribe<FogOverrideVolume>(Events.AfterAwake);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
 
@@ -22,12 +36,16 @@ namespace Raicuparta.NomaiVR
             //NomaiVR.Helper.HarmonyHelper.EmptyMethod<PlanetaryFogController>("OnEnable");
 
 
-            //NomaiVR.Helper.HarmonyHelper.EmptyMethod<OWCamera>("OnPostRender");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<OWCamera>("OnPostRender", typeof(void), "Patch");
-        }
+            //NomaiVR.Helper.HarmonyHelper.EmptyMethod<PlanetaryFogController>("ResetFogSettings");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<PlanetaryFogController>("ResetFogSettings", typeof(Patches), "PatchResetFog");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<PlanetaryFogController>("UpdateFogSettings", typeof(Patches), "PatchUpdateFog");
 
-        static void Patch() {
-            NomaiVR.Log("Post render");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<FogOverrideVolume>("OverrideFogSettings", typeof(Patches), "PatchOverrideFog");
+            //NomaiVR.Helper.HarmonyHelper.AddPrefix<FogOverrideVolume>("UpdateFogSettings", typeof(Patches), "PatchUpdateFog");
+            //NomaiVR.Helper.HarmonyHelper.Transpile<OWCamera>("OnPostRender", typeof(Patches), "Patch");
+
+            //Camera.main.stereoTargetEye = StereoTargetEyeMask.None;
+            //Camera.main.targetDisplay = 2;
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
