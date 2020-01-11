@@ -84,6 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\FogFix.cs" />
     <Compile Include="Modules\Menus.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
     <Compile Include="NomaiVR.cs" />

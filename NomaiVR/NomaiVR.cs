@@ -2,7 +2,7 @@
 using OWML.ModHelper;
 using OWML.ModHelper.Events;
 
-namespace OWML.NomaiVR
+namespace Raicuparta.NomaiVR
 {
     public class NomaiVR : ModBehaviour
     {
@@ -22,6 +22,7 @@ namespace OWML.NomaiVR
 
             // Add all modules here.
             gameObject.AddComponent<Menus>();
+            gameObject.AddComponent<FogFix>();
             gameObject.AddComponent<PlayerBodyPosition>();
         }
     }
