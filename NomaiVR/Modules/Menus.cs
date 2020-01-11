@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace OWML.NomaiVR
+namespace NomaiVR
 {
     public class Menus : MonoBehaviour
     {

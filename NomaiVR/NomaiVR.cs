@@ -2,7 +2,7 @@
 using OWML.ModHelper;
 using OWML.ModHelper.Events;
 
-namespace OWML.NomaiVR
+namespace NomaiVR
 {
     public class NomaiVR : ModBehaviour
     {
