@@ -48,10 +48,12 @@ namespace NomaiVR
 
             //Make an empty parent object for moving the camera around.
             _cameraParent = new GameObject();
-            _cameraParent.transform.parent = _mainCamera.transform.parent;
-            _cameraParent.transform.localPosition = Vector3.zero;
-            _cameraParent.transform.localRotation = Quaternion.identity;
+            //_cameraParent.transform.parent = _mainCamera.transform.parent;
+            _cameraParent.transform.position = _mainCamera.transform.position;
+            _cameraParent.transform.rotation = _mainCamera.transform.rotation;
             _mainCamera.transform.parent = _cameraParent.transform;
+
+            _prevCameraPosition = _cameraParent.transform.position - _mainCamera.transform.position;
 
             // This component is messing with our ability to read the VR camera's rotation.
             // I'm disabling it even though I have no clue what it does ¯\_(ツ)_/¯
@@ -66,23 +68,25 @@ namespace NomaiVR
             float localY = _cameraParent.transform.localPosition.y;
             Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
 
-            if (ignoreVerticalAxis) {
-                cameraMovement.y = 0;
-            }
+            //if (ignoreVerticalAxis) {
+            //    cameraMovement.y = 0;
+            //}
 
-            _cameraParent.transform.localPosition += cameraMovement;
+            _cameraParent.transform.position += movement;
         }
 
         void MovePlayerBodyToCamera() {
+
+            MoveCameraToPlayerHead(true);
+
             // Move player to camera position.
-            Vector3 movement = _prevCameraPosition - (_playerHead.position - _mainCamera.transform.position);
-            _playerBody.transform.localPosition += movement;
+            Vector3 movement = _prevCameraPosition - (_cameraParent.transform.position - _mainCamera.transform.position);
+            _playerBody.transform.position += movement;
 
             // Since camera is a child of player body, it also moves when we move the camera.
             // So we need to move the camera to the player's head again.
-            MoveCameraToPlayerHead(true);
             
-            _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
+            _prevCameraPosition = _cameraParent.transform.position - _mainCamera.transform.position;
         }
 
         void Update() {
