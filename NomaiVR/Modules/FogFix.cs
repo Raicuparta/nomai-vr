@@ -4,7 +4,7 @@ using OWML.ModHelper.Events;
 using UnityEngine.XR;
 using System.Reflection;
 
-namespace Raicuparta.NomaiVR
+namespace NomaiVR
 {
     public class FogFix : MonoBehaviour
     {
