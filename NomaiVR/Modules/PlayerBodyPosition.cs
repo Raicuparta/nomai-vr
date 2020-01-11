@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Raicuparta.NomaiVR
+namespace NomaiVR
 {
     public class PlayerBodyPosition : MonoBehaviour
     {
