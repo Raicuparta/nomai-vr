@@ -23,7 +23,7 @@ namespace Raicuparta.NomaiVR
             // Add all modules here.
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<FogFix>();
-            gameObject.AddComponent<PlayerBodyPosition>();
+            //gameObject.AddComponent<PlayerBodyPosition>();
         }
     }
 }
