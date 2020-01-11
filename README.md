@@ -42,4 +42,4 @@ If your desired contribution doesn't fit one of the existing issues, create an i
 
 ## Help / Discuss development / Tell me about your day
 
-[Join the Outer Wilds Discord](https://discord.gg/dg8A7m), we have a nice `#modding` channel where you can discuss all types of things.
+[Join the Outer Wilds Discord](https://discord.gg/Sftcc9Z), we have a nice `#modding` channel where you can discuss all types of things.
