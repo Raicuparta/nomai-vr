@@ -12,6 +12,10 @@ namespace Raicuparta.NomaiVR
             new CanvasInfo("PauseMenu", 0.0005f),
             new CanvasInfo("DialogueCanvas"),
             new CanvasInfo("ScreenPromptCanvas", 0.0015f),
+            
+            // This is the canvas that renders the lights in Dark Bramble.
+            // Not sure how to make it look nice in VR.
+            // new CanvasInfo("FogLightCanvas"),
         };
 
         void Start() {
