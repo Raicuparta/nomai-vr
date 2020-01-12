@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SpatialTracking;
 
-namespace OWML.NomaiVR
+namespace NomaiVR
 {
     public class NomaiVR : ModBehaviour
     {
@@ -25,6 +25,7 @@ namespace OWML.NomaiVR
 
             // Add all modules here.
             gameObject.AddComponent<Menus>();
+            gameObject.AddComponent<FogFix>();
             gameObject.AddComponent<PlayerBodyPosition>();
         }
 

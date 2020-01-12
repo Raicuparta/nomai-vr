@@ -1,41 +1,28 @@
-![NomaiVR](logo.png)
-
 # NomaiVR - Outer Wilds VR Mod
+
+![NomaiVR](logo.png)
 
 The aim of this mod is to enable VR mode in Outer Wilds, and eventually fix the problems that come with forcing VR in a game that's obviously not prepared for it.
 
 ## YOU WILL HAVE A BAD TIME
 
 While the game is playable at a surprisingly decent level, a lot of things range from mildly glitchy to completely broken. Expect low performance, crashes, blue screen, house fires, big explosions visibe from space. Have a look at the [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) to have an idea of some of the stuff that needs fixing.
- 
+
 ## Installation
 
-[Download the latest release](https://github.com/Raicuparta/NomaiVR/releases/latest). There should be two directories and one `exe` file inside. Extract it somewhere (doesn't matter where, you'll move them later).
+Easy way:
 
-Before moving on to the next sections, find out where your game directory is. If you bought through Epic, it should be `C:\Program Files\Epic Games\OuterWilds`.
+* [Follow the instructions to install Vortex and the Outer Wilds Mod Manager](https://www.nexusmods.com/outerwilds/mods/1);
+* [Install the mod through Vortex](https://www.nexusmods.com/outerwilds/mods/7);
+* Run the game through Vortex.
 
-Now to install everything:
+Manually:
 
-### Adding the OpenVR and Oculus libraries
-
-Move the contents of the `Plugins` directory from the mod to `[Outer Wilds]\OuterWilds_Data\Plugins` where `[Outer Wilds]` is the directory mentioned before.
-
-### Enabling VR mode
-
-Run `UnityXREnable.exe` and follow the instalation. On the third step, make sure to select the base game's directory, as mentioned before. One file will be patched, and a backup of it will be made in the same directory. You can delete the `.exe` file if you want now.
-
-### Installing the VR fixes mod with OWML
-
-(If you're already familiar with OWML just install the mod normally and skip to 4.)
-
-1. Download [Outer Worlds Mod Loader](https://github.com/amazingalek/owml/releases/latest);
-2. Extract it anywhere;
-3. From the NomaiVR mod files, move `Mods/NomaiVR` to the Mods directory of `OWML`;
-4. Make sure your VR headset is enabled and ready (not on standby);
-5. Have either SteamVR or Oculus app running;
-6. Get the puke bucket ready;
-7. Launch the game through `OWML.Launcher.exe`.
-8. If you can't see / do anything in VR, look at your computer screen, there might be some button prompt or something that needs attention but doesn't work in VR yet.
+* [Download OWML](https://github.com/amazingalek/owml/releases);
+* [Follow the instalation instructions](https://github.com/amazingalek/owml#installation);
+* [Download a release](https://github.com/Raicuparta/NomaiVR/releases);
+* Extract the `NomaiVR` directory to the `OWML/Mods` directory.
+* Run the game with `OWML.Launcher.exe`.
 
 ## Contributing
 
@@ -43,18 +30,23 @@ Look at through [currently open issues](https://github.com/Raicuparta/NomaiVR/is
 
 If your desired contribution doesn't fit one of the existing issues, create an issue first so we can discuss it.
 
-## Development
+## Development Setup
 
-- [Get OWML](https://github.com/amazingalek/owml) (follow instructions there);
-- Download and install the latest release of NomaiVR as per the installation instructions;
-- Clone NomaiVR's source;
-- Open the project solution file `NomaiVR.sln` in Visual Studio;
-- Fix the missing references (`Assembly-CSharp` and all the `UnityEngine` dlls) adding new references pointing to the same dlls in your game's directory, specifically in `Outer Wilds\OuterWilds_Data\Managed`;
-- (Optional) Fix the post-build step under build settings, so you don't have to move the built dll to the mods folder every time. Make sure it points to the same place where you installed NomaiVR;
-- Build the project;
-- Run the game through OWML;
-- Confirm that NomaiVR is running.
+* [Install OWML](https://github.com/amazingalek/owml#installation) in the game's directory (should be something like `C:\Program Files\Epic Games\OuterWilds\OWML`);
+* If you already have NomaiVR installed, remove it from the `OWML/Mods` directory;
+* Clone NomaiVR's source;
+* Open the project solution file `NomaiVR.sln` in Visual Studio;
+* On the Solution Explorer (usually the right side panel), under the project-name (NomaiVR), double click "Properties";
+* Go to "Debug" and change (if needed) "Working Directory" to **OWML's directory** (no need to change anything else);
+* In the top menu go to "Project" > "Unload Project", and then "Project" > "Reload Project".
+
+After doing this, the project references should be working. When you build the solution, the dll and json files will be copied to `OWML/NomaiVR`, so you can start the game and test right away. Pressing "Start" on Visual Studio will start the game through OWML.
+
+If for some reason none of this is working, you might have to set everything manually:
+
+* To fix the build paths and automatically copy the files to OWML, edit the "Build Events" in the properties menu.
+* To fix the references, right-click "References" in the Solution Explorer > "Add Reference", and add all the missing DLLs (references with yello warning icon).
 
 ## Help / Discuss development / Tell me about your day
 
-[Join the Outer Wilds Discord](https://discord.gg/dg8A7m), we have a nice `#modding` channel where you can discuss all types of things.
+[Join the Outer Wilds Discord](https://discord.gg/Sftcc9Z), we have a nice `#modding` channel where you can discuss all types of things.

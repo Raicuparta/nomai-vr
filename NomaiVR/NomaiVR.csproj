@@ -32,28 +32,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="NAudio-Unity, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.18\lib\net35\NAudio-Unity.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\NAudio-Unity.dll</HintPath>
     </Reference>
     <Reference Include="OWML, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.18\lib\net35\OWML.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.dll</HintPath>
     </Reference>
     <Reference Include="OWML.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.18\lib\net35\OWML.Common.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.Common.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.18\lib\net35\OWML.ModHelper.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper.Assets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.18\lib\net35\OWML.ModHelper.Assets.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.Assets.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper.Events, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.18\lib\net35\OWML.ModHelper.Events.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.Events.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper.Menus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.18\lib\net35\OWML.ModHelper.Menus.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.Menus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,43 +62,51 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule">
-      <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\FogFix.cs" />
     <Compile Include="Modules\Menus.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="default-config.json" />
     <None Include="manifest.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetPath)" "C:\Users\ricar\Downloads\OWML (2)\Mods\NomaiVR\NomaiVR.dll"</PostBuildEvent>
+    <PostBuildEvent>md "$(StartWorkingDirectory)\Mods\NomaiVR"
+
+copy /y "$(TargetPath)" "$(StartWorkingDirectory)\Mods\NomaiVR\NomaiVR.dll"
+
+copy /y "$(ProjectDir)\default-config.json" "$(StartWorkingDirectory)\Mods\NomaiVR\default-config.json"
+
+copy /y "$(ProjectDir)\manifest.json" "$(StartWorkingDirectory)\Mods\NomaiVR\manifest.json"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

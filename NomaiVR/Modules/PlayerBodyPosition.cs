@@ -1,13 +1,14 @@
 ﻿using OWML.Common;
+using OWML.ModHelper.Events;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SpatialTracking;
 
-namespace OWML.NomaiVR
+namespace NomaiVR
 {
     public class PlayerBodyPosition : MonoBehaviour
     {
-        Rigidbody _playerBody;
+        PlayerCharacterController _playerBody;
         Camera _mainCamera;
         GameObject _cameraParent;
         Transform _playerHead;
@@ -26,7 +27,9 @@ namespace OWML.NomaiVR
         private void OnWakeUp(MonoBehaviour behaviour, Events ev) {
             _isAwake = true;
 
-            _playerBody = GameObject.Find("Player_Body").GetComponent<Rigidbody>();
+            _playerBody = GameObject.Find("Player_Body").GetComponent<PlayerCharacterController>();
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+
             _playerHead = FindObjectOfType<ToolModeUI>().transform;
 
             MoveCameraToPlayerHead();
@@ -78,8 +81,8 @@ namespace OWML.NomaiVR
             //Make an empty parent object for moving the camera around.
             _cameraParent = new GameObject();
             _cameraParent.transform.parent = _mainCamera.transform.parent;
-            _cameraParent.transform.localPosition = _mainCamera.transform.localPosition;
-            _cameraParent.transform.localRotation = _mainCamera.transform.localRotation;
+            _cameraParent.transform.position = _mainCamera.transform.position;
+            _cameraParent.transform.rotation = _mainCamera.transform.rotation;
             _mainCamera.transform.parent = _cameraParent.transform;
             _mainCamera.transform.localPosition = Vector3.zero;
             _mainCamera.transform.localRotation = Quaternion.identity;
@@ -92,33 +95,41 @@ namespace OWML.NomaiVR
             }
         }
 
-        void MoveCameraToPlayerHead(bool ignoreVerticalAxis = false) {
+        void MoveCameraToPlayerHead() {
             Vector3 movement = _playerHead.position - _mainCamera.transform.position;
-            float localY = _cameraParent.transform.localPosition.y;
-            Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
-
-            if (ignoreVerticalAxis) {
-                cameraMovement.y = 0;
-            }
-
-            _cameraParent.transform.localPosition += cameraMovement;
+            _cameraParent.transform.position += movement;
         }
 
         void MovePlayerBodyToCamera() {
             // Move player to camera position.
-            Vector3 movement = _prevCameraPosition - (_playerHead.position - _mainCamera.transform.position);
-            _playerBody.transform.localPosition += movement;
+            Vector3 movement = _prevCameraPosition - (_cameraParent.transform.position - _mainCamera.transform.position);
+            _playerBody.transform.position += movement;
 
-            // Since camera is a child of player body, it also moves when we move the camera.
-            // So we need to move the camera to the player's head again.
-            MoveCameraToPlayerHead(true);
-            
-            _prevCameraPosition = _playerHead.position - _mainCamera.transform.position;
+            _prevCameraPosition = _cameraParent.transform.position - _mainCamera.transform.position;
         }
 
-        void Update() {
+
+        void FixedUpdate() {
             if (_isAwake) {
+                MoveCameraToPlayerHead();
                 MovePlayerBodyToCamera();
+            }
+        }
+
+        internal static class Patches
+        {
+            static Quaternion _prevRotation;
+
+            static void PatchTurning(PlayerCharacterController __instance) {
+                var playerCam = __instance.GetValue<OWCamera>("_playerCam");
+                var transform = __instance.GetValue<Transform>("_transform");
+
+                Quaternion fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
+
+                playerCam.transform.parent.rotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.rotation;
+                transform.rotation = fromTo * transform.rotation;
+
+                _prevRotation = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
             }
         }
 
