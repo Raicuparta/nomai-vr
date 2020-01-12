@@ -52,7 +52,7 @@ namespace NomaiVR
 
             //Make an empty parent object for moving the camera around.
             _cameraParent = new GameObject();
-            //_cameraParent.transform.parent = _mainCamera.transform.parent;
+            _cameraParent.transform.parent = _mainCamera.transform.parent;
             _cameraParent.transform.position = _mainCamera.transform.position;
             _cameraParent.transform.rotation = _mainCamera.transform.rotation;
             _mainCamera.transform.parent = _cameraParent.transform;
@@ -91,12 +91,6 @@ namespace NomaiVR
             _prevCameraPosition = _cameraParent.transform.position - _mainCamera.transform.position;
         }
 
-        float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up) {
-            Vector3 perp = Vector3.Cross(fwd, targetDir);
-            float dir = Vector3.Dot(perp, up);
-
-            return dir;
-        }
 
         void FixedUpdate() {
             if (_isAwake) {
@@ -136,24 +130,36 @@ namespace NomaiVR
                 //} else {
                 //    Patches.TurnDirection = 0;
                 //}
-                float dot = Vector3.Dot(
-                    Vector3.ProjectOnPlane(_mainCamera.transform.forward, _playerBody.transform.up),
-                    _playerBody.transform.forward
-                );
 
-                Patches.TurnDirection = AngleDir(_playerBody.transform.forward, _mainCamera.transform.forward, _playerBody.transform.up);
 
             }
         }
 
         internal static class Patches
         {
-            public static float TurnDirection = 0;
+            static Quaternion _prevRotation;
+            static float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up) {
+                Vector3 perp = Vector3.Cross(fwd, targetDir);
+                float dir = Vector3.Dot(perp, up);
+
+                return dir;
+            }
             static bool PatchTurning(PlayerCharacterController __instance) {
+
                 var playerCam = __instance.GetValue<OWCamera>("_playerCam");
                 var transform = __instance.GetValue<Transform>("_transform");
+                var movingPlatform = __instance.GetValue<MovingPlatform>("_movingPlatform");
+                var groudBody = __instance.GetValue<OWRigidbody>("_groundBody");
+                var baseAngularVelocity = __instance.GetValue<float>("_baseAngularVelocity");
 
-                Quaternion extraTurning = Quaternion.AngleAxis(TurnDirection * 10, transform.up);
+
+                //var turnAngle = AngleDir(transform.forward, playerCam.transform.forward, transform.up);
+
+                Quaternion fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
+
+                Quaternion extraTurning = Quaternion.Inverse(_prevRotation) * fromTo;
+                //Quaternion extraTurning = Quaternion.AngleAxis(turnAngle * 10, transform.up);
+                //Quaternion inverseTurning = Quaternion.AngleAxis(turnAngle * -10, transform.up);
 
                 float num = 1f;
                 num *= playerCam.fieldOfView / __instance.GetValue<float>("_initFOV");
@@ -162,10 +168,6 @@ namespace NomaiVR
                 float num3 = (!__instance.GetValue<bool>("_signalscopeZoom")) ? PlayerCameraController.LOOK_RATE : (PlayerCameraController.LOOK_RATE * PlayerCameraController.ZOOM_SCALAR);
                 float angle = num2 * num3 * Time.fixedDeltaTime / Time.timeScale;
                 Quaternion lhs = Quaternion.AngleAxis(angle, transform.up);
-
-                var movingPlatform = __instance.GetValue<MovingPlatform>("_movingPlatform");
-                var groudBody = __instance.GetValue<OWRigidbody>("_groundBody");
-                var baseAngularVelocity = __instance.GetValue<float>("_baseAngularVelocity");
 
                 if (__instance.GetValue<bool>("_isGrounded") && groudBody != null) {
                     Vector3 vector = (!(movingPlatform != null)) ? groudBody.GetAngularVelocity() : movingPlatform.GetAngularVelocity();
@@ -176,8 +178,10 @@ namespace NomaiVR
                 }
                 Quaternion rhs = Quaternion.AngleAxis(baseAngularVelocity * 180f / 3.14159274f * Time.fixedDeltaTime, transform.up);
 
+                playerCam.transform.parent.rotation = transform.rotation;
                 transform.rotation = extraTurning * lhs * rhs * transform.rotation;
-                playerCam.transform.parent.rotation = lhs * rhs * playerCam.transform.parent.rotation;
+
+                _prevRotation = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
 
                 return false;
             }
