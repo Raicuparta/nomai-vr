@@ -3,7 +3,6 @@
   "author": "Raicuparta",
   "name": "NomaiVR",
   "uniqueName": "Raicuparta.NomaiVR",
-  "version": "0.4",
-  "owmlVersion": "0.3.24",
-  "enabled": true
+  "version": "0.5",
+  "owmlVersion": "0.3.25"
 }
