@@ -27,18 +27,17 @@ Look at through [currently open issues](https://github.com/Raicuparta/NomaiVR/is
 
 If your desired contribution doesn't fit one of the existing issues, create an issue first so we can discuss it.
 
-## Development
+## Development Setup
 
-- Install OWML and the mod (with Vortex or without, does't matter) as per the instalation instructions above;
-- Run the game with the mod enabled at least once, and make sure it's working;
-- Clone NomaiVR's source;
-- Open the project solution file `NomaiVR.sln` in Visual Studio;
-- Add the necessary references (`Assembly-CSharp` and all the needed `UnityEngine.*` dlls) from `Outer Wilds\OuterWilds_Data\Managed`;
-- Fix the post-build step under build settings (right click on project > Properties > Build Events), so you don't have to move the built dll to the mods folder every time. Make sure it points to the same place where you installed the NomaiVR mod;
-- Make changes;
-- Build;
-- Run the game through OWML;
-- Confirm that NomaiVR is running.
+* [Install OWML](https://github.com/amazingalek/owml#installation) in the game's directory (should be something like `C:\Program Files\Epic Games\OuterWilds\OWML`);
+* If you already have NomaiVR installed, remove it from the `OWML/Mods` directory;
+* Clone NomaiVR's source;
+* Open the project solution file `NomaiVR.sln` in Visual Studio;
+* On the Solution Explorer (usually the right side panel), under the project-name (NomaiVR), double click "Properties";
+* Go to "Debug" and change (if needed) "Working Directory" to **OWML's directory** (no need to change anything else);
+* In the top menu go to "Project" > "Unload Project", and then "Project" > "Reload Project".
+
+After doing this, the project references should be working. If for some reason they're not, you'll have to set everything manually. To fix the build paths and automatically copy the files to OWML, edit the "Build Events" in the properties menu. To fix the references, right-click "References" in the Solution Explorer > "Add Reference", and add all the missing DLLs (references with yello warning icon).
 
 ## Help / Discuss development / Tell me about your day
 
