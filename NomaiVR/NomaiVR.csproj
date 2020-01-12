@@ -35,25 +35,25 @@
       <HintPath>..\..\..\..\..\Games\Outer Wilds\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="NAudio-Unity, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.24\lib\net35\NAudio-Unity.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\NAudio-Unity.dll</HintPath>
     </Reference>
     <Reference Include="OWML, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.24\lib\net35\OWML.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.dll</HintPath>
     </Reference>
     <Reference Include="OWML.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.24\lib\net35\OWML.Common.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.Common.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.24\lib\net35\OWML.ModHelper.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper.Assets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.24\lib\net35\OWML.ModHelper.Assets.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.Assets.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper.Events, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.24\lib\net35\OWML.ModHelper.Events.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.Events.dll</HintPath>
     </Reference>
     <Reference Include="OWML.ModHelper.Menus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.24\lib\net35\OWML.ModHelper.Menus.dll</HintPath>
+      <HintPath>..\packages\OWML.0.3.25\lib\net35\OWML.ModHelper.Menus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -97,7 +97,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetPath)" "C:\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR-7-0-4-1578761912\NomaiVR.dll"</PostBuildEvent>
+    <PostBuildEvent>md "C:\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR"
+copy /y "$(TargetPath)" "C:\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR\NomaiVR.dll"
+copy /y "$(ProjectDir)\default-config.json" "C:\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR\default-config.json"
+copy /y "$(ProjectDir)\manifest.json" "C:\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR\manifest.json"
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
