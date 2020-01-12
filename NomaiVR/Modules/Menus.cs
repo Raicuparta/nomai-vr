@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace NomaiVR
@@ -53,12 +54,18 @@ namespace NomaiVR
                 subCanvas.transform.localPosition = Vector3.zero;
                 subCanvas.transform.localRotation = Quaternion.identity;
                 subCanvas.transform.localScale = Vector3.one;
+                //subCanvas.gameObject.layer = SortingLayer.GetLayerValueFromName("Default");
+                //var renderer = subCanvas.gameObject.AddComponent<CanvasRenderer>();
+                //Material updatedMaterial = new Material(Canvas.GetDefaultCanvasMaterial());
+                Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+                //erer.setma
             }
 
             canvas.transform.parent = _camera.transform;
             canvas.transform.localPosition = canvasInfo.offset;
             canvas.transform.localEulerAngles = new Vector3(0, 0, 0);
             canvas.transform.localScale = Vector3.one * canvasInfo.scale;
+            canvas.layer = SortingLayer.GetLayerValueFromName("Default");
         }
 
         void FixMainMenuCanvas() {
