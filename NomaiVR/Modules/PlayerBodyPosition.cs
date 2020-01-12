@@ -22,8 +22,6 @@ namespace NomaiVR
 
             NomaiVR.Helper.Events.Subscribe<Flashlight>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnWakeUp;
-
-            InvokeRepeating("Delta", 1, 0.5f);
         }
 
         private void OnWakeUp(MonoBehaviour behaviour, Events ev) {
@@ -100,10 +98,6 @@ namespace NomaiVR
             return dir;
         }
 
-        void Delta() {
-            NomaiVR.Log("TurnDirection " + Patches.TurnDirection);
-        }
-
         void FixedUpdate() {
             if (_isAwake) {
                 MovePlayerBodyToCamera();
@@ -156,16 +150,17 @@ namespace NomaiVR
         {
             public static float TurnDirection = 0;
             static bool PatchTurning(PlayerCharacterController __instance) {
-                float extraTurning = TurnDirection * 10;
+                var playerCam = __instance.GetValue<OWCamera>("_playerCam");
+                var transform = __instance.GetValue<Transform>("_transform");
+
+                Quaternion extraTurning = Quaternion.AngleAxis(TurnDirection * 10, transform.up);
+
                 float num = 1f;
-                num *= __instance.GetValue<OWCamera>("_playerCam").fieldOfView / __instance.GetValue<float>("_initFOV");
-                float num2 = extraTurning + OWInput.GetValue(InputLibrary.look, InputMode.Character | InputMode.ScopeZoom | InputMode.NomaiRemoteCam).x * num;
+                num *= playerCam.fieldOfView / __instance.GetValue<float>("_initFOV");
+                float num2 = OWInput.GetValue(InputLibrary.look, InputMode.Character | InputMode.ScopeZoom | InputMode.NomaiRemoteCam).x * num;
                 __instance.SetValue("_lastTurnInput", num2);
                 float num3 = (!__instance.GetValue<bool>("_signalscopeZoom")) ? PlayerCameraController.LOOK_RATE : (PlayerCameraController.LOOK_RATE * PlayerCameraController.ZOOM_SCALAR);
                 float angle = num2 * num3 * Time.fixedDeltaTime / Time.timeScale;
-
-                var transform = __instance.GetValue<Transform>("_transform");
-
                 Quaternion lhs = Quaternion.AngleAxis(angle, transform.up);
 
                 var movingPlatform = __instance.GetValue<MovingPlatform>("_movingPlatform");
@@ -180,7 +175,9 @@ namespace NomaiVR
                     __instance.SetValue("_baseAngularVelocity", baseAngularVelocity * 0.995f);
                 }
                 Quaternion rhs = Quaternion.AngleAxis(baseAngularVelocity * 180f / 3.14159274f * Time.fixedDeltaTime, transform.up);
-                transform.rotation = lhs * rhs * transform.rotation;
+
+                transform.rotation = extraTurning * lhs * rhs * transform.rotation;
+                playerCam.transform.parent.rotation = lhs * rhs * playerCam.transform.parent.rotation;
 
                 return false;
             }
