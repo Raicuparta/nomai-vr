@@ -24,14 +24,10 @@ namespace NomaiVR
             Helper = ModHelper;
 
             // Add all modules here.
+            gameObject.AddComponent<Common>();
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<FogFix>();
             gameObject.AddComponent<PlayerBodyPosition>();
-        }
-
-        void Update() {
-            //_transform.
-            //_obj.transform.parent = null;
         }
     }
 }
