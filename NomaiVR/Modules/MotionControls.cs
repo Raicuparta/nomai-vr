@@ -1,7 +1,5 @@
 ﻿using OWML.Common;
-using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.SpatialTracking;
 
 namespace NomaiVR

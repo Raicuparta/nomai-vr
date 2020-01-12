@@ -2,7 +2,6 @@
 using OWML.ModHelper.Events;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SpatialTracking;
 
 namespace NomaiVR
 {
@@ -29,8 +28,6 @@ namespace NomaiVR
 
             // Move helmet forward so it is easier to look at the HUD in VR
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
-            NomaiVR.Log("pre_signalscope");
-
         }
 
         void OnDisable() {
