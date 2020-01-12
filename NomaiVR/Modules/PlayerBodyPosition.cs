@@ -64,21 +64,12 @@ namespace NomaiVR
             }
         }
 
-        void MoveCameraToPlayerHead(bool ignoreVerticalAxis = false) {
+        void MoveCameraToPlayerHead() {
             Vector3 movement = _playerHead.position - _mainCamera.transform.position;
-            float localY = _cameraParent.transform.localPosition.y;
-            Vector3 cameraMovement = _cameraParent.transform.InverseTransformVector(movement);
-
-            if (ignoreVerticalAxis) {
-                cameraMovement.y = 0;
-            }
-
             _cameraParent.transform.position += movement;
         }
 
         void MovePlayerBodyToCamera() {
-            MoveCameraToPlayerHead(true);
-
             // Move player to camera position.
             Vector3 movement = _prevCameraPosition - (_cameraParent.transform.position - _mainCamera.transform.position);
             _playerBody.transform.position += movement;
@@ -89,6 +80,7 @@ namespace NomaiVR
 
         void FixedUpdate() {
             if (_isAwake) {
+                MoveCameraToPlayerHead();
                 MovePlayerBodyToCamera();
             }
         }
@@ -102,8 +94,6 @@ namespace NomaiVR
                 var transform = __instance.GetValue<Transform>("_transform");
 
                 Quaternion fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
-                
-                Quaternion extraTurning = Quaternion.Inverse(_prevRotation) * fromTo;
 
                 playerCam.transform.parent.rotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.rotation;
                 transform.rotation = fromTo * transform.rotation;
