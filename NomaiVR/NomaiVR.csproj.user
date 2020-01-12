@@ -5,7 +5,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Program Files\Epic Games\OuterWilds\OWML\OWML.Launcher.exe</StartProgram>
     <StartWorkingDirectory>C:\Program Files\Epic Games\OuterWilds\OWML</StartWorkingDirectory>
+    <StartProgram>$(StartWorkingDirectory)\OWML.Launcher.exe</StartProgram>
   </PropertyGroup>
 </Project>
