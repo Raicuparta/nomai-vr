@@ -48,7 +48,7 @@ namespace NomaiVR
             _signalscope.transform.localRotation = Quaternion.identity;
             //NomaiVR.Log("childCount " + );
             _signalscope.transform.GetChild(0).GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
-            _signalscope.transform.GetChild(0).localPosition = Vector3.zero;
+            _signalscope.transform.GetChild(0).localPosition = Vector3.up * -0.1f;
             _signalscope.transform.GetChild(0).localRotation = Quaternion.identity;
             //_signalscope.transform.GetChild(0).GetChild(0).localPosition = Vector3.zero;
             //_signalscope.transform.GetChild(0).GetChild(0).localRotation = Quaternion.identity;
@@ -65,6 +65,14 @@ namespace NomaiVR
             var poseDriver = _signalscope.AddComponent<TrackedPoseDriver>();
             poseDriver.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, TrackedPoseDriver.TrackedPose.RightPose);
             poseDriver.UseRelativeTransform = true;
+
+            var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
+            reticule.renderMode = RenderMode.WorldSpace;
+            reticule.transform.parent = _signalscope.transform;
+            reticule.transform.localScale = Vector3.one * 0.0005f;
+            reticule.transform.localPosition = Vector3.forward * 0.5f;
+            reticule.transform.localRotation = Quaternion.identity;
+
         }
 
         void OnDisable() {
