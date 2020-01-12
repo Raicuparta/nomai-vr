@@ -3,4 +3,14 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>C:\Program Files\Epic Games\OuterWilds\OWML</StartWorkingDirectory>
+    <StartProgram>$(StartWorkingDirectory)\OWML.Launcher.exe</StartProgram>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>C:\Program Files\Epic Games\OuterWilds\OWML</StartWorkingDirectory>
+    <StartProgram>$(StartWorkingDirectory)\OWML.Launcher.exe</StartProgram>
+  </PropertyGroup>
 </Project>
