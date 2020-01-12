@@ -14,6 +14,7 @@ namespace NomaiVR
         Transform _playerHead;
         bool _isAwake;
         Vector3 _prevCameraPosition;
+        GameObject _signalscope;
 
         void Start() {
             NomaiVR.Log("Start PlayerBodyPosition");
@@ -36,32 +37,32 @@ namespace NomaiVR
 
             // Move helmet forward so it is easier to look at the HUD in VR
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
-            NomaiVR.Log("presignalscope");
+            NomaiVR.Log("pre_signalscope");
 
 
             //XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
-            var signalscope = GameObject.Find("Signalscope");
-            NomaiVR.Log("signalscope " + signalscope.name);
-            signalscope.transform.parent = _cameraParent.transform;
-            signalscope.transform.localPosition = _mainCamera.transform.localPosition;
-            signalscope.transform.localRotation = _mainCamera.transform.localRotation;
+            _signalscope = GameObject.Find("Signalscope");
+            NomaiVR.Log("_signalscope " + _signalscope.name);
+            _signalscope.transform.parent = _cameraParent.transform;
+            _signalscope.transform.position = _playerHead.position;
+            _signalscope.transform.localRotation = Quaternion.identity;
             //NomaiVR.Log("childCount " + );
-            signalscope.transform.GetChild(0).GetComponent<MeshRenderer>().material.shader = null;
-            signalscope.transform.GetChild(0).localPosition = Vector3.zero;
-            signalscope.transform.GetChild(0).localRotation = Quaternion.identity;
-            signalscope.transform.GetChild(0).GetChild(0).localPosition = Vector3.zero;
-            signalscope.transform.GetChild(0).GetChild(0).localRotation = Quaternion.identity;
-            //signalscope.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            _signalscope.transform.GetChild(0).GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
+            _signalscope.transform.GetChild(0).localPosition = Vector3.zero;
+            _signalscope.transform.GetChild(0).localRotation = Quaternion.identity;
+            //_signalscope.transform.GetChild(0).GetChild(0).localPosition = Vector3.zero;
+            //_signalscope.transform.GetChild(0).GetChild(0).localRotation = Quaternion.identity;
+            _signalscope.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
             NomaiVR.Log("nullified");
-            //signalscope.GetComponent<Material>().shader = new Shader();
-            //NomaiVR.Log("count " + signalscope.GetComponentsInChildren<Material>().Length);
+            //_signalscope.GetComponent<Material>().shader = new Shader();
+            //NomaiVR.Log("count " + _signalscope.GetComponentsInChildren<Material>().Length);
             //GameObject.Find("Scene").SetActive(false);
-            //signalscope.transform.parent = _mainCamera.transform.parent;
-            //signalscope.transform.DestroyAllChildren();
-            //signalscope.transform.localPosition = Vector3.zero;
-            //signalscope.transform.localRotation = Quaternion.identity;
+            //_signalscope.transform.parent = _mainCamera.transform.parent;
+            //_signalscope.transform.DestroyAllChildren();
+            //_signalscope.transform.localPosition = Vector3.zero;
+            //_signalscope.transform.localRotation = Quaternion.identity;
             //_obj.transform.localScale = Vector3.one * 0.05f;
-            var poseDriver = signalscope.AddComponent<TrackedPoseDriver>();
+            var poseDriver = _signalscope.AddComponent<TrackedPoseDriver>();
             poseDriver.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, TrackedPoseDriver.TrackedPose.RightPose);
             poseDriver.UseRelativeTransform = true;
         }
