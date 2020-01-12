@@ -62,7 +62,6 @@ namespace NomaiVR
             canvas.transform.localPosition = canvasInfo.offset;
             canvas.transform.localEulerAngles = new Vector3(0, 0, 0);
             canvas.transform.localScale = Vector3.one * canvasInfo.scale;
-            canvas.layer = SortingLayer.GetLayerValueFromName("Default");
 
             // Masks are used for hiding the overflowing elements in scrollable menus.
             // Apparently masks change the material of the canvas element being masked,
