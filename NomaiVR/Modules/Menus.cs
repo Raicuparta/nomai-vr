@@ -7,8 +7,6 @@ namespace NomaiVR
 {
     public class Menus : MonoBehaviour
     {
-        Camera _camera;
-
         // List all the canvas elements that need to be moved to world space during gameplay.
         static readonly CanvasInfo[] _canvasInfos = {
             new CanvasInfo("PauseMenu", 0.0005f),
@@ -37,7 +35,6 @@ namespace NomaiVR
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            _camera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
             FixGameCanvases();
         }
 
@@ -58,7 +55,7 @@ namespace NomaiVR
                 subCanvas.transform.localScale = Vector3.one;
             }
 
-            canvas.transform.parent = _camera.transform;
+            canvas.transform.parent = Common.MainCamera.transform;
             canvas.transform.localPosition = canvasInfo.offset;
             canvas.transform.localEulerAngles = new Vector3(0, 0, 0);
             canvas.transform.localScale = Vector3.one * canvasInfo.scale;
@@ -75,7 +72,6 @@ namespace NomaiVR
         }
 
         void FixMainMenuCanvas() {
-            _camera = GameObject.FindObjectOfType<Camera>();
             MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
         }
 
