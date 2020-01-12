@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace NomaiVR
 {
@@ -24,9 +25,11 @@ namespace NomaiVR
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
-            // Main menu camera
-            _camera = GameObject.FindObjectOfType<Camera>();
             FixMainMenuCanvas();
+
+            // Make UI elements draw on top of everything.
+            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+
         }
 
         void OnDisable() {
@@ -47,18 +50,12 @@ namespace NomaiVR
             }
 
             Canvas[] subCanvases = canvas.GetComponentsInChildren<Canvas>();
-            NomaiVR.Log("subcanvases: " + subCanvases.Length);
 
             foreach (Canvas subCanvas in subCanvases) {
                 subCanvas.renderMode = RenderMode.WorldSpace;
                 subCanvas.transform.localPosition = Vector3.zero;
                 subCanvas.transform.localRotation = Quaternion.identity;
                 subCanvas.transform.localScale = Vector3.one;
-                //subCanvas.gameObject.layer = SortingLayer.GetLayerValueFromName("Default");
-                //var renderer = subCanvas.gameObject.AddComponent<CanvasRenderer>();
-                //Material updatedMaterial = new Material(Canvas.GetDefaultCanvasMaterial());
-                Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
-                //erer.setma
             }
 
             canvas.transform.parent = _camera.transform;
@@ -66,9 +63,20 @@ namespace NomaiVR
             canvas.transform.localEulerAngles = new Vector3(0, 0, 0);
             canvas.transform.localScale = Vector3.one * canvasInfo.scale;
             canvas.layer = SortingLayer.GetLayerValueFromName("Default");
+
+            // Masks are used for hiding the overflowing elements in scrollable menus.
+            // Apparently masks change the material of the canvas element being masked,
+            // and I'm not sure how to change unity_GUIZTestMode there.
+            // So for now I'm disabling the mask completely, which breaks some menus.
+            var masks = canvas.GetComponentsInChildren<Mask>(true);
+            foreach (var mask in masks) {
+                mask.enabled = false;
+                mask.graphic.enabled = false;
+            }
         }
 
         void FixMainMenuCanvas() {
+            _camera = GameObject.FindObjectOfType<Camera>();
             MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
         }
 
