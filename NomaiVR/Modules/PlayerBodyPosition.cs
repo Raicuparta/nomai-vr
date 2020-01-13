@@ -44,6 +44,8 @@ namespace NomaiVR
             //Make an empty parent object for moving the camera around.
             _cameraParent = new GameObject();
             _cameraParent.transform.parent = Common.MainCamera.transform.parent;
+            //_cameraParent.transform.position = Common.PlayerHead.position;
+            //_cameraParent.transform.rotation = Common.PlayerHead.rotation;
             _cameraParent.transform.position = Common.MainCamera.transform.position;
             _cameraParent.transform.rotation = Common.MainCamera.transform.rotation;
             Common.MainCamera.transform.parent = _cameraParent.transform;
