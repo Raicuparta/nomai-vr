@@ -108,6 +108,8 @@ copy /y "$(TargetPath)" "$(StartWorkingDirectory)\Mods\NomaiVR\NomaiVR.dll"
 
 copy /y "$(ProjectDir)\default-config.json" "$(StartWorkingDirectory)\Mods\NomaiVR\default-config.json"
 
+copy /y "$(ProjectDir)\default-config.json" "$(StartWorkingDirectory)\Mods\NomaiVR\config.json"
+
 copy /y "$(ProjectDir)\manifest.json" "$(StartWorkingDirectory)\Mods\NomaiVR\manifest.json"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

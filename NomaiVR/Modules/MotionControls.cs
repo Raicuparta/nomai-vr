@@ -29,6 +29,9 @@ namespace NomaiVR
                 _leftHandParent = CreateHand("PlayerSuit_Glove_Left", TrackedPoseDriver.TrackedPose.LeftPose, Quaternion.Euler(-40, 330, 20));
 
                 HoldSignalscope();
+                HoldLaunchProbe();
+                //var probeLauncherModel = Common.MainCamera.transform.Find("ProbeLauncher/Props_HEA_ProbeLauncher_ProbeCamera");
+                //probeLauncherModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
             }
         }
 
@@ -52,7 +55,7 @@ namespace NomaiVR
 
         void HoldSignalscope() {
             var signalScope = GameObject.Find("Signalscope");
-            HoldObject(signalScope, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            HoldObject(signalScope.transform, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
 
             var signalScopeModel = signalScope.transform.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -75,24 +78,66 @@ namespace NomaiVR
             reticule.transform.localRotation = Quaternion.identity;
         }
 
-        void HoldObject(GameObject gameObject, Vector3 position, Quaternion rotation) {
+        void HoldLaunchProbe() {
+            var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
+            probeLauncher.localScale = Vector3.one * 0.4f;
+            HoldObject(probeLauncher);
+
+            var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
+            probeLauncherModel.gameObject.layer = 0;
+            probeLauncherModel.localPosition = Vector3.zero;
+            probeLauncherModel.localRotation = Quaternion.identity;
+
+            probeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
+
+            var renderers = probeLauncherModel.GetComponentsInChildren<MeshRenderer>();
+
+            foreach (var renderer in renderers) {
+                if (renderer.name == "RecallEffect") {
+                    continue;
+                }
+                renderer.material.shader = Shader.Find("Standard");
+            }
+
+            //NomaiVR.Log("shader0  " + probeLauncherModel.GetChild(0).GetComponent<MeshRenderer>().material.shader.name);
+            //NomaiVR.Log("shader0  " + probeLauncherModel.GetChild(1).GetComponent<MeshRenderer>().material.shader.name);
+
+            // This one is used only for rendering the probe launcher to the screen in pancake mode,
+            // so we can remove it.
+            probeLauncher.Find("Props_HEA_ProbeLauncher_ProbeCamera").gameObject.SetActive(false);
+        }
+
+        void HoldObject(Transform objectTransform, Vector3 position, Quaternion rotation) {
             var objectParent = new GameObject().transform;
             objectParent.parent = _rightHandParent;
             objectParent.localPosition = position;
             objectParent.localRotation = rotation;
-            gameObject.transform.parent = objectParent;
-            gameObject.transform.localPosition = Vector3.zero;
-            gameObject.transform.localRotation = Quaternion.identity;
+            objectTransform.transform.parent = objectParent;
+            objectTransform.transform.localPosition = Vector3.zero;
+            objectTransform.transform.localRotation = Quaternion.identity;
         }
 
-        void HoldObject(GameObject gameObject) {
-            HoldObject(gameObject, Vector3.zero, Quaternion.identity);
+        void HoldObject(Transform objectTransform) {
+            HoldObject(objectTransform, Vector3.zero, Quaternion.identity);
         }
-        void HoldObject(GameObject gameObject, Quaternion rotation) {
-            HoldObject(gameObject, Vector3.zero, rotation);
+        void HoldObject(Transform objectTransform, Quaternion rotation) {
+            HoldObject(objectTransform, Vector3.zero, rotation);
         }
-        void HoldObject(GameObject gameObject, Vector3 position) {
-            HoldObject(gameObject, position, Quaternion.identity);
+        void HoldObject(Transform objectTransform, Vector3 position) {
+            HoldObject(objectTransform, position, Quaternion.identity);
+        }
+
+        void Update() {
+            if (_rightHandParent) {
+                //var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
+                //probeLauncher.position = _rightHandParent.position;
+                //probeLauncher.rotation = _rightHandParent.rotation;
+
+                //var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher_ProbeCamera");
+                //probeLauncherModel.gameObject.layer = 0;
+                //probeLauncherModel.localPosition = Vector3.zero;
+                //probeLauncherModel.localRotation = Quaternion.identity;
+            }
         }
     }
 }

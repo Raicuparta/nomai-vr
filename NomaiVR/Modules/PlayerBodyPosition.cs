@@ -27,7 +27,7 @@ namespace NomaiVR
             MoveCameraToPlayerHead();
 
             // Move helmet forward so it is easier to look at the HUD in VR
-            FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
+            //FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
         }
 
         void OnDisable() {
