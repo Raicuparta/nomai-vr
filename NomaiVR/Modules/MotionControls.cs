@@ -31,8 +31,8 @@ namespace NomaiVR
             var handParent = new GameObject();
             _hand = rightHand.transform;
             _hand.parent = handParent.transform;
-            _hand.localPosition = Vector3.zero;
             _hand.localRotation = Quaternion.Euler(45, 180, 0);
+            _hand.localPosition = new Vector3(0, -0.03f, -0.08f);
             _hand.localScale = Vector3.one * 0.5f;
 
             //var hand = new GameObject();
@@ -86,6 +86,38 @@ namespace NomaiVR
             var poseDriver = gameObject.AddComponent<TrackedPoseDriver>();
             poseDriver.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, TrackedPoseDriver.TrackedPose.RightPose);
             //poseDriver.UseRelativeTransform = true;
+        }
+
+        void Update() {
+            if (_hand) {
+                var amount = 0.01f;
+                Vector3 handPosition = _hand.localPosition;
+                if (Input.GetKeyDown(KeyCode.Keypad7)) {
+                    handPosition.x += amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad4)) {
+                    handPosition.x -= amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad8)) {
+                    handPosition.y += amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad5)) {
+                    handPosition.y -= amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad9)) {
+                    handPosition.z += amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad6)) {
+                    handPosition.z -= amount;
+                }
+
+                if (Input.anyKeyDown) {
+                    NomaiVR.Log("x: " + handPosition.x);
+                    NomaiVR.Log("y: " + handPosition.y);
+                    NomaiVR.Log("z: " + handPosition.z);
+                    _hand.localPosition = handPosition;
+                }
+            }
         }
 
     }
