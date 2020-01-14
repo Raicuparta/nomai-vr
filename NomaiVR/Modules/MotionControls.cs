@@ -38,7 +38,7 @@ namespace NomaiVR
             addPoseDriver(handParent);
 
             var signalScope = GameObject.Find("Signalscope");
-            HoldObject(signalScope, new Vector3(-0.035f, 0.017f, 0.106f), Quaternion.Euler(32, 0, 0));
+            HoldObject(signalScope, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
             ////var probeLauncher = GameObject.Find("ProbeLauncher");
             ////setup(signalScope);
             ////setup(probeLauncher);
@@ -48,7 +48,7 @@ namespace NomaiVR
             // and screws with perspective. Changing to Standard shader so they look
             // like a normal 3D object.
             signalScopeModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
-            signalScopeModel.localPosition = Vector3.zero;
+            signalScopeModel.localPosition = Vector3.up * -0.1f;
             signalScopeModel.localRotation = Quaternion.identity;
 
             // This child seems to be only for some kind of shader effect.
