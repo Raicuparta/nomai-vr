@@ -35,45 +35,40 @@ namespace NomaiVR
             _hand.localPosition = new Vector3(0, -0.03f, -0.08f);
             _hand.localScale = Vector3.one * 0.5f;
 
-            //var hand = new GameObject();
-            //_hand = hand.transform;
-            //var filter = hand.AddComponent<MeshFilter>();
-            //filter.mesh = (Resources.Load("Mesh/PlayerSuit_Glove_Right.asset", typeof(GameObject)) as GameObject).GetComponent<MeshFilter>().mesh;
-            //NomaiVR.Log("mesh: " + filter.mesh.name);
-            //var renderer = hand.AddComponent<MeshRenderer>();
-            //renderer.material = Resources.Load("Material/Traveller_HEA_PlayerSuit_mat.mat", typeof(Material)) as Material;
-            //NomaiVR.Log("material: " + renderer.material.name);
             setup(handParent);
 
 
-            //var signalScope = GameObject.Find("Signalscope");
+            var signalScope = GameObject.Find("Signalscope");
+            signalScope.transform.parent = handParent.transform;
+            signalScope.transform.localPosition = Vector3.zero;
+            signalScope.transform.localRotation = Quaternion.identity;
             ////var probeLauncher = GameObject.Find("ProbeLauncher");
             ////setup(signalScope);
             ////setup(probeLauncher);
 
-            //var signalScopeModel = signalScope.transform.GetChild(0);
-            //// Tools have a special shader that draws them on top of everything
-            //// and screws with perspective. Changing to Standard shader so they look
-            //// like a normal 3D object.
-            //signalScopeModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
-            //signalScopeModel.localPosition = Vector3.up * -0.1f;
-            //signalScopeModel.localRotation = Quaternion.identity;
+            var signalScopeModel = signalScope.transform.GetChild(0);
+            // Tools have a special shader that draws them on top of everything
+            // and screws with perspective. Changing to Standard shader so they look
+            // like a normal 3D object.
+            signalScopeModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
+            signalScopeModel.localPosition = Vector3.up * -0.1f;
+            signalScopeModel.localRotation = Quaternion.identity;
 
-            //// This child seems to be only for some kind of shader effect.
-            //// Disabling it since it doesn't seem necessary.
-            //signalScopeModel.GetChild(0).gameObject.SetActive(false);
+            // This child seems to be only for some kind of shader effect.
+            // Disabling it since it doesn't seem necessary.
+            signalScopeModel.GetChild(0).gameObject.SetActive(false);
 
             ////addPoseDriver(probeLauncher);
             ////addPoseDriver(signalScope);
             addPoseDriver(handParent);
 
-            //// Attatch Signalscope UI to the Signalscope.
-            //var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
-            //reticule.renderMode = RenderMode.WorldSpace;
-            //reticule.transform.parent = signalScope.transform;
-            //reticule.transform.localScale = Vector3.one * 0.0005f;
-            //reticule.transform.localPosition = Vector3.forward * 0.5f;
-            //reticule.transform.localRotation = Quaternion.identity;
+            // Attatch Signalscope UI to the Signalscope.
+            var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
+            reticule.renderMode = RenderMode.WorldSpace;
+            reticule.transform.parent = signalScope.transform;
+            reticule.transform.localScale = Vector3.one * 0.0005f;
+            reticule.transform.localPosition = Vector3.forward * 0.5f;
+            reticule.transform.localRotation = Quaternion.identity;
         }
 
         void setup(GameObject gameObject) {
