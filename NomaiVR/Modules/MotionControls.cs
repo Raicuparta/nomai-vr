@@ -7,41 +7,36 @@ namespace NomaiVR
 {
     public class MotionControls : MonoBehaviour
     {
-        Transform _hand;
-        Transform _handParent;
+        Transform _rightHandParent;
         void Start() {
             NomaiVR.Log("Start MotionControls");
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
-
-            XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
-            InputTracking.Recenter();
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
                 SetupMotion();
+                HoldSignalscope();
             }
         }
 
         void SetupMotion() {
             var rightHand = Instantiate(GameObject.Find("PlayerSuit_Glove_Right"));
             var handParent = new GameObject();
-            _handParent = handParent.transform;
-            _hand = rightHand.transform;
-            _hand.parent = handParent.transform;
-            _hand.localRotation = Quaternion.Euler(45, 180, 0);
-            _hand.localPosition = new Vector3(0, -0.03f, -0.08f);
-            _hand.localScale = Vector3.one * 0.5f;
+            _rightHandParent = handParent.transform;
+            rightHand.transform.parent = handParent.transform;
+            rightHand.transform.localRotation = Quaternion.Euler(45, 180, 0);
+            rightHand.transform.localPosition = new Vector3(0, -0.03f, -0.08f);
+            rightHand.transform.localScale = Vector3.one * 0.5f;
 
             addPoseDriver(handParent);
+        }
 
+        void HoldSignalscope() {
             var signalScope = GameObject.Find("Signalscope");
             HoldObject(signalScope, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
-            ////var probeLauncher = GameObject.Find("ProbeLauncher");
-            ////setup(signalScope);
-            ////setup(probeLauncher);
 
             var signalScopeModel = signalScope.transform.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -52,9 +47,8 @@ namespace NomaiVR
             signalScopeModel.localRotation = Quaternion.identity;
 
             // This child seems to be only for some kind of shader effect.
-            // Disabling it since it doesn't seem necessary.
+            // Disabling it since it looks glitchy and doesn't seem necessary.
             signalScopeModel.GetChild(0).gameObject.SetActive(false);
-
 
             // Attatch Signalscope UI to the Signalscope.
             var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
@@ -67,7 +61,7 @@ namespace NomaiVR
 
         void HoldObject(GameObject gameObject, Vector3 position, Quaternion rotation) {
             var objectParent = new GameObject().transform;
-            objectParent.parent = _handParent;
+            objectParent.parent = _rightHandParent;
             objectParent.localPosition = position;
             objectParent.localRotation = rotation;
             gameObject.transform.parent = objectParent;
