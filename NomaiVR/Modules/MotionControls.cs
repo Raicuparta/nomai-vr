@@ -10,8 +10,6 @@ namespace NomaiVR
         Transform _rightHandParent;
         Transform _leftHandParent;
 
-        Transform _probeLauncher;
-
         void Start() {
             NomaiVR.Log("Start MotionControls");
 
@@ -80,13 +78,6 @@ namespace NomaiVR
 
         void HoldLaunchProbe() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
-            var children = probeLauncher.GetComponentsInChildren<Transform>();
-
-            foreach (Transform child in children) {
-                child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            }
-
-            _probeLauncher = probeLauncher;
             probeLauncher.localScale = Vector3.one * 0.3f;
             HoldObject(probeLauncher, new Vector3(-0.05f, 0.16f, 0.05f), Quaternion.Euler(45, 0, 0));
 
@@ -110,14 +101,11 @@ namespace NomaiVR
                 }
             }
 
-            //NomaiVR.Log("shader0  " + probeLauncherModel.GetChild(0).GetComponent<MeshRenderer>().material.shader.name);
-            //NomaiVR.Log("shader0  " + probeLauncherModel.GetChild(1).GetComponent<MeshRenderer>().material.shader.name);
-
             // This one is used only for rendering the probe launcher to the screen in pancake mode,
             // so we can remove it.
             probeLauncher.Find("Props_HEA_ProbeLauncher_ProbeCamera").gameObject.SetActive(false);
 
-
+            // This transform defines the origin and direction of the launched probe.
             var launchOrigin = Common.MainCamera.transform.Find("ProbeLauncherTransform").transform;
             launchOrigin.parent = probeLauncherModel;
             launchOrigin.localPosition = Vector3.forward * 0.2f;
@@ -144,36 +132,36 @@ namespace NomaiVR
             HoldObject(objectTransform, position, Quaternion.identity);
         }
 
-        void Update() {
-            if (_probeLauncher) {
-                var amount = 0.01f;
-                Vector3 position = _probeLauncher.parent.localPosition;
-                if (Input.GetKeyDown(KeyCode.Keypad7)) {
-                    position.x += amount;
-                }
-                if (Input.GetKeyDown(KeyCode.Keypad4)) {
-                    position.x -= amount;
-                }
-                if (Input.GetKeyDown(KeyCode.Keypad8)) {
-                    position.y += amount;
-                }
-                if (Input.GetKeyDown(KeyCode.Keypad5)) {
-                    position.y -= amount;
-                }
-                if (Input.GetKeyDown(KeyCode.Keypad9)) {
-                    position.z += amount;
-                }
-                if (Input.GetKeyDown(KeyCode.Keypad6)) {
-                    position.z -= amount;
-                }
+        //void Update() {
+        //    if (_probeLauncher) {
+        //        var amount = 0.01f;
+        //        Vector3 position = _probeLauncher.parent.localPosition;
+        //        if (Input.GetKeyDown(KeyCode.Keypad7)) {
+        //            position.x += amount;
+        //        }
+        //        if (Input.GetKeyDown(KeyCode.Keypad4)) {
+        //            position.x -= amount;
+        //        }
+        //        if (Input.GetKeyDown(KeyCode.Keypad8)) {
+        //            position.y += amount;
+        //        }
+        //        if (Input.GetKeyDown(KeyCode.Keypad5)) {
+        //            position.y -= amount;
+        //        }
+        //        if (Input.GetKeyDown(KeyCode.Keypad9)) {
+        //            position.z += amount;
+        //        }
+        //        if (Input.GetKeyDown(KeyCode.Keypad6)) {
+        //            position.z -= amount;
+        //        }
 
-                if (Input.anyKeyDown) {
-                    NomaiVR.Log("x: " + position.x);
-                    NomaiVR.Log("y: " + position.y);
-                    NomaiVR.Log("z: " + position.z);
-                    _probeLauncher.parent.localPosition = position;
-                }
-            }
-        }
+        //        if (Input.anyKeyDown) {
+        //            NomaiVR.Log("x: " + position.x);
+        //            NomaiVR.Log("y: " + position.y);
+        //            NomaiVR.Log("z: " + position.z);
+        //            _probeLauncher.parent.localPosition = position;
+        //        }
+        //    }
+        //}
     }
 }
