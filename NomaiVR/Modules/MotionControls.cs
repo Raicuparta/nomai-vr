@@ -8,11 +8,15 @@ namespace NomaiVR
     public class MotionControls : MonoBehaviour
     {
         Transform _rightHandParent;
+        Transform _leftHandParent;
         void Start() {
             NomaiVR.Log("Start MotionControls");
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
+
+            XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
+            InputTracking.Recenter();
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
@@ -23,15 +27,36 @@ namespace NomaiVR
         }
 
         void SetupMotion() {
-            var rightHand = Instantiate(GameObject.Find("PlayerSuit_Glove_Right"));
-            var handParent = new GameObject();
-            _rightHandParent = handParent.transform;
-            rightHand.transform.parent = handParent.transform;
-            rightHand.transform.localRotation = Quaternion.Euler(45, 180, 0);
-            rightHand.transform.localPosition = new Vector3(0, -0.03f, -0.08f);
-            rightHand.transform.localScale = Vector3.one * 0.5f;
+            //var rightHand = Instantiate(GameObject.Find("PlayerSuit_Glove_Right"));
+            //var handParent = new GameObject();
+            //_rightHandParent = handParent.transform;
+            //rightHand.transform.parent = handParent.transform;
+            //rightHand.transform.localRotation = Quaternion.Euler(45, 180, 0);
+            //rightHand.transform.localPosition = new Vector3(0, -0.03f, -0.08f);
+            //rightHand.transform.localScale = Vector3.one * 0.5f;
 
-            addPoseDriver(handParent);
+            //addPoseDriver(handParent);
+
+            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", TrackedPoseDriver.TrackedPose.RightPose, Quaternion.Euler(45, 180, 0));
+            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", TrackedPoseDriver.TrackedPose.LeftPose, Quaternion.Euler(-40, 330, 20));
+        }
+
+        Transform CreateHand(string objectName, TrackedPoseDriver.TrackedPose pose, Quaternion rotation) {
+            var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
+            var handParent = new GameObject().transform;
+            hand.parent = handParent;
+            hand.localRotation = rotation;
+            hand.localPosition = new Vector3(0, -0.03f, -0.08f);
+            hand.localScale = Vector3.one * 0.5f;
+
+            handParent.parent = Common.MainCamera.transform.parent;
+            handParent.position = Common.MainCamera.transform.position;
+            handParent.localRotation = Quaternion.identity;
+
+            var poseDriver = handParent.gameObject.AddComponent<TrackedPoseDriver>();
+            poseDriver.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, pose);
+
+            return handParent;
         }
 
         void HoldSignalscope() {
