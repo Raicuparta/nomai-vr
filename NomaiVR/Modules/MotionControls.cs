@@ -89,14 +89,18 @@ namespace NomaiVR
             probeLauncherModel.localRotation = Quaternion.identity;
 
             probeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
+            probeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
 
-            var renderers = probeLauncherModel.GetComponentsInChildren<MeshRenderer>();
+            var renderers = probeLauncher.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
             foreach (var renderer in renderers) {
                 if (renderer.name == "RecallEffect") {
+                    NomaiVR.Log("found ReacllEffect");
                     continue;
                 }
-                renderer.material.shader = Shader.Find("Standard");
+                foreach (var material in renderer.materials) {
+                    material.shader = Shader.Find("Standard");
+                }
             }
 
             //NomaiVR.Log("shader0  " + probeLauncherModel.GetChild(0).GetComponent<MeshRenderer>().material.shader.name);
