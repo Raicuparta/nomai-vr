@@ -30,6 +30,7 @@ namespace NomaiVR
 
                 HoldSignalscope();
                 HoldLaunchProbe();
+                HoldHUD();
             }
         }
 
@@ -51,11 +52,34 @@ namespace NomaiVR
             return handParent;
         }
 
-        void HoldSignalscope() {
-            var signalScope = GameObject.Find("Signalscope");
-            HoldObject(signalScope.transform, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+        void HoldHUD() {
+            var helmet = Common.MainCamera.transform.Find("Helmet");
 
-            var signalScopeModel = signalScope.transform.GetChild(0);
+            var helmetModels = helmet.Find("HelmetRoot").GetComponentsInChildren<MeshRenderer>();
+
+            helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2").gameObject.SetActive(false);
+
+            foreach (var helmetModel in helmetModels) {
+                helmetModel.material.shader = Shader.Find("Particles/Additive");
+                //helmetModel.material.SetFloat("_Mode", 3);
+            }
+
+            NomaiVR.Log("hudparent " + helmet.name);
+            var hudCanvases = helmet.GetComponentsInChildren<Canvas>(true);
+
+            //foreach (var hudCanvas in hudCanvases) {
+            //    hudCanvas.renderMode = RenderMode.WorldSpace;
+            //    hudCanvas.transform.localScale = Vector3.one * 0.0005f;
+            //}
+
+            HoldObject(helmet, _leftHandParent);
+        }
+
+        void HoldSignalscope() {
+            var signalScope = Common.MainCamera.transform.Find("Signalscope");
+            HoldObject(signalScope, _rightHandParent, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+
+            var signalScopeModel = signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
             // and screws with perspective. Changing to Standard shader so they look
             // like a normal 3D object.
@@ -70,7 +94,7 @@ namespace NomaiVR
             // Attatch Signalscope UI to the Signalscope.
             var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
             reticule.renderMode = RenderMode.WorldSpace;
-            reticule.transform.parent = signalScope.transform;
+            reticule.transform.parent = signalScope;
             reticule.transform.localScale = Vector3.one * 0.0005f;
             reticule.transform.localPosition = Vector3.forward * 0.5f;
             reticule.transform.localRotation = Quaternion.identity;
@@ -79,7 +103,7 @@ namespace NomaiVR
         void HoldLaunchProbe() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.3f;
-            HoldObject(probeLauncher, new Vector3(-0.05f, 0.16f, 0.05f), Quaternion.Euler(45, 0, 0));
+            HoldObject(probeLauncher, _rightHandParent, new Vector3(-0.05f, 0.16f, 0.05f), Quaternion.Euler(45, 0, 0));
 
             var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
             probeLauncherModel.gameObject.layer = 0;
@@ -112,9 +136,9 @@ namespace NomaiVR
             launchOrigin.localRotation = Quaternion.identity;
         }
 
-        void HoldObject(Transform objectTransform, Vector3 position, Quaternion rotation) {
+        void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
             var objectParent = new GameObject().transform;
-            objectParent.parent = _rightHandParent;
+            objectParent.parent = hand;
             objectParent.localPosition = position;
             objectParent.localRotation = rotation;
             objectTransform.transform.parent = objectParent;
@@ -122,14 +146,14 @@ namespace NomaiVR
             objectTransform.transform.localRotation = Quaternion.identity;
         }
 
-        void HoldObject(Transform objectTransform) {
-            HoldObject(objectTransform, Vector3.zero, Quaternion.identity);
+        void HoldObject(Transform objectTransform, Transform hand) {
+            HoldObject(objectTransform, hand, Vector3.zero, Quaternion.identity);
         }
-        void HoldObject(Transform objectTransform, Quaternion rotation) {
-            HoldObject(objectTransform, Vector3.zero, rotation);
+        void HoldObject(Transform objectTransform, Transform hand, Quaternion rotation) {
+            HoldObject(objectTransform, hand, Vector3.zero, rotation);
         }
-        void HoldObject(Transform objectTransform, Vector3 position) {
-            HoldObject(objectTransform, position, Quaternion.identity);
+        void HoldObject(Transform objectTransform, Transform hand, Vector3 position) {
+            HoldObject(objectTransform, hand, position, Quaternion.identity);
         }
 
         //void Update() {
