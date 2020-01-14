@@ -10,6 +10,8 @@ namespace NomaiVR
         Transform _rightHandParent;
         Transform _leftHandParent;
 
+        Transform _probeLauncher;
+
         void Start() {
             NomaiVR.Log("Start MotionControls");
 
@@ -30,8 +32,6 @@ namespace NomaiVR
 
                 HoldSignalscope();
                 HoldLaunchProbe();
-                //var probeLauncherModel = Common.MainCamera.transform.Find("ProbeLauncher/Props_HEA_ProbeLauncher_ProbeCamera");
-                //probeLauncherModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
             }
         }
 
@@ -80,8 +80,9 @@ namespace NomaiVR
 
         void HoldLaunchProbe() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
-            probeLauncher.localScale = Vector3.one * 0.4f;
-            HoldObject(probeLauncher);
+            _probeLauncher = probeLauncher;
+            probeLauncher.localScale = Vector3.one * 0.3f;
+            HoldObject(probeLauncher, new Vector3(-0.05f, 0.16f, 0.05f), Quaternion.Euler(45, 0, 0));
 
             var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
             probeLauncherModel.gameObject.layer = 0;
@@ -132,15 +133,34 @@ namespace NomaiVR
         }
 
         void Update() {
-            if (_rightHandParent) {
-                //var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
-                //probeLauncher.position = _rightHandParent.position;
-                //probeLauncher.rotation = _rightHandParent.rotation;
+            if (_probeLauncher) {
+                var amount = 0.01f;
+                Vector3 position = _probeLauncher.parent.localPosition;
+                if (Input.GetKeyDown(KeyCode.Keypad7)) {
+                    position.x += amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad4)) {
+                    position.x -= amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad8)) {
+                    position.y += amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad5)) {
+                    position.y -= amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad9)) {
+                    position.z += amount;
+                }
+                if (Input.GetKeyDown(KeyCode.Keypad6)) {
+                    position.z -= amount;
+                }
 
-                //var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher_ProbeCamera");
-                //probeLauncherModel.gameObject.layer = 0;
-                //probeLauncherModel.localPosition = Vector3.zero;
-                //probeLauncherModel.localRotation = Quaternion.identity;
+                if (Input.anyKeyDown) {
+                    NomaiVR.Log("x: " + position.x);
+                    NomaiVR.Log("y: " + position.y);
+                    NomaiVR.Log("z: " + position.z);
+                    _probeLauncher.parent.localPosition = position;
+                }
             }
         }
     }
