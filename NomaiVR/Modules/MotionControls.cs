@@ -80,6 +80,12 @@ namespace NomaiVR
 
         void HoldLaunchProbe() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
+            var children = probeLauncher.GetComponentsInChildren<Transform>();
+
+            foreach (Transform child in children) {
+                child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            }
+
             _probeLauncher = probeLauncher;
             probeLauncher.localScale = Vector3.one * 0.3f;
             HoldObject(probeLauncher, new Vector3(-0.05f, 0.16f, 0.05f), Quaternion.Euler(45, 0, 0));
@@ -110,6 +116,12 @@ namespace NomaiVR
             // This one is used only for rendering the probe launcher to the screen in pancake mode,
             // so we can remove it.
             probeLauncher.Find("Props_HEA_ProbeLauncher_ProbeCamera").gameObject.SetActive(false);
+
+
+            var launchOrigin = Common.MainCamera.transform.Find("ProbeLauncherTransform").transform;
+            launchOrigin.parent = probeLauncherModel;
+            launchOrigin.localPosition = Vector3.forward * 0.2f;
+            launchOrigin.localRotation = Quaternion.identity;
         }
 
         void HoldObject(Transform objectTransform, Vector3 position, Quaternion rotation) {
