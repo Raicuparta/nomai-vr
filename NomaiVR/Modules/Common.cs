@@ -1,4 +1,5 @@
 ﻿using OWML.Common;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,6 +38,18 @@ namespace NomaiVR
             InitPreGame();
             PlayerBody = GameObject.Find("Player_Body").GetComponent<PlayerCharacterController>();
             PlayerHead = FindObjectOfType<ToolModeUI>().transform;
+        }
+
+        public static List<GameObject> GetObjectsInLayer(GameObject root, int layer) {
+            var ret = new List<GameObject>();
+            var all = GameObject.FindObjectsOfType<GameObject>();
+
+            foreach (GameObject t in all) {
+                if (t.layer == layer) {
+                    ret.Add(t.gameObject);
+                }
+            }
+            return ret;
         }
     }
 }

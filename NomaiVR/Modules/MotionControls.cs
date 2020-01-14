@@ -9,6 +9,8 @@ namespace NomaiVR
     {
         Transform _rightHandParent;
         Transform _leftHandParent;
+        Transform _debugTransform;
+        bool _angleMode;
 
         void Start() {
             NomaiVR.Log("Start MotionControls");
@@ -53,26 +55,61 @@ namespace NomaiVR
         }
 
         void HoldHUD() {
-            var helmet = Common.MainCamera.transform.Find("Helmet");
+            var playerHUD = GameObject.Find("PlayerHUD");
+            playerHUD.transform.localScale = Vector3.one * 0.3f;
+            //playerHUD.transform.parent = Common.PlayerBody.transform;
+            playerHUD.transform.localPosition = Vector3.zero;
+            playerHUD.transform.localRotation = Quaternion.identity;
 
-            var helmetModels = helmet.Find("HelmetRoot").GetComponentsInChildren<MeshRenderer>();
+            var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, 23);
+            NomaiVR.Log("found " + hudElements.Count + " hudElements");
 
-            helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2").gameObject.SetActive(false);
-
-            foreach (var helmetModel in helmetModels) {
-                helmetModel.material.shader = Shader.Find("Particles/Additive");
-                //helmetModel.material.SetFloat("_Mode", 3);
+            foreach (var hudElement in hudElements) {
+                hudElement.layer = 0;
+                hudElement.SetActive(true);
             }
 
-            NomaiVR.Log("hudparent " + helmet.name);
-            var hudCanvases = helmet.GetComponentsInChildren<Canvas>(true);
+            var uiCanvas = playerHUD.transform.Find("HelmetOnUI/UICanvas").GetComponent<Canvas>();
+            uiCanvas.renderMode = RenderMode.WorldSpace;
+            uiCanvas.transform.localPosition = Vector3.zero;
+            uiCanvas.transform.localRotation = Quaternion.identity;
 
-            //foreach (var hudCanvas in hudCanvases) {
-            //    hudCanvas.renderMode = RenderMode.WorldSpace;
-            //    hudCanvas.transform.localScale = Vector3.one * 0.0005f;
+            HoldObject(playerHUD.transform, _leftHandParent, new Vector3(0.01f, -0.19f, 0.09f), Quaternion.Euler(42.80687f, 164.1181f, 246.7508f));
+
+            _debugTransform = playerHUD.transform;
+
+            //var helmetModels = helmet.Find("HelmetRoot").GetComponentsInChildren<MeshRenderer>();
+
+            //helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2").gameObject.SetActive(false);
+
+            //foreach (var helmetModel in helmetModels) {
+            //    //helmetModel.material.shader = Shader.Find("Particles/Additive");
+            //    //helmetModel.material.shader = Shader.Find("Outer WildsEffectsProjector (Additive)");
             //}
 
-            HoldObject(helmet, _leftHandParent);
+            //GameObject.Find("HUDCamera").SetActive(false);
+
+
+            //NomaiVR.Log("hudparent " + helmet.name);
+            //var hudCanvases = helmet.GetComponentsInChildren<Canvas>(true);
+            //NomaiVR.Log("found " + hudCanvases.Length + " canvases");
+
+            //var hudCanvas = GameObject.Find("HelmetOnUI").transform.Find("UICanvas").GetComponent<Canvas>();
+            //NomaiVR.Log("found " + hudCanvas.name);
+            //hudCanvas.renderMode = RenderMode.WorldSpace;
+            //hudCanvas.transform.localScale = Vector3.one * 0.0005f;
+            //hudCanvas.transform.localRotation = Quaternion.identity;
+            //hudCanvas.transform.localPosition = Vector3.forward * 2;
+            //hudCanvas.gameObject.SetActive(true);
+
+
+
+            //_debugTransform = hudCanvas.transform;
+
+            //foreach (var hudCanvas in hudCanvases) {
+            //}
+
+            //HoldObject(hudCanvas.transform, _leftHandParent);
         }
 
         void HoldSignalscope() {
@@ -156,36 +193,68 @@ namespace NomaiVR
             HoldObject(objectTransform, hand, position, Quaternion.identity);
         }
 
-        //void Update() {
-        //    if (_probeLauncher) {
-        //        var amount = 0.01f;
-        //        Vector3 position = _probeLauncher.parent.localPosition;
-        //        if (Input.GetKeyDown(KeyCode.Keypad7)) {
-        //            position.x += amount;
-        //        }
-        //        if (Input.GetKeyDown(KeyCode.Keypad4)) {
-        //            position.x -= amount;
-        //        }
-        //        if (Input.GetKeyDown(KeyCode.Keypad8)) {
-        //            position.y += amount;
-        //        }
-        //        if (Input.GetKeyDown(KeyCode.Keypad5)) {
-        //            position.y -= amount;
-        //        }
-        //        if (Input.GetKeyDown(KeyCode.Keypad9)) {
-        //            position.z += amount;
-        //        }
-        //        if (Input.GetKeyDown(KeyCode.Keypad6)) {
-        //            position.z -= amount;
-        //        }
+        void Update() {
+            if (_debugTransform) {
+                Vector3 position = _debugTransform.parent.localPosition;
+                var posDelta = 0.01f;
 
-        //        if (Input.anyKeyDown) {
-        //            NomaiVR.Log("x: " + position.x);
-        //            NomaiVR.Log("y: " + position.y);
-        //            NomaiVR.Log("z: " + position.z);
-        //            _probeLauncher.parent.localPosition = position;
-        //        }
-        //    }
-        //}
+                if (!_angleMode) {
+                    if (Input.GetKeyDown(KeyCode.Keypad7)) {
+                        position.x += posDelta;
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad4)) {
+                        position.x -= posDelta;
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad8)) {
+                        position.y += posDelta;
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad5)) {
+                        position.y -= posDelta;
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad9)) {
+                        position.z += posDelta;
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad6)) {
+                        position.z -= posDelta;
+                    }
+                }
+
+                Quaternion rotation = _debugTransform.parent.localRotation;
+                float angleDelta = 5;
+
+                if (_angleMode) {
+                    if (Input.GetKeyDown(KeyCode.Keypad7)) {
+                        rotation = rotation * Quaternion.Euler(angleDelta, 0, 0);
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad4)) {
+                        rotation = rotation * Quaternion.Euler(-angleDelta, 0, 0);
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad8)) {
+                        rotation = rotation * Quaternion.Euler(0, angleDelta, 0);
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad5)) {
+                        rotation = rotation * Quaternion.Euler(0, -angleDelta, 0);
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad9)) {
+                        rotation = rotation * Quaternion.Euler(0, 0, angleDelta);
+                    }
+                    if (Input.GetKeyDown(KeyCode.Keypad6)) {
+                        rotation = rotation * Quaternion.Euler(0, 0, -angleDelta);
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad0)) {
+                    _angleMode = !_angleMode;
+                }
+
+                if (Input.anyKeyDown) {
+                    _debugTransform.parent.localPosition = position;
+                    _debugTransform.parent.localRotation = rotation;
+                    var angles = _debugTransform.parent.localEulerAngles;
+                    NomaiVR.Log("position: new Vector3(" + position.x + "f, " + position.y + "f, " + position.z + "f)");
+                    NomaiVR.Log("Rotation: Quaternion.Euler(" + angles.x + "f, " + angles.y + "f, " + angles.z + "f)");
+                }
+            }
+        }
     }
 }
