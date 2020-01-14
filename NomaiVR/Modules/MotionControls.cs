@@ -16,14 +16,18 @@ namespace NomaiVR
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
 
+            // For some reason objects are very high up if tracking space is not stationary.
+            // Not sure exactly what stationary entails here, since it since tracks position fine.
             XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
             InputTracking.Recenter();
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
+                // Set up tracked hand objects
                 _rightHandParent = CreateHand("PlayerSuit_Glove_Right", TrackedPoseDriver.TrackedPose.RightPose, Quaternion.Euler(45, 180, 0));
                 _leftHandParent = CreateHand("PlayerSuit_Glove_Left", TrackedPoseDriver.TrackedPose.LeftPose, Quaternion.Euler(-40, 330, 20));
+
                 HoldSignalscope();
             }
         }
