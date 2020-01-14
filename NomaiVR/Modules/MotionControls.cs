@@ -9,6 +9,7 @@ namespace NomaiVR
     {
         Transform _rightHandParent;
         Transform _leftHandParent;
+
         void Start() {
             NomaiVR.Log("Start MotionControls");
 
@@ -21,24 +22,10 @@ namespace NomaiVR
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
-                SetupMotion();
+                _rightHandParent = CreateHand("PlayerSuit_Glove_Right", TrackedPoseDriver.TrackedPose.RightPose, Quaternion.Euler(45, 180, 0));
+                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", TrackedPoseDriver.TrackedPose.LeftPose, Quaternion.Euler(-40, 330, 20));
                 HoldSignalscope();
             }
-        }
-
-        void SetupMotion() {
-            //var rightHand = Instantiate(GameObject.Find("PlayerSuit_Glove_Right"));
-            //var handParent = new GameObject();
-            //_rightHandParent = handParent.transform;
-            //rightHand.transform.parent = handParent.transform;
-            //rightHand.transform.localRotation = Quaternion.Euler(45, 180, 0);
-            //rightHand.transform.localPosition = new Vector3(0, -0.03f, -0.08f);
-            //rightHand.transform.localScale = Vector3.one * 0.5f;
-
-            //addPoseDriver(handParent);
-
-            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", TrackedPoseDriver.TrackedPose.RightPose, Quaternion.Euler(45, 180, 0));
-            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", TrackedPoseDriver.TrackedPose.LeftPose, Quaternion.Euler(-40, 330, 20));
         }
 
         Transform CreateHand(string objectName, TrackedPoseDriver.TrackedPose pose, Quaternion rotation) {
@@ -102,15 +89,6 @@ namespace NomaiVR
         }
         void HoldObject(GameObject gameObject, Vector3 position) {
             HoldObject(gameObject, position, Quaternion.identity);
-        }
-
-        void addPoseDriver(GameObject gameObject) {
-            gameObject.transform.parent = Common.MainCamera.transform.parent;
-            gameObject.transform.position = Common.MainCamera.transform.position;
-            gameObject.transform.localRotation = Quaternion.identity;
-            var poseDriver = gameObject.AddComponent<TrackedPoseDriver>();
-            poseDriver.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, TrackedPoseDriver.TrackedPose.RightPose);
-            //poseDriver.UseRelativeTransform = true;
         }
     }
 }
