@@ -56,13 +56,11 @@ namespace NomaiVR
 
         void HoldHUD() {
             var playerHUD = GameObject.Find("PlayerHUD");
-            playerHUD.transform.localScale = Vector3.one * 0.3f;
-            //playerHUD.transform.parent = Common.PlayerBody.transform;
+            playerHUD.transform.localScale = Vector3.one * 0.2f;
             playerHUD.transform.localPosition = Vector3.zero;
             playerHUD.transform.localRotation = Quaternion.identity;
 
-            var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, 23);
-            NomaiVR.Log("found " + hudElements.Count + " hudElements");
+            var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, LayerMask.NameToLayer("HeadsUpDisplay"));
 
             foreach (var hudElement in hudElements) {
                 hudElement.layer = 0;
@@ -74,42 +72,9 @@ namespace NomaiVR
             uiCanvas.transform.localPosition = Vector3.zero;
             uiCanvas.transform.localRotation = Quaternion.identity;
 
-            HoldObject(playerHUD.transform, _leftHandParent, new Vector3(0.01f, -0.19f, 0.09f), Quaternion.Euler(42.80687f, 164.1181f, 246.7508f));
+            HoldObject(playerHUD.transform, _leftHandParent, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
 
             _debugTransform = playerHUD.transform;
-
-            //var helmetModels = helmet.Find("HelmetRoot").GetComponentsInChildren<MeshRenderer>();
-
-            //helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2").gameObject.SetActive(false);
-
-            //foreach (var helmetModel in helmetModels) {
-            //    //helmetModel.material.shader = Shader.Find("Particles/Additive");
-            //    //helmetModel.material.shader = Shader.Find("Outer WildsEffectsProjector (Additive)");
-            //}
-
-            //GameObject.Find("HUDCamera").SetActive(false);
-
-
-            //NomaiVR.Log("hudparent " + helmet.name);
-            //var hudCanvases = helmet.GetComponentsInChildren<Canvas>(true);
-            //NomaiVR.Log("found " + hudCanvases.Length + " canvases");
-
-            //var hudCanvas = GameObject.Find("HelmetOnUI").transform.Find("UICanvas").GetComponent<Canvas>();
-            //NomaiVR.Log("found " + hudCanvas.name);
-            //hudCanvas.renderMode = RenderMode.WorldSpace;
-            //hudCanvas.transform.localScale = Vector3.one * 0.0005f;
-            //hudCanvas.transform.localRotation = Quaternion.identity;
-            //hudCanvas.transform.localPosition = Vector3.forward * 2;
-            //hudCanvas.gameObject.SetActive(true);
-
-
-
-            //_debugTransform = hudCanvas.transform;
-
-            //foreach (var hudCanvas in hudCanvases) {
-            //}
-
-            //HoldObject(hudCanvas.transform, _leftHandParent);
         }
 
         void HoldSignalscope() {
