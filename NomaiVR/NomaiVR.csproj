@@ -62,28 +62,163 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AccessibilityModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.AccessibilityModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ARModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ARModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClothModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ClothModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterInputModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ClusterInputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterRendererModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ClusterRendererModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    <Reference Include="UnityEngine.CrashReportingModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.CrashReportingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.DirectorModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.DirectorModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GameCenterModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.GameCenterModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GridModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.GridModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticlesLegacyModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ParticlesLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PerformanceReportingModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SharedInternalsModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
+    <Reference Include="UnityEngine.SpriteMaskModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.SpriteMaskModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    <Reference Include="UnityEngine.SpriteShapeModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.SpriteShapeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StandardEvents">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StyleSheetsModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.StyleSheetsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.TerrainModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainPhysicsModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TilemapModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.TilemapModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Timeline">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UNETModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UNETModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityAnalyticsModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityConnectModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UnityConnectModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VehiclesModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.VehiclesModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.VideoModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule">
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.WebModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.WebModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.WindModule">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.WindModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Valve.Newtonsoft.Json">
+      <HintPath>lib\Valve.Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -92,13 +227,583 @@
     <Compile Include="Modules\Menus.cs" />
     <Compile Include="Modules\MotionControls.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
+    <Compile Include="Modules\SteamVRTest.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_BooleanEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_PoseEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_ConnectedChangedEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_DeviceIndexChangedEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_TrackingChangedEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_SingleEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_SkeletonEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Skeleton_ConnectedChangedEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Skeleton_TrackingChangedEvent.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Vector2Event.cs" />
+    <Compile Include="SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Vector3Event.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_ActionDirections.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_ActionSet.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_ActionSet_Manager.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Boolean.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_In.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Out.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Pose.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Single.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Skeleton.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Vector2.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Vector3.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Action_Vibration.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_ActivateActionSetOnLoad.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Behaviour_Boolean.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Behaviour_Pose.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Behaviour_Single.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Behaviour_Skeleton.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Behaviour_SkeletonCustom.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Behaviour_Vector2.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Behaviour_Vector3.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_DefaultAction.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_DefaultActionSet.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_ActionFile.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_ActionScopes.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_ActionSetUsages.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_BindingFile.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_Generator_Names.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_References.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_Source.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Input_Sources.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Skeleton_Pose.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_Skeleton_Poser.cs" />
+    <Compile Include="SteamVR\Input\SteamVR_UpdateModes.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\BodyCollider.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\CircularDrive.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\ComplexThrowable.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\ControllerHoverHighlight.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\CustomEvents.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\DebugUI.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\DestroyOnDetachedFromHand.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\DestroyOnParticleSystemDeath.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\DestroyOnTriggerEnter.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\DistanceHaptics.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\DontDestroyOnLoad.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\EnumFlags.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\Equippable.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\FallbackCameraController.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\GrabTypes.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\Hand.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\HapticRack.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\HideOnHandFocusLost.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\HoverButton.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\IgnoreHovering.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\InputModule.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\Interactable.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\InteractableDebug.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\InteractableHoverEvents.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\ItemPackage.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\ItemPackageReference.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\ItemPackageSpawner.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\LinearAnimation.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\LinearAnimator.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\LinearAudioPitch.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\LinearBlendshape.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\LinearDisplacement.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\LinearDrive.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\LinearMapping.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\ModalThrowable.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\Player.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\PlaySound.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\RenderModel.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\SeeThru.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\SleepOnAwake.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\SoundDeparent.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\SoundPlayOneshot.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\SpawnAndAttachAfterControllerIsTracking.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\SpawnAndAttachToHand.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\Throwable.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\UIElement.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\Unparent.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\Util.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Core\Scripts\VelocityEstimator.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Hints\Scripts\ControllerButtonHints.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\ArcheryTarget.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\Arrow.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\ArrowHand.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\ArrowheadRotation.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\Balloon.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\BalloonColliders.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\BalloonHapticBump.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\BalloonSpawner.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\ExplosionWobble.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\FireSource.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\Longbow.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Longbow\Scripts\SoundBowClick.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Audio\AmbientSound.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\BuggyBuddy.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\BuggyController.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\LockToPoint.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\trackCam.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\trackObj.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\WheelDust.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Grenade\Grenade.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\JoeJeff\JoeJeff.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\JoeJeff\JoeJeffController.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\JoeJeff\JoeJeffGestures.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\JoeJeff\ProceduralHats.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\ButtonEffect.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\ButtonExample.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\ControllerHintsExample.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\CustomSkeletonHelper.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\FloppyHand.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\FlowerPlanted.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\InteractableExample.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\Planting.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\RenderModelChangerUI.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\SkeletonUIOptions.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\TargetHitEffect.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Scripts\TargetMeasurement.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Samples\Squishy\SquishyToy.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\AllowTeleportWhileAttachedToHand.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\ChaperoneInfo.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\IgnoreTeleportTrace.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\Teleport.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\TeleportArc.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\TeleportArea.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\TeleportMarkerBase.cs" />
+    <Compile Include="SteamVR\InteractionSystem\Teleport\Scripts\TeleportPoint.cs" />
+    <Compile Include="SteamVR\Plugins\openvr_api.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Behaviour.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Camera.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_CameraFlip.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_CameraMask.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Ears.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_EnumEqualityComparer.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Events.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_ExternalCamera.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_ExternalCamera_LegacyManager.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Fade.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Frustum.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_IK.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_LoadLevel.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Menu.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Overlay.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_PlayArea.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Render.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_RenderModel.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_RingBuffer.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Settings.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Skybox.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_SphericalProjection.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_TrackedCamera.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_TrackedObject.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_TrackingReferenceManager.cs" />
+    <Compile Include="SteamVR\Scripts\SteamVR_Utils.cs" />
+    <Compile Include="SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_buggy.cs" />
+    <Compile Include="SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_default.cs" />
+    <Compile Include="SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_mixedreality.cs" />
+    <Compile Include="SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_platformer.cs" />
+    <Compile Include="SteamVR_Input\SteamVR_Input_Actions.cs" />
+    <Compile Include="SteamVR_Input\SteamVR_Input_ActionSets.cs" />
+    <Compile Include="SteamVR_Input\SteamVR_Input_Initialization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="default-config.json" />
     <None Include="manifest.json" />
     <None Include="packages.config" />
+    <None Include="SteamVR\Input\ExampleJSON\actions.json" />
+    <None Include="SteamVR\Input\ExampleJSON\bindings_holographic_controller.json" />
+    <None Include="SteamVR\Input\ExampleJSON\bindings_knuckles.json" />
+    <None Include="SteamVR\Input\ExampleJSON\bindings_oculus_touch.json" />
+    <None Include="SteamVR\Input\ExampleJSON\bindings_vive_controller.json" />
+    <None Include="SteamVR\Input\ExampleJSON\binding_holographic_hmd.json" />
+    <None Include="SteamVR\Input\ExampleJSON\binding_rift.json" />
+    <None Include="SteamVR\Input\ExampleJSON\binding_vive.json" />
+    <None Include="SteamVR\Input\ExampleJSON\binding_vive_pro.json" />
+    <None Include="SteamVR\Input\ExampleJSON\binding_vive_tracker_camera.json" />
+    <None Include="SteamVR\Input\Plugins\JSON.NET\LICENSE_James_Newton-King" />
+    <None Include="SteamVR\Input\Plugins\JSON.NET\LICENSE_SaladLab" />
+    <None Include="SteamVR\InteractionSystem\Core\Materials\FallbackHandIndicator.mat" />
+    <None Include="SteamVR\InteractionSystem\Core\Materials\HoverHighlight.mat" />
+    <None Include="SteamVR\InteractionSystem\Core\Materials\SeeThru.mat" />
+    <None Include="SteamVR\InteractionSystem\Core\Materials\SteamVRControllerModel.mat" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\LeftRenderModel Alien.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\LeftRenderModel Slim.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\LeftRenderModel.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\LeftRenderModelFloppy.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\Player.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\RightRenderModel Alien.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\RightRenderModel Slim.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\RightRenderModel.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Prefabs\RightRenderModelFloppy.prefab" />
+    <None Include="SteamVR\InteractionSystem\Core\Shaders\SeeThru.shader" />
+    <None Include="SteamVR\InteractionSystem\Core\Shaders\Silhouette.shader" />
+    <None Include="SteamVR\InteractionSystem\Hints\Materials\ControllerButtonHints.mat" />
+    <None Include="SteamVR\InteractionSystem\Hints\Materials\ControllerTextHintAnchor.mat" />
+    <None Include="SteamVR\InteractionSystem\Hints\Materials\ControllerTextHintLine.mat" />
+    <None Include="SteamVR\InteractionSystem\Hints\Prefabs\ControllerTextHint.prefab" />
+    <None Include="SteamVR\InteractionSystem\Hints\Shaders\ControllerButtonHints.shader" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Animators\LongbowAnimationController.controller" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\ArcheryTargetWeeble.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\Arrow.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\ArrowGlint.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\BalloonColor.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\BalloonPop.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\BalloonPopLine.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\ItemPickupOutline.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\ItemPickupOutlineThick.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\Longbow.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\LongbowNotch.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\LongbowString.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\TorchFire.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\TorchHead.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Materials\TorchShaft.mat" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Models\Arrow.fbx" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Models\Balloon.fbx" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Models\Longbow.fbx" />
+    <None Include="SteamVR\InteractionSystem\Longbow\PhysicMaterials\ArcheryTargetPhysMaterial.physicMaterial" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\ArcheryWeeble.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\Arrow.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\ArrowHand.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\Balloon.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\BalloonPop.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\BalloonPopNoSound.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\BalloonSpawner.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\FireSmall.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\FireTiny.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\FireWhip.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\Longbow.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\LongbowItemPackage.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\LongbowOutline.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\LongbowPreview.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Prefabs\Torch.prefab" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Sounds\Default.mixer" />
+    <None Include="SteamVR\InteractionSystem\Longbow\Sounds\MasterLongbowMix.mixer" />
+    <None Include="SteamVR\InteractionSystem\Poses\CubePose small.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\CubePose.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\fallback_fist.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\fallback_point.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\fallback_relaxed.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\GrenadePose.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\GrenadePose_pinch.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\HappyBallPose.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\HappyBallPoseSqueezed.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\longbowArrowPose.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\longbowPose.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\spherePose.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\sphereSmallPose.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\SquishyBase.asset" />
+    <None Include="SteamVR\InteractionSystem\Poses\SquishySqueeze.asset" />
+    <None Include="SteamVR\InteractionSystem\Samples\Animations\BallAnimation.anim" />
+    <None Include="SteamVR\InteractionSystem\Samples\Animators\BallAnimationController.controller" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Buggy Controller.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Buggy.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Buggy.physicMaterial" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Lightcone.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\Buggy.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\BuggyController.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\BuggyController__Controller.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\laser.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\LightCone.shader" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\LightCone_Blue.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\No Name.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\skidDust.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\smokeTurbo.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Materials\unnamed.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Grenade\Grenade.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\Grenade\Grenade.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Grenade\Materials\Nade.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Grenade\ModalThrowable.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Interactions_Example.unity" />
+    <None Include="SteamVR\InteractionSystem\Samples\Interactions_Example\LightingData.asset" />
+    <None Include="SteamVR\InteractionSystem\Samples\Interactions_Example\ReflectionProbe-0.exr" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidIdle.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidIdleJumpUp.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidJumpAndFall.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidMidAir.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidRun.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidRunTurn.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidRunTurnSharp.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidStandTurn.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidWalk.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidWalkTurn.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animation\HumanoidWalkTurnSharp.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Animator\JoeJeff.controller" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\JJHat.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\JoeJeff.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\JoeJeffController.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Materials\JJHat.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Materials\JoeJeff.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Materials\PController.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\Materials\Platformer.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\JoeJeff\platformer.physicMaterial" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\Bouncy.physicMaterial" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\flowerMat.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\flowerMatOp.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\Grey.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\LightGreen.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\MeasurementLine.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhite.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhiteHand.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhiteHighlighted.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhiteHighlightedHand.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhiteHighlightedObject.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhiteHighlightedOld.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhiteObject.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyWhiteOld.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ShinyYellow.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\ThrowingTarget.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Materials\Walls.physicMaterial" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\floor far.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\floor.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Flower.FBX" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Furniture.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\Buggy.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\BuggyController.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\BuggyController__Controller.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\fabric 1.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\Furniture.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\No Name.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\target.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\unnamed.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Materials\weird table.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\simpleLeftHandController.controller" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\simpleRightHandController.controller" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Table.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Table_Round.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Table_Small.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Target.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Wall.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Models\Weird Table.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\Buggy Controller.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\Buggy.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\Button.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\Flower.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\JoeJeff.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\JoeJeffController.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\ModalThrowable.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\TargetHitEffect.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\ThrowableBall.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Prefabs\ThrowableCube.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Squishy\Materials\Squish.mat" />
+    <None Include="SteamVR\InteractionSystem\Samples\Squishy\Squishy.fbx" />
+    <None Include="SteamVR\InteractionSystem\Samples\Squishy\Squishy.prefab" />
+    <None Include="SteamVR\InteractionSystem\Samples\Squishy\SquishyBall.physicMaterial" />
+    <None Include="SteamVR\InteractionSystem\Samples\Squishy\SquishyDeform.shader" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportAreaHighlighted.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportAreaHighlightedBright.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportAreaHighlightedLow.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportAreaLocked.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportAreaVisible.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportAreaVisibleBright.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportAreaVisibleLow.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPlaySpace.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPlayspaceVisualize.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPointer.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPointHighlighted.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPointInvalid.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPointLocked.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPointText.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Materials\TeleportPointVisible.mat" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Models\TeleportDestination.fbx" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Models\TeleportDestinationInvalid.fbx" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Models\TeleportMarker.fbx" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Models\TeleportPlayAreaPieces.fbx" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Prefabs\Teleporting.prefab" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Prefabs\TeleportPoint.prefab" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Shaders\HighlighGlobal.shader" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Shaders\Highlight.shader" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Textures\TeleportAreaPatternColor.tga" />
+    <None Include="SteamVR\InteractionSystem\Teleport\Textures\TeleportMarker.psd" />
+    <None Include="SteamVR_Input\SteamVR_Actions.asmdef" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll" />
+    <Content Include="SteamVR\InteractionSystem\Core\Icons\vr_interaction_system.png" />
+    <Content Include="SteamVR\InteractionSystem\Core\Icons\vr_interaction_system_feet.png" />
+    <Content Include="SteamVR\InteractionSystem\Core\Icons\vr_interaction_system_left_hand.png" />
+    <Content Include="SteamVR\InteractionSystem\Core\Icons\vr_interaction_system_left_hand_question.png" />
+    <Content Include="SteamVR\InteractionSystem\Core\Icons\vr_interaction_system_right_hand.png" />
+    <Content Include="SteamVR\InteractionSystem\Core\Icons\vr_interaction_system_right_hand_question.png" />
+    <Content Include="SteamVR\InteractionSystem\Core\Icons\vr_interaction_system_unknown_hand.png" />
+    <Content Include="SteamVR\InteractionSystem\Hints\Textures\HintBackground.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir08.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowAir09.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFallGround01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFallGround02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFallGround03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFallGround04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFallGround05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFallGround06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFallGround07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowFireLoop01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowHit01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowHit02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowHit03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowHit04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowHit05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowHit06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowIgnite01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire08.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire09.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire10.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire11.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire12.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowLaunchFire13.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock08.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock09.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock10.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock11.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock12.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock13.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock14.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock15.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock16.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowNock17.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease08.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowRelease09.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\ArrowSpawn08.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonBounce01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonBounce02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonBounce03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonBounce04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonBounce05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonBounce07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonInflate01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonPop01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonPop02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonPop03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonPop04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonPop05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonPop06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonPop07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonRubber01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonRubber02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\BalloonRubber03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack05.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack06.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack07.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack08.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack09.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack10.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack11.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack12.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack13.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack14.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack15.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBack16.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\LongbowPullBackclick_01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\TorchFireLoop01.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\TorchFireLoop02.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\TorchFireLoop03.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Sounds\TorchFireLoop04.wav" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\ArcheryWeebleTarget.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\ArrowAlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\ArrowAmbientOcclusion.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\ArrowGlint.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\ArrowMetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\ArrowNormal.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\BalloonColor.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\BalloonPop.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\BalloonPopLine.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\Longbow.png" />
+    <Content Include="SteamVR\InteractionSystem\Longbow\Textures\TorchFire.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Audio\Idle_loop.wav" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Audio\motor_loop.wav" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Audio\skidLoop.wav" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\Buggy_LO_Buggy_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\Buggy_LO_Buggy_Emission.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\Buggy_LO_Buggy_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\Buggy_LO_Buggy_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\controlerbuggy_LO_BuggyController_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\controlerbuggy_LO_BuggyController_Emission.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\controlerbuggy_LO_BuggyController_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\controlerbuggy_LO_BuggyController_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\Textures\dusty\wg_dust_particles_11.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\UI\BuggyUI\blob.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\UI\BuggyUI\RPMCounterBorder.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\UI\BuggyUI\RPMCounterFill.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\UI\BuggyUI\steering.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\BuggyBuddy\UI\Roundsquare.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Grenade\Nade_Nade_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Grenade\Nade_Nade_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Grenade\Nade_Nade_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Grenade\SunFlare.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\JJHat_JJHat_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\JJHat_JJHat_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\JJHat_JJHat_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\JoeJeff_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\JoeJeff_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\JoeJeff_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\PlatformController_PController_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\PlatformController_PController_Emission.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\PlatformController_PController_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\JoeJeff\Textures\PlatformController_PController_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Models\black_floor_metal_001a.jpg" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Models\black_floor_metal_MET.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Models\black_floor_metal_NRM.jpg" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Models\Materials\Furniture_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Models\Materials\Furniture_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Models\Materials\Furniture_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Squishy\Textures\gooNoise.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Squishy\Textures\gooNrm.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Squishy\Textures\Squishy_Squish_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Squishy\Textures\Squishy_Squish_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Squishy\Textures\Squishy_Squish_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\checker.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\estimatedOnHand.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\estimatedOnObject.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\fabric nrm.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\fabric.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\measurementTape.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\oldControllerVelocity.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\TargetLO_target_AlbedoTransparency.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\TargetLO_target_MetallicSmoothness.png" />
+    <Content Include="SteamVR\InteractionSystem\Samples\Textures\TargetLO_target_Normal.png" />
+    <Content Include="SteamVR\InteractionSystem\Teleport\Sounds\TeleportBadArea.wav" />
+    <Content Include="SteamVR\InteractionSystem\Teleport\Sounds\TeleportGo.wav" />
+    <Content Include="SteamVR\InteractionSystem\Teleport\Sounds\TeleportGoodArea.wav" />
+    <Content Include="SteamVR\InteractionSystem\Teleport\Sounds\TeleportPointerLoop.wav" />
+    <Content Include="SteamVR\InteractionSystem\Teleport\Sounds\TeleportPointerStart.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

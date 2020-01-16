@@ -25,10 +25,11 @@ namespace NomaiVR
 
             // Add all modules here.
             gameObject.AddComponent<Common>();
-            gameObject.AddComponent<Menus>();
-            gameObject.AddComponent<FogFix>();
-            gameObject.AddComponent<PlayerBodyPosition>();
-            gameObject.AddComponent<MotionControls>();
+            //gameObject.AddComponent<Menus>();
+            //gameObject.AddComponent<FogFix>();
+            //gameObject.AddComponent<PlayerBodyPosition>();
+            //gameObject.AddComponent<MotionControls>();
+            gameObject.AddComponent<SteamVRTest>();
         }
     }
 }
