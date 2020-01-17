@@ -9,6 +9,8 @@ namespace NomaiVR
     class SteamVRTest : MonoBehaviour
     {
         static bool pressingA = false;
+        static Vector2 leftStick;
+        static Vector2 rightStick;
 
         void Start() {
             NomaiVR.Log("Started SteamVRTest");
@@ -17,7 +19,7 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
-            SteamVR_Actions.default_A.onChange += Default_A_onChange; ;
+            SteamVR_Actions.default_A.onChange += Default_A_onChange;
             SteamVR_Actions.default_B.onChange += OnChangeBoolean;
             SteamVR_Actions.default_X.onChange += OnChangeBoolean;
             SteamVR_Actions.default_Y.onChange += OnChangeBoolean;
@@ -26,8 +28,17 @@ namespace NomaiVR
             SteamVR_Actions.default_Select.onChange += OnChangeBoolean;
             SteamVR_Actions.default_RT.onChange += OnChangeSingle;
             SteamVR_Actions.default_LT.onChange += OnChangeSingle;
-            SteamVR_Actions.default_RStick.onChange += OnVector2Change;
-            SteamVR_Actions.default_LStick.onChange += OnVector2Change;
+            SteamVR_Actions.default_RStick.onChange += Default_RStick_onChange;
+            SteamVR_Actions.default_LStick.onChange += Default_LStick_onChange;
+        }
+
+        private void Default_LStick_onChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
+            //NomaiVR.Log("axis: " + axis + ", delta: " + delta);
+            leftStick = axis;
+        }
+        private void Default_RStick_onChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
+            //NomaiVR.Log("axis: " + axis + ", delta: " + delta);
+            rightStick = axis;
         }
 
         private void Default_A_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -49,8 +60,9 @@ namespace NomaiVR
         }
 
         void Update() {
-
             InputLibrary.jump.SetValue("_value", pressingA ? 1f : 0f);
+            InputLibrary.moveXZ.SetValue("_value", leftStick);
+            InputLibrary.look.SetValue("_value", rightStick);
         }
     }
 }
