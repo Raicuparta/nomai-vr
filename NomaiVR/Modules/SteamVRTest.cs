@@ -87,10 +87,20 @@ namespace NomaiVR
         }
 
         void Update() {
-            SetInputValues(a, "jump");
-            InputLibrary.moveXZ.SetValue("_value", lStick);
-            InputLibrary.look.SetValue("_value", rStick);
-            InputLibrary.interact.SetValue("_value", x);
+            SetInputValues(a, "jump", "select2", "markEntryOnHUD", "boost", "matchVelocity");
+            SetInputValues(b, "cancel");
+            SetInputValues(x, "select", "confirm2", "interact", "landingCamera");
+            SetInputValues(y, "setDefaults", "swapShipLogMode", "sleep", "suitMenu", "signalscope");
+            SetInputValues(lb, "cancelRebinding1", "tabL", "probeReverse", "rollMode");
+            SetInputValues(rb, "cancelRebinding2", "tabR", "translate", "scopeView", "probeForward", "probeRetrieve");
+            SetInputValues(lStick.x, "right", "left", "menuRight", "menuLeft", "thrustX");
+            SetInputValues(lStick.y, "up", "down", "thrustZ");
+            SetInputValues(rStick.x, "tabL2", "tabR2", "yaw");
+            SetInputValues(rStick.y, "scrollLogText", "pitch");
+            SetInputValues(rt, "mapZoom", "extendStick", "thrustUp");
+            SetInputValues(lt, "thrustDown");
+            SetInputValues(lStick, "moveXZ");
+            SetInputValues(rStick, "look");
         }
     }
 }
