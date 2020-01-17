@@ -93,9 +93,12 @@ namespace NomaiVR
             SetInputValues(y, "setDefaults", "swapShipLogMode", "sleep", "suitMenu", "signalscope");
             SetInputValues(lb, "cancelRebinding1", "tabL", "probeReverse", "rollMode");
             SetInputValues(rb, "cancelRebinding2", "tabR", "translate", "scopeView", "probeForward", "probeRetrieve");
-            SetInputValues(lStick.x, "right", "left", "menuRight", "menuLeft", "thrustX");
-            SetInputValues(lStick.y, "up", "down", "thrustZ");
-            SetInputValues(rStick.x, "tabL2", "tabR2", "yaw");
+            SetInputValues(lStick.x, "right", "menuRight", "thrustX");
+            SetInputValues(-lStick.x, "left", "menuLeft");
+            SetInputValues(lStick.y, "up", "thrustZ");
+            SetInputValues(-lStick.y, "down");
+            SetInputValues(rStick.x, "tabR2", "yaw");
+            SetInputValues(-rStick.x, "tabL2");
             SetInputValues(rStick.y, "scrollLogText", "pitch");
             SetInputValues(rt, "mapZoom", "extendStick", "thrustUp");
             SetInputValues(lt, "thrustDown");
