@@ -94,6 +94,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="actions.json" />
+    <None Include="bindings_oculus_touch.json" />
     <None Include="default-config.json" />
     <None Include="manifest.json" />
     <None Include="packages.config" />
