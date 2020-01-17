@@ -8,6 +8,8 @@ namespace NomaiVR
     class SteamVRTest : MonoBehaviour
     {
         void Start() {
+            NomaiVR.Log("Started SteamVRTest");
+
             var hand = new GameObject();
 
             var pose = hand.AddComponent<SteamVR_Behaviour_Pose>();
