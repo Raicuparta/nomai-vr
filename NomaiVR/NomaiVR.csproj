@@ -71,6 +71,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>

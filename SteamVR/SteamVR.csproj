@@ -31,12 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SteamVR">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR\SteamVR.dll</HintPath>
-    </Reference>
-    <Reference Include="SteamVR_Actions">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OWML\Mods\NomaiVR\SteamVR_Actions.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

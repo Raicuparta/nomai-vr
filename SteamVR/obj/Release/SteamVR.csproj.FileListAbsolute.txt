@@ -1,4 +1,3 @@
-C:\Users\ricar\Repos\NomaiVR\SteamVR\obj\Release\SteamVR.csprojAssemblyReference.cache
 C:\Users\ricar\Repos\NomaiVR\SteamVR\bin\Release\SteamVR.dll
 C:\Users\ricar\Repos\NomaiVR\SteamVR\bin\Release\SteamVR.pdb
 C:\Users\ricar\Repos\NomaiVR\SteamVR\bin\Release\UnityEngine.AccessibilityModule.dll
