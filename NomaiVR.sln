@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NomaiVR", "NomaiVR\NomaiVR.csproj", "{CE7F4F71-F74E-4BA2-9AE1-930905B4B883}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamVR", "SteamVR\SteamVR.csproj", "{DA60553A-09E1-4C55-8826-953ECB0612A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CE7F4F71-F74E-4BA2-9AE1-930905B4B883}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE7F4F71-F74E-4BA2-9AE1-930905B4B883}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE7F4F71-F74E-4BA2-9AE1-930905B4B883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA60553A-09E1-4C55-8826-953ECB0612A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA60553A-09E1-4C55-8826-953ECB0612A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA60553A-09E1-4C55-8826-953ECB0612A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA60553A-09E1-4C55-8826-953ECB0612A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
