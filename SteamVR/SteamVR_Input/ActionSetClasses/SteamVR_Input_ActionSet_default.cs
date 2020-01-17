@@ -17,75 +17,131 @@ namespace Valve.VR
     public class SteamVR_Input_ActionSet_default : Valve.VR.SteamVR_ActionSet
     {
         
-        public virtual SteamVR_Action_Boolean InteractUI
+        public virtual SteamVR_Action_Boolean X
         {
             get
             {
-                return SteamVR_Actions.default_InteractUI;
+                return SteamVR_Actions.default_X;
             }
         }
         
-        public virtual SteamVR_Action_Boolean Teleport
+        public virtual SteamVR_Action_Boolean A
         {
             get
             {
-                return SteamVR_Actions.default_Teleport;
+                return SteamVR_Actions.default_A;
             }
         }
         
-        public virtual SteamVR_Action_Boolean GrabPinch
+        public virtual SteamVR_Action_Boolean Y
         {
             get
             {
-                return SteamVR_Actions.default_GrabPinch;
+                return SteamVR_Actions.default_Y;
             }
         }
         
-        public virtual SteamVR_Action_Boolean GrabGrip
+        public virtual SteamVR_Action_Boolean B
         {
             get
             {
-                return SteamVR_Actions.default_GrabGrip;
+                return SteamVR_Actions.default_B;
             }
         }
         
-        public virtual SteamVR_Action_Pose Pose
+        public virtual SteamVR_Action_Boolean RB
         {
             get
             {
-                return SteamVR_Actions.default_Pose;
+                return SteamVR_Actions.default_RB;
             }
         }
         
-        public virtual SteamVR_Action_Skeleton SkeletonLeftHand
+        public virtual SteamVR_Action_Boolean LB
         {
             get
             {
-                return SteamVR_Actions.default_SkeletonLeftHand;
+                return SteamVR_Actions.default_LB;
             }
         }
         
-        public virtual SteamVR_Action_Skeleton SkeletonRightHand
+        public virtual SteamVR_Action_Single RT
         {
             get
             {
-                return SteamVR_Actions.default_SkeletonRightHand;
+                return SteamVR_Actions.default_RT;
             }
         }
         
-        public virtual SteamVR_Action_Single Squeeze
+        public virtual SteamVR_Action_Single LT
         {
             get
             {
-                return SteamVR_Actions.default_Squeeze;
+                return SteamVR_Actions.default_LT;
             }
         }
         
-        public virtual SteamVR_Action_Boolean HeadsetOnHead
+        public virtual SteamVR_Action_Vector2 RStick
         {
             get
             {
-                return SteamVR_Actions.default_HeadsetOnHead;
+                return SteamVR_Actions.default_RStick;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vector2 LStick
+        {
+            get
+            {
+                return SteamVR_Actions.default_LStick;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Start
+        {
+            get
+            {
+                return SteamVR_Actions.default_Start;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Select
+        {
+            get
+            {
+                return SteamVR_Actions.default_Select;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DUp
+        {
+            get
+            {
+                return SteamVR_Actions.default_DUp;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DDown
+        {
+            get
+            {
+                return SteamVR_Actions.default_DDown;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DLeft
+        {
+            get
+            {
+                return SteamVR_Actions.default_DLeft;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DRight
+        {
+            get
+            {
+                return SteamVR_Actions.default_DRight;
             }
         }
         

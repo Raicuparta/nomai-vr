@@ -1,0 +1,123 @@
+{
+  "actions": [
+    {
+      "name": "/actions/default/in/X",
+      "type": "boolean",
+      "requirement": "suggested"
+    },
+    {
+      "name": "/actions/default/in/A",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/Y",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/B",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/RB",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/LB",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/RT",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/LT",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/RStick",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/LStick",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/Start",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/Select",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DUp",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DDown",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DLeft",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DRight",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/out/Haptic",
+      "type": "vibration"
+    }
+  ],
+  "action_sets": [
+    {
+      "name": "/actions/default",
+      "usage": "leftright"
+    }
+  ],
+  "default_bindings": [
+    {
+      "controller_type": "vive_controller",
+      "binding_url": "bindings_vive_controller.json"
+    },
+    {
+      "controller_type": "oculus_touch",
+      "binding_url": "bindings_oculus_touch.json"
+    },
+    {
+      "controller_type": "knuckles",
+      "binding_url": "bindings_knuckles.json"
+    },
+    {
+      "controller_type": "holographic_controller",
+      "binding_url": "bindings_holographic_controller.json"
+    },
+    {
+      "controller_type": "vive",
+      "binding_url": "binding_vive.json"
+    },
+    {
+      "controller_type": "vive_pro",
+      "binding_url": "binding_vive_pro.json"
+    },
+    {
+      "controller_type": "rift",
+      "binding_url": "binding_rift.json"
+    },
+    {
+      "controller_type": "holographic_hmd",
+      "binding_url": "binding_holographic_hmd.json"
+    },
+    {
+      "controller_type": "vive_tracker_camera",
+      "binding_url": "binding_vive_tracker_camera.json"
+    }
+  ],
+  "localization": [
+    {
+      "language_tag": "en_US",
+      "/actions/default/out/Haptic": "Haptic"
+    }
+  ]
+}

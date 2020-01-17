@@ -14,12 +14,12 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
-            var grabGrip = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip");
+            var grabGrip = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("X");
             grabGrip.onChange += GrabGrip_onChange;
         }
 
         private void GrabGrip_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            NomaiVR.Log("YO MR WHIaaTwE " + fromAction.localizedOriginName);
+            NomaiVR.Log("YO MR X " + fromAction.localizedOriginName);
         }
     }
 }
