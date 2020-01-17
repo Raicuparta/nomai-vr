@@ -1,16 +1,21 @@
-﻿using OWML.Common;
+﻿using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Valve.VR;
-using OWML.ModHelper.Events;
 
 namespace NomaiVR
 {
     class SteamVRTest : MonoBehaviour
     {
-        static bool pressingA = false;
-        static Vector2 leftStick;
-        static Vector2 rightStick;
+        static float a;
+        static float b;
+        static float x;
+        static float y;
+        static float lb;
+        static float rb;
+        static float rt;
+        static float lt;
+        static Vector2 lStick;
+        static Vector2 rStick;
 
         void Start() {
             NomaiVR.Log("Started SteamVRTest");
@@ -20,49 +25,72 @@ namespace NomaiVR
             SteamVR.Initialize();
 
             SteamVR_Actions.default_A.onChange += Default_A_onChange;
-            SteamVR_Actions.default_B.onChange += OnChangeBoolean;
-            SteamVR_Actions.default_X.onChange += OnChangeBoolean;
-            SteamVR_Actions.default_Y.onChange += OnChangeBoolean;
-            SteamVR_Actions.default_LB.onChange += OnChangeBoolean;
-            SteamVR_Actions.default_RB.onChange += OnChangeBoolean;
-            SteamVR_Actions.default_Select.onChange += OnChangeBoolean;
-            SteamVR_Actions.default_RT.onChange += OnChangeSingle;
-            SteamVR_Actions.default_LT.onChange += OnChangeSingle;
+            SteamVR_Actions.default_B.onChange += Default_B_onChange;
+            SteamVR_Actions.default_X.onChange += Default_X_onChange;
+            SteamVR_Actions.default_Y.onChange += Default_Y_onChange;
+            SteamVR_Actions.default_LB.onChange += Default_LB_onChange;
+            SteamVR_Actions.default_RB.onChange += Default_RB_onChange;
+            SteamVR_Actions.default_RT.onChange += Default_RT_onChange;
+            SteamVR_Actions.default_LT.onChange += Default_LT_onChange;
             SteamVR_Actions.default_RStick.onChange += Default_RStick_onChange;
             SteamVR_Actions.default_LStick.onChange += Default_LStick_onChange;
+
+            var cona = new {
+                pressingA = false,
+            };
         }
 
-        private void Default_LStick_onChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
-            //NomaiVR.Log("axis: " + axis + ", delta: " + delta);
-            leftStick = axis;
-        }
-        private void Default_RStick_onChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
-            //NomaiVR.Log("axis: " + axis + ", delta: " + delta);
-            rightStick = axis;
+        void Default_LT_onChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
+            lt = newAxis;
         }
 
-        private void Default_A_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            NomaiVR.Log("A " + fromAction.localizedOriginName + " " + newState);
-            pressingA = newState;
-            //InputLibrary.jump.SetValue("_value", newState ? 1f : 0f);
+        void Default_RT_onChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
+            rt = newAxis;
         }
 
-        private void OnVector2Change(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
-            //NomaiVR.Log("Vector2 " + fromAction.localizedOriginName + ": " + axis + " - " + delta);
+        void Default_RB_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            rb = newState ? 1 : 0;
         }
 
-        private void OnChangeSingle(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
-            //NomaiVR.Log("Single " + fromAction.localizedOriginName + ": " + newAxis + " - " + newDelta);
+        void Default_LB_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            lb = newState ? 1 : 0;
         }
 
-        private void OnChangeBoolean(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            //NomaiVR.Log("Boolean " + fromAction.localizedOriginName);
+        void Default_Y_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            y = newState ? 1 : 0;
+        }
+
+        void Default_X_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            x = newState ? 1 : 0;
+        }
+
+        void Default_B_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            b = newState ? 1 : 0;
+        }
+
+        void Default_A_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            a = newState ? 1 : 0;
+        }
+
+        void Default_LStick_onChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
+            lStick = axis;
+        }
+
+        void Default_RStick_onChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
+            rStick = axis;
+        }
+
+        void SetInputValues(object inputValue, params string[] inputActions) {
+            foreach (string action in inputActions) {
+                typeof(InputLibrary).GetAnyField(action).GetValue(null).SetValue("_value", inputValue);
+            }
         }
 
         void Update() {
-            InputLibrary.jump.SetValue("_value", pressingA ? 1f : 0f);
-            InputLibrary.moveXZ.SetValue("_value", leftStick);
-            InputLibrary.look.SetValue("_value", rightStick);
+            SetInputValues(a, "jump");
+            InputLibrary.moveXZ.SetValue("_value", lStick);
+            InputLibrary.look.SetValue("_value", rStick);
+            InputLibrary.interact.SetValue("_value", x);
         }
     }
 }
