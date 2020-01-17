@@ -41,13 +41,11 @@ namespace NomaiVR
         private void updateMainCamera() {
             NomaiVR.Helper.Console.WriteLine("Main camera: " + Common.MainCamera.name);
 
-            //Make an empty parent object for moving the camera around.
+            // Make an empty parent object for moving the camera around.
             _cameraParent = new GameObject();
             _cameraParent.transform.parent = Common.MainCamera.transform.parent;
-            //_cameraParent.transform.position = Common.PlayerHead.position;
-            //_cameraParent.transform.rotation = Common.PlayerHead.rotation;
-            _cameraParent.transform.position = Common.MainCamera.transform.position;
-            _cameraParent.transform.rotation = Common.MainCamera.transform.rotation;
+            _cameraParent.transform.localPosition = Vector3.zero;
+            _cameraParent.transform.localRotation = Quaternion.identity;
             Common.MainCamera.transform.parent = _cameraParent.transform;
             Common.MainCamera.transform.localPosition = Vector3.zero;
             Common.MainCamera.transform.localRotation = Quaternion.identity;
