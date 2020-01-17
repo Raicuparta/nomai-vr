@@ -28,13 +28,12 @@ namespace NomaiVR
             SteamVR_Actions.default_LT.onChange += OnChangeSingle;
             SteamVR_Actions.default_RStick.onChange += OnVector2Change;
             SteamVR_Actions.default_LStick.onChange += OnVector2Change;
-
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<OWInput>("IsPressed", typeof(Patches), "IsPressed");
         }
 
         private void Default_A_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            //NomaiVR.Log("A " + fromAction.localizedOriginName + " " + newState);
+            NomaiVR.Log("A " + fromAction.localizedOriginName + " " + newState);
             pressingA = newState;
+            //InputLibrary.jump.SetValue("_value", newState ? 1f : 0f);
         }
 
         private void OnVector2Change(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
@@ -49,17 +48,9 @@ namespace NomaiVR
             //NomaiVR.Log("Boolean " + fromAction.localizedOriginName);
         }
 
-        internal static class Patches
-        {
-            static bool IsPressed(bool __result, SingleAxisCommand command, InputMode mask = InputMode.All) {
-                if (command == InputLibrary.jump && SteamVRTest.pressingA) {
-                    NomaiVR.Log("jump");
-                    //return OWInput.IsInputMode(mask);
-                    return true;
-                }
-                return false;
-                //return __result;
-            }
+        void Update() {
+
+            InputLibrary.jump.SetValue("_value", pressingA ? 1f : 0f);
         }
     }
 }
