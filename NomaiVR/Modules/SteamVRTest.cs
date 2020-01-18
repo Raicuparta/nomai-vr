@@ -1,6 +1,9 @@
 ﻿using OWML.ModHelper.Events;
+using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
+using Harmony;
+using System.Reflection.Emit;
 
 namespace NomaiVR
 {
@@ -35,9 +38,7 @@ namespace NomaiVR
             SteamVR_Actions.default_RStick.onChange += Default_RStick_onChange;
             SteamVR_Actions.default_LStick.onChange += Default_LStick_onChange;
 
-            var cona = new {
-                pressingA = false,
-            };
+            NomaiVR.Helper.HarmonyHelper.Transpile<SingleAxisCommand>("Update", typeof(Patches), "TranspileUpdate");
         }
 
         void Default_LT_onChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
@@ -80,9 +81,14 @@ namespace NomaiVR
             rStick = axis;
         }
 
-        void SetInputValues(object inputValue, params string[] inputActions) {
+        static void SetInputValues(object inputValue, params string[] inputActions) {
             foreach (string action in inputActions) {
-                typeof(InputLibrary).GetAnyField(action).GetValue(null).SetValue("_value", inputValue);
+                var actionField = typeof(InputLibrary).GetAnyField(action);
+                var actionValue = actionField.GetValue(null);
+
+                var isSingleAxis = actionValue.GetType() == typeof(SingleAxisCommand);
+
+                actionValue.SetValue("_value", inputValue);
             }
         }
 
@@ -104,6 +110,20 @@ namespace NomaiVR
             SetInputValues(lt, "thrustDown");
             SetInputValues(lStick, "moveXZ");
             SetInputValues(rStick, "look");
+        }
+
+        internal static class Patches
+        {
+            static IEnumerable<CodeInstruction> TranspileUpdate(IEnumerable<CodeInstruction> instructions) {
+                var codes = new List<CodeInstruction>(instructions);
+                NomaiVR.Log("opcode: " + codes[8].opcode.ToString());
+                NomaiVR.Log("operand: " + codes[8].operand);
+                NomaiVR.Log("labels: " + codes[8].labels);
+
+                codes.RemoveRange(7, 3);
+
+                return codes;
+            }
         }
     }
 }
