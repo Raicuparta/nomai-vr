@@ -99,6 +99,6 @@ C:\Users\ricar\Repos\NomaiVR\SteamVR\bin\Release\UnityEngine.VideoModule.xml
 C:\Users\ricar\Repos\NomaiVR\SteamVR\bin\Release\UnityEngine.VRModule.xml
 C:\Users\ricar\Repos\NomaiVR\SteamVR\bin\Release\UnityEngine.WebModule.xml
 C:\Users\ricar\Repos\NomaiVR\SteamVR\bin\Release\UnityEngine.WindModule.xml
-C:\Users\ricar\Repos\NomaiVR\SteamVR\obj\Release\SteamVR.csproj.CopyComplete
+C:\Users\ricar\repos\NomaiVR\SteamVR\obj\Release\SteamVR.csproj.CopyComplete
 C:\Users\ricar\Repos\NomaiVR\SteamVR\obj\Release\SteamVR.dll
 C:\Users\ricar\Repos\NomaiVR\SteamVR\obj\Release\SteamVR.pdb
