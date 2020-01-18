@@ -770,4 +770,9 @@
     <Content Include="SteamVR\InteractionSystem\Teleport\Sounds\TeleportPointerStart.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>md "$(StartWorkingDirectory)\Mods\NomaiVR"
+
+copy /y "$(TargetPath)" "$(StartWorkingDirectory)\Mods\NomaiVR\SteamVR.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

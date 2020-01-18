@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -20,16 +21,20 @@ namespace NomaiVR
 
             // For some reason objects are very high up if tracking space is not stationary.
             // Not sure exactly what stationary entails here, since it since tracks position fine.
-            Valve.VR.OpenVR.System.ResetSeatedZeroPose();
-            Valve.VR.OpenVR.Compositor.SetTrackingSpace(
-            Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
+            //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
+            //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
+            //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
                 // Set up tracked hand objects
-                _rightHandParent = CreateHand("PlayerSuit_Glove_Right", TrackedPoseDriver.TrackedPose.RightPose, Quaternion.Euler(45, 180, 0));
-                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", TrackedPoseDriver.TrackedPose.LeftPose, Quaternion.Euler(-40, 330, 20));
+                _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0));
+                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20));
+
+                //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
+                //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
+                //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
 
                 HoldSignalscope();
                 HoldLaunchProbe();
@@ -37,22 +42,29 @@ namespace NomaiVR
             }
         }
 
-        Transform CreateHand(string objectName, TrackedPoseDriver.TrackedPose pose, Quaternion rotation) {
+        Transform CreateHand(string objectName, SteamVR_Action_Pose pose, Quaternion rotation) {
             var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
-            var handParent = new GameObject().transform;
-            hand.parent = handParent;
-            hand.localRotation = rotation;
-            hand.localPosition = new Vector3(0, -0.03f, -0.08f);
+            //var handParent = new GameObject().transform;
+            Common.MainCamera.transform.localPosition = Vector3.zero;
+            Common.MainCamera.transform.localRotation = Quaternion.identity;
+
+            hand.gameObject.SetActive(false);
+            hand.parent = Common.MainCamera.transform.parent;
+            hand.localRotation = Quaternion.identity;
+            //hand.localPosition = new Vector3(0, -0.03f, -0.08f);
+            hand.localPosition = Vector3.zero;
             hand.localScale = Vector3.one * 0.5f;
 
-            handParent.parent = Common.MainCamera.transform.parent;
-            handParent.position = Common.MainCamera.transform.position;
-            handParent.localRotation = Quaternion.identity;
+            //handParent.parent = Common.MainCamera.transform.parent;
+            //handParent.localPosition = Vector3.zero;
+            //handParent.localRotation = Quaternion.identity;
 
-            var poseDriver = handParent.gameObject.AddComponent<TrackedPoseDriver>();
-            poseDriver.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, pose);
+            var poseDriver = hand.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            poseDriver.poseAction = pose;
 
-            return handParent;
+            hand.gameObject.SetActive(true);
+
+            return hand;
         }
 
         void HoldHUD() {
