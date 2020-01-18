@@ -46,7 +46,8 @@ namespace NomaiVR
             SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
             SteamVR_Actions.default_LStick.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
 
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<SingleAxisCommand>("Update", typeof(Patches), "UpdatePrefix");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
         }
 
         SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis) {
@@ -106,7 +107,15 @@ namespace NomaiVR
 
         internal static class Patches
         {
-            static void UpdatePrefix(
+            static bool DoubleAxisUpdate(ref Vector2 ____value, DoubleAxis ____gamepadAxis) {
+                if (____gamepadAxis != null && _doubleAxes.ContainsKey(____gamepadAxis)) {
+                    ____value = _doubleAxes[____gamepadAxis];
+                }
+
+                return false;
+            }
+
+            static bool SingleAxisUpdate(
                 SingleAxisCommand __instance,
                 XboxButton ____xboxButtonPositive,
                 XboxButton ____xboxButtonNegative,
@@ -166,6 +175,8 @@ namespace NomaiVR
                 ____lastPressedDuration = ____pressedDuration;
                 ____pressedDuration = ((!__instance.IsPressed()) ? 0f : (____pressedDuration + (Time.realtimeSinceStartup - ____realtimeSinceLastUpdate)));
                 ____realtimeSinceLastUpdate = Time.realtimeSinceStartup;
+
+                return false;
             }
         }
     }
