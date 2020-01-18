@@ -1,7 +1,6 @@
 {
    "action_manifest_version" : 0,
    "alias_info" : {},
-   
    "bindings" : {
       "/actions/buggy" : {
          "chords" : [],
@@ -22,7 +21,16 @@
                "path" : "/user/hand/right/output/haptic"
             }
          ],
-         "poses" : [],
+         "poses" : [
+            {
+               "output" : "/actions/default/in/leftpose",
+               "path" : "/user/hand/left/pose/base"
+            },
+            {
+               "output" : "/actions/default/in/rightpose",
+               "path" : "/user/hand/right/pose/base"
+            }
+         ],
          "skeleton" : [],
          "sources" : [
             {
@@ -137,7 +145,7 @@
    "category" : "steamvr_input",
    "controller_type" : "oculus_touch",
    "description" : "",
-   "name" : "My vr-tests [Testing] configuration for Oculus Touch",
+   "name" : "NomaiVR Oculus Touch mapping",
    "options" : {},
    "simulated_actions" : []
 }

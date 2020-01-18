@@ -20,8 +20,9 @@ namespace NomaiVR
 
             // For some reason objects are very high up if tracking space is not stationary.
             // Not sure exactly what stationary entails here, since it since tracks position fine.
-            XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
-            InputTracking.Recenter();
+            Valve.VR.OpenVR.System.ResetSeatedZeroPose();
+            Valve.VR.OpenVR.Compositor.SetTrackingSpace(
+            Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
