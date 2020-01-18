@@ -1,9 +1,5 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
-using OWML.ModHelper.Events;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.SpatialTracking;
 
 namespace NomaiVR
 {
@@ -28,8 +24,8 @@ namespace NomaiVR
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<FogFix>();
             gameObject.AddComponent<PlayerBodyPosition>();
-            //gameObject.AddComponent<MotionControls>();
-            gameObject.AddComponent<SteamVRTest>();
+            gameObject.AddComponent<MotionControls>();
+            gameObject.AddComponent<ControllerInput>();
         }
     }
 }

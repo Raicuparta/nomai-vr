@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OWML\0Harmony.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -92,7 +89,7 @@
     <Compile Include="Modules\Menus.cs" />
     <Compile Include="Modules\MotionControls.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
-    <Compile Include="Modules\SteamVRTest.cs" />
+    <Compile Include="Modules\ControllerInput.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
