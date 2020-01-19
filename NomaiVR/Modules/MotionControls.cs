@@ -1,6 +1,7 @@
 ﻿using OWML.Common;
 using OWML.ModHelper.Events;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -32,6 +33,7 @@ namespace NomaiVR
 
                 HoldSignalscope();
                 HoldLaunchProbe();
+                HoldTranslator();
                 HoldHUD();
             }
         }
@@ -94,7 +96,7 @@ namespace NomaiVR
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<ToolHolster>();
             holster.hand = _rightHandParent;
-            holster.offset = 0.2f;
+            holster.offset = 0.3f;
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
 
@@ -113,8 +115,6 @@ namespace NomaiVR
             probeLauncher.localScale = Vector3.one * 0.2f;
             HoldObject(probeLauncher, _rightHandParent, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
 
-            _debugTransform = probeLauncher;
-
             var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
             probeLauncherModel.gameObject.layer = 0;
             probeLauncherModel.localPosition = Vector3.zero;
@@ -127,7 +127,6 @@ namespace NomaiVR
 
             foreach (var renderer in renderers) {
                 if (renderer.name == "RecallEffect") {
-                    NomaiVR.Log("found ReacllEffect");
                     continue;
                 }
                 foreach (var material in renderer.materials) {
@@ -149,9 +148,49 @@ namespace NomaiVR
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<ToolHolster>();
             holster.hand = _rightHandParent;
-            holster.offset = -0.2f;
+            holster.offset = 0;
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
+        }
+
+        void HoldTranslator() {
+            var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
+            HoldObject(translator, _rightHandParent, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+
+            var translatorModel = translator.Find("TranslatorGroup/Props_HEA_Translator");
+            // Tools have a special shader that draws them on top of everything
+            // and screws with perspective. Changing to Standard shader so they look
+            // like a normal 3D object.
+            //translatorModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
+            translatorModel.localPosition = Vector3.zero;
+            translatorModel.localRotation = Quaternion.identity;
+
+            // This child seems to be only for some kind of shader effect.
+            // Disabling it since it looks glitchy and doesn't seem necessary.
+            translatorModel.Find("Props_HEA_Translator_Prepass").gameObject.SetActive(false);
+
+            var renderers = translatorModel.gameObject.GetComponentsInChildren<MeshRenderer>(true);
+
+            foreach (var renderer in renderers) {
+                foreach (var material in renderer.materials) {
+                    material.shader = Shader.Find("Standard");
+                }
+            }
+
+            //var texts = translator.gameObject.GetComponentsInChildren<Text>(true);
+
+            //foreach (var text in texts) {
+            //    text.material = null;
+            //}
+
+            var signalScopeHolster = Instantiate(translatorModel).gameObject;
+            signalScopeHolster.SetActive(true);
+            var holster = signalScopeHolster.AddComponent<ToolHolster>();
+            holster.hand = _rightHandParent;
+            holster.offset = -0.3f;
+            holster.mode = ToolMode.Translator;
+            holster.scale = 0.3f;
+
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
@@ -164,8 +203,8 @@ namespace NomaiVR
             objectTransform.transform.localRotation = Quaternion.identity;
 
             var tool = objectTransform.gameObject.GetComponent<PlayerTool>();
-            tool.SetValue("_stowTransform", null);
-            tool.SetValue("_holdTransform", null);
+            //tool.SetValue("_stowTransform", null);
+            //tool.SetValue("_holdTransform", null);
         }
 
         void HoldObject(Transform objectTransform, Transform hand) {
