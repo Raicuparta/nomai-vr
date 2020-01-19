@@ -1,0 +1,84 @@
+// Buttons
+
+select2 = new SingleAxisCommand(XboxButton.A, KeyCode.None);
+markEntryOnHUD = new SingleAxisCommand(XboxButton.A, KeyCode.Space);
+jump = new SingleAxisCommand(XboxButton.A, KeyCode.Space);
+boost = new SingleAxisCommand(XboxButton.A, KeyCode.Space);
+matchVelocity = new SingleAxisCommand(XboxButton.A, KeyCode.Space);
+
+cancel = new SingleAxisCommand(XboxButton.B, KeyCode.Q);
+
+select = new SingleAxisCommand(XboxButton.X, KeyCode.E);
+confirm2 = new SingleAxisCommand(XboxButton.X, KeyCode.Return);
+interact = new SingleAxisCommand(XboxButton.X, KeyCode.E);
+landingCamera = new SingleAxisCommand(XboxButton.X, KeyCode.C);
+
+setDefaults = new SingleAxisCommand(XboxButton.Y, KeyCode.Y);
+swapShipLogMode = new SingleAxisCommand(XboxButton.Y, KeyCode.Z);
+sleep = new SingleAxisCommand(XboxButton.Y, KeyCode.R);
+suitMenu = new SingleAxisCommand(XboxButton.Y, KeyCode.R);
+signalscope = new SingleAxisCommand(XboxButton.Y, KeyCode.Y);
+
+cancelRebinding1 = new SingleAxisCommand(XboxButton.LeftBumper, KeyCode.None);
+tabL = new SingleAxisCommand(XboxButton.LeftBumper, KeyCode.None);
+probeReverse = new SingleAxisCommand(XboxButton.LeftBumper, KeyCode.R);
+rollMode = new SingleAxisCommand(XboxButton.LeftBumper, KeyCode.R);
+
+cancelRebinding2 = new SingleAxisCommand(XboxButton.RightBumper, KeyCode.None);
+tabR = new SingleAxisCommand(XboxButton.RightBumper, KeyCode.None);
+translate = new SingleAxisCommand(XboxButton.RightBumper, KeyCode.Mouse1);
+scopeView = new SingleAxisCommand(XboxButton.RightBumper, KeyCode.Mouse1);
+probeForward = new SingleAxisCommand(XboxButton.RightBumper, KeyCode.Mouse1);
+probeRetrieve = new SingleAxisCommand(XboxButton.RightBumper, KeyCode.Mouse1);
+
+confirm = new SingleAxisCommand(XboxButton.Start, KeyCode.Return);
+pause = new SingleAxisCommand(XboxButton.Start, KeyCode.Escape);
+
+map = new SingleAxisCommand(XboxButton.Select, KeyCode.Tab);
+
+flashlight = new SingleAxisCommand(XboxButton.RightStickClick, KeyCode.F);
+
+lockOn = new SingleAxisCommand(XboxButton.LeftStickClick, KeyCode.Mouse0);
+
+// Axis
+
+up = new SingleAxisCommand(XboxAxis.leftStickY, 1, KeyCode.W);
+down = new SingleAxisCommand(XboxAxis.leftStickY, -1, KeyCode.S);
+thrustZ = new SingleAxisCommand(XboxAxis.leftStickY, KeyCode.W, KeyCode.S);
+
+right = new SingleAxisCommand(XboxAxis.leftStickX, 1, KeyCode.D);
+left = new SingleAxisCommand(XboxAxis.leftStickX, -1, KeyCode.A);
+menuRight = new SingleAxisCommand(XboxAxis.leftStickX, 1, KeyCode.D);
+menuLeft = new SingleAxisCommand(XboxAxis.leftStickX, -1, KeyCode.A);
+thrustX = new SingleAxisCommand(XboxAxis.leftStickX, KeyCode.D, KeyCode.A);
+
+up2 = new SingleAxisCommand(XboxAxis.dPadY, 1, KeyCode.UpArrow);
+down2 = new SingleAxisCommand(XboxAxis.dPadY, -1, KeyCode.DownArrow);
+toolOptionUp = new SingleAxisCommand(XboxAxis.dPadY, 1, KeyCode.UpArrow);
+toolOptionDown = new SingleAxisCommand(XboxAxis.dPadY, -1, KeyCode.DownArrow);
+autopilot = new SingleAxisCommand(XboxAxis.dPadY, 1, KeyCode.X);
+freeLook = new SingleAxisCommand(XboxAxis.dPadY, -1, KeyCode.LeftAlt);
+take2xScreenshot = new SingleAxisCommand(XboxAxis.dPadY, -1, KeyCode.U);
+
+right2 = new SingleAxisCommand(XboxAxis.dPadX, 1, KeyCode.RightArrow);
+left2 = new SingleAxisCommand(XboxAxis.dPadX, -1, KeyCode.LeftArrow);
+toolOptionRight = new SingleAxisCommand(XboxAxis.dPadX, 1, KeyCode.RightArrow);
+toolOptionLeft = new SingleAxisCommand(XboxAxis.dPadX, -1, KeyCode.LeftArrow);
+slowDownTime = new SingleAxisCommand(XboxAxis.dPadX, -1, KeyCode.K);
+speedUpTime = new SingleAxisCommand(XboxAxis.dPadX, 1, KeyCode.L);
+
+tabL2 = new SingleAxisCommand(XboxAxis.rightStickX, -1, KeyCode.None);
+tabR2 = new SingleAxisCommand(XboxAxis.rightStickX, 1, KeyCode.None);
+yaw = new SingleAxisCommand(XboxAxis.rightStickX, MouseAxis.mouseX);
+
+scrollLogText = new SingleAxisCommand(XboxAxis.rightStickY, KeyCode.UpArrow, KeyCode.DownArrow);
+pitch = new SingleAxisCommand(XboxAxis.rightStickY, MouseAxis.mouseY);
+
+mapZoom = new SingleAxisCommand(XboxAxis.rightTrigger, XboxAxis.leftTrigger, KeyCode.LeftShift, KeyCode.LeftControl);
+extendStick = new SingleAxisCommand(XboxAxis.rightTrigger, KeyCode.LeftShift);
+thrustUp = new SingleAxisCommand(XboxAxis.rightTrigger, KeyCode.LeftShift);
+
+thrustDown = new SingleAxisCommand(XboxAxis.leftTrigger, KeyCode.LeftControl);
+
+moveXZ = new DoubleAxisCommand(XboxAxis.leftStick, KeyCode.D, KeyCode.A, KeyCode.W, KeyCode.S);
+look = new DoubleAxisCommand(XboxAxis.rightStick, MouseAxis.mouse);

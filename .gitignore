@@ -1,5 +1,7 @@
 
-NomaiVR/bin
 packages
 .vs
+NomaiVR/bin
 NomaiVR/obj
+SteamVR/bin
+SteamVR/obj

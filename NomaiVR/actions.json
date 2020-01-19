@@ -1,0 +1,99 @@
+{
+  "actions": [
+    {
+      "name": "/actions/default/in/X",
+      "type": "boolean",
+      "requirement": "suggested"
+    },
+    {
+      "name": "/actions/default/in/A",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/Y",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/B",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/RB",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/LB",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/RT",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/LT",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/RStick",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/LStick",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/Start",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/Select",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DUp",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DDown",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DLeft",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DRight",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/RightPose",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/default/in/LeftPose",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/default/out/Haptic",
+      "type": "vibration"
+    }
+  ],
+  "action_sets": [
+    {
+      "name": "/actions/default",
+      "usage": "leftright"
+    }
+  ],
+  "default_bindings": [
+    {
+      "controller_type": "oculus_touch",
+      "binding_url": "bindings_oculus_touch.json"
+    }
+  ],
+  "localization": [
+    {
+      "language_tag": "en_US",
+      "/actions/default/out/Haptic": "Haptic"
+    }
+  ]
+}

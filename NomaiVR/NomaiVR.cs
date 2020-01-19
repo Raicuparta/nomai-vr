@@ -1,6 +1,5 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
-using OWML.ModHelper.Events;
 
 namespace NomaiVR
 {
@@ -21,9 +20,12 @@ namespace NomaiVR
             Helper = ModHelper;
 
             // Add all modules here.
+            gameObject.AddComponent<Common>();
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<FogFix>();
-            gameObject.AddComponent<PlayerBodyPosition>();
+            //gameObject.AddComponent<PlayerBodyPosition>();
+            gameObject.AddComponent<MotionControls>();
+            gameObject.AddComponent<ControllerInput>();
         }
     }
 }
