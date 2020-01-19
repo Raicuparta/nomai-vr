@@ -97,6 +97,10 @@ namespace NomaiVR
             signalScopeHolster.parent = Common.MainCamera.transform.parent;
             signalScopeHolster.localRotation = Quaternion.identity;
             signalScopeHolster.Rotate(Vector3.right * 90);
+            //var collider = signalScopeHolster.gameObject.AddComponent<SphereCollider>();
+            //collider.center = Vector3.zero;
+            //collider.radius = 1;
+
 
             // Attatch Signalscope UI to the Signalscope.
             var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
@@ -169,6 +173,12 @@ namespace NomaiVR
             }
             if (_holster) {
                 _holster.localPosition = Common.MainCamera.transform.localPosition + new Vector3(0.2f, -0.7f, 0.1f);
+
+
+                if (Vector3.Distance(_holster.position, _rightHandParent.position) < 0.2f) {
+                    _holster.gameObject.SetActive(false);
+                    FindObjectOfType<ToolModeSwapper>().EquipToolMode(ToolMode.SignalScope);
+                }
             }
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
