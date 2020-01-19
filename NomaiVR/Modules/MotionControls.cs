@@ -1,4 +1,5 @@
 ﻿using OWML.Common;
+using OWML.ModHelper.Events;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
@@ -76,6 +77,10 @@ namespace NomaiVR
         void HoldSignalscope() {
             var signalScope = Common.MainCamera.transform.Find("Signalscope");
             HoldObject(signalScope, _rightHandParent, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+
+            var tool = signalScope.gameObject.GetComponent<PlayerTool>();
+            tool.SetValue("_stowTransform", null);
+            tool.SetValue("_holdTransform", null);
 
             var signalScopeModel = signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
