@@ -11,6 +11,7 @@ namespace NomaiVR
         Transform _leftHandParent;
         Transform _debugTransform;
         Transform _wrapper;
+        Transform _holster;
         bool _angleMode;
 
         void Start() {
@@ -89,6 +90,14 @@ namespace NomaiVR
             // Disabling it since it looks glitchy and doesn't seem necessary.
             signalScopeModel.GetChild(0).gameObject.SetActive(false);
 
+
+            var signalScopeHolster = Instantiate(signalScopeModel).transform;
+            _holster = signalScopeHolster;
+            signalScopeHolster.gameObject.SetActive(true);
+            signalScopeHolster.parent = Common.MainCamera.transform.parent;
+            signalScopeHolster.localRotation = Quaternion.identity;
+            signalScopeHolster.Rotate(Vector3.right * 90);
+
             // Attatch Signalscope UI to the Signalscope.
             var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
             reticule.renderMode = RenderMode.WorldSpace;
@@ -157,6 +166,9 @@ namespace NomaiVR
         void Update() {
             if (_wrapper) {
                 _wrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+            }
+            if (_holster) {
+                _holster.localPosition = Common.MainCamera.transform.localPosition + new Vector3(0.2f, -0.7f, 0.1f);
             }
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
