@@ -24,11 +24,11 @@
          "poses" : [
             {
                "output" : "/actions/default/in/leftpose",
-               "path" : "/user/hand/left/pose/base"
+               "path" : "/user/hand/left/pose/raw"
             },
             {
                "output" : "/actions/default/in/rightpose",
-               "path" : "/user/hand/right/pose/base"
+               "path" : "/user/hand/right/pose/raw"
             }
          ],
          "skeleton" : [],
