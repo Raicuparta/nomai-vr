@@ -97,6 +97,8 @@ namespace NomaiVR
             signalScopeHolster.parent = Common.MainCamera.transform.parent;
             signalScopeHolster.localRotation = Quaternion.identity;
             signalScopeHolster.Rotate(Vector3.right * 90);
+            var holster = signalScopeHolster.gameObject.AddComponent<ToolHolster>();
+            holster.hand = _rightHandParent;
             //var collider = signalScopeHolster.gameObject.AddComponent<SphereCollider>();
             //collider.center = Vector3.zero;
             //collider.radius = 1;
