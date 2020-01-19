@@ -78,10 +78,6 @@ namespace NomaiVR
             var signalScope = Common.MainCamera.transform.Find("Signalscope");
             HoldObject(signalScope, _rightHandParent, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
 
-            var tool = signalScope.gameObject.GetComponent<PlayerTool>();
-            tool.SetValue("_stowTransform", null);
-            tool.SetValue("_holdTransform", null);
-
             var signalScopeModel = signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
             // and screws with perspective. Changing to Standard shader so they look
@@ -165,6 +161,10 @@ namespace NomaiVR
             objectTransform.transform.parent = objectParent;
             objectTransform.transform.localPosition = Vector3.zero;
             objectTransform.transform.localRotation = Quaternion.identity;
+
+            var tool = objectTransform.gameObject.GetComponent<PlayerTool>();
+            tool.SetValue("_stowTransform", null);
+            tool.SetValue("_holdTransform", null);
         }
 
         void HoldObject(Transform objectTransform, Transform hand) {
