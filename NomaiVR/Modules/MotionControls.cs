@@ -148,7 +148,7 @@ namespace NomaiVR
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<ToolHolster>();
             holster.hand = _rightHandParent;
-            holster.offset = 0;
+            holster.offset = 0.1f;
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
         }
@@ -208,8 +208,10 @@ namespace NomaiVR
             objectTransform.transform.localRotation = Quaternion.identity;
 
             var tool = objectTransform.gameObject.GetComponent<PlayerTool>();
-            //tool.SetValue("_stowTransform", null);
-            //tool.SetValue("_holdTransform", null);
+            if (tool) {
+                tool.SetValue("_stowTransform", null);
+                tool.SetValue("_holdTransform", null);
+            }
         }
 
         void HoldObject(Transform objectTransform, Transform hand) {
