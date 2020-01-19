@@ -111,7 +111,9 @@ namespace NomaiVR
         void HoldLaunchProbe() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.2f;
-            HoldObject(probeLauncher, _rightHandParent, new Vector3(-0.05f, 0.16f, 0.05f), Quaternion.Euler(45, 0, 0));
+            HoldObject(probeLauncher, _rightHandParent, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
+
+            _debugTransform = probeLauncher;
 
             var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
             probeLauncherModel.gameObject.layer = 0;
@@ -142,7 +144,6 @@ namespace NomaiVR
             launchOrigin.parent = probeLauncherModel;
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;
-
 
             var probeLauncherHolster = Instantiate(probeLauncherModel).gameObject;
             probeLauncherHolster.SetActive(true);
