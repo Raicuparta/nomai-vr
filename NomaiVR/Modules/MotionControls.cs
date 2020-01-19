@@ -163,10 +163,10 @@ namespace NomaiVR
             translatorGroup.localPosition = Vector3.zero;
             translatorGroup.localRotation = Quaternion.identity;
 
+            translator.localScale = Vector3.one * 0.3f;
             var translatorModel = translatorGroup.Find("Props_HEA_Translator");
             translatorModel.localPosition = Vector3.zero;
             translatorModel.localRotation = Quaternion.identity;
-            translatorModel.localScale = Vector3.one * 0.3f;
 
             translator.GetComponent<NomaiTranslator>().SetValue("_raycastTransform", translatorModel);
 
@@ -182,11 +182,11 @@ namespace NomaiVR
                 }
             }
 
-            //var texts = translator.gameObject.GetComponentsInChildren<Text>(true);
+            var texts = translator.gameObject.GetComponentsInChildren<Graphic>(true);
 
-            //foreach (var text in texts) {
-            //    text.material = null;
-            //}
+            foreach (var text in texts) {
+                text.material = null;
+            }
 
             var signalScopeHolster = Instantiate(translatorModel).gameObject;
             signalScopeHolster.SetActive(true);

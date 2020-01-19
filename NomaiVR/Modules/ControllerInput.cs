@@ -26,13 +26,18 @@ namespace NomaiVR
             SteamVR_Actions.default_LB.onChange += CreateButtonHandler(XboxButton.LeftBumper);
             //SteamVR_Actions.default_RB.onChange += CreateButtonHandler(XboxButton.RightBumper);
             SteamVR_Actions.default_RB.onChange += onRBChange;
-            SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+            SteamVR_Actions.default_RT.onChange += OnRTChange;
+            //SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
             SteamVR_Actions.default_LT.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
             SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
             SteamVR_Actions.default_LStick.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
+        }
+
+        void OnRTChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
+            _buttons[XboxButton.RightBumper] = newAxis;
         }
 
         void onRBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
