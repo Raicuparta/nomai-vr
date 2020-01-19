@@ -10,6 +10,7 @@ namespace NomaiVR
         static Dictionary<XboxButton, float> _buttons;
         static Dictionary<SingleAxis, float> _singleAxes;
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
+        public static bool IsGripping;
 
         void Start() {
             NomaiVR.Log("Started ControllerInput");
@@ -24,6 +25,7 @@ namespace NomaiVR
             SteamVR_Actions.default_Y.onChange += CreateButtonHandler(XboxButton.Y);
             SteamVR_Actions.default_LB.onChange += CreateButtonHandler(XboxButton.LeftBumper);
             //SteamVR_Actions.default_RB.onChange += CreateButtonHandler(XboxButton.RightBumper);
+            SteamVR_Actions.default_RB.onChange += onRBChange;
             SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
             SteamVR_Actions.default_LT.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
             SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
@@ -31,6 +33,14 @@ namespace NomaiVR
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
+        }
+
+        void onRBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            IsGripping = newState;
+
+            if (!IsGripping) {
+                Common.ToolSwapper.UnequipTool();
+            }
         }
 
         SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis) {

@@ -10,6 +10,7 @@ namespace NomaiVR
         public static PlayerCharacterController PlayerBody { get; private set; }
         public static Camera MainCamera { get; private set; }
         public static Transform PlayerHead { get; private set; }
+        public static ToolModeSwapper ToolSwapper { get; private set; }
 
         void Awake() {
             NomaiVR.Log("Start Common");
@@ -38,6 +39,7 @@ namespace NomaiVR
             InitPreGame();
             PlayerBody = GameObject.Find("Player_Body").GetComponent<PlayerCharacterController>();
             PlayerHead = FindObjectOfType<ToolModeUI>().transform;
+            ToolSwapper = FindObjectOfType<ToolModeSwapper>();
         }
 
         public static List<GameObject> GetObjectsInLayer(GameObject root, int layer) {
