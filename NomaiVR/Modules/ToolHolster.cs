@@ -10,10 +10,16 @@ namespace NomaiVR
         public Transform hand;
         public ToolMode mode;
         public float offset;
+        public float scale;
         MeshRenderer[] _renderers;
 
         void Start() {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+
+            transform.localScale = Vector3.one * scale;
+            transform.parent = Common.MainCamera.transform.parent;
+            transform.localRotation = Quaternion.identity;
+            transform.Rotate(Vector3.right * 90);
         }
 
         void Equip() {

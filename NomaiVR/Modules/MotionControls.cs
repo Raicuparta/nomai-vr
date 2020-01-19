@@ -94,15 +94,13 @@ namespace NomaiVR
             // Disabling it since it looks glitchy and doesn't seem necessary.
             signalScopeModel.GetChild(0).gameObject.SetActive(false);
 
-            var signalScopeHolster = Instantiate(signalScopeModel).transform;
-            signalScopeHolster.gameObject.SetActive(true);
-            signalScopeHolster.parent = Common.MainCamera.transform.parent;
-            signalScopeHolster.localRotation = Quaternion.identity;
-            signalScopeHolster.Rotate(Vector3.right * 90);
-            var holster = signalScopeHolster.gameObject.AddComponent<ToolHolster>();
+            var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
+            signalScopeHolster.SetActive(true);
+            var holster = signalScopeHolster.AddComponent<ToolHolster>();
             holster.hand = _rightHandParent;
             holster.offset = 0.2f;
             holster.mode = ToolMode.SignalScope;
+            holster.scale = 0.8f;
 
 
             // Attatch Signalscope UI to the Signalscope.
@@ -150,16 +148,13 @@ namespace NomaiVR
             launchOrigin.localRotation = Quaternion.identity;
 
 
-            var probeLauncherHolster = Instantiate(probeLauncherModel).transform;
-            probeLauncherHolster.localScale = Vector3.one * 0.2f;
-            probeLauncherHolster.gameObject.SetActive(true);
-            probeLauncherHolster.parent = Common.MainCamera.transform.parent;
-            probeLauncherHolster.localRotation = Quaternion.identity;
-            probeLauncherHolster.Rotate(Vector3.right * 90);
-            var holster = probeLauncherHolster.gameObject.AddComponent<ToolHolster>();
+            var probeLauncherHolster = Instantiate(probeLauncherModel).gameObject;
+            probeLauncherHolster.SetActive(true);
+            var holster = probeLauncherHolster.AddComponent<ToolHolster>();
             holster.hand = _rightHandParent;
             holster.offset = -0.2f;
             holster.mode = ToolMode.Probe;
+            holster.scale = 0.15f;
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
