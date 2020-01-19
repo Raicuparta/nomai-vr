@@ -12,6 +12,7 @@ namespace NomaiVR
         Transform _rightHandParent;
         Transform _leftHandParent;
         Transform _debugTransform;
+        Transform _wrapper;
         bool _angleMode;
 
         void Start() {
@@ -39,12 +40,12 @@ namespace NomaiVR
 
 
             // Set up tracked hand objects
-            var wrapper = new GameObject().transform;
-            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), wrapper);
-            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), wrapper);
-            wrapper.parent = Common.MainCamera.transform.parent;
-            wrapper.localRotation = Quaternion.identity;
-            wrapper.localPosition = Common.MainCamera.transform.localPosition;
+            _wrapper = new GameObject().transform;
+            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
+            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
+            _wrapper.parent = Common.MainCamera.transform.parent;
+            _wrapper.localRotation = Quaternion.identity;
+            _wrapper.localPosition = Common.MainCamera.transform.localPosition;
             //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
             //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
             //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
@@ -78,10 +79,10 @@ namespace NomaiVR
             //handParent.localPosition = Vector3.zero;
             //handParent.localRotation = Quaternion.identity;
 
-            //handParent.gameObject.SetActive(false);
-            //var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
-            //poseDriver.poseAction = pose;
-            //handParent.gameObject.SetActive(true);
+            handParent.gameObject.SetActive(false);
+            var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            poseDriver.poseAction = pose;
+            handParent.gameObject.SetActive(true);
 
 
 
@@ -193,9 +194,8 @@ namespace NomaiVR
         }
 
         void Update() {
-            if (_rightHandParent) {
-                var groundPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
-                _rightHandParent.localPosition = groundPosition + SteamVR_Actions.default_RightPose.localPosition;
+            if (_wrapper) {
+                _wrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
