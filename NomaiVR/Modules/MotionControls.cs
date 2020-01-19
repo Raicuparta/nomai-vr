@@ -155,15 +155,18 @@ namespace NomaiVR
 
         void HoldTranslator() {
             var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
-            HoldObject(translator, _rightHandParent, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            HoldObject(translator, _rightHandParent, Vector3.zero, Quaternion.Euler(32.8f, 0, 0));
 
-            var translatorModel = translator.Find("TranslatorGroup/Props_HEA_Translator");
-            // Tools have a special shader that draws them on top of everything
-            // and screws with perspective. Changing to Standard shader so they look
-            // like a normal 3D object.
-            //translatorModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
+            var translatorGroup = translator.Find("TranslatorGroup");
+            translatorGroup.localPosition = Vector3.zero;
+            translatorGroup.localRotation = Quaternion.identity;
+
+            var translatorModel = translatorGroup.Find("Props_HEA_Translator");
             translatorModel.localPosition = Vector3.zero;
             translatorModel.localRotation = Quaternion.identity;
+            translatorModel.localScale = Vector3.one * 0.4f;
+
+            translator.GetComponent<NomaiTranslator>().SetValue("_raycastTransform", translatorModel);
 
             // This child seems to be only for some kind of shader effect.
             // Disabling it since it looks glitchy and doesn't seem necessary.
@@ -189,7 +192,7 @@ namespace NomaiVR
             holster.hand = _rightHandParent;
             holster.offset = -0.3f;
             holster.mode = ToolMode.Translator;
-            holster.scale = 0.3f;
+            holster.scale = 0.15f;
 
         }
 
