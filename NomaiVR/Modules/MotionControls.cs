@@ -1,7 +1,5 @@
 ﻿using OWML.Common;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -20,46 +18,20 @@ namespace NomaiVR
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
-
-            // For some reason objects are very high up if tracking space is not stationary.
-            // Not sure exactly what stationary entails here, since it since tracks position fine.
-            //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
-            //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
-            //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-
-        void OnDisable() {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            //OpenVR.Compositor.SetTrackingSpace(ETrackingUniverseOrigin.TrackingUniverseSeated);
-            //OpenVR.System.ResetSeatedZeroPose();
-
-
-            // Set up tracked hand objects
-            _wrapper = new GameObject().transform;
-            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
-            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
-            _wrapper.parent = Common.MainCamera.transform.parent;
-            _wrapper.localRotation = Quaternion.identity;
-            _wrapper.localPosition = Common.MainCamera.transform.localPosition;
-            //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
-            //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
-            //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
-
-            HoldSignalscope();
-            HoldLaunchProbe();
-            HoldHUD();
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
+                _wrapper = new GameObject().transform;
+                _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
+                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
+                _wrapper.parent = Common.MainCamera.transform.parent;
+                _wrapper.localRotation = Quaternion.identity;
+                _wrapper.localPosition = Common.MainCamera.transform.localPosition;
 
-
-
+                HoldSignalscope();
+                HoldLaunchProbe();
+                HoldHUD();
             }
         }
 
@@ -67,24 +39,15 @@ namespace NomaiVR
             var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
-
             hand.parent = handParent;
-            //hand.localPosition = new Vector3(0, -0.03f, -0.08f);
             hand.localPosition = new Vector3(0, -0.03f, -0.08f);
             hand.localRotation = rotation;
-            //hand.position = Common.MainCamera.transform.position - hand.position;
             hand.localScale = Vector3.one * 0.5f;
-
-            //handParent.parent = Common.MainCamera.transform.parent;
-            //handParent.localPosition = Vector3.zero;
-            //handParent.localRotation = Quaternion.identity;
 
             handParent.gameObject.SetActive(false);
             var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseDriver.poseAction = pose;
             handParent.gameObject.SetActive(true);
-
-
 
             return handParent;
         }
@@ -108,8 +71,6 @@ namespace NomaiVR
             uiCanvas.transform.localRotation = Quaternion.identity;
 
             HoldObject(playerHUD.transform, _leftHandParent, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
-
-            //_debugTransform = playerHUD.transform;
         }
 
         void HoldSignalscope() {
