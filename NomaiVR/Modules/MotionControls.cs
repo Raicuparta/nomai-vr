@@ -1,5 +1,6 @@
 ﻿using OWML.Common;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
 using Valve.VR;
@@ -24,45 +25,64 @@ namespace NomaiVR
             //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
             //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
             //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        void OnDisable() {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            //OpenVR.Compositor.SetTrackingSpace(ETrackingUniverseOrigin.TrackingUniverseSeated);
+            //OpenVR.System.ResetSeatedZeroPose();
+
+
+            // Set up tracked hand objects
+            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0));
+            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20));
+
+            //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
+            //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
+            //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
+
+            HoldSignalscope();
+            HoldLaunchProbe();
+            HoldHUD();
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
-                // Set up tracked hand objects
-                _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0));
-                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20));
 
-                //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
-                //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
-                //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
 
-                HoldSignalscope();
-                HoldLaunchProbe();
-                HoldHUD();
+
             }
         }
 
         Transform CreateHand(string objectName, SteamVR_Action_Pose pose, Quaternion rotation) {
             var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
-            //var handParent = new GameObject().transform;
-            Common.MainCamera.transform.localPosition = Vector3.zero;
-            Common.MainCamera.transform.localRotation = Quaternion.identity;
+            var handParent = new GameObject().transform;
 
-            hand.gameObject.SetActive(false);
-            hand.parent = Common.MainCamera.transform.parent;
-            hand.localRotation = Quaternion.identity;
+
+            hand.parent = handParent;
             //hand.localPosition = new Vector3(0, -0.03f, -0.08f);
             hand.localPosition = Vector3.zero;
+            hand.localRotation = Quaternion.identity;
+            //hand.position = Common.MainCamera.transform.position - hand.position;
             hand.localScale = Vector3.one * 0.5f;
 
             //handParent.parent = Common.MainCamera.transform.parent;
             //handParent.localPosition = Vector3.zero;
             //handParent.localRotation = Quaternion.identity;
 
+            hand.gameObject.SetActive(false);
             var poseDriver = hand.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseDriver.poseAction = pose;
-
             hand.gameObject.SetActive(true);
+
+            handParent.parent = Common.MainCamera.transform.parent;
+            handParent.localRotation = Quaternion.identity;
+            handParent.localPosition = Common.MainCamera.transform.localPosition;
 
             return hand;
         }
@@ -87,7 +107,7 @@ namespace NomaiVR
 
             HoldObject(playerHUD.transform, _leftHandParent, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
 
-            _debugTransform = playerHUD.transform;
+            //_debugTransform = playerHUD.transform;
         }
 
         void HoldSignalscope() {

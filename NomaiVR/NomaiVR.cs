@@ -23,7 +23,7 @@ namespace NomaiVR
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<FogFix>();
-            gameObject.AddComponent<PlayerBodyPosition>();
+            //gameObject.AddComponent<PlayerBodyPosition>();
             gameObject.AddComponent<MotionControls>();
             gameObject.AddComponent<ControllerInput>();
         }
