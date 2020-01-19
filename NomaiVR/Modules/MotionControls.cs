@@ -155,7 +155,9 @@ namespace NomaiVR
 
         void HoldTranslator() {
             var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
-            HoldObject(translator, _rightHandParent, Vector3.zero, Quaternion.Euler(32.8f, 0, 0));
+            HoldObject(translator, _rightHandParent, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
+
+            _debugTransform = translator;
 
             var translatorGroup = translator.Find("TranslatorGroup");
             translatorGroup.localPosition = Vector3.zero;
@@ -164,7 +166,7 @@ namespace NomaiVR
             var translatorModel = translatorGroup.Find("Props_HEA_Translator");
             translatorModel.localPosition = Vector3.zero;
             translatorModel.localRotation = Quaternion.identity;
-            translatorModel.localScale = Vector3.one * 0.4f;
+            translatorModel.localScale = Vector3.one * 0.3f;
 
             translator.GetComponent<NomaiTranslator>().SetValue("_raycastTransform", translatorModel);
 
