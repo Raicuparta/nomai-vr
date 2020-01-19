@@ -86,7 +86,7 @@ namespace NomaiVR
 
 
 
-            return hand;
+            return handParent;
         }
 
         void HoldHUD() {
