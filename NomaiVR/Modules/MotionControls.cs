@@ -39,9 +39,12 @@ namespace NomaiVR
 
 
             // Set up tracked hand objects
-            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0));
-            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20));
-
+            var wrapper = new GameObject().transform;
+            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), wrapper);
+            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), wrapper);
+            wrapper.parent = Common.MainCamera.transform.parent;
+            wrapper.localRotation = Quaternion.identity;
+            wrapper.localPosition = Common.MainCamera.transform.localPosition;
             //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
             //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
             //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
@@ -59,15 +62,15 @@ namespace NomaiVR
             }
         }
 
-        Transform CreateHand(string objectName, SteamVR_Action_Pose pose, Quaternion rotation) {
+        Transform CreateHand(string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {
             var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
             var handParent = new GameObject().transform;
-
+            handParent.parent = wrapper;
 
             hand.parent = handParent;
             //hand.localPosition = new Vector3(0, -0.03f, -0.08f);
-            hand.localPosition = Vector3.zero;
-            hand.localRotation = Quaternion.identity;
+            hand.localPosition = new Vector3(0, -0.03f, -0.08f);
+            hand.localRotation = rotation;
             //hand.position = Common.MainCamera.transform.position - hand.position;
             hand.localScale = Vector3.one * 0.5f;
 
@@ -75,14 +78,12 @@ namespace NomaiVR
             //handParent.localPosition = Vector3.zero;
             //handParent.localRotation = Quaternion.identity;
 
-            hand.gameObject.SetActive(false);
-            var poseDriver = hand.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            handParent.gameObject.SetActive(false);
+            var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseDriver.poseAction = pose;
-            hand.gameObject.SetActive(true);
+            handParent.gameObject.SetActive(true);
 
-            handParent.parent = Common.MainCamera.transform.parent;
-            handParent.localRotation = Quaternion.identity;
-            handParent.localPosition = Common.MainCamera.transform.localPosition;
+
 
             return hand;
         }
