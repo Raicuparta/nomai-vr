@@ -12,7 +12,7 @@ namespace NomaiVR
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
 
         void Start() {
-            NomaiVR.Log("Started SteamVRTest");
+            NomaiVR.Log("Started ControllerInput");
 
             _buttons = new Dictionary<XboxButton, float>();
             _singleAxes = new Dictionary<SingleAxis, float>();
