@@ -7,8 +7,10 @@ namespace NomaiVR
 {
     class ToolHolster: MonoBehaviour
     {
-        SphereCollider _collider;
         public Transform hand;
+
+        SphereCollider _collider;
+        bool _grip = false;
 
         void Start() {
             //var rigidbody = gameObject.AddComponent<Rigidbody>();
@@ -19,6 +21,17 @@ namespace NomaiVR
             //_collider.radius = 1f;
             //_collider.isTrigger = true;
             //_collider.enabled = true;
+            SteamVR_Actions.default_RB.onChange += onRBChange;
+        }
+
+        private void onRBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            NomaiVR.Log("Grip! " + newState);
+            _grip = newState;
+
+            if (!_grip) {
+                gameObject.SetActive(true);
+                FindObjectOfType<ToolModeSwapper>().UnequipTool();
+            }
         }
 
         public void Equip() {
@@ -28,7 +41,7 @@ namespace NomaiVR
         void Update() {
             transform.position = Common.MainCamera.transform.parent.TransformPoint(Common.MainCamera.transform.localPosition + new Vector3(0.2f, -0.7f, 0.1f));
 
-            if (Vector3.Distance(transform.position, hand.position) < 0.2f) {
+            if (_grip && Vector3.Distance(transform.position, hand.position) < 0.3f) {
                 gameObject.SetActive(false);
                 FindObjectOfType<ToolModeSwapper>().EquipToolMode(ToolMode.SignalScope);
             }

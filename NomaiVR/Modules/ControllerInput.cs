@@ -18,14 +18,12 @@ namespace NomaiVR
             _singleAxes = new Dictionary<SingleAxis, float>();
             _doubleAxes = new Dictionary<DoubleAxis, Vector2>();
 
-            SteamVR.Initialize();
-
             SteamVR_Actions.default_A.onChange += CreateButtonHandler(XboxButton.A);
             SteamVR_Actions.default_B.onChange += CreateButtonHandler(XboxButton.B);
             SteamVR_Actions.default_X.onChange += CreateButtonHandler(XboxButton.X);
             SteamVR_Actions.default_Y.onChange += CreateButtonHandler(XboxButton.Y);
             SteamVR_Actions.default_LB.onChange += CreateButtonHandler(XboxButton.LeftBumper);
-            SteamVR_Actions.default_RB.onChange += CreateButtonHandler(XboxButton.RightBumper);
+            //SteamVR_Actions.default_RB.onChange += CreateButtonHandler(XboxButton.RightBumper);
             SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
             SteamVR_Actions.default_LT.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
             SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);

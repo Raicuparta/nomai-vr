@@ -11,7 +11,6 @@ namespace NomaiVR
         Transform _leftHandParent;
         Transform _debugTransform;
         Transform _wrapper;
-        Transform _holster;
         bool _angleMode;
 
         void Start() {
@@ -92,7 +91,6 @@ namespace NomaiVR
 
 
             var signalScopeHolster = Instantiate(signalScopeModel).transform;
-            _holster = signalScopeHolster;
             signalScopeHolster.gameObject.SetActive(true);
             signalScopeHolster.parent = Common.MainCamera.transform.parent;
             signalScopeHolster.localRotation = Quaternion.identity;
@@ -172,15 +170,6 @@ namespace NomaiVR
         void Update() {
             if (_wrapper) {
                 _wrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
-            }
-            if (_holster) {
-                _holster.localPosition = Common.MainCamera.transform.localPosition + new Vector3(0.2f, -0.7f, 0.1f);
-
-
-                if (Vector3.Distance(_holster.position, _rightHandParent.position) < 0.2f) {
-                    _holster.gameObject.SetActive(false);
-                    FindObjectOfType<ToolModeSwapper>().EquipToolMode(ToolMode.SignalScope);
-                }
             }
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
