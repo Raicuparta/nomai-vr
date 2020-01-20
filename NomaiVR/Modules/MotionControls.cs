@@ -39,6 +39,11 @@ namespace NomaiVR
 
                 // For aiming at interactibles with hand:
                 //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
+                
+                // For fixing signalscope zoom
+                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
+                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
+                //behaviour.SetValue("_targetFOV", Common.MainCamera.fieldOfView);
             }
         }
 
@@ -313,6 +318,14 @@ namespace NomaiVR
                 func();
 
                 return false;
+            }
+
+            static void ZoomIn() {
+                Common.MainCamera.transform.localScale = Vector3.one * 0.1f;
+            }
+
+            static void ZoomOut() {
+                Common.MainCamera.transform.localScale = Vector3.one;
             }
         }
     }
