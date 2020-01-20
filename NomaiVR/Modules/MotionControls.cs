@@ -1,5 +1,6 @@
 ﻿using OWML.Common;
 using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
@@ -9,7 +10,7 @@ namespace NomaiVR
 {
     public class MotionControls : MonoBehaviour
     {
-        Transform _rightHandParent;
+        public static Transform _rightHandParent;
         Transform _leftHandParent;
         Transform _debugTransform;
         Transform _wrapper;
@@ -35,6 +36,9 @@ namespace NomaiVR
                 HoldLaunchProbe();
                 HoldTranslator();
                 HoldHUD();
+
+                // For aiming at interactibles with hand:
+                //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
             }
         }
 
@@ -195,7 +199,6 @@ namespace NomaiVR
             holster.offset = -0.3f;
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
-
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
@@ -288,6 +291,28 @@ namespace NomaiVR
                     NomaiVR.Log("position: new Vector3(" + position.x + "f, " + position.y + "f, " + position.z + "f)");
                     NomaiVR.Log("Rotation: Quaternion.Euler(" + angles.x + "f, " + angles.y + "f, " + angles.z + "f)");
                 }
+            }
+        }
+
+        internal static class Patches
+        {
+            static bool PatchUpdateInteractVolume(
+                InteractZone __instance,
+                OWCamera ____playerCam,
+                float ____viewingWindow,
+                ref bool ____focused
+            ) {
+                float num = 2f * Vector3.Angle(MotionControls._rightHandParent.forward, __instance.transform.forward);
+                ____focused = (num <= ____viewingWindow);
+                var Base = __instance as SingleInteractionVolume;
+
+                var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
+                var ftn = method.MethodHandle.GetFunctionPointer();
+                var func = (Action)Activator.CreateInstance(typeof(Action), __instance, ftn);
+
+                func();
+
+                return false;
             }
         }
     }
