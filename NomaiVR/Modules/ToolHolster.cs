@@ -12,31 +12,31 @@ namespace NomaiVR
         public float offset;
         public float scale;
         MeshRenderer[] _renderers;
+        bool _visible;
 
         void Start() {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
 
             transform.localScale = Vector3.one * scale;
             transform.parent = Common.PlayerBody.transform;
-            transform.localPosition = new Vector3(offset, 0.2f, 0.2f);
+            transform.localPosition = new Vector3(offset, 0.3f, 0.2f);
             transform.localRotation = Quaternion.identity;
             transform.Rotate(Vector3.right * 90);
         }
 
         void Equip() {
-            SetRenderersEnabled(false);
             FindObjectOfType<ToolModeSwapper>().EquipToolMode(mode);
         }
 
         void Unequip() {
-            SetRenderersEnabled(true);
             Common.ToolSwapper.UnequipTool();
         }
 
-        void SetRenderersEnabled(bool enabled) {
+        void SetVisible(bool visible) {
             foreach (var renderer in _renderers) {
-                renderer.enabled = enabled;
+                renderer.enabled = visible;
             }
+            _visible = visible;
         }
 
         void Update() {
@@ -47,6 +47,12 @@ namespace NomaiVR
                     Unequip();
                 }
                 ControllerInput.IsGripping = false;
+            }
+            if (!_visible && !Common.ToolSwapper.IsInToolMode(mode)) {
+                SetVisible(true);
+            }
+            if (_visible && Common.ToolSwapper.IsInToolMode(mode)) {
+                SetVisible(false);
             }
         }
     }
