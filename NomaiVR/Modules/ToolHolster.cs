@@ -30,6 +30,7 @@ namespace NomaiVR
 
         void Unequip() {
             SetRenderersEnabled(true);
+            Common.ToolSwapper.UnequipTool();
         }
 
         void SetRenderersEnabled(bool enabled) {
@@ -39,11 +40,13 @@ namespace NomaiVR
         }
 
         void Update() {
-            if (ControllerInput.IsGripping && Common.ToolSwapper.GetToolMode() == ToolMode.None && Vector3.Distance(transform.position, hand.position) < 0.2f) {
-                Equip();
-            }
-            if (!ControllerInput.IsGripping) {
-                Unequip();
+            if (ControllerInput.IsGripping && Vector3.Distance(transform.position, hand.position) < 0.2f) {
+                if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+                    Equip();
+                } else if(Common.ToolSwapper.IsInToolMode(mode)) {
+                    Unequip();
+                }
+                ControllerInput.IsGripping = false;
             }
         }
     }

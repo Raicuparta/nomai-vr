@@ -26,8 +26,8 @@ namespace NomaiVR
             SteamVR_Actions.default_LB.onChange += CreateButtonHandler(XboxButton.LeftBumper);
             //SteamVR_Actions.default_RB.onChange += CreateButtonHandler(XboxButton.RightBumper);
             SteamVR_Actions.default_RB.onChange += onRBChange;
-            SteamVR_Actions.default_RT.onChange += OnRTChange;
-            //SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+            //SteamVR_Actions.default_RT.onChange += OnRTChange;
+            SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
             SteamVR_Actions.default_LT.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
             SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
             SteamVR_Actions.default_LStick.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
@@ -42,9 +42,8 @@ namespace NomaiVR
 
         void onRBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             IsGripping = newState;
-
-            if (!IsGripping) {
-                Common.ToolSwapper.UnequipTool();
+            if (!Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+                _buttons[XboxButton.RightBumper] = newState ? 1 : 0;
             }
         }
 
