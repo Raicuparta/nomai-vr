@@ -100,7 +100,7 @@ namespace NomaiVR
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<ToolHolster>();
             holster.hand = _rightHandParent;
-            holster.offset = 0.3f;
+            holster.offset = 0.35f;
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
 

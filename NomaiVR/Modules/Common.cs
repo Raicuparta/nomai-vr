@@ -31,7 +31,7 @@ namespace NomaiVR
         }
         private void OnWakeUp(MonoBehaviour behaviour, Events ev) { InitGame(); }
 
-            void InitPreGame() {
+        void InitPreGame() {
             MainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
 

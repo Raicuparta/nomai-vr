@@ -17,7 +17,8 @@ namespace NomaiVR
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
 
             transform.localScale = Vector3.one * scale;
-            transform.parent = Common.MainCamera.transform.parent;
+            transform.parent = Common.PlayerBody.transform;
+            transform.localPosition = new Vector3(offset, 0.2f, 0.2f);
             transform.localRotation = Quaternion.identity;
             transform.Rotate(Vector3.right * 90);
         }
@@ -38,8 +39,6 @@ namespace NomaiVR
         }
 
         void Update() {
-            transform.position = Common.MainCamera.transform.parent.TransformPoint(Common.MainCamera.transform.localPosition + new Vector3(offset, -0.7f, 0.1f));
-
             if (ControllerInput.IsGripping && Common.ToolSwapper.GetToolMode() == ToolMode.None && Vector3.Distance(transform.position, hand.position) < 0.2f) {
                 Equip();
             }
