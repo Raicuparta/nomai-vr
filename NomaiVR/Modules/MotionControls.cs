@@ -110,13 +110,30 @@ namespace NomaiVR
             holster.scale = 0.8f;
 
 
+            var playerHUD = GameObject.Find("PlayerHUD").transform;
+            var reticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
+            var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
+            var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
+
+
             // Attatch Signalscope UI to the Signalscope.
-            var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
-            reticule.renderMode = RenderMode.WorldSpace;
-            reticule.transform.parent = signalScope;
-            reticule.transform.localScale = Vector3.one * 0.0005f;
-            reticule.transform.localPosition = Vector3.forward * 0.5f;
-            reticule.transform.localRotation = Quaternion.identity;
+            reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            reticule.parent = signalScope;
+            reticule.localScale = Vector3.one * 0.0005f;
+            reticule.localPosition = Vector3.forward * 0.5f;
+            reticule.localRotation = Quaternion.identity;
+
+            helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            helmetOff.parent = signalScope;
+            helmetOff.localScale = Vector3.one * 0.0005f;
+            helmetOff.localPosition = Vector3.zero;
+            helmetOff.localRotation = Quaternion.identity;
+
+            helmetOn.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            helmetOn.parent = signalScope;
+            helmetOn.localScale = Vector3.one * 0.0005f;
+            helmetOn.localPosition = Vector3.down * 0.5f;
+            helmetOn.localRotation = Quaternion.identity;
         }
 
         void HoldLaunchProbe() {
