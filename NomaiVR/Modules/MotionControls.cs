@@ -177,6 +177,21 @@ namespace NomaiVR
             holster.offset = 0.1f;
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
+
+            var playerHUD = GameObject.Find("PlayerHUD").transform;
+            var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
+            display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            display.parent = probeLauncherModel;
+            display.localScale = Vector3.one * 0.0012f;
+            display.localRotation = Quaternion.identity;
+            display.localPosition = Vector3.forward * -0.67f;
+
+            var displayImage = display.GetChild(0).GetComponent<RectTransform>();
+            displayImage.anchorMin = Vector2.one * 0.5f;
+            displayImage.anchorMax = Vector2.one * 0.5f;
+            displayImage.pivot = Vector2.one * 0.5f;
+            displayImage.localPosition = Vector3.zero;
+            displayImage.localRotation = Quaternion.identity;
         }
 
         void HoldTranslator() {
