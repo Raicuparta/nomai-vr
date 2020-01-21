@@ -190,11 +190,6 @@ namespace NomaiVR
             display.localRotation = Quaternion.identity;
             display.localPosition = Vector3.forward * -0.67f;
             ProbeUI = display.GetComponent<ProbeLauncherUI>();
-            //var clone = Instantiate(display);
-            //NomaiVR.Log("cloned " + clone.name);
-            //var cloneUI = clone.GetComponent<ProbeLauncherUI>();
-            //NomaiVR.Log("cloned UI " + cloneUI.name);
-            //cloneUI.SetValue("_nonSuitUI", false);
 
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
@@ -202,6 +197,8 @@ namespace NomaiVR
             displayImage.pivot = Vector2.one * 0.5f;
             displayImage.localPosition = Vector3.zero;
             displayImage.localRotation = Quaternion.identity;
+
+            playerHUD.Find("HelmetOnUI/UICanvas/HUDProbeDisplay/Image").gameObject.SetActive(false);
         }
 
         void HoldTranslator() {
