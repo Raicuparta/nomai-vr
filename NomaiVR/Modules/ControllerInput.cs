@@ -49,7 +49,7 @@ namespace NomaiVR
 
         SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis) {
             return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) => {
-                _singleAxes[singleAxis] = newAxis;
+                _singleAxes[singleAxis] = Mathf.Round(newAxis * 10) / 10;
             };
         }
 
@@ -61,9 +61,11 @@ namespace NomaiVR
 
         SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY) {
             return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) => {
-                _doubleAxes[doubleAxis] = axis;
-                _singleAxes[singleX] = axis.x;
-                _singleAxes[singleY] = axis.y;
+                var x = Mathf.Round(axis.x * 100) / 100;
+                var y = Mathf.Round(axis.y * 100) / 100;
+                _doubleAxes[doubleAxis] = new Vector2(x, y);
+                _singleAxes[singleX] = x;
+                _singleAxes[singleY] = y;
             };
         }
 
