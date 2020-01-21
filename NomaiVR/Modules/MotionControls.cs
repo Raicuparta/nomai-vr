@@ -10,7 +10,8 @@ namespace NomaiVR
 {
     public class MotionControls : MonoBehaviour
     {
-        public static Transform _rightHandParent;
+        protected static Transform RightHand;
+        protected static Transform ProbeLauncherModel;
         protected static ProbeLauncherUI ProbeUI;
         Transform _leftHandParent;
         Transform _debugTransform;
@@ -27,7 +28,7 @@ namespace NomaiVR
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
                 _wrapper = new GameObject().transform;
-                _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
+                RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
                 _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
                 _wrapper.parent = Common.MainCamera.transform.parent;
                 _wrapper.localRotation = Quaternion.identity;
@@ -91,7 +92,7 @@ namespace NomaiVR
 
         void HoldSignalscope() {
             var signalScope = Common.MainCamera.transform.Find("Signalscope");
-            HoldObject(signalScope, _rightHandParent, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            HoldObject(signalScope, RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
 
             var signalScopeModel = signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -108,7 +109,7 @@ namespace NomaiVR
             var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<ToolHolster>();
-            holster.hand = _rightHandParent;
+            holster.hand = RightHand;
             holster.offset = 0.35f;
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
@@ -143,15 +144,15 @@ namespace NomaiVR
         void HoldLaunchProbe() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.2f;
-            HoldObject(probeLauncher, _rightHandParent, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
+            HoldObject(probeLauncher, RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
 
-            var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
-            probeLauncherModel.gameObject.layer = 0;
-            probeLauncherModel.localPosition = Vector3.zero;
-            probeLauncherModel.localRotation = Quaternion.identity;
+            ProbeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
+            ProbeLauncherModel.gameObject.layer = 0;
+            ProbeLauncherModel.localPosition = Vector3.zero;
+            ProbeLauncherModel.localRotation = Quaternion.identity;
 
-            probeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
-            probeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
+            ProbeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
+            ProbeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
 
             var renderers = probeLauncher.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
@@ -170,14 +171,14 @@ namespace NomaiVR
 
             // This transform defines the origin and direction of the launched probe.
             var launchOrigin = Common.MainCamera.transform.Find("ProbeLauncherTransform").transform;
-            launchOrigin.parent = probeLauncherModel;
+            launchOrigin.parent = ProbeLauncherModel;
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;
 
-            var probeLauncherHolster = Instantiate(probeLauncherModel).gameObject;
+            var probeLauncherHolster = Instantiate(ProbeLauncherModel).gameObject;
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<ToolHolster>();
-            holster.hand = _rightHandParent;
+            holster.hand = RightHand;
             holster.offset = 0.1f;
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
@@ -185,7 +186,7 @@ namespace NomaiVR
             var playerHUD = GameObject.Find("PlayerHUD").transform;
             var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
             display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            display.parent = probeLauncherModel;
+            display.parent = ProbeLauncherModel;
             display.localScale = Vector3.one * 0.0012f;
             display.localRotation = Quaternion.identity;
             display.localPosition = Vector3.forward * -0.67f;
@@ -203,7 +204,7 @@ namespace NomaiVR
 
         void HoldTranslator() {
             var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
-            HoldObject(translator, _rightHandParent, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
+            HoldObject(translator, RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
 
             _debugTransform = translator;
 
@@ -239,7 +240,7 @@ namespace NomaiVR
             var signalScopeHolster = Instantiate(translatorModel).gameObject;
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<ToolHolster>();
-            holster.hand = _rightHandParent;
+            holster.hand = RightHand;
             holster.offset = -0.3f;
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
@@ -274,6 +275,11 @@ namespace NomaiVR
         void Update() {
             if (_wrapper) {
                 _wrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+            }
+            if (ProbeLauncherModel) {
+                Locator.GetProbe().transform.Find("CameraPivot").rotation = ProbeLauncherModel.rotation;
+                Locator.GetProbe().transform.Find("CameraPivot").Rotate(Vector3.right * 90);
+                //Locator.GetProbe().transform.Find("CameraPivot").up = ProbeLauncherModel.up;
             }
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
@@ -346,7 +352,7 @@ namespace NomaiVR
                 float ____viewingWindow,
                 ref bool ____focused
             ) {
-                float num = 2f * Vector3.Angle(MotionControls._rightHandParent.forward, __instance.transform.forward);
+                float num = 2f * Vector3.Angle(MotionControls.RightHand.forward, __instance.transform.forward);
                 ____focused = (num <= ____viewingWindow);
                 var Base = __instance as SingleInteractionVolume;
 
