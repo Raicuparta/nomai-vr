@@ -11,6 +11,7 @@ namespace NomaiVR
     public class MotionControls : MonoBehaviour
     {
         public static Transform _rightHandParent;
+        protected static ProbeLauncherUI ProbeUI;
         Transform _leftHandParent;
         Transform _debugTransform;
         Transform _wrapper;
@@ -39,11 +40,14 @@ namespace NomaiVR
 
                 // For aiming at interactibles with hand:
                 //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
-                
+
                 // For fixing signalscope zoom
                 //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
                 //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
                 //behaviour.SetValue("_targetFOV", Common.MainCamera.fieldOfView);
+
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
             }
         }
 
@@ -185,6 +189,12 @@ namespace NomaiVR
             display.localScale = Vector3.one * 0.0012f;
             display.localRotation = Quaternion.identity;
             display.localPosition = Vector3.forward * -0.67f;
+            ProbeUI = display.GetComponent<ProbeLauncherUI>();
+            //var clone = Instantiate(display);
+            //NomaiVR.Log("cloned " + clone.name);
+            //var cloneUI = clone.GetComponent<ProbeLauncherUI>();
+            //NomaiVR.Log("cloned UI " + cloneUI.name);
+            //cloneUI.SetValue("_nonSuitUI", false);
 
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
@@ -358,6 +368,14 @@ namespace NomaiVR
 
             static void ZoomOut() {
                 Common.MainCamera.transform.localScale = Vector3.one;
+            }
+
+            static void SuitUp() {
+                MotionControls.ProbeUI.SetValue("_nonSuitUI", false);
+            }
+
+            static void RemoveSuit() {
+                MotionControls.ProbeUI.SetValue("_nonSuitUI", true);
             }
         }
     }
