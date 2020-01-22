@@ -124,7 +124,7 @@ namespace NomaiVR
 
             var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
             signalScopeHolster.SetActive(true);
-            var holster = signalScopeHolster.AddComponent<ToolHolster>();
+            var holster = signalScopeHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
             holster.offset = 0.35f;
             holster.mode = ToolMode.SignalScope;
@@ -193,7 +193,7 @@ namespace NomaiVR
 
             var probeLauncherHolster = Instantiate(ProbeLauncherModel).gameObject;
             probeLauncherHolster.SetActive(true);
-            var holster = probeLauncherHolster.AddComponent<ToolHolster>();
+            var holster = probeLauncherHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
             holster.offset = 0.1f;
             holster.mode = ToolMode.Probe;
@@ -255,7 +255,7 @@ namespace NomaiVR
 
             var signalScopeHolster = Instantiate(translatorModel).gameObject;
             signalScopeHolster.SetActive(true);
-            var holster = signalScopeHolster.AddComponent<ToolHolster>();
+            var holster = signalScopeHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
             holster.offset = -0.3f;
             holster.mode = ToolMode.Translator;

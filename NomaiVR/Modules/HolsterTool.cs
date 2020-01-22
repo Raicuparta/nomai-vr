@@ -5,7 +5,7 @@ using Valve.VR;
 
 namespace NomaiVR
 {
-    class ToolHolster: MonoBehaviour
+    class HolsterTool: MonoBehaviour
     {
         public Transform hand;
         public ToolMode mode;
