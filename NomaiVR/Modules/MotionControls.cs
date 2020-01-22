@@ -34,6 +34,19 @@ namespace NomaiVR
                 _wrapper.localRotation = Quaternion.identity;
                 _wrapper.localPosition = Common.MainCamera.transform.localPosition;
 
+                var laser = new GameObject("Laser");
+                laser.transform.parent = RightHand;
+                laser.transform.position = Vector3.zero;
+                laser.transform.rotation = Quaternion.identity;
+                var lineRenderer = RightHand.gameObject.AddComponent<LineRenderer>();
+                lineRenderer.useWorldSpace = false;
+                lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });
+                lineRenderer.endColor = Color.clear;
+                lineRenderer.startColor = Color.cyan;
+                lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                lineRenderer.startWidth = 0.01f;
+                lineRenderer.endWidth = 0.01f;
+
                 HoldSignalscope();
                 HoldLaunchProbe();
                 HoldTranslator();
