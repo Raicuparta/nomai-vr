@@ -94,7 +94,7 @@
     <Compile Include="Modules\MotionControls.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
     <Compile Include="Modules\ControllerInput.cs" />
-    <Compile Include="Modules\ToolHolster.cs" />
+    <Compile Include="Modules\HolsterTool.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

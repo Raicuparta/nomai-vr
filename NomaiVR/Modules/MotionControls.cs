@@ -15,7 +15,8 @@ namespace NomaiVR
         protected static ProbeLauncherUI ProbeUI;
         Transform _leftHandParent;
         Transform _debugTransform;
-        Transform _wrapper;
+        Transform _handsWrapper;
+        Signalscope _signalscope;
         bool _angleMode;
         bool _enableLaser = false;
 
@@ -23,17 +24,18 @@ namespace NomaiVR
             NomaiVR.Log("Start MotionControls");
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
+            NomaiVR.Helper.Events.Subscribe<ShipCockpitUI>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
-                _wrapper = new GameObject().transform;
-                RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
-                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
-                _wrapper.parent = Common.MainCamera.transform.parent;
-                _wrapper.localRotation = Quaternion.identity;
-                _wrapper.localPosition = Common.MainCamera.transform.localPosition;
+                _handsWrapper = new GameObject().transform;
+                RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _handsWrapper);
+                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _handsWrapper);
+                _handsWrapper.parent = Common.MainCamera.transform.parent;
+                _handsWrapper.localRotation = Quaternion.identity;
+                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition;
 
                 if (_enableLaser) {
                     var laser = new GameObject("Laser");
@@ -65,6 +67,8 @@ namespace NomaiVR
 
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
+            } else if (behaviour.GetType() == typeof(ShipCockpitUI) && ev == Events.AfterStart) {
+                behaviour.SetValue("_signalscopeTool", _signalscope);
             }
         }
 
@@ -109,6 +113,7 @@ namespace NomaiVR
         void HoldSignalscope() {
             var signalScope = Common.MainCamera.transform.Find("Signalscope");
             HoldObject(signalScope, RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            _signalscope = signalScope.GetComponent<Signalscope>();
 
             var signalScopeModel = signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -222,8 +227,6 @@ namespace NomaiVR
             var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
             HoldObject(translator, RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
 
-            _debugTransform = translator;
-
             var translatorGroup = translator.Find("TranslatorGroup");
             translatorGroup.localPosition = Vector3.zero;
             translatorGroup.localRotation = Quaternion.identity;
@@ -289,8 +292,8 @@ namespace NomaiVR
         }
 
         void Update() {
-            if (_wrapper) {
-                _wrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+            if (_handsWrapper) {
+                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
             if (ProbeLauncherModel) {
                 Locator.GetProbe().transform.Find("CameraPivot").rotation = ProbeLauncherModel.rotation;
