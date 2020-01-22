@@ -13,10 +13,12 @@ namespace NomaiVR
         protected static Transform RightHand;
         protected static Transform ProbeLauncherModel;
         protected static ProbeLauncherUI ProbeUI;
+        protected static Transform SignalscopeReticule;
+        protected static Transform ShipWindshield;
+        protected static Signalscope SignalScope;
         Transform _leftHandParent;
         Transform _debugTransform;
         Transform _handsWrapper;
-        Signalscope _signalscope;
         bool _angleMode;
         bool _enableLaser = false;
 
@@ -57,6 +59,8 @@ namespace NomaiVR
                 HoldTranslator();
                 HoldHUD();
 
+                ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
+
                 // For aiming at interactibles with hand:
                 //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
 
@@ -67,8 +71,9 @@ namespace NomaiVR
 
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
             } else if (behaviour.GetType() == typeof(ShipCockpitUI) && ev == Events.AfterStart) {
-                behaviour.SetValue("_signalscopeTool", _signalscope);
+                behaviour.SetValue("_signalscopeTool", SignalScope);
             }
         }
 
@@ -113,7 +118,7 @@ namespace NomaiVR
         void HoldSignalscope() {
             var signalScope = Common.MainCamera.transform.Find("Signalscope");
             HoldObject(signalScope, RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
-            _signalscope = signalScope.GetComponent<Signalscope>();
+            SignalScope = signalScope.GetComponent<Signalscope>();
 
             var signalScopeModel = signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -137,17 +142,17 @@ namespace NomaiVR
 
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
-            var reticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
+            SignalscopeReticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
             var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
             var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
 
 
             // Attatch Signalscope UI to the Signalscope.
-            reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            reticule.parent = signalScope;
-            reticule.localScale = Vector3.one * 0.0005f;
-            reticule.localPosition = Vector3.forward * 0.5f;
-            reticule.localRotation = Quaternion.identity;
+            SignalscopeReticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            SignalscopeReticule.parent = signalScope;
+            SignalscopeReticule.localScale = Vector3.one * 0.0005f;
+            SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
+            SignalscopeReticule.localRotation = Quaternion.identity;
 
             helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
             helmetOff.parent = signalScope;
@@ -398,6 +403,23 @@ namespace NomaiVR
 
             static void RemoveSuit() {
                 MotionControls.ProbeUI.SetValue("_nonSuitUI", true);
+            }
+
+            static void ChangeInputMode(InputMode mode) {
+                NomaiVR.Log("Change Input Mode");
+                if (mode == InputMode.ShipCockpit) {
+                    NomaiVR.Log("Is Cockpit");
+                    SignalscopeReticule.parent = ShipWindshield;
+                    SignalscopeReticule.localScale = Vector3.one * 0.004f;
+                    SignalscopeReticule.localPosition = Vector3.forward * 3f;
+                    SignalscopeReticule.localRotation = Quaternion.identity;
+                } else {
+                    NomaiVR.Log("Is Not Cockpit");
+                    SignalscopeReticule.parent = SignalScope.transform;
+                    SignalscopeReticule.localScale = Vector3.one * 0.0005f;
+                    SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
+                    SignalscopeReticule.localRotation = Quaternion.identity;
+                }
             }
         }
     }
