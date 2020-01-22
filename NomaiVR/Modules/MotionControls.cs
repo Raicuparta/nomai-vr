@@ -406,15 +406,12 @@ namespace NomaiVR
             }
 
             static void ChangeInputMode(InputMode mode) {
-                NomaiVR.Log("Change Input Mode");
-                if (mode == InputMode.ShipCockpit) {
-                    NomaiVR.Log("Is Cockpit");
+                if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
                     SignalscopeReticule.parent = ShipWindshield;
                     SignalscopeReticule.localScale = Vector3.one * 0.004f;
                     SignalscopeReticule.localPosition = Vector3.forward * 3f;
                     SignalscopeReticule.localRotation = Quaternion.identity;
                 } else {
-                    NomaiVR.Log("Is Not Cockpit");
                     SignalscopeReticule.parent = SignalScope.transform;
                     SignalscopeReticule.localScale = Vector3.one * 0.0005f;
                     SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
