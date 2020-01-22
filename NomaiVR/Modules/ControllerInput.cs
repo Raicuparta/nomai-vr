@@ -42,7 +42,7 @@ namespace NomaiVR
 
         void onRBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             IsGripping = newState;
-            if (!Common.ToolSwapper.IsInToolMode(ToolMode.None) && !Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope)) {
+            if ((!Common.ToolSwapper.IsInToolMode(ToolMode.None) && !Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope)) || PlayerState.IsInsideShip()) {
                 _buttons[XboxButton.RightBumper] = newState ? 1 : 0;
             }
         }
