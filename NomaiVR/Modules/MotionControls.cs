@@ -61,6 +61,9 @@ namespace NomaiVR
 
                 ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
 
+                // Move helmet forward to make it a bit more visible.
+                FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
+
                 // For aiming at interactibles with hand:
                 //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
 
