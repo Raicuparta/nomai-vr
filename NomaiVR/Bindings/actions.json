@@ -74,6 +74,14 @@
       "type": "pose"
     },
     {
+      "name": "/actions/default/in/RClick",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/LClick",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     }
