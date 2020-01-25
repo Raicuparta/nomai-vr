@@ -10,15 +10,6 @@
          "sources" : []
       },
       "/actions/default" : {
-         "chords" : [
-            {
-               "inputs" : [
-                  [ "/user/hand/left/input/grip", "click" ],
-                  [ "/user/hand/right/input/grip", "click" ]
-               ],
-               "output" : "/actions/default/in/dup"
-            }
-         ],
          "haptics" : [
             {
                "output" : "/actions/default/out/haptic",
