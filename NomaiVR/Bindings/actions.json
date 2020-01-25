@@ -100,7 +100,11 @@
     {
       "binding_url" : "index_knuckles.json",
       "controller_type" : "knuckles"
-   }
+    },
+    {
+      "binding_url" : "vive_wands.json",
+      "controller_type" : "vive_controller"
+    }
   ],
   "localization": [
     {

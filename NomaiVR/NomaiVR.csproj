@@ -100,7 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Bindings\actions.json" />
-    <None Include="Bindings\bindings_oculus_touch.json" />
+    <None Include="Bindings\index_knuckles.json" />
+    <None Include="Bindings\oculus_touch.json" />
+    <None Include="Bindings\vive_wands.json" />
     <None Include="ModConfig\default-config.json" />
     <None Include="ModConfig\manifest.json" />
     <None Include="packages.config" />

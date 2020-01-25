@@ -136,7 +136,7 @@
    "category" : "steamvr_input",
    "controller_type" : "oculus_touch",
    "description" : "",
-   "name" : "My vr-tests [Testing] configuration for Oculus Touch",
+   "name" : "Outer Wilds Oculus Touch Bindings",
    "options" : {},
    "simulated_actions" : []
 }
