@@ -579,7 +579,6 @@
     <None Include="SteamVR\InteractionSystem\Teleport\Shaders\Highlight.shader" />
     <None Include="SteamVR\InteractionSystem\Teleport\Textures\TeleportAreaPatternColor.tga" />
     <None Include="SteamVR\InteractionSystem\Teleport\Textures\TeleportMarker.psd" />
-    <None Include="SteamVR_Input\SteamVR_Actions.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll" />

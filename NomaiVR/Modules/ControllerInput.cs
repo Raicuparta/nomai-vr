@@ -23,21 +23,31 @@ namespace NomaiVR
             SteamVR_Actions.default_B.onChange += CreateButtonHandler(XboxButton.B);
             SteamVR_Actions.default_X.onChange += CreateButtonHandler(XboxButton.X);
             SteamVR_Actions.default_Y.onChange += CreateButtonHandler(XboxButton.Y);
+
+            SteamVR_Actions.default_DUp.onChange += CreateButtonHandler(XboxAxis.dPadY, 1);
+            SteamVR_Actions.default_DDown.onChange += CreateButtonHandler(XboxAxis.dPadY, -1);
+            SteamVR_Actions.default_DLeft.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
+            SteamVR_Actions.default_DRight.onChange += CreateButtonHandler(XboxAxis.dPadX, 1);
+
+            SteamVR_Actions.default_LB.onChange += OnLBChange;
             SteamVR_Actions.default_LB.onChange += CreateButtonHandler(XboxButton.LeftBumper);
             //SteamVR_Actions.default_RB.onChange += CreateButtonHandler(XboxButton.RightBumper);
             SteamVR_Actions.default_RB.onChange += onRBChange;
-            //SteamVR_Actions.default_RT.onChange += OnRTChange;
-            SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+
             SteamVR_Actions.default_LT.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
-            SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
+            SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+
+            SteamVR_Actions.default_Start.onChange += CreateButtonHandler(XboxButton.Start);
+            SteamVR_Actions.default_Select.onChange += CreateButtonHandler(XboxButton.Select);
+
+            SteamVR_Actions.default_LClick.onChange += CreateButtonHandler(XboxButton.LeftStickClick);
+            SteamVR_Actions.default_RClick.onChange += CreateButtonHandler(XboxButton.RightStickClick);
+
             SteamVR_Actions.default_LStick.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
+            SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
-        }
-
-        void OnRTChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
-            _buttons[XboxButton.RightBumper] = newAxis;
         }
 
         void onRBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -47,9 +57,26 @@ namespace NomaiVR
             }
         }
 
-        SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis) {
+        private void OnLBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
+                NomaiVR.Log("OnLBChange DUp");
+                _singleAxes[XboxAxis.dPadY] = newState ? 1 : 0;
+            }
+        }
+
+        SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection) {
             return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) => {
-                _singleAxes[singleAxis] = Mathf.Round(newAxis * 10) / 10;
+                _singleAxes[singleAxis] = axisDirection * Mathf.Round(newAxis * 10) / 10;
+            };
+        }
+
+        SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis) {
+            return CreateSingleAxisHandler(singleAxis, 1);
+        }
+
+        SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(SingleAxis singleAxis, int axisDirection) {
+            return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) => {
+                _singleAxes[singleAxis] = axisDirection * (newState ? 1 : 0);
             };
         }
 
