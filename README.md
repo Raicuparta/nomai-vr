@@ -23,11 +23,24 @@ While the game is playable at a surprisingly decent level, a lot of things range
 * [Download the latest NomaiVR release](https://github.com/Raicuparta/NomaiVR/releases/latest);
 * Extract the `NomaiVR` directory to the `OWML/Mods` directory;
 * Run `OWML.Launcher.exe` to start the game.
+* Make sure the translator tool is set to "manual" in the settings;
+* Disable button prompts in the settings (they will be wrong and annoying anyway);
 
 ### If you have Oculus
 
 * Create a shortcut to `OWML.Launcher.exe` and add the params `-vrmode openvr` ([like in this image](https://i.imgur.com/5uv88Nk.png))
 * Use the shortcut you just created to launch the game;
+
+## VR Controller Inputs
+
+Since most VR controllers have less buttons than a normal game controller, input mappings can't be one-to-one. So I had to change the way some of the controls work:
+
+* LB/L1 will act as DPad-Up when piloting the ship (for auto-pilot);
+* RB/R1 is used to pick up tools from toolbelt. It's a toggle, not a hold;
+* Press RB/R1 over that tool's spot in the toolbelt to store the tool back in the belt;
+* Press RB/R1 while holding and aiming a tool to use that tool (shoot probe with probe launcher);
+
+On top of these changes, you also need SteamVR to do the mapping from VR controller to XBox controller inputs. I have included default mappings for Oculus, Index and Vive (but only tested Oculus).
 
 ## Contributing
 
