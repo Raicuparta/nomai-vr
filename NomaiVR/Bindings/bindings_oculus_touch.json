@@ -10,7 +10,6 @@
          "sources" : []
       },
       "/actions/default" : {
-         "chords" : [],
          "haptics" : [
             {
                "output" : "/actions/default/out/haptic",
@@ -53,6 +52,9 @@
             },
             {
                "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/lclick"
+                  },
                   "position" : {
                      "output" : "/actions/default/in/lstick"
                   }
@@ -81,7 +83,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/y"
+                     "output" : "/actions/default/in/start"
                   }
                },
                "mode" : "button",
@@ -98,6 +100,9 @@
             },
             {
                "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/rclick"
+                  },
                   "position" : {
                      "output" : "/actions/default/in/rstick"
                   }
@@ -145,7 +150,7 @@
    "category" : "steamvr_input",
    "controller_type" : "oculus_touch",
    "description" : "",
-   "name" : "NomaiVR Oculus Touch mapping",
+   "name" : "My vr-tests [Testing] configuration for Oculus Touch",
    "options" : {},
    "simulated_actions" : []
 }

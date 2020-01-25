@@ -62,25 +62,29 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -90,12 +94,13 @@
     <Compile Include="Modules\MotionControls.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
     <Compile Include="Modules\ControllerInput.cs" />
+    <Compile Include="Modules\HolsterTool.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="actions.json" />
-    <None Include="bindings_oculus_touch.json" />
+    <None Include="Bindings\actions.json" />
+    <None Include="Bindings\bindings_oculus_touch.json" />
     <None Include="default-config.json" />
     <None Include="manifest.json" />
     <None Include="packages.config" />
@@ -116,7 +121,11 @@ copy /y "$(ProjectDir)\default-config.json" "$(StartWorkingDirectory)\Mods\Nomai
 
 copy /y "$(ProjectDir)\default-config.json" "$(StartWorkingDirectory)\Mods\NomaiVR\config.json"
 
-copy /y "$(ProjectDir)\manifest.json" "$(StartWorkingDirectory)\Mods\NomaiVR\manifest.json"</PostBuildEvent>
+copy /y "$(ProjectDir)\manifest.json" "$(StartWorkingDirectory)\Mods\NomaiVR\manifest.json"
+
+copy /y "$(ProjectDir)\manifest.json" "$(StartWorkingDirectory)\Mods\NomaiVR\manifest.json"
+
+copy /y "$(ProjectDir)\Bindings\*.json" "$(StartWorkingDirectory)\.."</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

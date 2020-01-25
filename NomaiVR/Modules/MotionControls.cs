@@ -1,7 +1,8 @@
 ﻿using OWML.Common;
+using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.SpatialTracking;
+using UnityEngine.UI;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -9,56 +10,70 @@ namespace NomaiVR
 {
     public class MotionControls : MonoBehaviour
     {
-        Transform _rightHandParent;
+        protected static Transform RightHand;
+        protected static Transform ProbeLauncherModel;
+        protected static ProbeLauncherUI ProbeUI;
+        protected static Transform SignalscopeReticule;
+        protected static Transform ShipWindshield;
+        protected static Signalscope SignalScope;
         Transform _leftHandParent;
         Transform _debugTransform;
+        Transform _handsWrapper;
         bool _angleMode;
+        bool _enableLaser = false;
 
         void Start() {
             NomaiVR.Log("Start MotionControls");
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
+            NomaiVR.Helper.Events.Subscribe<ShipCockpitUI>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
-
-            // For some reason objects are very high up if tracking space is not stationary.
-            // Not sure exactly what stationary entails here, since it since tracks position fine.
-            //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
-            //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
-            //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-
-        void OnDisable() {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            //OpenVR.Compositor.SetTrackingSpace(ETrackingUniverseOrigin.TrackingUniverseSeated);
-            //OpenVR.System.ResetSeatedZeroPose();
-
-
-            // Set up tracked hand objects
-            var wrapper = new GameObject().transform;
-            _rightHandParent = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), wrapper);
-            _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), wrapper);
-            wrapper.parent = Common.MainCamera.transform.parent;
-            wrapper.localRotation = Quaternion.identity;
-            wrapper.localPosition = Common.MainCamera.transform.localPosition;
-            //Valve.VR.OpenVR.System.ResetSeatedZeroPose();
-            //Valve.VR.OpenVR.Compositor.SetTrackingSpace(
-            //Valve.VR.ETrackingUniverseOrigin.TrackingUniverseStanding);
-
-            HoldSignalscope();
-            HoldLaunchProbe();
-            HoldHUD();
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
+                _handsWrapper = new GameObject().transform;
+                RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _handsWrapper);
+                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _handsWrapper);
+                _handsWrapper.parent = Common.MainCamera.transform.parent;
+                _handsWrapper.localRotation = Quaternion.identity;
+                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition;
 
+                if (_enableLaser) {
+                    var laser = new GameObject("Laser");
+                    laser.transform.parent = RightHand;
+                    laser.transform.position = Vector3.zero;
+                    laser.transform.rotation = Quaternion.identity;
+                    var lineRenderer = RightHand.gameObject.AddComponent<LineRenderer>();
+                    lineRenderer.useWorldSpace = false;
+                    lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });
+                    lineRenderer.endColor = Color.clear;
+                    lineRenderer.startColor = Color.cyan;
+                    lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                    lineRenderer.startWidth = 0.01f;
+                    lineRenderer.endWidth = 0.01f;
+                }
 
+                HoldSignalscope();
+                HoldLaunchProbe();
+                HoldTranslator();
+                HoldHUD();
 
+                ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
+
+                // For aiming at interactibles with hand:
+                //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
+
+                // For fixing signalscope zoom
+                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
+                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
+                //behaviour.SetValue("_targetFOV", Common.MainCamera.fieldOfView);
+
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
+            } else if (behaviour.GetType() == typeof(ShipCockpitUI) && ev == Events.AfterStart) {
+                behaviour.SetValue("_signalscopeTool", SignalScope);
             }
         }
 
@@ -66,26 +81,17 @@ namespace NomaiVR
             var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
-
             hand.parent = handParent;
-            //hand.localPosition = new Vector3(0, -0.03f, -0.08f);
             hand.localPosition = new Vector3(0, -0.03f, -0.08f);
             hand.localRotation = rotation;
-            //hand.position = Common.MainCamera.transform.position - hand.position;
             hand.localScale = Vector3.one * 0.5f;
-
-            //handParent.parent = Common.MainCamera.transform.parent;
-            //handParent.localPosition = Vector3.zero;
-            //handParent.localRotation = Quaternion.identity;
 
             handParent.gameObject.SetActive(false);
             var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseDriver.poseAction = pose;
             handParent.gameObject.SetActive(true);
 
-
-
-            return hand;
+            return handParent;
         }
 
         void HoldHUD() {
@@ -107,13 +113,12 @@ namespace NomaiVR
             uiCanvas.transform.localRotation = Quaternion.identity;
 
             HoldObject(playerHUD.transform, _leftHandParent, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
-
-            //_debugTransform = playerHUD.transform;
         }
 
         void HoldSignalscope() {
             var signalScope = Common.MainCamera.transform.Find("Signalscope");
-            HoldObject(signalScope, _rightHandParent, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            HoldObject(signalScope, RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            SignalScope = signalScope.GetComponent<Signalscope>();
 
             var signalScopeModel = signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -127,33 +132,58 @@ namespace NomaiVR
             // Disabling it since it looks glitchy and doesn't seem necessary.
             signalScopeModel.GetChild(0).gameObject.SetActive(false);
 
+            var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
+            signalScopeHolster.SetActive(true);
+            var holster = signalScopeHolster.AddComponent<HolsterTool>();
+            holster.hand = RightHand;
+            holster.offset = 0.35f;
+            holster.mode = ToolMode.SignalScope;
+            holster.scale = 0.8f;
+
+
+            var playerHUD = GameObject.Find("PlayerHUD").transform;
+            SignalscopeReticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
+            var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
+            var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
+
+
             // Attatch Signalscope UI to the Signalscope.
-            var reticule = GameObject.Find("SignalscopeReticule").GetComponent<Canvas>();
-            reticule.renderMode = RenderMode.WorldSpace;
-            reticule.transform.parent = signalScope;
-            reticule.transform.localScale = Vector3.one * 0.0005f;
-            reticule.transform.localPosition = Vector3.forward * 0.5f;
-            reticule.transform.localRotation = Quaternion.identity;
+            SignalscopeReticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            SignalscopeReticule.parent = signalScope;
+            SignalscopeReticule.localScale = Vector3.one * 0.0005f;
+            SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
+            SignalscopeReticule.localRotation = Quaternion.identity;
+
+            helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            helmetOff.parent = signalScope;
+            helmetOff.localScale = Vector3.one * 0.0005f;
+            helmetOff.localPosition = Vector3.zero;
+            helmetOff.localRotation = Quaternion.identity;
+
+            helmetOn.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            helmetOn.parent = signalScope;
+            helmetOn.localScale = Vector3.one * 0.0005f;
+            helmetOn.localPosition = Vector3.down * 0.5f;
+            helmetOn.localRotation = Quaternion.identity;
         }
 
         void HoldLaunchProbe() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
-            probeLauncher.localScale = Vector3.one * 0.3f;
-            HoldObject(probeLauncher, _rightHandParent, new Vector3(-0.05f, 0.16f, 0.05f), Quaternion.Euler(45, 0, 0));
+            probeLauncher.localScale = Vector3.one * 0.2f;
+            HoldObject(probeLauncher, RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
 
-            var probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
-            probeLauncherModel.gameObject.layer = 0;
-            probeLauncherModel.localPosition = Vector3.zero;
-            probeLauncherModel.localRotation = Quaternion.identity;
+            ProbeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
+            ProbeLauncherModel.gameObject.layer = 0;
+            ProbeLauncherModel.localPosition = Vector3.zero;
+            ProbeLauncherModel.localRotation = Quaternion.identity;
 
-            probeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
-            probeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
+            ProbeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
+            ProbeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
 
             var renderers = probeLauncher.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
             foreach (var renderer in renderers) {
                 if (renderer.name == "RecallEffect") {
-                    NomaiVR.Log("found ReacllEffect");
                     continue;
                 }
                 foreach (var material in renderer.materials) {
@@ -167,9 +197,77 @@ namespace NomaiVR
 
             // This transform defines the origin and direction of the launched probe.
             var launchOrigin = Common.MainCamera.transform.Find("ProbeLauncherTransform").transform;
-            launchOrigin.parent = probeLauncherModel;
+            launchOrigin.parent = ProbeLauncherModel;
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;
+
+            var probeLauncherHolster = Instantiate(ProbeLauncherModel).gameObject;
+            probeLauncherHolster.SetActive(true);
+            var holster = probeLauncherHolster.AddComponent<HolsterTool>();
+            holster.hand = RightHand;
+            holster.offset = 0.1f;
+            holster.mode = ToolMode.Probe;
+            holster.scale = 0.15f;
+
+            var playerHUD = GameObject.Find("PlayerHUD").transform;
+            var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
+            display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            display.parent = ProbeLauncherModel;
+            display.localScale = Vector3.one * 0.0012f;
+            display.localRotation = Quaternion.identity;
+            display.localPosition = Vector3.forward * -0.67f;
+            ProbeUI = display.GetComponent<ProbeLauncherUI>();
+
+            var displayImage = display.GetChild(0).GetComponent<RectTransform>();
+            displayImage.anchorMin = Vector2.one * 0.5f;
+            displayImage.anchorMax = Vector2.one * 0.5f;
+            displayImage.pivot = Vector2.one * 0.5f;
+            displayImage.localPosition = Vector3.zero;
+            displayImage.localRotation = Quaternion.identity;
+
+            playerHUD.Find("HelmetOnUI/UICanvas/HUDProbeDisplay/Image").gameObject.SetActive(false);
+        }
+
+        void HoldTranslator() {
+            var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
+            HoldObject(translator, RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
+
+            var translatorGroup = translator.Find("TranslatorGroup");
+            translatorGroup.localPosition = Vector3.zero;
+            translatorGroup.localRotation = Quaternion.identity;
+
+            translator.localScale = Vector3.one * 0.3f;
+            var translatorModel = translatorGroup.Find("Props_HEA_Translator");
+            translatorModel.localPosition = Vector3.zero;
+            translatorModel.localRotation = Quaternion.identity;
+
+            translator.GetComponent<NomaiTranslator>().SetValue("_raycastTransform", translatorModel);
+
+            // This child seems to be only for some kind of shader effect.
+            // Disabling it since it looks glitchy and doesn't seem necessary.
+            translatorModel.Find("Props_HEA_Translator_Prepass").gameObject.SetActive(false);
+
+            var renderers = translatorModel.gameObject.GetComponentsInChildren<MeshRenderer>(true);
+
+            foreach (var renderer in renderers) {
+                foreach (var material in renderer.materials) {
+                    material.shader = Shader.Find("Standard");
+                }
+            }
+
+            var texts = translator.gameObject.GetComponentsInChildren<Graphic>(true);
+
+            foreach (var text in texts) {
+                text.material = null;
+            }
+
+            var signalScopeHolster = Instantiate(translatorModel).gameObject;
+            signalScopeHolster.SetActive(true);
+            var holster = signalScopeHolster.AddComponent<HolsterTool>();
+            holster.hand = RightHand;
+            holster.offset = -0.3f;
+            holster.mode = ToolMode.Translator;
+            holster.scale = 0.15f;
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
@@ -180,6 +278,12 @@ namespace NomaiVR
             objectTransform.transform.parent = objectParent;
             objectTransform.transform.localPosition = Vector3.zero;
             objectTransform.transform.localRotation = Quaternion.identity;
+
+            var tool = objectTransform.gameObject.GetComponent<PlayerTool>();
+            if (tool) {
+                tool.SetValue("_stowTransform", null);
+                tool.SetValue("_holdTransform", null);
+            }
         }
 
         void HoldObject(Transform objectTransform, Transform hand) {
@@ -193,6 +297,14 @@ namespace NomaiVR
         }
 
         void Update() {
+            if (_handsWrapper) {
+                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+            }
+            if (ProbeLauncherModel) {
+                Locator.GetProbe().transform.Find("CameraPivot").rotation = ProbeLauncherModel.rotation;
+                Locator.GetProbe().transform.Find("CameraPivot").Rotate(Vector3.right * 90);
+                //Locator.GetProbe().transform.Find("CameraPivot").up = ProbeLauncherModel.up;
+            }
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
                 var posDelta = 0.01f;
@@ -252,6 +364,58 @@ namespace NomaiVR
                     var angles = _debugTransform.parent.localEulerAngles;
                     NomaiVR.Log("position: new Vector3(" + position.x + "f, " + position.y + "f, " + position.z + "f)");
                     NomaiVR.Log("Rotation: Quaternion.Euler(" + angles.x + "f, " + angles.y + "f, " + angles.z + "f)");
+                }
+            }
+        }
+
+        internal static class Patches
+        {
+            static bool PatchUpdateInteractVolume(
+                InteractZone __instance,
+                OWCamera ____playerCam,
+                float ____viewingWindow,
+                ref bool ____focused
+            ) {
+                float num = 2f * Vector3.Angle(MotionControls.RightHand.forward, __instance.transform.forward);
+                ____focused = (num <= ____viewingWindow);
+                var Base = __instance as SingleInteractionVolume;
+
+                var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
+                var ftn = method.MethodHandle.GetFunctionPointer();
+                var func = (Action)Activator.CreateInstance(typeof(Action), __instance, ftn);
+
+                func();
+
+                return false;
+            }
+
+            static void ZoomIn() {
+                Common.MainCamera.transform.localScale = Vector3.one * 0.1f;
+            }
+
+            static void ZoomOut() {
+                Common.MainCamera.transform.localScale = Vector3.one;
+            }
+
+            static void SuitUp() {
+                MotionControls.ProbeUI.SetValue("_nonSuitUI", false);
+            }
+
+            static void RemoveSuit() {
+                MotionControls.ProbeUI.SetValue("_nonSuitUI", true);
+            }
+
+            static void ChangeInputMode(InputMode mode) {
+                if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
+                    SignalscopeReticule.parent = ShipWindshield;
+                    SignalscopeReticule.localScale = Vector3.one * 0.004f;
+                    SignalscopeReticule.localPosition = Vector3.forward * 3f;
+                    SignalscopeReticule.localRotation = Quaternion.identity;
+                } else {
+                    SignalscopeReticule.parent = SignalScope.transform;
+                    SignalscopeReticule.localScale = Vector3.one * 0.0005f;
+                    SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
+                    SignalscopeReticule.localRotation = Quaternion.identity;
                 }
             }
         }

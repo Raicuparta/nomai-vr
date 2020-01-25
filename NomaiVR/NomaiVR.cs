@@ -1,5 +1,6 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -19,13 +20,15 @@ namespace NomaiVR
 
             Helper = ModHelper;
 
+            SteamVR.Initialize();
+
             // Add all modules here.
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<FogFix>();
-            //gameObject.AddComponent<PlayerBodyPosition>();
-            gameObject.AddComponent<MotionControls>();
+            gameObject.AddComponent<PlayerBodyPosition>();
             gameObject.AddComponent<ControllerInput>();
+            gameObject.AddComponent<MotionControls>();
         }
     }
 }

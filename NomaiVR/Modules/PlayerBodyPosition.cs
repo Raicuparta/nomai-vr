@@ -72,7 +72,7 @@ namespace NomaiVR
         }
 
 
-        void FixedUpdate() {
+        void Update() {
             if (_isAwake) {
                 MoveCameraToPlayerHead();
                 MovePlayerBodyToCamera();
