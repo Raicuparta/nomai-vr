@@ -63,7 +63,6 @@ namespace NomaiVR
 
         private void OnLBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
-                NomaiVR.Log("OnLBChange DUp");
                 _singleAxes[XboxAxis.dPadY] = newState ? 1 : 0;
             }
         }
