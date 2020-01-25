@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using OWML.Common;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,7 +10,8 @@ namespace NomaiVR
     {
         // List all the canvas elements that need to be moved to world space during gameplay.
         static readonly CanvasInfo[] _canvasInfos = {
-            new CanvasInfo("PauseMenu", 0.0005f),
+            new CanvasInfo("PauseMenu"),
+            new CanvasInfo("CanvasMarkerManager", 0.0005f),
             new CanvasInfo("DialogueCanvas"),
             new CanvasInfo("ScreenPromptCanvas", 0.0015f),
             
@@ -28,14 +30,27 @@ namespace NomaiVR
             // Make UI elements draw on top of everything.
             Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
 
+            NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
+            NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
-        void OnDisable() {
+        private void OnEvent(MonoBehaviour behaviour, Events ev) {
+            if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
+                var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
+                canvas.planeDistance = 5;
+            }
+        }
+
+            void OnDisable() {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            FixGameCanvases();
+            FixGameCanvases(new[] {
+                new CanvasInfo("PauseMenu", 0.0005f),
+                new CanvasInfo("DialogueCanvas"),
+                new CanvasInfo("ScreenPromptCanvas", 0.0015f),
+            });
         }
 
         void MoveCanvasToWorldSpace(CanvasInfo canvasInfo) {
@@ -47,6 +62,7 @@ namespace NomaiVR
             }
 
             Canvas[] subCanvases = canvas.GetComponentsInChildren<Canvas>();
+            NomaiVR.Log("found " + subCanvases.Length + "subs inside " + canvas.name);
 
             foreach (Canvas subCanvas in subCanvases) {
                 subCanvas.renderMode = RenderMode.WorldSpace;
@@ -75,11 +91,12 @@ namespace NomaiVR
             MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
         }
 
-        void FixGameCanvases() {
-            foreach (CanvasInfo canvasInfo in _canvasInfos) {
+        void FixGameCanvases(CanvasInfo [] canvasInfos) {
+            foreach (CanvasInfo canvasInfo in canvasInfos) {
                 MoveCanvasToWorldSpace(canvasInfo);
             }
         }
+
         protected class CanvasInfo
         {
             public string name;
