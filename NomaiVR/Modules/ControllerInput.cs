@@ -70,6 +70,9 @@ namespace NomaiVR
             } else if (!Common.ToolSwapper.IsInToolMode(ToolMode.None) || OWInput.IsInputMode(InputMode.ShipCockpit)) {
                 _buttons[XboxButton.RightBumper] = newState ? 1 : 0;
             }
+            if (Common.ToolSwapper.IsInToolMode(ToolMode.Translator)) {
+                _singleAxes[XboxAxis.dPadX] = newState ? 1 : 0;
+            }
         }
 
         private void OnLBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
