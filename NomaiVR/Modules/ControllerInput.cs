@@ -12,6 +12,10 @@ namespace NomaiVR
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
         public static bool IsGripping;
 
+        void Awake() {
+            OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
+        }
+
         void Start() {
             NomaiVR.Log("Started ControllerInput");
 

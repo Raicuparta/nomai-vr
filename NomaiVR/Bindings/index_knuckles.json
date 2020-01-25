@@ -2,14 +2,8 @@
    "action_manifest_version" : 0,
    "alias_info" : {},
    "bindings" : {
-      "/actions/buggy" : {
-         "chords" : [],
-         "haptics" : [],
-         "poses" : [],
-         "skeleton" : [],
-         "sources" : []
-      },
       "/actions/default" : {
+         "chords" : [],
          "haptics" : [
             {
                "output" : "/actions/default/out/haptic",
@@ -32,15 +26,6 @@
          ],
          "skeleton" : [],
          "sources" : [
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/start"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/system"
-            },
             {
                "inputs" : {
                   "pull" : {
@@ -136,21 +121,56 @@
                },
                "mode" : "button",
                "path" : "/user/hand/right/input/b"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/lclick"
+                  },
+                  "position" : {
+                     "output" : "/actions/default/in/lstick"
+                  }
+               },
+               "mode" : "joystick",
+               "path" : "/user/hand/left/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/y"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/b"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/x"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/a"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/rclick"
+                  },
+                  "position" : {
+                     "output" : "/actions/default/in/rstick"
+                  }
+               },
+               "mode" : "joystick",
+               "path" : "/user/hand/right/input/thumbstick"
             }
          ]
-      },
-      "/actions/platformer" : {
-         "chords" : [],
-         "haptics" : [],
-         "poses" : [],
-         "skeleton" : [],
-         "sources" : []
       }
    },
    "category" : "steamvr_input",
-   "controller_type" : "oculus_touch",
+   "controller_type" : "knuckles",
    "description" : "",
-   "name" : "My vr-tests [Testing] configuration for Oculus Touch",
+   "name" : "Outer Wilds Index Knuckles Bindings",
    "options" : {},
    "simulated_actions" : []
 }
