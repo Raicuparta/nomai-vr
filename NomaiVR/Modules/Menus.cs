@@ -36,12 +36,11 @@ namespace NomaiVR
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
-                var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
-                canvas.planeDistance = 5;
+                behaviour.GetComponent<Canvas>().planeDistance = 5;
             }
         }
 
-            void OnDisable() {
+        void OnDisable() {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
