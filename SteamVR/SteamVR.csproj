@@ -279,23 +279,6 @@
     <Compile Include="SteamVR_Input\SteamVR_Input_ActionSets.cs" />
     <Compile Include="SteamVR_Input\SteamVR_Input_Initialization.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="SteamVR\Input\ExampleJSON\actions.json" />
-    <None Include="SteamVR\Input\ExampleJSON\bindings_holographic_controller.json" />
-    <None Include="SteamVR\Input\ExampleJSON\bindings_knuckles.json" />
-    <None Include="SteamVR\Input\ExampleJSON\bindings_oculus_touch.json" />
-    <None Include="SteamVR\Input\ExampleJSON\bindings_vive_controller.json" />
-    <None Include="SteamVR\Input\ExampleJSON\binding_holographic_hmd.json" />
-    <None Include="SteamVR\Input\ExampleJSON\binding_rift.json" />
-    <None Include="SteamVR\Input\ExampleJSON\binding_vive.json" />
-    <None Include="SteamVR\Input\ExampleJSON\binding_vive_pro.json" />
-    <None Include="SteamVR\Input\ExampleJSON\binding_vive_tracker_camera.json" />
-    <None Include="SteamVR\Input\Plugins\JSON.NET\LICENSE_James_Newton-King" />
-    <None Include="SteamVR\Input\Plugins\JSON.NET\LICENSE_SaladLab" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>md "$(StartWorkingDirectory)\Mods\NomaiVR"
