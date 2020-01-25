@@ -302,6 +302,6 @@
 
 copy /y "$(TargetPath)" "$(StartWorkingDirectory)\Mods\NomaiVR"
 
-copy /y "$(ProjectDir)\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll" "$(StartWorkingDirectory)\Mods\NomaiVR"</PostBuildEvent>
+copy /y "$(ProjectDir)\lib\*" "$(StartWorkingDirectory)\Mods\NomaiVR"</PostBuildEvent>
   </PropertyGroup>
 </Project>
