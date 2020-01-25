@@ -76,7 +76,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/start"
+                     "output" : "/actions/default/in/y"
                   }
                },
                "mode" : "button",

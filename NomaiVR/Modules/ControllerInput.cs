@@ -26,7 +26,7 @@ namespace NomaiVR
             SteamVR_Actions.default_A.onChange += CreateButtonHandler(XboxButton.A);
             SteamVR_Actions.default_B.onChange += CreateButtonHandler(XboxButton.B);
             SteamVR_Actions.default_X.onChange += CreateButtonHandler(XboxButton.X);
-            SteamVR_Actions.default_Y.onChange += CreateButtonHandler(XboxButton.Y);
+            SteamVR_Actions.default_Y.onChange += OnYChange;
 
             SteamVR_Actions.default_DUp.onChange += CreateButtonHandler(XboxAxis.dPadY, 1);
             SteamVR_Actions.default_DDown.onChange += CreateButtonHandler(XboxAxis.dPadY, -1);
@@ -52,6 +52,15 @@ namespace NomaiVR
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
+        }
+
+        private void OnYChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            var value = newState ? 1 : 0;
+            if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
+                _buttons[XboxButton.Y] = value;
+            } else {
+                _buttons[XboxButton.Start] = value;
+            }
         }
 
         void onRBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
