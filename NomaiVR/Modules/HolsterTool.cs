@@ -13,6 +13,7 @@ namespace NomaiVR
         public float scale;
         MeshRenderer[] _renderers;
         bool _visible;
+        bool _enabled = true;
 
         void Start() {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
@@ -40,6 +41,16 @@ namespace NomaiVR
         }
 
         void Update() {
+            if (_enabled && !OWInput.IsInputMode(InputMode.Character)) {
+                _enabled = false;
+                SetVisible(false);
+            }
+            if (!_enabled && OWInput.IsInputMode(InputMode.Character)) {
+                _enabled = true;
+            }
+            if (!_enabled) {
+                return;
+            }
             if (ControllerInput.IsGripping && Vector3.Distance(transform.position, hand.position) < 0.2f) {
                 if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
                     Equip();
