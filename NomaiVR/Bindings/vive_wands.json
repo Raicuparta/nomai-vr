@@ -100,9 +100,6 @@
                   "east" : {
                      "output" : "/actions/default/in/b"
                   },
-                  "north" : {
-                     "output" : "/actions/default/in/rclick"
-                  },
                   "south" : {
                      "output" : "/actions/default/in/a"
                   }
