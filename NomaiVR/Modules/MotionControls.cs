@@ -104,6 +104,7 @@ namespace NomaiVR
             var suitMesh = palyerMeshes.Find("Traveller_Mesh_v01:Traveller_Geo");
             suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
             suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_LeftArm").gameObject.SetActive(false);
+            suitMesh.Find("Traveller_Mesh_v01:Props_HEA_Jetpack").gameObject.SetActive(false);
 
             var bodyMesh = palyerMeshes.Find("player_mesh_noSuit:Traveller_HEA_Player");
             bodyMesh.Find("player_mesh_noSuit:Player_RightArm").gameObject.SetActive(false);
