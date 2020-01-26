@@ -153,7 +153,7 @@ namespace NomaiVR
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
-            holster.position = new Vector3(0.3f, 0.3f, 0);
+            holster.position = new Vector3(0.3f, 0.35f, 0);
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
             holster.angle = Vector3.right * 90;
@@ -223,7 +223,7 @@ namespace NomaiVR
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
-            holster.position = new Vector3(0, 0.3f, 0.2f);
+            holster.position = new Vector3(0, 0.35f, 0.2f);
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
             holster.angle = Vector3.right * 90;
@@ -285,7 +285,7 @@ namespace NomaiVR
             translatorHolster.SetActive(true);
             var holster = translatorHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
-            holster.position = new Vector3(-0.3f, 0.3f, 0);
+            holster.position = new Vector3(-0.3f, 0.35f, 0);
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
             holster.angle = new Vector3(0, 90, 90);
