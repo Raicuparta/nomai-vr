@@ -10,7 +10,8 @@ namespace NomaiVR
     {
         public Transform hand;
         public ToolMode mode;
-        public float offset;
+        public Vector3 position;
+        public Vector3 angle;
         public float scale;
         MeshRenderer[] _renderers;
         bool _visible;
@@ -21,9 +22,9 @@ namespace NomaiVR
 
             transform.localScale = Vector3.one * scale;
             transform.parent = Common.PlayerBody.transform;
-            transform.localPosition = new Vector3(offset, 0.3f, 0.2f);
+            transform.localPosition = position;
             transform.localRotation = Quaternion.identity;
-            transform.Rotate(Vector3.right * 90);
+            transform.Rotate(angle);
         }
 
         void Equip() {
