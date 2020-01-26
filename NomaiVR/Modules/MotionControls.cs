@@ -54,8 +54,9 @@ namespace NomaiVR
                     lineRenderer.endWidth = 0.01f;
                 }
 
+                HideArms();
                 HoldSignalscope();
-                HoldLaunchProbe();
+                HoldProbeLauncher();
                 HoldTranslator();
                 HoldHUD();
 
@@ -95,6 +96,19 @@ namespace NomaiVR
             handParent.gameObject.SetActive(true);
 
             return handParent;
+        }
+
+        void HideArms() {
+            var palyerMeshes = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
+
+            var suitMesh = palyerMeshes.Find("Traveller_Mesh_v01:Traveller_Geo");
+            suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
+            suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_LeftArm").gameObject.SetActive(false);
+            suitMesh.Find("Traveller_Mesh_v01:Props_HEA_Jetpack").gameObject.SetActive(false);
+
+            var bodyMesh = palyerMeshes.Find("player_mesh_noSuit:Traveller_HEA_Player");
+            bodyMesh.Find("player_mesh_noSuit:Player_RightArm").gameObject.SetActive(false);
+            bodyMesh.Find("player_mesh_noSuit:Player_LeftArm").gameObject.SetActive(false);
         }
 
         void HoldHUD() {
@@ -139,9 +153,10 @@ namespace NomaiVR
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
-            holster.offset = 0.35f;
+            holster.position = new Vector3(0.3f, 0.35f, 0);
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
+            holster.angle = Vector3.right * 90;
 
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
@@ -170,7 +185,7 @@ namespace NomaiVR
             helmetOn.localRotation = Quaternion.identity;
         }
 
-        void HoldLaunchProbe() {
+        void HoldProbeLauncher() {
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.2f;
             HoldObject(probeLauncher, RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
@@ -208,9 +223,10 @@ namespace NomaiVR
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
-            holster.offset = 0.1f;
+            holster.position = new Vector3(0, 0.35f, 0.2f);
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
+            holster.angle = Vector3.right * 90;
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
             var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
@@ -265,13 +281,14 @@ namespace NomaiVR
                 text.material = null;
             }
 
-            var signalScopeHolster = Instantiate(translatorModel).gameObject;
-            signalScopeHolster.SetActive(true);
-            var holster = signalScopeHolster.AddComponent<HolsterTool>();
+            var translatorHolster = Instantiate(translatorModel).gameObject;
+            translatorHolster.SetActive(true);
+            var holster = translatorHolster.AddComponent<HolsterTool>();
             holster.hand = RightHand;
-            holster.offset = -0.3f;
+            holster.position = new Vector3(-0.3f, 0.35f, 0);
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
+            holster.angle = new Vector3(0, 90, 90);
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
