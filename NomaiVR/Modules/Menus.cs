@@ -25,8 +25,8 @@ namespace NomaiVR
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
-            //FixMainMenuCanvas();
-            FixAllCanvases();
+            FixMainMenuCanvas();
+            //FixAllCanvases();
 
             // Make UI elements draw on top of everything.
             Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
@@ -46,13 +46,13 @@ namespace NomaiVR
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            //FixGameCanvases(new[] {
-            //    new CanvasInfo("PauseMenu", 0.0005f),
-            //    new CanvasInfo("DialogueCanvas"),
-            //    new CanvasInfo("ScreenPromptCanvas", 0.0015f),
-            //});
+            FixGameCanvases(new[] {
+                new CanvasInfo("PauseMenu", 0.0005f),
+                new CanvasInfo("DialogueCanvas"),
+                new CanvasInfo("ScreenPromptCanvas", 0.0015f),
+            });
 
-            FixAllCanvases();
+            //FixAllCanvases();
         }
 
         void MoveCanvasToWorldSpace(CanvasInfo canvasInfo) {

@@ -89,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\Common.cs" />
-    <Compile Include="Modules\FogFix.cs" />
+    <Compile Include="Modules\EffectFixes.cs" />
     <Compile Include="Modules\Menus.cs" />
     <Compile Include="Modules\MotionControls.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
