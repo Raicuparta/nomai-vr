@@ -1,4 +1,5 @@
 ﻿using OWML.Common;
+using OWML.ModHelper.Events;
 using UnityEngine;
 
 namespace NomaiVR
@@ -25,6 +26,11 @@ namespace NomaiVR
 
                 // Disable underwater effect.
                 GameObject.FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
+                
+                // Disable water entering and exiting effect.
+                var visorEffects = FindObjectOfType<VisorEffectController>();
+                visorEffects.SetValue("_waterClearLength", 0);
+                visorEffects.SetValue("_waterFadeInLength", 0);
             }
         }
 
