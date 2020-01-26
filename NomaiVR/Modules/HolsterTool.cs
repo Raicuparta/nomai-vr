@@ -1,4 +1,5 @@
 ﻿using OWML.Common;
+using OWML.ModHelper.Events;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
@@ -27,6 +28,10 @@ namespace NomaiVR
 
         void Equip() {
             FindObjectOfType<ToolModeSwapper>().EquipToolMode(mode);
+
+            if (mode == ToolMode.Translator) {
+                GameObject.FindObjectOfType<NomaiTranslatorProp>().SetValue("_currentTextID", 1);
+            }
         }
 
         void Unequip() {

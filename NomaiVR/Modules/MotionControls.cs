@@ -233,6 +233,7 @@ namespace NomaiVR
 
         void HoldTranslator() {
             var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
+
             HoldObject(translator, RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
 
             var translatorGroup = translator.Find("TranslatorGroup");
