@@ -21,6 +21,7 @@ namespace NomaiVR
         Transform _handsWrapper;
         bool _angleMode;
         bool _enableLaser = false;
+        bool _handNearHead = false;
 
         void Start() {
             NomaiVR.Log("Start MotionControls");
@@ -324,7 +325,16 @@ namespace NomaiVR
             if (ProbeLauncherModel) {
                 Locator.GetProbe().transform.Find("CameraPivot").rotation = ProbeLauncherModel.rotation;
                 Locator.GetProbe().transform.Find("CameraPivot").Rotate(Vector3.right * 90);
-                //Locator.GetProbe().transform.Find("CameraPivot").up = ProbeLauncherModel.up;
+            }
+            if (RightHand) {
+                if (!_handNearHead && Vector3.Distance(RightHand.position, Common.PlayerHead.position) < 0.2f) {
+                    _handNearHead = true;
+                    ControllerInput.SimulateButton(XboxButton.RightStickClick, 1);
+                }
+                if (_handNearHead && Vector3.Distance(RightHand.position, Common.PlayerHead.position) > 0.3f) {
+                    _handNearHead = false;
+                    ControllerInput.SimulateButton(XboxButton.RightStickClick, 0);
+                }
             }
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;

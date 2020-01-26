@@ -79,6 +79,10 @@ namespace NomaiVR
             _buttons[XboxButton.RightBumper] = 0;
         }
 
+        public static void SimulateButton(XboxButton button, float value) {
+            _buttons[button] = value;
+        }
+
         private void OnLBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
                 _singleAxes[XboxAxis.dPadY] = newState ? 1 : 0;
