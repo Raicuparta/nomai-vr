@@ -75,6 +75,10 @@ namespace NomaiVR
             }
         }
 
+        public static void ResetRB() {
+            _buttons[XboxButton.RightBumper] = 0;
+        }
+
         private void OnLBChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
                 _singleAxes[XboxAxis.dPadY] = newState ? 1 : 0;
