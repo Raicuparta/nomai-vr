@@ -60,6 +60,7 @@ namespace NomaiVR
                 if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
                     Equip();
                 } else if(Common.ToolSwapper.IsInToolMode(mode)) {
+                    ControllerInput.ResetRB();
                     Unequip();
                 }
                 ControllerInput.IsGripping = false;
