@@ -1,10 +1,10 @@
 ﻿using OWML.Common;
+using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace NomaiVR
 {
-    public class FogFix : MonoBehaviour
+    public class EffectFixes : MonoBehaviour
     {
         private void Start() {
             NomaiVR.Log("Started FogFix");
@@ -23,6 +23,14 @@ namespace NomaiVR
                 fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;
                 fogLightCanvas.worldCamera = Locator.GetActiveCamera().mainCamera;
                 fogLightCanvas.planeDistance = 100;
+
+                // Disable underwater effect.
+                GameObject.FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
+                
+                // Disable water entering and exiting effect.
+                var visorEffects = FindObjectOfType<VisorEffectController>();
+                visorEffects.SetValue("_waterClearLength", 0);
+                visorEffects.SetValue("_waterFadeInLength", 0);
             }
         }
 
