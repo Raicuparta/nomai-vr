@@ -1,4 +1,4 @@
-﻿{
+{
    "action_manifest_version" : 0,
    "alias_info" : {},
    "bindings" : {
@@ -129,7 +129,7 @@
    "category" : "steamvr_input",
    "controller_type" : "holographic_controller",
    "description" : "",
-   "name" : "Outer Wilds Windows Mixed Reality Controller Bindings",
+   "name" : "Outer Wilds WMR Controller Bindings",
    "options" : {},
    "simulated_actions" : []
 }

@@ -102,6 +102,7 @@
     <None Include="Bindings\actions.json" />
     <None Include="Bindings\index_knuckles.json" />
     <None Include="Bindings\oculus_touch.json" />
+    <None Include="Bindings\wmr-controller.json" />
     <None Include="Bindings\vive_wands.json" />
     <None Include="ModConfig\default-config.json" />
     <None Include="ModConfig\manifest.json" />
@@ -112,9 +113,6 @@
       <Project>{da60553a-09e1-4c55-8826-953ecb0612a2}</Project>
       <Name>SteamVR</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Bindings\wmr-controller.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
