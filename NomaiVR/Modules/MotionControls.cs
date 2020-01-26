@@ -327,11 +327,12 @@ namespace NomaiVR
                 Locator.GetProbe().transform.Find("CameraPivot").Rotate(Vector3.right * 90);
             }
             if (RightHand) {
-                if (!_handNearHead && Vector3.Distance(RightHand.position, Common.PlayerHead.position) < 0.2f) {
+                var templePosition = Common.PlayerHead.position + Common.PlayerHead.right * 0.15f;
+                if (!_handNearHead && Vector3.Distance(RightHand.position, templePosition) < 0.15f) {
                     _handNearHead = true;
                     ControllerInput.SimulateButton(XboxButton.RightStickClick, 1);
                 }
-                if (_handNearHead && Vector3.Distance(RightHand.position, Common.PlayerHead.position) > 0.3f) {
+                if (_handNearHead && Vector3.Distance(RightHand.position, templePosition) > 0.2f) {
                     _handNearHead = false;
                     ControllerInput.SimulateButton(XboxButton.RightStickClick, 0);
                 }
