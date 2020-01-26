@@ -94,7 +94,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/rclick"
+                     "output" : "/actions/default/in/select"
                   },
                   "position" : {
                      "output" : "/actions/default/in/rstick"
