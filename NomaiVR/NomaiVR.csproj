@@ -113,6 +113,9 @@
       <Name>SteamVR</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Bindings\wmr-controller.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>del "$(StartWorkingDirectory)\Mods\NomaiVR\config.json"
