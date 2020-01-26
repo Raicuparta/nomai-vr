@@ -54,6 +54,7 @@ namespace NomaiVR
                     lineRenderer.endWidth = 0.01f;
                 }
 
+                HideArms();
                 HoldSignalscope();
                 HoldProbeLauncher();
                 HoldTranslator();
@@ -95,6 +96,18 @@ namespace NomaiVR
             handParent.gameObject.SetActive(true);
 
             return handParent;
+        }
+
+        void HideArms() {
+            var palyerMeshes = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
+
+            var suitMesh = palyerMeshes.Find("Traveller_Mesh_v01:Traveller_Geo");
+            suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
+            suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_LeftArm").gameObject.SetActive(false);
+
+            var bodyMesh = palyerMeshes.Find("player_mesh_noSuit:Traveller_HEA_Player");
+            bodyMesh.Find("player_mesh_noSuit:Player_RightArm").gameObject.SetActive(false);
+            bodyMesh.Find("player_mesh_noSuit:Player_LeftArm").gameObject.SetActive(false);
         }
 
         void HoldHUD() {
