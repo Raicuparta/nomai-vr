@@ -318,25 +318,35 @@ namespace NomaiVR
             HoldObject(objectTransform, hand, position, Quaternion.identity);
         }
 
-        void Update() {
-            if (_handsWrapper) {
-                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
-            }
-            if (ProbeLauncherModel) {
-                Locator.GetProbe().transform.Find("CameraPivot").rotation = ProbeLauncherModel.rotation;
-                Locator.GetProbe().transform.Find("CameraPivot").Rotate(Vector3.right * 90);
-            }
+        void UpdateFlashlightGesture() {
             if (RightHand) {
                 var templePosition = Common.PlayerHead.position + Common.PlayerHead.right * 0.15f;
                 if (!_handNearHead && Vector3.Distance(RightHand.position, templePosition) < 0.15f) {
                     _handNearHead = true;
                     ControllerInput.SimulateButton(XboxButton.RightStickClick, 1);
                 }
-                if (_handNearHead && Vector3.Distance(RightHand.position, templePosition) > 0.2f) {
+                if (_handNearHead && Vector3.Distance(RightHand.position, templePosition) > 0.16f) {
                     _handNearHead = false;
                     ControllerInput.SimulateButton(XboxButton.RightStickClick, 0);
                 }
             }
+        }
+
+        void UpdateProbeRotation() {
+            if (ProbeLauncherModel) {
+                var probe = Locator.GetProbe().transform.Find("CameraPivot");
+                probe.rotation = ProbeLauncherModel.rotation;
+                probe.Rotate(Vector3.right * 90);
+            }
+        }
+
+        void UpdateHandPosition() {
+            if (_handsWrapper) {
+                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+            }
+        }
+
+        void UpdateDebugTransform() {
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
                 var posDelta = 0.01f;
@@ -398,6 +408,13 @@ namespace NomaiVR
                     NomaiVR.Log("Rotation: Quaternion.Euler(" + angles.x + "f, " + angles.y + "f, " + angles.z + "f)");
                 }
             }
+        }
+
+        void Update() {
+            UpdateHandPosition();
+            UpdateProbeRotation();
+            UpdateFlashlightGesture();
+            UpdateDebugTransform();
         }
 
         internal static class Patches
