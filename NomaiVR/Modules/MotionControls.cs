@@ -334,15 +334,18 @@ namespace NomaiVR
 
             // Hold mallow in left hand for replacing the one in the stick.
             var mallowClone = Instantiate(mallow.transform.Find("Props_HEA_Marshmallow"));
+            mallowClone.GetComponent<MeshRenderer>().material.color = Color.white;
             mallowClone.localScale *= 0.75f;
             HoldObject(mallowClone, _leftHandParent, new Vector3(0.06f, -0.03f, -0.02f));
-            _debugTransform = mallowClone;
 
+            // Replace right hand mallow on proximity with left hand mallow.
             var replaceDetector = mallowClone.gameObject.AddComponent<ProximityDetector>();
             replaceDetector.other = mallow.transform;
             replaceDetector.onEnter += ReplaceMallow;
 
+            // Render left hand mallow only when right hand mallow is not present.
             mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
+
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
