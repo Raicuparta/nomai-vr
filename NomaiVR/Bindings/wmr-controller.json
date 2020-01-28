@@ -122,6 +122,27 @@
                   "sub_mode" : "click"
                },
                "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "east" : {
+                     "output" : "/actions/default/in/b"
+                  },
+                  "north" : {
+                     "output" : "/actions/default/in/y"
+                  },
+                  "south" : {
+                     "output" : "/actions/default/in/a"
+                  },
+                  "west" : {
+                     "output" : "/actions/default/in/x"
+                  }
+               },
+               "mode" : "dpad",
+               "parameters" : {
+                  "sub_mode" : "click"
+               },
+               "path" : "/user/hand/right/input/trackpad"
             }
          ]
       }
