@@ -75,6 +75,8 @@ namespace NomaiVR
         void Update() {
             if (_isAwake) {
                 MoveCameraToPlayerHead();
+            }
+            if (OWInput.GetInputMode() == InputMode.Character) {
                 MovePlayerBodyToCamera();
             }
         }
@@ -82,6 +84,10 @@ namespace NomaiVR
         internal static class Patches
         {
             static void PatchTurning(PlayerCharacterController __instance) {
+                if (OWInput.GetInputMode() != InputMode.Character) {
+                    return;
+                }
+
                 var playerCam = __instance.GetValue<OWCamera>("_playerCam");
                 var transform = __instance.GetValue<Transform>("_transform");
 
