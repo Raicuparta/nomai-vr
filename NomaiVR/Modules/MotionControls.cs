@@ -302,26 +302,41 @@ namespace NomaiVR
 
             var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
             stickRoot.localScale *= 0.75f;
+            HoldObject(stickRoot, RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
 
             var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
             void EatMallow() {
-                if (mallow.GetValue<Marshmallow.MallowState>("_mallowState") != Marshmallow.MallowState.Gone) {
+                if (mallow.GetState() != Marshmallow.MallowState.Gone) {
                     mallow.Eat();
                 }
             }
 
+            void ReplaceMallow() {
+                if (mallow.GetState() == Marshmallow.MallowState.Gone) {
+                    mallow.SpawnMallow(true);
+                }
+            }
+
             // Eat mallow by moving it to player head.
-            var detector = mallow.gameObject.AddComponent<ProximityDetector>();
-            detector.other = Common.PlayerHead;
-            detector.onEnter += EatMallow;
+            var eatDetector = mallow.gameObject.AddComponent<ProximityDetector>();
+            eatDetector.other = Common.PlayerHead;
+            eatDetector.onEnter += EatMallow;
 
             // Hide arms that are part of the stick object.
             var meshes = stickRoot.Find("Stick_Tip/Props_HEA_RoastingStick");
             meshes.Find("RoastingStick_Arm").gameObject.SetActive(false);
             meshes.Find("RoastingStick_Arm_NoSuit").gameObject.SetActive(false);
 
-            HoldObject(stickRoot, RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
+            // Hold mallow in left hand for replacing the one in the stick.
+            var mallowClone = Instantiate(mallow.transform.Find("Props_HEA_Marshmallow"));
+            mallowClone.localScale *= 0.75f;
+            HoldObject(mallowClone, _leftHandParent);
+            _debugTransform = mallowClone;
+
+            var replaceDetector = mallowClone.gameObject.AddComponent<ProximityDetector>();
+            replaceDetector.other = mallow.transform;
+            replaceDetector.onEnter += ReplaceMallow;
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
