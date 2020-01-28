@@ -78,6 +78,7 @@ namespace NomaiVR
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
+                NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
             } else if (behaviour.GetType() == typeof(ShipCockpitUI) && ev == Events.AfterStart) {
                 behaviour.SetValue("_signalscopeTool", SignalScope);
             }
