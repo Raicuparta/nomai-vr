@@ -318,6 +318,10 @@ namespace NomaiVR
                 }
             }
 
+            bool ShouldRenderMallowClone() {
+                return stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
+            }
+
             // Eat mallow by moving it to player head.
             var eatDetector = mallow.gameObject.AddComponent<ProximityDetector>();
             eatDetector.other = Common.PlayerHead;
@@ -331,12 +335,14 @@ namespace NomaiVR
             // Hold mallow in left hand for replacing the one in the stick.
             var mallowClone = Instantiate(mallow.transform.Find("Props_HEA_Marshmallow"));
             mallowClone.localScale *= 0.75f;
-            HoldObject(mallowClone, _leftHandParent);
+            HoldObject(mallowClone, _leftHandParent, new Vector3(0.06f, -0.03f, -0.02f));
             _debugTransform = mallowClone;
 
             var replaceDetector = mallowClone.gameObject.AddComponent<ProximityDetector>();
             replaceDetector.other = mallow.transform;
             replaceDetector.onEnter += ReplaceMallow;
+
+            mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
