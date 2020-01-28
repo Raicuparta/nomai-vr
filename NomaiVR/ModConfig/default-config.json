@@ -1,5 +1,10 @@
 {
   "requireVR": true,
   "enabled": true,
-  "settings": {}
+  "settings": {
+    "enableMotionControls": false,
+    "movePlayerWithHead": true,
+    "showMirrorView": true,
+    "debugMode": false,
+  }
 }
