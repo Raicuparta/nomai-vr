@@ -10,6 +10,7 @@ namespace NomaiVR
         GameObject _cameraParent;
         Vector3 _prevCameraPosition;
         bool _isAwake;
+        public static bool MovePlayerWithHead = true;
 
         void Start() {
             NomaiVR.Log("Start PlayerBodyPosition");
@@ -76,8 +77,16 @@ namespace NomaiVR
             if (_isAwake) {
                 MoveCameraToPlayerHead();
             }
-            if (OWInput.GetInputMode() == InputMode.Character) {
+            if (MovePlayerWithHead && OWInput.GetInputMode() == InputMode.Character) {
                 MovePlayerBodyToCamera();
+            }
+            if (NomaiVR.DebugMode) {
+                if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
+                    _cameraParent.transform.localScale *= 0.9f;
+                }
+                if (Input.GetKeyDown(KeyCode.KeypadMinus)) {
+                    _cameraParent.transform.localScale /= 0.9f;
+                }
             }
         }
 
