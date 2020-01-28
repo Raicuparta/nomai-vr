@@ -97,8 +97,6 @@ namespace NomaiVR
             foreach (CanvasInfo canvasInfo in canvasInfos) {
                 MoveCanvasToWorldSpace(canvasInfo);
             }
-
-
         }
 
         void FixAllCanvases() {

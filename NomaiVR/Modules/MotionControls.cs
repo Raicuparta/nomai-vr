@@ -455,6 +455,9 @@ namespace NomaiVR
             }
 
             static void ChangeInputMode(InputMode mode) {
+                if (!SignalscopeReticule) {
+                    return;
+                }
                 if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
                     SignalscopeReticule.parent = ShipWindshield;
                     SignalscopeReticule.localScale = Vector3.one * 0.004f;
