@@ -1,6 +1,7 @@
 ﻿using OWML.Common;
 using OWML.ModHelper.Events;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
@@ -161,12 +162,10 @@ namespace NomaiVR
             holster.scale = 0.8f;
             holster.angle = Vector3.right * 90;
 
-
             var playerHUD = GameObject.Find("PlayerHUD").transform;
             SignalscopeReticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
             var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
             var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-
 
             // Attatch Signalscope UI to the Signalscope.
             SignalscopeReticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
@@ -295,13 +294,14 @@ namespace NomaiVR
         }
 
         void HoldMallow() {
+            var scale = Vector3.one * 0.75f;
             var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
 
             // Move the stick forward while not pressing RT.
             stickController.SetValue("_stickMinZ", 1f);
 
             var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
-            stickRoot.localScale *= 0.75f;
+            stickRoot.localScale = scale;
             HoldObject(stickRoot, RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
 
             var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
@@ -333,9 +333,10 @@ namespace NomaiVR
             meshes.Find("RoastingStick_Arm_NoSuit").gameObject.SetActive(false);
 
             // Hold mallow in left hand for replacing the one in the stick.
-            var mallowClone = Instantiate(mallow.transform.Find("Props_HEA_Marshmallow"));
+            var mallowModel = mallow.transform.Find("Props_HEA_Marshmallow");
+            var mallowClone = Instantiate(mallowModel);
             mallowClone.GetComponent<MeshRenderer>().material.color = Color.white;
-            mallowClone.localScale *= 0.75f;
+            mallowClone.localScale = scale;
             HoldObject(mallowClone, _leftHandParent, new Vector3(0.06f, -0.03f, -0.02f));
 
             // Replace right hand mallow on proximity with left hand mallow.
@@ -345,6 +346,28 @@ namespace NomaiVR
 
             // Render left hand mallow only when right hand mallow is not present.
             mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
+
+            var campfires = GameObject.FindObjectsOfType<Campfire>();
+            foreach (var campfire in campfires) {
+                void StartRoasting() {
+                    campfire.Invoke("StartRoasting");
+                }
+                var stickClone = Instantiate(meshes.Find("RoastingStick_Stick"));
+                var stickCloneMallow = Instantiate(mallowModel);
+                stickCloneMallow.parent = stickClone;
+                stickCloneMallow.localPosition = new Vector3(0, 0, 1.8f);
+                stickCloneMallow.localRotation = Quaternion.Euler(145, -85, -83);
+                stickClone.gameObject.SetActive(true);
+                stickClone.localScale = scale;
+                stickClone.parent = campfire.transform;
+                stickClone.localPosition = new Vector3(1.44f, 0, .019f);
+                stickClone.localRotation = Quaternion.Euler(-100, 125, -125);
+
+                var detector = stickClone.gameObject.AddComponent<ProximityDetector>();
+                detector.other = RightHand;
+                detector.minDistance = 2;
+                detector.onEnter += StartRoasting;
+            }
 
         }
 
