@@ -296,14 +296,31 @@ namespace NomaiVR
 
         void HoldMallow() {
             var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
+
+            // Move the stick forward while not pressing RT.
             stickController.SetValue("_stickMinZ", 1f);
+
             var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
             stickRoot.localScale *= 0.75f;
+
+            var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
+
+            void EatMallow() {
+                if (mallow.GetValue<Marshmallow.MallowState>("_mallowState") != Marshmallow.MallowState.Gone) {
+                    mallow.Eat();
+                }
+            }
+
+            // Eat mallow by moving it to player head.
+            var detector = mallow.gameObject.AddComponent<ProximityDetector>();
+            detector.other = Common.PlayerHead;
+            detector.onEnter += EatMallow;
+
+            // Hide arms that are part of the stick object.
             var meshes = stickRoot.Find("Stick_Tip/Props_HEA_RoastingStick");
             meshes.Find("RoastingStick_Arm").gameObject.SetActive(false);
             meshes.Find("RoastingStick_Arm_NoSuit").gameObject.SetActive(false);
 
-            _debugTransform = stickRoot;
             HoldObject(stickRoot, RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
         }
 

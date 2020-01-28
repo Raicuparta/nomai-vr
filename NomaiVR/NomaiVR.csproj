@@ -88,6 +88,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\ProximityDetector.cs" />
     <Compile Include="Modules\Common.cs" />
     <Compile Include="Modules\EffectFixes.cs" />
     <Compile Include="Modules\Menus.cs" />
