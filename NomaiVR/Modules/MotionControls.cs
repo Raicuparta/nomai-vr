@@ -295,13 +295,16 @@ namespace NomaiVR
         }
 
         void HoldMallow() {
-            var stickRoot = Locator.GetPlayerBody().transform.Find("RoastingSystem/Stick_Root/Stick_Pivot");
+            var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
+            stickController.SetValue("_stickMinZ", 1f);
+            var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
+            stickRoot.localScale *= 0.75f;
             var meshes = stickRoot.Find("Stick_Tip/Props_HEA_RoastingStick");
             meshes.Find("RoastingStick_Arm").gameObject.SetActive(false);
             meshes.Find("RoastingStick_Arm_NoSuit").gameObject.SetActive(false);
 
             _debugTransform = stickRoot;
-            HoldObject(stickRoot, RightHand);
+            HoldObject(stickRoot, RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
