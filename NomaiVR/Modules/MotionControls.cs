@@ -59,6 +59,7 @@ namespace NomaiVR
                 HoldSignalscope();
                 HoldProbeLauncher();
                 HoldTranslator();
+                HoldMallow();
                 HoldHUD();
 
                 ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
@@ -290,6 +291,16 @@ namespace NomaiVR
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
             holster.angle = new Vector3(0, 90, 90);
+        }
+
+        void HoldMallow() {
+            var stickRoot = Locator.GetPlayerBody().transform.Find("RoastingSystem/Stick_Root/Stick_Pivot");
+            var meshes = stickRoot.Find("Stick_Tip/Props_HEA_RoastingStick");
+            meshes.Find("RoastingStick_Arm").gameObject.SetActive(false);
+            meshes.Find("RoastingStick_Arm_NoSuit").gameObject.SetActive(false);
+
+            _debugTransform = stickRoot;
+            HoldObject(stickRoot, RightHand);
         }
 
         void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
