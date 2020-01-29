@@ -1,7 +1,9 @@
 ﻿using OWML.Common;
 using OWML.ModHelper.Events;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
@@ -11,13 +13,13 @@ namespace NomaiVR
 {
     public class MotionControls : MonoBehaviour
     {
-        protected static Transform RightHand;
+        public static Transform RightHand;
+        public static Transform LeftHand;
         protected static Transform ProbeLauncherModel;
         protected static ProbeLauncherUI ProbeUI;
         protected static Transform SignalscopeReticule;
         protected static Transform ShipWindshield;
         protected static Signalscope SignalScope;
-        Transform _leftHandParent;
         Transform _debugTransform;
         Transform _handsWrapper;
         bool _angleMode;
@@ -30,13 +32,26 @@ namespace NomaiVR
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
             NomaiVR.Helper.Events.Subscribe<ShipCockpitUI>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
+
+            // For aiming at interactibles with hand:
+            //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
+
+            // For fixing signalscope zoom
+            //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
+            //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
+            //behaviour.SetValue("_targetFOV", Common.MainCamera.fieldOfView);
+
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
+            NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
                 _handsWrapper = new GameObject().transform;
                 RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _handsWrapper);
-                _leftHandParent = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _handsWrapper);
+                LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _handsWrapper);
                 _handsWrapper.parent = Common.MainCamera.transform.parent;
                 _handsWrapper.localRotation = Quaternion.identity;
                 _handsWrapper.localPosition = Common.MainCamera.transform.localPosition;
@@ -60,26 +75,13 @@ namespace NomaiVR
                 HoldSignalscope();
                 HoldProbeLauncher();
                 HoldTranslator();
-                HoldMallow();
                 HoldHUD();
+                gameObject.AddComponent<HoldMallowStick>();
 
                 ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
 
                 // Move helmet forward to make it a bit more visible.
                 FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
-
-                // For aiming at interactibles with hand:
-                //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
-
-                // For fixing signalscope zoom
-                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
-                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
-                //behaviour.SetValue("_targetFOV", Common.MainCamera.fieldOfView);
-
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
-                NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
             } else if (behaviour.GetType() == typeof(ShipCockpitUI) && ev == Events.AfterStart) {
                 behaviour.SetValue("_signalscopeTool", SignalScope);
             }
@@ -133,7 +135,7 @@ namespace NomaiVR
             uiCanvas.transform.localPosition = Vector3.zero;
             uiCanvas.transform.localRotation = Quaternion.identity;
 
-            HoldObject(playerHUD.transform, _leftHandParent, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
+            HoldObject(playerHUD.transform, LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
         }
 
         void HoldSignalscope() {
@@ -293,91 +295,7 @@ namespace NomaiVR
             holster.angle = new Vector3(0, 90, 90);
         }
 
-        void HoldMallow() {
-            var scale = Vector3.one * 0.75f;
-            var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
-
-            // Move the stick forward while not pressing RT.
-            stickController.SetValue("_stickMinZ", 1f);
-
-            var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
-            stickRoot.localScale = scale;
-            HoldObject(stickRoot, RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
-
-            var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
-
-            void EatMallow() {
-                if (mallow.GetState() != Marshmallow.MallowState.Gone) {
-                    mallow.Eat();
-                }
-            }
-
-            void ReplaceMallow() {
-                if (mallow.GetState() == Marshmallow.MallowState.Gone) {
-                    mallow.SpawnMallow(true);
-                }
-            }
-
-            bool ShouldRenderMallowClone() {
-                return stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
-            }
-
-            bool ShouldRenderStickClone() {
-                return !stickController.enabled;
-            }
-
-            // Eat mallow by moving it to player head.
-            var eatDetector = mallow.gameObject.AddComponent<ProximityDetector>();
-            eatDetector.other = Common.PlayerHead;
-            eatDetector.onEnter += EatMallow;
-
-            // Hide arms that are part of the stick object.
-            var meshes = stickRoot.Find("Stick_Tip/Props_HEA_RoastingStick");
-            meshes.Find("RoastingStick_Arm").gameObject.SetActive(false);
-            meshes.Find("RoastingStick_Arm_NoSuit").gameObject.SetActive(false);
-
-            // Hold mallow in left hand for replacing the one in the stick.
-            var mallowModel = mallow.transform.Find("Props_HEA_Marshmallow");
-            var mallowClone = Instantiate(mallowModel);
-            mallowClone.GetComponent<MeshRenderer>().material.color = Color.white;
-            mallowClone.localScale = scale;
-            HoldObject(mallowClone, _leftHandParent, new Vector3(0.06f, -0.03f, -0.02f));
-
-            // Replace right hand mallow on proximity with left hand mallow.
-            var replaceDetector = mallowClone.gameObject.AddComponent<ProximityDetector>();
-            replaceDetector.other = mallow.transform;
-            replaceDetector.onEnter += ReplaceMallow;
-
-            // Render left hand mallow only when right hand mallow is not present.
-            mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
-
-            var campfires = GameObject.FindObjectsOfType<Campfire>();
-            foreach (var campfire in campfires) {
-                void StartRoasting() {
-                    campfire.Invoke("StartRoasting");
-                }
-                var stickClone = Instantiate(meshes.Find("RoastingStick_Stick"));
-                var stickCloneMallow = Instantiate(mallowModel);
-                stickCloneMallow.parent = stickClone;
-                stickCloneMallow.localPosition = new Vector3(0, 0, 1.8f);
-                stickCloneMallow.localRotation = Quaternion.Euler(145, -85, -83);
-                stickClone.gameObject.SetActive(true);
-                stickClone.localScale = scale;
-                stickClone.parent = campfire.transform;
-                stickClone.localPosition = new Vector3(1.44f, 0, .019f);
-                stickClone.localRotation = Quaternion.Euler(-100, 125, -125);
-
-                var detector = stickCloneMallow.gameObject.AddComponent<ProximityDetector>();
-                detector.other = RightHand;
-                detector.minDistance = 0.4f;
-                detector.onEnter += StartRoasting;
-
-                stickClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderStickClone;
-            }
-
-        }
-
-        void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
+        public static void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
             var objectParent = new GameObject().transform;
             objectParent.parent = hand;
             objectParent.localPosition = position;
@@ -393,13 +311,13 @@ namespace NomaiVR
             }
         }
 
-        void HoldObject(Transform objectTransform, Transform hand) {
+        public static void HoldObject(Transform objectTransform, Transform hand) {
             HoldObject(objectTransform, hand, Vector3.zero, Quaternion.identity);
         }
-        void HoldObject(Transform objectTransform, Transform hand, Quaternion rotation) {
+        public static void HoldObject(Transform objectTransform, Transform hand, Quaternion rotation) {
             HoldObject(objectTransform, hand, Vector3.zero, rotation);
         }
-        void HoldObject(Transform objectTransform, Transform hand, Vector3 position) {
+        public static void HoldObject(Transform objectTransform, Transform hand, Vector3 position) {
             HoldObject(objectTransform, hand, position, Quaternion.identity);
         }
 
