@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Modules\ConditionalRenderer.cs" />
     <Compile Include="Modules\Holdables\HoldMallowStick.cs" />
+    <Compile Include="Modules\Holdables\HoldProbeLauncher.cs" />
     <Compile Include="Modules\Holdables\HoldSignalscope.cs" />
     <Compile Include="Modules\Holdables\HoldTranslator.cs" />
     <Compile Include="Modules\ProximityDetector.cs" />
