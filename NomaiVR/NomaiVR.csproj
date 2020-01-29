@@ -91,6 +91,7 @@
     <Compile Include="Modules\ConditionalRenderer.cs" />
     <Compile Include="Modules\Holdables\HoldMallowStick.cs" />
     <Compile Include="Modules\Holdables\HoldSignalscope.cs" />
+    <Compile Include="Modules\Holdables\HoldTranslator.cs" />
     <Compile Include="Modules\ProximityDetector.cs" />
     <Compile Include="Modules\Common.cs" />
     <Compile Include="Modules\EffectFixes.cs" />
