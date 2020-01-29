@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\ConditionalRenderer.cs" />
+    <Compile Include="Modules\Holdables\HoldHUD.cs" />
     <Compile Include="Modules\Holdables\HoldMallowStick.cs" />
     <Compile Include="Modules\Holdables\HoldProbeLauncher.cs" />
     <Compile Include="Modules\Holdables\HoldSignalscope.cs" />

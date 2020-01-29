@@ -53,14 +53,11 @@ namespace NomaiVR
                 }
 
                 HideArms();
-                HoldHUD();
+                gameObject.AddComponent<HoldHUD>();
                 gameObject.AddComponent<HoldMallowStick>();
                 gameObject.AddComponent<HoldProbeLauncher>();
                 gameObject.AddComponent<HoldTranslator>();
                 gameObject.AddComponent<HoldSignalscope>();
-
-                // Move helmet forward to make it a bit more visible.
-                FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
             }
         }
 
@@ -92,27 +89,6 @@ namespace NomaiVR
             var bodyMesh = palyerMeshes.Find("player_mesh_noSuit:Traveller_HEA_Player");
             bodyMesh.Find("player_mesh_noSuit:Player_RightArm").gameObject.SetActive(false);
             bodyMesh.Find("player_mesh_noSuit:Player_LeftArm").gameObject.SetActive(false);
-        }
-
-        void HoldHUD() {
-            var playerHUD = GameObject.Find("PlayerHUD");
-            playerHUD.transform.localScale = Vector3.one * 0.2f;
-            playerHUD.transform.localPosition = Vector3.zero;
-            playerHUD.transform.localRotation = Quaternion.identity;
-
-            var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, LayerMask.NameToLayer("HeadsUpDisplay"));
-
-            foreach (var hudElement in hudElements) {
-                hudElement.layer = 0;
-                hudElement.SetActive(true);
-            }
-
-            var uiCanvas = playerHUD.transform.Find("HelmetOnUI/UICanvas").GetComponent<Canvas>();
-            uiCanvas.renderMode = RenderMode.WorldSpace;
-            uiCanvas.transform.localPosition = Vector3.zero;
-            uiCanvas.transform.localRotation = Quaternion.identity;
-
-            HoldObject(playerHUD.transform, LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
         }
 
         public static void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
