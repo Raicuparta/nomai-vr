@@ -33,7 +33,7 @@ namespace NomaiVR {
             gameObject.AddComponent<PlayerBodyPosition>();
             if (_motionControls) {
                 gameObject.AddComponent<ControllerInput>();
-                gameObject.AddComponent<MotionControls>();
+                gameObject.AddComponent<Hands>();
             }
         }
 

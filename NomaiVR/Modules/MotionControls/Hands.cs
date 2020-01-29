@@ -6,14 +6,13 @@ using UnityEngine.XR;
 using Valve.VR;
 
 namespace NomaiVR {
-    public class MotionControls: MonoBehaviour {
+    public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
         Transform _debugTransform;
         Transform _handsWrapper;
         bool _angleMode;
         bool _enableLaser = false;
-        bool _handNearHead = false;
 
         void Start () {
             NomaiVR.Log("Start MotionControls");
@@ -50,6 +49,7 @@ namespace NomaiVR {
                 }
 
                 HideArms();
+                gameObject.AddComponent<FlashlightGesture>();
                 gameObject.AddComponent<HoldHUD>();
                 gameObject.AddComponent<HoldMallowStick>();
                 gameObject.AddComponent<HoldProbeLauncher>();
@@ -112,20 +112,6 @@ namespace NomaiVR {
         }
         public static void HoldObject (Transform objectTransform, Transform hand, Vector3 position) {
             HoldObject(objectTransform, hand, position, Quaternion.identity);
-        }
-
-        void UpdateFlashlightGesture () {
-            if (RightHand) {
-                var templePosition = Common.PlayerHead.position + Common.PlayerHead.right * 0.15f;
-                if (!_handNearHead && Vector3.Distance(RightHand.position, templePosition) < 0.15f) {
-                    _handNearHead = true;
-                    ControllerInput.SimulateButton(XboxButton.RightStickClick, 1);
-                }
-                if (_handNearHead && Vector3.Distance(RightHand.position, templePosition) > 0.16f) {
-                    _handNearHead = false;
-                    ControllerInput.SimulateButton(XboxButton.RightStickClick, 0);
-                }
-            }
         }
 
         void UpdateHandPosition () {
@@ -200,7 +186,6 @@ namespace NomaiVR {
 
         void Update () {
             UpdateHandPosition();
-            UpdateFlashlightGesture();
             UpdateDebugTransform();
         }
 
@@ -211,7 +196,7 @@ namespace NomaiVR {
                 float ____viewingWindow,
                 ref bool ____focused
             ) {
-                float num = 2f * Vector3.Angle(MotionControls.RightHand.forward, __instance.transform.forward);
+                float num = 2f * Vector3.Angle(Hands.RightHand.forward, __instance.transform.forward);
                 ____focused = (num <= ____viewingWindow);
                 var Base = __instance as SingleInteractionVolume;
 

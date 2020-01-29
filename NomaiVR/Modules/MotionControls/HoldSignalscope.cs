@@ -22,7 +22,7 @@ namespace NomaiVR {
 
 
             var signalScope = Common.MainCamera.transform.Find("Signalscope");
-            MotionControls.HoldObject(signalScope, MotionControls.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            Hands.HoldObject(signalScope, Hands.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
             SignalScope = signalScope.GetComponent<Signalscope>();
 
             var signalScopeModel = signalScope.GetChild(0);
@@ -40,7 +40,7 @@ namespace NomaiVR {
             var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<HolsterTool>();
-            holster.hand = MotionControls.RightHand;
+            holster.hand = Hands.RightHand;
             holster.position = new Vector3(0.3f, 0.35f, 0);
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;

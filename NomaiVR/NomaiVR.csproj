@@ -89,16 +89,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\ConditionalRenderer.cs" />
-    <Compile Include="Modules\Holdables\HoldHUD.cs" />
-    <Compile Include="Modules\Holdables\HoldMallowStick.cs" />
-    <Compile Include="Modules\Holdables\HoldProbeLauncher.cs" />
-    <Compile Include="Modules\Holdables\HoldSignalscope.cs" />
-    <Compile Include="Modules\Holdables\HoldTranslator.cs" />
+    <Compile Include="Modules\MotionControls\FlashlightGesture.cs" />
+    <Compile Include="Modules\MotionControls\HoldHUD.cs" />
+    <Compile Include="Modules\MotionControls\HoldMallowStick.cs" />
+    <Compile Include="Modules\MotionControls\HoldProbeLauncher.cs" />
+    <Compile Include="Modules\MotionControls\HoldSignalscope.cs" />
+    <Compile Include="Modules\MotionControls\HoldTranslator.cs" />
     <Compile Include="Modules\ProximityDetector.cs" />
     <Compile Include="Modules\Common.cs" />
     <Compile Include="Modules\EffectFixes.cs" />
     <Compile Include="Modules\Menus.cs" />
-    <Compile Include="Modules\MotionControls.cs" />
+    <Compile Include="Modules\MotionControls\Hands.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
     <Compile Include="Modules\ControllerInput.cs" />
     <Compile Include="Modules\HolsterTool.cs" />

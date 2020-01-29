@@ -23,7 +23,7 @@ namespace NomaiVR {
             uiCanvas.transform.localPosition = Vector3.zero;
             uiCanvas.transform.localRotation = Quaternion.identity;
 
-            MotionControls.HoldObject(playerHUD.transform, MotionControls.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
+            Hands.HoldObject(playerHUD.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
         }
     }
 }

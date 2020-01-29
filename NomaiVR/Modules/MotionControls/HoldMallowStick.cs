@@ -16,7 +16,7 @@ namespace NomaiVR {
 
             var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
             stickRoot.localScale = scale;
-            MotionControls.HoldObject(stickRoot, MotionControls.RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
+            Hands.HoldObject(stickRoot, Hands.RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
 
             var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
@@ -55,7 +55,7 @@ namespace NomaiVR {
             var mallowClone = Instantiate(mallowModel);
             mallowClone.GetComponent<MeshRenderer>().material.color = Color.white;
             mallowClone.localScale = scale;
-            MotionControls.HoldObject(mallowClone, MotionControls.LeftHand, new Vector3(0.06f, -0.03f, -0.02f));
+            Hands.HoldObject(mallowClone, Hands.LeftHand, new Vector3(0.06f, -0.03f, -0.02f));
 
             // Replace right hand mallow on proximity with left hand mallow.
             var replaceDetector = mallowClone.gameObject.AddComponent<ProximityDetector>();
@@ -84,7 +84,7 @@ namespace NomaiVR {
                 stickClone.localRotation = Quaternion.Euler(-100, 125, -125);
 
                 var detector = stickCloneMallow.gameObject.AddComponent<ProximityDetector>();
-                detector.other = MotionControls.RightHand;
+                detector.other = Hands.RightHand;
                 detector.minDistance = 0.4f;
                 detector.onEnter += StartRoasting;
 

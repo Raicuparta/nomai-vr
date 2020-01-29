@@ -12,7 +12,7 @@ namespace NomaiVR {
 
             var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.2f;
-            MotionControls.HoldObject(probeLauncher, MotionControls.RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
+            Hands.HoldObject(probeLauncher, Hands.RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
 
             ProbeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
             ProbeLauncherModel.gameObject.layer = 0;
@@ -46,7 +46,7 @@ namespace NomaiVR {
             var probeLauncherHolster = Instantiate(ProbeLauncherModel).gameObject;
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<HolsterTool>();
-            holster.hand = MotionControls.RightHand;
+            holster.hand = Hands.RightHand;
             holster.position = new Vector3(0, 0.35f, 0.2f);
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;

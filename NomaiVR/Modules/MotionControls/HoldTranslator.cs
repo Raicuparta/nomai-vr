@@ -7,7 +7,7 @@ namespace NomaiVR {
         void Awake () {
             var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
 
-            MotionControls.HoldObject(translator, MotionControls.RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
+            Hands.HoldObject(translator, Hands.RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
 
             var translatorGroup = translator.Find("TranslatorGroup");
             translatorGroup.localPosition = Vector3.zero;
@@ -41,7 +41,7 @@ namespace NomaiVR {
             var translatorHolster = Instantiate(translatorModel).gameObject;
             translatorHolster.SetActive(true);
             var holster = translatorHolster.AddComponent<HolsterTool>();
-            holster.hand = MotionControls.RightHand;
+            holster.hand = Hands.RightHand;
             holster.position = new Vector3(-0.3f, 0.35f, 0);
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
