@@ -68,15 +68,6 @@ namespace NomaiVR {
             if (!_enabled) {
                 return;
             }
-            //if (ControllerInput.IsGripping && Vector3.Distance(transform.position, hand.position) < 0.2f) {
-            //    if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
-            //        Equip();
-            //    } else if (Common.ToolSwapper.IsInToolMode(mode)) {
-            //        ControllerInput.ResetRB();
-            //        Unequip();
-            //    }
-            //    ControllerInput.IsGripping = false;
-            //}
             if (!_visible && !Common.ToolSwapper.IsInToolMode(mode)) {
                 SetVisible(true);
             }
