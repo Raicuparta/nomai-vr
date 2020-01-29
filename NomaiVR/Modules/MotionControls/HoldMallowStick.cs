@@ -43,6 +43,7 @@ namespace NomaiVR {
             // Eat mallow by moving it to player head.
             var eatDetector = mallow.gameObject.AddComponent<ProximityDetector>();
             eatDetector.other = Common.PlayerHead;
+            eatDetector.minDistance = 0.2f;
             eatDetector.onEnter += EatMallow;
 
             // Hide arms that are part of the stick object.
@@ -83,10 +84,9 @@ namespace NomaiVR {
                 stickClone.localPosition = new Vector3(1.44f, 0, .019f);
                 stickClone.localRotation = Quaternion.Euler(-100, 125, -125);
 
-                var detector = stickCloneMallow.gameObject.AddComponent<ProximityDetector>();
-                detector.other = Hands.RightHand;
-                detector.minDistance = 0.4f;
-                detector.onEnter += StartRoasting;
+                var grabbable = stickCloneMallow.gameObject.AddComponent<Grabbable>();
+                grabbable.detector.minDistance = 0.4f;
+                grabbable.onGrab += StartRoasting;
 
                 stickClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderStickClone;
             }

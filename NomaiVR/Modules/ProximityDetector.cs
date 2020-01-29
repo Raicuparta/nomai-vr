@@ -9,7 +9,7 @@ namespace NomaiVR {
         public Action onEnter;
         public Action onExit;
         public Vector3 localOffset;
-        bool _entered;
+        public bool isInside;
 
         void Update () {
             if (!other.gameObject.activeSelf) {
@@ -19,18 +19,18 @@ namespace NomaiVR {
             var offset = transform.TransformVector(localOffset);
             var distance = Vector3.Distance(transform.position + offset, other.position);
 
-            if (!_entered && distance <= minDistance) {
+            if (!isInside && distance <= minDistance) {
                 if (onEnter != null) {
                     onEnter.Invoke();
                 }
-                _entered = true;
+                isInside = true;
             }
 
-            if (_entered && distance > minDistance + exitThreshold) {
+            if (isInside && distance > minDistance + exitThreshold) {
                 if (onExit != null) {
                     onExit.Invoke();
                 }
-                _entered = false;
+                isInside = false;
             }
         }
     }
