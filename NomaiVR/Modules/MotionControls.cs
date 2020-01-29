@@ -17,9 +17,6 @@ namespace NomaiVR
         public static Transform LeftHand;
         protected static Transform ProbeLauncherModel;
         protected static ProbeLauncherUI ProbeUI;
-        protected static Transform SignalscopeReticule;
-        protected static Transform ShipWindshield;
-        protected static Signalscope SignalScope;
         Transform _debugTransform;
         Transform _handsWrapper;
         bool _angleMode;
@@ -30,21 +27,14 @@ namespace NomaiVR
             NomaiVR.Log("Start MotionControls");
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
-            NomaiVR.Helper.Events.Subscribe<ShipCockpitUI>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
 
             // For aiming at interactibles with hand:
             //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
 
-            // For fixing signalscope zoom
-            //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
-            //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
-            //behaviour.SetValue("_targetFOV", Common.MainCamera.fieldOfView);
-
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
-            NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
+
         }
 
         private void OnEvent(MonoBehaviour behaviour, Events ev) {
@@ -72,18 +62,14 @@ namespace NomaiVR
                 }
 
                 HideArms();
-                HoldSignalscope();
                 HoldProbeLauncher();
                 HoldTranslator();
                 HoldHUD();
                 gameObject.AddComponent<HoldMallowStick>();
-
-                ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
+                gameObject.AddComponent<HoldSignalscope>();
 
                 // Move helmet forward to make it a bit more visible.
                 FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
-            } else if (behaviour.GetType() == typeof(ShipCockpitUI) && ev == Events.AfterStart) {
-                behaviour.SetValue("_signalscopeTool", SignalScope);
             }
         }
 
@@ -136,57 +122,6 @@ namespace NomaiVR
             uiCanvas.transform.localRotation = Quaternion.identity;
 
             HoldObject(playerHUD.transform, LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
-        }
-
-        void HoldSignalscope() {
-            var signalScope = Common.MainCamera.transform.Find("Signalscope");
-            HoldObject(signalScope, RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
-            SignalScope = signalScope.GetComponent<Signalscope>();
-
-            var signalScopeModel = signalScope.GetChild(0);
-            // Tools have a special shader that draws them on top of everything
-            // and screws with perspective. Changing to Standard shader so they look
-            // like a normal 3D object.
-            signalScopeModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
-            signalScopeModel.localPosition = Vector3.up * -0.1f;
-            signalScopeModel.localRotation = Quaternion.identity;
-
-            // This child seems to be only for some kind of shader effect.
-            // Disabling it since it looks glitchy and doesn't seem necessary.
-            signalScopeModel.GetChild(0).gameObject.SetActive(false);
-
-            var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
-            signalScopeHolster.SetActive(true);
-            var holster = signalScopeHolster.AddComponent<HolsterTool>();
-            holster.hand = RightHand;
-            holster.position = new Vector3(0.3f, 0.35f, 0);
-            holster.mode = ToolMode.SignalScope;
-            holster.scale = 0.8f;
-            holster.angle = Vector3.right * 90;
-
-            var playerHUD = GameObject.Find("PlayerHUD").transform;
-            SignalscopeReticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
-            var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
-            var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-
-            // Attatch Signalscope UI to the Signalscope.
-            SignalscopeReticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            SignalscopeReticule.parent = signalScope;
-            SignalscopeReticule.localScale = Vector3.one * 0.0005f;
-            SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
-            SignalscopeReticule.localRotation = Quaternion.identity;
-
-            helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOff.parent = signalScope;
-            helmetOff.localScale = Vector3.one * 0.0005f;
-            helmetOff.localPosition = Vector3.zero;
-            helmetOff.localRotation = Quaternion.identity;
-
-            helmetOn.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOn.parent = signalScope;
-            helmetOn.localScale = Vector3.one * 0.0005f;
-            helmetOn.localPosition = Vector3.down * 0.5f;
-            helmetOn.localRotation = Quaternion.identity;
         }
 
         void HoldProbeLauncher() {
@@ -441,37 +376,12 @@ namespace NomaiVR
                 return false;
             }
 
-            static void ZoomIn() {
-                Common.MainCamera.transform.localScale = Vector3.one * 0.1f;
-            }
-
-            static void ZoomOut() {
-                Common.MainCamera.transform.localScale = Vector3.one;
-            }
-
             static void SuitUp() {
                 MotionControls.ProbeUI.SetValue("_nonSuitUI", false);
             }
 
             static void RemoveSuit() {
                 MotionControls.ProbeUI.SetValue("_nonSuitUI", true);
-            }
-
-            static void ChangeInputMode(InputMode mode) {
-                if (!SignalscopeReticule) {
-                    return;
-                }
-                if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
-                    SignalscopeReticule.parent = ShipWindshield;
-                    SignalscopeReticule.localScale = Vector3.one * 0.004f;
-                    SignalscopeReticule.localPosition = Vector3.forward * 3f;
-                    SignalscopeReticule.localRotation = Quaternion.identity;
-                } else {
-                    SignalscopeReticule.parent = SignalScope.transform;
-                    SignalscopeReticule.localScale = Vector3.one * 0.0005f;
-                    SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
-                    SignalscopeReticule.localRotation = Quaternion.identity;
-                }
             }
         }
     }

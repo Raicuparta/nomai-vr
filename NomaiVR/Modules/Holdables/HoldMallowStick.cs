@@ -14,6 +14,10 @@ namespace NomaiVR
     public class HoldMallowStick : MonoBehaviour
     {
         void Awake() {
+
+            // Stop stick rotation animation.
+            NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
+
             var scale = Vector3.one * 0.75f;
             var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
 
