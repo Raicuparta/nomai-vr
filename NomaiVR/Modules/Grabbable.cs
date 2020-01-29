@@ -18,8 +18,10 @@ namespace NomaiVR {
                 return;
             }
             if (!_grabbing && ControllerInput.IsGripping) {
+                _grabbing = true;
                 onGrab.Invoke();
             } else if (_grabbing && !ControllerInput.IsGripping) {
+                _grabbing = false;
                 onRelease.Invoke();
             }
         }
