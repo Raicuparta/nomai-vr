@@ -9,19 +9,13 @@ namespace NomaiVR {
     public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
-        Transform _debugTransform;
         Transform _handsWrapper;
-        bool _angleMode;
-        bool _enableLaser = false;
 
         void Start () {
             NomaiVR.Log("Start MotionControls");
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
-
-            // For aiming at interactibles with hand:
-            //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume
         }
 
         private void OnEvent (MonoBehaviour behaviour, Events ev) {
@@ -33,21 +27,6 @@ namespace NomaiVR {
                 _handsWrapper.localRotation = Quaternion.identity;
                 _handsWrapper.localPosition = Common.MainCamera.transform.localPosition;
 
-                if (_enableLaser) {
-                    var laser = new GameObject("Laser");
-                    laser.transform.parent = RightHand;
-                    laser.transform.position = Vector3.zero;
-                    laser.transform.rotation = Quaternion.identity;
-                    var lineRenderer = RightHand.gameObject.AddComponent<LineRenderer>();
-                    lineRenderer.useWorldSpace = false;
-                    lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });
-                    lineRenderer.endColor = Color.clear;
-                    lineRenderer.startColor = Color.cyan;
-                    lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
-                    lineRenderer.startWidth = 0.01f;
-                    lineRenderer.endWidth = 0.01f;
-                }
-
                 HideArms();
                 gameObject.AddComponent<FlashlightGesture>();
                 gameObject.AddComponent<HoldHUD>();
@@ -55,6 +34,7 @@ namespace NomaiVR {
                 gameObject.AddComponent<HoldProbeLauncher>();
                 gameObject.AddComponent<HoldTranslator>();
                 gameObject.AddComponent<HoldSignalscope>();
+                //gameObject.AddComponent<LaserPointer>();
             }
         }
 
@@ -114,99 +94,9 @@ namespace NomaiVR {
             HoldObject(objectTransform, hand, position, Quaternion.identity);
         }
 
-        void UpdateHandPosition () {
+        void Update () {
             if (_handsWrapper) {
                 _handsWrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
-            }
-        }
-
-        void UpdateDebugTransform () {
-            if (_debugTransform) {
-                Vector3 position = _debugTransform.parent.localPosition;
-                var posDelta = 0.01f;
-
-                if (!_angleMode) {
-                    if (Input.GetKeyDown(KeyCode.Keypad7)) {
-                        position.x += posDelta;
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad4)) {
-                        position.x -= posDelta;
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad8)) {
-                        position.y += posDelta;
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad5)) {
-                        position.y -= posDelta;
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad9)) {
-                        position.z += posDelta;
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad6)) {
-                        position.z -= posDelta;
-                    }
-                }
-
-                Quaternion rotation = _debugTransform.parent.localRotation;
-                float angleDelta = 5;
-
-                if (_angleMode) {
-                    if (Input.GetKeyDown(KeyCode.Keypad7)) {
-                        rotation = rotation * Quaternion.Euler(angleDelta, 0, 0);
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad4)) {
-                        rotation = rotation * Quaternion.Euler(-angleDelta, 0, 0);
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad8)) {
-                        rotation = rotation * Quaternion.Euler(0, angleDelta, 0);
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad5)) {
-                        rotation = rotation * Quaternion.Euler(0, -angleDelta, 0);
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad9)) {
-                        rotation = rotation * Quaternion.Euler(0, 0, angleDelta);
-                    }
-                    if (Input.GetKeyDown(KeyCode.Keypad6)) {
-                        rotation = rotation * Quaternion.Euler(0, 0, -angleDelta);
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.Keypad0)) {
-                    _angleMode = !_angleMode;
-                }
-
-                if (Input.anyKeyDown) {
-                    _debugTransform.parent.localPosition = position;
-                    _debugTransform.parent.localRotation = rotation;
-                    var angles = _debugTransform.parent.localEulerAngles;
-                    NomaiVR.Log("position: new Vector3(" + position.x + "f, " + position.y + "f, " + position.z + "f)");
-                    NomaiVR.Log("Rotation: Quaternion.Euler(" + angles.x + "f, " + angles.y + "f, " + angles.z + "f)");
-                }
-            }
-        }
-
-        void Update () {
-            UpdateHandPosition();
-            UpdateDebugTransform();
-        }
-
-        internal static class Patches {
-            static bool PatchUpdateInteractVolume (
-                InteractZone __instance,
-                OWCamera ____playerCam,
-                float ____viewingWindow,
-                ref bool ____focused
-            ) {
-                float num = 2f * Vector3.Angle(Hands.RightHand.forward, __instance.transform.forward);
-                ____focused = (num <= ____viewingWindow);
-                var Base = __instance as SingleInteractionVolume;
-
-                var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
-                var ftn = method.MethodHandle.GetFunctionPointer();
-                var func = (Action) Activator.CreateInstance(typeof(Action), __instance, ftn);
-
-                func();
-
-                return false;
             }
         }
     }
