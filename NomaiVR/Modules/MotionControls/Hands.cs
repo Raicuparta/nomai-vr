@@ -9,7 +9,7 @@ namespace NomaiVR {
     public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
-        Transform _handsWrapper;
+        Transform _wrapper;
 
         void Start () {
             NomaiVR.Log("Start MotionControls");
@@ -20,12 +20,12 @@ namespace NomaiVR {
 
         private void OnEvent (MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
-                _handsWrapper = new GameObject().transform;
-                RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _handsWrapper);
-                LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _handsWrapper);
-                _handsWrapper.parent = Common.MainCamera.transform.parent;
-                _handsWrapper.localRotation = Quaternion.identity;
-                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition;
+                _wrapper = new GameObject().transform;
+                RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
+                LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
+                _wrapper.parent = Common.MainCamera.transform.parent;
+                _wrapper.localRotation = Quaternion.identity;
+                _wrapper.localPosition = Common.MainCamera.transform.localPosition;
 
                 HideArms();
                 gameObject.AddComponent<FlashlightGesture>();
@@ -95,8 +95,8 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if (_handsWrapper) {
-                _handsWrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+            if (_wrapper) {
+                _wrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
         }
     }
