@@ -11,12 +11,6 @@ namespace NomaiVR {
         bool _motionControls;
         public static bool DebugMode;
 
-        public static void Log (string s) {
-            if (DebugMode) {
-                _instance.ModHelper.Console.WriteLine("NomaiVR: " + s);
-            }
-        }
-
         void Start () {
             _instance = this;
 
@@ -35,16 +29,27 @@ namespace NomaiVR {
                 gameObject.AddComponent<ControllerInput>();
                 gameObject.AddComponent<Hands>();
             }
+
+            Application.runInBackground = true;
         }
 
         public override void Configure (IModConfig config) {
-            _motionControls = config.GetSetting<bool>("enableMotionControls");
             DebugMode = config.GetSetting<bool>("debugMode");
             PlayerBodyPosition.MovePlayerWithHead = config.GetSetting<bool>("movePlayerWithHead");
             XRSettings.showDeviceView = config.GetSetting<bool>("showMirrorView");
+            _motionControls = config.GetSetting<bool>("enableMotionControls");
 
-            Application.runInBackground = true;
-            Cursor.lockState = CursorLockMode.None;
+            if (_motionControls) {
+                // Prevent application from stealing mouse focus;
+                ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
+
+        public static void Log (string s) {
+            if (DebugMode) {
+                _instance.ModHelper.Console.WriteLine("NomaiVR: " + s);
+            }
         }
     }
 }
