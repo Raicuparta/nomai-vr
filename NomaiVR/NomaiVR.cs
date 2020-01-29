@@ -43,6 +43,7 @@ namespace NomaiVR {
                 // Prevent application from stealing mouse focus;
                 ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
 

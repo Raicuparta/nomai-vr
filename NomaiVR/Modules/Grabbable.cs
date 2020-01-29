@@ -11,18 +11,21 @@ namespace NomaiVR {
         void Awake () {
             detector = gameObject.AddComponent<ProximityDetector>();
             detector.other = Hands.RightHand;
+            detector.onEnter += OnEnter;
+            detector.onExit += OnExit;
         }
 
-        void Update () {
-            if (!detector.isInside) {
-                return;
-            }
-            if (!_grabbing && ControllerInput.IsGripping) {
-                _grabbing = true;
-                onGrab.Invoke();
-            } else if (_grabbing && !ControllerInput.IsGripping) {
+        void OnEnter () {
+            if (_grabbing && !ControllerInput.IsGripping) {
+                onRelease?.Invoke();
                 _grabbing = false;
-                onRelease.Invoke();
+            }
+        }
+
+        void OnExit () {
+            if (!_grabbing && ControllerInput.IsGripping) {
+                onGrab?.Invoke();
+                _grabbing = true;
             }
         }
     }

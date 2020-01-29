@@ -11,15 +11,31 @@ namespace NomaiVR {
         MeshRenderer[] _renderers;
         bool _visible;
         bool _enabled = true;
+        Grabbable _grabbable;
 
         void Start () {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+            _grabbable = gameObject.AddComponent<Grabbable>();
+            _grabbable.onGrab += OnGrab;
+            _grabbable.onRelease += OnRelease;
+            _grabbable.detector.minDistance = 0.2f;
 
             transform.localScale = Vector3.one * scale;
             transform.parent = Common.PlayerBody.transform;
             transform.localPosition = position;
             transform.localRotation = Quaternion.identity;
             transform.Rotate(angle);
+        }
+
+        void OnGrab () {
+            Equip();
+            NomaiVR.Log("grab");
+        }
+
+        void OnRelease () {
+            ControllerInput.ResetRB();
+            Unequip();
+            NomaiVR.Log("release");
         }
 
         void Equip () {
@@ -52,15 +68,15 @@ namespace NomaiVR {
             if (!_enabled) {
                 return;
             }
-            if (ControllerInput.IsGripping && Vector3.Distance(transform.position, hand.position) < 0.2f) {
-                if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
-                    Equip();
-                } else if (Common.ToolSwapper.IsInToolMode(mode)) {
-                    ControllerInput.ResetRB();
-                    Unequip();
-                }
-                ControllerInput.IsGripping = false;
-            }
+            //if (ControllerInput.IsGripping && Vector3.Distance(transform.position, hand.position) < 0.2f) {
+            //    if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+            //        Equip();
+            //    } else if (Common.ToolSwapper.IsInToolMode(mode)) {
+            //        ControllerInput.ResetRB();
+            //        Unequip();
+            //    }
+            //    ControllerInput.IsGripping = false;
+            //}
             if (!_visible && !Common.ToolSwapper.IsInToolMode(mode)) {
                 SetVisible(true);
             }
