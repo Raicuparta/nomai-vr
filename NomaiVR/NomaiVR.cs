@@ -4,22 +4,20 @@ using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
 
-namespace NomaiVR
-{
-    public class NomaiVR : ModBehaviour
-    {
+namespace NomaiVR {
+    public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
         static NomaiVR _instance;
         bool _motionControls;
         public static bool DebugMode;
 
-        public static void Log(string s) {
+        public static void Log (string s) {
             if (DebugMode) {
                 _instance.ModHelper.Console.WriteLine("NomaiVR: " + s);
             }
         }
 
-        void Start() {
+        void Start () {
             _instance = this;
 
             Log("Start Main");
@@ -39,7 +37,7 @@ namespace NomaiVR
             }
         }
 
-        public override void Configure(IModConfig config) {
+        public override void Configure (IModConfig config) {
             _motionControls = config.GetSetting<bool>("enableMotionControls");
             DebugMode = config.GetSetting<bool>("debugMode");
             PlayerBodyPosition.MovePlayerWithHead = config.GetSetting<bool>("movePlayerWithHead");

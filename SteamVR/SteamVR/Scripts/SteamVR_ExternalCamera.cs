@@ -6,18 +6,14 @@
 
 using UnityEngine;
 using UnityEngine.Rendering;
-using Valve.VR;
 
-namespace Valve.VR
-{
-    public class SteamVR_ExternalCamera : MonoBehaviour
-    {
+namespace Valve.VR {
+    public class SteamVR_ExternalCamera: MonoBehaviour {
         private SteamVR_Action_Pose cameraPose = null;
         private SteamVR_Input_Sources cameraInputSource = SteamVR_Input_Sources.Camera;
 
         [System.Serializable]
-        public struct Config
-        {
+        public struct Config {
             public float x, y, z;
             public float rx, ry, rz;
             public float fov;
@@ -37,26 +33,20 @@ namespace Valve.VR
         [Tooltip("This will automatically activate the action set the specified pose belongs to. And deactivate it when this component is disabled.")]
         public bool autoEnableDisableActionSet = true;
 
-        public void ReadConfig()
-        {
-            try
-            {
+        public void ReadConfig () {
+            try {
                 var mCam = new HmdMatrix34_t();
                 var readCamMatrix = false;
 
                 object c = config; // box
                 var lines = System.IO.File.ReadAllLines(configPath);
-                foreach (var line in lines)
-                {
+                foreach (var line in lines) {
                     var split = line.Split('=');
-                    if (split.Length == 2)
-                    {
+                    if (split.Length == 2) {
                         var key = split[0];
-                        if (key == "m")
-                        {
+                        if (key == "m") {
                             var values = split[1].Split(',');
-                            if (values.Length == 12)
-                            {
+                            if (values.Length == 12) {
                                 mCam.m0 = float.Parse(values[0]);
                                 mCam.m1 = float.Parse(values[1]);
                                 mCam.m2 = float.Parse(values[2]);
@@ -73,14 +63,11 @@ namespace Valve.VR
                             }
                         }
 #if !UNITY_METRO
-                        else if (key == "disableStandardAssets")
-                        {
+                        else if (key == "disableStandardAssets") {
                             var field = c.GetType().GetField(key);
                             if (field != null)
                                 field.SetValue(c, bool.Parse(split[1]));
-                        }
-                        else
-                        {
+                        } else {
                             var field = c.GetType().GetField(key);
                             if (field != null)
                                 field.SetValue(c, float.Parse(split[1]));
@@ -88,11 +75,10 @@ namespace Valve.VR
 #endif
                     }
                 }
-                config = (Config)c; //unbox
+                config = (Config) c; //unbox
 
                 // Convert calibrated camera matrix settings.
-                if (readCamMatrix)
-                {
+                if (readCamMatrix) {
                     var t = new SteamVR_Utils.RigidTransform(mCam);
                     config.x = t.pos.x;
                     config.y = t.pos.y;
@@ -102,15 +88,13 @@ namespace Valve.VR
                     config.ry = angles.y;
                     config.rz = angles.z;
                 }
-            }
-            catch { }
+            } catch { }
 
             // Clear target so AttachToCamera gets called to pick up any changes.
             target = null;
 #if !UNITY_METRO
             // Listen for changes.
-            if (watcher == null)
-            {
+            if (watcher == null) {
                 var fi = new System.IO.FileInfo(configPath);
                 watcher = new System.IO.FileSystemWatcher(fi.DirectoryName, fi.Name);
                 watcher.NotifyFilter = System.IO.NotifyFilters.LastWrite;
@@ -119,8 +103,7 @@ namespace Valve.VR
             }
         }
 
-        public void SetupPose(SteamVR_Action_Pose newCameraPose, SteamVR_Input_Sources newCameraSource)
-        {
+        public void SetupPose (SteamVR_Action_Pose newCameraPose, SteamVR_Input_Sources newCameraSource) {
             cameraPose = newCameraPose;
             cameraInputSource = newCameraSource;
 
@@ -131,14 +114,12 @@ namespace Valve.VR
             poseBehaviour.inputSource = newCameraSource;
         }
 
-        public void SetupDeviceIndex(int deviceIndex)
-        {
+        public void SetupDeviceIndex (int deviceIndex) {
             SteamVR_TrackedObject trackedObject = this.gameObject.AddComponent<SteamVR_TrackedObject>();
             trackedObject.SetDeviceIndex(deviceIndex);
         }
 
-        void OnChanged(object source, System.IO.FileSystemEventArgs e)
-        {
+        void OnChanged (object source, System.IO.FileSystemEventArgs e) {
             ReadConfig();
         }
 
@@ -153,19 +134,15 @@ namespace Valve.VR
 
         protected SteamVR_ActionSet activatedActionSet;
         protected SteamVR_Input_Sources activatedInputSource;
-        public void AttachToCamera(SteamVR_Camera steamVR_Camera)
-        {
+        public void AttachToCamera (SteamVR_Camera steamVR_Camera) {
             Camera vrcam;
-            if (steamVR_Camera == null)
-            {
+            if (steamVR_Camera == null) {
                 vrcam = Camera.main;
 
                 if (target == vrcam.transform)
                     return;
                 target = vrcam.transform;
-            }
-            else
-            {
+            } else {
                 vrcam = steamVR_Camera.camera;
 
                 if (target == steamVR_Camera.head)
@@ -173,7 +150,7 @@ namespace Valve.VR
                 target = steamVR_Camera.head;
             }
 
-            
+
 
             var root = transform.parent;
             var origin = target.parent;
@@ -232,8 +209,7 @@ namespace Valve.VR
             clipQuad.SetActive(false);
         }
 
-        public float GetTargetDistance()
-        {
+        public float GetTargetDistance () {
             if (target == null)
                 return config.near + 0.01f;
 
@@ -247,13 +223,11 @@ namespace Valve.VR
 
         Material colorMat, alphaMat;
 
-        public void RenderNear()
-        {
+        public void RenderNear () {
             var w = Screen.width / 2;
             var h = Screen.height / 2;
 
-            if (cam.targetTexture == null || cam.targetTexture.width != w || cam.targetTexture.height != h)
-            {
+            if (cam.targetTexture == null || cam.targetTexture.width != w || cam.targetTexture.height != h) {
                 var tex = new RenderTexture(w, h, 24, RenderTextureFormat.ARGB32);
                 tex.antiAliasing = QualitySettings.antiAliasing == 0 ? 1 : QualitySettings.antiAliasing;
                 cam.targetTexture = tex;
@@ -276,15 +250,12 @@ namespace Valve.VR
 
             MonoBehaviour[] behaviours = null;
             bool[] wasEnabled = null;
-            if (config.disableStandardAssets)
-            {
+            if (config.disableStandardAssets) {
                 behaviours = cam.gameObject.GetComponents<MonoBehaviour>();
                 wasEnabled = new bool[behaviours.Length];
-                for (int i = 0; i < behaviours.Length; i++)
-                {
+                for (int i = 0; i < behaviours.Length; i++) {
                     var behaviour = behaviours[i];
-                    if (behaviour.enabled && behaviour.GetType().ToString().StartsWith("UnityStandardAssets."))
-                    {
+                    if (behaviour.enabled && behaviour.GetType().ToString().StartsWith("UnityStandardAssets.")) {
                         behaviour.enabled = false;
                         wasEnabled[i] = true;
                     }
@@ -299,8 +270,7 @@ namespace Valve.VR
 
             // Re-render scene with post-processing fx disabled (if necessary) since they override alpha.
             var pp = cam.gameObject.GetComponent("PostProcessingBehaviour") as MonoBehaviour;
-            if ((pp != null) && pp.enabled)
-            {
+            if ((pp != null) && pp.enabled) {
                 pp.enabled = false;
                 cam.Render();
                 pp.enabled = true;
@@ -311,12 +281,9 @@ namespace Valve.VR
             // Restore settings.
             clipQuad.SetActive(false);
 
-            if (behaviours != null)
-            {
-                for (int i = 0; i < behaviours.Length; i++)
-                {
-                    if (wasEnabled[i])
-                    {
+            if (behaviours != null) {
+                for (int i = 0; i < behaviours.Length; i++) {
+                    if (wasEnabled[i]) {
                         behaviours[i].enabled = true;
                     }
                 }
@@ -326,8 +293,7 @@ namespace Valve.VR
             cam.backgroundColor = backgroundColor;
         }
 
-        public void RenderFar()
-        {
+        public void RenderFar () {
             cam.nearClipPlane = config.near;
             cam.farClipPlane = config.far;
             cam.Render();
@@ -337,8 +303,7 @@ namespace Valve.VR
             Graphics.DrawTexture(new Rect(0, h, w, h), cam.targetTexture, colorMat);
         }
 
-        void OnGUI()
-        {
+        void OnGUI () {
             // Necessary for Graphics.DrawTexture to work even though we don't do anything here.
         }
 
@@ -346,16 +311,13 @@ namespace Valve.VR
         Rect[] cameraRects;
         float sceneResolutionScale;
 
-        void OnEnable()
-        {
+        void OnEnable () {
             // Move game view cameras to lower-right quadrant.
             cameras = FindObjectsOfType<Camera>();
-            if (cameras != null)
-            {
+            if (cameras != null) {
                 var numCameras = cameras.Length;
                 cameraRects = new Rect[numCameras];
-                for (int i = 0; i < numCameras; i++)
-                {
+                for (int i = 0; i < numCameras; i++) {
                     var cam = cameras[i];
                     cameraRects[i] = cam.rect;
 
@@ -372,8 +334,7 @@ namespace Valve.VR
                 }
             }
 
-            if (config.sceneResolutionScale > 0.0f)
-            {
+            if (config.sceneResolutionScale > 0.0f) {
                 sceneResolutionScale = SteamVR_Camera.sceneResolutionScale;
                 SteamVR_Camera.sceneResolutionScale = config.sceneResolutionScale;
             }
@@ -381,14 +342,10 @@ namespace Valve.VR
             AutoEnableActionSet();
         }
 
-        private void AutoEnableActionSet()
-        {
-            if (autoEnableDisableActionSet)
-            {
-                if (cameraPose != null)
-                {
-                    if (cameraPose.actionSet.IsActive(cameraInputSource) == false)
-                    {
+        private void AutoEnableActionSet () {
+            if (autoEnableDisableActionSet) {
+                if (cameraPose != null) {
+                    if (cameraPose.actionSet.IsActive(cameraInputSource) == false) {
                         activatedActionSet = cameraPose.actionSet; //automatically activate the actionset if it isn't active already. (will deactivate on component disable)
                         activatedInputSource = cameraInputSource;
                         cameraPose.actionSet.Activate(cameraInputSource);
@@ -397,10 +354,8 @@ namespace Valve.VR
             }
         }
 
-        void OnDisable()
-        {
-            if (autoEnableDisableActionSet)
-            {
+        void OnDisable () {
+            if (autoEnableDisableActionSet) {
                 if (activatedActionSet != null) //deactivate the action set we activated for this camera
                 {
                     activatedActionSet.Deactivate(activatedInputSource);
@@ -410,11 +365,9 @@ namespace Valve.VR
 
 
             // Restore game view cameras.
-            if (cameras != null)
-            {
+            if (cameras != null) {
                 var numCameras = cameras.Length;
-                for (int i = 0; i < numCameras; i++)
-                {
+                for (int i = 0; i < numCameras; i++) {
                     var cam = cameras[i];
                     if (cam != null)
                         cam.rect = cameraRects[i];
@@ -423,8 +376,7 @@ namespace Valve.VR
                 cameraRects = null;
             }
 
-            if (config.sceneResolutionScale > 0.0f)
-            {
+            if (config.sceneResolutionScale > 0.0f) {
                 SteamVR_Camera.sceneResolutionScale = sceneResolutionScale;
             }
         }

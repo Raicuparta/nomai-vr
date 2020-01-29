@@ -21,16 +21,11 @@
 //=============================================================================
 
 using UnityEngine;
-using Valve.VR;
 
-namespace Valve.VR
-{
-    public class SteamVR_TrackedCamera
-    {
-        public class VideoStreamTexture
-        {
-            public VideoStreamTexture(uint deviceIndex, bool undistorted)
-            {
+namespace Valve.VR {
+    public class SteamVR_TrackedCamera {
+        public class VideoStreamTexture {
+            public VideoStreamTexture (uint deviceIndex, bool undistorted) {
                 this.undistorted = undistorted;
                 videostream = Stream(deviceIndex);
             }
@@ -49,18 +44,15 @@ namespace Valve.VR
             public Vector3 velocity { get { Update(); var pose = header.standingTrackedDevicePose; return new Vector3(pose.vVelocity.v0, pose.vVelocity.v1, -pose.vVelocity.v2); } }
             public Vector3 angularVelocity { get { Update(); var pose = header.standingTrackedDevicePose; return new Vector3(-pose.vAngularVelocity.v0, -pose.vAngularVelocity.v1, pose.vAngularVelocity.v2); } }
 
-            public TrackedDevicePose_t GetPose() { Update(); return header.standingTrackedDevicePose; }
+            public TrackedDevicePose_t GetPose () { Update(); return header.standingTrackedDevicePose; }
 
-            public ulong Acquire()
-            {
+            public ulong Acquire () {
                 return videostream.Acquire();
             }
-            public ulong Release()
-            {
+            public ulong Release () {
                 var result = videostream.Release();
 
-                if (videostream.handle == 0)
-                {
+                if (videostream.handle == 0) {
                     Object.Destroy(_texture);
                     _texture = null;
                 }
@@ -69,8 +61,7 @@ namespace Valve.VR
             }
 
             int prevFrameCount = -1;
-            void Update()
-            {
+            void Update () {
                 if (Time.frameCount == prevFrameCount)
                     return;
 
@@ -89,40 +80,33 @@ namespace Valve.VR
 
                 var nativeTex = System.IntPtr.Zero;
                 var deviceTexture = (_texture != null) ? _texture : new Texture2D(2, 2);
-                var headerSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(header.GetType());
+                var headerSize = (uint) System.Runtime.InteropServices.Marshal.SizeOf(header.GetType());
 
-                if (vr.textureType == ETextureType.OpenGL)
-                {
+                if (vr.textureType == ETextureType.OpenGL) {
                     if (glTextureId != 0)
                         trackedCamera.ReleaseVideoStreamTextureGL(videostream.handle, glTextureId);
 
                     if (trackedCamera.GetVideoStreamTextureGL(videostream.handle, frameType, ref glTextureId, ref header, headerSize) != EVRTrackedCameraError.None)
                         return;
 
-                    nativeTex = (System.IntPtr)glTextureId;
-                }
-                else if (vr.textureType == ETextureType.DirectX)
-                {
+                    nativeTex = (System.IntPtr) glTextureId;
+                } else if (vr.textureType == ETextureType.DirectX) {
                     if (trackedCamera.GetVideoStreamTextureD3D11(videostream.handle, frameType, deviceTexture.GetNativeTexturePtr(), ref nativeTex, ref header, headerSize) != EVRTrackedCameraError.None)
                         return;
                 }
 
-                if (_texture == null)
-                {
-                    _texture = Texture2D.CreateExternalTexture((int)header.nWidth, (int)header.nHeight, TextureFormat.RGBA32, false, false, nativeTex);
+                if (_texture == null) {
+                    _texture = Texture2D.CreateExternalTexture((int) header.nWidth, (int) header.nHeight, TextureFormat.RGBA32, false, false, nativeTex);
 
                     uint width = 0, height = 0;
                     var frameBounds = new VRTextureBounds_t();
-                    if (trackedCamera.GetVideoStreamTextureSize(deviceIndex, frameType, ref frameBounds, ref width, ref height) == EVRTrackedCameraError.None)
-                    {
+                    if (trackedCamera.GetVideoStreamTextureSize(deviceIndex, frameType, ref frameBounds, ref width, ref height) == EVRTrackedCameraError.None) {
                         // Account for textures being upside-down in Unity.
                         frameBounds.vMin = 1.0f - frameBounds.vMin;
                         frameBounds.vMax = 1.0f - frameBounds.vMax;
                         this.frameBounds = frameBounds;
                     }
-                }
-                else
-                {
+                } else {
                     _texture.UpdateExternalTexture(nativeTex);
                 }
             }
@@ -134,26 +118,23 @@ namespace Valve.VR
 
         #region Top level accessors.
 
-        public static VideoStreamTexture Distorted(int deviceIndex = (int)OpenVR.k_unTrackedDeviceIndex_Hmd)
-        {
+        public static VideoStreamTexture Distorted (int deviceIndex = (int) OpenVR.k_unTrackedDeviceIndex_Hmd) {
             if (distorted == null)
                 distorted = new VideoStreamTexture[OpenVR.k_unMaxTrackedDeviceCount];
             if (distorted[deviceIndex] == null)
-                distorted[deviceIndex] = new VideoStreamTexture((uint)deviceIndex, false);
+                distorted[deviceIndex] = new VideoStreamTexture((uint) deviceIndex, false);
             return distorted[deviceIndex];
         }
 
-        public static VideoStreamTexture Undistorted(int deviceIndex = (int)OpenVR.k_unTrackedDeviceIndex_Hmd)
-        {
+        public static VideoStreamTexture Undistorted (int deviceIndex = (int) OpenVR.k_unTrackedDeviceIndex_Hmd) {
             if (undistorted == null)
                 undistorted = new VideoStreamTexture[OpenVR.k_unMaxTrackedDeviceCount];
             if (undistorted[deviceIndex] == null)
-                undistorted[deviceIndex] = new VideoStreamTexture((uint)deviceIndex, true);
+                undistorted[deviceIndex] = new VideoStreamTexture((uint) deviceIndex, true);
             return undistorted[deviceIndex];
         }
 
-        public static VideoStreamTexture Source(bool undistorted, int deviceIndex = (int)OpenVR.k_unTrackedDeviceIndex_Hmd)
-        {
+        public static VideoStreamTexture Source (bool undistorted, int deviceIndex = (int) OpenVR.k_unTrackedDeviceIndex_Hmd) {
             return undistorted ? Undistorted(deviceIndex) : Distorted(deviceIndex);
         }
 
@@ -163,10 +144,8 @@ namespace Valve.VR
 
         #region Internal class to manage lifetime of video streams (per device).
 
-        class VideoStream
-        {
-            public VideoStream(uint deviceIndex)
-            {
+        class VideoStream {
+            public VideoStream (uint deviceIndex) {
                 this.deviceIndex = deviceIndex;
                 var trackedCamera = OpenVR.TrackedCamera;
                 if (trackedCamera != null)
@@ -181,20 +160,16 @@ namespace Valve.VR
             public bool hasCamera { get { return _hasCamera; } }
 
             ulong refCount;
-            public ulong Acquire()
-            {
-                if (_handle == 0 && hasCamera)
-                {
+            public ulong Acquire () {
+                if (_handle == 0 && hasCamera) {
                     var trackedCamera = OpenVR.TrackedCamera;
                     if (trackedCamera != null)
                         trackedCamera.AcquireVideoStreamingService(deviceIndex, ref _handle);
                 }
                 return ++refCount;
             }
-            public ulong Release()
-            {
-                if (refCount > 0 && --refCount == 0 && _handle != 0)
-                {
+            public ulong Release () {
+                if (refCount > 0 && --refCount == 0 && _handle != 0) {
                     var trackedCamera = OpenVR.TrackedCamera;
                     if (trackedCamera != null)
                         trackedCamera.ReleaseVideoStreamingService(_handle);
@@ -204,8 +179,7 @@ namespace Valve.VR
             }
         }
 
-        static VideoStream Stream(uint deviceIndex)
-        {
+        static VideoStream Stream (uint deviceIndex) {
             if (videostreams == null)
                 videostreams = new VideoStream[OpenVR.k_unMaxTrackedDeviceCount];
             if (videostreams[deviceIndex] == null)

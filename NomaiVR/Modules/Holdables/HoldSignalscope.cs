@@ -2,15 +2,13 @@
 using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR
-{
-    public class HoldSignalscope : MonoBehaviour
-    {
+namespace NomaiVR {
+    public class HoldSignalscope: MonoBehaviour {
         protected static Transform SignalscopeReticule;
         protected static Transform ShipWindshield;
         protected static Signalscope SignalScope;
 
-        void Awake() {
+        void Awake () {
             // For fixing signalscope zoom
             //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
             //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
@@ -73,23 +71,22 @@ namespace NomaiVR
             helmetOn.localRotation = Quaternion.identity;
         }
 
-        private void OnEvent(MonoBehaviour behaviour, Events ev) {
+        private void OnEvent (MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(ShipCockpitUI) && ev == Events.AfterStart) {
                 behaviour.SetValue("_signalscopeTool", SignalScope);
             }
         }
 
-        internal static class Patches
-        {
-            static void ZoomIn() {
+        internal static class Patches {
+            static void ZoomIn () {
                 Common.MainCamera.transform.localScale = Vector3.one * 0.1f;
             }
 
-            static void ZoomOut() {
+            static void ZoomOut () {
                 Common.MainCamera.transform.localScale = Vector3.one;
             }
 
-            static void ChangeInputMode(InputMode mode) {
+            static void ChangeInputMode (InputMode mode) {
                 if (!SignalscopeReticule) {
                     return;
                 }

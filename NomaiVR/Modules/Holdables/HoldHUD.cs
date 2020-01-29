@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
-{
-    public class HoldHUD : MonoBehaviour
-    {
-        void Awake() {
+namespace NomaiVR {
+    public class HoldHUD: MonoBehaviour {
+        void Awake () {
             // Move helmet forward to make it a bit more visible.
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
 

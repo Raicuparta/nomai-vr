@@ -1,11 +1,9 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR
-{
-    public class HoldMallowStick : MonoBehaviour
-    {
-        void Awake() {
+namespace NomaiVR {
+    public class HoldMallowStick: MonoBehaviour {
+        void Awake () {
 
             // Stop stick rotation animation.
             NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
@@ -22,23 +20,23 @@ namespace NomaiVR
 
             var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
-            void EatMallow() {
+            void EatMallow () {
                 if (mallow.GetState() != Marshmallow.MallowState.Gone) {
                     mallow.Eat();
                 }
             }
 
-            void ReplaceMallow() {
+            void ReplaceMallow () {
                 if (mallow.GetState() == Marshmallow.MallowState.Gone) {
                     mallow.SpawnMallow(true);
                 }
             }
 
-            bool ShouldRenderMallowClone() {
+            bool ShouldRenderMallowClone () {
                 return stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
             }
 
-            bool ShouldRenderStickClone() {
+            bool ShouldRenderStickClone () {
                 return !stickController.enabled;
             }
 
@@ -71,7 +69,7 @@ namespace NomaiVR
             // Picking up the stick starts roasting mode.
             var campfires = GameObject.FindObjectsOfType<Campfire>();
             foreach (var campfire in campfires) {
-                void StartRoasting() {
+                void StartRoasting () {
                     campfire.Invoke("StartRoasting");
                 }
                 var stickClone = Instantiate(meshes.Find("RoastingStick_Stick"));

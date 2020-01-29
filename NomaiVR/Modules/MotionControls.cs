@@ -5,10 +5,8 @@ using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
 
-namespace NomaiVR
-{
-    public class MotionControls : MonoBehaviour
-    {
+namespace NomaiVR {
+    public class MotionControls: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
         Transform _debugTransform;
@@ -17,18 +15,17 @@ namespace NomaiVR
         bool _enableLaser = false;
         bool _handNearHead = false;
 
-        void Start() {
+        void Start () {
             NomaiVR.Log("Start MotionControls");
 
             NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
 
             // For aiming at interactibles with hand:
-            //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
-
+            //NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume
         }
 
-        private void OnEvent(MonoBehaviour behaviour, Events ev) {
+        private void OnEvent (MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
                 _handsWrapper = new GameObject().transform;
                 RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _handsWrapper);
@@ -61,7 +58,7 @@ namespace NomaiVR
             }
         }
 
-        Transform CreateHand(string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {
+        Transform CreateHand (string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {
             var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
@@ -78,7 +75,7 @@ namespace NomaiVR
             return handParent;
         }
 
-        void HideArms() {
+        void HideArms () {
             var palyerMeshes = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
 
             var suitMesh = palyerMeshes.Find("Traveller_Mesh_v01:Traveller_Geo");
@@ -91,7 +88,7 @@ namespace NomaiVR
             bodyMesh.Find("player_mesh_noSuit:Player_LeftArm").gameObject.SetActive(false);
         }
 
-        public static void HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
+        public static void HoldObject (Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
             var objectParent = new GameObject().transform;
             objectParent.parent = hand;
             objectParent.localPosition = position;
@@ -107,17 +104,17 @@ namespace NomaiVR
             }
         }
 
-        public static void HoldObject(Transform objectTransform, Transform hand) {
+        public static void HoldObject (Transform objectTransform, Transform hand) {
             HoldObject(objectTransform, hand, Vector3.zero, Quaternion.identity);
         }
-        public static void HoldObject(Transform objectTransform, Transform hand, Quaternion rotation) {
+        public static void HoldObject (Transform objectTransform, Transform hand, Quaternion rotation) {
             HoldObject(objectTransform, hand, Vector3.zero, rotation);
         }
-        public static void HoldObject(Transform objectTransform, Transform hand, Vector3 position) {
+        public static void HoldObject (Transform objectTransform, Transform hand, Vector3 position) {
             HoldObject(objectTransform, hand, position, Quaternion.identity);
         }
 
-        void UpdateFlashlightGesture() {
+        void UpdateFlashlightGesture () {
             if (RightHand) {
                 var templePosition = Common.PlayerHead.position + Common.PlayerHead.right * 0.15f;
                 if (!_handNearHead && Vector3.Distance(RightHand.position, templePosition) < 0.15f) {
@@ -131,13 +128,13 @@ namespace NomaiVR
             }
         }
 
-        void UpdateHandPosition() {
+        void UpdateHandPosition () {
             if (_handsWrapper) {
                 _handsWrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
         }
 
-        void UpdateDebugTransform() {
+        void UpdateDebugTransform () {
             if (_debugTransform) {
                 Vector3 position = _debugTransform.parent.localPosition;
                 var posDelta = 0.01f;
@@ -201,15 +198,14 @@ namespace NomaiVR
             }
         }
 
-        void Update() {
+        void Update () {
             UpdateHandPosition();
             UpdateFlashlightGesture();
             UpdateDebugTransform();
         }
 
-        internal static class Patches
-        {
-            static bool PatchUpdateInteractVolume(
+        internal static class Patches {
+            static bool PatchUpdateInteractVolume (
                 InteractZone __instance,
                 OWCamera ____playerCam,
                 float ____viewingWindow,
@@ -221,7 +217,7 @@ namespace NomaiVR
 
                 var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
                 var ftn = method.MethodHandle.GetFunctionPointer();
-                var func = (Action)Activator.CreateInstance(typeof(Action), __instance, ftn);
+                var func = (Action) Activator.CreateInstance(typeof(Action), __instance, ftn);
 
                 func();
 

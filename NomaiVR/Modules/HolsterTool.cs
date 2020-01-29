@@ -1,13 +1,8 @@
-﻿using OWML.Common;
-using OWML.ModHelper.Events;
+﻿using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.XR;
-using Valve.VR;
 
-namespace NomaiVR
-{
-    class HolsterTool: MonoBehaviour
-    {
+namespace NomaiVR {
+    class HolsterTool: MonoBehaviour {
         public Transform hand;
         public ToolMode mode;
         public Vector3 position;
@@ -17,7 +12,7 @@ namespace NomaiVR
         bool _visible;
         bool _enabled = true;
 
-        void Start() {
+        void Start () {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
 
             transform.localScale = Vector3.one * scale;
@@ -27,7 +22,7 @@ namespace NomaiVR
             transform.Rotate(angle);
         }
 
-        void Equip() {
+        void Equip () {
             FindObjectOfType<ToolModeSwapper>().EquipToolMode(mode);
 
             if (mode == ToolMode.Translator) {
@@ -35,18 +30,18 @@ namespace NomaiVR
             }
         }
 
-        void Unequip() {
+        void Unequip () {
             Common.ToolSwapper.UnequipTool();
         }
 
-        void SetVisible(bool visible) {
+        void SetVisible (bool visible) {
             foreach (var renderer in _renderers) {
                 renderer.enabled = visible;
             }
             _visible = visible;
         }
 
-        void Update() {
+        void Update () {
             if (_enabled && !OWInput.IsInputMode(InputMode.Character)) {
                 _enabled = false;
                 SetVisible(false);
@@ -60,7 +55,7 @@ namespace NomaiVR
             if (ControllerInput.IsGripping && Vector3.Distance(transform.position, hand.position) < 0.2f) {
                 if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
                     Equip();
-                } else if(Common.ToolSwapper.IsInToolMode(mode)) {
+                } else if (Common.ToolSwapper.IsInToolMode(mode)) {
                     ControllerInput.ResetRB();
                     Unequip();
                 }

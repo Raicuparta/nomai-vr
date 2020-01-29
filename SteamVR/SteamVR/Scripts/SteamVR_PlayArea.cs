@@ -4,23 +4,19 @@
 //
 //=============================================================================
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using System.Collections;
-using Valve.VR;
 
-namespace Valve.VR
-{
+namespace Valve.VR {
     [ExecuteInEditMode, RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
-    public class SteamVR_PlayArea : MonoBehaviour
-    {
+    public class SteamVR_PlayArea: MonoBehaviour {
         public float borderThickness = 0.15f;
         public float wireframeHeight = 2.0f;
         public bool drawWireframeWhenSelectedOnly = false;
         public bool drawInGame = true;
 
-        public enum Size
-        {
+        public enum Size {
             Calibrated,
             _400x300,
             _300x225,
@@ -33,10 +29,8 @@ namespace Valve.VR
         [HideInInspector]
         public Vector3[] vertices;
 
-        public static bool GetBounds(Size size, ref HmdQuad_t pRect)
-        {
-            if (size == Size.Calibrated)
-            {
+        public static bool GetBounds (Size size, ref HmdQuad_t pRect) {
+            if (size == Size.Calibrated) {
                 bool temporarySession = false;
                 if (Application.isEditor && Application.isPlaying == false)
                     temporarySession = SteamVR.InitializeTemporarySession();
@@ -50,11 +44,8 @@ namespace Valve.VR
                     SteamVR.ExitTemporarySession();
 
                 return success;
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     var str = size.ToString().Substring(1);
                     var arr = str.Split(new char[] { 'x' }, 2);
 
@@ -79,15 +70,13 @@ namespace Valve.VR
                     pRect.vCorners3.v2 = z;
 
                     return true;
-                }
-                catch { }
+                } catch { }
             }
 
             return false;
         }
 
-        public void BuildMesh()
-        {
+        public void BuildMesh () {
             var rect = new HmdQuad_t();
             if (!GetBounds(size, ref rect))
                 return;
@@ -95,20 +84,17 @@ namespace Valve.VR
             var corners = new HmdVector3_t[] { rect.vCorners0, rect.vCorners1, rect.vCorners2, rect.vCorners3 };
 
             vertices = new Vector3[corners.Length * 2];
-            for (int i = 0; i < corners.Length; i++)
-            {
+            for (int i = 0; i < corners.Length; i++) {
                 var c = corners[i];
                 vertices[i] = new Vector3(c.v0, 0.01f, c.v2);
             }
 
-            if (borderThickness == 0.0f)
-            {
+            if (borderThickness == 0.0f) {
                 GetComponent<MeshFilter>().mesh = null;
                 return;
             }
 
-            for (int i = 0; i < corners.Length; i++)
-            {
+            for (int i = 0; i < corners.Length; i++) {
                 int next = (i + 1) % corners.Length;
                 int prev = (i + corners.Length - 1) % corners.Length;
 
@@ -211,26 +197,22 @@ namespace Valve.VR
         }
 #endif
 
-        void OnDrawGizmos()
-        {
+        void OnDrawGizmos () {
             if (!drawWireframeWhenSelectedOnly)
                 DrawWireframe();
         }
 
-        void OnDrawGizmosSelected()
-        {
+        void OnDrawGizmosSelected () {
             if (drawWireframeWhenSelectedOnly)
                 DrawWireframe();
         }
 
-        public void DrawWireframe()
-        {
+        public void DrawWireframe () {
             if (vertices == null || vertices.Length == 0)
                 return;
 
             var offset = transform.TransformVector(Vector3.up * wireframeHeight);
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 int next = (i + 1) % 4;
 
                 var a = transform.TransformPoint(vertices[i]);
@@ -243,10 +225,8 @@ namespace Valve.VR
             }
         }
 
-        public void OnEnable()
-        {
-            if (Application.isPlaying)
-            {
+        public void OnEnable () {
+            if (Application.isPlaying) {
                 GetComponent<MeshRenderer>().enabled = drawInGame;
 
                 // No need to remain enabled at runtime.
@@ -261,8 +241,7 @@ namespace Valve.VR
             }
         }
 
-        IEnumerator UpdateBounds()
-        {
+        IEnumerator UpdateBounds () {
             GetComponent<MeshFilter>().mesh = null; // clear existing
 
             var chaperone = OpenVR.Chaperone;

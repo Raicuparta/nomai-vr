@@ -1,22 +1,12 @@
-﻿using OWML.Common;
-using OWML.ModHelper.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR;
-using Valve.VR;
 
-namespace NomaiVR
-{
-    public class HoldProbeLauncher : MonoBehaviour
-    {
+namespace NomaiVR {
+    public class HoldProbeLauncher: MonoBehaviour {
         protected static Transform ProbeLauncherModel;
         protected static ProbeLauncherUI ProbeUI;
 
-        void Awake() {
+        void Awake () {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
 
@@ -81,18 +71,18 @@ namespace NomaiVR
             playerHUD.Find("HelmetOnUI/UICanvas/HUDProbeDisplay/Image").gameObject.SetActive(false);
         }
 
-        void Update() {
+        void Update () {
             var probe = Locator.GetProbe().transform.Find("CameraPivot");
             probe.rotation = ProbeLauncherModel.rotation;
             probe.Rotate(Vector3.right * 90);
         }
 
         internal static class Patches {
-            static void SuitUp() {
+            static void SuitUp () {
                 ProbeUI.SetValue("_nonSuitUI", false);
             }
 
-            static void RemoveSuit() {
+            static void RemoveSuit () {
                 ProbeUI.SetValue("_nonSuitUI", true);
             }
         }

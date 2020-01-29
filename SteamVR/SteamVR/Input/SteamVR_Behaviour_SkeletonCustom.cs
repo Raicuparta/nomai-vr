@@ -1,16 +1,13 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using UnityEngine;
-using Valve.VR;
 
-namespace Valve.VR
-{
+namespace Valve.VR {
     /// <summary>
     /// The major difference between this component and the standard SteamVR_Behaviour_Skeleton is this one lets you
     /// only use the joints you care about. You can set the transforms you're concerned with and ignore the ones you're not.
     /// </summary>
-    public class SteamVR_Behaviour_SkeletonCustom : SteamVR_Behaviour_Skeleton
-    {
+    public class SteamVR_Behaviour_SkeletonCustom: SteamVR_Behaviour_Skeleton {
         [SerializeField]
         protected Transform _wrist;
 
@@ -105,8 +102,7 @@ namespace Valve.VR
         protected Transform _pinkyAux;
 
 
-        protected override void AssignBonesArray()
-        {
+        protected override void AssignBonesArray () {
             if (bones == null)
                 bones = new Transform[SteamVR_Action_Skeleton.numBones];
 
