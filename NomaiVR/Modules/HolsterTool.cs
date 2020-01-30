@@ -29,13 +29,11 @@ namespace NomaiVR {
 
         void OnGrab () {
             Equip();
-            NomaiVR.Log("grab");
         }
 
         void OnRelease () {
             ControllerInput.ResetRB();
             Unequip();
-            NomaiVR.Log("release");
         }
 
         void Equip () {
