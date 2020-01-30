@@ -45,19 +45,20 @@ namespace NomaiVR {
             // GameObject for them.
 
             var isInGame = scene.name == "SolarSystem" || scene.name == "EyeOfTheUniverse";
-            var gameModules = new GameObject();
+            var isInTitle = scene.name == "TitleScreen";
 
+            var gameModules = new GameObject();
             gameModules.AddComponent<Menus>().isInGame = isInGame;
 
-            if (!isInGame) {
-                return;
-            }
-
-            gameModules.AddComponent<EffectFixes>();
-            gameModules.AddComponent<PlayerBodyPosition>();
-
-            if (MotionControlsEnabled) {
-                gameModules.AddComponent<Hands>();
+            if (isInGame) {
+                Common.InitGame();
+                gameModules.AddComponent<EffectFixes>();
+                gameModules.AddComponent<PlayerBodyPosition>();
+                if (MotionControlsEnabled) {
+                    gameModules.AddComponent<Hands>();
+                }
+            } else if (isInTitle) {
+                Common.InitPreGame();
             }
         }
 
