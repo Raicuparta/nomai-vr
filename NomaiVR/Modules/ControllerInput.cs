@@ -54,9 +54,6 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<Campfire>("Awake", typeof(Patches), "CampfireAwake");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
-
-            typeof(InputLibrary).SetValue("sleep", new SingleAxisCommand(XboxButton.X, KeyCode.R));
-            typeof(InputLibrary).SetValue("interact", new SingleAxisCommand(XboxButton.Y, KeyCode.R));
         }
 
         private void OnYChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
