@@ -11,25 +11,19 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlanetaryFogController>("UpdateFogSettings", typeof(Patches), "PatchUpdateFog");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<FogOverrideVolume>("OverrideFogSettings", typeof(Patches), "PatchOverrideFog");
 
-            NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(OWML.Common.Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnEvent;
-        }
+            // Make dark bramble lights visible in the fog.
+            var fogLightCanvas = GameObject.Find("FogLightCanvas").GetComponent<Canvas>();
+            fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            fogLightCanvas.worldCamera = Locator.GetActiveCamera().mainCamera;
+            fogLightCanvas.planeDistance = 100;
 
-        private void OnEvent (MonoBehaviour behaviour, Events ev) {
-            if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
-                var fogLightCanvas = GameObject.Find("FogLightCanvas").GetComponent<Canvas>();
-                fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                fogLightCanvas.worldCamera = Locator.GetActiveCamera().mainCamera;
-                fogLightCanvas.planeDistance = 100;
+            // Disable underwater effect.
+            GameObject.FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
 
-                // Disable underwater effect.
-                GameObject.FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
-
-                // Disable water entering and exiting effect.
-                var visorEffects = FindObjectOfType<VisorEffectController>();
-                visorEffects.SetValue("_waterClearLength", 0);
-                visorEffects.SetValue("_waterFadeInLength", 0);
-            }
+            // Disable water entering and exiting effect.
+            var visorEffects = FindObjectOfType<VisorEffectController>();
+            visorEffects.SetValue("_waterClearLength", 0);
+            visorEffects.SetValue("_waterFadeInLength", 0);
         }
 
         internal static class Patches {

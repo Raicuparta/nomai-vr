@@ -24,7 +24,6 @@ namespace NomaiVR {
             // Add all modules here.
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<Menus>();
-            gameObject.AddComponent<EffectFixes>();
             if (MotionControlsEnabled) {
                 gameObject.AddComponent<ControllerInput>();
             }
@@ -39,7 +38,11 @@ namespace NomaiVR {
         }
 
         void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
+            // The GameObject associated with this ModBehaviour is set to persist between scene loads.
+            // The following modules need to be restarted on every scene load, so we create a new
+            // GameObject for them.
             var gameModules = new GameObject();
+            gameModules.AddComponent<EffectFixes>();
             gameModules.AddComponent<PlayerBodyPosition>();
             if (MotionControlsEnabled) {
                 gameModules.AddComponent<Hands>();
