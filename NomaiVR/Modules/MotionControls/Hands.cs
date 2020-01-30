@@ -1,6 +1,5 @@
 ﻿using OWML.Common;
 using OWML.ModHelper.Events;
-using System;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
