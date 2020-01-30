@@ -1,5 +1,7 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using Valve.VR;
 
@@ -50,6 +52,11 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<Campfire>("Awake", typeof(Patches), "CampfireAwake");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
+
+            typeof(InputLibrary).SetValue("sleep", new SingleAxisCommand(XboxButton.X, KeyCode.R));
+            typeof(InputLibrary).SetValue("interact", new SingleAxisCommand(XboxButton.Y, KeyCode.R));
         }
 
         private void OnYChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -182,6 +189,29 @@ namespace NomaiVR {
 
             static void OWInputUpdate (ref bool ____usingGamepad) {
                 ____usingGamepad = true;
+            }
+
+            static void CampfireAwake (
+                SingleInteractionVolume ____interactVolume,
+                bool ____canSleepHere,
+                ref ScreenPrompt ____sleepPrompt,
+                ref ScreenPrompt ____wakePrompt,
+                Campfire __instance
+            ) {
+                if (____interactVolume != null && ____canSleepHere) {
+                    ____sleepPrompt = new ScreenPrompt(InputLibrary.interact, UITextLibrary.GetString(UITextType.CampfireDozeOff), 0, false, false);
+                    ____interactVolume.SetValue("_textID", UITextType.None);
+                    ____interactVolume.SetValue("_usingPromptWithCommand", false);
+                    ____interactVolume.SetValue("OnPressInteract", null);
+                    ____interactVolume.OnPressInteract += () => __instance.Invoke("StartSleeping");
+                }
+            }
+
+            static bool InteractionVolumeChangePrompt (UITextType promptID) {
+                if (promptID == UITextType.RoastingPrompt) {
+                    return false;
+                }
+                return true;
             }
         }
     }
