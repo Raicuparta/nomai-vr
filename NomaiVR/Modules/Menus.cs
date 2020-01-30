@@ -5,6 +5,8 @@ using UnityEngine.UI;
 namespace NomaiVR {
     public class Menus: MonoBehaviour {
         public bool isInGame;
+        float _farClipPlane;
+        int _cullingMask;
 
         // List all the canvas elements that need to be moved to world space during gameplay.
         static readonly CanvasInfo[] _canvasInfos = {
@@ -12,10 +14,6 @@ namespace NomaiVR {
             new CanvasInfo("CanvasMarkerManager", 0.0005f),
             new CanvasInfo("DialogueCanvas"),
             new CanvasInfo("ScreenPromptCanvas", 0.0015f),
-            
-            // This is the canvas that renders the lights in Dark Bramble.
-            // Not sure how to make it look nice in VR.
-            // new CanvasInfo("FogLightCanvas"),
         };
 
         void Start () {
@@ -23,6 +21,11 @@ namespace NomaiVR {
 
             // Make UI elements draw on top of everything.
             Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
+
+
+            GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+            _cullingMask = Camera.main.cullingMask;
+            _farClipPlane = Camera.main.farClipPlane;
 
             FixMainMenuCanvas();
             //FixAllCanvases();
@@ -33,7 +36,17 @@ namespace NomaiVR {
                     new CanvasInfo("DialogueCanvas"),
                     new CanvasInfo("ScreenPromptCanvas", 0.0015f),
                 });
+
+                Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
+                var cullingMask = Camera.main.cullingMask;
+                Camera.main.cullingMask = (1 << 5);
+                Camera.main.farClipPlane = 5;
             }
+        }
+
+        void OnWakeUp () {
+            Camera.main.cullingMask = _cullingMask;
+            Camera.main.farClipPlane = _farClipPlane;
         }
 
         void MoveCanvasToWorldSpace (CanvasInfo canvasInfo) {
