@@ -1,6 +1,7 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -24,13 +25,25 @@ namespace NomaiVR {
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<EffectFixes>();
-            gameObject.AddComponent<PlayerBodyPosition>();
             if (MotionControlsEnabled) {
                 gameObject.AddComponent<ControllerInput>();
-                gameObject.AddComponent<Hands>();
             }
 
             Application.runInBackground = true;
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        void OnDisable () {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
+            var gameModules = new GameObject();
+            gameModules.AddComponent<PlayerBodyPosition>();
+            if (MotionControlsEnabled) {
+                gameModules.AddComponent<Hands>();
+            }
         }
 
         public override void Configure (IModConfig config) {

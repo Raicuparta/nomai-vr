@@ -13,27 +13,9 @@ namespace NomaiVR {
         void Start () {
             NomaiVR.Log("Start PlayerBodyPosition");
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
-
-            NomaiVR.Helper.Events.Subscribe<Flashlight>(Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnEvent;
-        }
-
-        private void OnEvent (MonoBehaviour behaviour, Events ev) {
-            if (behaviour.GetType() == typeof(Flashlight) && ev == Events.AfterStart) {
-                _isAwake = true;
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
-
-                MoveCameraToPlayerHead();
-            }
-        }
-
-        void OnDisable () {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
             updateMainCamera();
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+            MoveCameraToPlayerHead();
         }
 
         private void updateMainCamera () {
@@ -67,12 +49,13 @@ namespace NomaiVR {
             Common.PlayerBody.transform.position += movement;
 
             _prevCameraPosition = _cameraParent.transform.position - Common.MainCamera.transform.position;
+
         }
 
 
         void Update () {
+            MoveCameraToPlayerHead();
             if (_isAwake) {
-                MoveCameraToPlayerHead();
             }
             if (MovePlayerWithHead && OWInput.GetInputMode() == InputMode.Character) {
                 MovePlayerBodyToCamera();
