@@ -1,6 +1,8 @@
 # NomaiVR - Outer Wilds VR Mod
 
-![NomaiVR](logo.png)
+<img src="logo.png" width=300/>
+
+[![NomaiVR Gameplay](https://i.imgur.com/utsUMNv.gif)](https://www.youtube.com/watch?v=BblIMEPq54M)
 
 The aim of this mod is to enable VR mode in Outer Wilds, and eventually fix the problems that come with forcing VR in a game that's obviously not prepared for it.
 
