@@ -16,17 +16,16 @@ namespace NomaiVR {
             SceneManager.sceneLoaded += OnSceneLoaded;
 
             NomaiVR.Helper.Events.Subscribe<Flashlight>(Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnWakeUp;
+            NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
-        private void OnWakeUp (MonoBehaviour behaviour, Events ev) {
-            _isAwake = true;
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+        private void OnEvent (MonoBehaviour behaviour, Events ev) {
+            if (behaviour.GetType() == typeof(Flashlight) && ev == Events.AfterStart) {
+                _isAwake = true;
+                NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
 
-            MoveCameraToPlayerHead();
-
-            // Move helmet forward so it is easier to look at the HUD in VR
-            //FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
+                MoveCameraToPlayerHead();
+            }
         }
 
         void OnDisable () {

@@ -1,4 +1,5 @@
-﻿using OWML.ModHelper.Events;
+﻿using OWML.Common;
+using OWML.ModHelper.Events;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -50,6 +51,7 @@ namespace NomaiVR {
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
         }
 
         private void OnYChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -178,6 +180,10 @@ namespace NomaiVR {
                 ____realtimeSinceLastUpdate = Time.realtimeSinceStartup;
 
                 return false;
+            }
+
+            static void OWInputUpdate (ref bool ____usingGamepad) {
+                ____usingGamepad = true;
             }
         }
     }
