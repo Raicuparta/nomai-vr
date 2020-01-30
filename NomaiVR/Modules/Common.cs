@@ -1,7 +1,5 @@
-﻿using OWML.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace NomaiVR {
     public class Common: MonoBehaviour {
@@ -13,31 +11,14 @@ namespace NomaiVR {
         void Awake () {
             NomaiVR.Log("Start Common");
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
-
             InitPreGame();
-            NomaiVR.Helper.Events.Subscribe<Flashlight>(Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
-        void OnDisable () {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
-            InitGame();
-        }
-        private void OnEvent (MonoBehaviour behaviour, Events ev) {
-            if (behaviour.GetType() == typeof(Flashlight) && ev == Events.AfterStart) {
-                InitGame();
-            }
-        }
-
-        void InitPreGame () {
+        public static void InitPreGame () {
             MainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
 
-        void InitGame () {
+        public static void InitGame () {
             InitPreGame();
             PlayerBody = GameObject.Find("Player_Body").GetComponent<PlayerCharacterController>();
             PlayerHead = FindObjectOfType<ToolModeUI>().transform;

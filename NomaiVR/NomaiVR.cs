@@ -1,6 +1,7 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -22,15 +23,43 @@ namespace NomaiVR {
 
             // Add all modules here.
             gameObject.AddComponent<Common>();
-            gameObject.AddComponent<Menus>();
-            gameObject.AddComponent<EffectFixes>();
-            gameObject.AddComponent<PlayerBodyPosition>();
             if (MotionControlsEnabled) {
                 gameObject.AddComponent<ControllerInput>();
-                gameObject.AddComponent<Hands>();
             }
 
+            var gameModules = new GameObject();
+            gameModules.AddComponent<Menus>();
+
             Application.runInBackground = true;
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        void OnDisable () {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
+            // The GameObject associated with this ModBehaviour is set to persist between scene loads.
+            // The following modules need to be restarted on every scene load, so we create a new
+            // GameObject for them.
+
+            var isInGame = scene.name == "SolarSystem" || scene.name == "EyeOfTheUniverse";
+            var isInTitle = scene.name == "TitleScreen";
+
+            var gameModules = new GameObject();
+            gameModules.AddComponent<Menus>().isInGame = isInGame;
+
+            if (isInGame) {
+                Common.InitGame();
+                gameModules.AddComponent<EffectFixes>();
+                gameModules.AddComponent<PlayerBodyPosition>();
+                if (MotionControlsEnabled) {
+                    gameModules.AddComponent<Hands>();
+                }
+            } else if (isInTitle) {
+                Common.InitPreGame();
+            }
         }
 
         public override void Configure (IModConfig config) {
