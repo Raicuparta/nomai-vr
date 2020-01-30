@@ -36,6 +36,8 @@ namespace NomaiVR {
                     new CanvasInfo("DialogueCanvas"),
                     new CanvasInfo("ScreenPromptCanvas", 0.0015f),
                 });
+                //FixAllCanvases();
+
 
                 Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
                 var cullingMask = Camera.main.cullingMask;

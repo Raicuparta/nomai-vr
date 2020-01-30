@@ -3,7 +3,9 @@ using UnityEngine;
 
 namespace NomaiVR {
     public class EffectFixes: MonoBehaviour {
-        private void Start () {
+        OWCamera _camera;
+
+        void Start () {
             NomaiVR.Log("Started FogFix");
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlanetaryFogController>("ResetFogSettings", typeof(Patches), "PatchResetFog");
@@ -23,6 +25,16 @@ namespace NomaiVR {
             var visorEffects = FindObjectOfType<VisorEffectController>();
             visorEffects.SetValue("_waterClearLength", 0);
             visorEffects.SetValue("_waterFadeInLength", 0);
+
+            _camera = Locator.GetPlayerCamera();
+        }
+
+        void Update () {
+            _camera.postProcessingSettings.bloomEnabled = false;
+            _camera.postProcessingSettings.chromaticAberrationEnabled = false;
+            _camera.postProcessingSettings.colorGradingEnabled = false;
+            _camera.postProcessingSettings.phosphenesEnabled = false;
+            _camera.postProcessingSettings.vignetteEnabled = false;
         }
 
         internal static class Patches {
