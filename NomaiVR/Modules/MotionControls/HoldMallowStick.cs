@@ -72,6 +72,7 @@ namespace NomaiVR {
             foreach (var campfire in campfires) {
                 void StartRoasting () {
                     campfire.Invoke("StartRoasting");
+                    NomaiVR.Log("input mode" + OWInput.GetInputMode());
                 }
                 var stickClone = Instantiate(meshes.Find("RoastingStick_Stick"));
                 var stickCloneMallow = Instantiate(mallowModel);
@@ -92,11 +93,12 @@ namespace NomaiVR {
             }
 
             // Disable prompts.
-            stickController.SetValue("_tiltPrompt", new ScreenPrompt(""));
-            stickController.SetValue("_extendPrompt", new ScreenPrompt(""));
-            stickController.SetValue("_mallowPrompt", new ScreenPrompt(""));
-            stickController.SetValue("_removePrompt", new ScreenPrompt(""));
-            stickController.SetValue("_exitPrompt", new ScreenPrompt(""));
+            //stickController.SetValue("_tiltPrompt", new ScreenPrompt(""));
+            //stickController.SetValue("_extendPrompt", new ScreenPrompt(""));
+            //stickController.SetValue("_mallowPrompt", new ScreenPrompt(""));
+            //stickController.SetValue("_removePrompt", new ScreenPrompt(""));
+            //stickController.SetValue("_exitPrompt", new ScreenPrompt(""));
+            NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("LateInitialize");
             //stickController.GetValue<ScreenPrompt>("_tiltPrompt").SetValue("_commandList", new List<InputCommand>());
             //stickController.GetValue<ScreenPrompt>("_extendPrompt").SetValue("_commandList", new List<InputCommand>());
             //stickController.GetValue<ScreenPrompt>("_mallowPrompt").SetValue("_commandList", new List<InputCommand>());

@@ -90,7 +90,7 @@
   <ItemGroup>
     <Compile Include="Modules\ConditionalRenderer.cs" />
     <Compile Include="Modules\DebugTransform.cs" />
-    <Compile Include="Modules\Grabbable.cs" />
+    <Compile Include="Modules\MotionControls\Grabbable.cs" />
     <Compile Include="Modules\MotionControls\FlashlightGesture.cs" />
     <Compile Include="Modules\MotionControls\HoldHUD.cs" />
     <Compile Include="Modules\MotionControls\HoldMallowStick.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="Modules\MotionControls\Hands.cs" />
     <Compile Include="Modules\PlayerBodyPosition.cs" />
     <Compile Include="Modules\ControllerInput.cs" />
-    <Compile Include="Modules\HolsterTool.cs" />
+    <Compile Include="Modules\MotionControls\HolsterTool.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
