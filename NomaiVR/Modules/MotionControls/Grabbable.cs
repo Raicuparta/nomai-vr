@@ -15,7 +15,7 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if (!detector.isInside) {
+            if (!detector.isInside || !OWInput.IsInputMode(InputMode.Character)) {
                 return;
             }
             if (ControllerInput.IsGripping) {
