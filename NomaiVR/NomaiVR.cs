@@ -23,10 +23,12 @@ namespace NomaiVR {
 
             // Add all modules here.
             gameObject.AddComponent<Common>();
-            gameObject.AddComponent<Menus>();
             if (MotionControlsEnabled) {
                 gameObject.AddComponent<ControllerInput>();
             }
+
+            var gameModules = new GameObject();
+            gameModules.AddComponent<Menus>();
 
             Application.runInBackground = true;
 
@@ -41,9 +43,15 @@ namespace NomaiVR {
             // The GameObject associated with this ModBehaviour is set to persist between scene loads.
             // The following modules need to be restarted on every scene load, so we create a new
             // GameObject for them.
+
+            var isInGame = scene.name == "SolarSystem" || scene.name == "EyeOfTheUniverse";
+
             var gameModules = new GameObject();
             gameModules.AddComponent<EffectFixes>();
             gameModules.AddComponent<PlayerBodyPosition>();
+            gameModules.AddComponent<Menus>().isInGame = isInGame;
+
+
             if (MotionControlsEnabled) {
                 gameModules.AddComponent<Hands>();
             }

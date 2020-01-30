@@ -25,8 +25,15 @@ namespace NomaiVR {
         }
 
         void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
-            InitGame();
+            var isInGame = scene.name == "SolarSystem" || scene.name == "EyeOfTheUniverse";
+
+            if (isInGame) {
+                InitGame();
+            } else {
+                InitPreGame();
+            }
         }
+
         private void OnEvent (MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(Flashlight) && ev == Events.AfterStart) {
                 InitGame();

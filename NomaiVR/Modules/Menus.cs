@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 namespace NomaiVR {
     public class Menus: MonoBehaviour {
+        public bool isInGame;
+
         // List all the canvas elements that need to be moved to world space during gameplay.
         static readonly CanvasInfo[] _canvasInfos = {
             new CanvasInfo("PauseMenu"),
@@ -21,36 +23,19 @@ namespace NomaiVR {
         void Start () {
             NomaiVR.Log("Start Menus");
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            // Make UI elements draw on top of everything.
+            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
 
             FixMainMenuCanvas();
             //FixAllCanvases();
 
-            // Make UI elements draw on top of everything.
-            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
-
-            NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnEvent;
-        }
-
-        private void OnEvent (MonoBehaviour behaviour, Events ev) {
-            if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
-                behaviour.GetComponent<Canvas>().planeDistance = 5;
+            if (isInGame) {
+                FixGameCanvases(new[] {
+                    new CanvasInfo("PauseMenu", 0.0005f),
+                    new CanvasInfo("DialogueCanvas"),
+                    new CanvasInfo("ScreenPromptCanvas", 0.0015f),
+                });
             }
-        }
-
-        void OnDisable () {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
-            FixGameCanvases(new[] {
-                new CanvasInfo("PauseMenu", 0.0005f),
-                new CanvasInfo("DialogueCanvas"),
-                new CanvasInfo("ScreenPromptCanvas", 0.0015f),
-            });
-
-            //FixAllCanvases();
         }
 
         void MoveCanvasToWorldSpace (CanvasInfo canvasInfo) {
