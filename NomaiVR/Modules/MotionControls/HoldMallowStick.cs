@@ -72,13 +72,13 @@ namespace NomaiVR {
             foreach (var campfire in campfires) {
                 void StartRoasting () {
                     campfire.Invoke("StartRoasting");
-                    NomaiVR.Log("input mode" + OWInput.GetInputMode());
                 }
                 var stickClone = Instantiate(meshes.Find("RoastingStick_Stick"));
                 var stickCloneMallow = Instantiate(mallowModel);
                 stickCloneMallow.parent = stickClone;
                 stickCloneMallow.localPosition = new Vector3(0, 0, 1.8f);
                 stickCloneMallow.localRotation = Quaternion.Euler(145, -85, -83);
+                stickCloneMallow.GetComponent<MeshRenderer>().material.color = Color.white;
                 stickClone.gameObject.SetActive(true);
                 stickClone.localScale = scale;
                 stickClone.parent = campfire.transform;

@@ -62,7 +62,6 @@ namespace NomaiVR {
             }
 
             Canvas[] subCanvases = canvas.GetComponentsInChildren<Canvas>();
-            NomaiVR.Log("found " + subCanvases.Length + "subs inside " + canvas.name);
 
             foreach (Canvas subCanvas in subCanvases) {
                 subCanvas.renderMode = RenderMode.WorldSpace;

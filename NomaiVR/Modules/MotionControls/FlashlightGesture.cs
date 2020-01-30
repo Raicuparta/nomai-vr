@@ -8,8 +8,6 @@ namespace NomaiVR {
             detector.localOffset = Vector3.right * 0.15f;
             detector.onEnter += FlashlightPress;
             detector.onExit += FlashlightRelease;
-
-            NomaiVR.Log("awake gesture");
         }
 
         void FlashlightPress () {
