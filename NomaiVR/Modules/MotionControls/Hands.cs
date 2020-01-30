@@ -10,31 +10,22 @@ namespace NomaiVR {
         public static Transform LeftHand;
         Transform _wrapper;
 
-        void Start () {
-            NomaiVR.Log("Start MotionControls");
+        private void Start () {
+            _wrapper = new GameObject().transform;
+            RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
+            LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
+            _wrapper.parent = Common.MainCamera.transform.parent;
+            _wrapper.localRotation = Quaternion.identity;
+            _wrapper.localPosition = Common.MainCamera.transform.localPosition;
 
-            NomaiVR.Helper.Events.Subscribe<Signalscope>(Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnEvent;
-        }
-
-        private void OnEvent (MonoBehaviour behaviour, Events ev) {
-            if (behaviour.GetType() == typeof(Signalscope) && ev == Events.AfterStart) {
-                _wrapper = new GameObject().transform;
-                RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightPose, Quaternion.Euler(45, 180, 0), _wrapper);
-                LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftPose, Quaternion.Euler(-40, 330, 20), _wrapper);
-                _wrapper.parent = Common.MainCamera.transform.parent;
-                _wrapper.localRotation = Quaternion.identity;
-                _wrapper.localPosition = Common.MainCamera.transform.localPosition;
-
-                HideArms();
-                gameObject.AddComponent<FlashlightGesture>();
-                gameObject.AddComponent<HoldHUD>();
-                gameObject.AddComponent<HoldMallowStick>();
-                gameObject.AddComponent<HoldProbeLauncher>();
-                gameObject.AddComponent<HoldTranslator>();
-                gameObject.AddComponent<HoldSignalscope>();
-                //gameObject.AddComponent<LaserPointer>();
-            }
+            HideArms();
+            gameObject.AddComponent<FlashlightGesture>();
+            gameObject.AddComponent<HoldHUD>();
+            gameObject.AddComponent<HoldMallowStick>();
+            gameObject.AddComponent<HoldProbeLauncher>();
+            gameObject.AddComponent<HoldTranslator>();
+            gameObject.AddComponent<HoldSignalscope>();
+            //gameObject.AddComponent<LaserPointer>();
         }
 
         Transform CreateHand (string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {

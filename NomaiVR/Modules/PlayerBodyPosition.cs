@@ -1,13 +1,10 @@
-﻿using OWML.Common;
-using OWML.ModHelper.Events;
+﻿using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace NomaiVR {
     public class PlayerBodyPosition: MonoBehaviour {
         GameObject _cameraParent;
         Vector3 _prevCameraPosition;
-        bool _isAwake;
         public static bool MovePlayerWithHead = true;
 
         void Start () {
@@ -31,7 +28,7 @@ namespace NomaiVR {
             Common.MainCamera.transform.localRotation = Quaternion.identity;
 
             // This component is messing with our ability to read the VR camera's rotation.
-            // I'm disabling it even though I have no clue what it does ¯\_(ツ)_/¯
+            // Seems to be responsible for controlling the camera rotation with the mouse / joystick.
             PlayerCameraController playerCameraController = Common.MainCamera.GetComponent<PlayerCameraController>();
             if (playerCameraController) {
                 playerCameraController.enabled = false;
@@ -44,7 +41,6 @@ namespace NomaiVR {
         }
 
         void MovePlayerBodyToCamera () {
-            // Move player to camera position.
             Vector3 movement = _prevCameraPosition - (_cameraParent.transform.position - Common.MainCamera.transform.position);
             Common.PlayerBody.transform.position += movement;
 
@@ -55,8 +51,6 @@ namespace NomaiVR {
 
         void Update () {
             MoveCameraToPlayerHead();
-            if (_isAwake) {
-            }
             if (MovePlayerWithHead && OWInput.GetInputMode() == InputMode.Character) {
                 MovePlayerBodyToCamera();
             }
