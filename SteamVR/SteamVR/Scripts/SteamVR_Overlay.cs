@@ -5,13 +5,9 @@
 //=============================================================================
 
 using UnityEngine;
-using System.Collections;
-using Valve.VR;
 
-namespace Valve.VR
-{
-    public class SteamVR_Overlay : MonoBehaviour
-    {
+namespace Valve.VR {
+    public class SteamVR_Overlay: MonoBehaviour {
         public Texture texture;
         public bool curved = true;
         public bool antialias = true;
@@ -38,14 +34,11 @@ namespace Valve.VR
 
         private ulong handle = OpenVR.k_ulOverlayHandleInvalid;
 
-        void OnEnable()
-        {
+        void OnEnable () {
             var overlay = OpenVR.Overlay;
-            if (overlay != null)
-            {
+            if (overlay != null) {
                 var error = overlay.CreateOverlay(key, gameObject.name, ref handle);
-                if (error != EVROverlayError.None)
-                {
+                if (error != EVROverlayError.None) {
                     Debug.Log("<b>[SteamVR]</b> " + overlay.GetOverlayErrorNameFromEnum(error));
                     enabled = false;
                     return;
@@ -55,13 +48,10 @@ namespace Valve.VR
             SteamVR_Overlay.instance = this;
         }
 
-        void OnDisable()
-        {
-            if (handle != OpenVR.k_ulOverlayHandleInvalid)
-            {
+        void OnDisable () {
+            if (handle != OpenVR.k_ulOverlayHandleInvalid) {
                 var overlay = OpenVR.Overlay;
-                if (overlay != null)
-                {
+                if (overlay != null) {
                     overlay.DestroyOverlay(handle);
                 }
 
@@ -71,17 +61,14 @@ namespace Valve.VR
             SteamVR_Overlay.instance = null;
         }
 
-        public void UpdateOverlay()
-        {
+        public void UpdateOverlay () {
             var overlay = OpenVR.Overlay;
             if (overlay == null)
                 return;
 
-            if (texture != null)
-            {
+            if (texture != null) {
                 var error = overlay.ShowOverlay(handle);
-                if (error == EVROverlayError.InvalidHandle || error == EVROverlayError.UnknownOverlay)
-                {
+                if (error == EVROverlayError.InvalidHandle || error == EVROverlayError.UnknownOverlay) {
                     if (overlay.FindOverlay(key, ref handle) != EVROverlayError.None)
                         return;
                 }
@@ -109,8 +96,7 @@ namespace Valve.VR
                 overlay.SetOverlayMouseScale(handle, ref vecMouseScale);
 
                 var vrcam = SteamVR_Render.Top();
-                if (vrcam != null && vrcam.origin != null)
-                {
+                if (vrcam != null && vrcam.origin != null) {
                     var offset = new SteamVR_Utils.RigidTransform(vrcam.origin, transform);
                     offset.pos.x /= vrcam.origin.localScale.x;
                     offset.pos.y /= vrcam.origin.localScale.y;
@@ -127,43 +113,35 @@ namespace Valve.VR
                 if (curved || antialias)
                     highquality = true;
 
-                if (highquality)
-                {
+                if (highquality) {
                     overlay.SetHighQualityOverlay(handle);
                     overlay.SetOverlayFlag(handle, VROverlayFlags.Curved, curved);
                     overlay.SetOverlayFlag(handle, VROverlayFlags.RGSS4X, antialias);
-                }
-                else if (overlay.GetHighQualityOverlay() == handle)
-                {
+                } else if (overlay.GetHighQualityOverlay() == handle) {
                     overlay.SetHighQualityOverlay(OpenVR.k_ulOverlayHandleInvalid);
                 }
-            }
-            else
-            {
+            } else {
                 overlay.HideOverlay(handle);
             }
         }
 
-        public bool PollNextEvent(ref VREvent_t pEvent)
-        {
+        public bool PollNextEvent (ref VREvent_t pEvent) {
             var overlay = OpenVR.Overlay;
             if (overlay == null)
                 return false;
 
-            var size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Valve.VR.VREvent_t));
+            var size = (uint) System.Runtime.InteropServices.Marshal.SizeOf(typeof(Valve.VR.VREvent_t));
             return overlay.PollNextOverlayEvent(handle, ref pEvent, size);
         }
 
-        public struct IntersectionResults
-        {
+        public struct IntersectionResults {
             public Vector3 point;
             public Vector3 normal;
             public Vector2 UVs;
             public float distance;
         }
 
-        public bool ComputeIntersection(Vector3 source, Vector3 direction, ref IntersectionResults results)
-        {
+        public bool ComputeIntersection (Vector3 source, Vector3 direction, ref IntersectionResults results) {
             var overlay = OpenVR.Overlay;
             if (overlay == null)
                 return false;

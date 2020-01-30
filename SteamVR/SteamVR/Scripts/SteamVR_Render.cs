@@ -4,43 +4,36 @@
 //
 //=============================================================================
 
-using UnityEngine;
 using System.Collections;
-using Valve.VR;
+using UnityEngine;
 
 
-namespace Valve.VR
-{
-    public class SteamVR_Render : MonoBehaviour
-    {
+namespace Valve.VR {
+    public class SteamVR_Render: MonoBehaviour {
         public SteamVR_ExternalCamera externalCamera;
         public string externalCameraConfigPath = "externalcamera.cfg";
 
         public static EVREye eye { get; private set; }
-        
+
         public static SteamVR_Render instance { get { return SteamVR_Behaviour.instance.steamvr_render; } }
 
         static private bool isQuitting;
-        void OnApplicationQuit()
-        {
+        void OnApplicationQuit () {
             isQuitting = true;
             SteamVR.SafeDispose();
         }
 
-        static public void Add(SteamVR_Camera vrcam)
-        {
+        static public void Add (SteamVR_Camera vrcam) {
             if (!isQuitting)
                 instance.AddInternal(vrcam);
         }
 
-        static public void Remove(SteamVR_Camera vrcam)
-        {
+        static public void Remove (SteamVR_Camera vrcam) {
             if (!isQuitting && instance != null)
                 instance.RemoveInternal(vrcam);
         }
 
-        static public SteamVR_Camera Top()
-        {
+        static public SteamVR_Camera Top () {
             if (!isQuitting)
                 return instance.TopInternal();
 
@@ -49,14 +42,12 @@ namespace Valve.VR
 
         private SteamVR_Camera[] cameras = new SteamVR_Camera[0];
 
-        void AddInternal(SteamVR_Camera vrcam)
-        {
+        void AddInternal (SteamVR_Camera vrcam) {
             var camera = vrcam.GetComponent<Camera>();
             var length = cameras.Length;
             var sorted = new SteamVR_Camera[length + 1];
             int insert = 0;
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 var c = cameras[i].GetComponent<Camera>();
                 if (i == insert && c.depth > camera.depth)
                     sorted[insert++] = vrcam;
@@ -69,12 +60,10 @@ namespace Valve.VR
             cameras = sorted;
         }
 
-        void RemoveInternal(SteamVR_Camera vrcam)
-        {
+        void RemoveInternal (SteamVR_Camera vrcam) {
             var length = cameras.Length;
             int count = 0;
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 var c = cameras[i];
                 if (c == vrcam)
                     ++count;
@@ -84,8 +73,7 @@ namespace Valve.VR
 
             var sorted = new SteamVR_Camera[length - count];
             int insert = 0;
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 var c = cameras[i];
                 if (c != vrcam)
                     sorted[insert++] = c;
@@ -94,8 +82,7 @@ namespace Valve.VR
             cameras = sorted;
         }
 
-        SteamVR_Camera TopInternal()
-        {
+        SteamVR_Camera TopInternal () {
             if (cameras.Length > 0)
                 return cameras[cameras.Length - 1];
 
@@ -106,11 +93,9 @@ namespace Valve.VR
         public TrackedDevicePose_t[] gamePoses = new TrackedDevicePose_t[0];
 
         static private bool _pauseRendering;
-        static public bool pauseRendering
-        {
+        static public bool pauseRendering {
             get { return _pauseRendering; }
-            set
-            {
+            set {
                 _pauseRendering = value;
 
                 var compositor = OpenVR.Compositor;
@@ -121,18 +106,15 @@ namespace Valve.VR
 
         private WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
 
-        private IEnumerator RenderLoop()
-        {
-            while (Application.isPlaying)
-            {
+        private IEnumerator RenderLoop () {
+            while (Application.isPlaying) {
                 yield return waitForEndOfFrame;
 
                 if (pauseRendering)
                     continue;
 
                 var compositor = OpenVR.Compositor;
-                if (compositor != null)
-                {
+                if (compositor != null) {
                     if (!compositor.CanRenderScene())
                         continue;
 
@@ -147,27 +129,21 @@ namespace Valve.VR
                     RenderExternalCamera();
             }
         }
-        
+
         private bool? doesPathExist = null;
-        private bool CheckExternalCamera()
-        {
+        private bool CheckExternalCamera () {
             if (doesPathExist == false)
                 return false;
             else if (doesPathExist == null)
                 doesPathExist = System.IO.File.Exists(externalCameraConfigPath);
 
-            if (externalCamera == null && doesPathExist == true)
-            {
+            if (externalCamera == null && doesPathExist == true) {
                 GameObject prefab = Resources.Load<GameObject>("SteamVR_ExternalCamera");
-                if (prefab == null)
-                {
+                if (prefab == null) {
                     doesPathExist = false;
                     return false;
-                }
-                else
-                {
-                    if (SteamVR_Settings.instance.legacyMixedRealityCamera)
-                    {
+                } else {
+                    if (SteamVR_Settings.instance.legacyMixedRealityCamera) {
                         if (SteamVR_ExternalCamera_LegacyManager.hasCamera == false)
                             return false;
 
@@ -178,26 +154,21 @@ namespace Valve.VR
                         externalCamera.configPath = externalCameraConfigPath;
                         externalCamera.ReadConfig();
                         externalCamera.SetupDeviceIndex(SteamVR_ExternalCamera_LegacyManager.cameraIndex);
-                    }
-                    else
-                    {
+                    } else {
                         SteamVR_Action_Pose cameraPose = SteamVR_Settings.instance.mixedRealityCameraPose;
                         SteamVR_Input_Sources cameraSource = SteamVR_Settings.instance.mixedRealityCameraInputSource;
 
-                        if (cameraPose != null && SteamVR_Settings.instance.mixedRealityActionSetAutoEnable)
-                        {
+                        if (cameraPose != null && SteamVR_Settings.instance.mixedRealityActionSetAutoEnable) {
                             if (cameraPose.actionSet != null && cameraPose.actionSet.IsActive(cameraSource) == false)
                                 cameraPose.actionSet.Activate(cameraSource);
                         }
 
-                        if (cameraPose == null)
-                        {
+                        if (cameraPose == null) {
                             doesPathExist = false;
                             return false;
                         }
 
-                        if (cameraPose != null && cameraPose[cameraSource].active && cameraPose[cameraSource].deviceIsConnected)
-                        {
+                        if (cameraPose != null && cameraPose[cameraSource].active && cameraPose[cameraSource].deviceIsConnected) {
                             GameObject instance = Instantiate(prefab);
                             instance.gameObject.name = "External Camera";
 
@@ -213,15 +184,14 @@ namespace Valve.VR
             return (externalCamera != null);
         }
 
-        void RenderExternalCamera()
-        {
+        void RenderExternalCamera () {
             if (externalCamera == null)
                 return;
 
             if (!externalCamera.gameObject.activeInHierarchy)
                 return;
 
-            var frameSkip = (int)Mathf.Max(externalCamera.config.frameSkip, 0.0f);
+            var frameSkip = (int) Mathf.Max(externalCamera.config.frameSkip, 0.0f);
             if (Time.frameCount % (frameSkip + 1) != 0)
                 return;
 
@@ -234,24 +204,18 @@ namespace Valve.VR
 
         float sceneResolutionScale = 1.0f, timeScale = 1.0f;
 
-        private void OnInputFocus(bool hasFocus)
-        {
+        private void OnInputFocus (bool hasFocus) {
             if (SteamVR.active == false)
                 return;
 
-            if (hasFocus)
-            {
-                if (SteamVR.settings.pauseGameWhenDashboardVisible)
-                {
+            if (hasFocus) {
+                if (SteamVR.settings.pauseGameWhenDashboardVisible) {
                     Time.timeScale = timeScale;
                 }
 
                 SteamVR_Camera.sceneResolutionScale = sceneResolutionScale;
-            }
-            else
-            {
-                if (SteamVR.settings.pauseGameWhenDashboardVisible)
-                {
+            } else {
+                if (SteamVR.settings.pauseGameWhenDashboardVisible) {
                     timeScale = Time.timeScale;
                     Time.timeScale = 0.0f;
                 }
@@ -261,15 +225,13 @@ namespace Valve.VR
             }
         }
 
-        private string GetScreenshotFilename(uint screenshotHandle, EVRScreenshotPropertyFilenames screenshotPropertyFilename)
-        {
+        private string GetScreenshotFilename (uint screenshotHandle, EVRScreenshotPropertyFilenames screenshotPropertyFilename) {
             var error = EVRScreenshotError.None;
             var capacity = OpenVR.Screenshots.GetScreenshotPropertyFilename(screenshotHandle, screenshotPropertyFilename, null, 0, ref error);
             if (error != EVRScreenshotError.None && error != EVRScreenshotError.BufferTooSmall)
                 return null;
-            if (capacity > 1)
-            {
-                var result = new System.Text.StringBuilder((int)capacity);
+            if (capacity > 1) {
+                var result = new System.Text.StringBuilder((int) capacity);
                 OpenVR.Screenshots.GetScreenshotPropertyFilename(screenshotHandle, screenshotPropertyFilename, result, capacity, ref error);
                 if (error != EVRScreenshotError.None)
                     return null;
@@ -278,13 +240,11 @@ namespace Valve.VR
             return null;
         }
 
-        private void OnRequestScreenshot(VREvent_t vrEvent)
-        {
+        private void OnRequestScreenshot (VREvent_t vrEvent) {
             var screenshotHandle = vrEvent.data.screenshot.handle;
-            var screenshotType = (EVRScreenshotType)vrEvent.data.screenshot.type;
+            var screenshotType = (EVRScreenshotType) vrEvent.data.screenshot.type;
 
-            if (screenshotType == EVRScreenshotType.StereoPanorama)
-            {
+            if (screenshotType == EVRScreenshotType.StereoPanorama) {
                 string previewFilename = GetScreenshotFilename(screenshotHandle, EVRScreenshotPropertyFilenames.Preview);
                 string VRFilename = GetScreenshotFilename(screenshotHandle, EVRScreenshotPropertyFilenames.VR);
 
@@ -306,8 +266,7 @@ namespace Valve.VR
 
         private EVRScreenshotType[] screenshotTypes = new EVRScreenshotType[] { EVRScreenshotType.StereoPanorama };
 
-        private void OnEnable()
-        {
+        private void OnEnable () {
             StartCoroutine(RenderLoop());
             SteamVR_Events.InputFocus.Listen(OnInputFocus);
             SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Listen(OnRequestScreenshot);
@@ -316,7 +275,7 @@ namespace Valve.VR
                 SteamVR_ExternalCamera_LegacyManager.SubscribeToNewPoses();
 
 #if true
-		    Application.onBeforeRender += OnBeforeRender;
+            Application.onBeforeRender += OnBeforeRender;
 #else
             Camera.onPreCull += OnCameraPreCull;
 #endif
@@ -327,20 +286,18 @@ namespace Valve.VR
                 SteamVR_Events.Initialized.AddListener(OnSteamVRInitialized);
         }
 
-        private void OnSteamVRInitialized(bool success)
-        {
+        private void OnSteamVRInitialized (bool success) {
             if (success)
                 OpenVR.Screenshots.HookScreenshot(screenshotTypes);
         }
 
-        private void OnDisable()
-        {
+        private void OnDisable () {
             StopAllCoroutines();
             SteamVR_Events.InputFocus.Remove(OnInputFocus);
             SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Remove(OnRequestScreenshot);
 
 #if true
-		    Application.onBeforeRender -= OnBeforeRender;
+            Application.onBeforeRender -= OnBeforeRender;
 #else
             Camera.onPreCull -= OnCameraPreCull;
 #endif
@@ -349,11 +306,9 @@ namespace Valve.VR
                 SteamVR_Events.Initialized.RemoveListener(OnSteamVRInitialized);
         }
 
-        public void UpdatePoses()
-        {
+        public void UpdatePoses () {
             var compositor = OpenVR.Compositor;
-            if (compositor != null)
-            {
+            if (compositor != null) {
                 compositor.GetLastPoses(poses, gamePoses);
                 SteamVR_Events.NewPoses.Send(poses);
                 SteamVR_Events.NewPosesApplied.Send();
@@ -361,13 +316,11 @@ namespace Valve.VR
         }
 
 #if true
-	    void OnBeforeRender() 
-        { 
+        void OnBeforeRender () {
             if (SteamVR.active == false)
                 return;
 
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
-            {
+            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull)) {
                 UpdatePoses();
             }
         }
@@ -401,8 +354,7 @@ namespace Valve.VR
         static int lastFrameCount = -1;
 #endif
 
-        void Update()
-        {
+        void Update () {
             if (SteamVR.active == false)
                 return;
 
@@ -410,38 +362,33 @@ namespace Valve.VR
 
             // Dispatch any OpenVR events.
             var system = OpenVR.System;
-            if (system != null)
-            {
+            if (system != null) {
                 var vrEvent = new VREvent_t();
-                var size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VREvent_t));
-                for (int i = 0; i < 64; i++)
-                {
+                var size = (uint) System.Runtime.InteropServices.Marshal.SizeOf(typeof(VREvent_t));
+                for (int i = 0; i < 64; i++) {
                     if (!system.PollNextEvent(ref vrEvent, size))
                         break;
 
-                    switch ((EVREventType)vrEvent.eventType)
-                    {
+                    switch ((EVREventType) vrEvent.eventType) {
                         case EVREventType.VREvent_InputFocusCaptured: // another app has taken focus (likely dashboard)
-                            if (vrEvent.data.process.oldPid == 0)
-                            {
-                                SteamVR_Events.InputFocus.Send(false);
-                            }
-                            break;
+                        if (vrEvent.data.process.oldPid == 0) {
+                            SteamVR_Events.InputFocus.Send(false);
+                        }
+                        break;
                         case EVREventType.VREvent_InputFocusReleased: // that app has released input focus
-                            if (vrEvent.data.process.pid == 0)
-                            {
-                                SteamVR_Events.InputFocus.Send(true);
-                            }
-                            break;
+                        if (vrEvent.data.process.pid == 0) {
+                            SteamVR_Events.InputFocus.Send(true);
+                        }
+                        break;
                         case EVREventType.VREvent_ShowRenderModels:
-                            SteamVR_Events.HideRenderModels.Send(false);
-                            break;
+                        SteamVR_Events.HideRenderModels.Send(false);
+                        break;
                         case EVREventType.VREvent_HideRenderModels:
-                            SteamVR_Events.HideRenderModels.Send(true);
-                            break;
+                        SteamVR_Events.HideRenderModels.Send(true);
+                        break;
                         default:
-                            SteamVR_Events.System((EVREventType)vrEvent.eventType).Send(vrEvent);
-                            break;
+                        SteamVR_Events.System((EVREventType) vrEvent.eventType).Send(vrEvent);
+                        break;
                     }
                 }
             }
@@ -452,11 +399,9 @@ namespace Valve.VR
             QualitySettings.maxQueuedFrames = -1;
             QualitySettings.vSyncCount = 0; // this applies to the companion window
 
-            if (SteamVR.settings.lockPhysicsUpdateRateToRenderFrequency && Time.timeScale > 0.0f)
-            {
+            if (SteamVR.settings.lockPhysicsUpdateRateToRenderFrequency && Time.timeScale > 0.0f) {
                 var vr = SteamVR.instance;
-                if (vr != null)
-                {
+                if (vr != null) {
                     //var timing = new Compositor_FrameTiming();
                     //timing.m_nSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
                     //vr.compositor.GetFrameTiming(ref timing, 0);

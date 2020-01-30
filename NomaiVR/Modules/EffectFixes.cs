@@ -2,11 +2,9 @@
 using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR
-{
-    public class EffectFixes : MonoBehaviour
-    {
-        private void Start() {
+namespace NomaiVR {
+    public class EffectFixes: MonoBehaviour {
+        private void Start () {
             NomaiVR.Log("Started FogFix");
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlanetaryFogController>("ResetFogSettings", typeof(Patches), "PatchResetFog");
@@ -17,7 +15,7 @@ namespace NomaiVR
             NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
-        private void OnEvent(MonoBehaviour behaviour, Events ev) {
+        private void OnEvent (MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
                 var fogLightCanvas = GameObject.Find("FogLightCanvas").GetComponent<Canvas>();
                 fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;
@@ -26,7 +24,7 @@ namespace NomaiVR
 
                 // Disable underwater effect.
                 GameObject.FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
-                
+
                 // Disable water entering and exiting effect.
                 var visorEffects = FindObjectOfType<VisorEffectController>();
                 visorEffects.SetValue("_waterClearLength", 0);
@@ -34,15 +32,14 @@ namespace NomaiVR
             }
         }
 
-        internal static class Patches
-        {
-            static bool PatchResetFog() {
+        internal static class Patches {
+            static bool PatchResetFog () {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
             }
-            static bool PatchUpdateFog() {
+            static bool PatchUpdateFog () {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
             }
-            static bool PatchOverrideFog() {
+            static bool PatchOverrideFog () {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
             }
         }

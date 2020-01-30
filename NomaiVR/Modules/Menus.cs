@@ -4,10 +4,8 @@ using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace NomaiVR
-{
-    public class Menus : MonoBehaviour
-    {
+namespace NomaiVR {
+    public class Menus: MonoBehaviour {
         // List all the canvas elements that need to be moved to world space during gameplay.
         static readonly CanvasInfo[] _canvasInfos = {
             new CanvasInfo("PauseMenu"),
@@ -20,7 +18,7 @@ namespace NomaiVR
             // new CanvasInfo("FogLightCanvas"),
         };
 
-        void Start() {
+        void Start () {
             NomaiVR.Log("Start Menus");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -29,23 +27,23 @@ namespace NomaiVR
             //FixAllCanvases();
 
             // Make UI elements draw on top of everything.
-            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
 
             NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
-        private void OnEvent(MonoBehaviour behaviour, Events ev) {
+        private void OnEvent (MonoBehaviour behaviour, Events ev) {
             if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
                 behaviour.GetComponent<Canvas>().planeDistance = 5;
             }
         }
 
-        void OnDisable() {
+        void OnDisable () {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
             FixGameCanvases(new[] {
                 new CanvasInfo("PauseMenu", 0.0005f),
                 new CanvasInfo("DialogueCanvas"),
@@ -55,7 +53,7 @@ namespace NomaiVR
             //FixAllCanvases();
         }
 
-        void MoveCanvasToWorldSpace(CanvasInfo canvasInfo) {
+        void MoveCanvasToWorldSpace (CanvasInfo canvasInfo) {
             GameObject canvas = GameObject.Find(canvasInfo.name);
 
             if (canvas == null) {
@@ -64,7 +62,6 @@ namespace NomaiVR
             }
 
             Canvas[] subCanvases = canvas.GetComponentsInChildren<Canvas>();
-            NomaiVR.Log("found " + subCanvases.Length + "subs inside " + canvas.name);
 
             foreach (Canvas subCanvas in subCanvases) {
                 subCanvas.renderMode = RenderMode.WorldSpace;
@@ -89,17 +86,17 @@ namespace NomaiVR
             }
         }
 
-        void FixMainMenuCanvas() {
+        void FixMainMenuCanvas () {
             MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
         }
 
-        void FixGameCanvases(CanvasInfo [] canvasInfos) {
+        void FixGameCanvases (CanvasInfo[] canvasInfos) {
             foreach (CanvasInfo canvasInfo in canvasInfos) {
                 MoveCanvasToWorldSpace(canvasInfo);
             }
         }
 
-        void FixAllCanvases() {
+        void FixAllCanvases () {
             var canvases = GameObject.FindObjectsOfType<Canvas>();
             foreach (var canvas in canvases) {
                 if (canvas.renderMode == RenderMode.ScreenSpaceOverlay) {
@@ -110,20 +107,19 @@ namespace NomaiVR
             }
         }
 
-        protected class CanvasInfo
-        {
+        protected class CanvasInfo {
             public string name;
             public Vector3 offset;
             public float scale;
             const float _defaultScale = 0.001f;
 
-            public CanvasInfo(string _name, Vector3 _offset, float _scale = _defaultScale) {
+            public CanvasInfo (string _name, Vector3 _offset, float _scale = _defaultScale) {
                 name = _name;
                 offset = _offset;
                 scale = _scale;
             }
 
-            public CanvasInfo(string _name, float _scale = _defaultScale) {
+            public CanvasInfo (string _name, float _scale = _defaultScale) {
                 name = _name;
                 offset = new Vector3(0, 0, 1);
                 scale = _scale;

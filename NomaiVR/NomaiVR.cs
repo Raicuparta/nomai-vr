@@ -4,22 +4,14 @@ using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
 
-namespace NomaiVR
-{
-    public class NomaiVR : ModBehaviour
-    {
+namespace NomaiVR {
+    public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
         static NomaiVR _instance;
-        bool _motionControls;
+        public static bool MotionControlsEnabled;
         public static bool DebugMode;
 
-        public static void Log(string s) {
-            if (DebugMode) {
-                _instance.ModHelper.Console.WriteLine("NomaiVR: " + s);
-            }
-        }
-
-        void Start() {
+        void Start () {
             _instance = this;
 
             Log("Start Main");
@@ -33,20 +25,32 @@ namespace NomaiVR
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<EffectFixes>();
             gameObject.AddComponent<PlayerBodyPosition>();
-            if (_motionControls) {
+            if (MotionControlsEnabled) {
                 gameObject.AddComponent<ControllerInput>();
-                gameObject.AddComponent<MotionControls>();
+                gameObject.AddComponent<Hands>();
             }
+
+            Application.runInBackground = true;
         }
 
-        public override void Configure(IModConfig config) {
-            _motionControls = config.GetSetting<bool>("enableMotionControls");
+        public override void Configure (IModConfig config) {
             DebugMode = config.GetSetting<bool>("debugMode");
             PlayerBodyPosition.MovePlayerWithHead = config.GetSetting<bool>("movePlayerWithHead");
             XRSettings.showDeviceView = config.GetSetting<bool>("showMirrorView");
+            MotionControlsEnabled = config.GetSetting<bool>("enableMotionControls");
 
-            Application.runInBackground = true;
-            Cursor.lockState = CursorLockMode.None;
+            if (MotionControlsEnabled) {
+                // Prevent application from stealing mouse focus;
+                ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+
+        public static void Log (string s) {
+            if (DebugMode) {
+                _instance.ModHelper.Console.WriteLine("NomaiVR: " + s);
+            }
         }
     }
 }

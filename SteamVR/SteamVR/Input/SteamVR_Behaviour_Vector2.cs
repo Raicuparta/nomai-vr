@@ -1,20 +1,12 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Valve.VR
-{
+namespace Valve.VR {
     /// <summary>
     /// Simplifies the use of the Vector2 action. Provides an onChange event that fires whenever the vector2 changes.
     /// </summary>
-    public class SteamVR_Behaviour_Vector2 : MonoBehaviour
-    {
+    public class SteamVR_Behaviour_Vector2: MonoBehaviour {
         /// <summary>The vector2 action to get data from</summary>
         public SteamVR_Action_Vector2 vector2Action;
 
@@ -46,10 +38,8 @@ namespace Valve.VR
         /// <summary>Returns whether this action is bound and the action set is active</summary>
         public bool isActive { get { return vector2Action.GetActive(inputSource); } }
 
-        protected virtual void OnEnable()
-        {
-            if (vector2Action == null)
-            {
+        protected virtual void OnEnable () {
+            if (vector2Action == null) {
                 Debug.LogError("[SteamVR] Vector2 action not set.", this);
                 return;
             }
@@ -57,60 +47,47 @@ namespace Valve.VR
             AddHandlers();
         }
 
-        protected virtual void OnDisable()
-        {
+        protected virtual void OnDisable () {
             RemoveHandlers();
         }
 
-        protected void AddHandlers()
-        {
+        protected void AddHandlers () {
             vector2Action[inputSource].onUpdate += SteamVR_Behaviour_Vector2_OnUpdate;
             vector2Action[inputSource].onChange += SteamVR_Behaviour_Vector2_OnChange;
             vector2Action[inputSource].onAxis += SteamVR_Behaviour_Vector2_OnAxis;
         }
 
-        protected void RemoveHandlers()
-        {
-            if (vector2Action != null)
-            {
+        protected void RemoveHandlers () {
+            if (vector2Action != null) {
                 vector2Action[inputSource].onUpdate -= SteamVR_Behaviour_Vector2_OnUpdate;
                 vector2Action[inputSource].onChange -= SteamVR_Behaviour_Vector2_OnChange;
                 vector2Action[inputSource].onAxis -= SteamVR_Behaviour_Vector2_OnAxis;
             }
         }
 
-        private void SteamVR_Behaviour_Vector2_OnUpdate(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
-        {
-            if (onUpdate != null)
-            {
+        private void SteamVR_Behaviour_Vector2_OnUpdate (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta) {
+            if (onUpdate != null) {
                 onUpdate.Invoke(this, fromSource, newAxis, newDelta);
             }
-            if (onUpdateEvent != null)
-            {
+            if (onUpdateEvent != null) {
                 onUpdateEvent.Invoke(this, fromSource, newAxis, newDelta);
             }
         }
 
-        private void SteamVR_Behaviour_Vector2_OnChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
-        {
-            if (onChange != null)
-            {
+        private void SteamVR_Behaviour_Vector2_OnChange (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta) {
+            if (onChange != null) {
                 onChange.Invoke(this, fromSource, newAxis, newDelta);
             }
-            if (onChangeEvent != null)
-            {
+            if (onChangeEvent != null) {
                 onChangeEvent.Invoke(this, fromSource, newAxis, newDelta);
             }
         }
 
-        private void SteamVR_Behaviour_Vector2_OnAxis(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
-        {
-            if (onAxis != null)
-            {
+        private void SteamVR_Behaviour_Vector2_OnAxis (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta) {
+            if (onAxis != null) {
                 onAxis.Invoke(this, fromSource, newAxis, newDelta);
             }
-            if (onAxisEvent != null)
-            {
+            if (onAxisEvent != null) {
                 onAxisEvent.Invoke(this, fromSource, newAxis, newDelta);
             }
         }
@@ -126,15 +103,14 @@ namespace Valve.VR
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
-        public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
-        {
+        public string GetLocalizedName (params EVRInputStringBits[] localizedParts) {
             if (vector2Action != null)
                 return vector2Action.GetLocalizedOriginPart(inputSource, localizedParts);
             return null;
         }
 
-        public delegate void AxisHandler(SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
-        public delegate void ChangeHandler(SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
-        public delegate void UpdateHandler(SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
+        public delegate void AxisHandler (SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
+        public delegate void ChangeHandler (SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
+        public delegate void UpdateHandler (SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
     }
 }

@@ -3,43 +3,40 @@ using OWML.ModHelper.Events;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace NomaiVR
-{
-    public class PlayerBodyPosition : MonoBehaviour
-    {
+namespace NomaiVR {
+    public class PlayerBodyPosition: MonoBehaviour {
         GameObject _cameraParent;
         Vector3 _prevCameraPosition;
         bool _isAwake;
         public static bool MovePlayerWithHead = true;
 
-        void Start() {
+        void Start () {
             NomaiVR.Log("Start PlayerBodyPosition");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
             NomaiVR.Helper.Events.Subscribe<Flashlight>(Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnWakeUp;
+            NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
-        private void OnWakeUp(MonoBehaviour behaviour, Events ev) {
-            _isAwake = true;
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+        private void OnEvent (MonoBehaviour behaviour, Events ev) {
+            if (behaviour.GetType() == typeof(Flashlight) && ev == Events.AfterStart) {
+                _isAwake = true;
+                NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
 
-            MoveCameraToPlayerHead();
-
-            // Move helmet forward so it is easier to look at the HUD in VR
-            //FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.3f;
+                MoveCameraToPlayerHead();
+            }
         }
 
-        void OnDisable() {
+        void OnDisable () {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
             updateMainCamera();
         }
 
-        private void updateMainCamera() {
+        private void updateMainCamera () {
             NomaiVR.Helper.Console.WriteLine("Main camera: " + Common.MainCamera.name);
 
             // Make an empty parent object for moving the camera around.
@@ -59,12 +56,12 @@ namespace NomaiVR
             }
         }
 
-        void MoveCameraToPlayerHead() {
+        void MoveCameraToPlayerHead () {
             Vector3 movement = Common.PlayerHead.position - Common.MainCamera.transform.position;
             _cameraParent.transform.position += movement;
         }
 
-        void MovePlayerBodyToCamera() {
+        void MovePlayerBodyToCamera () {
             // Move player to camera position.
             Vector3 movement = _prevCameraPosition - (_cameraParent.transform.position - Common.MainCamera.transform.position);
             Common.PlayerBody.transform.position += movement;
@@ -73,7 +70,7 @@ namespace NomaiVR
         }
 
 
-        void Update() {
+        void Update () {
             if (_isAwake) {
                 MoveCameraToPlayerHead();
             }
@@ -90,9 +87,8 @@ namespace NomaiVR
             }
         }
 
-        internal static class Patches
-        {
-            static void PatchTurning(PlayerCharacterController __instance) {
+        internal static class Patches {
+            static void PatchTurning (PlayerCharacterController __instance) {
                 if (OWInput.GetInputMode() != InputMode.Character) {
                     return;
                 }

@@ -1,31 +1,25 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using UnityEngine;
-using System.Collections;
 
-namespace Valve.VR
-{
-    public class SteamVR_RingBuffer<T>
-    {
+namespace Valve.VR {
+    public class SteamVR_RingBuffer<T> {
         protected T[] buffer;
         protected int currentIndex;
         protected T lastElement;
 
-        public SteamVR_RingBuffer(int size)
-        {
+        public SteamVR_RingBuffer (int size) {
             buffer = new T[size];
             currentIndex = 0;
         }
 
-        public void Add(T newElement)
-        {
+        public void Add (T newElement) {
             buffer[currentIndex] = newElement;
 
             StepForward();
         }
 
-        public virtual void StepForward()
-        {
+        public virtual void StepForward () {
             lastElement = buffer[currentIndex];
 
             currentIndex++;
@@ -35,21 +29,18 @@ namespace Valve.VR
             cleared = false;
         }
 
-        public virtual T GetAtIndex(int atIndex)
-        {
+        public virtual T GetAtIndex (int atIndex) {
             if (atIndex < 0)
                 atIndex += buffer.Length;
 
             return buffer[atIndex];
         }
 
-        public virtual T GetLast()
-        {
+        public virtual T GetLast () {
             return lastElement;
         }
 
-        public virtual int GetLastIndex()
-        {
+        public virtual int GetLastIndex () {
             int lastIndex = currentIndex - 1;
             if (lastIndex < 0)
                 lastIndex += buffer.Length;
@@ -58,16 +49,14 @@ namespace Valve.VR
         }
 
         private bool cleared = false;
-        public void Clear()
-        {
+        public void Clear () {
             if (cleared == true)
                 return;
 
             if (buffer == null)
                 return;
 
-            for (int index = 0; index < buffer.Length; index++)
-            {
+            for (int index = 0; index < buffer.Length; index++) {
                 buffer[index] = default(T);
             }
 
@@ -79,15 +68,12 @@ namespace Valve.VR
         }
     }
 
-    public class SteamVR_HistoryBuffer : SteamVR_RingBuffer<SteamVR_HistoryStep>
-    {
-        public SteamVR_HistoryBuffer(int size) : base(size)
-        {
+    public class SteamVR_HistoryBuffer: SteamVR_RingBuffer<SteamVR_HistoryStep> {
+        public SteamVR_HistoryBuffer (int size) : base(size) {
 
         }
 
-        public void Update(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
-        {
+        public void Update (Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity) {
             if (buffer[currentIndex] == null)
                 buffer[currentIndex] = new SteamVR_HistoryStep();
 
@@ -100,8 +86,7 @@ namespace Valve.VR
             StepForward();
         }
 
-        public float GetVelocityMagnitudeTrend(int toIndex = -1, int fromIndex = -1)
-        {
+        public float GetVelocityMagnitudeTrend (int toIndex = -1, int fromIndex = -1) {
             if (toIndex == -1)
                 toIndex = currentIndex - 1;
 
@@ -117,28 +102,24 @@ namespace Valve.VR
             SteamVR_HistoryStep toStep = buffer[toIndex];
             SteamVR_HistoryStep fromStep = buffer[fromIndex];
 
-            if (IsValid(toStep) && IsValid(fromStep))
-            {
+            if (IsValid(toStep) && IsValid(fromStep)) {
                 return toStep.velocity.sqrMagnitude - fromStep.velocity.sqrMagnitude;
             }
 
             return 0;
         }
 
-        public bool IsValid(SteamVR_HistoryStep step)
-        {
+        public bool IsValid (SteamVR_HistoryStep step) {
             return step != null && step.timeInTicks != -1;
         }
 
-        public int GetTopVelocity(int forFrames, int addFrames = 0)
-        {
+        public int GetTopVelocity (int forFrames, int addFrames = 0) {
             int topFrame = currentIndex;
             float topVelocitySqr = 0;
 
             int currentFrame = currentIndex;
 
-            while (forFrames > 0)
-            {
+            while (forFrames > 0) {
                 forFrames--;
                 currentFrame--;
 
@@ -151,8 +132,7 @@ namespace Valve.VR
                     break;
 
                 float currentSqr = buffer[currentFrame].velocity.sqrMagnitude;
-                if (currentSqr > topVelocitySqr)
-                {
+                if (currentSqr > topVelocitySqr) {
                     topFrame = currentFrame;
                     topVelocitySqr = currentSqr;
                 }
@@ -166,8 +146,7 @@ namespace Valve.VR
             return topFrame;
         }
 
-        public void GetAverageVelocities(out Vector3 velocity, out Vector3 angularVelocity, int forFrames, int startFrame = -1)
-        {
+        public void GetAverageVelocities (out Vector3 velocity, out Vector3 angularVelocity, int forFrames, int startFrame = -1) {
             velocity = Vector3.zero;
             angularVelocity = Vector3.zero;
 
@@ -186,8 +165,7 @@ namespace Valve.VR
             Vector3 totalAngularVelocity = Vector3.zero;
             float totalFrames = 0;
             int currentFrame = startFrame;
-            while (forFrames > 0)
-            {
+            while (forFrames > 0) {
                 forFrames--;
                 currentFrame--;
 
@@ -210,8 +188,7 @@ namespace Valve.VR
         }
     }
 
-    public class SteamVR_HistoryStep
-    {
+    public class SteamVR_HistoryStep {
         public Vector3 position;
         public Quaternion rotation;
 

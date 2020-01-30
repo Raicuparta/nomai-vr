@@ -1,39 +1,30 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using UnityEngine;
-using System.Collections;
 using System;
-using Valve.VR;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
+using UnityEngine;
 
 #pragma warning disable 0067
 
-namespace Valve.VR
-{
+namespace Valve.VR {
     [Serializable]
     /// <summary>
     /// Vibration actions are used to trigger haptic feedback in vr controllers.
     /// </summary>
-    public class SteamVR_Action_Vibration : SteamVR_Action_Out<SteamVR_Action_Vibration_Source_Map, SteamVR_Action_Vibration_Source>, ISerializationCallbackReceiver
-    {
-        public delegate void ActiveChangeHandler(SteamVR_Action_Vibration fromAction, SteamVR_Input_Sources fromSource, bool active);
-        public delegate void ExecuteHandler(SteamVR_Action_Vibration fromAction, SteamVR_Input_Sources fromSource, float secondsFromNow, float durationSeconds, float frequency, float amplitude);
+    public class SteamVR_Action_Vibration: SteamVR_Action_Out<SteamVR_Action_Vibration_Source_Map, SteamVR_Action_Vibration_Source>, ISerializationCallbackReceiver {
+        public delegate void ActiveChangeHandler (SteamVR_Action_Vibration fromAction, SteamVR_Input_Sources fromSource, bool active);
+        public delegate void ExecuteHandler (SteamVR_Action_Vibration fromAction, SteamVR_Input_Sources fromSource, float secondsFromNow, float durationSeconds, float frequency, float amplitude);
 
         /// <summary><strong>[SteamVR_Input_Sources.Any]</strong> This event fires whenever a change happens in the action</summary>
-        public event ActiveChangeHandler onActiveChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
+        public event ActiveChangeHandler onActiveChange { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
 
         /// <summary><strong>[SteamVR_Input_Sources.Any]</strong> This event fires whenever a change happens in the action</summary>
-        public event ActiveChangeHandler onActiveBindingChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
+        public event ActiveChangeHandler onActiveBindingChange { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
         /// <summary><strong>[SteamVR_Input_Sources.Any]</strong> This event fires whenever this action is executed</summary>
-        public event ExecuteHandler onExecute
-        { add { sourceMap[SteamVR_Input_Sources.Any].onExecute += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onExecute -= value; } }
+        public event ExecuteHandler onExecute { add { sourceMap[SteamVR_Input_Sources.Any].onExecute += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onExecute -= value; } }
 
 
-        public SteamVR_Action_Vibration() { }
+        public SteamVR_Action_Vibration () { }
 
 
         /// <summary>
@@ -44,8 +35,7 @@ namespace Valve.VR
         /// <param name="frequency">How often the haptic motor should bounce (0 - 320 in hz. The lower end being more useful)</param>
         /// <param name="amplitude">How intense the haptic action should be (0 - 1)</param>
         /// <param name="inputSource">The device you would like to execute the haptic action. Any if the action is not device specific.</param>
-        public void Execute(float secondsFromNow, float durationSeconds, float frequency, float amplitude, SteamVR_Input_Sources inputSource)
-        {
+        public void Execute (float secondsFromNow, float durationSeconds, float frequency, float amplitude, SteamVR_Input_Sources inputSource) {
             sourceMap[inputSource].Execute(secondsFromNow, durationSeconds, frequency, amplitude);
         }
 
@@ -54,8 +44,7 @@ namespace Valve.VR
         /// This happens when the action is bound or unbound, or when the ActionSet changes state.</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's active state changes and the corresponding input source</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnActiveChangeListener(ActiveChangeHandler functionToCall, SteamVR_Input_Sources inputSource)
-        {
+        public void AddOnActiveChangeListener (ActiveChangeHandler functionToCall, SteamVR_Input_Sources inputSource) {
             sourceMap[inputSource].onActiveChange += functionToCall;
         }
 
@@ -63,40 +52,35 @@ namespace Valve.VR
         /// This happens when the action is bound or unbound, or when the ActionSet changes state.</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnActiveChangeListener(ActiveChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
-        {
+        public void RemoveOnActiveChangeListener (ActiveChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource) {
             sourceMap[inputSource].onActiveChange -= functionToStopCalling;
         }
 
         /// <summary>Executes a function when the active state of this action (with the specified inputSource) changes. This happens when the action is bound or unbound</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's active state changes and the corresponding input source</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnActiveBindingChangeListener(ActiveChangeHandler functionToCall, SteamVR_Input_Sources inputSource)
-        {
+        public void AddOnActiveBindingChangeListener (ActiveChangeHandler functionToCall, SteamVR_Input_Sources inputSource) {
             sourceMap[inputSource].onActiveBindingChange += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnActiveBindingChangeListener(ActiveChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
-        {
+        public void RemoveOnActiveBindingChangeListener (ActiveChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource) {
             sourceMap[inputSource].onActiveBindingChange -= functionToStopCalling;
         }
 
         /// <summary>Executes a function when the execute method of this action (with the specified inputSource) is called. This happens when the action is bound or unbound</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's active state changes and the corresponding input source</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnExecuteListener(ExecuteHandler functionToCall, SteamVR_Input_Sources inputSource)
-        {
+        public void AddOnExecuteListener (ExecuteHandler functionToCall, SteamVR_Input_Sources inputSource) {
             sourceMap[inputSource].onExecute += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnExecuteListener(ExecuteHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
-        {
+        public void RemoveOnExecuteListener (ExecuteHandler functionToStopCalling, SteamVR_Input_Sources inputSource) {
             sourceMap[inputSource].onExecute -= functionToStopCalling;
         }
 
@@ -104,36 +88,29 @@ namespace Valve.VR
         /// Returns the last time this action was executed
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public override float GetTimeLastChanged(SteamVR_Input_Sources inputSource)
-        {
+        public override float GetTimeLastChanged (SteamVR_Input_Sources inputSource) {
             return sourceMap[inputSource].timeLastExecuted;
         }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
-        {
+        void ISerializationCallbackReceiver.OnBeforeSerialize () {
         }
 
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
+        void ISerializationCallbackReceiver.OnAfterDeserialize () {
             InitAfterDeserialize();
         }
 
-        public override bool IsUpdating(SteamVR_Input_Sources inputSource)
-        {
+        public override bool IsUpdating (SteamVR_Input_Sources inputSource) {
             return sourceMap.IsUpdating(inputSource);
         }
     }
 
-    public class SteamVR_Action_Vibration_Source_Map : SteamVR_Action_Source_Map<SteamVR_Action_Vibration_Source>
-    {
-        public bool IsUpdating(SteamVR_Input_Sources inputSource)
-        {
+    public class SteamVR_Action_Vibration_Source_Map: SteamVR_Action_Source_Map<SteamVR_Action_Vibration_Source> {
+        public bool IsUpdating (SteamVR_Input_Sources inputSource) {
             return sources[inputSource].timeLastExecuted != 0;
         }
     }
 
-    public class SteamVR_Action_Vibration_Source : SteamVR_Action_Out_Source
-    {
+    public class SteamVR_Action_Vibration_Source: SteamVR_Action_Out_Source {
         /// <summary>Event fires when the active state (ActionSet active and binding active) changes</summary>
         public event SteamVR_Action_Vibration.ActiveChangeHandler onActiveChange;
 
@@ -167,18 +144,16 @@ namespace Valve.VR
         /// <strong>[Should not be called by user code]</strong> 
         /// Initializes the handle for the inputSource, and any other related SteamVR data.
         /// </summary>
-        public override void Initialize()
-        {
+        public override void Initialize () {
             base.Initialize();
 
             lastActive = true;
         }
 
-        public override void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
-        {
+        public override void Preinitialize (SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource) {
             base.Preinitialize(wrappingAction, forInputSource);
 
-            vibrationAction = (SteamVR_Action_Vibration)wrappingAction;
+            vibrationAction = (SteamVR_Action_Vibration) wrappingAction;
         }
 
 
@@ -190,8 +165,7 @@ namespace Valve.VR
         /// <param name="frequency">How often the haptic motor should bounce (0 - 320 in hz. The lower end being more useful)</param>
         /// <param name="amplitude">How intense the haptic action should be (0 - 1)</param>
         /// <param name="inputSource">The device you would like to execute the haptic action. Any if the action is not device specific.</param>
-        public void Execute(float secondsFromNow, float durationSeconds, float frequency, float amplitude)
-        {
+        public void Execute (float secondsFromNow, float durationSeconds, float frequency, float amplitude) {
             if (SteamVR_Input.isStartupFrame)
                 return;
 
@@ -213,8 +187,7 @@ namespace Valve.VR
     /// <summary>
     /// Vibration actions are used to trigger haptic feedback in vr controllers.
     /// </summary>
-    public interface ISteamVR_Action_Vibration : ISteamVR_Action_Out
-    {
+    public interface ISteamVR_Action_Vibration: ISteamVR_Action_Out {
         /// <summary>
         /// Trigger the haptics at a certain time for a certain length
         /// </summary>
@@ -223,7 +196,7 @@ namespace Valve.VR
         /// <param name="frequency">How often the haptic motor should bounce (0 - 320 in hz. The lower end being more useful)</param>
         /// <param name="amplitude">How intense the haptic action should be (0 - 1)</param>
         /// <param name="inputSource">The device you would like to execute the haptic action. Any if the action is not device specific.</param>
-        void Execute(float secondsFromNow, float durationSeconds, float frequency, float amplitude, SteamVR_Input_Sources inputSource);
+        void Execute (float secondsFromNow, float durationSeconds, float frequency, float amplitude, SteamVR_Input_Sources inputSource);
     }
 }
 

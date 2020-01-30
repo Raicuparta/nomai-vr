@@ -7,20 +7,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Reflection;
-using Valve.VR;
 
 #if true
-    using UnityEngine.XR;
+using UnityEngine.XR;
 #else
 using XRSettings = UnityEngine.VR.VRSettings;
 using XRDevice = UnityEngine.VR.VRDevice;
 #endif
 
-namespace Valve.VR
-{
+namespace Valve.VR {
     [RequireComponent(typeof(Camera))]
-    public class SteamVR_Camera : MonoBehaviour
-    {
+    public class SteamVR_Camera: MonoBehaviour {
         [SerializeField]
         private Transform _head;
         public Transform head { get { return _head; } }
@@ -33,19 +30,17 @@ namespace Valve.VR
         private Transform _ears;
         public Transform ears { get { return _ears; } }
 
-        public Ray GetRay()
-        {
+        public Ray GetRay () {
             return new Ray(_head.position, _head.forward);
         }
 
         public bool wireframe = false;
 
 #if true
-    static public float sceneResolutionScale
-    {
-        get { return XRSettings.eyeTextureResolutionScale; }
-        set { XRSettings.eyeTextureResolutionScale = value; }
-    }
+        static public float sceneResolutionScale {
+            get { return XRSettings.eyeTextureResolutionScale; }
+            set { XRSettings.eyeTextureResolutionScale = value; }
+        }
 #else
         static public float sceneResolutionScale
         {
@@ -56,19 +51,15 @@ namespace Valve.VR
 
         #region Enable / Disable
 
-        void OnDisable()
-        {
+        void OnDisable () {
             SteamVR_Render.Remove(this);
         }
 
-        void OnEnable()
-        {
+        void OnEnable () {
             // Bail if no hmd is connected
             var vr = SteamVR.instance;
-            if (vr == null)
-            {
-                if (head != null)
-                {
+            if (vr == null) {
+                if (head != null) {
                     head.GetComponent<SteamVR_TrackedObject>().enabled = false;
                 }
 
@@ -78,8 +69,7 @@ namespace Valve.VR
 
             // Convert camera rig for native OpenVR integration.
             var t = transform;
-            if (head != t)
-            {
+            if (head != t) {
                 Expand();
 
                 t.parent = origin;
@@ -98,8 +88,7 @@ namespace Valve.VR
                 _head = t;
             }
 
-            if (ears == null)
-            {
+            if (ears == null) {
                 var e = transform.GetComponentInChildren<SteamVR_Ears>();
                 if (e != null)
                     _ears = e.transform;
@@ -115,45 +104,36 @@ namespace Valve.VR
 
         #region Functionality to ensure SteamVR_Camera component is always the last component on an object
 
-        void Awake()
-        {
+        void Awake () {
             camera = GetComponent<Camera>(); // cached to avoid runtime lookup
             ForceLast();
         }
 
         static Hashtable values;
 
-        public void ForceLast()
-        {
-            if (values != null)
-            {
+        public void ForceLast () {
+            if (values != null) {
                 // Restore values on new instance
-                foreach (DictionaryEntry entry in values)
-                {
+                foreach (DictionaryEntry entry in values) {
                     var f = entry.Key as FieldInfo;
                     f.SetValue(this, entry.Value);
                 }
                 values = null;
-            }
-            else
-            {
+            } else {
                 // Make sure it's the last component
                 var components = GetComponents<Component>();
 
                 // But first make sure there aren't any other SteamVR_Cameras on this object.
-                for (int i = 0; i < components.Length; i++)
-                {
+                for (int i = 0; i < components.Length; i++) {
                     var c = components[i] as SteamVR_Camera;
-                    if (c != null && c != this)
-                    {
+                    if (c != null && c != this) {
                         DestroyImmediate(c);
                     }
                 }
 
                 components = GetComponents<Component>();
 
-                if (this != components[components.Length - 1])
-                {
+                if (this != components[components.Length - 1]) {
                     // Store off values to be restored on new instance
                     values = new Hashtable();
                     var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
@@ -184,19 +164,16 @@ namespace Valve.VR
         // Object hierarchy creation to make it easy to parent other objects appropriately,
         // otherwise this gets called on demand at runtime. Remaining initialization is
         // performed at startup, once the hmd has been identified.
-        public void Expand()
-        {
+        public void Expand () {
             var _origin = transform.parent;
-            if (_origin == null)
-            {
+            if (_origin == null) {
                 _origin = new GameObject(name + originSuffix).transform;
                 _origin.localPosition = transform.localPosition;
                 _origin.localRotation = transform.localRotation;
                 _origin.localScale = transform.localScale;
             }
 
-            if (head == null)
-            {
+            if (head == null) {
                 _head = new GameObject(name + headSuffix, typeof(SteamVR_TrackedObject)).transform;
                 head.parent = _origin;
                 head.position = transform.position;
@@ -205,8 +182,7 @@ namespace Valve.VR
                 head.tag = tag;
             }
 
-            if (transform.parent != head)
-            {
+            if (transform.parent != head) {
                 transform.parent = head;
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.identity;
@@ -223,8 +199,7 @@ namespace Valve.VR
                 }
 #endif
                 var audioListener = GetComponent<AudioListener>();
-                if (audioListener != null)
-                {
+                if (audioListener != null) {
                     DestroyImmediate(audioListener);
                     _ears = new GameObject(name + earsSuffix, typeof(SteamVR_Ears)).transform;
                     ears.parent = _head;
@@ -238,8 +213,7 @@ namespace Valve.VR
                 name += eyeSuffix;
         }
 
-        public void Collapse()
-        {
+        public void Collapse () {
             transform.parent = null;
 
             // Move children and components from head back to camera.
@@ -253,8 +227,7 @@ namespace Valve.VR
                 gameObject.AddComponent<GUILayer>();
             }
 #endif
-            if (ears != null)
-            {
+            if (ears != null) {
                 while (ears.childCount > 0)
                     ears.GetChild(0).parent = transform;
 
@@ -264,20 +237,16 @@ namespace Valve.VR
                 gameObject.AddComponent(typeof(AudioListener));
             }
 
-            if (origin != null)
-            {
+            if (origin != null) {
                 // If we created the origin originally, destroy it now.
-                if (origin.name.EndsWith(originSuffix))
-                {
+                if (origin.name.EndsWith(originSuffix)) {
                     // Reparent any children so we don't accidentally delete them.
                     var _origin = origin;
                     while (_origin.childCount > 0)
                         _origin.GetChild(0).parent = _origin.parent;
 
                     DestroyImmediate(_origin.gameObject);
-                }
-                else
-                {
+                } else {
                     transform.parent = origin;
                 }
             }
