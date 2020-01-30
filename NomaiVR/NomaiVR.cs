@@ -8,7 +8,7 @@ namespace NomaiVR {
     public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
         static NomaiVR _instance;
-        bool _motionControls;
+        public static bool MotionControlsEnabled;
         public static bool DebugMode;
 
         void Start () {
@@ -25,7 +25,7 @@ namespace NomaiVR {
             gameObject.AddComponent<Menus>();
             gameObject.AddComponent<EffectFixes>();
             gameObject.AddComponent<PlayerBodyPosition>();
-            if (_motionControls) {
+            if (MotionControlsEnabled) {
                 gameObject.AddComponent<ControllerInput>();
                 gameObject.AddComponent<Hands>();
             }
@@ -37,9 +37,9 @@ namespace NomaiVR {
             DebugMode = config.GetSetting<bool>("debugMode");
             PlayerBodyPosition.MovePlayerWithHead = config.GetSetting<bool>("movePlayerWithHead");
             XRSettings.showDeviceView = config.GetSetting<bool>("showMirrorView");
-            _motionControls = config.GetSetting<bool>("enableMotionControls");
+            MotionControlsEnabled = config.GetSetting<bool>("enableMotionControls");
 
-            if (_motionControls) {
+            if (MotionControlsEnabled) {
                 // Prevent application from stealing mouse focus;
                 ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
                 Cursor.lockState = CursorLockMode.None;

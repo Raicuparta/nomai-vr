@@ -34,7 +34,6 @@ namespace NomaiVR {
 
             SteamVR_Actions.default_LB.onChange += OnLBChange;
             SteamVR_Actions.default_LB.onChange += CreateButtonHandler(XboxButton.LeftBumper);
-            //SteamVR_Actions.default_RB.onChange += CreateButtonHandler(XboxButton.RightBumper);
             SteamVR_Actions.default_RB.onChange += onRBChange;
 
             SteamVR_Actions.default_LT.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
