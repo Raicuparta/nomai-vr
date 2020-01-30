@@ -92,6 +92,7 @@ namespace NomaiVR {
                 stickClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderStickClone;
             }
 
+            // Hide prompts.
             NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("LateInitialize");
         }
     }
