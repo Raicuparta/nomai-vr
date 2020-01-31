@@ -59,6 +59,7 @@ namespace NomaiVR {
                 }
             } else if (isInTitle) {
                 Common.InitPreGame();
+                Menus.Reset();
             }
         }
 

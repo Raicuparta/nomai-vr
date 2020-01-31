@@ -46,6 +46,10 @@ namespace NomaiVR {
             }
         }
 
+        public static void Reset () {
+            _farClipPlane = -1;
+        }
+
         void OnWakeUp () {
             NomaiVR.Log("wake up freeman");
             Camera.main.cullingMask = _cullingMask;
