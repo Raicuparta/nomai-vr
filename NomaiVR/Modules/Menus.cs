@@ -22,16 +22,12 @@ namespace NomaiVR {
             // Make UI elements draw on top of everything.
             Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
 
-            FixMainMenuCanvas();
-            //FixAllCanvases();
-
             if (isInGame) {
                 FixGameCanvases(new[] {
                     new CanvasInfo("PauseMenu", 0.0005f),
                     new CanvasInfo("DialogueCanvas"),
                     new CanvasInfo("ScreenPromptCanvas", 0.0015f),
                 });
-                //FixAllCanvases();
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
@@ -42,7 +38,8 @@ namespace NomaiVR {
                     Camera.main.cullingMask = (1 << 5);
                     Camera.main.farClipPlane = 5;
                 }
-
+            } else {
+                FixMainMenuCanvas();
             }
         }
 
