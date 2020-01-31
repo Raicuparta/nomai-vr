@@ -5,8 +5,8 @@ using UnityEngine.UI;
 namespace NomaiVR {
     public class Menus: MonoBehaviour {
         public bool isInGame;
-        float _farClipPlane;
-        int _cullingMask;
+        static float _farClipPlane = -1;
+        static int _cullingMask;
 
         // List all the canvas elements that need to be moved to world space during gameplay.
         static readonly CanvasInfo[] _canvasInfos = {
@@ -22,11 +22,6 @@ namespace NomaiVR {
             // Make UI elements draw on top of everything.
             Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
 
-
-            GlobalMessenger.AddListener("WakeUp", OnWakeUp);
-            _cullingMask = Camera.main.cullingMask;
-            _farClipPlane = Camera.main.farClipPlane;
-
             FixMainMenuCanvas();
             //FixAllCanvases();
 
@@ -38,15 +33,25 @@ namespace NomaiVR {
                 });
                 //FixAllCanvases();
 
+                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
-                Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
-                var cullingMask = Camera.main.cullingMask;
-                Camera.main.cullingMask = (1 << 5);
-                Camera.main.farClipPlane = 5;
+                if (_farClipPlane == -1) {
+                    _cullingMask = Camera.main.cullingMask;
+                    _farClipPlane = Camera.main.farClipPlane;
+                    Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
+                    Camera.main.cullingMask = (1 << 5);
+                    Camera.main.farClipPlane = 5;
+                }
+
             }
         }
 
+        public static void Reset () {
+            _farClipPlane = -1;
+        }
+
         void OnWakeUp () {
+            NomaiVR.Log("wake up freeman");
             Camera.main.cullingMask = _cullingMask;
             Camera.main.farClipPlane = _farClipPlane;
         }
