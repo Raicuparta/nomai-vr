@@ -48,8 +48,8 @@ namespace NomaiVR {
 
             // Hide arms that are part of the stick object.
             var meshes = stickRoot.Find("Stick_Tip/Props_HEA_RoastingStick");
-            meshes.Find("RoastingStick_Arm").gameObject.SetActive(false);
-            meshes.Find("RoastingStick_Arm_NoSuit").gameObject.SetActive(false);
+            meshes.Find("RoastingStick_Arm").GetComponent<Renderer>().enabled = false;
+            meshes.Find("RoastingStick_Arm_NoSuit").GetComponent<Renderer>().enabled = false;
 
             // Hold mallow in left hand for replacing the one in the stick.
             var mallowModel = mallow.transform.Find("Props_HEA_Marshmallow");
