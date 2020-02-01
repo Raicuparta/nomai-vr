@@ -24,6 +24,7 @@ namespace NomaiVR {
             gameObject.AddComponent<HoldProbeLauncher>();
             gameObject.AddComponent<HoldTranslator>();
             gameObject.AddComponent<HoldSignalscope>();
+            gameObject.AddComponent<HoldItem>();
             //gameObject.AddComponent<LaserPointer>();
         }
 

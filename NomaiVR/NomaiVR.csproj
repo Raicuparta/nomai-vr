@@ -92,6 +92,7 @@
     <Compile Include="Modules\DebugTransform.cs" />
     <Compile Include="Modules\MotionControls\Grabbable.cs" />
     <Compile Include="Modules\MotionControls\FlashlightGesture.cs" />
+    <Compile Include="Modules\MotionControls\HoldItem.cs" />
     <Compile Include="Modules\MotionControls\HoldHUD.cs" />
     <Compile Include="Modules\MotionControls\HoldMallowStick.cs" />
     <Compile Include="Modules\MotionControls\HoldProbeLauncher.cs" />
