@@ -5,6 +5,7 @@ namespace NomaiVR {
         bool _angleMode;
         public float positionDelta = 0.01f;
         public float angleDelta = 5;
+        public float scaleDelta = 0.1f;
 
         void Update () {
             Vector3 position = transform.localPosition;
@@ -53,6 +54,15 @@ namespace NomaiVR {
                 }
             }
 
+            float scale = transform.localScale.x;
+
+            if (Input.GetKeyDown(KeyCode.Keypad1)) {
+                scale += scaleDelta;
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad2)) {
+                scale -= scaleDelta;
+            }
+
             if (Input.GetKeyDown(KeyCode.Keypad0)) {
                 _angleMode = !_angleMode;
             }
@@ -60,9 +70,11 @@ namespace NomaiVR {
             if (Input.anyKeyDown) {
                 transform.localPosition = position;
                 transform.localRotation = rotation;
+                transform.localScale = scale * Vector3.one;
                 var angles = transform.localEulerAngles;
                 NomaiVR.Log("Position: new Vector3(" + position.x + "f, " + position.y + "f, " + position.z + "f)");
                 NomaiVR.Log("Rotation: Quaternion.Euler(" + angles.x + "f, " + angles.y + "f, " + angles.z + "f)");
+                NomaiVR.Log("Scale: " + scale);
             }
         }
     }
