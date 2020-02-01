@@ -3,9 +3,14 @@
 namespace NomaiVR {
     class HoldItem: MonoBehaviour {
         void Awake () {
-            var itemCarryTool = GameObject.FindObjectOfType<ItemTool>();
-            itemCarryTool.transform.localScale = 1.8f * Vector3.one;
-            Hands.HoldObject(itemCarryTool.transform, Hands.RightHand, new Vector3(-0.17f, 0.08f, -0.54f), Quaternion.Euler(340, 16.41602f, 280));
+            var itemCarryTool = GameObject.FindObjectOfType<ItemTool>().transform;
+            itemCarryTool.localScale = 1.8f * Vector3.one;
+            Hands.HoldObject(itemCarryTool.Find("ScrollSocket"), Hands.RightHand, new Vector3(-0.06f, -0.06f, -0.06f), Quaternion.Euler(4.5f, 286f, 320f));
+            Hands.HoldObject(itemCarryTool.Find("ItemSocket"), Hands.RightHand);
+            Hands.HoldObject(itemCarryTool.Find("SharedStoneSocket"), Hands.RightHand);
+            Hands.HoldObject(itemCarryTool.Find("WarpCoreSocket"), Hands.RightHand);
+            Hands.HoldObject(itemCarryTool.Find("VesselCoreSocket"), Hands.RightHand);
+            Hands.HoldObject(itemCarryTool.Find("LanternSocket"), Hands.RightHand);
         }
     }
 }
