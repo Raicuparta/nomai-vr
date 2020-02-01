@@ -58,7 +58,7 @@ namespace NomaiVR {
             bodyMesh.Find("player_mesh_noSuit:Player_LeftArm").gameObject.SetActive(false);
         }
 
-        public static void HoldObject (Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
+        public static Transform HoldObject (Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
             var objectParent = new GameObject().transform;
             objectParent.parent = hand;
             objectParent.localPosition = position;
@@ -72,16 +72,18 @@ namespace NomaiVR {
                 tool.SetValue("_stowTransform", null);
                 tool.SetValue("_holdTransform", null);
             }
+
+            return objectParent;
         }
 
-        public static void HoldObject (Transform objectTransform, Transform hand) {
-            HoldObject(objectTransform, hand, Vector3.zero, Quaternion.identity);
+        public static Transform HoldObject (Transform objectTransform, Transform hand) {
+            return HoldObject(objectTransform, hand, Vector3.zero, Quaternion.identity);
         }
-        public static void HoldObject (Transform objectTransform, Transform hand, Quaternion rotation) {
-            HoldObject(objectTransform, hand, Vector3.zero, rotation);
+        public static Transform HoldObject (Transform objectTransform, Transform hand, Quaternion rotation) {
+            return HoldObject(objectTransform, hand, Vector3.zero, rotation);
         }
-        public static void HoldObject (Transform objectTransform, Transform hand, Vector3 position) {
-            HoldObject(objectTransform, hand, position, Quaternion.identity);
+        public static Transform HoldObject (Transform objectTransform, Transform hand, Vector3 position) {
+            return HoldObject(objectTransform, hand, position, Quaternion.identity);
         }
 
         void Update () {
