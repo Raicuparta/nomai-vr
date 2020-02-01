@@ -25,7 +25,7 @@ namespace NomaiVR {
             gameObject.AddComponent<HoldTranslator>();
             gameObject.AddComponent<HoldSignalscope>();
             gameObject.AddComponent<HoldItem>();
-            //gameObject.AddComponent<LaserPointer>();
+            gameObject.AddComponent<LaserPointer>();
         }
 
         Transform CreateHand (string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {
