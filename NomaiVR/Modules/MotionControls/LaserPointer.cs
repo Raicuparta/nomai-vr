@@ -1,10 +1,14 @@
-﻿using System;
+﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 
 namespace NomaiVR {
     class LaserPointer: MonoBehaviour {
+        static FirstPersonManipulator _manipulator;
         void Awake () {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnEntry", typeof(Patches), "InteractZoneEntry");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnExit", typeof(Patches), "InteractZoneExit");
 
             var laser = new GameObject("Laser");
             laser.transform.parent = Hands.RightHand;
@@ -18,6 +22,9 @@ namespace NomaiVR {
             lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
             lineRenderer.startWidth = 0.01f;
             lineRenderer.endWidth = 0.01f;
+
+            GameObject.FindObjectOfType<FirstPersonManipulator>().enabled = false;
+            _manipulator = Hands.RightHand.gameObject.AddComponent<FirstPersonManipulator>();
         }
 
         internal static class Patches {
@@ -39,6 +46,21 @@ namespace NomaiVR {
 
                 return false;
             }
+
+            static bool InteractZoneEntry (GameObject hitObj, InteractZone __instance) {
+                if (hitObj.CompareTag("PlayerDetector")) {
+                    _manipulator.OnEnterInteractZone(__instance);
+                }
+                return false;
+            }
+
+            static bool InteractZoneExit (GameObject hitObj, InteractZone __instance) {
+                if (hitObj.CompareTag("PlayerDetector")) {
+                    _manipulator.OnExitInteractZone(__instance);
+                }
+                return false;
+            }
         }
+
     }
 }
