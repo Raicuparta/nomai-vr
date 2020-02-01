@@ -5,10 +5,12 @@ using UnityEngine;
 namespace NomaiVR {
     class LaserPointer: MonoBehaviour {
         static FirstPersonManipulator _manipulator;
+
         void Awake () {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnEntry", typeof(Patches), "InteractZoneEntry");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnExit", typeof(Patches), "InteractZoneExit");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<ToolModeSwapper>("Update", typeof(Patches), "ToolModeUpdate");
 
             var laser = new GameObject("Laser");
             laser.transform.parent = Hands.RightHand;
@@ -27,7 +29,7 @@ namespace NomaiVR {
             _manipulator = Hands.RightHand.gameObject.AddComponent<FirstPersonManipulator>();
         }
 
-        internal static class Patches {
+        static class Patches {
             static bool PatchUpdateInteractVolume (
                 InteractZone __instance,
                 OWCamera ____playerCam,
@@ -59,6 +61,13 @@ namespace NomaiVR {
                     _manipulator.OnExitInteractZone(__instance);
                 }
                 return false;
+            }
+
+            static void ToolModeUpdate (ref FirstPersonManipulator ____firstPersonManipulator) {
+                if (____firstPersonManipulator != _manipulator) {
+                    NomaiVR.Log("setup!!!!!!!!!!!!");
+                    ____firstPersonManipulator = _manipulator;
+                }
             }
         }
 
