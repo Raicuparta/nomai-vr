@@ -48,7 +48,6 @@ namespace NomaiVR {
         }
 
         void OnWakeUp () {
-            NomaiVR.Log("wake up freeman");
             Camera.main.cullingMask = _cullingMask;
             Camera.main.farClipPlane = _farClipPlane;
         }

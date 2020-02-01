@@ -11,6 +11,8 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnEntry", typeof(Patches), "InteractZoneEntry");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnExit", typeof(Patches), "InteractZoneExit");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<ToolModeSwapper>("Update", typeof(Patches), "ToolModeUpdate");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PreUpdateIsDroppable");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PostUpdateIsDroppable");
 
             var laser = new GameObject("Laser");
             laser.transform.parent = Hands.RightHand;
@@ -65,9 +67,25 @@ namespace NomaiVR {
 
             static void ToolModeUpdate (ref FirstPersonManipulator ____firstPersonManipulator) {
                 if (____firstPersonManipulator != _manipulator) {
-                    NomaiVR.Log("setup!!!!!!!!!!!!");
                     ____firstPersonManipulator = _manipulator;
                 }
+            }
+
+            static Vector3 _cameraForward;
+            static Vector3 _cameraPosition;
+
+            static void PreUpdateIsDroppable () {
+                var camera = Locator.GetPlayerCamera();
+                _cameraForward = camera.transform.forward;
+                _cameraPosition = camera.transform.position;
+                camera.transform.position = Hands.RightHand.position;
+                camera.transform.forward = Hands.RightHand.forward;
+            }
+
+            static void PostUpdateIsDroppable () {
+                var camera = Locator.GetPlayerCamera();
+                camera.transform.position = _cameraPosition;
+                camera.transform.forward = _cameraForward;
             }
         }
 
