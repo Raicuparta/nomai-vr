@@ -28,7 +28,7 @@ namespace NomaiVR {
         }
 
         bool ShouldRender () {
-            return Common.ToolSwapper.IsInToolMode(ToolMode.None);
+            return Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item);
         }
 
         void Update () {
