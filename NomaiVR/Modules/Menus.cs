@@ -8,14 +8,6 @@ namespace NomaiVR {
         static float _farClipPlane = -1;
         static int _cullingMask;
 
-        // List all the canvas elements that need to be moved to world space during gameplay.
-        static readonly CanvasInfo[] _canvasInfos = {
-            new CanvasInfo("PauseMenu"),
-            new CanvasInfo("CanvasMarkerManager", 0.0005f),
-            new CanvasInfo("DialogueCanvas"),
-            new CanvasInfo("ScreenPromptCanvas", 0.0015f),
-        };
-
         void Start () {
             NomaiVR.Log("Start Menus");
 
@@ -26,7 +18,7 @@ namespace NomaiVR {
                 FixGameCanvases(new[] {
                     new CanvasInfo("PauseMenu", 0.0005f),
                     new CanvasInfo("DialogueCanvas"),
-                    new CanvasInfo("ScreenPromptCanvas", 0.0015f),
+                    //new CanvasInfo("ScreenPromptCanvas", 0.0015f),
                 });
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);

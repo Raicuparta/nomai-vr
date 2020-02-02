@@ -96,6 +96,7 @@
     <Compile Include="Modules\MotionControls\HoldHUD.cs" />
     <Compile Include="Modules\MotionControls\HoldMallowStick.cs" />
     <Compile Include="Modules\MotionControls\HoldProbeLauncher.cs" />
+    <Compile Include="Modules\MotionControls\HoldPrompts.cs" />
     <Compile Include="Modules\MotionControls\HoldSignalscope.cs" />
     <Compile Include="Modules\MotionControls\HoldTranslator.cs" />
     <Compile Include="Modules\MotionControls\LaserPointer.cs" />

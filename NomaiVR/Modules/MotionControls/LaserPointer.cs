@@ -16,7 +16,6 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PostUpdateIsDroppable");
 
             _laser = new GameObject("Laser").transform;
-            _laser.gameObject.AddComponent<DebugTransform>();
             _laser.transform.parent = Hands.RightHand;
             _laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
             _laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
