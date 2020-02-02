@@ -1,5 +1,4 @@
-﻿using OWML.ModHelper.Events;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace NomaiVR {

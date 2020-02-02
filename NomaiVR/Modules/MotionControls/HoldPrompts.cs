@@ -3,7 +3,6 @@
 namespace NomaiVR {
     public class HoldPrompts: MonoBehaviour {
         Transform _holdTransform;
-        int _debugChild = 0;
         Transform _canvasTransform;
 
         void Awake () {
