@@ -55,7 +55,7 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<Campfire>("Awake", typeof(Patches), "CampfireAwake");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<SingleInteractionVolume>("Awake", typeof(Patches), "InteractionVolumeAwake");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "InteractionVolumeAwake");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "InteractionVolumeVisible");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("AddInteraction", typeof(Patches), "MultipleInteractionAdd");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "MultipleInteractionAdd");
         }
@@ -223,8 +223,14 @@ namespace NomaiVR {
                 return true;
             }
 
-            static void InteractionVolumeAwake (ref bool ____usingPromptWithCommand) {
+            static void InteractionVolumeAwake (ref bool ____usingPromptWithCommand, SingleInteractionVolume __instance) {
                 ____usingPromptWithCommand = false;
+            }
+
+            static bool InteractionVolumeVisible (ref bool ____usingPromptWithCommand, SingleInteractionVolume __instance) {
+                ____usingPromptWithCommand = false;
+                __instance.Invoke("UpdatePromptVisibility");
+                return false;
             }
 
             static void MultipleInteractionAdd (List<MultipleInteractionVolume.Interaction> ____listInteractions) {
