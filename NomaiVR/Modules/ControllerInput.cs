@@ -58,6 +58,7 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "InteractionVolumeVisible");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("AddInteraction", typeof(Patches), "MultipleInteractionAdd");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "MultipleInteractionAdd");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
         }
 
         private void OnYChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -239,6 +240,12 @@ namespace NomaiVR {
                         interaction.displayPromptCommandIcon = false;
                     }
                 }
+            }
+
+            static void ItemToolStart (ref ScreenPrompt ____interactButtonPrompt) {
+                Locator.GetPromptManager().RemoveScreenPrompt(____interactButtonPrompt);
+                ____interactButtonPrompt = new ScreenPrompt(string.Empty, 0);
+                Locator.GetPromptManager().AddScreenPrompt(____interactButtonPrompt);
             }
         }
     }
