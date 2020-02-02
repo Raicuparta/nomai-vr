@@ -5,7 +5,6 @@ using System.Collections;
 namespace NomaiVR {
     public class Dialog: MonoBehaviour {
 
-        // Use this for initialization
         void Start () {
             NomaiVR.Log("Started Dialog Fixes");
 
