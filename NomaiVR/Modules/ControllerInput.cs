@@ -79,7 +79,7 @@ namespace NomaiVR {
             if (Common.ToolSwapper.IsInToolMode(ToolMode.Translator)) {
                 _singleAxes[XboxAxis.dPadX] = value;
             }
-            if (isInteractMode) {
+            if (isInteractMode && !OWInput.IsInputMode(InputMode.ShipCockpit)) {
                 _buttons[XboxButton.X] = value;
             }
         }
