@@ -1,176 +1,176 @@
 {
-   "action_manifest_version" : 0,
-   "alias_info" : {},
-   "bindings" : {
-      "/actions/default" : {
-         "chords" : [],
-         "haptics" : [
-            {
-               "output" : "/actions/default/out/haptic",
-               "path" : "/user/hand/left/output/haptic"
-            },
-            {
-               "output" : "/actions/default/out/haptic",
-               "path" : "/user/hand/right/output/haptic"
-            }
-         ],
-         "poses" : [
-            {
-               "output" : "/actions/default/in/leftpose",
-               "path" : "/user/hand/left/pose/raw"
-            },
-            {
-               "output" : "/actions/default/in/rightpose",
-               "path" : "/user/hand/right/pose/raw"
-            }
-         ],
-         "skeleton" : [],
-         "sources" : [
-            {
-               "inputs" : {
-                  "pull" : {
-                     "output" : "/actions/default/in/lt"
-                  }
-               },
-               "mode" : "trigger",
-               "path" : "/user/hand/left/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/lclick"
-                  },
-                  "position" : {
-                     "output" : "/actions/default/in/lstick"
-                  }
-               },
-               "mode" : "joystick",
-               "path" : "/user/hand/left/input/joystick"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/lb"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/grip"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/x"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/x"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/start"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/y"
-            },
-            {
-               "inputs" : {
-                  "pull" : {
-                     "output" : "/actions/default/in/rt"
-                  }
-               },
-               "mode" : "trigger",
-               "path" : "/user/hand/right/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/select"
-                  },
-                  "position" : {
-                     "output" : "/actions/default/in/rstick"
-                  }
-               },
-               "mode" : "joystick",
-               "path" : "/user/hand/right/input/joystick"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/rb"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/grip"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/a"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/a"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/b"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/b"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/lclick"
-                  },
-                  "position" : {
-                     "output" : "/actions/default/in/lstick"
-                  }
-               },
-               "mode" : "joystick",
-               "path" : "/user/hand/left/input/thumbstick"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/y"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/b"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/x"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/a"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/select"
-                  },
-                  "position" : {
-                     "output" : "/actions/default/in/rstick"
-                  }
-               },
-               "mode" : "joystick",
-               "path" : "/user/hand/right/input/thumbstick"
-            }
-         ]
-      }
-   },
-   "category" : "steamvr_input",
-   "controller_type" : "knuckles",
-   "description" : "",
-   "name" : "Outer Wilds Index Knuckles Bindings",
-   "options" : {},
-   "simulated_actions" : []
+    "action_manifest_version": 0,
+    "alias_info": {},
+    "bindings": {
+        "/actions/default": {
+            "chords": [],
+            "poses": [
+                {
+                    "output": "/actions/default/in/leftpose",
+                    "path": "/user/hand/left/pose/raw"
+                },
+                {
+                    "output": "/actions/default/in/rightpose",
+                    "path": "/user/hand/right/pose/raw"
+                }
+            ],
+            "haptics": [
+                {
+                    "output": "/actions/default/out/haptic",
+                    "path": "/user/hand/left/output/haptic"
+                },
+                {
+                    "output": "/actions/default/out/haptic",
+                    "path": "/user/hand/right/output/haptic"
+                }
+            ],
+            "sources": [
+                {
+                    "path": "/user/hand/left/input/trigger",
+                    "mode": "trigger",
+                    "inputs": {
+                        "pull": {
+                            "output": "/actions/default/in/lt"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/left/input/joystick",
+                    "mode": "joystick",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/lclick"
+                        },
+                        "position": {
+                            "output": "/actions/default/in/lstick"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/left/input/x",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/x"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/left/input/y",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/start"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/right/input/trigger",
+                    "mode": "trigger",
+                    "inputs": {
+                        "pull": {
+                            "output": "/actions/default/in/rt"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/right/input/joystick",
+                    "mode": "joystick",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/select"
+                        },
+                        "position": {
+                            "output": "/actions/default/in/rstick"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/right/input/a",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/a"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/right/input/b",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/rb"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/left/input/thumbstick",
+                    "mode": "joystick",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/lclick"
+                        },
+                        "position": {
+                            "output": "/actions/default/in/lstick"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/left/input/b",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/b"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/left/input/a",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/y"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/right/input/thumbstick",
+                    "mode": "joystick",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/select"
+                        },
+                        "position": {
+                            "output": "/actions/default/in/rstick"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/right/input/trackpad",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/x"
+                        }
+                    }
+                },
+                {
+                    "path": "/user/hand/left/input/trackpad",
+                    "mode": "button",
+                    "inputs": {
+                        "click": {
+                            "output": "/actions/default/in/lb"
+                        }
+                    }
+                }
+            ],
+            "skeleton": []
+        }
+    },
+    "category": "steamvr_input",
+    "controller_type": "knuckles",
+    "description": "",
+    "name": "Outer Wilds Index Knuckles Bindings",
+    "options": {},
+    "simulated_actions": []
 }
