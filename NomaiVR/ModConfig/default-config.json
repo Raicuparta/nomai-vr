@@ -3,7 +3,7 @@
   "enabled": true,
   "settings": {
     "enableMotionControls": true,
-    "movePlayerWithHead": true,
+    "movePlayerWithHead": false,
     "showMirrorView": true,
     "debugMode": false,
   }
