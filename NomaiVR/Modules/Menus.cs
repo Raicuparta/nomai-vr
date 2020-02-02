@@ -16,6 +16,13 @@ namespace NomaiVR {
             new CanvasInfo("ScreenPromptCanvas", 0.0015f),
         };
 
+        public static class CanvasTypes {
+            public const string PauseMenu = "PauseMenu";
+            public const string DialogueCanvas = "DialogueCanvas";
+            public const string ScreenPromptCanvas = "ScreenPromptCanvas";
+            public const string TitleMenu = "TitleMenu";
+        }
+
         void Start () {
             NomaiVR.Log("Start Menus");
 
@@ -24,9 +31,9 @@ namespace NomaiVR {
 
             if (isInGame) {
                 FixGameCanvases(new[] {
-                    new CanvasInfo("PauseMenu", 0.0005f),
-                    new CanvasInfo("DialogueCanvas"),
-                    new CanvasInfo("ScreenPromptCanvas", 0.0015f),
+                    new CanvasInfo(CanvasTypes.PauseMenu, 0.0005f),
+                    new CanvasInfo(CanvasTypes.DialogueCanvas),
+                    new CanvasInfo(CanvasTypes.ScreenPromptCanvas, 0.0015f),
                 });
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
@@ -87,7 +94,7 @@ namespace NomaiVR {
         }
 
         void FixMainMenuCanvas () {
-            MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
+            MoveCanvasToWorldSpace(new CanvasInfo(CanvasTypes.TitleMenu, 0.0005f));
         }
 
         void FixGameCanvases (CanvasInfo[] canvasInfos) {
