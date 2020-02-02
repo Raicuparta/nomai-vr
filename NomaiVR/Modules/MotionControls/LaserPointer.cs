@@ -30,6 +30,18 @@ namespace NomaiVR {
 
             GameObject.FindObjectOfType<FirstPersonManipulator>().enabled = false;
             _manipulator = _laser.gameObject.AddComponent<FirstPersonManipulator>();
+
+            DisableReticule();
+        }
+
+        void DisableReticule () {
+            var rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+            foreach (var rootObject in rootObjects) {
+                if (rootObject.name == "Reticule") {
+                    rootObject.SetActive(false);
+                    return;
+                }
+            }
         }
 
         static class Patches {
