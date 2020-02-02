@@ -1,7 +1,5 @@
 ﻿using OWML.ModHelper.Events;
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using Valve.VR;
 
@@ -54,6 +52,11 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<Campfire>("Awake", typeof(Patches), "CampfireAwake");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<SingleInteractionVolume>("Awake", typeof(Patches), "InteractionVolumeAwake");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "InteractionVolumeVisible");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("AddInteraction", typeof(Patches), "MultipleInteractionAdd");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "MultipleInteractionAdd");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
         }
 
         private void OnYChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -67,13 +70,20 @@ namespace NomaiVR {
 
         void onRBChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             IsGripping = newState;
+            float value = newState ? 1 : 0;
+
+            bool isInteractMode = Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item);
+
             if (Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope)) {
-                _singleAxes[XboxAxis.dPadX] = newState ? 1 : 0;
-            } else if (!Common.ToolSwapper.IsInToolMode(ToolMode.None) || OWInput.IsInputMode(InputMode.ShipCockpit)) {
-                _buttons[XboxButton.RightBumper] = newState ? 1 : 0;
+                _singleAxes[XboxAxis.dPadX] = value;
+            } else if (!isInteractMode || OWInput.IsInputMode(InputMode.ShipCockpit)) {
+                _buttons[XboxButton.RightBumper] = value;
             }
             if (Common.ToolSwapper.IsInToolMode(ToolMode.Translator)) {
-                _singleAxes[XboxAxis.dPadX] = newState ? 1 : 0;
+                _singleAxes[XboxAxis.dPadX] = value;
+            }
+            if (isInteractMode && !OWInput.IsInputMode(InputMode.ShipCockpit)) {
+                _buttons[XboxButton.X] = value;
             }
         }
 
@@ -196,7 +206,7 @@ namespace NomaiVR {
                 Campfire __instance
             ) {
                 if (____interactVolume != null && ____canSleepHere) {
-                    ____sleepPrompt = new ScreenPrompt(InputLibrary.interact, UITextLibrary.GetString(UITextType.CampfireDozeOff), 0, false, false);
+                    ____sleepPrompt = new ScreenPrompt(UITextLibrary.GetString(UITextType.CampfireDozeOff), 0);
                     ____interactVolume.SetValue("_textID", UITextType.None);
                     ____interactVolume.SetValue("_usingPromptWithCommand", false);
                     ____interactVolume.SetValue("OnPressInteract", null);
@@ -204,11 +214,36 @@ namespace NomaiVR {
                 }
             }
 
-            static bool InteractionVolumeChangePrompt (UITextType promptID) {
+            static bool InteractionVolumeChangePrompt (UITextType promptID, ref bool ____usingPromptWithCommand) {
                 if (promptID == UITextType.RoastingPrompt) {
                     return false;
                 }
+
                 return true;
+            }
+
+            static void InteractionVolumeAwake (ref bool ____usingPromptWithCommand, SingleInteractionVolume __instance) {
+                ____usingPromptWithCommand = false;
+            }
+
+            static bool InteractionVolumeVisible (ref bool ____usingPromptWithCommand, SingleInteractionVolume __instance) {
+                ____usingPromptWithCommand = false;
+                __instance.Invoke("UpdatePromptVisibility");
+                return false;
+            }
+
+            static void MultipleInteractionAdd (List<MultipleInteractionVolume.Interaction> ____listInteractions) {
+                foreach (var interaction in ____listInteractions) {
+                    if (interaction.inputCommand == InputLibrary.interact) {
+                        interaction.displayPromptCommandIcon = false;
+                    }
+                }
+            }
+
+            static void ItemToolStart (ref ScreenPrompt ____interactButtonPrompt) {
+                Locator.GetPromptManager().RemoveScreenPrompt(____interactButtonPrompt);
+                ____interactButtonPrompt = new ScreenPrompt(string.Empty, 0);
+                Locator.GetPromptManager().AddScreenPrompt(____interactButtonPrompt);
             }
         }
     }

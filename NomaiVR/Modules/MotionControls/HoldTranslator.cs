@@ -46,6 +46,17 @@ namespace NomaiVR {
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
             holster.angle = new Vector3(0, 90, 90);
+
+            translatorGroup.Find("TranslatorBeams").localScale = Vector3.one / 0.3f;
+
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patches), "IsPromptAllowed");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patches), "IsPromptAllowed");
+        }
+
+        static class Patches {
+            static bool IsPromptAllowed (bool __result) {
+                return false;
+            }
         }
     }
 }

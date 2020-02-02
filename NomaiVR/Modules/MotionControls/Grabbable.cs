@@ -15,7 +15,7 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if (!detector.isInside || !OWInput.IsInputMode(InputMode.Character)) {
+            if (!detector.isInside || !OWInput.IsInputMode(InputMode.Character) || !Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
                 return;
             }
             if (ControllerInput.IsGripping) {
