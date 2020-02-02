@@ -24,7 +24,8 @@ namespace NomaiVR {
             if (isInGame) {
                 FixGameCanvases(new[] {
                     new CanvasInfo(CanvasTypes.PauseMenu, 0.0005f),
-                    new CanvasInfo(CanvasTypes.DialogueCanvas)
+                    new CanvasInfo(CanvasTypes.DialogueCanvas),
+                    new CanvasInfo(CanvasTypes.ScreenPromptCanvas, 0.0015f),
                 });
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
