@@ -22,10 +22,8 @@ While the game is playable at a surprisingly decent level, a lot of things range
 
 Since most VR controllers have less buttons than a normal game controller, input mappings can't be one-to-one. So I had to change the way some of the controls work:
 
-* LB/L1 will act as DPad-Up when piloting the ship (for auto-pilot);
-* RB/R1 is used to pick up tools from toolbelt. It's a toggle, not a hold;
-* Press RB/R1 over that tool's spot in the toolbelt to store the tool back in the belt;
-* Press RB/R1 while holding and aiming a tool to use that tool (shoot probe with probe launcher);
+* LB/L1 (usually mapped to left hand grip) will act as DPad-Up when piloting the ship (for auto-pilot);
+* RB/R1 (usually mapped to right hand grip) is used for interactions. Picking up tools in the toolbelt, picking up objects, talking with characters, interacting with objects, etc.
 
 On top of these changes, you also need SteamVR to do the mapping from VR controller to XBox controller inputs. I have included default mappings for Oculus, Index and Vive (but only tested Oculus).
 
