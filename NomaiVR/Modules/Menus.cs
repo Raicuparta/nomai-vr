@@ -8,14 +8,6 @@ namespace NomaiVR {
         static float _farClipPlane = -1;
         static int _cullingMask;
 
-        // List all the canvas elements that need to be moved to world space during gameplay.
-        static readonly CanvasInfo[] _canvasInfos = {
-            new CanvasInfo("PauseMenu"),
-            new CanvasInfo("CanvasMarkerManager", 0.0005f),
-            new CanvasInfo("DialogueCanvas"),
-            new CanvasInfo("ScreenPromptCanvas", 0.0015f),
-        };
-
         public static class CanvasTypes {
             public const string PauseMenu = "PauseMenu";
             public const string DialogueCanvas = "DialogueCanvas";
