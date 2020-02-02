@@ -28,10 +28,16 @@ namespace NomaiVR {
             lineRenderer.startWidth = 0.02f;
             lineRenderer.endWidth = 0.01f;
 
+            _laser.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRender;
+
             GameObject.FindObjectOfType<FirstPersonManipulator>().enabled = false;
             _manipulator = _laser.gameObject.AddComponent<FirstPersonManipulator>();
 
             DisableReticule();
+        }
+
+        bool ShouldRender () {
+            return Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item);
         }
 
         void DisableReticule () {

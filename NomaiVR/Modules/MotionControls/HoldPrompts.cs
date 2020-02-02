@@ -30,5 +30,9 @@ namespace NomaiVR {
         bool ShouldRender () {
             return Common.ToolSwapper.IsInToolMode(ToolMode.None);
         }
+
+        void Update () {
+            _holdTransform.LookAt(2 * _holdTransform.position - Common.MainCamera.transform.position, Common.PlayerHead.up);
+        }
     }
 }
