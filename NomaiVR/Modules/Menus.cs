@@ -18,7 +18,6 @@ namespace NomaiVR {
                 FixGameCanvases(new[] {
                     new CanvasInfo("PauseMenu", 0.0005f),
                     new CanvasInfo("DialogueCanvas"),
-                    //new CanvasInfo("ScreenPromptCanvas", 0.0015f),
                 });
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
