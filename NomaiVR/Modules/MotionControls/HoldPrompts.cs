@@ -18,7 +18,6 @@ namespace NomaiVR {
             canvas.transform.localRotation = Quaternion.identity;
 
             _holdTransform = Hands.HoldObject(canvas.transform, Hands.RightHand, new Vector3(-0.09f, -0.11f, 0.13f));
-            _holdTransform.gameObject.AddComponent<DebugTransform>();
 
             foreach (Transform child in canvas.transform) {
                 child.localPosition = Vector3.zero;
@@ -30,20 +29,6 @@ namespace NomaiVR {
 
         bool ShouldRender () {
             return Common.ToolSwapper.IsInToolMode(ToolMode.None);
-        }
-
-        void Update () {
-            _holdTransform.LookAt(2 * _holdTransform.position - Common.MainCamera.transform.position, Common.PlayerHead.up);
-
-            if (Input.GetKeyDown(KeyCode.Keypad3)) {
-                Destroy(_canvasTransform.GetChild(_debugChild).gameObject.GetComponent<DebugTransform>());
-                if (_debugChild < 5)
-                    _debugChild += 1;
-                else {
-                    _debugChild = 0;
-                }
-                _canvasTransform.GetChild(_debugChild).gameObject.AddComponent<DebugTransform>();
-            }
         }
     }
 }
