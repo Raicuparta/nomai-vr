@@ -54,6 +54,7 @@ namespace NomaiVR {
                 Common.InitGame();
                 nonPersistentObject.AddComponent<EffectFixes>();
                 nonPersistentObject.AddComponent<PlayerBodyPosition>();
+                nonPersistentObject.AddComponent<Dialog>();
                 if (MotionControlsEnabled) {
                     nonPersistentObject.AddComponent<Hands>();
                 }

@@ -8,6 +8,13 @@ namespace NomaiVR {
         static float _farClipPlane = -1;
         static int _cullingMask;
 
+        public static class CanvasTypes {
+            public const string PauseMenu = "PauseMenu";
+            public const string DialogueCanvas = "DialogueCanvas";
+            public const string ScreenPromptCanvas = "ScreenPromptCanvas";
+            public const string TitleMenu = "TitleMenu";
+        }
+
         void Start () {
             NomaiVR.Log("Start Menus");
 
@@ -16,8 +23,8 @@ namespace NomaiVR {
 
             if (isInGame) {
                 FixGameCanvases(new[] {
-                    new CanvasInfo("PauseMenu", 0.0005f),
-                    new CanvasInfo("DialogueCanvas"),
+                    new CanvasInfo(CanvasTypes.PauseMenu, 0.0005f),
+                    new CanvasInfo(CanvasTypes.DialogueCanvas)
                 });
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
@@ -77,7 +84,7 @@ namespace NomaiVR {
         }
 
         void FixMainMenuCanvas () {
-            MoveCanvasToWorldSpace(new CanvasInfo("TitleMenu", 0.0005f));
+            MoveCanvasToWorldSpace(new CanvasInfo(CanvasTypes.TitleMenu, 0.0005f));
         }
 
         void FixGameCanvases (CanvasInfo[] canvasInfos) {
