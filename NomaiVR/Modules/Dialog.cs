@@ -12,11 +12,6 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<CharacterDialogueTree>("StartConversation", typeof(Patches), "PatchStartConversation");
         }
 
-        // Update is called once per frame
-        void Update () {
-            // no need to update, head is stuck in place during dialog regardless
-        }
-
         internal static class Patches {
             static void PatchStartConversation (CharacterDialogueTree __instance) {
                 GameObject dialogCanvas = GameObject.Find(Menus.CanvasTypes.DialogueCanvas);
