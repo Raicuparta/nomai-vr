@@ -1,5 +1,8 @@
 # NomaiVR - Outer Wilds VR Mod
 
+## Compatible only with Outer Wilds 1.04
+Version 1.05 came out and the mod loader has not been updated to support it yet.
+
 <img src="logo.png" width=300/>
 
 [![NomaiVR Gameplay](https://i.imgur.com/utsUMNv.gif)](https://www.youtube.com/watch?v=BblIMEPq54M)
