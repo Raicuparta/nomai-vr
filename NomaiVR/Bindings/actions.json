@@ -1,85 +1,61 @@
 {
   "actions": [
     {
-      "name": "/actions/default/in/X",
+      "name": "/actions/default/in/Grip",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/ThrottleUp",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/ThrottleDown",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/SecondaryAction",
       "type": "boolean",
       "requirement": "suggested"
     },
     {
-      "name": "/actions/default/in/A",
+      "name": "/actions/default/in/PrimaryAction",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/Y",
+      "name": "/actions/default/in/Jump",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/B",
+      "name": "/actions/default/in/Back",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/RB",
+      "name": "/actions/default/in/Menu",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/LB",
+      "name": "/actions/default/in/Map",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/RT",
-      "type": "vector1"
+      "name": "/actions/default/in/LockOn",
+      "type": "boolean"
     },
     {
-      "name": "/actions/default/in/LT",
-      "type": "vector1"
-    },
-    {
-      "name": "/actions/default/in/RStick",
+      "name": "/actions/default/in/Look",
       "type": "vector2"
     },
     {
-      "name": "/actions/default/in/LStick",
+      "name": "/actions/default/in/Move",
       "type": "vector2"
     },
     {
-      "name": "/actions/default/in/Start",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/Select",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/DUp",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/DDown",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/DLeft",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/DRight",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/RightPose",
+      "name": "/actions/default/in/LeftHand",
       "type": "pose"
     },
     {
-      "name": "/actions/default/in/LeftPose",
+      "name": "/actions/default/in/RightHand",
       "type": "pose"
-    },
-    {
-      "name": "/actions/default/in/RClick",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/LClick",
-      "type": "boolean"
     },
     {
       "name": "/actions/default/out/Haptic",
@@ -94,26 +70,21 @@
   ],
   "default_bindings": [
     {
-      "binding_url": "oculus_touch.json",
-      "controller_type": "oculus_touch"
+      "controller_type": "vive_controller",
+      "binding_url": "vive_wands.json"
     },
     {
-      "binding_url" : "index_knuckles.json",
-      "controller_type" : "knuckles"
+      "controller_type": "oculus_touch",
+      "binding_url": "oculus_touch.json"
     },
     {
-      "binding_url" : "vive_wands.json",
-      "controller_type" : "vive_controller"
+      "controller_type": "knuckles",
+      "binding_url": "index_knuckles.json"
     },
     {
-      "binding_url" : "wmr-controller.json",
-      "controller_type" : "holographic_controller"
+      "controller_type": "holographic_controller",
+      "binding_url": "wmr-controller.json"
     }
   ],
-  "localization": [
-    {
-      "language_tag": "en_US",
-      "/actions/default/out/Haptic": "Haptic"
-    }
-  ]
+  "localization": []
 }

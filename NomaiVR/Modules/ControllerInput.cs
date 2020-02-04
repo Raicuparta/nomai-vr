@@ -21,31 +21,23 @@ namespace NomaiVR {
             _singleAxes = new Dictionary<SingleAxis, float>();
             _doubleAxes = new Dictionary<DoubleAxis, Vector2>();
 
-            SteamVR_Actions.default_A.onChange += CreateButtonHandler(XboxButton.A);
-            SteamVR_Actions.default_B.onChange += CreateButtonHandler(XboxButton.B);
-            SteamVR_Actions.default_X.onChange += CreateButtonHandler(XboxButton.X);
-            SteamVR_Actions.default_Y.onChange += OnYChange;
+            SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
+            SteamVR_Actions.default_Back.onChange += CreateButtonHandler(XboxButton.B);
+            SteamVR_Actions.default_PrimaryAction.onChange += CreateButtonHandler(XboxButton.X);
+            SteamVR_Actions.default_Map.onChange += OnYChange;
 
-            SteamVR_Actions.default_DUp.onChange += CreateButtonHandler(XboxAxis.dPadY, 1);
-            SteamVR_Actions.default_DDown.onChange += CreateButtonHandler(XboxAxis.dPadY, -1);
-            SteamVR_Actions.default_DLeft.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
-            SteamVR_Actions.default_DRight.onChange += CreateButtonHandler(XboxAxis.dPadX, 1);
+            SteamVR_Actions.default_SecondaryAction.onChange += OnLBChange;
+            SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
+            SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxButton.LeftBumper);
+            SteamVR_Actions.default_Grip.onChange += onRBChange;
 
-            SteamVR_Actions.default_LB.onChange += OnLBChange;
-            SteamVR_Actions.default_LB.onChange += CreateButtonHandler(XboxButton.LeftBumper);
-            SteamVR_Actions.default_RB.onChange += onRBChange;
+            SteamVR_Actions.default_ThrottleDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
+            SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
 
-            SteamVR_Actions.default_LT.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
-            SteamVR_Actions.default_RT.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+            SteamVR_Actions.default_LockOn.onChange += CreateButtonHandler(XboxButton.LeftStickClick);
 
-            SteamVR_Actions.default_Start.onChange += CreateButtonHandler(XboxButton.Start);
-            SteamVR_Actions.default_Select.onChange += CreateButtonHandler(XboxButton.Select);
-
-            SteamVR_Actions.default_LClick.onChange += CreateButtonHandler(XboxButton.LeftStickClick);
-            SteamVR_Actions.default_RClick.onChange += CreateButtonHandler(XboxButton.RightStickClick);
-
-            SteamVR_Actions.default_LStick.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
-            SteamVR_Actions.default_RStick.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
+            SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
+            SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
