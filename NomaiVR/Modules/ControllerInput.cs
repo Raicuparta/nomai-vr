@@ -66,6 +66,8 @@ namespace NomaiVR {
         private void OnPrimaryActionCHange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
+            NomaiVR.Log("toolmode", Common.ToolSwapper.GetToolMode().ToString());
+
             switch (Common.ToolSwapper.GetToolMode()) {
                 case ToolMode.SignalScope:
                 case ToolMode.Translator:

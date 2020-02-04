@@ -1,14 +1,14 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 
 namespace NomaiVR {
     class ShipTools: MonoBehaviour {
-        static ProbeLauncher _shipProbeLauncher;
+        static ShipCockpitController _cockpit;
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
 
-            _shipProbeLauncher = GameObject.FindObjectOfType<ShipCockpitController>().GetShipProbeLauncher();
-            _shipProbeLauncher.EquipTool();
+            _cockpit = GameObject.FindObjectOfType<ShipCockpitController>();
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ShipBody>("Start", typeof(Patches), "ShipStart");
         }
 
@@ -26,17 +26,20 @@ namespace NomaiVR {
                 interaction.SetInteractRange(2);
                 interaction.SetValue("_usableInShip", true);
                 interaction.SetPromptText(UITextType.Probe_Title);
-                interaction.OnPressInteract += OnProbeInteract;
+                interaction.OnPressInteract += OnToolInteract(ToolMode.Probe);
 
             }
 
-            private static void OnProbeInteract () {
-                var activeProbe = _shipProbeLauncher.GetActiveProbe();
-                if (activeProbe == null) {
-                    _shipProbeLauncher.Invoke("LaunchProbe");
-                } else {
-                    _shipProbeLauncher.Invoke("TakeSnapshotWithCamera", activeProbe.GetForwardCamera());
-                }
+            private static SingleInteractionVolume.PressInteractEvent OnToolInteract (ToolMode mode) {
+                var swapper = Locator.GetToolModeSwapper();
+                return () => {
+                    _cockpit.Invoke("ExitLandingView");
+                    if (swapper.IsInToolMode(mode)) {
+                        swapper.UnequipTool();
+                    } else {
+                        swapper.EquipToolMode(mode);
+                    }
+                };
             }
         }
     }
