@@ -5,23 +5,16 @@ namespace NomaiVR {
     class ConditionalRenderer: MonoBehaviour {
         public Func<bool> getShouldRender;
         bool _shouldRender;
-        Renderer[] _renderers;
-        Canvas[] _canvases;
+        Vector3 _scale;
 
         void Start () {
-            _renderers = GetComponentsInChildren<Renderer>();
-            _canvases = GetComponentsInChildren<Canvas>();
+            _scale = transform.localScale;
             SetShow(false);
         }
 
         void SetShow (bool show) {
             _shouldRender = show;
-            foreach (var renderer in _renderers) {
-                renderer.enabled = show;
-            }
-            foreach (var canvas in _canvases) {
-                canvas.enabled = show;
-            }
+            transform.localScale = show ? _scale : Vector3.zero;
         }
 
         void Update () {

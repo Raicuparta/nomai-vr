@@ -24,6 +24,12 @@ namespace NomaiVR {
             uiCanvas.transform.localRotation = Quaternion.identity;
 
             Hands.HoldObject(playerHUD.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
+
+            playerHUD.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRender;
+        }
+
+        bool ShouldRender () {
+            return Locator.GetPlayerSuit().IsWearingSuit(true);
         }
     }
 }
