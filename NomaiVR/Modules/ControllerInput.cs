@@ -30,8 +30,6 @@ namespace NomaiVR {
 
             SteamVR_Actions.default_SecondaryAction.onChange += OnSecondaryActionChange;
             SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
-            SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxButton.LeftBumper);
-            //SteamVR_Actions.default_Grip.onChange += CreateButtonHandler(XboxButton.RightBumper);
             SteamVR_Actions.default_Grip.onChange += OnGripChange;
 
             SteamVR_Actions.default_ThrottleDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
@@ -87,8 +85,12 @@ namespace NomaiVR {
         }
 
         private void OnSecondaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            var value = newState ? 1 : 0;
             if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
-                _singleAxes[XboxAxis.dPadY] = newState ? 1 : 0;
+                _singleAxes[XboxAxis.dPadY] = value;
+            }
+            if (!Common.ToolSwapper.IsInToolMode(ToolMode.Probe)) {
+                _buttons[XboxButton.LeftBumper] = value;
             }
         }
 
