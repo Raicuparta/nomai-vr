@@ -8,7 +8,7 @@ namespace NomaiVR {
         static Dictionary<XboxButton, float> _buttons;
         static Dictionary<SingleAxis, float> _singleAxes;
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
-        public static bool IsGripping;
+        public static bool IsGripping { get; private set; }
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
@@ -24,14 +24,18 @@ namespace NomaiVR {
             SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
             SteamVR_Actions.default_Back.onChange += CreateButtonHandler(XboxButton.B);
             SteamVR_Actions.default_PrimaryAction.onChange += CreateButtonHandler(XboxButton.X);
-            SteamVR_Actions.default_Map.onChange += OnYChange;
+            SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryActionCHange;
+            ;
+            SteamVR_Actions.default_Map.onChange += OnMapChange;
 
-            SteamVR_Actions.default_SecondaryAction.onChange += OnLBChange;
+            SteamVR_Actions.default_SecondaryAction.onChange += OnSecondaryActionChange;
             SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
             SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxButton.LeftBumper);
-            SteamVR_Actions.default_Grip.onChange += onRBChange;
+            //SteamVR_Actions.default_Grip.onChange += CreateButtonHandler(XboxButton.RightBumper);
+            SteamVR_Actions.default_Grip.onChange += OnGripChange;
 
             SteamVR_Actions.default_ThrottleDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
+            SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
             SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
 
             SteamVR_Actions.default_LockOn.onChange += CreateButtonHandler(XboxButton.LeftStickClick);
@@ -51,7 +55,25 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
         }
 
-        private void OnYChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+        private void OnGripChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            IsGripping = newState;
+        }
+
+        private void OnPrimaryActionCHange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            var value = newState ? 1 : 0;
+
+            switch (Common.ToolSwapper.GetToolMode()) {
+                case ToolMode.SignalScope:
+                case ToolMode.Translator:
+                    _singleAxes[XboxAxis.dPadX] = value;
+                    break;
+                case ToolMode.Probe:
+                    _buttons[XboxButton.RightBumper] = value;
+                    break;
+            }
+        }
+
+        private void OnMapChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
             if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
                 _buttons[XboxButton.Y] = value;
@@ -60,34 +82,11 @@ namespace NomaiVR {
             }
         }
 
-        void onRBChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            IsGripping = newState;
-            float value = newState ? 1 : 0;
-
-            bool isInteractMode = Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item);
-
-            if (Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope)) {
-                _singleAxes[XboxAxis.dPadX] = value;
-            } else if (!isInteractMode || OWInput.IsInputMode(InputMode.ShipCockpit)) {
-                _buttons[XboxButton.RightBumper] = value;
-            }
-            if (Common.ToolSwapper.IsInToolMode(ToolMode.Translator)) {
-                _singleAxes[XboxAxis.dPadX] = value;
-            }
-            if (isInteractMode && !OWInput.IsInputMode(InputMode.ShipCockpit)) {
-                _buttons[XboxButton.X] = value;
-            }
-        }
-
-        public static void ResetRB () {
-            _buttons[XboxButton.RightBumper] = 0;
-        }
-
         public static void SimulateButton (XboxButton button, float value) {
             _buttons[button] = value;
         }
 
-        private void OnLBChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+        private void OnSecondaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
                 _singleAxes[XboxAxis.dPadY] = newState ? 1 : 0;
             }

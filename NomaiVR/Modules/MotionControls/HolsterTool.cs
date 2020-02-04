@@ -32,7 +32,6 @@ namespace NomaiVR {
         }
 
         void OnRelease () {
-            ControllerInput.ResetRB();
             Unequip();
         }
 
