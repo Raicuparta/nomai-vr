@@ -22,11 +22,11 @@ namespace NomaiVR {
             _doubleAxes = new Dictionary<DoubleAxis, Vector2>();
 
             SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
-            SteamVR_Actions.default_Back.onChange += CreateButtonHandler(XboxButton.B);
-            SteamVR_Actions.default_PrimaryAction.onChange += CreateButtonHandler(XboxButton.X);
+            SteamVR_Actions.default_Back.onChange += OnBackChange;
             SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryActionCHange;
-            ;
-            SteamVR_Actions.default_Map.onChange += OnMapChange;
+            SteamVR_Actions.default_Menu.onChange += OnMenuChange;
+
+            SteamVR_Actions.default_Map.onChange += CreateButtonHandler(XboxButton.Select);
 
             SteamVR_Actions.default_SecondaryAction.onChange += OnSecondaryActionChange;
             SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
@@ -53,6 +53,12 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
         }
 
+        private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            if (Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item)) {
+                _buttons[XboxButton.B] = newState ? 1 : 0;
+            }
+        }
+
         private void OnGripChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             IsGripping = newState;
         }
@@ -68,10 +74,13 @@ namespace NomaiVR {
                 case ToolMode.Probe:
                     _buttons[XboxButton.RightBumper] = value;
                     break;
+                default:
+                    _buttons[XboxButton.X] = value;
+                    break;
             }
         }
 
-        private void OnMapChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+        private void OnMenuChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
             if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
                 _buttons[XboxButton.Y] = value;
