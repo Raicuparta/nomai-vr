@@ -91,6 +91,7 @@
     <Compile Include="Modules\ConditionalRenderer.cs" />
     <Compile Include="Modules\DebugTransform.cs" />
     <Compile Include="Modules\Dialog.cs" />
+    <Compile Include="Modules\MotionControls\ButtonInteraction.cs" />
     <Compile Include="Modules\MotionControls\Grabbable.cs" />
     <Compile Include="Modules\MotionControls\FlashlightGesture.cs" />
     <Compile Include="Modules\MotionControls\HoldItem.cs" />
