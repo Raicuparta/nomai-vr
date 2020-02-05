@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -8,9 +9,11 @@ namespace NomaiVR {
         static Dictionary<XboxButton, float> _buttons;
         static Dictionary<SingleAxis, float> _singleAxes;
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
+        static ControllerInput _instance;
         public static bool IsGripping { get; private set; }
 
         void Awake () {
+            _instance = this;
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
         }
 
@@ -51,10 +54,16 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("AddInteraction", typeof(Patches), "MultipleInteractionAdd");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "MultipleInteractionAdd");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Awake", typeof(Patches), "EnableListenForAllJoysticks");
+
+            //InputLibrary.landingCamera.ChangeBinding(XboxButton.Y, KeyCode.Y);
+            //InputRebindableLibrary.shipLandingCam.SetBindings(InputRebindableLibrary.signalscope.GetGamepadBinding(), InputRebindableLibrary.signalscope.GetKeyboardMouseBinding());
+            //InputRebindableLibrary.SharedInstance.Invoke("ApplyKeyBindings");
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            if (Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item)) {
+            //NomaiVR.Log("InputMode", OWInput.GetInputMode().ToString()); InputMode.Character
+            if (!IsGripping) {
                 _buttons[XboxButton.B] = newState ? 1 : 0;
             }
         }
@@ -65,8 +74,6 @@ namespace NomaiVR {
 
         private void OnPrimaryActionCHange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
-
-            NomaiVR.Log("toolmode", Common.ToolSwapper.GetToolMode().ToString());
 
             switch (Common.ToolSwapper.GetToolMode()) {
                 case ToolMode.SignalScope:
@@ -89,6 +96,16 @@ namespace NomaiVR {
             } else {
                 _buttons[XboxButton.Start] = value;
             }
+        }
+
+        public static void SimulateButton (XboxButton button) {
+            SimulateButton(button, 1);
+            _instance.StartCoroutine(_instance.ResetSimulatedButton(button));
+        }
+
+        public IEnumerator ResetSimulatedButton (XboxButton button) {
+            yield return new WaitForSeconds(0.5f);
+            SimulateButton(button, 0);
         }
 
         public static void SimulateButton (XboxButton button, float value) {
@@ -248,6 +265,10 @@ namespace NomaiVR {
                 Locator.GetPromptManager().RemoveScreenPrompt(____interactButtonPrompt);
                 ____interactButtonPrompt = new ScreenPrompt(string.Empty, 0);
                 Locator.GetPromptManager().AddScreenPrompt(____interactButtonPrompt);
+            }
+
+            static void EnableListenForAllJoysticks () {
+                InputLibrary.landingCamera.ChangeBinding(XboxButton.Y, KeyCode.Y);
             }
         }
     }

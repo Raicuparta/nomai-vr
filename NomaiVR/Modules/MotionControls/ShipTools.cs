@@ -8,7 +8,7 @@ namespace NomaiVR {
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
 
-            _cockpit = GameObject.FindObjectOfType<ShipCockpitController>();
+            _cockpit = FindObjectOfType<ShipCockpitController>();
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ShipBody>("Start", typeof(Patches), "ShipStart");
         }
 
@@ -33,12 +33,19 @@ namespace NomaiVR {
             private static SingleInteractionVolume.PressInteractEvent OnToolInteract (ToolMode mode) {
                 var swapper = Locator.GetToolModeSwapper();
                 return () => {
-                    _cockpit.Invoke("ExitLandingView");
-                    if (swapper.IsInToolMode(mode)) {
-                        swapper.UnequipTool();
-                    } else {
-                        swapper.EquipToolMode(mode);
-                    }
+                    ControllerInput.SimulateButton(XboxButton.RightBumper);
+                    //_cockpit.Invoke("ExitLandingView");
+                    //if (!OWInput.IsInputMode(InputMode.ShipCockpit)) {
+                    //    return;
+                    //}
+                    //_cockpit.Invoke("ExitLandingView");
+                    //swapper.SetValue("_currentToolGroup", ToolGroup.Ship);
+                    //if (swapper.IsInToolMode(mode)) {
+                    //    swapper.UnequipTool();
+                    //} else {
+                    //    ControllerInput.SimulateButton(XboxButton.RightBumper, 1);
+                    //    swapper.EquipToolMode(mode);
+                    //}
                 };
             }
         }
