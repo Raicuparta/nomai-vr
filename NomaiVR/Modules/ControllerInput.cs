@@ -39,8 +39,6 @@ namespace NomaiVR {
             SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
             SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
 
-            SteamVR_Actions.default_LockOn.onChange += CreateButtonHandler(XboxButton.LeftStickClick);
-
             SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
             SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
 
@@ -83,8 +81,13 @@ namespace NomaiVR {
                     break;
             }
 
-            if (Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship && !newState) {
-                _buttons[XboxButton.X] = value;
+            if (Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship) {
+                if (!newState) {
+                    _buttons[XboxButton.X] = value;
+                }
+                if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+                    _buttons[XboxButton.LeftStickClick] = value;
+                }
             }
         }
 
