@@ -5,6 +5,6 @@
     "enableMotionControls": true,
     "movePlayerWithHead": false,
     "showMirrorView": true,
-    "debugMode": false,
+    "debugMode": true,
   }
 }

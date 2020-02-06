@@ -98,17 +98,8 @@ namespace NomaiVR {
             }
         }
 
-        public static void SimulateButton (XboxButton button) {
-            SimulateButton(button, 1);
-            _instance.StartCoroutine(_instance.ResetSimulatedButton(button));
-        }
-
-        public IEnumerator ResetSimulatedButton (XboxButton button) {
-            yield return new WaitForSeconds(0.5f);
-            SimulateButton(button, 0);
-        }
-
         public static void SimulateButton (XboxButton button, float value) {
+            NomaiVR.Log("Simulate " + button + ": " + value);
             _buttons[button] = value;
         }
 
