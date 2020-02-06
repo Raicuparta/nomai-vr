@@ -268,7 +268,7 @@ namespace NomaiVR {
             }
 
             static void EnableListenForAllJoysticks () {
-                InputLibrary.landingCamera.ChangeBinding(null, null);
+                InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
             }
         }
     }
