@@ -91,7 +91,6 @@ namespace NomaiVR {
             if (Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship && !newState) {
                 _buttons[XboxButton.X] = value;
             }
-
         }
 
         private void OnMenuChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {

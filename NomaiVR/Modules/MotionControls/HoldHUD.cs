@@ -29,7 +29,7 @@ namespace NomaiVR {
         }
 
         bool ShouldRender () {
-            return Locator.GetPlayerSuit().IsWearingSuit(true);
+            return Locator.GetPlayerSuit().IsWearingSuit(true) && Common.ToolSwapper.GetToolGroup() == ToolGroup.Suit;
         }
     }
 }
