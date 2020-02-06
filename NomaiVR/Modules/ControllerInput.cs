@@ -27,8 +27,8 @@ namespace NomaiVR {
             SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
             SteamVR_Actions.default_Back.onChange += OnBackChange;
             SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryActionCHange;
-            SteamVR_Actions.default_Menu.onChange += OnMenuChange;
 
+            SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(XboxButton.Start);
             SteamVR_Actions.default_Map.onChange += CreateButtonHandler(XboxButton.Select);
 
             SteamVR_Actions.default_SecondaryAction.onChange += OnSecondaryActionChange;
@@ -90,15 +90,6 @@ namespace NomaiVR {
 
             if (Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship && !newState) {
                 _buttons[XboxButton.X] = value;
-            }
-        }
-
-        private void OnMenuChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            var value = newState ? 1 : 0;
-            if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
-                _buttons[XboxButton.Y] = value;
-            } else {
-                _buttons[XboxButton.Start] = value;
             }
         }
 
