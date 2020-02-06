@@ -1,5 +1,4 @@
 ﻿using OWML.ModHelper.Events;
-using System;
 using UnityEngine;
 
 namespace NomaiVR {
@@ -9,7 +8,6 @@ namespace NomaiVR {
 
         void Start () {
             var collider = gameObject.AddComponent<BoxCollider>();
-            //collider.radius = 0.4f;
             collider.isTrigger = true;
 
             var interaction = gameObject.AddComponent<InteractReceiver>();

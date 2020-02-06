@@ -1,6 +1,4 @@
-﻿using OWML.ModHelper.Events;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NomaiVR {
     class ShipTools: MonoBehaviour {

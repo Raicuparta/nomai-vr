@@ -371,24 +371,24 @@ namespace Valve.VR {
 
                     switch ((EVREventType) vrEvent.eventType) {
                         case EVREventType.VREvent_InputFocusCaptured: // another app has taken focus (likely dashboard)
-                        if (vrEvent.data.process.oldPid == 0) {
-                            SteamVR_Events.InputFocus.Send(false);
-                        }
-                        break;
+                            if (vrEvent.data.process.oldPid == 0) {
+                                SteamVR_Events.InputFocus.Send(false);
+                            }
+                            break;
                         case EVREventType.VREvent_InputFocusReleased: // that app has released input focus
-                        if (vrEvent.data.process.pid == 0) {
-                            SteamVR_Events.InputFocus.Send(true);
-                        }
-                        break;
+                            if (vrEvent.data.process.pid == 0) {
+                                SteamVR_Events.InputFocus.Send(true);
+                            }
+                            break;
                         case EVREventType.VREvent_ShowRenderModels:
-                        SteamVR_Events.HideRenderModels.Send(false);
-                        break;
+                            SteamVR_Events.HideRenderModels.Send(false);
+                            break;
                         case EVREventType.VREvent_HideRenderModels:
-                        SteamVR_Events.HideRenderModels.Send(true);
-                        break;
+                            SteamVR_Events.HideRenderModels.Send(true);
+                            break;
                         default:
-                        SteamVR_Events.System((EVREventType) vrEvent.eventType).Send(vrEvent);
-                        break;
+                            SteamVR_Events.System((EVREventType) vrEvent.eventType).Send(vrEvent);
+                            break;
                     }
                 }
             }

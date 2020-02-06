@@ -77,19 +77,19 @@ namespace Valve.VR {
 
             switch (fingerIndex) {
                 case SteamVR_Skeleton_FingerIndexes.thumb:
-                return thumbFingerMovementType;
+                    return thumbFingerMovementType;
 
                 case SteamVR_Skeleton_FingerIndexes.index:
-                return indexFingerMovementType;
+                    return indexFingerMovementType;
 
                 case SteamVR_Skeleton_FingerIndexes.middle:
-                return middleFingerMovementType;
+                    return middleFingerMovementType;
 
                 case SteamVR_Skeleton_FingerIndexes.ring:
-                return ringFingerMovementType;
+                    return ringFingerMovementType;
 
                 case SteamVR_Skeleton_FingerIndexes.pinky:
-                return pinkyFingerMovementType;
+                    return pinkyFingerMovementType;
             }
 
             return SteamVR_Skeleton_FingerExtensionTypes.Static;

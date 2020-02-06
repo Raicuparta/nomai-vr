@@ -181,19 +181,19 @@ namespace Valve.VR {
         static void ReportError (EVRInitError error) {
             switch (error) {
                 case EVRInitError.None:
-                break;
+                    break;
                 case EVRInitError.VendorSpecific_UnableToConnectToOculusRuntime:
-                Debug.LogWarning("<b>[SteamVR]</b> Initialization Failed!  Make sure device is on, Oculus runtime is installed, and OVRService_*.exe is running.");
-                break;
+                    Debug.LogWarning("<b>[SteamVR]</b> Initialization Failed!  Make sure device is on, Oculus runtime is installed, and OVRService_*.exe is running.");
+                    break;
                 case EVRInitError.Init_VRClientDLLNotFound:
-                Debug.LogWarning("<b>[SteamVR]</b> Drivers not found!  They can be installed via Steam under Library > Tools.  Visit http://steampowered.com to install Steam.");
-                break;
+                    Debug.LogWarning("<b>[SteamVR]</b> Drivers not found!  They can be installed via Steam under Library > Tools.  Visit http://steampowered.com to install Steam.");
+                    break;
                 case EVRInitError.Driver_RuntimeOutOfDate:
-                Debug.LogWarning("<b>[SteamVR]</b> Initialization Failed!  Make sure device's runtime is up to date.");
-                break;
+                    Debug.LogWarning("<b>[SteamVR]</b> Initialization Failed!  Make sure device's runtime is up to date.");
+                    break;
                 default:
-                Debug.LogWarning("<b>[SteamVR]</b> " + OpenVR.GetStringForHmdError(error));
-                break;
+                    Debug.LogWarning("<b>[SteamVR]</b> " + OpenVR.GetStringForHmdError(error));
+                    break;
             }
         }
 
@@ -606,16 +606,16 @@ namespace Valve.VR {
                 case UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore:
                 case UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2:
                 case UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3:
-                textureType = ETextureType.OpenGL;
-                break;
+                    textureType = ETextureType.OpenGL;
+                    break;
 #if !(UNITY_5_4)
                 case UnityEngine.Rendering.GraphicsDeviceType.Vulkan:
-                textureType = ETextureType.Vulkan;
-                break;
+                    textureType = ETextureType.Vulkan;
+                    break;
 #endif
                 default:
-                textureType = ETextureType.DirectX;
-                break;
+                    textureType = ETextureType.DirectX;
+                    break;
             }
 
             SteamVR_Events.Initializing.Listen(OnInitializing);
