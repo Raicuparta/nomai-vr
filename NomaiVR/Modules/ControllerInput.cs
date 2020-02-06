@@ -75,18 +75,23 @@ namespace NomaiVR {
         private void OnPrimaryActionCHange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
-            switch (Common.ToolSwapper.GetToolMode()) {
-                case ToolMode.SignalScope:
-                case ToolMode.Translator:
-                    _singleAxes[XboxAxis.dPadX] = value;
-                    break;
-                case ToolMode.Probe:
-                    _buttons[XboxButton.RightBumper] = value;
-                    break;
-                default:
-                    _buttons[XboxButton.X] = value;
-                    break;
+            if (Common.ToolSwapper.GetToolGroup() == ToolGroup.Suit) {
+                switch (Common.ToolSwapper.GetToolMode()) {
+                    case ToolMode.SignalScope:
+                    case ToolMode.Translator:
+                        _singleAxes[XboxAxis.dPadX] = value;
+                        break;
+                    case ToolMode.Probe:
+                        _buttons[XboxButton.RightBumper] = value;
+                        break;
+                    default:
+                        _buttons[XboxButton.X] = value;
+                        break;
+                }
+            } else {
+                _buttons[XboxButton.X] = value;
             }
+
         }
 
         private void OnMenuChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
