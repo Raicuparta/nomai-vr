@@ -55,14 +55,9 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "MultipleInteractionAdd");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Awake", typeof(Patches), "EnableListenForAllJoysticks");
-
-            //InputLibrary.landingCamera.ChangeBinding(XboxButton.Y, KeyCode.Y);
-            //InputRebindableLibrary.shipLandingCam.SetBindings(InputRebindableLibrary.signalscope.GetGamepadBinding(), InputRebindableLibrary.signalscope.GetKeyboardMouseBinding());
-            //InputRebindableLibrary.SharedInstance.Invoke("ApplyKeyBindings");
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            //NomaiVR.Log("InputMode", OWInput.GetInputMode().ToString()); InputMode.Character
             if (!IsGripping) {
                 _buttons[XboxButton.B] = newState ? 1 : 0;
             }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace NomaiVR {
     class LaserPointer: MonoBehaviour {
         static FirstPersonManipulator _manipulator;
-        static Transform _laser;
+        public static Transform Laser;
 
         void Awake () {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
@@ -14,11 +14,11 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PreUpdateIsDroppable");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PostUpdateIsDroppable");
 
-            _laser = new GameObject("Laser").transform;
-            _laser.transform.parent = Hands.RightHand;
-            _laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
-            _laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
-            var lineRenderer = _laser.gameObject.AddComponent<LineRenderer>();
+            Laser = new GameObject("Laser").transform;
+            Laser.transform.parent = Hands.RightHand;
+            Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
+            Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+            var lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
             lineRenderer.useWorldSpace = false;
             lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });
             lineRenderer.endColor = new Color(1, 1, 1, 0.5f);
@@ -27,10 +27,10 @@ namespace NomaiVR {
             lineRenderer.startWidth = 0.02f;
             lineRenderer.endWidth = 0.01f;
 
-            _laser.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRender;
+            Laser.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRender;
 
             GameObject.FindObjectOfType<FirstPersonManipulator>().enabled = false;
-            _manipulator = _laser.gameObject.AddComponent<FirstPersonManipulator>();
+            _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
 
             DisableReticule();
         }
@@ -56,7 +56,7 @@ namespace NomaiVR {
                 float ____viewingWindow,
                 ref bool ____focused
             ) {
-                float num = 2f * Vector3.Angle(_laser.forward, __instance.transform.forward);
+                float num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
                 ____focused = (num <= ____viewingWindow);
                 var Base = __instance as SingleInteractionVolume;
 
@@ -96,8 +96,8 @@ namespace NomaiVR {
                 var camera = Locator.GetPlayerCamera();
                 _cameraForward = camera.transform.forward;
                 _cameraPosition = camera.transform.position;
-                camera.transform.position = _laser.position;
-                camera.transform.forward = _laser.forward;
+                camera.transform.position = Laser.position;
+                camera.transform.forward = Laser.forward;
             }
 
             static void PostUpdateIsDroppable () {

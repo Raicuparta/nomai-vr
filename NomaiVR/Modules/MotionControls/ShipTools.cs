@@ -8,6 +8,8 @@ namespace NomaiVR {
 
             _cockpit = FindObjectOfType<ShipCockpitController>();
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ShipBody>("Start", typeof(Patches), "ShipStart");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PreFindReferenceFrameInLineOfSight");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PostFindReferenceFrameInLineOfSight");
         }
 
         internal static class Patches {
@@ -26,6 +28,34 @@ namespace NomaiVR {
                 var landingCam = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior/LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
                 landingCam.button = XboxButton.DPadDown;
                 landingCam.text = UITextType.ShipLandingPrompt;
+            }
+
+
+            static Vector3 _cameraPosition;
+            static Quaternion _cameraRotation;
+
+            static void PreFindReferenceFrameInLineOfSight (
+                OWCamera ____activeCam,
+                OWCamera ____landingCam,
+                bool ____isLandingView
+            ) {
+                var camera = ____isLandingView ? ____landingCam : ____activeCam;
+                _cameraPosition = camera.transform.position;
+                _cameraRotation = camera.transform.rotation;
+
+                camera.transform.position = LaserPointer.Laser.position;
+                camera.transform.rotation = LaserPointer.Laser.rotation;
+            }
+
+            static void PostFindReferenceFrameInLineOfSight (
+                OWCamera ____activeCam,
+                OWCamera ____landingCam,
+                bool ____isLandingView
+            ) {
+                var camera = ____isLandingView ? ____landingCam : ____activeCam;
+
+                camera.transform.position = _cameraPosition;
+                camera.transform.rotation = _cameraRotation;
             }
         }
     }
