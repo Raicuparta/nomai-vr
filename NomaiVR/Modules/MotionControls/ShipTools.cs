@@ -20,14 +20,19 @@ namespace NomaiVR {
                 probe.button = XboxButton.RightBumper;
                 probe.text = UITextType.ScoutModePrompt;
 
-
                 var signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot/SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
                 signalscope.button = XboxButton.Y;
                 signalscope.text = UITextType.SignalscopePrompt;
 
-                var landingCam = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior/LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
+                var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
+
+                var landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
                 landingCam.button = XboxButton.DPadDown;
                 landingCam.text = UITextType.ShipLandingPrompt;
+
+                var consoleScreen = cockpitTech.Find("ConsoleScreen").gameObject.AddComponent<ButtonInteraction>();
+                consoleScreen.button = XboxButton.DPadUp;
+                consoleScreen.text = UITextType.AutopilotPrompt;
             }
 
 
