@@ -111,7 +111,6 @@ namespace NomaiVR {
             objectParent.parent = hand;
             objectParent.localPosition = position;
             objectParent.localRotation = rotation;
-            objectParent.name = objectTransform.name + " parent";
             objectTransform.transform.parent = objectParent;
             objectTransform.transform.localPosition = Vector3.zero;
             objectTransform.transform.localRotation = Quaternion.identity;
@@ -139,16 +138,6 @@ namespace NomaiVR {
             if (_wrapper && Camera.main) {
                 _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
-
-            var thrusterHUD = GameObject.Find("HUD_Thrusters");
-
-            //var thrustHUD = GameObject.FindObjectOfType<ThrustAndAttitudeIndicator>();
-
-            thrusterHUD.transform.LookAt(Common.MainCamera.transform.position, Common.PlayerHead.up);
-            //thrusterHUD.transform.
-            
-
-            //dialogCanvas.transform.LookAt(2 * attentionPoint.position - Common.MainCamera.transform.position, Common.PlayerHead.up);
         }
     }
 }
