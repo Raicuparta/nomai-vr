@@ -35,8 +35,6 @@ namespace Valve.VR
         
         private static SteamVR_Action_Boolean p_default_Map;
         
-        private static SteamVR_Action_Boolean p_default_LockOn;
-        
         private static SteamVR_Action_Vector2 p_default_Look;
         
         private static SteamVR_Action_Vector2 p_default_Move;
@@ -119,14 +117,6 @@ namespace Valve.VR
             }
         }
         
-        public static SteamVR_Action_Boolean default_LockOn
-        {
-            get
-            {
-                return SteamVR_Actions.p_default_LockOn.GetCopy <SteamVR_Action_Boolean>();
-            }
-        }
-        
         public static SteamVR_Action_Vector2 default_Look
         {
             get
@@ -180,7 +170,6 @@ namespace Valve.VR
                     SteamVR_Actions.default_Back,
                     SteamVR_Actions.default_Menu,
                     SteamVR_Actions.default_Map,
-                    SteamVR_Actions.default_LockOn,
                     SteamVR_Actions.default_Look,
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.default_LeftHand,
@@ -197,7 +186,6 @@ namespace Valve.VR
                     SteamVR_Actions.default_Back,
                     SteamVR_Actions.default_Menu,
                     SteamVR_Actions.default_Map,
-                    SteamVR_Actions.default_LockOn,
                     SteamVR_Actions.default_Look,
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.default_LeftHand,
@@ -220,8 +208,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_Jump,
                     SteamVR_Actions.default_Back,
                     SteamVR_Actions.default_Menu,
-                    SteamVR_Actions.default_Map,
-                    SteamVR_Actions.default_LockOn};
+                    SteamVR_Actions.default_Map};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[]
             {
                     SteamVR_Actions.default_ThrottleUp,
@@ -243,7 +230,6 @@ namespace Valve.VR
                     SteamVR_Actions.default_Back,
                     SteamVR_Actions.default_Menu,
                     SteamVR_Actions.default_Map,
-                    SteamVR_Actions.default_LockOn,
                     SteamVR_Actions.default_Look,
                     SteamVR_Actions.default_Move};
         }
@@ -259,7 +245,6 @@ namespace Valve.VR
             SteamVR_Actions.p_default_Back = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/default/in/Back")));
             SteamVR_Actions.p_default_Menu = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/default/in/Menu")));
             SteamVR_Actions.p_default_Map = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/default/in/Map")));
-            SteamVR_Actions.p_default_LockOn = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/default/in/LockOn")));
             SteamVR_Actions.p_default_Look = ((SteamVR_Action_Vector2)(SteamVR_Action.Create <SteamVR_Action_Vector2>("/actions/default/in/Look")));
             SteamVR_Actions.p_default_Move = ((SteamVR_Action_Vector2)(SteamVR_Action.Create <SteamVR_Action_Vector2>("/actions/default/in/Move")));
             SteamVR_Actions.p_default_LeftHand = ((SteamVR_Action_Pose)(SteamVR_Action.Create <SteamVR_Action_Pose>("/actions/default/in/LeftHand")));

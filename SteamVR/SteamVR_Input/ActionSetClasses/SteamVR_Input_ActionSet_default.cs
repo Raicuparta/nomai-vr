@@ -89,14 +89,6 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean LockOn
-        {
-            get
-            {
-                return SteamVR_Actions.default_LockOn;
-            }
-        }
-        
         public virtual SteamVR_Action_Vector2 Look
         {
             get

@@ -14,8 +14,7 @@
     },
     {
       "name": "/actions/default/in/SecondaryAction",
-      "type": "boolean",
-      "requirement": "suggested"
+      "type": "boolean"
     },
     {
       "name": "/actions/default/in/PrimaryAction",
@@ -35,10 +34,6 @@
     },
     {
       "name": "/actions/default/in/Map",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/default/in/LockOn",
       "type": "boolean"
     },
     {
