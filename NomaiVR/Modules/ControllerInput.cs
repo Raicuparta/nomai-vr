@@ -9,11 +9,9 @@ namespace NomaiVR {
         static Dictionary<XboxButton, float> _buttons;
         static Dictionary<SingleAxis, float> _singleAxes;
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
-        static ControllerInput _instance;
         public static bool IsGripping { get; private set; }
 
         void Awake () {
-            _instance = this;
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
         }
 
@@ -34,6 +32,7 @@ namespace NomaiVR {
             SteamVR_Actions.default_SecondaryAction.onChange += OnSecondaryActionChange;
             SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
             SteamVR_Actions.default_Grip.onChange += OnGripChange;
+            SteamVR_Actions.default_LockOn.onChange += CreateButtonHandler(XboxAxis.dPadY, 1);
 
             SteamVR_Actions.default_ThrottleDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
             SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
@@ -85,24 +84,21 @@ namespace NomaiVR {
                 if (!newState) {
                     _buttons[XboxButton.X] = value;
                 }
-                if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
-                    _buttons[XboxButton.LeftStickClick] = value;
-                }
+            }
+
+            if (Common.ToolSwapper.IsInToolMode(ToolMode.None, ToolGroup.Ship)) {
+                _buttons[XboxButton.LeftStickClick] = value;
+            }
+        }
+
+        private void OnSecondaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+            if (!Common.ToolSwapper.IsInToolMode(ToolMode.Probe)) {
+                _buttons[XboxButton.LeftBumper] = newState ? 1 : 0;
             }
         }
 
         public static void SimulateButton (XboxButton button, float value) {
             _buttons[button] = value;
-        }
-
-        private void OnSecondaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            var value = newState ? 1 : 0;
-            if (OWInput.IsInputMode(InputMode.ShipCockpit)) {
-                _singleAxes[XboxAxis.dPadY] = value;
-            }
-            if (!Common.ToolSwapper.IsInToolMode(ToolMode.Probe)) {
-                _buttons[XboxButton.LeftBumper] = value;
-            }
         }
 
         SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler (SingleAxis singleAxis, int axisDirection) {
