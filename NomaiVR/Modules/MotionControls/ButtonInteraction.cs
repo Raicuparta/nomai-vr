@@ -20,11 +20,11 @@ namespace NomaiVR {
         }
 
         void OnPress () {
-            ControllerInput.SimulateButton(button, 1);
+            ControllerInput.SimulateInput(button, 1);
         }
 
         void OnRelease () {
-            ControllerInput.SimulateButton(button, 0);
+            ControllerInput.SimulateInput(button, 0);
             _interaction.ResetInteraction();
         }
     }

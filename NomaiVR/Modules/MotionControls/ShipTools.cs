@@ -3,13 +3,40 @@
 namespace NomaiVR {
     class ShipTools: MonoBehaviour {
         static ShipCockpitController _cockpit;
+        bool _wasHoldingInteract;
+        ReferenceFrameTracker _referenceFrameTracker;
+
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
 
             _cockpit = FindObjectOfType<ShipCockpitController>();
+            _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ShipBody>("Start", typeof(Patches), "ShipStart");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PreFindReferenceFrameInLineOfSight");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PostFindReferenceFrameInLineOfSight");
+        }
+
+        void Update () {
+            if (_referenceFrameTracker.GetReferenceFrame() == null && _referenceFrameTracker.GetPossibleReferenceFrame() == null) {
+                return;
+            }
+            if (OWInput.IsNewlyHeld(InputLibrary.interact)) {
+                ControllerInput.SimulateInput(XboxAxis.dPadY, 1);
+                _wasHoldingInteract = true;
+            }
+            if (OWInput.IsNewlyReleased(InputLibrary.interact)) {
+                if (_wasHoldingInteract) {
+                    ControllerInput.SimulateInput(XboxAxis.dPadY, 0);
+                    _wasHoldingInteract = false;
+                } else {
+                    ControllerInput.SimulateInput(XboxButton.LeftStickClick, 1);
+                    Invoke("ResetLeftStickClick", 0.5f);
+                }
+            }
+        }
+
+        void ResetLeftStickClick () {
+            ControllerInput.SimulateInput(XboxButton.LeftStickClick, 0);
         }
 
         internal static class Patches {

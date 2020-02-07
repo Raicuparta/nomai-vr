@@ -32,7 +32,6 @@ namespace NomaiVR {
             SteamVR_Actions.default_SecondaryAction.onChange += OnSecondaryActionChange;
             SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
             SteamVR_Actions.default_Grip.onChange += OnGripChange;
-            SteamVR_Actions.default_LockOn.onChange += CreateButtonHandler(XboxAxis.dPadY, 1);
 
             SteamVR_Actions.default_ThrottleDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
             SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
@@ -88,10 +87,6 @@ namespace NomaiVR {
                     _buttons[XboxButton.X] = value;
                 }
             }
-
-            if (Common.ToolSwapper.IsInToolMode(ToolMode.None, ToolGroup.Ship)) {
-                _buttons[XboxButton.LeftStickClick] = value;
-            }
         }
 
         private void OnSecondaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -100,8 +95,12 @@ namespace NomaiVR {
             }
         }
 
-        public static void SimulateButton (XboxButton button, float value) {
+        public static void SimulateInput (XboxButton button, float value) {
             _buttons[button] = value;
+        }
+
+        public static void SimulateInput (SingleAxis axis, float value) {
+            _singleAxes[axis] = value;
         }
 
         SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler (SingleAxis singleAxis, int axisDirection) {
