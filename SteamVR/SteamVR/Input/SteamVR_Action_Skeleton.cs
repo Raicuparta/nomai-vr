@@ -1204,14 +1204,14 @@ namespace Valve.VR {
             switch (boneIndex) {
                 case root:
                 case wrist:
-                return -1;
+                    return -1;
 
                 case thumbMetacarpal:
                 case thumbMiddle:
                 case thumbDistal:
                 case thumbTip:
                 case thumbAux:
-                return 0;
+                    return 0;
 
                 case indexMetacarpal:
                 case indexProximal:
@@ -1219,7 +1219,7 @@ namespace Valve.VR {
                 case indexDistal:
                 case indexTip:
                 case indexAux:
-                return 1;
+                    return 1;
 
                 case middleMetacarpal:
                 case middleProximal:
@@ -1227,7 +1227,7 @@ namespace Valve.VR {
                 case middleDistal:
                 case middleTip:
                 case middleAux:
-                return 2;
+                    return 2;
 
                 case ringMetacarpal:
                 case ringProximal:
@@ -1235,7 +1235,7 @@ namespace Valve.VR {
                 case ringDistal:
                 case ringTip:
                 case ringAux:
-                return 3;
+                    return 3;
 
                 case pinkyMetacarpal:
                 case pinkyProximal:
@@ -1243,10 +1243,10 @@ namespace Valve.VR {
                 case pinkyDistal:
                 case pinkyTip:
                 case pinkyAux:
-                return 4;
+                    return 4;
 
                 default:
-                return -1;
+                    return -1;
             }
         }
     }

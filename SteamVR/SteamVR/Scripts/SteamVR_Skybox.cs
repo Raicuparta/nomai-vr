@@ -21,40 +21,40 @@ namespace Valve.VR {
         public void SetTextureByIndex (int i, Texture t) {
             switch (i) {
                 case 0:
-                front = t;
-                break;
+                    front = t;
+                    break;
                 case 1:
-                back = t;
-                break;
+                    back = t;
+                    break;
                 case 2:
-                left = t;
-                break;
+                    left = t;
+                    break;
                 case 3:
-                right = t;
-                break;
+                    right = t;
+                    break;
                 case 4:
-                top = t;
-                break;
+                    top = t;
+                    break;
                 case 5:
-                bottom = t;
-                break;
+                    bottom = t;
+                    break;
             }
         }
 
         public Texture GetTextureByIndex (int i) {
             switch (i) {
                 case 0:
-                return front;
+                    return front;
                 case 1:
-                return back;
+                    return back;
                 case 2:
-                return left;
+                    return left;
                 case 3:
-                return right;
+                    return right;
                 case 4:
-                return top;
+                    return top;
                 case 5:
-                return bottom;
+                    return bottom;
             }
             return null;
         }

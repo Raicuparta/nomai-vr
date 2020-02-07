@@ -17,163 +17,107 @@ namespace Valve.VR
     public class SteamVR_Input_ActionSet_default : Valve.VR.SteamVR_ActionSet
     {
         
-        public virtual SteamVR_Action_Boolean X
+        public virtual SteamVR_Action_Boolean Grip
         {
             get
             {
-                return SteamVR_Actions.default_X;
+                return SteamVR_Actions.default_Grip;
             }
         }
         
-        public virtual SteamVR_Action_Boolean A
+        public virtual SteamVR_Action_Single ThrottleUp
         {
             get
             {
-                return SteamVR_Actions.default_A;
+                return SteamVR_Actions.default_ThrottleUp;
             }
         }
         
-        public virtual SteamVR_Action_Boolean Y
+        public virtual SteamVR_Action_Single ThrottleDown
         {
             get
             {
-                return SteamVR_Actions.default_Y;
+                return SteamVR_Actions.default_ThrottleDown;
             }
         }
         
-        public virtual SteamVR_Action_Boolean B
+        public virtual SteamVR_Action_Boolean SecondaryAction
         {
             get
             {
-                return SteamVR_Actions.default_B;
+                return SteamVR_Actions.default_SecondaryAction;
             }
         }
         
-        public virtual SteamVR_Action_Boolean RB
+        public virtual SteamVR_Action_Boolean PrimaryAction
         {
             get
             {
-                return SteamVR_Actions.default_RB;
+                return SteamVR_Actions.default_PrimaryAction;
             }
         }
         
-        public virtual SteamVR_Action_Boolean LB
+        public virtual SteamVR_Action_Boolean Jump
         {
             get
             {
-                return SteamVR_Actions.default_LB;
+                return SteamVR_Actions.default_Jump;
             }
         }
         
-        public virtual SteamVR_Action_Single RT
+        public virtual SteamVR_Action_Boolean Back
         {
             get
             {
-                return SteamVR_Actions.default_RT;
+                return SteamVR_Actions.default_Back;
             }
         }
         
-        public virtual SteamVR_Action_Single LT
+        public virtual SteamVR_Action_Boolean Menu
         {
             get
             {
-                return SteamVR_Actions.default_LT;
+                return SteamVR_Actions.default_Menu;
             }
         }
         
-        public virtual SteamVR_Action_Vector2 RStick
+        public virtual SteamVR_Action_Boolean Map
         {
             get
             {
-                return SteamVR_Actions.default_RStick;
+                return SteamVR_Actions.default_Map;
             }
         }
         
-        public virtual SteamVR_Action_Vector2 LStick
+        public virtual SteamVR_Action_Vector2 Look
         {
             get
             {
-                return SteamVR_Actions.default_LStick;
+                return SteamVR_Actions.default_Look;
             }
         }
         
-        public virtual SteamVR_Action_Boolean Start
+        public virtual SteamVR_Action_Vector2 Move
         {
             get
             {
-                return SteamVR_Actions.default_Start;
+                return SteamVR_Actions.default_Move;
             }
         }
         
-        public virtual SteamVR_Action_Boolean Select
+        public virtual SteamVR_Action_Pose LeftHand
         {
             get
             {
-                return SteamVR_Actions.default_Select;
+                return SteamVR_Actions.default_LeftHand;
             }
         }
         
-        public virtual SteamVR_Action_Boolean DUp
+        public virtual SteamVR_Action_Pose RightHand
         {
             get
             {
-                return SteamVR_Actions.default_DUp;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean DDown
-        {
-            get
-            {
-                return SteamVR_Actions.default_DDown;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean DLeft
-        {
-            get
-            {
-                return SteamVR_Actions.default_DLeft;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean DRight
-        {
-            get
-            {
-                return SteamVR_Actions.default_DRight;
-            }
-        }
-        
-        public virtual SteamVR_Action_Pose RightPose
-        {
-            get
-            {
-                return SteamVR_Actions.default_RightPose;
-            }
-        }
-        
-        public virtual SteamVR_Action_Pose LeftPose
-        {
-            get
-            {
-                return SteamVR_Actions.default_LeftPose;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean RClick
-        {
-            get
-            {
-                return SteamVR_Actions.default_RClick;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean LClick
-        {
-            get
-            {
-                return SteamVR_Actions.default_LClick;
+                return SteamVR_Actions.default_RightHand;
             }
         }
         

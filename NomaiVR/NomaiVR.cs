@@ -56,6 +56,7 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<PlayerBodyPosition>();
                 nonPersistentObject.AddComponent<Dialog>();
                 if (MotionControlsEnabled) {
+                    nonPersistentObject.AddComponent<ShipTools>();
                     nonPersistentObject.AddComponent<Hands>();
                 }
             } else if (isInTitle) {
@@ -78,9 +79,9 @@ namespace NomaiVR {
             }
         }
 
-        public static void Log (string s) {
+        public static void Log (params string[] strings) {
             if (DebugMode) {
-                _instance.ModHelper.Console.WriteLine("NomaiVR: " + s);
+                _instance.ModHelper.Console.WriteLine(string.Join(" ", strings));
             }
         }
     }

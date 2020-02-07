@@ -56,9 +56,9 @@ namespace NomaiVR {
             var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
             display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
             display.parent = ProbeLauncherModel;
-            display.localScale = Vector3.one * 0.0012f;
+            display.localScale = Vector3.one * 0.0014f;
             display.localRotation = Quaternion.identity;
-            display.localPosition = Vector3.forward * -0.67f;
+            display.localPosition = Vector3.forward * -0.8f;
             ProbeUI = display.GetComponent<ProbeLauncherUI>();
 
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();

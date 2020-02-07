@@ -91,6 +91,7 @@
     <Compile Include="Modules\ConditionalRenderer.cs" />
     <Compile Include="Modules\DebugTransform.cs" />
     <Compile Include="Modules\Dialog.cs" />
+    <Compile Include="Modules\MotionControls\ButtonInteraction.cs" />
     <Compile Include="Modules\MotionControls\Grabbable.cs" />
     <Compile Include="Modules\MotionControls\FlashlightGesture.cs" />
     <Compile Include="Modules\MotionControls\HoldItem.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Modules\MotionControls\HoldSignalscope.cs" />
     <Compile Include="Modules\MotionControls\HoldTranslator.cs" />
     <Compile Include="Modules\MotionControls\LaserPointer.cs" />
+    <Compile Include="Modules\MotionControls\ShipTools.cs" />
     <Compile Include="Modules\ProximityDetector.cs" />
     <Compile Include="Modules\Common.cs" />
     <Compile Include="Modules\EffectFixes.cs" />

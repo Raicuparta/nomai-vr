@@ -6,28 +6,35 @@ namespace NomaiVR {
         public ProximityDetector detector { get; private set; }
         public Action onGrab;
         public Action onRelease;
-        bool _grabbing;
-        bool _grabbed;
+        bool _isGrabbing;
 
         void Awake () {
             detector = gameObject.AddComponent<ProximityDetector>();
             detector.other = Hands.RightHand;
         }
 
+        void Grab () {
+            _isGrabbing = true;
+            onGrab?.Invoke();
+        }
+
+        void Release () {
+            _isGrabbing = false;
+            onRelease?.Invoke();
+        }
+
         void Update () {
-            if (!detector.isInside || !OWInput.IsInputMode(InputMode.Character) || !Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+            if (!OWInput.IsInputMode(InputMode.Character)) {
+                if (_isGrabbing) {
+                    Release();
+                }
                 return;
             }
-            if (ControllerInput.IsGripping) {
-                if (!_grabbed && !_grabbing) {
-                    _grabbing = true;
-                    onGrab?.Invoke();
-                } else if (_grabbing && _grabbed) {
-                    _grabbing = false;
-                    onRelease?.Invoke();
-                }
-            } else if ((!_grabbed && _grabbing) || (_grabbed && !_grabbing)) {
-                _grabbed = !_grabbed && _grabbing;
+            if (!_isGrabbing && ControllerInput.IsGripping && detector.isInside) {
+                Grab();
+            }
+            if (_isGrabbing && !ControllerInput.IsGripping && !Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+                Release();
             }
         }
     }

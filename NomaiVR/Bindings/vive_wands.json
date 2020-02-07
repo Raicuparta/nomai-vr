@@ -3,21 +3,35 @@
    "alias_info" : {},
    "bindings" : {
       "/actions/default" : {
-         "poses": [
+         "haptics" : [
             {
-               "path": "/user/hand/left/pose/raw",
-               "output": "/actions/default/in/leftpose"
+               "output" : "/actions/default/out/haptic",
+               "path" : "/user/hand/left/output/haptic"
             },
             {
-               "path": "/user/hand/right/pose/raw",
-               "output": "/actions/default/in/rightpose"
+               "output" : "/actions/default/out/haptic",
+               "path" : "/user/hand/right/output/haptic"
+            }
+         ],
+         "poses" : [
+            {
+               "output" : "/actions/default/in/lefthand",
+               "path" : "/user/hand/left/pose/raw"
+            },
+            {
+               "output" : "/actions/default/in/righthand",
+               "path" : "/user/hand/right/pose/raw"
+            },
+            {
+               "output" : "none",
+               "path" : "/user/hand/left/pose/handgrip"
             }
          ],
          "sources" : [
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/lb"
+                     "output" : "/actions/default/in/secondaryaction"
                   }
                },
                "mode" : "button",
@@ -26,7 +40,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/select"
+                     "output" : "/actions/default/in/menu"
                   }
                },
                "mode" : "button",
@@ -35,7 +49,7 @@
             {
                "inputs" : {
                   "pull" : {
-                     "output" : "/actions/default/in/rt"
+                     "output" : "/actions/default/in/throttledown"
                   }
                },
                "mode" : "trigger",
@@ -44,7 +58,7 @@
             {
                "inputs" : {
                   "position" : {
-                     "output" : "/actions/default/in/lstick"
+                     "output" : "/actions/default/in/move"
                   }
                },
                "mode" : "trackpad",
@@ -52,26 +66,8 @@
             },
             {
                "inputs" : {
-                  "north" : {
-                     "output" : "/actions/default/in/y"
-                  },
-                  "south" : {
-                     "output" : "/actions/default/in/lclick"
-                  },
-                  "west" : {
-                     "output" : "/actions/default/in/x"
-                  }
-               },
-               "mode" : "dpad",
-               "parameters" : {
-                  "sub_mode" : "click"
-               },
-               "path" : "/user/hand/left/input/trackpad"
-            },
-            {
-               "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/start"
+                     "output" : "/actions/default/in/primaryaction"
                   }
                },
                "mode" : "button",
@@ -81,6 +77,9 @@
                "inputs" : {
                   "click" : {
                      "output" : "/actions/default/in/rt"
+                  },
+                  "pull" : {
+                     "output" : "/actions/default/in/throttleup"
                   }
                },
                "mode" : "trigger",
@@ -89,7 +88,7 @@
             {
                "inputs" : {
                   "position" : {
-                     "output" : "/actions/default/in/rstick"
+                     "output" : "/actions/default/in/look"
                   }
                },
                "mode" : "trackpad",
@@ -97,18 +96,30 @@
             },
             {
                "inputs" : {
-                  "east" : {
-                     "output" : "/actions/default/in/b"
-                  },
-                  "south" : {
-                     "output" : "/actions/default/in/a"
+                  "click" : {
+                     "output" : "/actions/default/in/back"
                   }
                },
-               "mode" : "dpad",
-               "parameters" : {
-                  "sub_mode" : "click"
+               "mode" : "button",
+               "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/jump"
+                  }
                },
+               "mode" : "button",
                "path" : "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/grip"
+                  }
+               },
+               "mode" : "toggle_button",
+               "path" : "/user/hand/right/input/grip"
             }
          ]
       }

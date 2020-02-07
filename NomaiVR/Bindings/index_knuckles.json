@@ -16,11 +16,11 @@
          ],
          "poses" : [
             {
-               "output" : "/actions/default/in/leftpose",
+               "output" : "/actions/default/in/lefthand",
                "path" : "/user/hand/left/pose/raw"
             },
             {
-               "output" : "/actions/default/in/rightpose",
+               "output" : "/actions/default/in/righthand",
                "path" : "/user/hand/right/pose/raw"
             }
          ],
@@ -29,7 +29,7 @@
             {
                "inputs" : {
                   "pull" : {
-                     "output" : "/actions/default/in/lt"
+                     "output" : "/actions/default/in/throttledown"
                   }
                },
                "mode" : "trigger",
@@ -46,15 +46,6 @@
                },
                "mode" : "joystick",
                "path" : "/user/hand/left/input/joystick"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/lb"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/grip"
             },
             {
                "inputs" : {
@@ -77,7 +68,7 @@
             {
                "inputs" : {
                   "pull" : {
-                     "output" : "/actions/default/in/rt"
+                     "output" : "/actions/default/in/throttleup"
                   }
                },
                "mode" : "trigger",
@@ -98,7 +89,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/rb"
+                     "output" : "/actions/default/in/grip"
                   }
                },
                "mode" : "button",
@@ -107,7 +98,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/a"
+                     "output" : "/actions/default/in/jump"
                   }
                },
                "mode" : "button",
@@ -116,7 +107,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/b"
+                     "output" : "/actions/default/in/primaryaction"
                   }
                },
                "mode" : "button",
@@ -125,10 +116,10 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/lclick"
+                     "output" : "/actions/default/in/map"
                   },
                   "position" : {
-                     "output" : "/actions/default/in/lstick"
+                     "output" : "/actions/default/in/move"
                   }
                },
                "mode" : "joystick",
@@ -137,7 +128,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/y"
+                     "output" : "/actions/default/in/menu"
                   }
                },
                "mode" : "button",
@@ -146,7 +137,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/x"
+                     "output" : "/actions/default/in/secondaryaction"
                   }
                },
                "mode" : "button",
@@ -158,11 +149,20 @@
                      "output" : "/actions/default/in/select"
                   },
                   "position" : {
-                     "output" : "/actions/default/in/rstick"
+                     "output" : "/actions/default/in/look"
                   }
                },
                "mode" : "joystick",
                "path" : "/user/hand/right/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/back"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/trackpad"
             }
          ]
       }
