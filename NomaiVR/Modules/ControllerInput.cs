@@ -153,27 +153,28 @@ namespace NomaiVR {
                 ref float ____pressedDuration,
                 ref float ____realtimeSinceLastUpdate
             ) {
+                if (____xboxButtonPositive == XboxButton.None && ____xboxButtonNegative == XboxButton.None) {
+                    return true;
+                }
 
                 ____newlyPressedThisFrame = false;
                 ____lastValue = ____value;
                 ____value = 0f;
-                bool shouldContinue = true;
+
 
                 if (_buttons.ContainsKey(____xboxButtonPositive)) {
                     ____value += _buttons[____xboxButtonPositive];
-                    shouldContinue = false;
                 }
 
                 if (_buttons.ContainsKey(____xboxButtonNegative)) {
                     ____value -= _buttons[____xboxButtonNegative];
-                    shouldContinue = false;
                 }
 
                 ____lastPressedDuration = ____pressedDuration;
                 ____pressedDuration = ((!__instance.IsPressed()) ? 0f : (____pressedDuration + (Time.realtimeSinceStartup - ____realtimeSinceLastUpdate)));
                 ____realtimeSinceLastUpdate = Time.realtimeSinceStartup;
 
-                return shouldContinue;
+                return false;
             }
 
             static void OWInputUpdate (ref bool ____usingGamepad) {
