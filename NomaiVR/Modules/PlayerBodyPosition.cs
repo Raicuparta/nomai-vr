@@ -13,7 +13,7 @@ namespace NomaiVR {
             NomaiVR.Log("Start PlayerBodyPosition");
 
             //SetupCamera();
-            //NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
             //MoveCameraToPlayerHead();
 
 
@@ -34,6 +34,7 @@ namespace NomaiVR {
             _camera = Camera.main.transform;
             _cameraParent = new GameObject().transform;
             _playArea = new GameObject().transform;
+            _playArea.parent = Common.PlayerBody.transform;
             _playArea.position = Common.PlayerHead.position;
             _playArea.rotation = Common.PlayerHead.rotation;
             _cameraParent.parent = _playArea;
@@ -75,8 +76,6 @@ namespace NomaiVR {
             if (Vector3.Distance(Common.PlayerHead.position, _camera.position) > 0.5f) {
                 MoveCameraToPlayerHead();
             }
-            _playArea.rotation = Common.PlayerHead.rotation;
-            _playArea.position = Common.PlayerHead.position;
             if (NomaiVR.DebugMode) {
                 if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
                     _cameraParent.localScale *= 0.9f;
@@ -107,10 +106,10 @@ namespace NomaiVR {
                 }
 
                 var targetRotation = fromTo * transform.rotation;
-                var inverseRotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.rotation;
+                var inverseRotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.parent.rotation;
 
                 var maxDegreesDelta = magnitude * 5f;
-                playerCam.transform.parent.rotation = Quaternion.RotateTowards(playerCam.transform.parent.rotation, inverseRotation, maxDegreesDelta);
+                playerCam.transform.parent.parent.rotation = Quaternion.RotateTowards(playerCam.transform.parent.parent.rotation, inverseRotation, maxDegreesDelta);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxDegreesDelta);
             }
         }
