@@ -134,17 +134,6 @@ namespace NomaiVR {
             };
         }
 
-        static void SetInputValues (object inputValue, params string[] inputActions) {
-            foreach (string action in inputActions) {
-                var actionField = typeof(InputLibrary).GetAnyField(action);
-                var actionValue = actionField.GetValue(null);
-
-                var isSingleAxis = actionValue.GetType() == typeof(SingleAxisCommand);
-
-                actionValue.SetValue("_value", inputValue);
-            }
-        }
-
         internal static class Patches {
             static bool DoubleAxisUpdate (ref Vector2 ____value, DoubleAxis ____gamepadAxis) {
                 if (____gamepadAxis != null && _doubleAxes.ContainsKey(____gamepadAxis)) {
