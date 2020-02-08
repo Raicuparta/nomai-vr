@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using OWML.Common;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
@@ -15,6 +16,11 @@ namespace NomaiVR {
             public const string TitleMenu = "TitleMenu";
         }
 
+        void Awake () {
+            NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
+            NomaiVR.Helper.Events.OnEvent += OnEvent;
+        }
+
         void Start () {
             NomaiVR.Log("Start Menus");
 
@@ -24,7 +30,7 @@ namespace NomaiVR {
             if (isInGame) {
                 FixGameCanvases(new[] {
                     new CanvasInfo(CanvasTypes.PauseMenu, 0.0005f),
-                    new CanvasInfo(CanvasTypes.DialogueCanvas)
+                    new CanvasInfo(CanvasTypes.DialogueCanvas),
                 });
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
@@ -38,6 +44,13 @@ namespace NomaiVR {
                 }
             } else {
                 FixMainMenuCanvas();
+            }
+        }
+
+        private void OnEvent (MonoBehaviour behaviour, Events ev) {
+            if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
+                var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
+                canvas.planeDistance = 5;
             }
         }
 
