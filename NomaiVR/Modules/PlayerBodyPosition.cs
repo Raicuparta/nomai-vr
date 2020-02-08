@@ -46,10 +46,10 @@ namespace NomaiVR {
         }
 
         void MoveCameraToPlayerHead () {
-            //Vector3 movement = Common.PlayerHead.position - _camera.position;
-            //_cameraParent.position += movement;
-            _playArea.rotation = Common.PlayerHead.rotation;
-            _playArea.position = Common.PlayerHead.position;
+            Vector3 movement = Common.PlayerHead.position - _camera.position;
+            _cameraParent.position += movement;
+            //_playArea.rotation = Common.PlayerHead.rotation;
+            //_playArea.position = Common.PlayerHead.position;
 
         }
 
@@ -72,7 +72,11 @@ namespace NomaiVR {
             if (MovePlayerWithHead && OWInput.GetInputMode() == InputMode.Character) {
                 //MovePlayerBodyToCamera();
             }
-            MoveCameraToPlayerHead();
+            if (Vector3.Distance(Common.PlayerHead.position, _camera.position) > 0.5f) {
+                MoveCameraToPlayerHead();
+            }
+            _playArea.rotation = Common.PlayerHead.rotation;
+            _playArea.position = Common.PlayerHead.position;
             if (NomaiVR.DebugMode) {
                 if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
                     _cameraParent.localScale *= 0.9f;
