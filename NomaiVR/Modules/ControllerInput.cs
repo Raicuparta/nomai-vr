@@ -50,7 +50,6 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Awake", typeof(Patches), "EnableListenForAllJoysticks");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<PadEZ.PadManager>("GetAxis", typeof(Patches), "GetAxis");
-
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -147,15 +146,12 @@ namespace NomaiVR {
                 SingleAxisCommand __instance,
                 XboxButton ____xboxButtonPositive,
                 XboxButton ____xboxButtonNegative,
-                SingleAxis ____gamepadAxisPositive,
-                SingleAxis ____gamepadAxisNegative,
                 ref float ____value,
                 ref bool ____newlyPressedThisFrame,
                 ref float ____lastValue,
                 ref float ____lastPressedDuration,
                 ref float ____pressedDuration,
-                ref float ____realtimeSinceLastUpdate,
-                int ____axisDirection
+                ref float ____realtimeSinceLastUpdate
             ) {
 
                 ____newlyPressedThisFrame = false;
