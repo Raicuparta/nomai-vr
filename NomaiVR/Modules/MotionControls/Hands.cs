@@ -17,7 +17,7 @@ namespace NomaiVR {
             _wrapper.localRotation = Quaternion.identity;
             _wrapper.localPosition = Camera.main.transform.localPosition;
 
-            //HideBody();
+            HideBody();
             gameObject.AddComponent<FlashlightGesture>();
             gameObject.AddComponent<HoldHUD>();
             gameObject.AddComponent<HoldMallowStick>();
