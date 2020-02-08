@@ -75,8 +75,20 @@ namespace NomaiVR {
 
                 Quaternion fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
 
-                playerCam.transform.parent.rotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.rotation;
-                transform.rotation = fromTo * transform.rotation;
+                var magnitudeUp = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.up).magnitude;
+                var magnitudeForward = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.right).magnitude;
+                var magnitude = magnitudeUp + magnitudeForward;
+
+                if (magnitude < 0.35) {
+                    return;
+                }
+
+                var targetRotation = fromTo * transform.rotation;
+                var inverseRotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.rotation;
+
+                var maxDegreesDelta = magnitude * 5f;
+                playerCam.transform.parent.rotation = Quaternion.RotateTowards(playerCam.transform.parent.rotation, inverseRotation, maxDegreesDelta);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxDegreesDelta);
             }
         }
 

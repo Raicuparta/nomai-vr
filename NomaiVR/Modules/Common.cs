@@ -22,6 +22,7 @@ namespace NomaiVR {
             InitPreGame();
             PlayerBody = GameObject.Find("Player_Body").GetComponent<PlayerCharacterController>();
             PlayerHead = FindObjectOfType<ToolModeUI>().transform;
+            PlayerHead.localPosition = new Vector3(PlayerHead.localPosition.x, PlayerHead.localPosition.y, 0);
             ToolSwapper = FindObjectOfType<ToolModeSwapper>();
         }
 
