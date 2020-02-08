@@ -39,8 +39,7 @@ namespace NomaiVR {
             SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
             SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
 
-            //NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
-            //NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
+            NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<Campfire>("Awake", typeof(Patches), "CampfireAwake");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
@@ -143,13 +142,6 @@ namespace NomaiVR {
                 }
                 return __result;
             }
-            static bool DoubleAxisUpdate (ref Vector2 ____value, DoubleAxis ____gamepadAxis) {
-                if (____gamepadAxis != null && _doubleAxes.ContainsKey(____gamepadAxis)) {
-                    ____value = _doubleAxes[____gamepadAxis];
-                }
-
-                return false;
-            }
 
             static bool SingleAxisUpdate (
                 SingleAxisCommand __instance,
@@ -169,20 +161,23 @@ namespace NomaiVR {
                 ____newlyPressedThisFrame = false;
                 ____lastValue = ____value;
                 ____value = 0f;
+                bool shouldContinue = true;
 
                 if (_buttons.ContainsKey(____xboxButtonPositive)) {
                     ____value += _buttons[____xboxButtonPositive];
+                    shouldContinue = false;
                 }
 
                 if (_buttons.ContainsKey(____xboxButtonNegative)) {
                     ____value -= _buttons[____xboxButtonNegative];
+                    shouldContinue = false;
                 }
 
                 ____lastPressedDuration = ____pressedDuration;
                 ____pressedDuration = ((!__instance.IsPressed()) ? 0f : (____pressedDuration + (Time.realtimeSinceStartup - ____realtimeSinceLastUpdate)));
                 ____realtimeSinceLastUpdate = Time.realtimeSinceStartup;
 
-                return false;
+                return shouldContinue;
             }
 
             static void OWInputUpdate (ref bool ____usingGamepad) {
