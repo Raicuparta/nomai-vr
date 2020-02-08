@@ -10,7 +10,7 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
 
-            var probeLauncher = Common.MainCamera.transform.Find("ProbeLauncher");
+            var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.2f;
             Hands.HoldObject(probeLauncher, Hands.RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
 
@@ -38,7 +38,7 @@ namespace NomaiVR {
             probeLauncher.Find("Props_HEA_ProbeLauncher_ProbeCamera").gameObject.SetActive(false);
 
             // This transform defines the origin and direction of the launched probe.
-            var launchOrigin = Common.MainCamera.transform.Find("ProbeLauncherTransform").transform;
+            var launchOrigin = Camera.main.transform.Find("ProbeLauncherTransform").transform;
             launchOrigin.parent = ProbeLauncherModel;
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;

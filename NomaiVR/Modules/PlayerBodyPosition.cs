@@ -3,63 +3,82 @@ using UnityEngine;
 
 namespace NomaiVR {
     public class PlayerBodyPosition: MonoBehaviour {
-        GameObject _cameraParent;
+        Transform _cameraParent;
+        Transform _playArea;
+        Transform _camera;
         Vector3 _prevCameraPosition;
         public static bool MovePlayerWithHead = true;
 
         void Start () {
             NomaiVR.Log("Start PlayerBodyPosition");
 
-            updateMainCamera();
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
-            MoveCameraToPlayerHead();
-        }
+            //SetupCamera();
+            //NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+            //MoveCameraToPlayerHead();
 
-        private void updateMainCamera () {
-            NomaiVR.Helper.Console.WriteLine("Main camera: " + Common.MainCamera.name);
-
-            // Make an empty parent object for moving the camera around.
-            _cameraParent = new GameObject();
-            _cameraParent.transform.parent = Common.MainCamera.transform.parent;
-            _cameraParent.transform.localPosition = Vector3.zero;
-            _cameraParent.transform.localRotation = Quaternion.identity;
-            Common.MainCamera.transform.parent = _cameraParent.transform;
-            Common.MainCamera.transform.localPosition = Vector3.zero;
-            Common.MainCamera.transform.localRotation = Quaternion.identity;
 
             // This component is messing with our ability to read the VR camera's rotation.
             // Seems to be responsible for controlling the camera rotation with the mouse / joystick.
-            PlayerCameraController playerCameraController = Common.MainCamera.GetComponent<PlayerCameraController>();
+            PlayerCameraController playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             if (playerCameraController) {
                 playerCameraController.enabled = false;
             }
+
+            Invoke("SetupCamera", 1);
+        }
+
+        private void SetupCamera () {
+            NomaiVR.Helper.Console.WriteLine("Main camera: " + Camera.main.name);
+
+            // Make an empty parent object for moving the camera around.
+            _camera = Camera.main.transform;
+            _cameraParent = new GameObject().transform;
+            _playArea = new GameObject().transform;
+            _playArea.position = Common.PlayerHead.position;
+            _playArea.rotation = Common.PlayerHead.rotation;
+            _cameraParent.parent = _playArea;
+            //_cameraParent.localPosition = Vector3.zero;
+            _cameraParent.localRotation = Quaternion.identity;
+            _camera.parent = _cameraParent;
+
+            Vector3 movement = Common.PlayerHead.position - _camera.position;
+            _cameraParent.position += movement;
         }
 
         void MoveCameraToPlayerHead () {
-            Vector3 movement = Common.PlayerHead.position - Common.MainCamera.transform.position;
-            _cameraParent.transform.position += movement;
+            //Vector3 movement = Common.PlayerHead.position - _camera.position;
+            //_cameraParent.position += movement;
+            _playArea.rotation = Common.PlayerHead.rotation;
+            _playArea.position = Common.PlayerHead.position;
+
         }
 
         void MovePlayerBodyToCamera () {
-            Vector3 movement = _prevCameraPosition - (_cameraParent.transform.position - Common.MainCamera.transform.position);
-            Common.PlayerBody.transform.position += movement;
+            var movement = _camera.position - Common.PlayerHead.position;
+            var projectedMovement = Common.PlayerBody.transform.InverseTransformVector(Vector3.ProjectOnPlane(movement, Common.PlayerBody.transform.up));
+            ControllerInput.SimulateInput(XboxAxis.leftStickX, projectedMovement.x);
+            ControllerInput.SimulateInput(XboxAxis.leftStickY, projectedMovement.y);
 
-            _prevCameraPosition = _cameraParent.transform.position - Common.MainCamera.transform.position;
+            //Common.PlayerBody.transform.position += Vector3.ProjectOnPlane(movement, Common.PlayerBody.transform.up);
 
+            _prevCameraPosition = _cameraParent.position - _camera.position;
         }
 
 
         void Update () {
-            MoveCameraToPlayerHead();
-            if (MovePlayerWithHead && OWInput.GetInputMode() == InputMode.Character) {
-                MovePlayerBodyToCamera();
+            if (_cameraParent == null) {
+                return;
             }
+            if (MovePlayerWithHead && OWInput.GetInputMode() == InputMode.Character) {
+                //MovePlayerBodyToCamera();
+            }
+            MoveCameraToPlayerHead();
             if (NomaiVR.DebugMode) {
                 if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
-                    _cameraParent.transform.localScale *= 0.9f;
+                    _cameraParent.localScale *= 0.9f;
                 }
                 if (Input.GetKeyDown(KeyCode.KeypadMinus)) {
-                    _cameraParent.transform.localScale /= 0.9f;
+                    _cameraParent.localScale /= 0.9f;
                 }
             }
         }

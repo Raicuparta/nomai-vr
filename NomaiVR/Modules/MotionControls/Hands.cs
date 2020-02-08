@@ -13,11 +13,11 @@ namespace NomaiVR {
             _wrapper = new GameObject().transform;
             RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightHand, Quaternion.Euler(45, 180, 0), _wrapper);
             LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftHand, Quaternion.Euler(-40, 330, 20), _wrapper);
-            _wrapper.parent = Common.MainCamera.transform.parent;
+            _wrapper.parent = Camera.main.transform.parent;
             _wrapper.localRotation = Quaternion.identity;
-            _wrapper.localPosition = Common.MainCamera.transform.localPosition;
+            _wrapper.localPosition = Camera.main.transform.localPosition;
 
-            HideBody();
+            //HideBody();
             gameObject.AddComponent<FlashlightGesture>();
             gameObject.AddComponent<HoldHUD>();
             gameObject.AddComponent<HoldMallowStick>();
@@ -80,7 +80,7 @@ namespace NomaiVR {
 
         void Update () {
             if (_wrapper) {
-                _wrapper.localPosition = Common.MainCamera.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+                _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
         }
     }

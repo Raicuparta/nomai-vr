@@ -30,11 +30,11 @@ namespace NomaiVR {
                 Transform attentionPoint = currentDialogue.GetValue<Transform>("_attentionPoint");
                 dialogCanvas.transform.parent = attentionPoint;
                 dialogCanvas.transform.localPosition = Vector3.zero;
-                dialogCanvas.transform.LookAt(2 * attentionPoint.position - Common.MainCamera.transform.position, Common.PlayerHead.up);
+                dialogCanvas.transform.LookAt(2 * attentionPoint.position - Camera.main.transform.position, Common.PlayerHead.up);
 
                 // Move so it is 1 unit away from the player
-                float distance = Vector3.Distance(attentionPoint.position, Common.MainCamera.transform.position);
-                dialogCanvas.transform.position = Vector3.MoveTowards(attentionPoint.position, Common.MainCamera.transform.position, distance - dialogRenderDistance);
+                float distance = Vector3.Distance(attentionPoint.position, Camera.main.transform.position);
+                dialogCanvas.transform.position = Vector3.MoveTowards(attentionPoint.position, Camera.main.transform.position, distance - dialogRenderDistance);
             }
         }
 

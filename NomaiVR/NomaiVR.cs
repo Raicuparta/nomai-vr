@@ -60,7 +60,6 @@ namespace NomaiVR {
                     nonPersistentObject.AddComponent<Hands>();
                 }
             } else if (isInTitle) {
-                Common.InitPreGame();
                 Menus.Reset();
             }
         }

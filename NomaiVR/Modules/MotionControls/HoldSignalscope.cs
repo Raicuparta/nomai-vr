@@ -12,7 +12,7 @@ namespace NomaiVR {
             // For fixing signalscope zoom
             //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
             //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
-            //behaviour.SetValue("_targetFOV", Common.MainCamera.fieldOfView);
+            //behaviour.SetValue("_targetFOV", Camera.main.fieldOfView);
 
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
             NomaiVR.Helper.Events.Subscribe<ShipCockpitUI>(Events.AfterStart);
@@ -21,7 +21,7 @@ namespace NomaiVR {
             ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
 
 
-            var signalScope = Common.MainCamera.transform.Find("Signalscope");
+            var signalScope = Camera.main.transform.Find("Signalscope");
             Hands.HoldObject(signalScope, Hands.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
             SignalScope = signalScope.GetComponent<Signalscope>();
 
@@ -79,11 +79,11 @@ namespace NomaiVR {
 
         internal static class Patches {
             static void ZoomIn () {
-                Common.MainCamera.transform.localScale = Vector3.one * 0.1f;
+                Camera.main.transform.localScale = Vector3.one * 0.1f;
             }
 
             static void ZoomOut () {
-                Common.MainCamera.transform.localScale = Vector3.one;
+                Camera.main.transform.localScale = Vector3.one;
             }
 
             static void ChangeInputMode (InputMode mode) {

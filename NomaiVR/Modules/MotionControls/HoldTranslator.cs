@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace NomaiVR {
     public class HoldTranslator: MonoBehaviour {
         void Awake () {
-            var translator = Common.MainCamera.transform.Find("NomaiTranslatorProp");
+            var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 
             Hands.HoldObject(translator, Hands.RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
 
