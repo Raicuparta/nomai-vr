@@ -36,12 +36,12 @@ namespace NomaiVR {
 
             Vector3 movement = Common.PlayerHead.position - _camera.position;
             _cameraParent.position += movement;
+
         }
 
         void MoveCameraToPlayerHead () {
             Vector3 movement = Common.PlayerHead.position - _camera.position;
             _cameraParent.position += movement;
-
         }
 
         void Update () {
@@ -73,14 +73,14 @@ namespace NomaiVR {
                 var magnitudeForward = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.right).magnitude;
                 var magnitude = magnitudeUp + magnitudeForward;
 
-                if (magnitude < 0.35) {
+                if (magnitude < 0.3f) {
                     return;
                 }
 
                 var targetRotation = fromTo * transform.rotation;
                 var inverseRotation = Quaternion.Inverse(fromTo) * _playArea.rotation;
 
-                var maxDegreesDelta = magnitude * 5f;
+                var maxDegreesDelta = magnitude * 3f;
                 _playArea.rotation = Quaternion.RotateTowards(_playArea.rotation, inverseRotation, maxDegreesDelta);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxDegreesDelta);
             }

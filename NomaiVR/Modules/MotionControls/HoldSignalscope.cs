@@ -41,7 +41,7 @@ namespace NomaiVR {
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<HolsterTool>();
             holster.hand = Hands.RightHand;
-            holster.position = new Vector3(0.3f, -0.35f, 0);
+            holster.position = new Vector3(0.3f, -0.55f, 0);
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
             holster.angle = Vector3.right * 90;
