@@ -6,7 +6,7 @@ using Valve.VR;
 namespace NomaiVR {
     class ControllerInput: MonoBehaviour {
         static Dictionary<XboxButton, float> _buttons;
-        static Dictionary<SingleAxis, float> _singleAxes;
+        static Dictionary<string, float> _singleAxes;
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
         public static bool IsGripping { get; private set; }
 
@@ -18,7 +18,7 @@ namespace NomaiVR {
             NomaiVR.Log("Started ControllerInput");
 
             _buttons = new Dictionary<XboxButton, float>();
-            _singleAxes = new Dictionary<SingleAxis, float>();
+            _singleAxes = new Dictionary<string, float>();
             _doubleAxes = new Dictionary<DoubleAxis, Vector2>();
 
             SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
@@ -39,8 +39,8 @@ namespace NomaiVR {
             SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
             SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
 
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
+            //NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
+            //NomaiVR.Helper.HarmonyHelper.AddPrefix<DoubleAxisCommand>("Update", typeof(Patches), "DoubleAxisUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<Campfire>("Awake", typeof(Patches), "CampfireAwake");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
@@ -50,6 +50,8 @@ namespace NomaiVR {
             NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "MultipleInteractionAdd");
             NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
             NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Awake", typeof(Patches), "EnableListenForAllJoysticks");
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<PadEZ.PadManager>("GetAxis", typeof(Patches), "GetAxis");
+
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -67,10 +69,10 @@ namespace NomaiVR {
 
             switch (Common.ToolSwapper.GetToolMode()) {
                 case ToolMode.SignalScope:
-                    _singleAxes[XboxAxis.dPadX] = value;
+                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
                     break;
                 case ToolMode.Translator:
-                    _singleAxes[XboxAxis.dPadX] = value;
+                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
                     _buttons[XboxButton.RightBumper] = value;
                     break;
                 case ToolMode.Probe:
@@ -99,12 +101,12 @@ namespace NomaiVR {
         }
 
         public static void SimulateInput (SingleAxis axis, float value) {
-            _singleAxes[axis] = value;
+            _singleAxes[axis.GetInputAxisName(0)] = value;
         }
 
         SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler (SingleAxis singleAxis, int axisDirection) {
             return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) => {
-                _singleAxes[singleAxis] = axisDirection * Mathf.Round(newAxis * 10) / 10;
+                _singleAxes[singleAxis.GetInputAxisName(0)] = axisDirection * Mathf.Round(newAxis * 10) / 10;
             };
         }
 
@@ -114,7 +116,7 @@ namespace NomaiVR {
 
         SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler (SingleAxis singleAxis, int axisDirection) {
             return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) => {
-                _singleAxes[singleAxis] = axisDirection * (newState ? 1 : 0);
+                _singleAxes[singleAxis.GetInputAxisName(0)] = axisDirection * (newState ? 1 : 0);
             };
         }
 
@@ -129,12 +131,18 @@ namespace NomaiVR {
                 var x = Mathf.Round(axis.x * 100) / 100;
                 var y = Mathf.Round(axis.y * 100) / 100;
                 _doubleAxes[doubleAxis] = new Vector2(x, y);
-                _singleAxes[singleX] = x;
-                _singleAxes[singleY] = y;
+                _singleAxes[singleX.GetInputAxisName(0)] = x;
+                _singleAxes[singleY.GetInputAxisName(0)] = y;
             };
         }
 
         internal static class Patches {
+            static float GetAxis (float __result, string axisName) {
+                if (_singleAxes.ContainsKey(axisName)) {
+                    return _singleAxes[axisName];
+                }
+                return __result;
+            }
             static bool DoubleAxisUpdate (ref Vector2 ____value, DoubleAxis ____gamepadAxis) {
                 if (____gamepadAxis != null && _doubleAxes.ContainsKey(____gamepadAxis)) {
                     ____value = _doubleAxes[____gamepadAxis];
@@ -157,29 +165,17 @@ namespace NomaiVR {
                 ref float ____realtimeSinceLastUpdate,
                 int ____axisDirection
             ) {
+
                 ____newlyPressedThisFrame = false;
                 ____lastValue = ____value;
                 ____value = 0f;
 
-                if (____gamepadAxisNegative != null && _singleAxes.ContainsKey(____gamepadAxisNegative)) {
-                    var num = _singleAxes[____gamepadAxisNegative];
-                    float value = Mathf.Abs(num);
-                    var result = Mathf.Sign(num) * Mathf.InverseLerp(____gamepadAxisNegative.GetValue<float>("_innerDeadZone"), 1f - ____gamepadAxisNegative.GetValue<float>("_outerDeadZone"), value);
-                    ____value -= result * (float) ____axisDirection;
+                if (_buttons.ContainsKey(____xboxButtonPositive)) {
+                    ____value += _buttons[____xboxButtonPositive];
                 }
-                if (____gamepadAxisPositive != null && _singleAxes.ContainsKey(____gamepadAxisPositive)) {
-                    var num = _singleAxes[____gamepadAxisPositive];
-                    float value = Mathf.Abs(num);
-                    var result = Mathf.Sign(num) * Mathf.InverseLerp(____gamepadAxisPositive.GetValue<float>("_innerDeadZone"), 1f - ____gamepadAxisPositive.GetValue<float>("_outerDeadZone"), value);
-                    ____value += result * (float) ____axisDirection;
-                } else {
-                    if (_buttons.ContainsKey(____xboxButtonPositive)) {
-                        ____value += _buttons[____xboxButtonPositive];
-                    }
 
-                    if (_buttons.ContainsKey(____xboxButtonNegative)) {
-                        ____value -= _buttons[____xboxButtonNegative];
-                    }
+                if (_buttons.ContainsKey(____xboxButtonNegative)) {
+                    ____value -= _buttons[____xboxButtonNegative];
                 }
 
                 ____lastPressedDuration = ____pressedDuration;
