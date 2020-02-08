@@ -6,7 +6,6 @@ namespace NomaiVR {
         Transform _cameraParent;
         static Transform _playArea;
         Transform _camera;
-        public static bool MovePlayerWithHead = true;
 
         void Start () {
             NomaiVR.Log("Start PlayerBodyPosition");

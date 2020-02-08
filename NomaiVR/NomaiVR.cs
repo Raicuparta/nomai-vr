@@ -66,7 +66,6 @@ namespace NomaiVR {
 
         public override void Configure (IModConfig config) {
             DebugMode = config.GetSetting<bool>("debugMode");
-            PlayerBodyPosition.MovePlayerWithHead = config.GetSetting<bool>("movePlayerWithHead");
             XRSettings.showDeviceView = config.GetSetting<bool>("showMirrorView");
             MotionControlsEnabled = config.GetSetting<bool>("enableMotionControls");
 
