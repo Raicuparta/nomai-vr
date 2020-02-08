@@ -4,7 +4,7 @@ using UnityEngine;
 namespace NomaiVR {
     public class PlayerBodyPosition: MonoBehaviour {
         Transform _cameraParent;
-        Transform _playArea;
+        public static Transform PlayArea;
         Transform _camera;
         Vector3 _prevCameraPosition;
         public static bool MovePlayerWithHead = true;
@@ -24,7 +24,8 @@ namespace NomaiVR {
                 playerCameraController.enabled = false;
             }
 
-            Invoke("SetupCamera", 1);
+            //Invoke("SetupCamera", 1);
+            SetupCamera();
         }
 
         private void SetupCamera () {
@@ -33,11 +34,11 @@ namespace NomaiVR {
             // Make an empty parent object for moving the camera around.
             _camera = Camera.main.transform;
             _cameraParent = new GameObject().transform;
-            _playArea = new GameObject().transform;
-            _playArea.parent = Common.PlayerBody.transform;
-            _playArea.position = Common.PlayerHead.position;
-            _playArea.rotation = Common.PlayerHead.rotation;
-            _cameraParent.parent = _playArea;
+            PlayArea = new GameObject().transform;
+            PlayArea.parent = Common.PlayerBody.transform;
+            PlayArea.position = Common.PlayerHead.position;
+            PlayArea.rotation = Common.PlayerHead.rotation;
+            _cameraParent.parent = PlayArea;
             //_cameraParent.localPosition = Vector3.zero;
             _cameraParent.localRotation = Quaternion.identity;
             _camera.parent = _cameraParent;
@@ -106,10 +107,10 @@ namespace NomaiVR {
                 }
 
                 var targetRotation = fromTo * transform.rotation;
-                var inverseRotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.parent.rotation;
+                var inverseRotation = Quaternion.Inverse(fromTo) * PlayArea.rotation;
 
                 var maxDegreesDelta = magnitude * 5f;
-                playerCam.transform.parent.parent.rotation = Quaternion.RotateTowards(playerCam.transform.parent.parent.rotation, inverseRotation, maxDegreesDelta);
+                PlayArea.rotation = Quaternion.RotateTowards(PlayArea.rotation, inverseRotation, maxDegreesDelta);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxDegreesDelta);
             }
         }
