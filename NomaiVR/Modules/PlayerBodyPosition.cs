@@ -13,6 +13,13 @@ namespace NomaiVR {
             updateMainCamera();
             NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
             MoveCameraToPlayerHead();
+
+            InvokeRepeating("LogMagnitude", 0.5f, 0.5f);
+        }
+
+        void LogMagnitude () {
+            var magnitude = Vector3.ProjectOnPlane(Camera.main.transform.forward, Common.PlayerBody.transform.up).magnitude;
+            NomaiVR.Log("magnitude", magnitude.ToString());
         }
 
         private void updateMainCamera () {
@@ -74,9 +81,13 @@ namespace NomaiVR {
                 var transform = __instance.GetValue<Transform>("_transform");
 
                 Quaternion fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
+                var magnitude = Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up).magnitude;
 
-                playerCam.transform.parent.rotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.rotation;
-                transform.rotation = fromTo * transform.rotation;
+                var targetRotation = fromTo * transform.rotation;
+                var inverseRotation = Quaternion.Inverse(fromTo) * playerCam.transform.parent.rotation;
+
+                playerCam.transform.parent.rotation = Quaternion.RotateTowards(playerCam.transform.parent.rotation, inverseRotation, magnitude * magnitude * 2f);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, magnitude * magnitude * 2f);
             }
         }
 
