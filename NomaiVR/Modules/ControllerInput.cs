@@ -23,7 +23,7 @@ namespace NomaiVR {
 
             SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
             SteamVR_Actions.default_Back.onChange += OnBackChange;
-            SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryActionCHange;
+            SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryActionChange;
 
             SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(XboxButton.Start);
             SteamVR_Actions.default_Map.onChange += CreateButtonHandler(XboxButton.Select);
@@ -62,7 +62,7 @@ namespace NomaiVR {
             IsGripping = newState;
         }
 
-        private void OnPrimaryActionCHange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+        private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
             switch (Common.ToolSwapper.GetToolMode()) {
