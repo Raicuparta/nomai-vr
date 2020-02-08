@@ -11,7 +11,7 @@ The aim of this mod is to enable VR mode in Outer Wilds, and eventually fix the 
 
 ## YOU WILL HAVE A BAD TIME
 
-While the game is playable at a surprisingly decent level, a lot of things range from mildly glitchy to completely broken. Expect nausea, low performance, crashes, blue screen, house fires, big explosions visibe from space. Have a look at the [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) to have an idea of some of the stuff that needs fixing.
+While the game is playable at a surprisingly decent level, a lot of things range from mildly glitchy to completely broken. Expect nausea, low performance, flashing images, crashes, blue screens, house fires, big explosions visibe from space. Have a look at the [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) to have an idea of some of the stuff that needs fixing.
 
 ## Requirements
 
@@ -23,12 +23,17 @@ While the game is playable at a surprisingly decent level, a lot of things range
 
 ## VR Controller Inputs
 
-Since most VR controllers have less buttons than a normal game controller, input mappings can't be one-to-one. So I had to change the way some of the controls work:
+Since most VR controllers have less buttons than a normal game controller, input mappings can't be one-to-one. This led to some creative use of motion controls in order to reduce the number of required buttons. The game will control a lot different than it did originally, and there won't be any tutorials teaching you how to play with these controls. Important things:
 
-* LB/L1 (usually mapped to left hand grip) will act as DPad-Up when piloting the ship (for auto-pilot);
-* RB/R1 (usually mapped to right hand grip) is used for interactions. Picking up tools in the toolbelt, picking up objects, talking with characters, interacting with objects, etc.
-
-On top of these changes, you also need SteamVR to do the mapping from VR controller to XBox controller inputs. I have included default mappings for Oculus, Index and Vive (but only tested Oculus).
+* Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
+* Don't try to change the controller bindings in-game;
+* In SteamVR's settings you can see the default controls that I set up for the game;
+* You can interact with most stuff by aiming with the right-hand laser and pressing the "primary interaction" button;
+* Right hand grip can be used to grab tools from the toolbelt;
+* While holding a tool, press the "primary interacttion" button to use the tool and change modes;
+* Left hand grip is usually the same as the LB/L1 button on an XBox/PlayStation controller;
+* While piloting the ship, you can aim at and interact with stuff inside the ship;
+* Experiment with the controls. When in doubt, aim laser and interact.
 
 ## Installation
 
