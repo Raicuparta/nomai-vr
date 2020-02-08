@@ -56,10 +56,6 @@ namespace NomaiVR {
                 var landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
                 landingCam.button = XboxButton.DPadDown;
                 landingCam.text = UITextType.ShipLandingPrompt;
-
-                var consoleScreen = cockpitTech.Find("ConsoleScreen").gameObject.AddComponent<ButtonInteraction>();
-                consoleScreen.button = XboxButton.DPadUp;
-                consoleScreen.text = UITextType.AutopilotPrompt;
             }
 
 
