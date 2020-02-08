@@ -45,7 +45,7 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if (Vector3.Distance(Common.PlayerHead.position, _camera.position) > 0.5f) {
+            if ((Common.PlayerHead.position - _camera.position).sqrMagnitude > 0.5f) {
                 MoveCameraToPlayerHead();
             }
             if (NomaiVR.DebugMode) {
