@@ -80,7 +80,7 @@ namespace NomaiVR {
                 subCanvas.transform.localScale = Vector3.one;
             }
 
-            canvas.transform.parent = Common.MainCamera.transform;
+            canvas.transform.parent = Camera.main.transform;
             canvas.transform.localPosition = canvasInfo.offset;
             canvas.transform.localEulerAngles = new Vector3(0, 0, 0);
             canvas.transform.localScale = Vector3.one * canvasInfo.scale;

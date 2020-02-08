@@ -29,7 +29,7 @@ namespace NomaiVR {
         }
 
         void Update () {
-            _holdTransform.LookAt(2 * _holdTransform.position - Common.MainCamera.transform.position, Common.PlayerHead.up);
+            _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, Common.PlayerHead.up);
         }
     }
 }
