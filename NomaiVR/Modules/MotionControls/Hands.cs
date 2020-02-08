@@ -17,7 +17,7 @@ namespace NomaiVR {
             _wrapper.localRotation = Quaternion.identity;
             _wrapper.localPosition = Common.MainCamera.transform.localPosition;
 
-            HideArms();
+            HideBody();
             gameObject.AddComponent<FlashlightGesture>();
             gameObject.AddComponent<HoldHUD>();
             gameObject.AddComponent<HoldMallowStick>();
@@ -46,17 +46,8 @@ namespace NomaiVR {
             return handParent;
         }
 
-        void HideArms () {
-            var palyerMeshes = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
-
-            var suitMesh = palyerMeshes.Find("Traveller_Mesh_v01:Traveller_Geo");
-            suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
-            suitMesh.Find("Traveller_Mesh_v01:PlayerSuit_LeftArm").gameObject.SetActive(false);
-            suitMesh.Find("Traveller_Mesh_v01:Props_HEA_Jetpack").gameObject.SetActive(false);
-
-            var bodyMesh = palyerMeshes.Find("player_mesh_noSuit:Traveller_HEA_Player");
-            bodyMesh.Find("player_mesh_noSuit:Player_RightArm").gameObject.SetActive(false);
-            bodyMesh.Find("player_mesh_noSuit:Player_LeftArm").gameObject.SetActive(false);
+        void HideBody () {
+            Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
         }
 
         public static Transform HoldObject (Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {

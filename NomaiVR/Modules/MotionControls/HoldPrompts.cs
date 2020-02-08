@@ -3,11 +3,9 @@
 namespace NomaiVR {
     public class HoldPrompts: MonoBehaviour {
         Transform _holdTransform;
-        Transform _canvasTransform;
 
         void Awake () {
             var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
-            _canvasTransform = canvas.transform;
             canvas.transform.localScale = Vector3.one * 0.0015f;
             canvas.transform.localPosition = Vector3.zero;
             canvas.transform.localRotation = Quaternion.identity;

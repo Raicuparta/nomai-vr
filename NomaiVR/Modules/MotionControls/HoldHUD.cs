@@ -2,6 +2,8 @@
 
 namespace NomaiVR {
     public class HoldHUD: MonoBehaviour {
+        Transform _holdTransform;
+
         void Awake () {
             // Move helmet forward to make it a bit more visible.
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
@@ -23,13 +25,17 @@ namespace NomaiVR {
             uiCanvas.transform.localPosition = Vector3.zero;
             uiCanvas.transform.localRotation = Quaternion.identity;
 
-            Hands.HoldObject(playerHUD.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
+            _holdTransform = Hands.HoldObject(playerHUD.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
 
             playerHUD.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRender;
         }
 
         bool ShouldRender () {
             return Locator.GetPlayerSuit().IsWearingSuit(true) && Common.ToolSwapper.GetToolGroup() == ToolGroup.Suit;
+        }
+
+        void Update () {
+            _holdTransform.LookAt(2 * _holdTransform.position - Common.MainCamera.transform.position, Common.PlayerHead.up);
         }
     }
 }
