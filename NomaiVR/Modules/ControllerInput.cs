@@ -172,12 +172,18 @@ namespace NomaiVR {
                 ____lastValue = ____value;
                 ____value = 0f;
 
-                if (____gamepadAxisPositive != null && _singleAxes.ContainsKey(____gamepadAxisPositive)) {
-                    ____value += _singleAxes[____gamepadAxisPositive] * (float) ____axisDirection;
+                if (____gamepadAxisNegative != null && _singleAxes.ContainsKey(____gamepadAxisNegative)) {
+                    var num = _singleAxes[____gamepadAxisNegative];
+                    float value = Mathf.Abs(num);
+                    var result = Mathf.Sign(num) * Mathf.InverseLerp(____gamepadAxisPositive.GetValue<float>("_innerDeadZone"), 1f - ____gamepadAxisPositive.GetValue<float>("_outerDeadZone"), value);
+                    ____value -= result * (float) ____axisDirection;
+                }
 
-                    if (____gamepadAxisNegative != null && _singleAxes.ContainsKey(____gamepadAxisNegative)) {
-                        ____value -= _singleAxes[____gamepadAxisNegative] * (float) ____axisDirection;
-                    }
+                if (____gamepadAxisPositive != null && _singleAxes.ContainsKey(____gamepadAxisPositive)) {
+                    var num = _singleAxes[____gamepadAxisPositive];
+                    float value = Mathf.Abs(num);
+                    var result = Mathf.Sign(num) * Mathf.InverseLerp(____gamepadAxisPositive.GetValue<float>("_innerDeadZone"), 1f - ____gamepadAxisPositive.GetValue<float>("_outerDeadZone"), value);
+                    ____value += result * (float) ____axisDirection;
                 } else {
                     if (_buttons.ContainsKey(____xboxButtonPositive)) {
                         ____value += _buttons[____xboxButtonPositive];
