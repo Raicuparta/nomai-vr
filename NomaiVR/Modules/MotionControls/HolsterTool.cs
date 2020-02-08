@@ -21,10 +21,10 @@ namespace NomaiVR {
             _grabbable.detector.minDistance = 0.2f;
 
             transform.localScale = Vector3.one * scale;
-            transform.parent = Common.PlayerBody.transform;
-            transform.localPosition = position;
-            transform.localRotation = Quaternion.identity;
-            transform.Rotate(angle);
+            //transform.parent = Common.PlayerBody.transform;
+            //transform.localPosition = position;
+            //transform.localRotation = Quaternion.identity;
+            //transform.Rotate(angle);
         }
 
         void OnGrab () {
@@ -70,6 +70,11 @@ namespace NomaiVR {
             }
             if (_visible && Common.ToolSwapper.IsInToolMode(mode)) {
                 SetVisible(false);
+            }
+            if (_enabled && _visible) {
+                transform.position = Camera.main.transform.position + Common.PlayerBody.transform.TransformVector(position);
+                transform.rotation = Common.PlayerBody.transform.rotation;
+                transform.Rotate(angle);
             }
         }
     }

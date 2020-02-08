@@ -47,7 +47,7 @@ namespace NomaiVR {
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<HolsterTool>();
             holster.hand = Hands.RightHand;
-            holster.position = new Vector3(0, 0.35f, 0.2f);
+            holster.position = new Vector3(0, -0.35f, 0.2f);
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
             holster.angle = Vector3.right * 90;
