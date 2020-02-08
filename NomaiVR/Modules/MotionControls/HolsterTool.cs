@@ -19,12 +19,7 @@ namespace NomaiVR {
             _grabbable.onGrab += OnGrab;
             _grabbable.onRelease += OnRelease;
             _grabbable.detector.minDistance = 0.2f;
-
             transform.localScale = Vector3.one * scale;
-            //transform.parent = Common.PlayerBody.transform;
-            //transform.localPosition = position;
-            //transform.localRotation = Quaternion.identity;
-            //transform.Rotate(angle);
         }
 
         void OnGrab () {
