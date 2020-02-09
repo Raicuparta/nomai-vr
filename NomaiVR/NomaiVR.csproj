@@ -136,10 +136,13 @@
 
 md "$(StartWorkingDirectory)\Mods\NomaiVR"
 md "$(StartWorkingDirectory)\Mods\NomaiVR\bindings"
+md "$(StartWorkingDirectory)\Mods\NomaiVR\assets"
 
 copy /y "$(TargetPath)" "$(StartWorkingDirectory)\Mods\NomaiVR\NomaiVR.dll"
 
 copy /y "$(ProjectDir)\Bindings\*.json" "$(StartWorkingDirectory)\Mods\NomaiVR\bindings"
+
+copy /y "$(ProjectDir)\Assets\*" "$(StartWorkingDirectory)\Mods\NomaiVR\assets"
 
 copy /y "$(ProjectDir)\ModConfig\*.json" "$(StartWorkingDirectory)\Mods\NomaiVR"</PostBuildEvent>
   </PropertyGroup>

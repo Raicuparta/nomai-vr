@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
@@ -18,19 +19,23 @@ namespace NomaiVR {
             _wrapper.localPosition = Camera.main.transform.localPosition;
 
             HideBody();
-            gameObject.AddComponent<FlashlightGesture>();
-            gameObject.AddComponent<HoldHUD>();
-            gameObject.AddComponent<HoldMallowStick>();
-            gameObject.AddComponent<HoldProbeLauncher>();
-            gameObject.AddComponent<HoldTranslator>();
-            gameObject.AddComponent<HoldSignalscope>();
-            gameObject.AddComponent<HoldItem>();
-            gameObject.AddComponent<HoldPrompts>();
-            gameObject.AddComponent<LaserPointer>();
+            //gameObject.AddComponent<FlashlightGesture>();
+            //gameObject.AddComponent<HoldHUD>();
+            //gameObject.AddComponent<HoldMallowStick>();
+            //gameObject.AddComponent<HoldProbeLauncher>();
+            //gameObject.AddComponent<HoldTranslator>();
+            //gameObject.AddComponent<HoldSignalscope>();
+            //gameObject.AddComponent<HoldItem>();
+            //gameObject.AddComponent<HoldPrompts>();
+            //gameObject.AddComponent<LaserPointer>();
         }
 
         Transform CreateHand (string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {
-            var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
+            var hands = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
+            NomaiVR.Log(String.Join(" ", hands.GetAllAssetNames()));
+            var hand = hands.LoadAsset<GameObject>("assets/RightHandPrefab.prefab").transform;
+            NomaiVR.Log("loaded", hand.name);
+            //var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
             hand.parent = handParent;
