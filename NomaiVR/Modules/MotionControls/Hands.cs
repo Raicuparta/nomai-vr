@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
@@ -7,12 +8,19 @@ namespace NomaiVR {
     public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
+        GameObject _handPrefab;
+        GameObject _glovePrefab;
         Transform _wrapper;
 
         private void Start () {
+            var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
+            _handPrefab = assetBundle.LoadAsset<GameObject>("assets/righthandprefab.prefab");
+            _glovePrefab = assetBundle.LoadAsset<GameObject>("assets/rightgloveprefab.prefab");
+
             _wrapper = new GameObject().transform;
-            RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightHand, Quaternion.Euler(45, 180, 0), _wrapper);
-            LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftHand, Quaternion.Euler(-40, 330, 20), _wrapper);
+            RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(314f, 12.7f, 281f), new Vector3(0.02f, 0.06f, -0.2f), _wrapper);
+            LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(317.032f, 347.616f, 76.826f), new Vector3(-0.05f, 0.07f, -0.2f), _wrapper, true);
+
             _wrapper.parent = Camera.main.transform.parent;
             _wrapper.localRotation = Quaternion.identity;
             _wrapper.localPosition = Camera.main.transform.localPosition;
@@ -29,14 +37,35 @@ namespace NomaiVR {
             gameObject.AddComponent<LaserPointer>();
         }
 
-        Transform CreateHand (string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {
-            var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
+        bool ShouldRenderGloves () {
+            return Locator.GetPlayerSuit().IsWearingSuit(true);
+        }
+
+        bool ShouldRenderHands () {
+            return !Locator.GetPlayerSuit().IsWearingSuit(true);
+        }
+
+        Transform CreateHand (SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false) {
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
-            hand.parent = handParent;
-            hand.localPosition = new Vector3(0, -0.03f, -0.08f);
-            hand.localRotation = rotation;
-            hand.localScale = Vector3.one * 0.5f;
+
+            var hand = Instantiate(_handPrefab).transform;
+            var glove = Instantiate(_glovePrefab).transform;
+            hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
+            glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
+
+            void setupHandModel (Transform model) {
+                model.parent = handParent;
+                model.localPosition = position;
+                model.localRotation = rotation;
+                model.localScale = Vector3.one * 6;
+                if (isLeft) {
+                    model.localScale = new Vector3(-model.localScale.x, model.localScale.y, model.localScale.z);
+                }
+            }
+
+            setupHandModel(hand);
+            setupHandModel(glove);
 
             handParent.gameObject.SetActive(false);
             var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();

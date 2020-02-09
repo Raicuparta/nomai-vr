@@ -33,9 +33,5 @@ namespace NomaiVR {
         bool ShouldRender () {
             return Locator.GetPlayerSuit().IsWearingSuit(true) && Common.ToolSwapper.GetToolGroup() == ToolGroup.Suit;
         }
-
-        void Update () {
-            _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, Common.PlayerHead.up);
-        }
     }
 }
