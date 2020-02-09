@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1451978565
+CRC: 3370397212
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 13f3b95f1933ddfcbf2d4dc3b6c671a1
+    Hash: 4a4a15b02fcfabb84861daaa8d0f842a
   TypeTreeHash:
     serializedVersion: 2
     Hash: bc193d49e7d16f71ac778acf3c7bfc27
@@ -26,10 +26,11 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 Assets:
-- Assets/Meshes/right-hand.fbx
-- Assets/Meshes/hands-d.png
-- Assets/Meshes/hands-n.png
-- Assets/Meshes/hands.mat
-- Assets/Meshes/hands-ao.png
-- Assets/Meshes/RightHandPrefab.prefab
+- Assets/Meshes/hands/right-hand.fbx
+- Assets/Meshes/hands/hands-d.png
+- Assets/RightGlovePrefab.prefab
+- Assets/Meshes/hands/hands-n.png
+- Assets/Meshes/hands/hands.mat
+- Assets/Meshes/hands/hands-ao.png
+- Assets/RightHandPrefab.prefab
 Dependencies: []

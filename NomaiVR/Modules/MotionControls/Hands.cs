@@ -8,25 +8,19 @@ namespace NomaiVR {
     public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
-        Transform _handPrefab;
+        GameObject _handPrefab;
+        GameObject _glovePrefab;
         Transform _wrapper;
 
         private void Start () {
-            _handPrefab = NomaiVR.Helper.Assets
-                .LoadBundle("assets/hands")
-                .LoadAsset<GameObject>("assets/meshes/righthandprefab.prefab")
-                .transform;
+            var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
+            NomaiVR.Log("assets:", String.Join(" ", assetBundle.GetAllAssetNames()));
+            _handPrefab = assetBundle.LoadAsset<GameObject>("assets/righthandprefab.prefab");
+            _glovePrefab = assetBundle.LoadAsset<GameObject>("assets/rightgloveprefab.prefab");
 
             _wrapper = new GameObject().transform;
             RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(314f, 12.7f, 281f), new Vector3(0.02f, 0.06f, -0.2f), _wrapper);
             LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(317.032f, 347.616f, 76.826f), new Vector3(-0.05f, 0.07f, -0.2f), _wrapper, true);
-
-
-            var rightGlove = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/PlayerSuit_Glove_Right").gameObject).transform;
-            var leftGlove = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/PlayerSuit_Glove_Left").gameObject).transform;
-            var heldGlove = HoldObject(rightGlove, RightHand, new Vector3(0.02f, 0.01f, -0.12f), Quaternion.Euler(47.216f, 155.211f, 350.206f)).gameObject.AddComponent<DebugTransform>();
-            heldGlove.transform.localScale = Vector3.one * 0.6f;
-            heldGlove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
 
             _wrapper.parent = Camera.main.transform.parent;
             _wrapper.localRotation = Quaternion.identity;
@@ -54,15 +48,22 @@ namespace NomaiVR {
 
         Transform CreateHand (SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false) {
             var hand = Instantiate(_handPrefab).transform;
+            var glove = Instantiate(_glovePrefab).transform;
             hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
+            glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
             hand.parent = handParent;
             hand.localPosition = position;
             hand.localRotation = rotation;
             hand.localScale = Vector3.one * 6;
+            glove.parent = handParent;
+            glove.localPosition = position;
+            glove.localRotation = rotation;
+            glove.localScale = Vector3.one * 6;
             if (isLeft) {
                 hand.localScale = new Vector3(-hand.localScale.x, hand.localScale.y, hand.localScale.z);
+                glove.localScale = new Vector3(-glove.localScale.x, glove.localScale.y, glove.localScale.z);
             }
 
             handParent.gameObject.SetActive(false);
