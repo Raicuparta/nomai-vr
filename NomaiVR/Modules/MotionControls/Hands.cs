@@ -14,7 +14,6 @@ namespace NomaiVR {
 
         private void Start () {
             var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
-            NomaiVR.Log("assets:", String.Join(" ", assetBundle.GetAllAssetNames()));
             _handPrefab = assetBundle.LoadAsset<GameObject>("assets/righthandprefab.prefab");
             _glovePrefab = assetBundle.LoadAsset<GameObject>("assets/rightgloveprefab.prefab");
 
