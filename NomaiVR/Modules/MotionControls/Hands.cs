@@ -8,12 +8,14 @@ namespace NomaiVR {
     public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
-        AssetBundle _handsAssets;
+        Transform _handPrefab;
         Transform _wrapper;
 
         private void Start () {
-            _handsAssets = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
-            NomaiVR.Log(String.Join(" ", _handsAssets.GetAllAssetNames()));
+            _handPrefab = NomaiVR.Helper.Assets
+                .LoadBundle("assets/hands")
+                .LoadAsset<GameObject>("assets/meshes/righthandprefab.prefab")
+                .transform;
 
             _wrapper = new GameObject().transform;
             RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(314f, 12.7f, 281f), new Vector3(0.02f, 0.06f, -0.2f), _wrapper);
@@ -37,15 +39,13 @@ namespace NomaiVR {
         }
 
         Transform CreateHand (SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false) {
-            var hand = Instantiate(_handsAssets.LoadAsset<GameObject>("assets/meshes/righthandprefab.prefab")).transform;
-            NomaiVR.Log("loaded", hand.name);
-            //var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
+            var hand = Instantiate(_handPrefab).transform;
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
             hand.parent = handParent;
             hand.localPosition = position;
             hand.localRotation = rotation;
-            hand.localScale = Vector3.one * 7.5f;
+            hand.localScale = Vector3.one * 7;
             if (isLeft) {
                 hand.localScale = new Vector3(-hand.localScale.x, hand.localScale.y, hand.localScale.z);
             }
