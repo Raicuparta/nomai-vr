@@ -8,40 +8,47 @@ namespace NomaiVR {
     public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
+        AssetBundle _handsAssets;
         Transform _wrapper;
 
         private void Start () {
+            _handsAssets = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
+            NomaiVR.Log(String.Join(" ", _handsAssets.GetAllAssetNames()));
+
             _wrapper = new GameObject().transform;
-            RightHand = CreateHand("PlayerSuit_Glove_Right", SteamVR_Actions.default_RightHand, Quaternion.Euler(45, 180, 0), _wrapper);
-            LeftHand = CreateHand("PlayerSuit_Glove_Left", SteamVR_Actions.default_LeftHand, Quaternion.Euler(-40, 330, 20), _wrapper);
+            RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(314f, 12.7f, 281f), new Vector3(0.02f, 0.06f, -0.2f), _wrapper);
+            LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(317.032f, 347.616f, 76.826f), new Vector3(-0.05f, 0.07f, -0.2f), _wrapper, true);
+
+            RightHand.GetChild(0).gameObject.AddComponent<DebugTransform>();
             _wrapper.parent = Camera.main.transform.parent;
             _wrapper.localRotation = Quaternion.identity;
             _wrapper.localPosition = Camera.main.transform.localPosition;
 
             HideBody();
-            //gameObject.AddComponent<FlashlightGesture>();
-            //gameObject.AddComponent<HoldHUD>();
-            //gameObject.AddComponent<HoldMallowStick>();
-            //gameObject.AddComponent<HoldProbeLauncher>();
-            //gameObject.AddComponent<HoldTranslator>();
-            //gameObject.AddComponent<HoldSignalscope>();
-            //gameObject.AddComponent<HoldItem>();
-            //gameObject.AddComponent<HoldPrompts>();
-            //gameObject.AddComponent<LaserPointer>();
+            gameObject.AddComponent<FlashlightGesture>();
+            gameObject.AddComponent<HoldHUD>();
+            gameObject.AddComponent<HoldMallowStick>();
+            gameObject.AddComponent<HoldProbeLauncher>();
+            gameObject.AddComponent<HoldTranslator>();
+            gameObject.AddComponent<HoldSignalscope>();
+            gameObject.AddComponent<HoldItem>();
+            gameObject.AddComponent<HoldPrompts>();
+            gameObject.AddComponent<LaserPointer>();
         }
 
-        Transform CreateHand (string objectName, SteamVR_Action_Pose pose, Quaternion rotation, Transform wrapper) {
-            var hands = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
-            NomaiVR.Log(String.Join(" ", hands.GetAllAssetNames()));
-            var hand = hands.LoadAsset<GameObject>("assets/RightHandPrefab.prefab").transform;
+        Transform CreateHand (SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false) {
+            var hand = Instantiate(_handsAssets.LoadAsset<GameObject>("assets/meshes/righthandprefab.prefab")).transform;
             NomaiVR.Log("loaded", hand.name);
             //var hand = Instantiate(GameObject.Find("SpaceSuit").transform.Find("Props_HEA_PlayerSuit_Hanging/" + objectName).gameObject).transform;
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
             hand.parent = handParent;
-            hand.localPosition = new Vector3(0, -0.03f, -0.08f);
+            hand.localPosition = position;
             hand.localRotation = rotation;
-            hand.localScale = Vector3.one * 0.5f;
+            hand.localScale = Vector3.one * 7.5f;
+            if (isLeft) {
+                hand.localScale = new Vector3(-hand.localScale.x, hand.localScale.y, hand.localScale.z);
+            }
 
             handParent.gameObject.SetActive(false);
             var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
