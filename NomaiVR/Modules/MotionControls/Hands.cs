@@ -47,24 +47,26 @@ namespace NomaiVR {
         }
 
         Transform CreateHand (SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false) {
+            var handParent = new GameObject().transform;
+            handParent.parent = wrapper;
+
             var hand = Instantiate(_handPrefab).transform;
             var glove = Instantiate(_glovePrefab).transform;
             hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
             glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
-            var handParent = new GameObject().transform;
-            handParent.parent = wrapper;
-            hand.parent = handParent;
-            hand.localPosition = position;
-            hand.localRotation = rotation;
-            hand.localScale = Vector3.one * 6;
-            glove.parent = handParent;
-            glove.localPosition = position;
-            glove.localRotation = rotation;
-            glove.localScale = Vector3.one * 6;
-            if (isLeft) {
-                hand.localScale = new Vector3(-hand.localScale.x, hand.localScale.y, hand.localScale.z);
-                glove.localScale = new Vector3(-glove.localScale.x, glove.localScale.y, glove.localScale.z);
+
+            void setupHandModel (Transform model) {
+                model.parent = handParent;
+                model.localPosition = position;
+                model.localRotation = rotation;
+                model.localScale = Vector3.one * 6;
+                if (isLeft) {
+                    model.localScale = new Vector3(-model.localScale.x, model.localScale.y, model.localScale.z);
+                }
             }
+
+            setupHandModel(hand);
+            setupHandModel(glove);
 
             handParent.gameObject.SetActive(false);
             var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
