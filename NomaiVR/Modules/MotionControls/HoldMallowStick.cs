@@ -33,10 +33,6 @@ namespace NomaiVR {
                 return stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
             }
 
-            bool ShouldRenderStickClone () {
-                return !stickController.enabled;
-            }
-
             // Eat mallow by moving it to player head.
             var eatDetector = mallow.gameObject.AddComponent<ProximityDetector>();
             eatDetector.other = Common.PlayerHead;
@@ -62,32 +58,6 @@ namespace NomaiVR {
 
             // Render left hand mallow only when right hand mallow is not present.
             mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
-
-            // Add a stick to every campfire.
-            // Picking up the stick starts roasting mode.
-            var campfires = GameObject.FindObjectsOfType<Campfire>();
-            foreach (var campfire in campfires) {
-                void StartRoasting () {
-                    campfire.Invoke("StartRoasting");
-                }
-                var stickClone = Instantiate(meshes.Find("RoastingStick_Stick"));
-                var stickCloneMallow = Instantiate(mallowModel);
-                stickCloneMallow.parent = stickClone;
-                stickCloneMallow.localPosition = new Vector3(0, 0, 1.8f);
-                stickCloneMallow.localRotation = Quaternion.Euler(145, -85, -83);
-                stickCloneMallow.GetComponent<MeshRenderer>().material.color = Color.white;
-                stickClone.gameObject.SetActive(true);
-                stickClone.localScale = scale;
-                stickClone.parent = campfire.transform;
-                stickClone.localPosition = new Vector3(1.44f, 0, .019f);
-                stickClone.localRotation = Quaternion.Euler(-100, 125, -125);
-
-                var grabbable = stickCloneMallow.gameObject.AddComponent<Grabbable>();
-                grabbable.detector.minDistance = 0.4f;
-                grabbable.onGrab += StartRoasting;
-
-                stickClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderStickClone;
-            }
         }
 
         internal static class Patches {
