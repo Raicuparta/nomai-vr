@@ -59,10 +59,11 @@ namespace NomaiVR {
             foreach (var canvas in canvases) {
                 if (canvas.renderMode == RenderMode.ScreenSpaceOverlay) {
                     canvas.renderMode = RenderMode.WorldSpace;
-                    canvas.transform.parent = Camera.main.transform;
-                    canvas.transform.localPosition = Vector3.forward;
-                    canvas.transform.localRotation = Quaternion.identity;
+                    //canvas.transform.parent = Camera.main.transform;
+                    canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
+                    canvas.transform.localRotation = Camera.main.transform.rotation;
                     canvas.transform.localScale = Vector3.one * 0.0005f;
+                    canvas.gameObject.AddComponent<LookAtSmooth>().target = Camera.main.transform;
 
                     // Masks are used for hiding the overflowing elements in scrollable menus.
                     // Apparently masks change the material of the canvas element being masked,
