@@ -92,7 +92,7 @@ namespace NomaiVR {
                 renderer.gameObject.layer = LayerMask.NameToLayer("VisibleToProbe");
 
                 // Make the player body shadows visible to the player camera.
-                var shadowCaster = Instantiate(renderer)
+                var shadowCaster = Instantiate(renderer);
                 shadowCaster.transform.parent = renderer.transform;
                 shadowCaster.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
             }
