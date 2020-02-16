@@ -57,9 +57,6 @@ namespace NomaiVR {
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
-            NomaiVR.Log("Primary Action");
-            NomaiVR.Log("time", fromAction.updateTime.ToString());
-
             if (newState) {
                 _primaryLastTime = fromAction.changedTime;
             } else {
