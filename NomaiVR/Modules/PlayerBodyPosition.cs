@@ -58,7 +58,7 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+                NomaiVR.Post<PlayerCharacterController>("UpdateTurning", typeof(Patches), nameof(Patches.PatchTurning));
             }
 
             static void PatchTurning (PlayerCharacterController __instance) {

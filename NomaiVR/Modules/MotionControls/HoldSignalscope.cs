@@ -68,12 +68,12 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("ChangeInputMode", typeof(Patches), "ChangeInputMode");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ShipCockpitUI>("Start", typeof(Patches), "ShipCockpitStart");
+                NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(Patches.ChangeInputMode));
+                NomaiVR.Post<ShipCockpitUI>("Start", typeof(Patches), nameof(Patches.ShipCockpitStart));
 
                 // For fixing signalscope zoom
-                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("EnterSignalscopeZoom", typeof(Patches), "ZoomIn");
-                //NomaiVR.Helper.HarmonyHelper.AddPostfix<Signalscope>("ExitSignalscopeZoom", typeof(Patches), "ZoomOut");
+                //NomaiVR.Post<Signalscope>("EnterSignalscopeZoom", typeof(Patches), nameof(Patches.ZoomIn));
+                //NomaiVR.Post<Signalscope>("ExitSignalscopeZoom", typeof(Patches), nameof(Patches.ZoomOut));
             }
 
             static void ShipCockpitStart (Signalscope ____signalscopeTool) {
