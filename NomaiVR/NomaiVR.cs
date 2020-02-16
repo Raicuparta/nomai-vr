@@ -58,7 +58,6 @@ namespace NomaiVR {
             // Some modules need to be restarted on every scene load.
             // This GameObject is for them.
             var nonPersistentObject = new GameObject();
-            nonPersistentObject.AddComponent<Menus>().isInGame = isSolarSystem || isEye;
 
             if (isSolarSystem || isEye) {
                 Common.InitGame();
@@ -72,6 +71,8 @@ namespace NomaiVR {
             } else if (isTitle) {
                 Menus.Reset();
             }
+
+            nonPersistentObject.AddComponent<Menus>().isInGame = isSolarSystem || isEye;
         }
 
         public override void Configure (IModConfig config) {
