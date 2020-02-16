@@ -8,14 +8,17 @@ namespace NomaiVR {
     public class Hands: MonoBehaviour {
         public static Transform RightHand;
         public static Transform LeftHand;
-        GameObject _handPrefab;
-        GameObject _glovePrefab;
+        static AssetBundle _assetBundle;
+        static GameObject _handPrefab;
+        static GameObject _glovePrefab;
         Transform _wrapper;
 
         private void Start () {
-            var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
-            _handPrefab = assetBundle.LoadAsset<GameObject>("assets/righthandprefab.prefab");
-            _glovePrefab = assetBundle.LoadAsset<GameObject>("assets/rightgloveprefab.prefab");
+            if (!_assetBundle) {
+                _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
+                _handPrefab = _assetBundle.LoadAsset<GameObject>("assets/righthandprefab.prefab");
+                _glovePrefab = _assetBundle.LoadAsset<GameObject>("assets/rightgloveprefab.prefab");
+            }
 
             _wrapper = new GameObject().transform;
             RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(314f, 12.7f, 281f), new Vector3(0.02f, 0.06f, -0.2f), _wrapper);
@@ -108,7 +111,7 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if (_wrapper) {
+            if (_wrapper && Camera.main) {
                 _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
         }
