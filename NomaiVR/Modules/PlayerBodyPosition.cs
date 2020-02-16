@@ -10,8 +10,6 @@ namespace NomaiVR {
         void Start () {
             NomaiVR.Log("Start PlayerBodyPosition");
 
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
-
             // This component is messing with our ability to read the VR camera's rotation.
             // Seems to be responsible for controlling the camera rotation with the mouse / joystick.
             PlayerCameraController playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
@@ -59,6 +57,10 @@ namespace NomaiVR {
         }
 
         internal static class Patches {
+            public static void Patch () {
+                NomaiVR.Helper.HarmonyHelper.AddPostfix<PlayerCharacterController>("UpdateTurning", typeof(Patches), "PatchTurning");
+            }
+
             static void PatchTurning (PlayerCharacterController __instance) {
                 if (OWInput.GetInputMode() != InputMode.Character) {
                     return;

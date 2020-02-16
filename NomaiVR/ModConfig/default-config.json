@@ -2,7 +2,6 @@
   "requireVR": true,
   "enabled": true,
   "settings": {
-    "enableMotionControls": true,
     "showMirrorView": true,
     "debugMode": true,
   }

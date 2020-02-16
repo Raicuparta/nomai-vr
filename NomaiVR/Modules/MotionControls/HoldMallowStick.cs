@@ -5,9 +5,6 @@ namespace NomaiVR {
     public class HoldMallowStick: MonoBehaviour {
         void Awake () {
 
-            // Stop stick rotation animation.
-            NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
-
             var scale = Vector3.one * 0.75f;
             var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
 
@@ -91,9 +88,16 @@ namespace NomaiVR {
 
                 stickClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderStickClone;
             }
+        }
 
-            // Hide prompts.
-            NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("LateInitialize");
+        internal static class Patches {
+            public static void Patch () {
+                // Stop stick rotation animation.
+                NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
+
+                // Hide prompts.
+                NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("LateInitialize");
+            }
         }
     }
 }

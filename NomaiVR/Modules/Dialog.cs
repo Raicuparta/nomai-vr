@@ -13,9 +13,6 @@ namespace NomaiVR {
         void Start () {
             NomaiVR.Log("Started Dialog Fixes");
 
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<CharacterDialogueTree>("StartConversation", typeof(Patches), "PatchStartConversation");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<CharacterDialogueTree>("EndConversation", typeof(Patches), "PatchEndConversation");
-
             currentDialogue = null;
             dialogCanvas = GameObject.Find(Menus.CanvasTypes.DialogueCanvas);
             if (dialogCanvas == null) {
@@ -39,6 +36,10 @@ namespace NomaiVR {
         }
 
         internal static class Patches {
+            public static void Patch () {
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<CharacterDialogueTree>("StartConversation", typeof(Patches), "PatchStartConversation");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<CharacterDialogueTree>("EndConversation", typeof(Patches), "PatchEndConversation");
+            }
             static void PatchStartConversation (CharacterDialogueTree __instance) {
                 currentDialogue = __instance;
             }

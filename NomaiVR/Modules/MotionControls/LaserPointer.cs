@@ -7,13 +7,6 @@ namespace NomaiVR {
         public static Transform Laser;
 
         void Awake () {
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnEntry", typeof(Patches), "InteractZoneEntry");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnExit", typeof(Patches), "InteractZoneExit");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<ToolModeSwapper>("Update", typeof(Patches), "ToolModeUpdate");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PreUpdateIsDroppable");
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PostUpdateIsDroppable");
-
             Laser = new GameObject("Laser").transform;
             Laser.transform.parent = Hands.RightHand;
             Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
@@ -49,7 +42,16 @@ namespace NomaiVR {
             }
         }
 
-        static class Patches {
+        internal static class Patches {
+            public static void Patch () {
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnEntry", typeof(Patches), "InteractZoneEntry");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnExit", typeof(Patches), "InteractZoneExit");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<ToolModeSwapper>("Update", typeof(Patches), "ToolModeUpdate");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PreUpdateIsDroppable");
+                NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PostUpdateIsDroppable");
+            }
+
             static bool PatchUpdateInteractVolume (
                 InteractZone __instance,
                 OWCamera ____playerCam,

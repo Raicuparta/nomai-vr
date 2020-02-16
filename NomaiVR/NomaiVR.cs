@@ -9,7 +9,6 @@ namespace NomaiVR {
     public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
         static NomaiVR _instance;
-        public static bool MotionControlsEnabled;
         public static bool DebugMode;
 
         void Start () {
@@ -21,11 +20,20 @@ namespace NomaiVR {
 
             SteamVR.Initialize();
 
+            ShipTools.Patches.Patch();
+            ControllerInput.Patches.Patch();
+            Dialog.Patches.Patch();
+            EffectFixes.Patches.Patch();
+            HoldProbeLauncher.Patches.Patch();
+            HoldSignalscope.Patches.Patch();
+            HoldTranslator.Patches.Patch();
+            HoldMallowStick.Patches.Patch();
+            LaserPointer.Patches.Patch();
+            PlayerBodyPosition.Patches.Patch();
+
             // Add all modules here.
             gameObject.AddComponent<Common>();
-            if (MotionControlsEnabled) {
-                gameObject.AddComponent<ControllerInput>();
-            }
+            gameObject.AddComponent<ControllerInput>();
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
@@ -55,10 +63,8 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<EffectFixes>();
                 nonPersistentObject.AddComponent<PlayerBodyPosition>();
                 nonPersistentObject.AddComponent<Dialog>();
-                if (MotionControlsEnabled) {
-                    nonPersistentObject.AddComponent<ShipTools>();
-                    nonPersistentObject.AddComponent<Hands>();
-                }
+                nonPersistentObject.AddComponent<ShipTools>();
+                nonPersistentObject.AddComponent<Hands>();
             } else if (isInTitle) {
                 Menus.Reset();
             }
@@ -67,14 +73,10 @@ namespace NomaiVR {
         public override void Configure (IModConfig config) {
             DebugMode = config.GetSetting<bool>("debugMode");
             XRSettings.showDeviceView = config.GetSetting<bool>("showMirrorView");
-            MotionControlsEnabled = config.GetSetting<bool>("enableMotionControls");
-
-            if (MotionControlsEnabled) {
-                // Prevent application from stealing mouse focus;
-                ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
+            // Prevent application from stealing mouse focus;
+            ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         public static void Log (params string[] strings) {
