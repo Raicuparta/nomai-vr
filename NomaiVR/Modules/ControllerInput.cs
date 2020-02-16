@@ -126,11 +126,6 @@ namespace NomaiVR {
             public static void Patch () {
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<SingleInteractionVolume>("Awake", typeof(Patches), "InteractionVolumeAwake");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "InteractionVolumeVisible");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("AddInteraction", typeof(Patches), "MultipleInteractionAdd");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<MultipleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "MultipleInteractionAdd");
                 NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Awake", typeof(Patches), "EnableListenForAllJoysticks");
                 NomaiVR.Helper.HarmonyHelper.AddPostfix<PadEZ.PadManager>("GetAxis", typeof(Patches), "GetAxis");
@@ -179,32 +174,6 @@ namespace NomaiVR {
 
             static void OWInputUpdate (ref bool ____usingGamepad) {
                 ____usingGamepad = true;
-            }
-
-            static bool InteractionVolumeChangePrompt (UITextType promptID, ref bool ____usingPromptWithCommand) {
-                if (promptID == UITextType.RoastingPrompt) {
-                    return false;
-                }
-
-                return true;
-            }
-
-            static void InteractionVolumeAwake (ref bool ____usingPromptWithCommand, SingleInteractionVolume __instance) {
-                ____usingPromptWithCommand = false;
-            }
-
-            static bool InteractionVolumeVisible (ref bool ____usingPromptWithCommand, SingleInteractionVolume __instance) {
-                ____usingPromptWithCommand = false;
-                __instance.Invoke("UpdatePromptVisibility");
-                return false;
-            }
-
-            static void MultipleInteractionAdd (List<MultipleInteractionVolume.Interaction> ____listInteractions) {
-                foreach (var interaction in ____listInteractions) {
-                    if (interaction.inputCommand == InputLibrary.interact) {
-                        interaction.displayPromptCommandIcon = false;
-                    }
-                }
             }
 
             static void ItemToolStart (ref ScreenPrompt ____interactButtonPrompt) {
