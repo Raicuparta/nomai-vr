@@ -1,5 +1,4 @@
 ﻿using OWML.Common;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
