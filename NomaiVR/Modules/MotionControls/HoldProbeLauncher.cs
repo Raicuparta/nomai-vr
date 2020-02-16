@@ -7,9 +7,6 @@ namespace NomaiVR {
         protected static ProbeLauncherUI ProbeUI;
 
         void Awake () {
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
-
             var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.2f;
             Hands.HoldObject(probeLauncher, Hands.RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
@@ -78,6 +75,11 @@ namespace NomaiVR {
         }
 
         internal static class Patches {
+            public static void Patch () {
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("SuitUp", typeof(Patches), "SuitUp");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlayerSpacesuit>("RemoveSuit", typeof(Patches), "RemoveSuit");
+            }
+
             static void SuitUp () {
                 ProbeUI.SetValue("_nonSuitUI", false);
             }
