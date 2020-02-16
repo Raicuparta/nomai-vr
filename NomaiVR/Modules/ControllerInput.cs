@@ -1,5 +1,4 @@
-﻿using OWML.ModHelper.Events;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 

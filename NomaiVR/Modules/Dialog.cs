@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using OWML.ModHelper.Events;
+﻿using OWML.ModHelper.Events;
+using UnityEngine;
 
 namespace NomaiVR {
     public class Dialog: MonoBehaviour {
