@@ -2,18 +2,13 @@
 
 namespace NomaiVR {
     class ShipTools: MonoBehaviour {
-        static ShipCockpitController _cockpit;
         bool _wasHoldingInteract;
         ReferenceFrameTracker _referenceFrameTracker;
 
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
 
-            _cockpit = FindObjectOfType<ShipCockpitController>();
             _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<ShipBody>("Start", typeof(Patches), "ShipStart");
-            NomaiVR.Helper.HarmonyHelper.AddPrefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PreFindReferenceFrameInLineOfSight");
-            NomaiVR.Helper.HarmonyHelper.AddPostfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PostFindReferenceFrameInLineOfSight");
         }
 
         void Update () {
