@@ -1,5 +1,6 @@
 ﻿using OWML.Common;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NomaiVR {
     public class HoldSignalscope: MonoBehaviour {
@@ -8,8 +9,9 @@ namespace NomaiVR {
         protected static Signalscope SignalScope;
 
         void Awake () {
-            ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
-
+            if (SceneManager.GetActiveScene().name == "SolarSystem") {
+                ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
+            }
 
             var signalScope = Camera.main.transform.Find("Signalscope");
             Hands.HoldObject(signalScope, Hands.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
@@ -88,7 +90,7 @@ namespace NomaiVR {
             }
 
             static void ChangeInputMode (InputMode mode) {
-                if (!SignalscopeReticule) {
+                if (!SignalscopeReticule || !ShipWindshield) {
                     return;
                 }
                 if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
