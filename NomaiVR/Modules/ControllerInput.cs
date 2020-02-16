@@ -5,10 +5,13 @@ using Valve.VR;
 
 namespace NomaiVR {
     class ControllerInput: MonoBehaviour {
+        static ControllerInput _instance;
         static Dictionary<XboxButton, float> _buttons;
         static Dictionary<string, float> _singleAxes;
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
         public static bool IsGripping { get; private set; }
+        float _primaryLastTime = -1;
+        const float holdDuration = 0.3f;
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
@@ -17,6 +20,7 @@ namespace NomaiVR {
         void Start () {
             NomaiVR.Log("Started ControllerInput");
 
+            _instance = this;
             _buttons = new Dictionary<XboxButton, float>();
             _singleAxes = new Dictionary<string, float>();
             _doubleAxes = new Dictionary<DoubleAxis, Vector2>();
@@ -53,6 +57,16 @@ namespace NomaiVR {
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
+            NomaiVR.Log("Primary Action");
+            NomaiVR.Log("time", fromAction.updateTime.ToString());
+
+            if (newState) {
+                _primaryLastTime = fromAction.changedTime;
+            } else {
+                _primaryLastTime = -1;
+                SimulateInput(XboxButton.X);
+            }
+
             switch (Common.ToolSwapper.GetToolMode()) {
                 case ToolMode.SignalScope:
                     _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
@@ -65,7 +79,6 @@ namespace NomaiVR {
                     _buttons[XboxButton.RightBumper] = value;
                     break;
                 default:
-                    _buttons[XboxButton.X] = value;
                     break;
             }
 
@@ -80,6 +93,16 @@ namespace NomaiVR {
             if (!Common.ToolSwapper.IsInToolMode(ToolMode.Probe)) {
                 _buttons[XboxButton.LeftBumper] = newState ? 1 : 0;
             }
+        }
+
+        static IEnumerator<WaitForSeconds> ResetInput (XboxButton button) {
+            yield return new WaitForSeconds(0.5f);
+            SimulateInput(button, 0);
+        }
+
+        public static void SimulateInput (XboxButton button) {
+            _buttons[button] = 1;
+            _instance.StartCoroutine(ResetInput(button));
         }
 
         public static void SimulateInput (XboxButton button, float value) {
@@ -120,6 +143,14 @@ namespace NomaiVR {
                 _singleAxes[singleX.GetInputAxisName(0)] = x;
                 _singleAxes[singleY.GetInputAxisName(0)] = y;
             };
+        }
+
+        void Update () {
+            if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > 0.3f)) {
+                NomaiVR.Log("Simulate");
+                SimulateInput(XboxButton.Y);
+                _primaryLastTime = -1;
+            }
         }
 
         internal static class Patches {
