@@ -78,7 +78,22 @@ namespace NomaiVR {
         }
 
         void HideBody () {
-            Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
+            var bodyModels = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
+
+            // Legs, torso and head are kept visible to the probe camera,
+            // so we can still take some selfies when we're feelinf cute.
+            var renderers = bodyModels.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+            foreach (var renderer in renderers) {
+                renderer.gameObject.layer = LayerMask.NameToLayer("VisibleToProbe");
+            }
+
+            // Arms are always hidden, since we have our own motion-controlled hands.
+            var withoutSuit = bodyModels.Find("player_mesh_noSuit:Traveller_HEA_Player");
+            withoutSuit.Find("player_mesh_noSuit:Player_LeftArm").gameObject.SetActive(false);
+            withoutSuit.Find("player_mesh_noSuit:Player_RightArm").gameObject.SetActive(false);
+            var withSuit = bodyModels.Find("Traveller_Mesh_v01:Traveller_Geo");
+            withSuit.Find("Traveller_Mesh_v01:PlayerSuit_LeftArm").gameObject.SetActive(false);
+            withSuit.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
         }
 
         public static Transform HoldObject (Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
