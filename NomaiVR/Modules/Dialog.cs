@@ -14,9 +14,9 @@ namespace NomaiVR {
             NomaiVR.Log("Started Dialog Fixes");
 
             currentDialogue = null;
-            dialogCanvas = GameObject.Find(Menus.CanvasTypes.DialogueCanvas);
+            dialogCanvas = GameObject.Find("DialogueCanvas");
             if (dialogCanvas == null) {
-                NomaiVR.Log("Couldn't find canvas with name: " + Menus.CanvasTypes.DialogueCanvas);
+                NomaiVR.Log("Couldn't find canvas with name: DialogueCanvas");
             } else {
                 dialogCanvas.transform.localScale = Vector3.one * dialogRenderSize;
             }
