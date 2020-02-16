@@ -3,6 +3,6 @@
   "enabled": true,
   "settings": {
     "showMirrorView": true,
-    "debugMode": true,
+    "debugMode": false,
   }
 }
