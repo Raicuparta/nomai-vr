@@ -11,6 +11,7 @@ namespace NomaiVR {
         public static bool IsGripping { get; private set; }
         float _primaryLastTime = -1;
         const float holdDuration = 0.3f;
+        bool _justHeld;
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
@@ -63,7 +64,10 @@ namespace NomaiVR {
                 _primaryLastTime = fromAction.changedTime;
             } else {
                 _primaryLastTime = -1;
-                SimulateInput(XboxButton.X);
+                if (!_justHeld) {
+                    SimulateInput(XboxButton.X);
+                }
+                _justHeld = false;
             }
 
             switch (Common.ToolSwapper.GetToolMode()) {
@@ -145,10 +149,10 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > 0.3f)) {
-                NomaiVR.Log("Simulate");
+            if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration)) {
                 SimulateInput(XboxButton.Y);
                 _primaryLastTime = -1;
+                _justHeld = true;
             }
         }
 
