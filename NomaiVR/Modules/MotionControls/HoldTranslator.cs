@@ -52,8 +52,8 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patches), "IsPromptAllowed");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patches), "IsPromptAllowed");
+                NomaiVR.Post<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patches), nameof(Patches.IsPromptAllowed));
+                NomaiVR.Post<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patches), nameof(Patches.IsPromptAllowed));
             }
 
             static bool IsPromptAllowed (bool __result) {

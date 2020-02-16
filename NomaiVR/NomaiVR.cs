@@ -1,5 +1,6 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
@@ -81,8 +82,20 @@ namespace NomaiVR {
 
         public static void Log (params string[] strings) {
             if (DebugMode) {
-                _instance.ModHelper.Console.WriteLine(string.Join(" ", strings));
+                Helper.Console.WriteLine(string.Join(" ", strings));
             }
+        }
+
+        public static void Pre<T> (string methodName, Type patchType, string patchMethodName) {
+            Helper.HarmonyHelper.AddPrefix<T>(methodName, patchType, patchMethodName);
+        }
+
+        public static void Post<T> (string methodName, Type patchType, string patchMethodName) {
+            Helper.HarmonyHelper.AddPostfix<T>(methodName, patchType, patchMethodName);
+        }
+
+        public static void Empty<T> (string methodName) {
+            Helper.HarmonyHelper.EmptyMethod<T>(methodName);
         }
     }
 }

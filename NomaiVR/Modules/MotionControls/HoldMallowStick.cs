@@ -93,10 +93,10 @@ namespace NomaiVR {
         internal static class Patches {
             public static void Patch () {
                 // Stop stick rotation animation.
-                NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("UpdateRotation");
+                NomaiVR.Empty<RoastingStickController>("UpdateRotation");
 
                 // Hide prompts.
-                NomaiVR.Helper.HarmonyHelper.EmptyMethod<RoastingStickController>("LateInitialize");
+                NomaiVR.Empty<RoastingStickController>("LateInitialize");
             }
         }
     }

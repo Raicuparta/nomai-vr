@@ -37,8 +37,8 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<CharacterDialogueTree>("StartConversation", typeof(Patches), "PatchStartConversation");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<CharacterDialogueTree>("EndConversation", typeof(Patches), "PatchEndConversation");
+                NomaiVR.Pre<CharacterDialogueTree>("StartConversation", typeof(Patches), nameof(Patches.PatchStartConversation));
+                NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patches), nameof(Patches.PatchEndConversation));
             }
             static void PatchStartConversation (CharacterDialogueTree __instance) {
                 currentDialogue = __instance;

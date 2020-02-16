@@ -124,11 +124,11 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("Start", typeof(Patches), "ItemToolStart");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Awake", typeof(Patches), "EnableListenForAllJoysticks");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<PadEZ.PadManager>("GetAxis", typeof(Patches), "GetAxis");
+                NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patches), nameof(Patches.SingleAxisUpdate));
+                NomaiVR.Pre<OWInput>("Update", typeof(Patches), nameof(Patches.OWInputUpdate));
+                NomaiVR.Post<ItemTool>("Start", typeof(Patches), nameof(Patches.ItemToolStart));
+                NomaiVR.Pre<OWInput>("Awake", typeof(Patches), nameof(Patches.EnableListenForAllJoysticks));
+                NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patches), nameof(Patches.GetAxis));
             }
             static float GetAxis (float __result, string axisName) {
                 if (_singleAxes.ContainsKey(axisName)) {

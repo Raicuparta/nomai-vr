@@ -35,11 +35,11 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlanetaryFogController>("ResetFogSettings", typeof(Patches), "PatchResetFog");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<PlanetaryFogController>("UpdateFogSettings", typeof(Patches), "PatchUpdateFog");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<FogOverrideVolume>("OverrideFogSettings", typeof(Patches), "PatchOverrideFog");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<Flashback>("OnTriggerFlashback", typeof(Patches), "PatchTriggerFlashback");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<Flashback>("Update", typeof(Patches), "FlashbackUpdate");
+                NomaiVR.Pre<PlanetaryFogController>("ResetFogSettings", typeof(Patches), nameof(Patches.PatchResetFog));
+                NomaiVR.Pre<PlanetaryFogController>("UpdateFogSettings", typeof(Patches), nameof(Patches.PatchUpdateFog));
+                NomaiVR.Pre<FogOverrideVolume>("OverrideFogSettings", typeof(Patches), nameof(Patches.PatchOverrideFog));
+                NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patches), nameof(Patches.PatchTriggerFlashback));
+                NomaiVR.Pre<Flashback>("Update", typeof(Patches), nameof(Patches.FlashbackUpdate));
             }
             static bool PatchResetFog () {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;

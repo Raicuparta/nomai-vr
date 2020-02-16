@@ -44,12 +44,12 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("UpdateInteractVolume", typeof(Patches), "PatchUpdateInteractVolume");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnEntry", typeof(Patches), "InteractZoneEntry");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<InteractZone>("OnExit", typeof(Patches), "InteractZoneExit");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<ToolModeSwapper>("Update", typeof(Patches), "ToolModeUpdate");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PreUpdateIsDroppable");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ItemTool>("UpdateIsDroppable", typeof(Patches), "PostUpdateIsDroppable");
+                NomaiVR.Pre<InteractZone>("UpdateInteractVolume", typeof(Patches), nameof(Patches.PatchUpdateInteractVolume));
+                NomaiVR.Pre<InteractZone>("OnEntry", typeof(Patches), nameof(Patches.InteractZoneEntry));
+                NomaiVR.Pre<InteractZone>("OnExit", typeof(Patches), nameof(Patches.InteractZoneExit));
+                NomaiVR.Pre<ToolModeSwapper>("Update", typeof(Patches), nameof(Patches.ToolModeUpdate));
+                NomaiVR.Pre<ItemTool>("UpdateIsDroppable", typeof(Patches), nameof(Patches.PreUpdateIsDroppable));
+                NomaiVR.Post<ItemTool>("UpdateIsDroppable", typeof(Patches), nameof(Patches.PostUpdateIsDroppable));
             }
 
             static bool PatchUpdateInteractVolume (

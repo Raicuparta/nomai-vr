@@ -36,9 +36,9 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ShipBody>("Start", typeof(Patches), "ShipStart");
-                NomaiVR.Helper.HarmonyHelper.AddPrefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PreFindReferenceFrameInLineOfSight");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), "PostFindReferenceFrameInLineOfSight");
+                NomaiVR.Post<ShipBody>("Start", typeof(Patches), nameof(Patches.ShipStart));
+                NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(Patches.PreFindReferenceFrameInLineOfSight));
+                NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(Patches.PostFindReferenceFrameInLineOfSight));
             }
 
             static void ShipStart (ShipBody __instance) {
