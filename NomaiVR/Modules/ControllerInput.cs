@@ -126,7 +126,6 @@ namespace NomaiVR {
             public static void Patch () {
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleAxisCommand>("Update", typeof(Patches), "SingleAxisUpdate");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<OWInput>("Update", typeof(Patches), "OWInputUpdate");
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<Campfire>("Awake", typeof(Patches), "CampfireAwake");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("ChangePrompt", typeof(Patches), "InteractionVolumeChangePrompt");
                 NomaiVR.Helper.HarmonyHelper.AddPostfix<SingleInteractionVolume>("Awake", typeof(Patches), "InteractionVolumeAwake");
                 NomaiVR.Helper.HarmonyHelper.AddPrefix<SingleInteractionVolume>("SetKeyCommandVisible", typeof(Patches), "InteractionVolumeVisible");
@@ -180,22 +179,6 @@ namespace NomaiVR {
 
             static void OWInputUpdate (ref bool ____usingGamepad) {
                 ____usingGamepad = true;
-            }
-
-            static void CampfireAwake (
-                SingleInteractionVolume ____interactVolume,
-                bool ____canSleepHere,
-                ref ScreenPrompt ____sleepPrompt,
-                ref ScreenPrompt ____wakePrompt,
-                Campfire __instance
-            ) {
-                if (____interactVolume != null && ____canSleepHere) {
-                    ____sleepPrompt = new ScreenPrompt(UITextLibrary.GetString(UITextType.CampfireDozeOff), 0);
-                    ____interactVolume.SetValue("_textID", UITextType.None);
-                    ____interactVolume.SetValue("_usingPromptWithCommand", false);
-                    ____interactVolume.SetValue("OnPressInteract", null);
-                    ____interactVolume.OnPressInteract += () => __instance.Invoke("StartSleeping");
-                }
             }
 
             static bool InteractionVolumeChangePrompt (UITextType promptID, ref bool ____usingPromptWithCommand) {
