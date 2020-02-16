@@ -84,7 +84,17 @@ namespace NomaiVR {
             // so we can still take some selfies when we're feelinf cute.
             var renderers = bodyModels.GetComponentsInChildren<SkinnedMeshRenderer>(true);
             foreach (var renderer in renderers) {
+                if (renderer.name.Contains("ShadowCaster") || renderer.name.Contains("Head") || renderer.name.Contains("Helmet")) {
+                    continue;
+                }
+
+                // Make this body mesh only visible to the probe launcher camera.
                 renderer.gameObject.layer = LayerMask.NameToLayer("VisibleToProbe");
+
+                // Make the player body shadows visible to the player camera.
+                var shadowCaster = Instantiate(renderer)
+                shadowCaster.transform.parent = renderer.transform;
+                shadowCaster.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
             }
 
             // Arms are always hidden, since we have our own motion-controlled hands.
