@@ -50,23 +50,26 @@ namespace NomaiVR {
 
         void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
 
-            var isInGame = scene.name == "SolarSystem" || scene.name == "EyeOfTheUniverse";
-            var isInTitle = scene.name == "TitleScreen";
+            var isSolarSystem = scene.name == "SolarSystem";
+            var isEye = scene.name == "EyeOfTheUniverse";
+            var isTitle = scene.name == "TitleScreen";
 
             // The GameObject associated with this ModBehaviour is set to persist between scene loads.
             // Some modules need to be restarted on every scene load.
             // This GameObject is for them.
             var nonPersistentObject = new GameObject();
-            nonPersistentObject.AddComponent<Menus>().isInGame = isInGame;
+            nonPersistentObject.AddComponent<Menus>().isInGame = isSolarSystem || isEye;
 
-            if (isInGame) {
+            if (isSolarSystem || isEye) {
                 Common.InitGame();
                 nonPersistentObject.AddComponent<EffectFixes>();
                 nonPersistentObject.AddComponent<PlayerBodyPosition>();
                 nonPersistentObject.AddComponent<Dialog>();
-                nonPersistentObject.AddComponent<ShipTools>();
                 nonPersistentObject.AddComponent<Hands>();
-            } else if (isInTitle) {
+                if (isSolarSystem) {
+                    nonPersistentObject.AddComponent<ShipTools>();
+                }
+            } else if (isTitle) {
                 Menus.Reset();
             }
         }
