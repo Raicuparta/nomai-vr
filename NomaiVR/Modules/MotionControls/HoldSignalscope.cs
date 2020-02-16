@@ -63,10 +63,6 @@ namespace NomaiVR {
             helmetOn.localRotation = Quaternion.identity;
         }
 
-        private void OnEvent (MonoBehaviour behaviour, Events ev) {
-
-        }
-
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(Patches.ChangeInputMode));
