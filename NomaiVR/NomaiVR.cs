@@ -71,8 +71,8 @@ namespace NomaiVR {
         }
 
         public override void Configure (IModConfig config) {
-            DebugMode = config.GetSetting<bool>("debugMode");
-            XRSettings.showDeviceView = config.GetSetting<bool>("showMirrorView");
+            DebugMode = config.GetSettingsValue<bool>("debugMode");
+            XRSettings.showDeviceView = config.GetSettingsValue<bool>("showMirrorView");
             // Prevent application from stealing mouse focus;
             ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
             Cursor.lockState = CursorLockMode.None;
