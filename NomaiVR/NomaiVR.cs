@@ -81,7 +81,7 @@ namespace NomaiVR {
         }
 
         public static void Log (params string[] strings) {
-            if (DebugMode) {
+            if (DebugMode && Helper != null) {
                 Helper.Console.WriteLine(string.Join(" ", strings));
             }
         }
