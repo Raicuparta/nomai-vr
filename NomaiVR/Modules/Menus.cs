@@ -1,6 +1,7 @@
 ﻿using OWML.Common;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace NomaiVR {
@@ -33,14 +34,16 @@ namespace NomaiVR {
                     new CanvasInfo(CanvasTypes.DialogueCanvas),
                 });
 
-                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+                if (SceneManager.GetActiveScene().name == "SolarSystem") {
+                    GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
-                if (_farClipPlane == -1) {
-                    _cullingMask = Camera.main.cullingMask;
-                    _farClipPlane = Camera.main.farClipPlane;
-                    Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
-                    Camera.main.cullingMask = (1 << 5);
-                    Camera.main.farClipPlane = 5;
+                    if (_farClipPlane == -1) {
+                        _cullingMask = Camera.main.cullingMask;
+                        _farClipPlane = Camera.main.farClipPlane;
+                        Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
+                        Camera.main.cullingMask = (1 << 5);
+                        Camera.main.farClipPlane = 5;
+                    }
                 }
             } else {
                 FixMainMenuCanvas();
