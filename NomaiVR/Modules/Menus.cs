@@ -56,7 +56,7 @@ namespace NomaiVR {
             var canvases = FindObjectsOfType<Canvas>();
             NomaiVR.Log("found", canvases.Length.ToString(), "canvases");
             foreach (var canvas in canvases) {
-                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay) {
+                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name != "PauseBackdropCanvas") {
                     canvas.renderMode = RenderMode.WorldSpace;
                     //canvas.transform.parent = Camera.main.transform;
                     canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward;

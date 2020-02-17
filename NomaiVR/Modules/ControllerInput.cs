@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OWML.ModHelper.Events;
+using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
@@ -12,6 +13,7 @@ namespace NomaiVR {
         float _primaryLastTime = -1;
         const float holdDuration = 0.3f;
         bool _justHeld;
+        ScreenPrompt _repairPrompt;
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
@@ -42,6 +44,12 @@ namespace NomaiVR {
 
             SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
             SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
+
+            GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+        }
+
+        void OnWakeUp () {
+            _repairPrompt = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt");
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -57,16 +65,6 @@ namespace NomaiVR {
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
-            if (newState) {
-                _primaryLastTime = fromAction.changedTime;
-            } else {
-                _primaryLastTime = -1;
-                if (!_justHeld) {
-                    SimulateInput(XboxButton.X);
-                }
-                _justHeld = false;
-            }
-
             switch (Common.ToolSwapper.GetToolMode()) {
                 case ToolMode.SignalScope:
                     _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
@@ -79,6 +77,19 @@ namespace NomaiVR {
                     _buttons[XboxButton.RightBumper] = value;
                     break;
                 default:
+                    if (!_repairPrompt.IsVisible()) {
+                        if (newState) {
+                            _primaryLastTime = fromAction.changedTime;
+                        } else {
+                            _primaryLastTime = -1;
+                            if (!_justHeld) {
+                                SimulateInput(XboxButton.X);
+                            }
+                            _justHeld = false;
+                        }
+                    } else {
+                        _buttons[XboxButton.X] = value;
+                    }
                     break;
             }
 
@@ -95,8 +106,8 @@ namespace NomaiVR {
             }
         }
 
-        static IEnumerator<WaitForSeconds> ResetInput (XboxButton button) {
-            yield return new WaitForSeconds(0.5f);
+        static IEnumerator<WaitForSecondsRealtime> ResetInput (XboxButton button) {
+            yield return new WaitForSecondsRealtime(0.5f);
             SimulateInput(button, 0);
         }
 
