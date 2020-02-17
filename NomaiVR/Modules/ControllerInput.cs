@@ -51,8 +51,7 @@ namespace NomaiVR {
             var repairVolumes = FindObjectsOfType<RepairVolume>();
             NomaiVR.Log("found", repairVolumes.Length.ToString(), "volumnes");
             foreach (var volume in repairVolumes) {
-                volume.GetInteractReceiver().OnGainFocus += OnRepairGainFocus;
-                volume.GetInteractReceiver().OnLoseFocus += OnRepairLoseFocus;
+                volume.Invoke("OnGainFocus");
             }
         }
 
@@ -79,15 +78,7 @@ namespace NomaiVR {
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
-            if (newState) {
-                _primaryLastTime = fromAction.changedTime;
-            } else {
-                _primaryLastTime = -1;
-                if (!_justHeld) {
-                    SimulateInput(XboxButton.X);
-                }
-                _justHeld = false;
-            }
+            var isFocusingRepair = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt").IsVisible();
 
             switch (Common.ToolSwapper.GetToolMode()) {
                 case ToolMode.SignalScope:
@@ -101,6 +92,19 @@ namespace NomaiVR {
                     _buttons[XboxButton.RightBumper] = value;
                     break;
                 default:
+                    if (!isFocusingRepair) {
+                        if (newState) {
+                            _primaryLastTime = fromAction.changedTime;
+                        } else {
+                            _primaryLastTime = -1;
+                            if (!_justHeld) {
+                                SimulateInput(XboxButton.X);
+                            }
+                            _justHeld = false;
+                        }
+                    } else {
+                        _buttons[XboxButton.X] = value;
+                    }
                     break;
             }
 
@@ -177,12 +181,13 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
+                NomaiVR.Pre<RepairVolume>("OnGainFocus", typeof(Patches), nameof(Patches.RepairVolumeStart));
                 NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patches), nameof(Patches.SingleAxisUpdate));
                 NomaiVR.Pre<OWInput>("Update", typeof(Patches), nameof(Patches.OWInputUpdate));
                 NomaiVR.Post<ItemTool>("Start", typeof(Patches), nameof(Patches.ItemToolStart));
                 NomaiVR.Pre<OWInput>("Awake", typeof(Patches), nameof(Patches.EnableListenForAllJoysticks));
                 NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patches), nameof(Patches.GetAxis));
-                NomaiVR.Post<RepairVolume>("Awake", typeof(Patches), nameof(Patches.RepairVolumeAwake));
+                NomaiVR.Log("gonna repair this fucking shit");
             }
             static float GetAxis (float __result, string axisName) {
                 if (_singleAxes.ContainsKey(axisName)) {
@@ -241,9 +246,10 @@ namespace NomaiVR {
                 InputLibrary.signalscope.ChangeBinding(XboxButton.None, KeyCode.None);
             }
 
-            static void RepairVolumeAwake (InteractReceiver ____interactReceiver) {
-                ____interactReceiver.OnGainFocus += OnRepairGainFocus;
-                ____interactReceiver.OnLoseFocus += OnRepairLoseFocus;
+            static void RepairVolumeStart (InteractReceiver ____interactReceiver) {
+                NomaiVR.Log("FUCKING PATCH THIS FUCKING SHIT");
+                //____interactReceiver.OnGainFocus += OnRepairGainFocus;
+                //____interactReceiver.OnLoseFocus += OnRepairLoseFocus;
             }
         }
     }
