@@ -54,12 +54,11 @@ namespace NomaiVR {
 
         void ScreenCanvasesToWorld () {
             var canvases = FindObjectsOfType<Canvas>();
-			NomaiVR.Log("found", canvases.Length.ToString(), "canvases");
             foreach (var canvas in canvases) {
-				if (canvas.renderMode == RenderMode.ScreenSpaceOverlay) {
-					canvas.renderMode = RenderMode.WorldSpace;
+                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name != "PauseBackdropCanvas") {
+                    canvas.renderMode = RenderMode.WorldSpace;
                     canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-                    canvas.transform.localRotation = Camera.main.transform.rotation;
+                    canvas.transform.rotation = Camera.main.transform.rotation;
                     canvas.transform.localScale *= 0.001f;
                     var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                     followTarget.target = Camera.main.transform;
