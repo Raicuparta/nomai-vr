@@ -22,14 +22,7 @@ namespace NomaiVR {
             Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
 
             ScreenCanvasesToWorld();
-			
-            if (isInGame) {
-                FixGameCanvases(new[] {
-                    new CanvasInfo(CanvasTypes.PauseMenu, 0.0005f),
-                    new CanvasInfo(CanvasTypes.DialogueCanvas),
-                    new CanvasInfo(CanvasTypes.ScreenPromptCanvas, 0.0015f)
-                });
-				
+
             if (SceneManager.GetActiveScene().name == "SolarSystem") {
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
