@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OWML.ModHelper.Events;
+using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
@@ -12,6 +13,7 @@ namespace NomaiVR {
         float _primaryLastTime = -1;
         const float holdDuration = 0.3f;
         bool _justHeld;
+        bool _repairFocused;
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
@@ -42,6 +44,26 @@ namespace NomaiVR {
 
             SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
             SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
+
+        }
+
+        public void SolarSystemStart () {
+            var repairVolumes = FindObjectsOfType<RepairVolume>();
+            NomaiVR.Log("found", repairVolumes.Length.ToString(), "volumnes");
+            foreach (var volume in repairVolumes) {
+                volume.GetInteractReceiver().OnGainFocus += OnRepairGainFocus;
+                volume.GetInteractReceiver().OnLoseFocus += OnRepairLoseFocus;
+            }
+        }
+
+        private void OnRepairLoseFocus () {
+            NomaiVR.Log("repair blurred!");
+            _repairFocused = false;
+        }
+
+        private void OnRepairGainFocus () {
+            NomaiVR.Log("repair focused!");
+            _repairFocused = true;
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
@@ -160,6 +182,7 @@ namespace NomaiVR {
                 NomaiVR.Post<ItemTool>("Start", typeof(Patches), nameof(Patches.ItemToolStart));
                 NomaiVR.Pre<OWInput>("Awake", typeof(Patches), nameof(Patches.EnableListenForAllJoysticks));
                 NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patches), nameof(Patches.GetAxis));
+                NomaiVR.Post<RepairVolume>("Awake", typeof(Patches), nameof(Patches.RepairVolumeAwake));
             }
             static float GetAxis (float __result, string axisName) {
                 if (_singleAxes.ContainsKey(axisName)) {
@@ -216,6 +239,10 @@ namespace NomaiVR {
             static void EnableListenForAllJoysticks () {
                 InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
                 InputLibrary.signalscope.ChangeBinding(XboxButton.None, KeyCode.None);
+            }
+
+            static void RepairVolumeAwake () {
+
             }
         }
     }
