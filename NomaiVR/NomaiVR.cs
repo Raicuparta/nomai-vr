@@ -67,7 +67,6 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<Hands>();
                 if (isSolarSystem) {
                     nonPersistentObject.AddComponent<ShipTools>();
-                    gameObject.GetComponent<ControllerInput>().SolarSystemStart();
                 }
             } else if (isTitle) {
                 Menus.Reset();
