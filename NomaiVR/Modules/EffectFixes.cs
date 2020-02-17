@@ -74,7 +74,7 @@ namespace NomaiVR {
                 ____maskTransform.parent = parent;
             }
 
-            static void FlashbackUpdate (Flashback __instance, Transform ____maskTransform, Transform ____screenTransform) {
+            static void FlashbackUpdate (Flashback __instance, Transform ____maskTransform) {
                 var parent = ____maskTransform.parent;
                 var angle = Quaternion.Angle(parent.rotation, __instance.transform.rotation) * 0.5f;
                 parent.rotation = Quaternion.RotateTowards(parent.rotation, __instance.transform.rotation, Time.fixedDeltaTime * angle);
