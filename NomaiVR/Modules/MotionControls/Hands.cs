@@ -88,13 +88,13 @@ namespace NomaiVR {
                     continue;
                 }
 
-                // Make this body mesh only visible to the probe launcher camera.
-                renderer.gameObject.layer = LayerMask.NameToLayer("VisibleToProbe");
-
                 // Make the player body shadows visible to the player camera.
                 var shadowCaster = Instantiate(renderer);
                 shadowCaster.transform.parent = renderer.transform;
                 shadowCaster.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+
+                // Make this body mesh only visible to the probe launcher camera.
+                renderer.gameObject.layer = LayerMask.NameToLayer("VisibleToProbe");
             }
 
             // Arms are always hidden, since we have our own motion-controlled hands.
