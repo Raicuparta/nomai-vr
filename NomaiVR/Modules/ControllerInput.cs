@@ -9,11 +9,11 @@ namespace NomaiVR {
         static Dictionary<XboxButton, float> _buttons;
         static Dictionary<string, float> _singleAxes;
         static Dictionary<DoubleAxis, Vector2> _doubleAxes;
+        static bool _repairFocused;
         public static bool IsGripping { get; private set; }
         float _primaryLastTime = -1;
         const float holdDuration = 0.3f;
         bool _justHeld;
-        bool _repairFocused;
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
@@ -56,12 +56,12 @@ namespace NomaiVR {
             }
         }
 
-        private void OnRepairLoseFocus () {
+        static void OnRepairLoseFocus () {
             NomaiVR.Log("repair blurred!");
             _repairFocused = false;
         }
 
-        private void OnRepairGainFocus () {
+        static void OnRepairGainFocus () {
             NomaiVR.Log("repair focused!");
             _repairFocused = true;
         }
@@ -241,8 +241,9 @@ namespace NomaiVR {
                 InputLibrary.signalscope.ChangeBinding(XboxButton.None, KeyCode.None);
             }
 
-            static void RepairVolumeAwake () {
-
+            static void RepairVolumeAwake (InteractReceiver ____interactReceiver) {
+                ____interactReceiver.OnGainFocus += OnRepairGainFocus;
+                ____interactReceiver.OnLoseFocus += OnRepairLoseFocus;
             }
         }
     }
