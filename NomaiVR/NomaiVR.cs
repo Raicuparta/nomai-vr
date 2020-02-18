@@ -38,6 +38,7 @@ namespace NomaiVR {
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
+            gameModules.AddComponent<ForceSettings>();
 
             Application.runInBackground = true;
 
