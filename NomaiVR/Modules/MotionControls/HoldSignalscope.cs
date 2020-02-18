@@ -85,7 +85,7 @@ namespace NomaiVR {
             }
 
             static void ChangeInputMode (InputMode mode) {
-                if (!SignalscopeReticule || !ShipWindshield) {
+                if (!SignalscopeReticule || !ShipWindshield || mode == InputMode.Menu) {
                     return;
                 }
                 if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
