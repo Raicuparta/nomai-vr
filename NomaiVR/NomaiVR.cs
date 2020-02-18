@@ -31,10 +31,12 @@ namespace NomaiVR {
             HoldMallowStick.Patches.Patch();
             LaserPointer.Patches.Patch();
             PlayerBodyPosition.Patches.Patch();
+            ForceSettings.Patches.Patch();
 
-            // Add all modules here.
+            // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<ControllerInput>();
+            gameObject.AddComponent<ForceSettings>();
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
