@@ -2,14 +2,8 @@
 
 namespace NomaiVR {
     class ForceSettings: MonoBehaviour {
-        static GraphicSettings _graphicSettings;
-
         void Awake () {
-            _graphicSettings = PlayerData.GetGraphicSettings();
-
             SetResolution();
-
-            _graphicSettings.ApplyAllGraphicSettings();
         }
 
         static void SetResolution () {
