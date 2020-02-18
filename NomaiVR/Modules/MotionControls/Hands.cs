@@ -11,6 +11,8 @@ namespace NomaiVR {
         static GameObject _handPrefab;
         static GameObject _glovePrefab;
         Transform _wrapper;
+        private static Transform _thrusterParent;
+        private static Transform _thrusterHUD;
 
         private void Start () {
             if (!_assetBundle) {
@@ -37,6 +39,19 @@ namespace NomaiVR {
             gameObject.AddComponent<HoldItem>();
             gameObject.AddComponent<HoldPrompts>();
             gameObject.AddComponent<LaserPointer>();
+
+            setupThrusterHUD();
+        }
+
+        private void setupThrusterHUD () {
+            NomaiVR.Helper.HarmonyHelper.AddPostfix<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), "PatchLateUpdate");
+            _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
+            _thrusterParent = new GameObject().transform;
+            _thrusterParent.parent = _thrusterHUD.parent;
+            _thrusterParent.localRotation = Quaternion.identity;
+            _thrusterParent.localPosition = _thrusterHUD.localPosition;
+            _thrusterHUD.parent = _thrusterParent;
+            _thrusterHUD.localPosition = Vector3.zero;
         }
 
         bool ShouldRenderGloves () {
@@ -137,6 +152,15 @@ namespace NomaiVR {
         void Update () {
             if (_wrapper && Camera.main) {
                 _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+            }
+        }
+
+        internal static class Patches {
+            static void PatchLateUpdate () {
+                // only allow rotation around the up/down axis, always face forward
+                _thrusterParent.transform.rotation = Quaternion.LookRotation(Common.PlayerHead.up, Camera.main.transform.forward);
+                // gets updated elsewhere and needs to be reset to proper local rotation
+                _thrusterHUD.localRotation = Quaternion.Euler(-90f, 0f, 180f);
             }
         }
     }
