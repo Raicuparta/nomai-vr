@@ -77,7 +77,7 @@ namespace NomaiVR {
                     _buttons[XboxButton.RightBumper] = value;
                     break;
                 default:
-                    if (!_repairPrompt.IsVisible()) {
+                    if (!_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
                         if (newState) {
                             _primaryLastTime = fromAction.changedTime;
                         } else {
@@ -226,7 +226,7 @@ namespace NomaiVR {
 
             static void EnableListenForAllJoysticks () {
                 InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
-                InputLibrary.signalscope.ChangeBinding(XboxButton.None, KeyCode.None);
+                InputLibrary.signalscope.ChangeBinding(XboxButton.DPadRight, KeyCode.None);
             }
         }
     }

@@ -49,7 +49,7 @@ namespace NomaiVR {
                 probe.text = UITextType.ScoutModePrompt;
 
                 var signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot/SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
-                signalscope.button = XboxButton.Y;
+                signalscope.button = XboxButton.DPadRight;
                 signalscope.text = UITextType.SignalscopePrompt;
 
                 var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
