@@ -33,13 +33,13 @@ namespace NomaiVR {
             PlayerBodyPosition.Patches.Patch();
             ForceSettings.Patches.Patch();
 
-            // Add all modules here.
+            // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<ControllerInput>();
+            gameObject.AddComponent<ForceSettings>();
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
-            gameModules.AddComponent<ForceSettings>();
 
             Application.runInBackground = true;
 
