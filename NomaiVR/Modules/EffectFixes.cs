@@ -43,10 +43,13 @@ namespace NomaiVR {
                 NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patches), nameof(Patches.SwitchToRemoteCamera));
             }
 
-            static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
-                ____slavePlatform.GetOwnedCamera().transform.parent = ____playerHologram;
-                ____playerHologram.Find("Traveller_HEA_Player_v2/Traveller_Mesh_v01:Traveller_Geo/Traveller_Mesh_v01:PlayerSuit_Helmet").gameObject.layer = 0;
-                ____playerHologram.Find("Traveller_HEA_Player_v2/player_mesh_noSuit:Traveller_HEA_Player/player_mesh_noSuit:Player_Head").gameObject.layer = 0;
+            static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform __instance, NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
+                var camera = ____slavePlatform.GetOwnedCamera().transform;
+                if (camera.parent.name == "Prefab_NOM_RemoteViewer") {
+                    ____slavePlatform.GetOwnedCamera().transform.parent = ____playerHologram;
+                    ____playerHologram.Find("Traveller_HEA_Player_v2/Traveller_Mesh_v01:Traveller_Geo/Traveller_Mesh_v01:PlayerSuit_Helmet").gameObject.layer = 0;
+                    ____playerHologram.Find("Traveller_HEA_Player_v2/player_mesh_noSuit:Traveller_HEA_Player/player_mesh_noSuit:Player_Head").gameObject.layer = 0;
+                }
             }
 
             static bool PatchResetFog () {
