@@ -35,12 +35,31 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
+                // Fixes for fog stereo problems.
                 NomaiVR.Pre<PlanetaryFogController>("ResetFogSettings", typeof(Patches), nameof(Patches.PatchResetFog));
                 NomaiVR.Pre<PlanetaryFogController>("UpdateFogSettings", typeof(Patches), nameof(Patches.PatchUpdateFog));
                 NomaiVR.Pre<FogOverrideVolume>("OverrideFogSettings", typeof(Patches), nameof(Patches.PatchOverrideFog));
+
+                // Improvements for the "loop reset" effect.
                 NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patches), nameof(Patches.PatchTriggerFlashback));
                 NomaiVR.Pre<Flashback>("Update", typeof(Patches), nameof(Patches.FlashbackUpdate));
+
+                // Fix for the reprojection stone camera position.
+                NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patches), nameof(Patches.SwitchToRemoteCamera));
             }
+
+            static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform __instance, NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
+                var camera = ____slavePlatform.GetOwnedCamera().transform;
+                if (camera.parent.name == "Prefab_NOM_RemoteViewer") {
+                    var parent = new GameObject().transform;
+                    parent.parent = ____playerHologram;
+                    parent.localPosition = new Vector3(0, -2.5f, 0);
+                    parent.localRotation = Quaternion.identity;
+                    ____slavePlatform.GetOwnedCamera().transform.parent = parent;
+                    ____playerHologram.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
+                }
+            }
+
             static bool PatchResetFog () {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
             }
