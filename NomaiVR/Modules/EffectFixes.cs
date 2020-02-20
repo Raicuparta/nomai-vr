@@ -45,7 +45,10 @@ namespace NomaiVR {
 
             static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
                 ____slavePlatform.GetOwnedCamera().transform.parent = ____playerHologram;
+                ____playerHologram.Find("Traveller_HEA_Player_v2/Traveller_Mesh_v01:Traveller_Geo/Traveller_Mesh_v01:PlayerSuit_Helmet").gameObject.layer = 0;
+                ____playerHologram.Find("Traveller_HEA_Player_v2/player_mesh_noSuit:Traveller_HEA_Player/player_mesh_noSuit:Player_Head").gameObject.layer = 0;
             }
+
             static bool PatchResetFog () {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
             }
