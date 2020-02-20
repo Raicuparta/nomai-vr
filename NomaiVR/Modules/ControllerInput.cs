@@ -77,7 +77,7 @@ namespace NomaiVR {
                     _buttons[XboxButton.RightBumper] = value;
                     break;
                 default:
-                    if (!_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
+                    if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
                         if (newState) {
                             _primaryLastTime = fromAction.changedTime;
                         } else {
