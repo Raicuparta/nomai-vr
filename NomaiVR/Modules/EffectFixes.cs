@@ -35,11 +35,16 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
+                // Fixes for fog stereo problems.
                 NomaiVR.Pre<PlanetaryFogController>("ResetFogSettings", typeof(Patches), nameof(Patches.PatchResetFog));
                 NomaiVR.Pre<PlanetaryFogController>("UpdateFogSettings", typeof(Patches), nameof(Patches.PatchUpdateFog));
                 NomaiVR.Pre<FogOverrideVolume>("OverrideFogSettings", typeof(Patches), nameof(Patches.PatchOverrideFog));
+
+                // Improvements for the "loop reset" effect.
                 NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patches), nameof(Patches.PatchTriggerFlashback));
                 NomaiVR.Pre<Flashback>("Update", typeof(Patches), nameof(Patches.FlashbackUpdate));
+
+                // Fix for the reprojection stone camera position.
                 NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patches), nameof(Patches.SwitchToRemoteCamera));
             }
 
