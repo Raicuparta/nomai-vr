@@ -46,9 +46,12 @@ namespace NomaiVR {
             static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform __instance, NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
                 var camera = ____slavePlatform.GetOwnedCamera().transform;
                 if (camera.parent.name == "Prefab_NOM_RemoteViewer") {
-                    ____slavePlatform.GetOwnedCamera().transform.parent = ____playerHologram;
-                    ____playerHologram.Find("Traveller_HEA_Player_v2/Traveller_Mesh_v01:Traveller_Geo/Traveller_Mesh_v01:PlayerSuit_Helmet").gameObject.layer = 0;
-                    ____playerHologram.Find("Traveller_HEA_Player_v2/player_mesh_noSuit:Traveller_HEA_Player/player_mesh_noSuit:Player_Head").gameObject.layer = 0;
+                    var parent = new GameObject().transform;
+                    parent.parent = ____playerHologram;
+                    parent.localPosition = new Vector3(0, -2.5f, 0);
+                    parent.localRotation = Quaternion.identity;
+                    ____slavePlatform.GetOwnedCamera().transform.parent = parent;
+                    ____playerHologram.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
                 }
             }
 
