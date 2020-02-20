@@ -40,6 +40,11 @@ namespace NomaiVR {
                 NomaiVR.Pre<FogOverrideVolume>("OverrideFogSettings", typeof(Patches), nameof(Patches.PatchOverrideFog));
                 NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patches), nameof(Patches.PatchTriggerFlashback));
                 NomaiVR.Pre<Flashback>("Update", typeof(Patches), nameof(Patches.FlashbackUpdate));
+                NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patches), nameof(Patches.SwitchToRemoteCamera));
+            }
+
+            static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
+                ____slavePlatform.GetOwnedCamera().transform.parent = ____playerHologram;
             }
             static bool PatchResetFog () {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
