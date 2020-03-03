@@ -12,6 +12,7 @@ namespace NomaiVR {
         static Camera _scopeLensCamera;
         static OWCamera _playerCamera;
         Transform _scopeLens;
+        static GameObject _scopeLensPrefab;
 
         void Awake () {
             if (SceneManager.GetActiveScene().name == "SolarSystem") {
@@ -85,34 +86,35 @@ namespace NomaiVR {
         void LoadScopeLens () {
             if (!_assetBundle) {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/scope-lens");
-                _scopeLens = Instantiate(_assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab")).transform;
-                _scopeLens.parent = _signalScope.transform;
-                _scopeLens.localPosition = Vector3.zero;
-                _scopeLens.localRotation = Quaternion.identity;
-                _scopeLens.localScale = Vector3.one * 1.5f;
-                _scopeLens.gameObject.SetActive(false);
-
-                _scopeLensCamera = _scopeLens.GetComponentInChildren<Camera>();
-                _scopeLensCamera.gameObject.SetActive(false);
-                _scopeLensCamera.cullingMask = Camera.main.cullingMask;
-                _scopeLensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
-                _scopeLensCamera.fieldOfView = 5f;
-
-                var owCamera = _scopeLensCamera.gameObject.AddComponent<OWCamera>();
-                owCamera.useFarCamera = true;
-                owCamera.renderSkybox = true;
-                owCamera.useViewmodels = true;
-                owCamera.farCameraDistance = 50000;
-                owCamera.viewmodelFOV = 70;
-                var fogEffect = _scopeLensCamera.gameObject.AddComponent<PlanetaryFogImageEffect>();
-                fogEffect.fogShader = Locator.GetPlayerCamera().GetComponent<PlanetaryFogImageEffect>().fogShader;
-                _scopeLensCamera.farClipPlane = 2000f;
-                _scopeLensCamera.nearClipPlane = 0.1f;
-                _scopeLensCamera.depth = 0f;
-                _scopeLensCamera.clearFlags = CameraClearFlags.Color;
-                _scopeLensCamera.backgroundColor = Color.black;
-                _scopeLensCamera.gameObject.SetActive(true);
+                _scopeLensPrefab = _assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab");
             }
+            _scopeLens = Instantiate(_scopeLensPrefab).transform;
+            _scopeLens.parent = _signalScope.transform;
+            _scopeLens.localPosition = Vector3.zero;
+            _scopeLens.localRotation = Quaternion.identity;
+            _scopeLens.localScale = Vector3.one * 1.5f;
+            _scopeLens.gameObject.SetActive(false);
+
+            _scopeLensCamera = _scopeLens.GetComponentInChildren<Camera>();
+            _scopeLensCamera.gameObject.SetActive(false);
+            _scopeLensCamera.cullingMask = Camera.main.cullingMask;
+            _scopeLensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+            _scopeLensCamera.fieldOfView = 5f;
+
+            var owCamera = _scopeLensCamera.gameObject.AddComponent<OWCamera>();
+            owCamera.useFarCamera = true;
+            owCamera.renderSkybox = true;
+            owCamera.useViewmodels = true;
+            owCamera.farCameraDistance = 50000;
+            owCamera.viewmodelFOV = 70;
+            var fogEffect = _scopeLensCamera.gameObject.AddComponent<PlanetaryFogImageEffect>();
+            fogEffect.fogShader = Locator.GetPlayerCamera().GetComponent<PlanetaryFogImageEffect>().fogShader;
+            _scopeLensCamera.farClipPlane = 2000f;
+            _scopeLensCamera.nearClipPlane = 0.1f;
+            _scopeLensCamera.depth = 0f;
+            _scopeLensCamera.clearFlags = CameraClearFlags.Color;
+            _scopeLensCamera.backgroundColor = Color.black;
+            _scopeLensCamera.gameObject.SetActive(true);
         }
 
         internal static class Patches {
