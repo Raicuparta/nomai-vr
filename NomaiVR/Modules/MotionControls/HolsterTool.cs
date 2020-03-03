@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 
 namespace NomaiVR {
@@ -12,6 +13,8 @@ namespace NomaiVR {
         bool _visible;
         bool _enabled = true;
         Grabbable _grabbable;
+        public Action onEquip;
+        public Action onUnequip;
 
         void Start () {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
@@ -31,6 +34,9 @@ namespace NomaiVR {
         }
 
         void Equip () {
+            if (onEquip != null) {
+                onEquip();
+            }
             FindObjectOfType<ToolModeSwapper>().EquipToolMode(mode);
 
             if (mode == ToolMode.Translator) {
@@ -39,6 +45,9 @@ namespace NomaiVR {
         }
 
         void Unequip () {
+            if (onUnequip != null) {
+                onUnequip();
+            }
             Common.ToolSwapper.UnequipTool();
         }
 
