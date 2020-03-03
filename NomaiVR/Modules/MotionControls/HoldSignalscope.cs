@@ -74,27 +74,21 @@ namespace NomaiVR {
                 _scopeLens.parent = _signalScope;
                 _scopeLens.localPosition = Vector3.zero;
                 _scopeLens.localRotation = Quaternion.identity;
+                _scopeLens.localScale = Vector3.one * 1.5f;
 
                 var camera = _scopeLens.GetComponentInChildren<Camera>();
+                camera.gameObject.SetActive(false);
                 camera.cullingMask = Camera.main.cullingMask;
                 camera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
-
-                //LayerMask.GetMask(
-                //    "Default",
-                //    "TransparentFX",
-                //    "Ignore Raycast",
-                //    "Water",
-                //    "PlayerSafetyCollider",
-                //    "Sun",
-                //    "ShipInterior",
-                //    "AdvancedDetector",
-                //    "Primitive",
-                //    "IgnoreSun",
-                //    "AdvancedEffectVolume",
-                //    "BasicEffectVolume",
-                //    "Proxy"
-                //);
                 camera.fieldOfView = 5f;
+
+                var owCamera = camera.gameObject.AddComponent<OWCamera>();
+                owCamera.useFarCamera = true;
+                owCamera.renderSkybox = true;
+                owCamera.useViewmodels = true;
+                owCamera.farCameraDistance = 50000;
+                owCamera.viewmodelFOV = 70;
+                camera.gameObject.SetActive(true);
             }
         }
 
