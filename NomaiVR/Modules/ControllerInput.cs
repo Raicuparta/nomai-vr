@@ -68,7 +68,6 @@ namespace NomaiVR {
             switch (Common.ToolSwapper.GetToolMode()) {
                 case ToolMode.SignalScope:
                     _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                    _buttons[XboxButton.RightBumper] = value;
                     break;
                 case ToolMode.Translator:
                     _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
