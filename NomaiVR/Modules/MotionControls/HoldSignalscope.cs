@@ -90,9 +90,12 @@ namespace NomaiVR {
                 owCamera.viewmodelFOV = 70;
                 var fogEffect = camera.gameObject.AddComponent<PlanetaryFogImageEffect>();
                 fogEffect.fogShader = Locator.GetPlayerCamera().GetComponent<PlanetaryFogImageEffect>().fogShader;
-                camera.gameObject.SetActive(true);
-                camera.farClipPlane = 2000;
+                camera.farClipPlane = 2000f;
                 camera.nearClipPlane = 0.1f;
+                camera.depth = 0f;
+                camera.clearFlags = CameraClearFlags.Color;
+                camera.backgroundColor = Color.black;
+                camera.gameObject.SetActive(true);
             }
         }
 
