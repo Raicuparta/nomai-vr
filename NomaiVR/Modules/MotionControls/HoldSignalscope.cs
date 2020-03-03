@@ -6,17 +6,20 @@ namespace NomaiVR {
         protected static Transform SignalscopeReticule;
         protected static Transform ShipWindshield;
         protected static Signalscope SignalScope;
+        static AssetBundle _assetBundle;
+        Transform _signalScope;
+        Transform _scopeLens;
 
         void Awake () {
             if (SceneManager.GetActiveScene().name == "SolarSystem") {
                 ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
             }
 
-            var signalScope = Camera.main.transform.Find("Signalscope");
-            Hands.HoldObject(signalScope, Hands.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
-            SignalScope = signalScope.GetComponent<Signalscope>();
+            _signalScope = Camera.main.transform.Find("Signalscope");
+            Hands.HoldObject(_signalScope, Hands.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
+            SignalScope = _signalScope.GetComponent<Signalscope>();
 
-            var signalScopeModel = signalScope.GetChild(0);
+            var signalScopeModel = _signalScope.GetChild(0);
             // Tools have a special shader that draws them on top of everything
             // and screws with perspective. Changing to Standard shader so they look
             // like a normal 3D object.
@@ -44,22 +47,55 @@ namespace NomaiVR {
 
             // Attatch Signalscope UI to the Signalscope.
             SignalscopeReticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            SignalscopeReticule.parent = signalScope;
+            SignalscopeReticule.parent = _signalScope;
             SignalscopeReticule.localScale = Vector3.one * 0.0005f;
             SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
             SignalscopeReticule.localRotation = Quaternion.identity;
 
             helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOff.parent = signalScope;
+            helmetOff.parent = _signalScope;
             helmetOff.localScale = Vector3.one * 0.0005f;
             helmetOff.localPosition = Vector3.zero;
             helmetOff.localRotation = Quaternion.identity;
 
             helmetOn.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOn.parent = signalScope;
+            helmetOn.parent = _signalScope;
             helmetOn.localScale = Vector3.one * 0.0005f;
             helmetOn.localPosition = Vector3.down * 0.5f;
             helmetOn.localRotation = Quaternion.identity;
+
+            LoadScopeLens();
+        }
+
+        void LoadScopeLens () {
+            if (!_assetBundle) {
+                _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/scope-lens");
+                _scopeLens = Instantiate(_assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab")).transform;
+                _scopeLens.parent = _signalScope;
+                _scopeLens.localPosition = Vector3.zero;
+                _scopeLens.localRotation = Quaternion.Euler(-90, 0, 0);
+
+                var camera = _scopeLens.GetComponentInChildren<Camera>();
+                camera.cullingMask = Camera.main.cullingMask;
+                camera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+
+                //LayerMask.GetMask(
+                //    "Default",
+                //    "TransparentFX",
+                //    "Ignore Raycast",
+                //    "Water",
+                //    "PlayerSafetyCollider",
+                //    "Sun",
+                //    "ShipInterior",
+                //    "AdvancedDetector",
+                //    "Primitive",
+                //    "IgnoreSun",
+                //    "AdvancedEffectVolume",
+                //    "BasicEffectVolume",
+                //    "Proxy"
+                //);
+                camera.fieldOfView = 5f;
+            }
         }
 
         internal static class Patches {

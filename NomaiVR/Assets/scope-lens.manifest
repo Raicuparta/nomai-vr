@@ -1,0 +1,39 @@
+ManifestFileVersion: 0
+CRC: 920973779
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d117529c523b8774ade3c32056e6055e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 654284ae0ba0dac673a38c740503b9f3
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 84
+  Script: {instanceID: 0}
+- Class: 124
+  Script: {instanceID: 0}
+Assets:
+- Assets/ScopeLens.prefab
+- Assets/ScopeTexture.renderTexture
+Dependencies: []
