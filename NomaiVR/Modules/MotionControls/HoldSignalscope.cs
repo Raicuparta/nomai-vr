@@ -73,7 +73,7 @@ namespace NomaiVR {
                 _scopeLens = Instantiate(_assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab")).transform;
                 _scopeLens.parent = _signalScope;
                 _scopeLens.localPosition = Vector3.zero;
-                _scopeLens.localRotation = Quaternion.Euler(-90, 0, 0);
+                _scopeLens.localRotation = Quaternion.identity;
 
                 var camera = _scopeLens.GetComponentInChildren<Camera>();
                 camera.cullingMask = Camera.main.cullingMask;

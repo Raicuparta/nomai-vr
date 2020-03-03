@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 920973779
+CRC: 1064998281
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d117529c523b8774ade3c32056e6055e
+    Hash: ba4abafebcf2179fa6992baf301a17eb
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 654284ae0ba0dac673a38c740503b9f3
+    Hash: 39f70d9a424c54ea80a59c66e707eeea
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -19,21 +19,43 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 23
   Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
 - Class: 33
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
-- Class: 64
-  Script: {instanceID: 0}
 - Class: 81
   Script: {instanceID: 0}
 - Class: 84
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
 - Class: 124
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
   Script: {instanceID: 0}
 Assets:
 - Assets/ScopeLens.prefab
 - Assets/ScopeTexture.renderTexture
+- Assets/scope-lens-model.fbx
+- Assets/scope-lens-mask.png
 Dependencies: []
