@@ -65,7 +65,7 @@ namespace NomaiVR {
 
             var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
 
-            if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+            if (Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item)) {
                 if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
                     if (newState) {
                         _primaryLastTime = fromAction.changedTime;
