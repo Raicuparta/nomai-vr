@@ -7,32 +7,36 @@ namespace NomaiVR {
         void Start () {
             var mapCameraTransform = Locator.GetRootTransform().Find("MapCamera");
 
-            var cameraCopy = Instantiate(mapCameraTransform.gameObject);
-            foreach (Transform child in cameraCopy.transform) {
-                DestroyImmediate(child);
-            }
-            Destroy(cameraCopy.GetComponent<MapController>());
-            cameraCopy.transform.parent = mapCameraTransform;
+            var originalCamera = mapCameraTransform.GetComponent<Camera>();
+            var originalOWCamera = mapCameraTransform.GetComponent<OWCamera>();
 
-            Destroy(mapCameraTransform.GetComponent<Camera>());
-            Destroy(mapCameraTransform.GetComponent<OWCamera>());
+            var newCamera = new GameObject().transform;
+            newCamera.gameObject.SetActive(false);
+            newCamera.parent = mapCameraTransform;
+            newCamera.localPosition = Vector3.zero;
+            newCamera.localRotation = Quaternion.identity;
+
+            var camera = newCamera.gameObject.AddComponent<Camera>();
+            camera.farClipPlane = 100000;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black;
+            camera.cullingMask = originalCamera.cullingMask;
+            camera.depth = 0;
+            camera.enabled = false;
+
+            var owCamera = newCamera.gameObject.AddComponent<OWCamera>();
+            owCamera.renderSkybox = true;
+
+            Destroy(mapCameraTransform.GetComponent<FlareLayer>());
             Destroy(mapCameraTransform.GetComponent<FlashbackScreenGrabImageEffect>());
+            Destroy(mapCameraTransform.GetComponent("PostProcessingBehaviour"));
+            Destroy(originalOWCamera);
+            Destroy(originalCamera);
 
             var mapController = mapCameraTransform.GetComponent<MapController>();
-            mapController.SetValue("_mapCamera", cameraCopy.GetComponent<OWCamera>());
-        }
 
-        void CopyClassValues<T> (T source, GameObject targetObject) where T : Behaviour {
-            var target = targetObject.AddComponent<T>();
-
-            FieldInfo[] sourceFields = source
-                .GetType()
-                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-            for (var i = 0; i < sourceFields.Length; i++) {
-                var value = sourceFields[i].GetValue(source);
-                sourceFields[i].SetValue(target, value);
-            }
+            newCamera.gameObject.SetActive(true);
+            mapController.SetValue("_mapCamera", owCamera);
         }
     }
 }
