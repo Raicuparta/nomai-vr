@@ -23,14 +23,14 @@ While the game is playable at a surprisingly decent level, a lot of things range
 Since most VR controllers have less buttons than a normal game controller, input mappings can't be one-to-one. This led to some creative use of motion controls in order to reduce the number of required buttons. The game will control a lot different than it did originally, and there won't be any tutorials teaching you how to play with these controls. Important things:
 
 * Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
-* Don't try to change the controller bindings in-game;
 * In SteamVR's settings you can see the default controls that I set up for the game;
+* You can't change the control bindings in-game (they will always reset);
 * You can interact with most stuff by aiming with the right-hand laser and pressing the "primary interaction" button;
 * Right hand grip can be used to grab tools from the toolbelt;
-* While holding a tool, press the "primary interacttion" button to use the tool and change modes;
-* Left hand grip is usually the same as the LB/L1 button on an XBox/PlayStation controller;
-* While piloting the ship, you can aim at and interact with stuff inside the ship;
-* Experiment with the controls. When in doubt, aim laser and interact.
+* While holding a tool, press the "primary interaction" button to use the tool;
+* Change tool modes by holding a tool on your right hand and touching it with your left hand;
+* While piloting the ship, you can aim at and interact with stuff inside the ship (interact with the screens to equip that tool);
+* Experiment with the controls. When in doubt, aim laser and press interact.
 
 ## Installation
 
