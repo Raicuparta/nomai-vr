@@ -19,6 +19,9 @@ namespace NomaiVR {
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Post<GraphicSettings>("ApplyAllGraphicSettings", typeof(Patches), nameof(PreApplySettings));
+
+                // Force default key bindings
+                NomaiVR.Empty<InputRebindableLibrary>("SetKeyBindings");
             }
 
             static void PreApplySettings () {
