@@ -110,7 +110,7 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All)) {
+            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit)) {
                 _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
             }
         }
