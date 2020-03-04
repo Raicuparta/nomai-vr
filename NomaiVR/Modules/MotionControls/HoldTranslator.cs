@@ -52,8 +52,9 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Post<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patches), nameof(Patches.IsPromptAllowed));
-                NomaiVR.Post<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patches), nameof(Patches.IsPromptAllowed));
+                NomaiVR.Post<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patches), nameof(IsPromptAllowed));
+                NomaiVR.Post<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patches), nameof(IsPromptAllowed));
+                NomaiVR.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patches), nameof(IsPromptAllowed));
             }
 
             static bool IsPromptAllowed (bool __result) {
