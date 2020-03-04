@@ -34,9 +34,6 @@ namespace NomaiVR {
         }
 
         void Equip () {
-            if (!Locator.GetToolModeSwapper().IsInToolMode(ToolMode.None)) {
-                return;
-            }
             if (onEquip != null) {
                 onEquip();
             }
