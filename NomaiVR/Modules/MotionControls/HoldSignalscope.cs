@@ -10,7 +10,6 @@ namespace NomaiVR {
         static AssetBundle _assetBundle;
         Signalscope _signalScope;
         static Camera _scopeLensCamera;
-        static OWCamera _playerCamera;
         Transform _scopeLens;
         static GameObject _scopeLensPrefab;
 
@@ -121,7 +120,6 @@ namespace NomaiVR {
             public static void Patch () {
                 NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(ChangeInputMode));
                 NomaiVR.Post<ShipCockpitUI>("Start", typeof(Patches), nameof(ShipCockpitStart));
-                NomaiVR.Pre<QuantumInstrument>("Update", typeof(Patches), nameof(PreQuantumInstrumentUpdate));
                 NomaiVR.Post<QuantumInstrument>("Update", typeof(Patches), nameof(PostQuantumInstrumentUpdate));
             }
 
@@ -129,16 +127,14 @@ namespace NomaiVR {
                 ____signalscopeTool = SignalScope;
             }
 
-            static void PreQuantumInstrumentUpdate () {
-                if (!_playerCamera) {
-                    _playerCamera = Locator.GetPlayerCamera();
+            static void PostQuantumInstrumentUpdate (QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut, ScreenPrompt ____scopeGatherPrompt) {
+                if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope)) {
+                    Vector3 from = __instance.transform.position - _scopeLensCamera.transform.position;
+                    float num = Vector3.Angle(from, _scopeLensCamera.transform.forward);
+                    if (num < 1f && from.magnitude < 200) {
+                        __instance.Invoke("Gather");
+                    }
                 }
-
-                typeof(Locator).SetValue("_playerCamera", _scopeLensCamera);
-            }
-
-            static void PostQuantumInstrumentUpdate () {
-                typeof(Locator).SetValue("_playerCamera", _playerCamera);
             }
 
             static void ChangeInputMode (InputMode mode) {
