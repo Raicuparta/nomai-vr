@@ -40,7 +40,6 @@ namespace NomaiVR {
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
             holster.angle = Vector3.right * 90;
-            holster.onEquip = OnEquip;
             holster.onUnequip = OnUnequip;
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
@@ -55,32 +54,28 @@ namespace NomaiVR {
             _reticule.localPosition = Vector3.forward * 0.5f;
             _reticule.localRotation = Quaternion.identity;
 
-            helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOff.parent = _signalscope.transform;
-            helmetOff.localScale = Vector3.one * 0.0005f;
-            helmetOff.localPosition = Vector3.zero;
-            helmetOff.localRotation = Quaternion.identity;
+            _signalscope.gameObject.AddComponent<ToolModeInteraction>();
 
-            helmetOn.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOn.parent = _signalscope.transform;
-            helmetOn.localScale = Vector3.one * 0.0005f;
-            helmetOn.localPosition = Vector3.down * 0.5f;
-            helmetOn.localRotation = Quaternion.identity;
+            SetupSignalscopeUI(helmetOff);
+            SetupSignalscopeUI(helmetOn);
+            helmetOff.localPosition += Vector3.up * 0.63f;
 
-            LoadScopeLens();
+            SetupScopeLens();
         }
 
-        void OnEquip () {
-            _lens.gameObject.SetActive(true);
-            _signalscope.SetValue("_inZoomMode", true);
+        void SetupSignalscopeUI (Transform parent) {
+            parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            parent.parent = _signalscope.transform;
+            parent.localScale = Vector3.one * 0.0005f;
+            parent.localPosition = new Vector3(-0.05f, -0.2f, 0);
+            parent.localRotation = Quaternion.Euler(0, 90, 0);
         }
 
         void OnUnequip () {
             _lens.gameObject.SetActive(false);
-            _signalscope.SetValue("_inZoomMode", false);
         }
 
-        void LoadScopeLens () {
+        void SetupScopeLens () {
             if (!_assetBundle) {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/scope-lens");
                 _lensPrefab = _assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab");
@@ -114,11 +109,19 @@ namespace NomaiVR {
             _lensCamera.gameObject.SetActive(true);
         }
 
+        void Update () {
+            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit)) {
+                _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
+            }
+        }
+
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(ChangeInputMode));
                 NomaiVR.Post<ShipCockpitUI>("Start", typeof(Patches), nameof(ShipCockpitStart));
                 NomaiVR.Post<QuantumInstrument>("Update", typeof(Patches), nameof(PostQuantumInstrumentUpdate));
+                NomaiVR.Empty<Signalscope>("EnterSignalscopeZoom");
+                NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
             }
 
             static void ShipCockpitStart (Signalscope ____signalscopeTool) {
@@ -129,7 +132,7 @@ namespace NomaiVR {
                 if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope)) {
                     Vector3 from = __instance.transform.position - _lensCamera.transform.position;
                     float num = Vector3.Angle(from, _lensCamera.transform.forward);
-                    if (num < 1f && from.magnitude < 150) {
+                    if (num < 1f && _lens.gameObject.activeSelf) {
                         __instance.Invoke("Gather");
                     }
                 }
@@ -145,9 +148,9 @@ namespace NomaiVR {
                     _reticule.localPosition = Vector3.forward * 3f;
                     _reticule.localRotation = Quaternion.identity;
                 } else {
-                    _reticule.parent = _lens;
+                    _reticule.parent = _signalscope.transform;
                     _reticule.localScale = Vector3.one * 0.0003f;
-                    _reticule.localPosition = Vector3.zero;
+                    _reticule.localPosition = Vector3.forward * 0.14f;
                     _reticule.localRotation = Quaternion.identity;
                 }
             }

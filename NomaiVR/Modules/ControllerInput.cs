@@ -30,13 +30,11 @@ namespace NomaiVR {
             SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
             SteamVR_Actions.default_Back.onChange += OnBackChange;
             SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryActionChange;
+            SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxButton.LeftBumper);
+            SteamVR_Actions.default_Grip.onChange += OnGripChange;
 
             SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(XboxButton.Start);
             SteamVR_Actions.default_Map.onChange += CreateButtonHandler(XboxButton.Select);
-
-            SteamVR_Actions.default_SecondaryAction.onChange += OnSecondaryActionChange;
-            SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxAxis.dPadX, -1);
-            SteamVR_Actions.default_Grip.onChange += OnGripChange;
 
             SteamVR_Actions.default_ThrottleDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
             SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
@@ -65,44 +63,32 @@ namespace NomaiVR {
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
-            switch (Common.ToolSwapper.GetToolMode()) {
-                case ToolMode.SignalScope:
-                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                    break;
-                case ToolMode.Translator:
-                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                    _buttons[XboxButton.RightBumper] = value;
-                    break;
-                case ToolMode.Probe:
-                    _buttons[XboxButton.RightBumper] = value;
-                    break;
-                default:
-                    if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
-                        if (newState) {
-                            _primaryLastTime = fromAction.changedTime;
-                        } else {
-                            _primaryLastTime = -1;
-                            if (!_justHeld) {
-                                SimulateInput(XboxButton.X);
-                            }
-                            _justHeld = false;
-                        }
+            var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
+
+            if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+                if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
+                    if (newState) {
+                        _primaryLastTime = fromAction.changedTime;
                     } else {
-                        _buttons[XboxButton.X] = value;
+                        _primaryLastTime = -1;
+                        if (!_justHeld) {
+                            SimulateInput(XboxButton.X);
+                        }
+                        _justHeld = false;
                     }
-                    break;
+                } else {
+                    _buttons[XboxButton.X] = value;
+                }
+            } else if (!isInShip || Common.ToolSwapper.IsInToolMode(ToolMode.Probe)) {
+                _buttons[XboxButton.RightBumper] = value;
+            } else if (Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope)) {
+                _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
             }
 
-            if (Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship) {
+            if (isInShip) {
                 if (!newState) {
                     _buttons[XboxButton.X] = value;
                 }
-            }
-        }
-
-        private void OnSecondaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            if (!Common.ToolSwapper.IsInToolMode(ToolMode.Probe)) {
-                _buttons[XboxButton.LeftBumper] = newState ? 1 : 0;
             }
         }
 
