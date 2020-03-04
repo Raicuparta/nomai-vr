@@ -54,21 +54,21 @@ namespace NomaiVR {
             _reticule.localPosition = Vector3.forward * 0.5f;
             _reticule.localRotation = Quaternion.identity;
 
-            helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOff.parent = _signalscope.transform;
-            helmetOff.localScale = Vector3.one * 0.0005f;
-            helmetOff.localPosition = Vector3.zero;
-            helmetOff.localRotation = Quaternion.identity;
-
-            helmetOn.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOn.parent = _signalscope.transform;
-            helmetOn.localScale = Vector3.one * 0.0005f;
-            helmetOn.localPosition = Vector3.down * 0.5f;
-            helmetOn.localRotation = Quaternion.identity;
-
             _signalscope.gameObject.AddComponent<ToolModeInteraction>();
 
+            SetupSignalscopeUI(helmetOff);
+            SetupSignalscopeUI(helmetOn);
+            helmetOff.localPosition += Vector3.up * 0.63f;
+
             SetupScopeLens();
+        }
+
+        void SetupSignalscopeUI (Transform parent) {
+            parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            parent.parent = _signalscope.transform;
+            parent.localScale = Vector3.one * 0.0005f;
+            parent.localPosition = new Vector3(-0.05f, -0.2f, 0);
+            parent.localRotation = Quaternion.Euler(0, 90, 0);
         }
 
         void OnUnequip () {
