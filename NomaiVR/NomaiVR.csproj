@@ -105,6 +105,7 @@
     <Compile Include="Modules\MotionControls\HoldTranslator.cs" />
     <Compile Include="Modules\MotionControls\LaserPointer.cs" />
     <Compile Include="Modules\MotionControls\ShipTools.cs" />
+    <Compile Include="Modules\MotionControls\ToolModeInteraction.cs" />
     <Compile Include="Modules\ProximityDetector.cs" />
     <Compile Include="Modules\Common.cs" />
     <Compile Include="Modules\EffectFixes.cs" />

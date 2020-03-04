@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR {
     public class HoldProbeLauncher: MonoBehaviour {
-        protected static Transform ProbeLauncherModel;
+        Transform _probeLauncherModel;
         protected static ProbeLauncherUI ProbeUI;
 
         void Awake () {
@@ -11,13 +11,13 @@ namespace NomaiVR {
             probeLauncher.localScale = Vector3.one * 0.2f;
             Hands.HoldObject(probeLauncher, Hands.RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
 
-            ProbeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
-            ProbeLauncherModel.gameObject.layer = 0;
-            ProbeLauncherModel.localPosition = Vector3.zero;
-            ProbeLauncherModel.localRotation = Quaternion.identity;
+            _probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
+            _probeLauncherModel.gameObject.layer = 0;
+            _probeLauncherModel.localPosition = Vector3.zero;
+            _probeLauncherModel.localRotation = Quaternion.identity;
 
-            ProbeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
-            ProbeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
+            _probeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
+            _probeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
 
             var renderers = probeLauncher.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
@@ -36,11 +36,11 @@ namespace NomaiVR {
 
             // This transform defines the origin and direction of the launched probe.
             var launchOrigin = Camera.main.transform.Find("ProbeLauncherTransform").transform;
-            launchOrigin.parent = ProbeLauncherModel;
+            launchOrigin.parent = _probeLauncherModel;
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;
 
-            var probeLauncherHolster = Instantiate(ProbeLauncherModel).gameObject;
+            var probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
             probeLauncherHolster.SetActive(true);
             var holster = probeLauncherHolster.AddComponent<HolsterTool>();
             holster.hand = Hands.RightHand;
@@ -52,7 +52,7 @@ namespace NomaiVR {
             var playerHUD = GameObject.Find("PlayerHUD").transform;
             var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
             display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            display.parent = ProbeLauncherModel;
+            display.parent = _probeLauncherModel;
             display.localScale = Vector3.one * 0.0014f;
             display.localRotation = Quaternion.identity;
             display.localPosition = Vector3.forward * -0.8f;
@@ -66,11 +66,13 @@ namespace NomaiVR {
             displayImage.localRotation = Quaternion.identity;
 
             playerHUD.Find("HelmetOnUI/UICanvas/HUDProbeDisplay/Image").gameObject.SetActive(false);
+
+            probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
         }
 
         void Update () {
             var probe = Locator.GetProbe().transform.Find("CameraPivot");
-            probe.rotation = ProbeLauncherModel.rotation;
+            probe.rotation = _probeLauncherModel.rotation;
             probe.Rotate(Vector3.right * 90);
         }
 

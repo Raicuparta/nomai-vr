@@ -67,7 +67,9 @@ namespace NomaiVR {
             helmetOn.localPosition = Vector3.down * 0.5f;
             helmetOn.localRotation = Quaternion.identity;
 
-            LoadScopeLens();
+            _signalscope.gameObject.AddComponent<ToolModeInteraction>();
+
+            SetupScopeLens();
         }
 
         void OnEquip () {
@@ -80,7 +82,7 @@ namespace NomaiVR {
             _signalscope.SetValue("_inZoomMode", false);
         }
 
-        void LoadScopeLens () {
+        void SetupScopeLens () {
             if (!_assetBundle) {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/scope-lens");
                 _lensPrefab = _assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab");
