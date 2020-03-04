@@ -131,7 +131,7 @@ namespace NomaiVR {
                 if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope)) {
                     Vector3 from = __instance.transform.position - _scopeLensCamera.transform.position;
                     float num = Vector3.Angle(from, _scopeLensCamera.transform.forward);
-                    if (num < 1f && from.magnitude < 200) {
+                    if (num < 1f && from.magnitude < 150) {
                         __instance.Invoke("Gather");
                     }
                 }
