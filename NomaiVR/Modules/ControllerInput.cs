@@ -65,32 +65,22 @@ namespace NomaiVR {
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
 
-            switch (Common.ToolSwapper.GetToolMode()) {
-                case ToolMode.SignalScope:
-                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                    break;
-                case ToolMode.Translator:
-                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                    _buttons[XboxButton.RightBumper] = value;
-                    break;
-                case ToolMode.Probe:
-                    _buttons[XboxButton.RightBumper] = value;
-                    break;
-                default:
-                    if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
-                        if (newState) {
-                            _primaryLastTime = fromAction.changedTime;
-                        } else {
-                            _primaryLastTime = -1;
-                            if (!_justHeld) {
-                                SimulateInput(XboxButton.X);
-                            }
-                            _justHeld = false;
-                        }
+            if (Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
+                if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship) {
+                    if (newState) {
+                        _primaryLastTime = fromAction.changedTime;
                     } else {
-                        _buttons[XboxButton.X] = value;
+                        _primaryLastTime = -1;
+                        if (!_justHeld) {
+                            SimulateInput(XboxButton.X);
+                        }
+                        _justHeld = false;
                     }
-                    break;
+                } else {
+                    _buttons[XboxButton.X] = value;
+                }
+            } else {
+                _buttons[XboxButton.RightBumper] = value;
             }
 
             if (Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship) {
