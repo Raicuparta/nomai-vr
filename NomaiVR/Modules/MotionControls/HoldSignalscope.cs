@@ -40,7 +40,6 @@ namespace NomaiVR {
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
             holster.angle = Vector3.right * 90;
-            holster.onEquip = OnEquip;
             holster.onUnequip = OnUnequip;
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
@@ -72,14 +71,8 @@ namespace NomaiVR {
             SetupScopeLens();
         }
 
-        void OnEquip () {
-            _lens.gameObject.SetActive(true);
-            _signalscope.SetValue("_inZoomMode", true);
-        }
-
         void OnUnequip () {
             _lens.gameObject.SetActive(false);
-            _signalscope.SetValue("_inZoomMode", false);
         }
 
         void SetupScopeLens () {
@@ -116,11 +109,19 @@ namespace NomaiVR {
             _lensCamera.gameObject.SetActive(true);
         }
 
+        void Update () {
+            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All)) {
+                _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
+            }
+        }
+
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(ChangeInputMode));
                 NomaiVR.Post<ShipCockpitUI>("Start", typeof(Patches), nameof(ShipCockpitStart));
                 NomaiVR.Post<QuantumInstrument>("Update", typeof(Patches), nameof(PostQuantumInstrumentUpdate));
+                NomaiVR.Empty<Signalscope>("EnterSignalscopeZoom");
+                NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
             }
 
             static void ShipCockpitStart (Signalscope ____signalscopeTool) {
@@ -131,7 +132,7 @@ namespace NomaiVR {
                 if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope)) {
                     Vector3 from = __instance.transform.position - _lensCamera.transform.position;
                     float num = Vector3.Angle(from, _lensCamera.transform.forward);
-                    if (num < 1f && from.magnitude < 150) {
+                    if (num < 1f && _lens.gameObject.activeSelf) {
                         __instance.Invoke("Gather");
                     }
                 }
@@ -147,9 +148,9 @@ namespace NomaiVR {
                     _reticule.localPosition = Vector3.forward * 3f;
                     _reticule.localRotation = Quaternion.identity;
                 } else {
-                    _reticule.parent = _lens;
+                    _reticule.parent = _signalscope.transform;
                     _reticule.localScale = Vector3.one * 0.0003f;
-                    _reticule.localPosition = Vector3.zero;
+                    _reticule.localPosition = Vector3.forward * 0.14f;
                     _reticule.localRotation = Quaternion.identity;
                 }
             }
