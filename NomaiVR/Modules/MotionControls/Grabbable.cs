@@ -30,7 +30,7 @@ namespace NomaiVR {
                 }
                 return;
             }
-            if (!_isGrabbing && ControllerInput.IsGripping && detector.isInside) {
+            if (!_isGrabbing && ControllerInput.IsGripping && detector.isInside && Common.ToolSwapper.IsInToolMode(ToolMode.None)) {
                 Grab();
             }
             if (_isGrabbing && !ControllerInput.IsGripping && !Common.ToolSwapper.IsInToolMode(ToolMode.None)) {

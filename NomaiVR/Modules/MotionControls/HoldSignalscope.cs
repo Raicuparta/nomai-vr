@@ -1,22 +1,26 @@
-﻿using UnityEngine;
+﻿using OWML.ModHelper.Events;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace NomaiVR {
     public class HoldSignalscope: MonoBehaviour {
-        protected static Transform SignalscopeReticule;
-        protected static Transform ShipWindshield;
-        protected static Signalscope SignalScope;
+        protected static Transform _reticule;
+        protected static Transform _shipeWindshield;
+        protected static Signalscope _signalscope;
+        static AssetBundle _assetBundle;
+        static Camera _lensCamera;
+        static Transform _lens;
+        static GameObject _lensPrefab;
 
         void Awake () {
             if (SceneManager.GetActiveScene().name == "SolarSystem") {
-                ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
+                _shipeWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
             }
 
-            var signalScope = Camera.main.transform.Find("Signalscope");
-            Hands.HoldObject(signalScope, Hands.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
-            SignalScope = signalScope.GetComponent<Signalscope>();
+            _signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
+            Hands.HoldObject(_signalscope.transform, Hands.RightHand, new Vector3(-0.047f, 0.053f, 0.143f), Quaternion.Euler(32.8f, 0, 0));
 
-            var signalScopeModel = signalScope.GetChild(0);
+            var signalScopeModel = _signalscope.transform.GetChild(0);
             // Tools have a special shader that draws them on top of everything
             // and screws with perspective. Changing to Standard shader so they look
             // like a normal 3D object.
@@ -36,68 +40,115 @@ namespace NomaiVR {
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
             holster.angle = Vector3.right * 90;
+            holster.onEquip = OnEquip;
+            holster.onUnequip = OnUnequip;
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
-            SignalscopeReticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
+            _reticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
             var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
             var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
 
             // Attatch Signalscope UI to the Signalscope.
-            SignalscopeReticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            SignalscopeReticule.parent = signalScope;
-            SignalscopeReticule.localScale = Vector3.one * 0.0005f;
-            SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
-            SignalscopeReticule.localRotation = Quaternion.identity;
+            _reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+            _reticule.parent = _signalscope.transform;
+            _reticule.localScale = Vector3.one * 0.0005f;
+            _reticule.localPosition = Vector3.forward * 0.5f;
+            _reticule.localRotation = Quaternion.identity;
 
             helmetOff.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOff.parent = signalScope;
+            helmetOff.parent = _signalscope.transform;
             helmetOff.localScale = Vector3.one * 0.0005f;
             helmetOff.localPosition = Vector3.zero;
             helmetOff.localRotation = Quaternion.identity;
 
             helmetOn.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-            helmetOn.parent = signalScope;
+            helmetOn.parent = _signalscope.transform;
             helmetOn.localScale = Vector3.one * 0.0005f;
             helmetOn.localPosition = Vector3.down * 0.5f;
             helmetOn.localRotation = Quaternion.identity;
+
+            LoadScopeLens();
+        }
+
+        void OnEquip () {
+            _lens.gameObject.SetActive(true);
+            _signalscope.SetValue("_inZoomMode", true);
+        }
+
+        void OnUnequip () {
+            _lens.gameObject.SetActive(false);
+            _signalscope.SetValue("_inZoomMode", false);
+        }
+
+        void LoadScopeLens () {
+            if (!_assetBundle) {
+                _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/scope-lens");
+                _lensPrefab = _assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab");
+            }
+            _lens = Instantiate(_lensPrefab).transform;
+            _lens.parent = _signalscope.transform;
+            _lens.localPosition = Vector3.forward * 0.14f;
+            _lens.localRotation = Quaternion.identity;
+            _lens.localScale = Vector3.one * 1.5f;
+            _lens.gameObject.SetActive(false);
+
+            _lensCamera = _lens.GetComponentInChildren<Camera>();
+            _lensCamera.gameObject.SetActive(false);
+            _lensCamera.cullingMask = Camera.main.cullingMask;
+            _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+            _lensCamera.fieldOfView = 5f;
+
+            var owCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
+            owCamera.useFarCamera = true;
+            owCamera.renderSkybox = true;
+            owCamera.useViewmodels = true;
+            owCamera.farCameraDistance = 50000;
+            owCamera.viewmodelFOV = 70;
+            var fogEffect = _lensCamera.gameObject.AddComponent<PlanetaryFogImageEffect>();
+            fogEffect.fogShader = Locator.GetPlayerCamera().GetComponent<PlanetaryFogImageEffect>().fogShader;
+            _lensCamera.farClipPlane = 2000f;
+            _lensCamera.nearClipPlane = 0.1f;
+            _lensCamera.depth = 0f;
+            _lensCamera.clearFlags = CameraClearFlags.Color;
+            _lensCamera.backgroundColor = Color.black;
+            _lensCamera.gameObject.SetActive(true);
         }
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(Patches.ChangeInputMode));
-                NomaiVR.Post<ShipCockpitUI>("Start", typeof(Patches), nameof(Patches.ShipCockpitStart));
-
-                // For fixing signalscope zoom
-                //NomaiVR.Post<Signalscope>("EnterSignalscopeZoom", typeof(Patches), nameof(Patches.ZoomIn));
-                //NomaiVR.Post<Signalscope>("ExitSignalscopeZoom", typeof(Patches), nameof(Patches.ZoomOut));
+                NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(ChangeInputMode));
+                NomaiVR.Post<ShipCockpitUI>("Start", typeof(Patches), nameof(ShipCockpitStart));
+                NomaiVR.Post<QuantumInstrument>("Update", typeof(Patches), nameof(PostQuantumInstrumentUpdate));
             }
 
             static void ShipCockpitStart (Signalscope ____signalscopeTool) {
-                ____signalscopeTool = SignalScope;
+                ____signalscopeTool = _signalscope;
             }
 
-            static void ZoomIn () {
-                Camera.main.transform.localScale = Vector3.one * 0.1f;
-            }
-
-            static void ZoomOut () {
-                Camera.main.transform.localScale = Vector3.one;
+            static void PostQuantumInstrumentUpdate (QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut, ScreenPrompt ____scopeGatherPrompt) {
+                if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope)) {
+                    Vector3 from = __instance.transform.position - _lensCamera.transform.position;
+                    float num = Vector3.Angle(from, _lensCamera.transform.forward);
+                    if (num < 1f && from.magnitude < 150) {
+                        __instance.Invoke("Gather");
+                    }
+                }
             }
 
             static void ChangeInputMode (InputMode mode) {
-                if (!SignalscopeReticule || !ShipWindshield || mode == InputMode.Menu) {
+                if (!_reticule || !_shipeWindshield || mode == InputMode.Menu) {
                     return;
                 }
                 if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
-                    SignalscopeReticule.parent = ShipWindshield;
-                    SignalscopeReticule.localScale = Vector3.one * 0.004f;
-                    SignalscopeReticule.localPosition = Vector3.forward * 3f;
-                    SignalscopeReticule.localRotation = Quaternion.identity;
+                    _reticule.parent = _shipeWindshield;
+                    _reticule.localScale = Vector3.one * 0.004f;
+                    _reticule.localPosition = Vector3.forward * 3f;
+                    _reticule.localRotation = Quaternion.identity;
                 } else {
-                    SignalscopeReticule.parent = SignalScope.transform;
-                    SignalscopeReticule.localScale = Vector3.one * 0.0005f;
-                    SignalscopeReticule.localPosition = Vector3.forward * 0.5f;
-                    SignalscopeReticule.localRotation = Quaternion.identity;
+                    _reticule.parent = _lens;
+                    _reticule.localScale = Vector3.one * 0.0003f;
+                    _reticule.localPosition = Vector3.zero;
+                    _reticule.localRotation = Quaternion.identity;
                 }
             }
         }
