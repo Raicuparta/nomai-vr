@@ -44,7 +44,9 @@ namespace NomaiVR {
             mapController.SetValue("_mapCamera", owCamera);
 
             var markerManager = mapCameraTransform.Find("MarkerManager").GetComponent<Canvas>();
-            markerManager.worldCamera = camera;
+            var lockOnCanvas = mapCameraTransform.Find("MapLockOnCanvas").GetComponent<Canvas>();
+
+            markerManager.worldCamera = lockOnCanvas.worldCamera = camera;
         }
     }
 }
