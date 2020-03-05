@@ -42,6 +42,9 @@ namespace NomaiVR {
 
             newCamera.gameObject.SetActive(true);
             mapController.SetValue("_mapCamera", owCamera);
+
+            var markerManager = mapCameraTransform.Find("MarkerManager").GetComponent<Canvas>();
+            markerManager.worldCamera = camera;
         }
     }
 }
