@@ -5,13 +5,13 @@ namespace NomaiVR {
     class ShipTools: MonoBehaviour {
         bool _wasHoldingInteract;
         ReferenceFrameTracker _referenceFrameTracker;
-        static Transform _gridRenderer;
+        static Transform _mapGridRenderer;
 
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
 
             _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
-            _gridRenderer = GameObject.FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
+            _mapGridRenderer = GameObject.FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
         }
 
         void Update () {
@@ -79,8 +79,8 @@ namespace NomaiVR {
                 _cameraRotation = camera.transform.rotation;
 
                 if (____isMapView) {
-                    camera.transform.position = _gridRenderer.position + _gridRenderer.up * 10000;
-                    camera.transform.rotation = Quaternion.LookRotation(_gridRenderer.up * -1);
+                    camera.transform.position = _mapGridRenderer.position + _mapGridRenderer.up * 10000;
+                    camera.transform.rotation = Quaternion.LookRotation(_mapGridRenderer.up * -1);
                 } else {
                     camera.transform.position = LaserPointer.Laser.position;
                     camera.transform.rotation = LaserPointer.Laser.rotation;
