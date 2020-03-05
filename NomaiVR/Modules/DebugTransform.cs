@@ -3,8 +3,8 @@
 namespace NomaiVR {
     class DebugTransform: MonoBehaviour {
         bool _angleMode;
-        public float positionDelta = 0.002f;
-        public float angleDelta = 1;
+        public float positionDelta = 0.02f;
+        public float angleDelta = 10;
         public float scaleDelta = 0.02f;
 
         float Round (float value) {

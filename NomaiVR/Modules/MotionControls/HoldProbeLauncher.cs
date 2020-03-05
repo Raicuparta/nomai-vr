@@ -78,6 +78,13 @@ namespace NomaiVR {
             displayImage.localPosition = Vector3.zero;
             displayImage.localRotation = Quaternion.identity;
 
+            var notifications = uiCanvas.Find("Notifications");
+            notifications.parent = Hands.RightHand;
+            notifications.localPosition = Vector3.zero;
+            notifications.localRotation = Quaternion.identity;
+            notifications.gameObject.AddComponent<DebugTransform>();
+            var conditionalRenderer = notifications.gameObject.AddComponent<ConditionalRenderer>();
+            conditionalRenderer.getShouldRender = () => Locator.GetPlayerSuit().IsWearingSuit();
 
             probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
         }
