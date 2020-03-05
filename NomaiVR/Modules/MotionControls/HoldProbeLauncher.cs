@@ -58,6 +58,19 @@ namespace NomaiVR {
             display.localPosition = Vector3.forward * -0.8f;
             ProbeUI = display.GetComponent<ProbeLauncherUI>();
 
+            var uiCanvas = playerHUD.Find("HelmetOnUI/UICanvas");
+            uiCanvas.Find("HUDProbeDisplay/Image").gameObject.SetActive(false);
+
+            var hudProbeDisplay = uiCanvas.Find("HUDProbeDisplay");
+            hudProbeDisplay.parent = display;
+            hudProbeDisplay.localPosition = Vector3.zero;
+            hudProbeDisplay.localRotation = Quaternion.identity;
+
+            var brackedImage = uiCanvas.Find("BracketImage");
+            brackedImage.parent = display;
+            brackedImage.localPosition = Vector3.zero;
+            brackedImage.localRotation = Quaternion.identity;
+
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
             displayImage.anchorMax = Vector2.one * 0.5f;
@@ -65,7 +78,6 @@ namespace NomaiVR {
             displayImage.localPosition = Vector3.zero;
             displayImage.localRotation = Quaternion.identity;
 
-            playerHUD.Find("HelmetOnUI/UICanvas/HUDProbeDisplay/Image").gameObject.SetActive(false);
 
             probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
         }
