@@ -158,7 +158,7 @@ namespace NomaiVR {
         internal static class Patches {
             static void PatchLateUpdate () {
                 // only allow rotation around the up/down axis, always face forward
-                _thrusterParent.transform.rotation = Quaternion.LookRotation(Common.PlayerHead.up, Camera.main.transform.forward);
+                _thrusterParent.transform.rotation = Quaternion.LookRotation(Common.PlayerHead.up, Locator.GetPlayerCamera().transform.forward);
                 // gets updated elsewhere and needs to be reset to proper local rotation
                 _thrusterHUD.localRotation = Quaternion.Euler(-90f, 0f, 180f);
             }
