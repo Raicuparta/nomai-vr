@@ -1,14 +1,17 @@
-﻿using UnityEngine;
+﻿using OWML.ModHelper.Events;
+using UnityEngine;
 
 namespace NomaiVR {
     class ShipTools: MonoBehaviour {
         bool _wasHoldingInteract;
         ReferenceFrameTracker _referenceFrameTracker;
+        static Transform _gridRenderer;
 
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
 
             _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
+            _gridRenderer = GameObject.FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
         }
 
         void Update () {
@@ -37,8 +40,10 @@ namespace NomaiVR {
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Post<ShipBody>("Start", typeof(Patches), nameof(Patches.ShipStart));
-                NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(Patches.PreFindReferenceFrameInLineOfSight));
-                NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(Patches.PostFindReferenceFrameInLineOfSight));
+                NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(PreFindFrame));
+                NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(PostFindFrame));
+                NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patches), nameof(PreFindFrame));
+                NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patches), nameof(PostFindFrame));
             }
 
             static void ShipStart (ShipBody __instance) {
@@ -63,23 +68,30 @@ namespace NomaiVR {
             static Vector3 _cameraPosition;
             static Quaternion _cameraRotation;
 
-            static void PreFindReferenceFrameInLineOfSight (
+            static void PreFindFrame (
                 OWCamera ____activeCam,
                 OWCamera ____landingCam,
-                bool ____isLandingView
+                bool ____isLandingView,
+                bool ____isMapView
             ) {
                 var camera = ____isLandingView ? ____landingCam : ____activeCam;
                 _cameraPosition = camera.transform.position;
                 _cameraRotation = camera.transform.rotation;
 
-                camera.transform.position = LaserPointer.Laser.position;
-                camera.transform.rotation = LaserPointer.Laser.rotation;
+                if (____isMapView) {
+                    camera.transform.position = _gridRenderer.position + _gridRenderer.up * 10000;
+                    camera.transform.rotation = Quaternion.LookRotation(_gridRenderer.up * -1);
+                } else {
+                    camera.transform.position = LaserPointer.Laser.position;
+                    camera.transform.rotation = LaserPointer.Laser.rotation;
+                }
             }
 
-            static void PostFindReferenceFrameInLineOfSight (
+            static void PostFindFrame (
                 OWCamera ____activeCam,
                 OWCamera ____landingCam,
-                bool ____isLandingView
+                bool ____isLandingView,
+                bool ____isMapView
             ) {
                 var camera = ____isLandingView ? ____landingCam : ____activeCam;
 

@@ -17,11 +17,12 @@ namespace NomaiVR {
             newCamera.localRotation = Quaternion.identity;
 
             var camera = newCamera.gameObject.AddComponent<Camera>();
-            camera.farClipPlane = 100000;
-            camera.clearFlags = CameraClearFlags.SolidColor;
-            camera.backgroundColor = Color.black;
+            camera.farClipPlane = originalCamera.farClipPlane;
+            camera.clearFlags = originalCamera.clearFlags;
+            camera.backgroundColor = originalCamera.backgroundColor;
             camera.cullingMask = originalCamera.cullingMask;
-            camera.depth = 0;
+            camera.depth = originalCamera.depth;
+            camera.tag = originalCamera.tag;
             camera.enabled = false;
 
             var owCamera = newCamera.gameObject.AddComponent<OWCamera>();
