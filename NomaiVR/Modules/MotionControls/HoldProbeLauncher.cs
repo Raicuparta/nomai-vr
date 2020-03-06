@@ -67,8 +67,8 @@ namespace NomaiVR {
             hudProbeDisplay.localPosition = Vector3.zero;
             hudProbeDisplay.localRotation = Quaternion.identity;
 
-            var brackedImage = uiCanvas.Find("BracketImage");
-            brackedImage.gameObject.AddComponent<FollowTarget>().target = display;
+            var bracketImage = uiCanvas.Find("BracketImage");
+            bracketImage.gameObject.AddComponent<FollowTarget>().target = display;
 
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
