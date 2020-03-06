@@ -4,6 +4,7 @@ using UnityEngine;
 namespace NomaiVR {
     public class HoldProbeLauncher: MonoBehaviour {
         Transform _probeLauncherModel;
+        GameObject _probeLauncherHolster;
         protected static ProbeLauncherUI ProbeUI;
 
         void Awake () {
@@ -40,9 +41,9 @@ namespace NomaiVR {
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;
 
-            var probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
-            probeLauncherHolster.SetActive(true);
-            var holster = probeLauncherHolster.AddComponent<HolsterTool>();
+            _probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
+            _probeLauncherHolster.SetActive(false);
+            var holster = _probeLauncherHolster.AddComponent<HolsterTool>();
             holster.hand = Hands.RightHand;
             holster.position = new Vector3(0, -0.55f, 0.2f);
             holster.mode = ToolMode.Probe;
@@ -86,6 +87,17 @@ namespace NomaiVR {
             conditionalRenderer.getShouldRender = () => Locator.GetPlayerSuit().IsWearingSuit();
 
             probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
+
+            GlobalMessenger.AddListener("SuitUp", OnSuitUp);
+            GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
+        }
+
+        void OnSuitUp () {
+            _probeLauncherHolster.SetActive(true);
+        }
+
+        void OnRemoveSuit () {
+            _probeLauncherHolster.SetActive(false);
         }
 
         void Update () {
