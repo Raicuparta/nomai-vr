@@ -8,7 +8,7 @@ namespace NomaiVR {
         public Vector3 localPosition;
         public Quaternion localRotation = Quaternion.identity;
 
-        void Update () {
+        void LateUpdate () {
             if (!target) {
                 return;
             }

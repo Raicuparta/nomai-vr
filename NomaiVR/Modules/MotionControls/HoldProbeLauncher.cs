@@ -4,6 +4,7 @@ using UnityEngine;
 namespace NomaiVR {
     public class HoldProbeLauncher: MonoBehaviour {
         Transform _probeLauncherModel;
+        GameObject _probeLauncherHolster;
         protected static ProbeLauncherUI ProbeUI;
 
         void Awake () {
@@ -40,9 +41,9 @@ namespace NomaiVR {
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;
 
-            var probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
-            probeLauncherHolster.SetActive(true);
-            var holster = probeLauncherHolster.AddComponent<HolsterTool>();
+            _probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
+            _probeLauncherHolster.SetActive(false);
+            var holster = _probeLauncherHolster.AddComponent<HolsterTool>();
             holster.hand = Hands.RightHand;
             holster.position = new Vector3(0, -0.55f, 0.2f);
             holster.mode = ToolMode.Probe;
@@ -58,6 +59,17 @@ namespace NomaiVR {
             display.localPosition = Vector3.forward * -0.8f;
             ProbeUI = display.GetComponent<ProbeLauncherUI>();
 
+            var uiCanvas = playerHUD.Find("HelmetOnUI/UICanvas");
+            uiCanvas.Find("HUDProbeDisplay/Image").gameObject.SetActive(false);
+
+            var hudProbeDisplay = uiCanvas.Find("HUDProbeDisplay");
+            hudProbeDisplay.parent = display;
+            hudProbeDisplay.localPosition = Vector3.zero;
+            hudProbeDisplay.localRotation = Quaternion.identity;
+
+            var bracketImage = uiCanvas.Find("BracketImage");
+            bracketImage.gameObject.AddComponent<FollowTarget>().target = display;
+
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
             displayImage.anchorMax = Vector2.one * 0.5f;
@@ -65,9 +77,25 @@ namespace NomaiVR {
             displayImage.localPosition = Vector3.zero;
             displayImage.localRotation = Quaternion.identity;
 
-            playerHUD.Find("HelmetOnUI/UICanvas/HUDProbeDisplay/Image").gameObject.SetActive(false);
+            var notifications = uiCanvas.Find("Notifications");
+            notifications.parent = Hands.RightHand;
+            notifications.localPosition = new Vector3(-0.08f, 0f, -0.12f);
+            notifications.localRotation = Quaternion.Euler(0, 90, 50);
+            var conditionalRenderer = notifications.gameObject.AddComponent<ConditionalRenderer>();
+            conditionalRenderer.getShouldRender = () => Locator.GetPlayerSuit().IsWearingSuit();
 
             probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
+
+            GlobalMessenger.AddListener("SuitUp", OnSuitUp);
+            GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
+        }
+
+        void OnSuitUp () {
+            _probeLauncherHolster.SetActive(true);
+        }
+
+        void OnRemoveSuit () {
+            _probeLauncherHolster.SetActive(false);
         }
 
         void Update () {
