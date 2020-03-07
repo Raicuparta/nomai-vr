@@ -91,6 +91,7 @@
     <Compile Include="Modules\ConditionalRenderer.cs" />
     <Compile Include="Modules\DebugTransform.cs" />
     <Compile Include="Modules\Dialog.cs" />
+    <Compile Include="Modules\FeetMarker.cs" />
     <Compile Include="Modules\FollowTarget.cs" />
     <Compile Include="Modules\ForceSettings.cs" />
     <Compile Include="Modules\MotionControls\ButtonInteraction.cs" />
