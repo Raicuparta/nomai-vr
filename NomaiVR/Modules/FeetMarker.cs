@@ -18,7 +18,10 @@ namespace NomaiVR {
             var marker = Instantiate(_prefab).transform;
             marker.parent = Locator.GetPlayerTransform();
             marker.localPosition = -Vector3.up * Locator.GetPlayerCollider().bounds.extents.y;
-            marker.localRotation = Quaternion.identity;
+            marker.localRotation = Quaternion.Euler(90, 0, 0);
+            marker.localScale *= 0.75f;
+
+            marker.GetComponentInChildren<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
         }
     }
 }

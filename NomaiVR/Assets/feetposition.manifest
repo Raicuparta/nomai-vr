@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1289435255
+CRC: 499499963
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 794782f5d9490271acca4244b68ad47f
+    Hash: a39fb6846f1e8033c710906aee5e12cd
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6fa9ce387392089bc59dd886979cd053
+    Hash: 97475b384836061e380e7443a2963a09
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -15,16 +15,26 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
-- Class: 23
-  Script: {instanceID: 0}
-- Class: 33
-  Script: {instanceID: 0}
-- Class: 43
+- Class: 28
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
 Assets:
 - Assets/FeetPosition.prefab
+- Assets/player-feet.png
 - Assets/feet-position-material.mat
-- Assets/feet-position.fbx
 Dependencies: []
