@@ -81,6 +81,7 @@ namespace NomaiVR {
             notifications.parent = Hands.RightHand;
             notifications.localPosition = new Vector3(-0.08f, 0f, -0.12f);
             notifications.localRotation = Quaternion.Euler(0, 90, 50);
+            notifications.localScale = Vector3.one * 0.001f;
             var conditionalRenderer = notifications.gameObject.AddComponent<ConditionalRenderer>();
             conditionalRenderer.getShouldRender = () => Locator.GetPlayerSuit().IsWearingSuit();
 
