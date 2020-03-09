@@ -31,6 +31,10 @@ namespace NomaiVR {
             GlobalMessenger.AddListener("RemoveSuit", Disable);
 
             SetEnabled();
+
+            // Fix lock on UI on suit mode.
+            var lockOnCanvas = playerHUD.transform.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
+            lockOnCanvas.planeDistance = 10;
         }
 
         void Enable () {
