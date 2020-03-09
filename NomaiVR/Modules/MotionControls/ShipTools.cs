@@ -4,6 +4,7 @@ using UnityEngine;
 namespace NomaiVR {
     class ShipTools: MonoBehaviour {
         bool _wasHoldingInteract;
+        bool _pressedInteract;
         ReferenceFrameTracker _referenceFrameTracker;
         static Transform _mapGridRenderer;
         static ButtonInteraction _probe;
@@ -21,6 +22,9 @@ namespace NomaiVR {
             if (_referenceFrameTracker.GetReferenceFrame() == null && _referenceFrameTracker.GetPossibleReferenceFrame() == null) {
                 return;
             }
+            if (OWInput.IsNewlyPressed(InputLibrary.interact)) {
+                _pressedInteract = true;
+            }
             if (OWInput.IsNewlyHeld(InputLibrary.interact)) {
                 ControllerInput.SimulateInput(XboxAxis.dPadY, 1);
                 _wasHoldingInteract = true;
@@ -29,9 +33,10 @@ namespace NomaiVR {
                 if (_wasHoldingInteract) {
                     ControllerInput.SimulateInput(XboxAxis.dPadY, 0);
                     _wasHoldingInteract = false;
-                } else if (!_probe.receiver.IsFocused() && !_signalscope.receiver.IsFocused() && !_landingCam.receiver.IsFocused()) {
+                } else if (_pressedInteract && !_probe.receiver.IsFocused() && !_signalscope.receiver.IsFocused() && !_landingCam.receiver.IsFocused()) {
                     ControllerInput.SimulateInput(XboxButton.LeftStickClick);
                 }
+                _pressedInteract = false;
             }
         }
 
