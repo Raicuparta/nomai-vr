@@ -32,6 +32,7 @@ namespace NomaiVR {
             LaserPointer.Patches.Patch();
             PlayerBodyPosition.Patches.Patch();
             ForceSettings.Patches.Patch();
+            HoldHUD.Patches.Patch();
 
             // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
