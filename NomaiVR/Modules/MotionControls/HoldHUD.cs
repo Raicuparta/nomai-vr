@@ -9,29 +9,45 @@ namespace NomaiVR {
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
 
             var playerHUD = GameObject.Find("PlayerHUD");
-            playerHUD.transform.localScale = Vector3.one * 0.2f;
-            playerHUD.transform.localPosition = Vector3.zero;
-            playerHUD.transform.localRotation = Quaternion.identity;
+            //playerHUD.transform.localScale = Vector3.one * 0.2f;
+            //playerHUD.transform.localPosition = Vector3.zero;
+            //playerHUD.transform.localRotation = Quaternion.identity;
 
             var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, LayerMask.NameToLayer("HeadsUpDisplay"));
 
             foreach (var hudElement in hudElements) {
                 hudElement.layer = 0;
-                hudElement.SetActive(true);
             }
 
             var uiCanvas = playerHUD.transform.Find("HelmetOnUI/UICanvas").GetComponent<Canvas>();
+            uiCanvas.transform.localScale = Vector3.one * 0.0005f;
             uiCanvas.renderMode = RenderMode.WorldSpace;
             uiCanvas.transform.localPosition = Vector3.zero;
             uiCanvas.transform.localRotation = Quaternion.identity;
 
-            _holdTransform = Hands.HoldObject(playerHUD.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
+            _holdTransform = Hands.HoldObject(uiCanvas.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
 
-            playerHUD.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRender;
+            GlobalMessenger.AddListener("SuitUp", Enable);
+            GlobalMessenger.AddListener("RemoveSuit", Disable);
+
+            SetEnabled();
         }
 
-        bool ShouldRender () {
-            return Locator.GetPlayerSuit().IsWearingSuit(true) && Common.ToolSwapper.GetToolGroup() == ToolGroup.Suit;
+        void Enable () {
+            _holdTransform.gameObject.SetActive(true);
+        }
+
+        void Disable () {
+            _holdTransform.gameObject.SetActive(false);
+        }
+
+
+        void SetEnabled () {
+            if (Locator.GetPlayerSuit().IsWearingSuit(true) && Common.ToolSwapper.GetToolGroup() == ToolGroup.Suit) {
+                Enable();
+            } else {
+                Disable();
+            }
         }
     }
 }
