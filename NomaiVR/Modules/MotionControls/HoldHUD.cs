@@ -9,10 +9,6 @@ namespace NomaiVR {
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
 
             var playerHUD = GameObject.Find("PlayerHUD");
-            //playerHUD.transform.localScale = Vector3.one * 0.2f;
-            //playerHUD.transform.localPosition = Vector3.zero;
-            //playerHUD.transform.localRotation = Quaternion.identity;
-
             var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, LayerMask.NameToLayer("HeadsUpDisplay"));
 
             foreach (var hudElement in hudElements) {
