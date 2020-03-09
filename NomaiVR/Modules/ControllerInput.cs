@@ -96,7 +96,7 @@ namespace NomaiVR {
         }
 
         static IEnumerator<WaitForSecondsRealtime> ResetInput (XboxButton button) {
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
             SimulateInput(button, 0);
         }
 

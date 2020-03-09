@@ -5,18 +5,18 @@ namespace NomaiVR {
     class ButtonInteraction: MonoBehaviour {
         public XboxButton button;
         public UITextType text;
-        InteractReceiver _interaction;
+        public InteractReceiver receiver;
 
         void Start () {
             var collider = gameObject.AddComponent<BoxCollider>();
             collider.isTrigger = true;
 
-            _interaction = gameObject.AddComponent<InteractReceiver>();
-            _interaction.SetInteractRange(2);
-            _interaction.SetValue("_usableInShip", true);
-            _interaction.SetPromptText(text);
-            _interaction.OnPressInteract += OnPress;
-            _interaction.OnReleaseInteract += OnRelease;
+            receiver = gameObject.AddComponent<InteractReceiver>();
+            receiver.SetInteractRange(2);
+            receiver.SetValue("_usableInShip", true);
+            receiver.SetPromptText(text);
+            receiver.OnPressInteract += OnPress;
+            receiver.OnReleaseInteract += OnRelease;
         }
 
         void OnPress () {
@@ -25,7 +25,7 @@ namespace NomaiVR {
 
         void OnRelease () {
             ControllerInput.SimulateInput(button, 0);
-            _interaction.ResetInteraction();
+            receiver.ResetInteraction();
         }
     }
 }

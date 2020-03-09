@@ -6,6 +6,9 @@ namespace NomaiVR {
         bool _wasHoldingInteract;
         ReferenceFrameTracker _referenceFrameTracker;
         static Transform _mapGridRenderer;
+        static ButtonInteraction _probe;
+        static ButtonInteraction _signalscope;
+        static ButtonInteraction _landingCam;
 
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
@@ -26,15 +29,10 @@ namespace NomaiVR {
                 if (_wasHoldingInteract) {
                     ControllerInput.SimulateInput(XboxAxis.dPadY, 0);
                     _wasHoldingInteract = false;
-                } else {
-                    ControllerInput.SimulateInput(XboxButton.LeftStickClick, 1);
-                    Invoke("ResetLeftStickClick", 0.5f);
+                } else if (!_probe.receiver.IsFocused() && !_signalscope.receiver.IsFocused() && !_landingCam.receiver.IsFocused()) {
+                    ControllerInput.SimulateInput(XboxButton.LeftStickClick);
                 }
             }
-        }
-
-        void ResetLeftStickClick () {
-            ControllerInput.SimulateInput(XboxButton.LeftStickClick, 0);
         }
 
         internal static class Patches {
@@ -49,19 +47,19 @@ namespace NomaiVR {
             static void ShipStart (ShipBody __instance) {
                 var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
 
-                var probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot/ProbeScreen").gameObject.AddComponent<ButtonInteraction>();
-                probe.button = XboxButton.RightBumper;
-                probe.text = UITextType.ScoutModePrompt;
+                _probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot/ProbeScreen").gameObject.AddComponent<ButtonInteraction>();
+                _probe.button = XboxButton.RightBumper;
+                _probe.text = UITextType.ScoutModePrompt;
 
-                var signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot/SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
-                signalscope.button = XboxButton.DPadRight;
-                signalscope.text = UITextType.SignalscopePrompt;
+                _signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot/SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
+                _signalscope.button = XboxButton.DPadRight;
+                _signalscope.text = UITextType.SignalscopePrompt;
 
                 var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
-                var landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
-                landingCam.button = XboxButton.DPadDown;
-                landingCam.text = UITextType.ShipLandingPrompt;
+                _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
+                _landingCam.button = XboxButton.DPadDown;
+                _landingCam.text = UITextType.ShipLandingPrompt;
             }
 
 
