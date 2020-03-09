@@ -29,7 +29,6 @@ namespace NomaiVR {
 
             HideBody();
             gameObject.AddComponent<FlashlightGesture>();
-            gameObject.AddComponent<HoldHUD>();
             gameObject.AddComponent<HoldMallowStick>();
             gameObject.AddComponent<HoldProbeLauncher>();
             gameObject.AddComponent<HoldTranslator>();
@@ -37,6 +36,7 @@ namespace NomaiVR {
             gameObject.AddComponent<HoldItem>();
             gameObject.AddComponent<HoldPrompts>();
             gameObject.AddComponent<LaserPointer>();
+            gameObject.AddComponent<HoldHUD>();
         }
 
         bool ShouldRenderGloves () {
