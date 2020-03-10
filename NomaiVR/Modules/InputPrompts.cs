@@ -75,6 +75,7 @@ namespace NomaiVR {
                 NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patches), nameof(RemoveShipPrompts));
                 NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patches), nameof(RemoveTranslatorPrompts));
                 NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patches), nameof(RemoveJoystickPrompts));
+                NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patches), nameof(RemoveToolModePrompts));
             }
 
             static void ShowJumpPrompt () {
@@ -89,6 +90,28 @@ namespace NomaiVR {
 
             static void RemoveJoystickPrompts (ref bool ____lookPromptAdded) {
                 ____lookPromptAdded = true;
+            }
+
+            static void RemoveToolModePrompts (
+                ScreenPrompt ____freeLookPrompt,
+                ScreenPrompt ____probePrompt,
+                ScreenPrompt ____signalscopePrompt,
+                ScreenPrompt ____flashlightPrompt,
+                ScreenPrompt ____centerFlashlightPrompt,
+                ScreenPrompt ____centerTranslatePrompt,
+                ScreenPrompt ____centerProbePrompt,
+                ScreenPrompt ____centerSignalscopePrompt
+            ) {
+                var manager = Locator.GetPromptManager();
+                manager.RemoveScreenPrompt(____freeLookPrompt);
+                manager.RemoveScreenPrompt(____probePrompt);
+                manager.RemoveScreenPrompt(____signalscopePrompt);
+                manager.RemoveScreenPrompt(____flashlightPrompt);
+                manager.RemoveScreenPrompt(____flashlightPrompt);
+                manager.RemoveScreenPrompt(____centerFlashlightPrompt);
+                manager.RemoveScreenPrompt(____centerTranslatePrompt);
+                manager.RemoveScreenPrompt(____centerProbePrompt);
+                manager.RemoveScreenPrompt(____centerSignalscopePrompt);
             }
 
             static void ChangeProbePrompts (
