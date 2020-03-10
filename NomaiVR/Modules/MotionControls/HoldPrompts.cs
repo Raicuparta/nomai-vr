@@ -19,13 +19,6 @@ namespace NomaiVR {
             foreach (Transform child in canvas.transform) {
                 child.localPosition = Vector3.zero;
             }
-
-            var conditionalRenderer = canvas.gameObject.AddComponent<ConditionalRenderer>();
-            conditionalRenderer.getShouldRender += ShouldRender;
-        }
-
-        bool ShouldRender () {
-            return Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item);
         }
 
         void Update () {

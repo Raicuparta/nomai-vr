@@ -69,6 +69,7 @@ namespace NomaiVR {
             public static void Patch () {
                 NomaiVR.Pre<JumpPromptTrigger>("OnTriggerEnter", typeof(Patches), nameof(ShowJumpPrompt));
                 NomaiVR.Pre<JumpPromptTrigger>("OnTriggerExit", typeof(Patches), nameof(HideJumpPrompt));
+                NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
             }
 
             static void ShowJumpPrompt () {
@@ -79,6 +80,25 @@ namespace NomaiVR {
 
             static void HideJumpPrompt () {
                 SteamVR_Actions.default_Jump.HideOrigins();
+            }
+
+            static void RemoveProbePrompts (
+                ScreenPrompt ____unequipPrompt,
+                ScreenPrompt ____aimPrompt,
+                ScreenPrompt ____photoModePrompt,
+                ScreenPrompt ____forwardCamPrompt,
+                ScreenPrompt ____reverseCamPrompt,
+                ScreenPrompt ____rotatePrompt,
+                ScreenPrompt ____rotateCenterPrompt
+            ) {
+                var manager = Locator.GetPromptManager();
+                manager.RemoveScreenPrompt(____unequipPrompt);
+                manager.RemoveScreenPrompt(____aimPrompt);
+                manager.RemoveScreenPrompt(____photoModePrompt);
+                manager.RemoveScreenPrompt(____forwardCamPrompt);
+                manager.RemoveScreenPrompt(____reverseCamPrompt);
+                manager.RemoveScreenPrompt(____rotatePrompt);
+                manager.RemoveScreenPrompt(____rotateCenterPrompt);
             }
         }
 
