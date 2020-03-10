@@ -70,6 +70,7 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<Dialog>();
                 nonPersistentObject.AddComponent<Hands>();
                 nonPersistentObject.AddComponent<FeetMarker>();
+                nonPersistentObject.AddComponent<InputPrompts>();
                 if (isSolarSystem) {
                     nonPersistentObject.AddComponent<ShipTools>();
                     nonPersistentObject.AddComponent<SolarSystemMap>();
