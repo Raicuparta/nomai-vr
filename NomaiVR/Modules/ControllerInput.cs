@@ -51,46 +51,6 @@ namespace NomaiVR {
 
         void OnWakeUp () {
             _repairPrompt = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt");
-
-            SteamVR_Actions._default.ShowBindingHints();
-
-            SetupInputNames();
-            foreach (var action in SteamVR_Input.actionsIn) {
-                NomaiVR.Log(action.GetShortName(), " :: ", _inputNames[action]);
-            }
-        }
-
-        void SetupInputNames () {
-            _inputNames = new Dictionary<ISteamVR_Action_In, string>();
-
-            foreach (var action in SteamVR_Input.actionsIn) {
-                _inputNames.Add(action, GetInputName(action));
-            }
-
-            foreach (var actionA in SteamVR_Input.actionsIn) {
-                var allButA = SteamVR_Input.actionsIn.Except(new[] { actionA });
-                foreach (var actionB in allButA) {
-                    if (_inputNames[actionA] == _inputNames[actionB]) {
-                        _inputNames[actionA] = GetInputName(actionA, true);
-                        _inputNames[actionB] = GetInputName(actionB, true);
-                    }
-                }
-            }
-        }
-
-        string GetInputName (ISteamVR_Action_In action, bool includeHandName = false) {
-            string name;
-            if (includeHandName) {
-                name = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource, EVRInputStringBits.VRInputString_Hand);
-            } else {
-                name = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource);
-            }
-
-            return name
-                .Replace(" Button", "")
-                .Replace(" Hand", "")
-                .Replace("Left", "L")
-                .Replace("Right", "R");
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
