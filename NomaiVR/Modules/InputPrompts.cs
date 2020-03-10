@@ -72,6 +72,8 @@ namespace NomaiVR {
                 NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
                 NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
                 NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patches), nameof(RemoveShipPrompts));
+                NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patches), nameof(RemoveTranslatorPrompts));
+                NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patches), nameof(RemoveJoystickPrompts));
             }
 
             static void ShowJumpPrompt () {
@@ -82,6 +84,10 @@ namespace NomaiVR {
 
             static void HideJumpPrompt () {
                 SteamVR_Actions.default_Jump.HideOrigins();
+            }
+
+            static void RemoveJoystickPrompts (ref bool ____lookPromptAdded) {
+                ____lookPromptAdded = true;
             }
 
             static void RemoveProbePrompts (
@@ -123,6 +129,14 @@ namespace NomaiVR {
                 manager.RemoveScreenPrompt(____freeLookPrompt);
                 manager.RemoveScreenPrompt(____landingModePrompt);
                 manager.RemoveScreenPrompt(____liftoffCamera);
+            }
+            static void RemoveTranslatorPrompts (
+                ScreenPrompt ____scrollPrompt,
+                ScreenPrompt ____pagePrompt
+            ) {
+                var manager = Locator.GetPromptManager();
+                manager.RemoveScreenPrompt(____scrollPrompt);
+                manager.RemoveScreenPrompt(____pagePrompt);
             }
         }
 
