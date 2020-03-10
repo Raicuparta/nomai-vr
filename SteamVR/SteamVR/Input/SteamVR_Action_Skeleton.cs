@@ -1,62 +1,76 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using System;
-using System.Runtime.InteropServices;
-using System.Text;
 using UnityEngine;
+using System.Collections;
+using System;
 
-namespace Valve.VR {
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Valve.VR
+{
     [Serializable]
     /// <summary>
     /// Skeleton Actions are our best approximation of where your hands are while holding vr controllers and pressing buttons. We give you 31 bones to help you animate hand models.
     /// For more information check out this blog post: https://steamcommunity.com/games/250820/announcements/detail/1690421280625220068
     /// </summary>
-    public class SteamVR_Action_Skeleton: SteamVR_Action_Pose_Base<SteamVR_Action_Skeleton_Source_Map, SteamVR_Action_Skeleton_Source>, ISteamVR_Action_Skeleton_Source, ISerializationCallbackReceiver {
+    public class SteamVR_Action_Skeleton : SteamVR_Action_Pose_Base<SteamVR_Action_Skeleton_Source_Map, SteamVR_Action_Skeleton_Source>, ISteamVR_Action_Skeleton_Source, ISerializationCallbackReceiver
+    {
         public const int numBones = 31;
 
-        public delegate void ActiveChangeHandler (SteamVR_Action_Skeleton fromAction, bool active);
-        public delegate void ChangeHandler (SteamVR_Action_Skeleton fromAction);
-        public delegate void UpdateHandler (SteamVR_Action_Skeleton fromAction);
-        public delegate void TrackingChangeHandler (SteamVR_Action_Skeleton fromAction, ETrackingResult trackingState);
-        public delegate void ValidPoseChangeHandler (SteamVR_Action_Skeleton fromAction, bool validPose);
-        public delegate void DeviceConnectedChangeHandler (SteamVR_Action_Skeleton fromAction, bool deviceConnected);
+        public delegate void ActiveChangeHandler(SteamVR_Action_Skeleton fromAction, bool active);
+        public delegate void ChangeHandler(SteamVR_Action_Skeleton fromAction);
+        public delegate void UpdateHandler(SteamVR_Action_Skeleton fromAction);
+        public delegate void TrackingChangeHandler(SteamVR_Action_Skeleton fromAction, ETrackingResult trackingState);
+        public delegate void ValidPoseChangeHandler(SteamVR_Action_Skeleton fromAction, bool validPose);
+        public delegate void DeviceConnectedChangeHandler(SteamVR_Action_Skeleton fromAction, bool deviceConnected);
 
         /// <summary>Event fires when the active state (ActionSet active and binding active) changes</summary>
-        public event ActiveChangeHandler onActiveChange { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
+        public event ActiveChangeHandler onActiveChange
+        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
 
         /// <summary>Event fires when the active state of the binding changes</summary>
-        public event ActiveChangeHandler onActiveBindingChange { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
+        public event ActiveChangeHandler onActiveBindingChange
+        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
         /// <summary>Event fires when the state of the pose or bones moves more than the changeTolerance</summary>
-        public event ChangeHandler onChange { add { sourceMap[SteamVR_Input_Sources.Any].onChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onChange -= value; } }
+        public event ChangeHandler onChange
+        { add { sourceMap[SteamVR_Input_Sources.Any].onChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onChange -= value; } }
 
         /// <summary>Event fires when the action is updated</summary>
-        public event UpdateHandler onUpdate { add { sourceMap[SteamVR_Input_Sources.Any].onUpdate += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onUpdate -= value; } }
+        public event UpdateHandler onUpdate
+        { add { sourceMap[SteamVR_Input_Sources.Any].onUpdate += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onUpdate -= value; } }
 
         /// <summary>Event fires when the state of the tracking system that is used to create pose data (position, rotation, etc) changes</summary>
-        public event TrackingChangeHandler onTrackingChanged { add { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged -= value; } }
+        public event TrackingChangeHandler onTrackingChanged
+        { add { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged -= value; } }
 
         /// <summary>Event fires when the state of the pose data retrieved for this action changes validity (good/bad data from the tracking source)</summary>
-        public event ValidPoseChangeHandler onValidPoseChanged { add { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged -= value; } }
+        public event ValidPoseChangeHandler onValidPoseChanged
+        { add { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged -= value; } }
 
         /// <summary>Event fires when the device bound to this action is connected or disconnected</summary>
-        public event DeviceConnectedChangeHandler onDeviceConnectedChanged { add { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged -= value; } }
+        public event DeviceConnectedChangeHandler onDeviceConnectedChanged
+        { add { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged -= value; } }
 
-        public SteamVR_Action_Skeleton () { }
+        public SteamVR_Action_Skeleton() { }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Updates the skeleton action data
         /// </summary>
-        public virtual void UpdateValue (bool skipStateAndEventUpdates) {
+        public virtual void UpdateValue(bool skipStateAndEventUpdates)
+        {
             sourceMap[SteamVR_Input_Sources.Any].UpdateValue(skipStateAndEventUpdates);
         }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Updates the skeleton action data without firing events
         /// </summary>
-        public void UpdateValueWithoutEvents () {
+        public void UpdateValueWithoutEvents()
+        {
             sourceMap[SteamVR_Input_Sources.Any].UpdateValue(true);
         }
 
@@ -64,7 +78,8 @@ namespace Valve.VR {
         /// Update a transform's local position and local roation to match the pose from the most recent update
         /// </summary>
         /// <param name="transformToUpdate">The transform of the object to be updated</param>
-        public void UpdateTransform (Transform transformToUpdate) {
+        public void UpdateTransform(Transform transformToUpdate)
+        {
             base.UpdateTransform(SteamVR_Input_Sources.Any, transformToUpdate);
         }
 
@@ -82,30 +97,34 @@ namespace Valve.VR {
         public Quaternion[] lastBoneRotations { get { return sourceMap[SteamVR_Input_Sources.Any].lastBoneRotations; } }
 
         /// <summary>The range of motion the we're using to get bone data from. With Controller being your hand while holding the controller.</summary>
-        public EVRSkeletalMotionRange rangeOfMotion {
+        public EVRSkeletalMotionRange rangeOfMotion
+        {
             get { return sourceMap[SteamVR_Input_Sources.Any].rangeOfMotion; }
             set { sourceMap[SteamVR_Input_Sources.Any].rangeOfMotion = value; }
         }
 
         /// <summary>The space to get bone data in. Parent space by default</summary>
-        public EVRSkeletalTransformSpace skeletalTransformSpace {
+        public EVRSkeletalTransformSpace skeletalTransformSpace
+        {
             get { return sourceMap[SteamVR_Input_Sources.Any].skeletalTransformSpace; }
             set { sourceMap[SteamVR_Input_Sources.Any].skeletalTransformSpace = value; }
         }
 
         /// <summary>The type of summary data that will be retrieved by default. FromAnimation is smoothed data to based on the skeletal animation system. FromDevice is as recent from the device as we can get - may be different data from smoothed. </summary>
-        public EVRSummaryType summaryDataType {
+        public EVRSummaryType summaryDataType
+        {
             get { return sourceMap[SteamVR_Input_Sources.Any].summaryDataType; }
             set { sourceMap[SteamVR_Input_Sources.Any].summaryDataType = value; }
         }
 
         /// <summary>
-        /// Get the accuracy level of the skeletal tracking data. 
+        /// Get the accuracy level of the skeletal tracking data.
         /// <para/>* Estimated: Body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated based on the active buttons, triggers, joysticks, or other input sensors. Examples include the Vive Controller and gamepads.
         /// <para/>* Partial: Body part location can be measured directly but with fewer degrees of freedom than the actual body part.Certain body part positions may be unmeasured by the device and estimated from other input data.Examples include Knuckles or gloves that only measure finger curl
         /// <para/>* Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.
         /// </summary>
-        public EVRSkeletalTrackingLevel skeletalTrackingLevel {
+        public EVRSkeletalTrackingLevel skeletalTrackingLevel
+        {
             get { return sourceMap[SteamVR_Input_Sources.Any].skeletalTrackingLevel; }
         }
 
@@ -181,17 +200,19 @@ namespace Valve.VR {
 
         /// <summary>Skips processing the full per bone data and only does the summary data</summary>
         public bool onlyUpdateSummaryData { get { return sourceMap[SteamVR_Input_Sources.Any].onlyUpdateSummaryData; } set { sourceMap[SteamVR_Input_Sources.Any].onlyUpdateSummaryData = value; } }
-        #endregion  
+        #endregion
 
         #region pose functions with SteamVR_Input_Sources.Any
 
         /// <summary>True if this action is bound and the ActionSet is active</summary>
-        public bool GetActive () {
+        public bool GetActive()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].active;
         }
 
         /// <summary>True if the ActionSet that contains this action is active</summary>
-        public bool GetSetActive () {
+        public bool GetSetActive()
+        {
             return actionSet.IsActive(SteamVR_Input_Sources.Any);
         }
 
@@ -200,7 +221,8 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="secondsFromNow">The time offset in the future (estimated) or in the past (previously recorded) you want to get data from</param>
         /// <returns>true if we successfully returned a pose</returns>
-        public bool GetVelocitiesAtTimeOffset (float secondsFromNow, out Vector3 velocity, out Vector3 angularVelocity) {
+        public bool GetVelocitiesAtTimeOffset(float secondsFromNow, out Vector3 velocity, out Vector3 angularVelocity)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetVelocitiesAtTimeOffset(secondsFromNow, out velocity, out angularVelocity);
         }
 
@@ -209,79 +231,94 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="secondsFromNow">The time offset in the future (estimated) or in the past (previously recorded) you want to get data from</param>
         /// <returns>true if we successfully returned a pose</returns>
-        public bool GetPoseAtTimeOffset (float secondsFromNow, out Vector3 position, out Quaternion rotation, out Vector3 velocity, out Vector3 angularVelocity) {
+        public bool GetPoseAtTimeOffset(float secondsFromNow, out Vector3 position, out Quaternion rotation, out Vector3 velocity, out Vector3 angularVelocity)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetPoseAtTimeOffset(secondsFromNow, out position, out rotation, out velocity, out angularVelocity);
         }
 
         /// <summary>The local position of the pose relative to the universe origin</summary>
-        public Vector3 GetLocalPosition () {
+        public Vector3 GetLocalPosition()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].localPosition;
         }
 
         /// <summary>The local rotation of the pose relative to the universe origin</summary>
-        public Quaternion GetLocalRotation () {
+        public Quaternion GetLocalRotation()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].localRotation;
         }
 
         /// <summary>The local velocity of the pose relative to the universe origin</summary>
-        public Vector3 GetVelocity () {
+        public Vector3 GetVelocity()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].velocity;
         }
 
         /// <summary>The local angular velocity of the pose relative to the universe origin</summary>
-        public Vector3 GetAngularVelocity () {
+        public Vector3 GetAngularVelocity()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].angularVelocity;
         }
 
         /// <summary>True if the device bound to this action is connected</summary>
-        public bool GetDeviceIsConnected () {
+        public bool GetDeviceIsConnected()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].deviceIsConnected;
         }
 
         /// <summary>True if the pose retrieved for this action is valid (good data from the tracking source)</summary>
-        public bool GetPoseIsValid () {
+        public bool GetPoseIsValid()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].poseIsValid;
         }
 
         /// <summary>The state of the tracking system that is used to create pose data (position, rotation, etc)</summary>
-        public ETrackingResult GetTrackingResult () {
+        public ETrackingResult GetTrackingResult()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].trackingState;
         }
 
 
 
         /// <summary>The last local position of the pose relative to the universe origin</summary>
-        public Vector3 GetLastLocalPosition () {
+        public Vector3 GetLastLocalPosition()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastLocalPosition;
         }
 
         /// <summary>The last local rotation of the pose relative to the universe origin</summary>
-        public Quaternion GetLastLocalRotation () {
+        public Quaternion GetLastLocalRotation()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastLocalRotation;
         }
 
         /// <summary>The last local velocity of the pose relative to the universe origin</summary>
-        public Vector3 GetLastVelocity () {
+        public Vector3 GetLastVelocity()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastVelocity;
         }
 
         /// <summary>The last local angular velocity of the pose relative to the universe origin</summary>
-        public Vector3 GetLastAngularVelocity () {
+        public Vector3 GetLastAngularVelocity()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastAngularVelocity;
         }
 
         /// <summary>True if the device bound to this action was connected during the previous update</summary>
-        public bool GetLastDeviceIsConnected () {
+        public bool GetLastDeviceIsConnected()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastDeviceIsConnected;
         }
 
         /// <summary>True if the pose was valid during the previous update</summary>
-        public bool GetLastPoseIsValid () {
+        public bool GetLastPoseIsValid()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastPoseIsValid;
         }
 
         /// <summary>The tracking state for this pose during the previous update</summary>
-        public ETrackingResult GetLastTrackingResult () {
+        public ETrackingResult GetLastTrackingResult()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastTrackingState;
         }
         #endregion
@@ -289,15 +326,16 @@ namespace Valve.VR {
         /// <summary>
         /// The number of bones in the skeleton for this action
         /// </summary>
-        public int boneCount { get { return (int) GetBoneCount(); } }
+        public int boneCount { get { return (int)GetBoneCount(); } }
 
         /// <summary>
         /// Gets the bone positions in local space. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public Vector3[] GetBonePositions (bool copy = false) {
+        public Vector3[] GetBonePositions(bool copy = false)
+        {
             if (copy)
-                return (Vector3[]) sourceMap[SteamVR_Input_Sources.Any].bonePositions.Clone();
+                return (Vector3[])sourceMap[SteamVR_Input_Sources.Any].bonePositions.Clone();
 
             return sourceMap[SteamVR_Input_Sources.Any].bonePositions;
         }
@@ -306,9 +344,10 @@ namespace Valve.VR {
         /// Gets the bone rotations in local space. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public Quaternion[] GetBoneRotations (bool copy = false) {
+        public Quaternion[] GetBoneRotations(bool copy = false)
+        {
             if (copy)
-                return (Quaternion[]) sourceMap[SteamVR_Input_Sources.Any].boneRotations.Clone();
+                return (Quaternion[])sourceMap[SteamVR_Input_Sources.Any].boneRotations.Clone();
 
             return sourceMap[SteamVR_Input_Sources.Any].boneRotations;
         }
@@ -317,9 +356,10 @@ namespace Valve.VR {
         /// Gets the bone positions in local space from the previous update. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public Vector3[] GetLastBonePositions (bool copy = false) {
+        public Vector3[] GetLastBonePositions(bool copy = false)
+        {
             if (copy)
-                return (Vector3[]) sourceMap[SteamVR_Input_Sources.Any].lastBonePositions.Clone();
+                return (Vector3[])sourceMap[SteamVR_Input_Sources.Any].lastBonePositions.Clone();
 
             return sourceMap[SteamVR_Input_Sources.Any].lastBonePositions;
         }
@@ -328,18 +368,20 @@ namespace Valve.VR {
         /// Gets the bone rotations in local space from the previous update. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public Quaternion[] GetLastBoneRotations (bool copy = false) {
+        public Quaternion[] GetLastBoneRotations(bool copy = false)
+        {
             if (copy)
-                return (Quaternion[]) sourceMap[SteamVR_Input_Sources.Any].lastBoneRotations.Clone();
+                return (Quaternion[])sourceMap[SteamVR_Input_Sources.Any].lastBoneRotations.Clone();
 
             return sourceMap[SteamVR_Input_Sources.Any].lastBoneRotations;
         }
 
         /// <summary>
-        /// Set the range of the motion of the bones in this skeleton. Options are "With Controller" as if your hand is holding your VR controller. 
+        /// Set the range of the motion of the bones in this skeleton. Options are "With Controller" as if your hand is holding your VR controller.
         /// Or "Without Controller" as if your hand is empty. This will set the range for the following update.
         /// </summary>
-        public void SetRangeOfMotion (EVRSkeletalMotionRange range) {
+        public void SetRangeOfMotion(EVRSkeletalMotionRange range)
+        {
             sourceMap[SteamVR_Input_Sources.Any].rangeOfMotion = range;
         }
 
@@ -347,28 +389,32 @@ namespace Valve.VR {
         /// Sets the space that you'll get bone data back in. Options are relative to the Model and relative to the Parent bone
         /// </summary>
         /// <param name="space">the space that you'll get bone data back in. Options are relative to the Model and relative to the Parent bone.</param>
-        public void SetSkeletalTransformSpace (EVRSkeletalTransformSpace space) {
+        public void SetSkeletalTransformSpace(EVRSkeletalTransformSpace space)
+        {
             sourceMap[SteamVR_Input_Sources.Any].skeletalTransformSpace = space;
         }
 
         /// <summary>
         /// Returns the total number of bones in the skeleton
         /// </summary>
-        public uint GetBoneCount () {
+        public uint GetBoneCount()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetBoneCount();
         }
 
         /// <summary>
         /// Returns the order of bones in the hierarchy
         /// </summary>
-        public int[] GetBoneHierarchy () {
+        public int[] GetBoneHierarchy()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetBoneHierarchy();
         }
 
         /// <summary>
         /// Returns the name of the bone
         /// </summary>
-        public string GetBoneName (int boneIndex) {
+        public string GetBoneName(int boneIndex)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetBoneName(boneIndex);
         }
 
@@ -378,12 +424,13 @@ namespace Valve.VR {
         /// <param name="transformSpace">What to get the position/rotation data relative to, the model, or the bone's parent</param>
         /// <param name="referencePose">Which reference pose to return</param>
         /// <returns></returns>
-        public SteamVR_Utils.RigidTransform[] GetReferenceTransforms (EVRSkeletalTransformSpace transformSpace, EVRSkeletalReferencePose referencePose) {
+        public SteamVR_Utils.RigidTransform[] GetReferenceTransforms(EVRSkeletalTransformSpace transformSpace, EVRSkeletalReferencePose referencePose)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetReferenceTransforms(transformSpace, referencePose);
         }
 
         /// <summary>
-        /// Get the accuracy level of the skeletal tracking data. 
+        /// Get the accuracy level of the skeletal tracking data.
         /// </summary>
         /// <returns>
         /// <list type="bullet">
@@ -392,7 +439,8 @@ namespace Valve.VR {
         /// <item><description>Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.</description></item>
         /// </list>
         /// </returns>
-        public EVRSkeletalTrackingLevel GetSkeletalTrackingLevel () {
+        public EVRSkeletalTrackingLevel GetSkeletalTrackingLevel()
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetSkeletalTrackingLevel();
         }
 
@@ -400,9 +448,10 @@ namespace Valve.VR {
         /// Returns the finger curl data that we calculate each update. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public float[] GetFingerCurls (bool copy = false) {
+        public float[] GetFingerCurls(bool copy = false)
+        {
             if (copy)
-                return (float[]) sourceMap[SteamVR_Input_Sources.Any].fingerCurls.Clone();
+                return (float[])sourceMap[SteamVR_Input_Sources.Any].fingerCurls.Clone();
             else
                 return sourceMap[SteamVR_Input_Sources.Any].fingerCurls;
         }
@@ -411,9 +460,10 @@ namespace Valve.VR {
         /// Returns the finger curl data from the previous update. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public float[] GetLastFingerCurls (bool copy = false) {
+        public float[] GetLastFingerCurls(bool copy = false)
+        {
             if (copy)
-                return (float[]) sourceMap[SteamVR_Input_Sources.Any].lastFingerCurls.Clone();
+                return (float[])sourceMap[SteamVR_Input_Sources.Any].lastFingerCurls.Clone();
             else
                 return sourceMap[SteamVR_Input_Sources.Any].lastFingerCurls;
         }
@@ -422,9 +472,10 @@ namespace Valve.VR {
         /// Returns the finger splay data that we calculate each update. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public float[] GetFingerSplays (bool copy = false) {
+        public float[] GetFingerSplays(bool copy = false)
+        {
             if (copy)
-                return (float[]) sourceMap[SteamVR_Input_Sources.Any].fingerSplays.Clone();
+                return (float[])sourceMap[SteamVR_Input_Sources.Any].fingerSplays.Clone();
             else
                 return sourceMap[SteamVR_Input_Sources.Any].fingerSplays;
         }
@@ -433,9 +484,10 @@ namespace Valve.VR {
         /// Returns the finger splay data from the previous update. This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array
         /// </summary>
         /// <param name="copy">This array may be modified later so if you want to hold this data then pass true to get a copy of the data instead of the actual array</param>
-        public float[] GetLastFingerSplays (bool copy = false) {
+        public float[] GetLastFingerSplays(bool copy = false)
+        {
             if (copy)
-                return (float[]) sourceMap[SteamVR_Input_Sources.Any].lastFingerSplays.Clone();
+                return (float[])sourceMap[SteamVR_Input_Sources.Any].lastFingerSplays.Clone();
             else
                 return sourceMap[SteamVR_Input_Sources.Any].lastFingerSplays;
         }
@@ -445,7 +497,8 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="finger">The index of the finger to return a curl value for. 0-4. thumb, index, middle, ring, pinky</param>
         /// <returns>0-1 value. 0 being straight, 1 being fully curled.</returns>
-        public float GetFingerCurl (int finger) {
+        public float GetFingerCurl(int finger)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].fingerCurls[finger];
         }
 
@@ -454,7 +507,8 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="fingerGapIndex">The index of the finger gap to return a splay value for. 0 being the gap between thumb and index, 1 being the gap between index and middle, 2 being the gap between middle and ring, and 3 being the gap between ring and pinky.</param>
         /// <returns>0-1 value. 0 being no gap, 1 being "full" gap</returns>
-        public float GetSplay (int fingerGapIndex) {
+        public float GetSplay(int fingerGapIndex)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].fingerSplays[fingerGapIndex];
         }
 
@@ -463,8 +517,9 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="finger">The finger to return a curl value for</param>
         /// <returns>0-1 value. 0 being straight, 1 being fully curled.</returns>
-        public float GetFingerCurl (SteamVR_Skeleton_FingerIndexEnum finger) {
-            return GetFingerCurl((int) finger);
+        public float GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum finger)
+        {
+            return GetFingerCurl((int)finger);
         }
 
         /// <summary>
@@ -472,8 +527,9 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="fingerGapIndex">The finger gap to return a splay value for.</param>
         /// <returns>0-1 value. 0 being no gap, 1 being "full" gap</returns>
-        public float GetSplay (SteamVR_Skeleton_FingerSplayIndexEnum fingerSplay) {
-            return GetSplay((int) fingerSplay);
+        public float GetSplay(SteamVR_Skeleton_FingerSplayIndexEnum fingerSplay)
+        {
+            return GetSplay((int)fingerSplay);
         }
 
         /// <summary>
@@ -481,7 +537,8 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="finger">The index of the finger to return a curl value for. 0-4. thumb, index, middle, ring, pinky</param>
         /// <returns>0-1 value. 0 being straight, 1 being fully curled.</returns>
-        public float GetLastFingerCurl (int finger) {
+        public float GetLastFingerCurl(int finger)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastFingerCurls[finger];
         }
 
@@ -490,7 +547,8 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="fingerGapIndex">The index of the finger gap to return a splay value for. 0 being the gap between thumb and index, 1 being the gap between index and middle, 2 being the gap between middle and ring, and 3 being the gap between ring and pinky.</param>
         /// <returns>0-1 value. 0 being no gap, 1 being "full" gap</returns>
-        public float GetLastSplay (int fingerGapIndex) {
+        public float GetLastSplay(int fingerGapIndex)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].lastFingerSplays[fingerGapIndex];
         }
 
@@ -499,8 +557,9 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="finger">The finger to return a curl value for</param>
         /// <returns>0-1 value. 0 being straight, 1 being fully curled.</returns>
-        public float GetLastFingerCurl (SteamVR_Skeleton_FingerIndexEnum finger) {
-            return GetLastFingerCurl((int) finger);
+        public float GetLastFingerCurl(SteamVR_Skeleton_FingerIndexEnum finger)
+        {
+            return GetLastFingerCurl((int)finger);
         }
 
         /// <summary>
@@ -508,8 +567,9 @@ namespace Valve.VR {
         /// </summary>
         /// <param name="fingerGapIndex">The finger gap to return a splay value for. </param>
         /// <returns>0-1 value. 0 being no gap, 1 being "full" gap</returns>
-        public float GetLastSplay (SteamVR_Skeleton_FingerSplayIndexEnum fingerSplay) {
-            return GetLastSplay((int) fingerSplay);
+        public float GetLastSplay(SteamVR_Skeleton_FingerSplayIndexEnum fingerSplay)
+        {
+            return GetLastSplay((int)fingerSplay);
         }
 
 
@@ -524,7 +584,8 @@ namespace Valve.VR {
         /// <item><description>VRInputString_All - All of the above. ex: "Left Hand Vive Controller Trackpad". </description></item>
         /// </list>
         /// </param>
-        public string GetLocalizedName (params EVRInputStringBits[] localizedParts) {
+        public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
+        {
             return sourceMap[SteamVR_Input_Sources.Any].GetLocalizedOriginPart(localizedParts);
         }
 
@@ -532,91 +593,107 @@ namespace Valve.VR {
 
         /// <summary>Fires an event when a device is connected or disconnected.</summary>
         /// <param name="functionToCall">The method you would like to be called when a device is connected. Should take a SteamVR_Action_Pose as a param</param>
-        public void AddOnDeviceConnectedChanged (DeviceConnectedChangeHandler functionToCall) {
+        public void AddOnDeviceConnectedChanged(DeviceConnectedChangeHandler functionToCall)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The method you would like to stop calling when a device is connected. Should take a SteamVR_Action_Pose as a param</param>
-        public void RemoveOnDeviceConnectedChanged (DeviceConnectedChangeHandler functionToStopCalling) {
+        public void RemoveOnDeviceConnectedChanged(DeviceConnectedChangeHandler functionToStopCalling)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged -= functionToStopCalling;
         }
 
 
         /// <summary>Fires an event when the tracking of the device has changed</summary>
         /// <param name="functionToCall">The method you would like to be called when tracking has changed. Should take a SteamVR_Action_Pose as a param</param>
-        public void AddOnTrackingChanged (TrackingChangeHandler functionToCall) {
+        public void AddOnTrackingChanged(TrackingChangeHandler functionToCall)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The method you would like to stop calling when tracking has changed. Should take a SteamVR_Action_Pose as a param</param>
-        public void RemoveOnTrackingChanged (TrackingChangeHandler functionToStopCalling) {
+        public void RemoveOnTrackingChanged(TrackingChangeHandler functionToStopCalling)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged -= functionToStopCalling;
         }
 
 
         /// <summary>Fires an event when the device now has a valid pose or no longer has a valid pose</summary>
         /// <param name="functionToCall">The method you would like to be called when the pose has become valid or invalid. Should take a SteamVR_Action_Pose as a param</param>
-        public void AddOnValidPoseChanged (ValidPoseChangeHandler functionToCall) {
+        public void AddOnValidPoseChanged(ValidPoseChangeHandler functionToCall)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The method you would like to stop calling when the pose has become valid or invalid. Should take a SteamVR_Action_Pose as a param</param>
-        public void RemoveOnValidPoseChanged (ValidPoseChangeHandler functionToStopCalling) {
+        public void RemoveOnValidPoseChanged(ValidPoseChangeHandler functionToStopCalling)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged -= functionToStopCalling;
         }
 
 
         /// <summary>Executes a function when this action's bound state changes</summary>
-        public void AddOnActiveChangeListener (ActiveChangeHandler functionToCall) {
+        public void AddOnActiveChangeListener(ActiveChangeHandler functionToCall)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onActiveChange += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
-        public void RemoveOnActiveChangeListener (ActiveChangeHandler functionToStopCalling) {
+        public void RemoveOnActiveChangeListener(ActiveChangeHandler functionToStopCalling)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= functionToStopCalling;
         }
 
         /// <summary>Executes a function when the state of this action changes</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's state has changed, the corresponding input source, and the new value</param>
-        public void AddOnChangeListener (ChangeHandler functionToCall) {
+        public void AddOnChangeListener(ChangeHandler functionToCall)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onChange += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive on change events</param>
-        public void RemoveOnChangeListener (ChangeHandler functionToStopCalling) {
+        public void RemoveOnChangeListener(ChangeHandler functionToStopCalling)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onChange -= functionToStopCalling;
         }
 
         /// <summary>Executes a function when the state of this action is updated.</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's state has changed, the corresponding input source, and the new value</param>
-        public void AddOnUpdateListener (UpdateHandler functionToCall) {
+        public void AddOnUpdateListener(UpdateHandler functionToCall)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onUpdate += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
-        public void RemoveOnUpdateListener (UpdateHandler functionToStopCalling) {
+        public void RemoveOnUpdateListener(UpdateHandler functionToStopCalling)
+        {
             sourceMap[SteamVR_Input_Sources.Any].onUpdate -= functionToStopCalling;
         }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize () {
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
         }
 
-        void ISerializationCallbackReceiver.OnAfterDeserialize () {
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
             InitAfterDeserialize();
         }
 
         public static Quaternion steamVRFixUpRotation = Quaternion.AngleAxis(Mathf.PI * Mathf.Rad2Deg, Vector3.up);
     }
 
-    public class SteamVR_Action_Skeleton_Source_Map: SteamVR_Action_Pose_Source_Map<SteamVR_Action_Skeleton_Source> {
-        protected override SteamVR_Action_Skeleton_Source GetSourceElementForIndexer (SteamVR_Input_Sources inputSource) {
-            return sources[SteamVR_Input_Sources.Any]; //just in case somebody tries to access a different element, redirect them to the correct one.
+    public class SteamVR_Action_Skeleton_Source_Map : SteamVR_Action_Pose_Source_Map<SteamVR_Action_Skeleton_Source>
+    {
+        protected override SteamVR_Action_Skeleton_Source GetSourceElementForIndexer(SteamVR_Input_Sources inputSource)
+        {
+            return sources[0]; //just in case somebody tries to access a different element, redirect them to the correct one.
         }
     }
 
@@ -624,7 +701,8 @@ namespace Valve.VR {
     /// Skeleton Actions are our best approximation of where your hands are while holding vr controllers and pressing buttons. We give you 31 bones to help you animate hand models.
     /// For more information check out this blog post: https://steamcommunity.com/games/250820/announcements/detail/1690421280625220068
     /// </summary>
-    public class SteamVR_Action_Skeleton_Source: SteamVR_Action_Pose_Source, ISteamVR_Action_Skeleton_Source {
+    public class SteamVR_Action_Skeleton_Source : SteamVR_Action_Pose_Source, ISteamVR_Action_Skeleton_Source
+    {
         protected static uint skeletonActionData_size = 0;
 
         /// <summary>Event fires when the active state (ActionSet active and binding active) changes</summary>
@@ -768,9 +846,10 @@ namespace Valve.VR {
 
         protected InputSkeletalActionData_t tempSkeletonActionData = new InputSkeletalActionData_t();
 
-        public override void Preinitialize (SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource) {
+        public override void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
+        {
             base.Preinitialize(wrappingAction, forInputSource);
-            skeletonAction = (SteamVR_Action_Skeleton) wrappingAction;
+            skeletonAction = (SteamVR_Action_Skeleton)wrappingAction;
 
             bonePositions = new Vector3[SteamVR_Action_Skeleton.numBones];
             lastBonePositions = new Vector3[SteamVR_Action_Skeleton.numBones];
@@ -788,43 +867,50 @@ namespace Valve.VR {
         }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Initializes the handle for the inputSource, the skeletal action data size, and any other related SteamVR data.
         /// </summary>
-        public override void Initialize () {
+        public override void Initialize()
+        {
             base.Initialize();
 
             if (skeletonActionData_size == 0)
-                skeletonActionData_size = (uint) Marshal.SizeOf(typeof(InputSkeletalActionData_t));
+                skeletonActionData_size = (uint)Marshal.SizeOf(typeof(InputSkeletalActionData_t));
         }
 
-        /// <summary><strong>[Should not be called by user code]</strong> 
+        /// <summary><strong>[Should not be called by user code]</strong>
         /// Updates the data for this action and this input source. Sends related events.
         /// </summary>
-        public override void UpdateValue () {
+        public override void UpdateValue()
+        {
             UpdateValue(false);
         }
 
-        /// <summary><strong>[Should not be called by user code]</strong> 
+        /// <summary><strong>[Should not be called by user code]</strong>
         /// Updates the data for this action and this input source. Sends related events.
         /// </summary>
-        public override void UpdateValue (bool skipStateAndEventUpdates) {
+        public override void UpdateValue(bool skipStateAndEventUpdates)
+        {
             lastActive = active;
             lastSkeletonActionData = skeletonActionData;
             lastSkeletalSummaryData = skeletalSummaryData;
 
-            if (onlyUpdateSummaryData == false) {
-                for (int boneIndex = 0; boneIndex < SteamVR_Action_Skeleton.numBones; boneIndex++) {
+            if (onlyUpdateSummaryData == false)
+            {
+                for (int boneIndex = 0; boneIndex < SteamVR_Action_Skeleton.numBones; boneIndex++)
+                {
                     lastBonePositions[boneIndex] = bonePositions[boneIndex];
                     lastBoneRotations[boneIndex] = boneRotations[boneIndex];
                 }
             }
 
-            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerIndexes.enumArray.Length; fingerIndex++) {
+            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerIndexes.enumArray.Length; fingerIndex++)
+            {
                 lastFingerCurls[fingerIndex] = fingerCurls[fingerIndex];
             }
 
-            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerSplayIndexes.enumArray.Length; fingerIndex++) {
+            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerSplayIndexes.enumArray.Length; fingerIndex++)
+            {
                 lastFingerSplays[fingerIndex] = fingerSplays[fingerIndex];
             }
 
@@ -832,18 +918,22 @@ namespace Valve.VR {
             poseChanged = changed;
 
             EVRInputError error = OpenVR.Input.GetSkeletalActionData(handle, ref skeletonActionData, skeletonActionData_size);
-            if (error != EVRInputError.None) {
+            if (error != EVRInputError.None)
+            {
                 Debug.LogError("<b>[SteamVR]</b> GetSkeletalActionData error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
                 return;
             }
 
-            if (active) {
-                if (onlyUpdateSummaryData == false) {
+            if (active)
+            {
+                if (onlyUpdateSummaryData == false)
+                {
                     error = OpenVR.Input.GetSkeletalBoneData(handle, skeletalTransformSpace, rangeOfMotion, tempBoneTransforms);
                     if (error != EVRInputError.None)
                         Debug.LogError("<b>[SteamVR]</b> GetSkeletalBoneData error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
 
-                    for (int boneIndex = 0; boneIndex < tempBoneTransforms.Length; boneIndex++) {
+                    for (int boneIndex = 0; boneIndex < tempBoneTransforms.Length; boneIndex++)
+                    {
                         // SteamVR's coordinate system is right handed, and Unity's is left handed.  The FBX data has its
                         // X axis flipped when Unity imports it, so here we need to flip the X axis as well
                         bonePositions[boneIndex].x = -tempBoneTransforms[boneIndex].position.v0;
@@ -865,14 +955,18 @@ namespace Valve.VR {
                 UpdateSkeletalSummaryData(summaryDataType, true);
             }
 
-            if (changed == false) {
-                for (int boneIndex = 0; boneIndex < tempBoneTransforms.Length; boneIndex++) {
-                    if (Vector3.Distance(lastBonePositions[boneIndex], bonePositions[boneIndex]) > changeTolerance) {
+            if (changed == false)
+            {
+                for (int boneIndex = 0; boneIndex < tempBoneTransforms.Length; boneIndex++)
+                {
+                    if (Vector3.Distance(lastBonePositions[boneIndex], bonePositions[boneIndex]) > changeTolerance)
+                    {
                         changed = true;
                         break;
                     }
 
-                    if (Mathf.Abs(Quaternion.Angle(lastBoneRotations[boneIndex], boneRotations[boneIndex])) > changeTolerance) {
+                    if (Mathf.Abs(Quaternion.Angle(lastBoneRotations[boneIndex], boneRotations[boneIndex])) > changeTolerance)
+                    {
                         changed = true;
                         break;
                     }
@@ -889,12 +983,13 @@ namespace Valve.VR {
         /// <summary>
         /// The number of bones in the skeleton for this action
         /// </summary>
-        public int boneCount { get { return (int) GetBoneCount(); } }
+        public int boneCount { get { return (int)GetBoneCount(); } }
 
         /// <summary>
         /// Gets the number of bones in the skeleton for this action
         /// </summary>
-        public uint GetBoneCount () {
+        public uint GetBoneCount()
+        {
             uint boneCount = 0;
             EVRInputError error = OpenVR.Input.GetBoneCount(handle, ref boneCount);
             if (error != EVRInputError.None)
@@ -911,8 +1006,9 @@ namespace Valve.VR {
         /// <summary>
         /// Gets the ordering of the bone hierarchy
         /// </summary>
-        public int[] GetBoneHierarchy () {
-            int boneCount = (int) GetBoneCount();
+        public int[] GetBoneHierarchy()
+        {
+            int boneCount = (int)GetBoneCount();
             int[] parentIndicies = new int[boneCount];
 
             EVRInputError error = OpenVR.Input.GetBoneHierarchy(handle, parentIndicies);
@@ -925,7 +1021,8 @@ namespace Valve.VR {
         /// <summary>
         /// Gets the name for a bone at the specified index
         /// </summary>
-        public string GetBoneName (int boneIndex) {
+        public string GetBoneName(int boneIndex)
+        {
             StringBuilder stringBuilder = new StringBuilder(255);
             EVRInputError error = OpenVR.Input.GetBoneName(handle, boneIndex, stringBuilder, 255);
             if (error != EVRInputError.None)
@@ -940,7 +1037,8 @@ namespace Valve.VR {
         /// <param name="transformSpace">What to get the position/rotation data relative to, the model, or the bone's parent</param>
         /// <param name="referencePose">Which reference pose to return</param>
         /// <returns></returns>
-        public SteamVR_Utils.RigidTransform[] GetReferenceTransforms (EVRSkeletalTransformSpace transformSpace, EVRSkeletalReferencePose referencePose) {
+        public SteamVR_Utils.RigidTransform[] GetReferenceTransforms(EVRSkeletalTransformSpace transformSpace, EVRSkeletalReferencePose referencePose)
+        {
             SteamVR_Utils.RigidTransform[] transforms = new SteamVR_Utils.RigidTransform[GetBoneCount()];
 
             VRBoneTransform_t[] boneTransforms = new VRBoneTransform_t[transforms.Length];
@@ -949,13 +1047,15 @@ namespace Valve.VR {
             if (error != EVRInputError.None)
                 Debug.LogError("<b>[SteamVR]</b> GetSkeletalReferenceTransforms error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
 
-            for (int transformIndex = 0; transformIndex < boneTransforms.Length; transformIndex++) {
+            for (int transformIndex = 0; transformIndex < boneTransforms.Length; transformIndex++)
+            {
                 Vector3 position = new Vector3(-boneTransforms[transformIndex].position.v0, boneTransforms[transformIndex].position.v1, boneTransforms[transformIndex].position.v2);
                 Quaternion rotation = new Quaternion(boneTransforms[transformIndex].orientation.x, -boneTransforms[transformIndex].orientation.y, -boneTransforms[transformIndex].orientation.z, boneTransforms[transformIndex].orientation.w);
                 transforms[transformIndex] = new SteamVR_Utils.RigidTransform(position, rotation);
             }
 
-            if (transforms.Length > 0) {
+            if (transforms.Length > 0)
+            {
                 // Now that we're in the same handedness as Unity, rotate the root bone around the Y axis
                 // so that forward is facing down +Z
                 Quaternion qFixUpRot = Quaternion.AngleAxis(Mathf.PI * Mathf.Rad2Deg, Vector3.up);
@@ -967,7 +1067,7 @@ namespace Valve.VR {
         }
 
         /// <summary>
-        /// Get the accuracy level of the skeletal tracking data. 
+        /// Get the accuracy level of the skeletal tracking data.
         /// <para/>* Estimated: Body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated based on the active buttons, triggers, joysticks, or other input sensors. Examples include the Vive Controller and gamepads.
         /// <para/>* Partial: Body part location can be measured directly but with fewer degrees of freedom than the actual body part.Certain body part positions may be unmeasured by the device and estimated from other input data.Examples include Knuckles or gloves that only measure finger curl
         /// <para/>* Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.
@@ -975,12 +1075,13 @@ namespace Valve.VR {
         public EVRSkeletalTrackingLevel skeletalTrackingLevel { get { return GetSkeletalTrackingLevel(); } }
 
         /// <summary>
-        /// Get the accuracy level of the skeletal tracking data. 
+        /// Get the accuracy level of the skeletal tracking data.
         /// <para/>* Estimated: Body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated based on the active buttons, triggers, joysticks, or other input sensors. Examples include the Vive Controller and gamepads.
         /// <para/>* Partial: Body part location can be measured directly but with fewer degrees of freedom than the actual body part.Certain body part positions may be unmeasured by the device and estimated from other input data.Examples include Knuckles or gloves that only measure finger curl
         /// <para/>* Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.
         /// </summary>
-        public EVRSkeletalTrackingLevel GetSkeletalTrackingLevel () {
+        public EVRSkeletalTrackingLevel GetSkeletalTrackingLevel()
+        {
             EVRSkeletalTrackingLevel skeletalTrackingLevel = EVRSkeletalTrackingLevel.VRSkeletalTracking_Estimated;
 
             EVRInputError error = OpenVR.Input.GetSkeletalTrackingLevel(handle, ref skeletalTrackingLevel);
@@ -991,22 +1092,25 @@ namespace Valve.VR {
         }
 
         /// <summary>
-        /// Get the skeletal summary data structure from OpenVR. 
-        /// Contains curl and splay data in finger order: thumb, index, middlg, ring, pinky. 
+        /// Get the skeletal summary data structure from OpenVR.
+        /// Contains curl and splay data in finger order: thumb, index, middlg, ring, pinky.
         /// Easier access at named members: indexCurl, ringSplay, etc.
         /// </summary>
-        protected VRSkeletalSummaryData_t GetSkeletalSummaryData (EVRSummaryType summaryType = EVRSummaryType.FromAnimation, bool force = false) {
+        protected VRSkeletalSummaryData_t GetSkeletalSummaryData(EVRSummaryType summaryType = EVRSummaryType.FromAnimation, bool force = false)
+        {
             UpdateSkeletalSummaryData(summaryType, force);
             return skeletalSummaryData;
         }
 
         /// <summary>
-        /// Updates the skeletal summary data structure from OpenVR. 
-        /// Contains curl and splay data in finger order: thumb, index, middlg, ring, pinky. 
+        /// Updates the skeletal summary data structure from OpenVR.
+        /// Contains curl and splay data in finger order: thumb, index, middlg, ring, pinky.
         /// Easier access at named members: indexCurl, ringSplay, etc.
         /// </summary>
-        protected void UpdateSkeletalSummaryData (EVRSummaryType summaryType = EVRSummaryType.FromAnimation, bool force = false) {
-            if (force || this.summaryDataType != summaryDataType && active) {
+        protected void UpdateSkeletalSummaryData(EVRSummaryType summaryType = EVRSummaryType.FromAnimation, bool force = false)
+        {
+            if (force || this.summaryDataType != summaryDataType && active)
+            {
                 EVRInputError error = OpenVR.Input.GetSkeletalSummaryData(handle, summaryType, ref skeletalSummaryData);
                 if (error != EVRInputError.None)
                     Debug.LogError("<b>[SteamVR]</b> GetSkeletalSummaryData error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
@@ -1025,7 +1129,8 @@ namespace Valve.VR {
             }
         }
 
-        protected override void CheckAndSendEvents () {
+        protected override void CheckAndSendEvents()
+        {
             if (trackingState != lastTrackingState && onTrackingChanged != null)
                 onTrackingChanged.Invoke(skeletonAction, trackingState);
 
@@ -1049,9 +1154,10 @@ namespace Valve.VR {
         }
     }
 
-    public interface ISteamVR_Action_Skeleton_Source {
+    public interface ISteamVR_Action_Skeleton_Source
+    {
         /// <summary>
-        /// Get the accuracy level of the skeletal tracking data. 
+        /// Get the accuracy level of the skeletal tracking data.
         /// <para/>* Estimated: Body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated based on the active buttons, triggers, joysticks, or other input sensors. Examples include the Vive Controller and gamepads.
         /// <para/>* Partial: Body part location can be measured directly but with fewer degrees of freedom than the actual body part.Certain body part positions may be unmeasured by the device and estimated from other input data.Examples include Knuckles or gloves that only measure finger curl
         /// <para/>* Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.
@@ -1150,10 +1256,11 @@ namespace Valve.VR {
     }
 
     /// <summary>
-    /// The change in range of the motion of the bones in the skeleton. Options are "With Controller" as if your hand is holding your VR controller. 
+    /// The change in range of the motion of the bones in the skeleton. Options are "With Controller" as if your hand is holding your VR controller.
     /// Or "Without Controller" as if your hand is empty.
     /// </summary>
-    public enum SkeletalMotionRangeChange {
+    public enum SkeletalMotionRangeChange
+    {
         None = -1,
 
         /// <summary>Estimation of bones in hand while holding a controller</summary>
@@ -1166,7 +1273,8 @@ namespace Valve.VR {
 
 
     /// <summary>The order of the joints that SteamVR Skeleton Input is expecting.</summary>
-    public static class SteamVR_Skeleton_JointIndexes {
+    public static class SteamVR_Skeleton_JointIndexes
+    {
         public const int root = 0;
         public const int wrist = 1;
         public const int thumbMetacarpal = 2;
@@ -1200,8 +1308,10 @@ namespace Valve.VR {
         public const int ringAux = 29;
         public const int pinkyAux = 30;
 
-        public static int GetFingerForBone (int boneIndex) {
-            switch (boneIndex) {
+        public static int GetFingerForBone(int boneIndex)
+        {
+            switch (boneIndex)
+            {
                 case root:
                 case wrist:
                     return -1;
@@ -1249,9 +1359,29 @@ namespace Valve.VR {
                     return -1;
             }
         }
+
+        public static int GetBoneForFingerTip(int fingerIndex)
+        {
+            switch (fingerIndex)
+            {
+                case SteamVR_Skeleton_FingerIndexes.thumb:
+                    return thumbTip;
+                case SteamVR_Skeleton_FingerIndexes.index:
+                    return indexTip;
+                case SteamVR_Skeleton_FingerIndexes.middle:
+                    return middleTip;
+                case SteamVR_Skeleton_FingerIndexes.ring:
+                    return ringTip;
+                case SteamVR_Skeleton_FingerIndexes.pinky:
+                    return pinkyTip;
+                default:
+                    return indexTip;
+            }
+        }
     }
 
-    public enum SteamVR_Skeleton_JointIndexEnum {
+    public enum SteamVR_Skeleton_JointIndexEnum
+    {
         root = SteamVR_Skeleton_JointIndexes.root,
         wrist = SteamVR_Skeleton_JointIndexes.wrist,
         thumbMetacarpal = SteamVR_Skeleton_JointIndexes.thumbMetacarpal,
@@ -1288,34 +1418,38 @@ namespace Valve.VR {
 
 
     /// <summary>The order of the fingers that SteamVR Skeleton Input outputs</summary>
-    public class SteamVR_Skeleton_FingerIndexes {
+    public class SteamVR_Skeleton_FingerIndexes
+    {
         public const int thumb = 0;
         public const int index = 1;
         public const int middle = 2;
         public const int ring = 3;
         public const int pinky = 4;
 
-        public static SteamVR_Skeleton_FingerIndexEnum[] enumArray = (SteamVR_Skeleton_FingerIndexEnum[]) System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerIndexEnum));
+        public static SteamVR_Skeleton_FingerIndexEnum[] enumArray = (SteamVR_Skeleton_FingerIndexEnum[])System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerIndexEnum));
     }
 
     /// <summary>The order of the fingerSplays that SteamVR Skeleton Input outputs</summary>
-    public class SteamVR_Skeleton_FingerSplayIndexes {
+    public class SteamVR_Skeleton_FingerSplayIndexes
+    {
         public const int thumbIndex = 0;
         public const int indexMiddle = 1;
         public const int middleRing = 2;
         public const int ringPinky = 3;
 
-        public static SteamVR_Skeleton_FingerSplayIndexEnum[] enumArray = (SteamVR_Skeleton_FingerSplayIndexEnum[]) System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerSplayIndexEnum));
+        public static SteamVR_Skeleton_FingerSplayIndexEnum[] enumArray = (SteamVR_Skeleton_FingerSplayIndexEnum[])System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerSplayIndexEnum));
     }
 
-    public enum SteamVR_Skeleton_FingerSplayIndexEnum {
+    public enum SteamVR_Skeleton_FingerSplayIndexEnum
+    {
         thumbIndex = SteamVR_Skeleton_FingerSplayIndexes.thumbIndex,
         indexMiddle = SteamVR_Skeleton_FingerSplayIndexes.indexMiddle,
         middleRing = SteamVR_Skeleton_FingerSplayIndexes.middleRing,
         ringPinky = SteamVR_Skeleton_FingerSplayIndexes.ringPinky,
     }
 
-    public enum SteamVR_Skeleton_FingerIndexEnum {
+    public enum SteamVR_Skeleton_FingerIndexEnum
+    {
         thumb = SteamVR_Skeleton_FingerIndexes.thumb,
         index = SteamVR_Skeleton_FingerIndexes.index,
         middle = SteamVR_Skeleton_FingerIndexes.middle,

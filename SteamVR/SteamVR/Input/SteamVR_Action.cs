@@ -1,25 +1,30 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 // Action implementation overview:
 // Actions are split into three parts:
-//     * Action: The user-accessible class that is the interface for accessing action data. 
+//     * Action: The user-accessible class that is the interface for accessing action data.
 //          There may be many Action instances per Actual SteamVR Action, but these instances are just interfaces to the data and should have virtually no overhead.
-//     * Action Map: This is basically a wrapper for a list of Action_Source instances. 
-//          The idea being there is one Map per Actual SteamVR Action. 
+//     * Action Map: This is basically a wrapper for a list of Action_Source instances.
+//          The idea being there is one Map per Actual SteamVR Action.
 //          These maps can be retrieved from a static store in SteamVR_Input so we're not duplicating data.
-//     * Action Source: This is a collection of cached data retrieved by calls to the underlying SteamVR Input system. 
+//     * Action Source: This is a collection of cached data retrieved by calls to the underlying SteamVR Input system.
 //          Each Action Source has an inputSource that it is associated with.
 
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using System;
+using Valve.VR;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
-namespace Valve.VR {
+namespace Valve.VR
+{
     [Serializable]
     /// <summary>
     /// This is the base level action for SteamVR Input Actions. All SteamVR_Action_In and SteamVR_Action_Out inherit from this.
     /// Initializes the ulong handle for the action, has some helper references that all actions will have.
     /// </summary>
-    public abstract class SteamVR_Action<SourceMap, SourceElement>: SteamVR_Action, ISteamVR_Action where SourceMap : SteamVR_Action_Source_Map<SourceElement>, new() where SourceElement : SteamVR_Action_Source, new() {
+    public abstract class SteamVR_Action<SourceMap, SourceElement> : SteamVR_Action, ISteamVR_Action where SourceMap : SteamVR_Action_Source_Map<SourceElement>, new() where SourceElement : SteamVR_Action_Source, new()
+    {
         /// <summary>
         /// The map to the source elements, a dictionary of source elements. Should be accessed through the action indexer
         /// </summary>
@@ -30,15 +35,19 @@ namespace Valve.VR {
         /// Access this action restricted to individual input sources.
         /// </summary>
         /// <param name="inputSource">The input source to access for this action</param>
-        public virtual SourceElement this[SteamVR_Input_Sources inputSource] {
-            get {
+        public virtual SourceElement this[SteamVR_Input_Sources inputSource]
+        {
+            get
+            {
                 return sourceMap[inputSource];
             }
         }
 
         /// <summary>The full string path for this action</summary>
-        public override string fullPath {
-            get {
+        public override string fullPath
+        {
+            get
+            {
                 return sourceMap.fullPath;
             }
         }
@@ -47,15 +56,19 @@ namespace Valve.VR {
         public override ulong handle { get { return sourceMap.handle; } }
 
         /// <summary>The actionset this action is contained within</summary>
-        public override SteamVR_ActionSet actionSet {
-            get {
+        public override SteamVR_ActionSet actionSet
+        {
+            get
+            {
                 return sourceMap.actionSet;
             }
         }
 
         /// <summary>The action direction of this action (in for input - most actions, out for output - mainly haptics)</summary>
-        public override SteamVR_ActionDirections direction {
-            get {
+        public override SteamVR_ActionDirections direction
+        {
+            get
+            {
                 return sourceMap.direction;
             }
         }
@@ -79,7 +92,8 @@ namespace Valve.VR {
         /// <summary>
         /// Prepares the action to be initialized. Creating dictionaries, finding the right existing action, etc.
         /// </summary>
-        public override void PreInitialize (string newActionPath) {
+        public override void PreInitialize(string newActionPath)
+        {
             actionPath = newActionPath;
 
             sourceMap = new SourceMap();
@@ -88,7 +102,8 @@ namespace Valve.VR {
             initialized = true;
         }
 
-        protected override void CreateUninitialized (string newActionPath, bool caseSensitive) {
+        protected override void CreateUninitialized(string newActionPath, bool caseSensitive)
+        {
             actionPath = newActionPath;
 
             sourceMap = new SourceMap();
@@ -98,7 +113,8 @@ namespace Valve.VR {
             initialized = false;
         }
 
-        protected override void CreateUninitialized (string newActionSet, SteamVR_ActionDirections direction, string newAction, bool caseSensitive) {
+        protected override void CreateUninitialized(string newActionSet, SteamVR_ActionDirections direction, string newAction, bool caseSensitive)
+        {
             actionPath = SteamVR_Input_ActionFile_Action.CreateNewName(newActionSet, direction, newAction);
 
             sourceMap = new SourceMap();
@@ -111,15 +127,20 @@ namespace Valve.VR {
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> If it looks like we aren't attached to a real action then try and find the existing action for our given path.
         /// </summary>
-        public override string TryNeedsInitData () {
-            if (needsReinit && actionPath != null) {
+        public override string TryNeedsInitData()
+        {
+            if (needsReinit && actionPath != null)
+            {
                 SteamVR_Action existingAction = FindExistingActionForPartialPath(actionPath);
 
-                if (existingAction == null) {
+                if (existingAction == null)
+                {
                     this.sourceMap = null;
-                } else {
+                }
+                else
+                {
                     this.actionPath = existingAction.fullPath;
-                    this.sourceMap = (SourceMap) existingAction.GetSourceMap();
+                    this.sourceMap = (SourceMap)existingAction.GetSourceMap();
 
                     initialized = true;
                     needsReinit = false;
@@ -132,21 +153,27 @@ namespace Valve.VR {
 
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Initializes the individual sources as well as the base map itself. 
+        /// <strong>[Should not be called by user code]</strong> Initializes the individual sources as well as the base map itself.
         /// Gets the handle for the action from SteamVR and does any other SteamVR related setup that needs to be done
         /// </summary>
-        public override void Initialize (bool createNew = false, bool throwErrors = true) {
-            if (needsReinit) {
+        public override void Initialize(bool createNew = false, bool throwErrors = true)
+        {
+            if (needsReinit)
+            {
                 TryNeedsInitData();
             }
 
-            if (createNew) {
+            if (createNew)
+            {
                 sourceMap.Initialize();
-            } else {
+            }
+            else
+            {
                 sourceMap = SteamVR_Input.GetActionDataFromPath<SourceMap>(actionPath);
 
-                if (sourceMap == null) {
-#if false
+                if (sourceMap == null)
+                {
+#if UNITY_EDITOR
                     if (throwErrors)
                     {
                         if (string.IsNullOrEmpty(actionPath))
@@ -169,20 +196,25 @@ namespace Valve.VR {
         /// <strong>[Should not be called by user code]</strong> Returns the underlying source map for the action.
         /// <strong>[Should not be called by user code]</strong> Returns the underlying source map for the action.
         /// </summary>
-        public override SteamVR_Action_Source_Map GetSourceMap () {
+        public override SteamVR_Action_Source_Map GetSourceMap()
+        {
             return sourceMap;
         }
 
-        protected override void InitializeCopy (string newActionPath, SteamVR_Action_Source_Map newData) {
+        protected override void InitializeCopy(string newActionPath, SteamVR_Action_Source_Map newData)
+        {
             this.actionPath = newActionPath;
-            this.sourceMap = (SourceMap) newData;
+            this.sourceMap = (SourceMap)newData;
 
             initialized = true;
         }
 
-        protected void InitAfterDeserialize () {
-            if (sourceMap != null) {
-                if (sourceMap.fullPath != actionPath) {
+        protected void InitAfterDeserialize()
+        {
+            if (sourceMap != null)
+            {
+                if (sourceMap.fullPath != actionPath)
+                {
                     needsReinit = true;
                     TryNeedsInitData();
                 }
@@ -191,7 +223,8 @@ namespace Valve.VR {
                     sourceMap = null;
             }
 
-            if (initialized == false) {
+            if (initialized == false)
+            {
                 Initialize(false, false);
             }
         }
@@ -201,7 +234,8 @@ namespace Valve.VR {
         /// Gets a value indicating whether or not the action is currently bound and if the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public override bool GetActive (SteamVR_Input_Sources inputSource) {
+        public override bool GetActive(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].active;
         }
 
@@ -209,7 +243,8 @@ namespace Valve.VR {
         /// Gets a value indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public override bool GetActiveBinding (SteamVR_Input_Sources inputSource) {
+        public override bool GetActiveBinding(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].activeBinding;
         }
 
@@ -218,7 +253,8 @@ namespace Valve.VR {
         /// Gets the value from the previous update indicating whether or not the action was currently bound and if the containing action set was active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public override bool GetLastActive (SteamVR_Input_Sources inputSource) {
+        public override bool GetLastActive(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].lastActive;
         }
 
@@ -226,15 +262,17 @@ namespace Valve.VR {
         /// Gets the value from the previous update indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public override bool GetLastActiveBinding (SteamVR_Input_Sources inputSource) {
+        public override bool GetLastActiveBinding(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].lastActiveBinding;
         }
     }
 
 
     [Serializable]
-    public abstract class SteamVR_Action: IEquatable<SteamVR_Action>, ISteamVR_Action {
-        public SteamVR_Action () { }
+    public abstract class SteamVR_Action : IEquatable<SteamVR_Action>, ISteamVR_Action
+    {
+        public SteamVR_Action() { }
 
         [SerializeField]
         protected string actionPath;
@@ -250,7 +288,8 @@ namespace Valve.VR {
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Creates an actual action that will later be called by user code.
         /// </summary>
-        public static CreateType Create<CreateType> (string newActionPath) where CreateType : SteamVR_Action, new() {
+        public static CreateType Create<CreateType>(string newActionPath) where CreateType : SteamVR_Action, new()
+        {
             CreateType action = new CreateType();
             action.PreInitialize(newActionPath);
             return action;
@@ -259,7 +298,8 @@ namespace Valve.VR {
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Creates an uninitialized action that can be saved without being attached to a real action
         /// </summary>
-        public static CreateType CreateUninitialized<CreateType> (string setName, SteamVR_ActionDirections direction, string newActionName, bool caseSensitive) where CreateType : SteamVR_Action, new() {
+        public static CreateType CreateUninitialized<CreateType>(string setName, SteamVR_ActionDirections direction, string newActionName, bool caseSensitive) where CreateType : SteamVR_Action, new()
+        {
             CreateType action = new CreateType();
             action.CreateUninitialized(setName, direction, newActionName, caseSensitive);
             return action;
@@ -268,7 +308,8 @@ namespace Valve.VR {
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Creates an uninitialized action that can be saved without being attached to a real action
         /// </summary>
-        public static CreateType CreateUninitialized<CreateType> (string actionPath, bool caseSensitive) where CreateType : SteamVR_Action, new() {
+        public static CreateType CreateUninitialized<CreateType>(string actionPath, bool caseSensitive) where CreateType : SteamVR_Action, new()
+        {
             CreateType action = new CreateType();
             action.CreateUninitialized(actionPath, caseSensitive);
             return action;
@@ -277,20 +318,23 @@ namespace Valve.VR {
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Gets a copy of the underlying source map so we're always using the same underlying event data
         /// </summary>
-        public CreateType GetCopy<CreateType> () where CreateType : SteamVR_Action, new() {
+        public CreateType GetCopy<CreateType>() where CreateType : SteamVR_Action, new()
+        {
             if (SteamVR_Input.ShouldMakeCopy()) //no need to make copies at runtime
             {
                 CreateType action = new CreateType();
                 action.InitializeCopy(this.actionPath, this.GetSourceMap());
                 return action;
-            } else {
-                return (CreateType) this;
+            }
+            else
+            {
+                return (CreateType)this;
             }
         }
 
-        public abstract string TryNeedsInitData ();
+        public abstract string TryNeedsInitData();
 
-        protected abstract void InitializeCopy (string newActionPath, SteamVR_Action_Source_Map newData);
+        protected abstract void InitializeCopy(string newActionPath, SteamVR_Action_Source_Map newData);
 
         /// <summary>The full string path for this action</summary>
         public abstract string fullPath { get; }
@@ -317,43 +361,44 @@ namespace Valve.VR {
         public abstract bool lastActive { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public abstract bool lastActiveBinding { get; }
 
         /// <summary>
         /// Prepares the action to be initialized. Creating dictionaries, finding the right existing action, etc.
         /// </summary>
-        public abstract void PreInitialize (string newActionPath);
+        public abstract void PreInitialize(string newActionPath);
 
-        protected abstract void CreateUninitialized (string newActionPath, bool caseSensitive);
+        protected abstract void CreateUninitialized(string newActionPath, bool caseSensitive);
 
-        protected abstract void CreateUninitialized (string newActionSet, SteamVR_ActionDirections direction, string newAction, bool caseSensitive);
+        protected abstract void CreateUninitialized(string newActionSet, SteamVR_ActionDirections direction, string newAction, bool caseSensitive);
 
         /// <summary>
         /// Initializes the individual sources as well as the base map itself. Gets the handle for the action from SteamVR and does any other SteamVR related setup that needs to be done
         /// </summary>
-        public abstract void Initialize (bool createNew = false, bool throwNotSetError = true);
+        public abstract void Initialize(bool createNew = false, bool throwNotSetError = true);
 
         /// <summary>Gets the last timestamp this action was changed. (by Time.realtimeSinceStartup)</summary>
         /// <param name="inputSource">The input source to use to select the last changed time</param>
-        public abstract float GetTimeLastChanged (SteamVR_Input_Sources inputSource);
+        public abstract float GetTimeLastChanged(SteamVR_Input_Sources inputSource);
 
-        public abstract SteamVR_Action_Source_Map GetSourceMap ();
+        public abstract SteamVR_Action_Source_Map GetSourceMap();
 
 
         /// <summary>
         /// Gets a value indicating whether or not the action is currently bound and if the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public abstract bool GetActive (SteamVR_Input_Sources inputSource);
+        public abstract bool GetActive(SteamVR_Input_Sources inputSource);
 
 
         /// <summary>
         /// Gets a value indicating whether or not the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public bool GetSetActive (SteamVR_Input_Sources inputSource) {
+        public bool GetSetActive(SteamVR_Input_Sources inputSource)
+        {
             return actionSet.IsActive(inputSource);
         }
 
@@ -361,36 +406,38 @@ namespace Valve.VR {
         /// Gets a value indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public abstract bool GetActiveBinding (SteamVR_Input_Sources inputSource);
+        public abstract bool GetActiveBinding(SteamVR_Input_Sources inputSource);
 
 
         /// <summary>
         /// Gets the value from the previous update indicating whether or not the action is currently bound and if the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public abstract bool GetLastActive (SteamVR_Input_Sources inputSource);
+        public abstract bool GetLastActive(SteamVR_Input_Sources inputSource);
 
         /// <summary>
         /// Gets the value from the previous update indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public abstract bool GetLastActiveBinding (SteamVR_Input_Sources inputSource);
+        public abstract bool GetLastActiveBinding(SteamVR_Input_Sources inputSource);
 
         /// <summary>Returns the full action path for this action.</summary>
-        public string GetPath () {
+        public string GetPath()
+        {
             return actionPath;
         }
 
         /// <summary>
         /// Returns true if the data for this action is being updated for the specified input source. This can be triggered by querying the data
         /// </summary>
-        public abstract bool IsUpdating (SteamVR_Input_Sources inputSource);
+        public abstract bool IsUpdating(SteamVR_Input_Sources inputSource);
 
 
         /// <summary>
         /// Creates a hashcode from the full action path of this action
         /// </summary>
-        public override int GetHashCode () {
+        public override int GetHashCode()
+        {
             if (actionPath == null)
                 return 0;
             else
@@ -400,7 +447,8 @@ namespace Valve.VR {
         /// <summary>
         /// Compares two SteamVR_Actions by their action path instead of references
         /// </summary>
-        public bool Equals (SteamVR_Action other) {
+        public bool Equals(SteamVR_Action other)
+        {
             if (ReferenceEquals(null, other))
                 return false;
 
@@ -414,8 +462,10 @@ namespace Valve.VR {
         /// <summary>
         /// Compares two SteamVR_Actions by their action path instead of references
         /// </summary>
-        public override bool Equals (object other) {
-            if (ReferenceEquals(null, other)) {
+        public override bool Equals(object other)
+        {
+            if (ReferenceEquals(null, other))
+            {
                 if (string.IsNullOrEmpty(this.actionPath)) //if we haven't set a path, say this action is equal to null
                     return true;
                 if (this.GetSourceMap() == null)
@@ -428,7 +478,7 @@ namespace Valve.VR {
                 return true;
 
             if (other is SteamVR_Action)
-                return this.Equals((SteamVR_Action) other);
+                return this.Equals((SteamVR_Action)other);
 
             return false;
         }
@@ -436,14 +486,16 @@ namespace Valve.VR {
         /// <summary>
         /// Compares two SteamVR_Actions by their action path.
         /// </summary>
-        public static bool operator != (SteamVR_Action action1, SteamVR_Action action2) {
+        public static bool operator !=(SteamVR_Action action1, SteamVR_Action action2)
+        {
             return !(action1 == action2);
         }
 
         /// <summary>
         /// Compares two SteamVR_Actions by their action path.
         /// </summary>
-        public static bool operator == (SteamVR_Action action1, SteamVR_Action action2) {
+        public static bool operator ==(SteamVR_Action action1, SteamVR_Action action2)
+        {
             bool action1null = (ReferenceEquals(null, action1) || string.IsNullOrEmpty(action1.actionPath) || action1.GetSourceMap() == null);
             bool action2null = (ReferenceEquals(null, action2) || string.IsNullOrEmpty(action2.actionPath) || action2.GetSourceMap() == null);
 
@@ -458,7 +510,8 @@ namespace Valve.VR {
         /// <summary>
         /// Tries to find an existing action matching some subsection of an action path. More useful functions in SteamVR_Input.
         /// </summary>
-        public static SteamVR_Action FindExistingActionForPartialPath (string path) {
+        public static SteamVR_Action FindExistingActionForPartialPath(string path)
+        {
             if (string.IsNullOrEmpty(path) || path.IndexOf('/') == -1)
                 return null;
 
@@ -467,11 +520,14 @@ namespace Valve.VR {
             string[] pathParts = path.Split('/');
             SteamVR_Action existingAction;
 
-            if (pathParts.Length >= 2 && string.IsNullOrEmpty(pathParts[2])) {
+            if (pathParts.Length >= 5 && string.IsNullOrEmpty(pathParts[2]))
+            {
                 string set = pathParts[2];
                 string name = pathParts[4];
                 existingAction = SteamVR_Input.GetBaseAction(set, name);
-            } else {
+            }
+            else
+            {
                 existingAction = SteamVR_Input.GetBaseActionFromPath(path);
             }
 
@@ -483,64 +539,78 @@ namespace Valve.VR {
         private string cachedShortName;
 
         /// <summary>Gets just the name of this action. The last part of the path for this action. Removes action set, and direction.</summary>
-        public string GetShortName () {
-            if (cachedShortName == null) {
+        public string GetShortName()
+        {
+            if (cachedShortName == null)
+            {
                 cachedShortName = SteamVR_Input_ActionFile.GetShortName(fullPath);
             }
 
             return cachedShortName;
         }
 
-        public void ShowOrigins () {
+        public void ShowOrigins()
+        {
             OpenVR.Input.ShowActionOrigins(actionSet.handle, handle);
         }
 
-        public void HideOrigins () {
-            OpenVR.Input.ShowActionOrigins(0, 0);
+        public void HideOrigins()
+        {
+            OpenVR.Input.ShowActionOrigins(0,0);
         }
     }
 
-    public abstract class SteamVR_Action_Source_Map<SourceElement>: SteamVR_Action_Source_Map where SourceElement : SteamVR_Action_Source, new() {
+    public abstract class SteamVR_Action_Source_Map<SourceElement> : SteamVR_Action_Source_Map where SourceElement : SteamVR_Action_Source, new()
+    {
         /// <summary>
         /// Gets a reference to the action restricted to a certain input source. LeftHand or RightHand for example.
         /// </summary>
         /// <param name="inputSource">The device you would like data from</param>
-        public SourceElement this[SteamVR_Input_Sources inputSource] {
-            get {
+        public SourceElement this[SteamVR_Input_Sources inputSource]
+        {
+            get
+            {
                 return GetSourceElementForIndexer(inputSource);
             }
         }
 
-        protected virtual void OnAccessSource (SteamVR_Input_Sources inputSource) { }
+        protected virtual void OnAccessSource(SteamVR_Input_Sources inputSource) { }
 
-        protected Dictionary<SteamVR_Input_Sources, SourceElement> sources = new Dictionary<SteamVR_Input_Sources, SourceElement>(new SteamVR_Input_Sources_Comparer());
+        protected SourceElement[] sources = new SourceElement[SteamVR_Input_Source.numSources];
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Initializes the individual sources as well as the base map itself. Gets the handle for the action from SteamVR and does any other SteamVR related setup that needs to be done
         /// </summary>
-        public override void Initialize () {
+        public override void Initialize()
+        {
             base.Initialize();
 
-            var sourceEnumerator = sources.GetEnumerator();
-            while (sourceEnumerator.MoveNext()) {
-                var sourceElement = sourceEnumerator.Current;
-                sourceElement.Value.Initialize();
+            for (int sourceIndex = 0; sourceIndex < sources.Length; sourceIndex++)
+            {
+                if (sources[sourceIndex] != null)
+                    sources[sourceIndex].Initialize();
             }
         }
 
-        protected override void PreinitializeMap (SteamVR_Input_Sources inputSource, SteamVR_Action wrappingAction) {
-            sources.Add(inputSource, new SourceElement());
-            sources[inputSource].Preinitialize(wrappingAction, inputSource);
+        protected override void PreinitializeMap(SteamVR_Input_Sources inputSource, SteamVR_Action wrappingAction)
+        {
+            int sourceIndex = (int)inputSource;
+            sources[sourceIndex] = new SourceElement();
+            sources[sourceIndex].Preinitialize(wrappingAction, inputSource);
         }
 
         // Normally I'd just make the indexer virtual and override that but some unity versions don't like that
-        protected virtual SourceElement GetSourceElementForIndexer (SteamVR_Input_Sources inputSource) {
+        protected virtual SourceElement GetSourceElementForIndexer(SteamVR_Input_Sources inputSource)
+        {
+            int sourceIndex = (int)inputSource;
+
             OnAccessSource(inputSource);
-            return sources[inputSource];
+            return sources[sourceIndex];
         }
     }
 
-    public abstract class SteamVR_Action_Source_Map {
+    public abstract class SteamVR_Action_Source_Map
+    {
         /// <summary>The full string path for this action (from the action manifest)</summary>
         public string fullPath { get; protected set; }
 
@@ -556,7 +626,8 @@ namespace Valve.VR {
         /// <summary>The base SteamVR_Action this map corresponds to</summary>
         public SteamVR_Action action;
 
-        public virtual void PreInitialize (SteamVR_Action wrappingAction, string actionPath, bool throwErrors = true) {
+        public virtual void PreInitialize(SteamVR_Action wrappingAction, string actionPath, bool throwErrors = true)
+        {
             fullPath = actionPath;
             action = wrappingAction;
 
@@ -565,7 +636,8 @@ namespace Valve.VR {
             direction = GetActionDirection();
 
             SteamVR_Input_Sources[] sources = SteamVR_Input_Source.GetAllSources();
-            for (int sourceIndex = 0; sourceIndex < sources.Length; sourceIndex++) {
+            for (int sourceIndex = 0; sourceIndex < sources.Length; sourceIndex++)
+            {
                 PreinitializeMap(sources[sourceIndex], wrappingAction);
             }
         }
@@ -573,21 +645,23 @@ namespace Valve.VR {
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
-        protected abstract void PreinitializeMap (SteamVR_Input_Sources inputSource, SteamVR_Action wrappingAction);
+        protected abstract void PreinitializeMap(SteamVR_Input_Sources inputSource, SteamVR_Action wrappingAction);
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Initializes the handle for the action and any other related SteamVR data.
         /// </summary>
-        public virtual void Initialize () {
+        public virtual void Initialize()
+        {
             ulong newHandle = 0;
-            EVRInputError err = OpenVR.Input.GetActionHandle(fullPath.ToLower(), ref newHandle);
+            EVRInputError err = OpenVR.Input.GetActionHandle(fullPath.ToLowerInvariant(), ref newHandle);
             handle = newHandle;
 
             if (err != EVRInputError.None)
-                Debug.LogError("<b>[SteamVR]</b> GetActionHandle (" + fullPath.ToLower() + ") error: " + err.ToString());
+                Debug.LogError("<b>[SteamVR]</b> GetActionHandle (" + fullPath.ToLowerInvariant() + ") error: " + err.ToString());
         }
 
-        private string GetActionSetPath () {
+        private string GetActionSetPath()
+        {
             int actionsEndIndex = fullPath.IndexOf('/', 1);
             int setStartIndex = actionsEndIndex + 1;
             int setEndIndex = fullPath.IndexOf('/', setStartIndex);
@@ -596,7 +670,11 @@ namespace Valve.VR {
             return fullPath.Substring(0, count);
         }
 
-        private SteamVR_ActionDirections GetActionDirection () {
+        private static string inLowered = "IN".ToLower(System.Globalization.CultureInfo.CurrentCulture);
+        private static string outLowered = "OUT".ToLower(System.Globalization.CultureInfo.CurrentCulture);
+
+        private SteamVR_ActionDirections GetActionDirection()
+        {
             int actionsEndIndex = fullPath.IndexOf('/', 1);
             int setStartIndex = actionsEndIndex + 1;
             int setEndIndex = fullPath.IndexOf('/', setStartIndex);
@@ -604,9 +682,9 @@ namespace Valve.VR {
             int count = directionEndIndex - setEndIndex - 1;
             string direction = fullPath.Substring(setEndIndex + 1, count);
 
-            if (direction == "in")
+            if (direction == inLowered)
                 return SteamVR_ActionDirections.In;
-            else if (direction == "out")
+            else if (direction == outLowered)
                 return SteamVR_ActionDirections.Out;
             else
                 Debug.LogError("Could not find match for direction: " + direction);
@@ -614,7 +692,8 @@ namespace Valve.VR {
         }
     }
 
-    public abstract class SteamVR_Action_Source: ISteamVR_Action_Source {
+    public abstract class SteamVR_Action_Source : ISteamVR_Action_Source
+    {
         /// <summary>The full string path for this action (from the action manifest)</summary>
         public string fullPath { get { return action.fullPath; } }
 
@@ -654,34 +733,38 @@ namespace Valve.VR {
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
-        public virtual void Preinitialize (SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource) {
+        public virtual void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
+        {
             action = wrappingAction;
             inputSource = forInputSource;
         }
 
-        public SteamVR_Action_Source () { }
+        public SteamVR_Action_Source() { }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Initializes the handle for the inputSource, and any other related SteamVR data.
         /// </summary>
-        public virtual void Initialize () {
+        public virtual void Initialize()
+        {
             inputSourceHandle = SteamVR_Input_Source.GetHandle(inputSource);
         }
     }
 
 
-    public interface ISteamVR_Action: ISteamVR_Action_Source {
+    public interface ISteamVR_Action : ISteamVR_Action_Source
+    {
         /// <summary>Returns the active state of the action for the specified Input Source</summary>
         /// <param name="inputSource">The input source to check</param>
-        bool GetActive (SteamVR_Input_Sources inputSource);
+        bool GetActive(SteamVR_Input_Sources inputSource);
 
         /// <summary>Returns the name of the action without the action set or direction</summary>
-        string GetShortName ();
+        string GetShortName();
     }
 
 
-    public interface ISteamVR_Action_Source {
+    public interface ISteamVR_Action_Source
+    {
         /// <summary>Returns true if this action is bound and the ActionSet is active</summary>
         bool active { get; }
 

@@ -52,6 +52,8 @@ namespace NomaiVR {
         void OnWakeUp () {
             _repairPrompt = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt");
 
+            SteamVR_Actions._default.ShowBindingHints();
+
             SetupInputNames();
             foreach (var action in SteamVR_Input.actionsIn) {
                 NomaiVR.Log(action.GetShortName(), " :: ", _inputNames[action]);

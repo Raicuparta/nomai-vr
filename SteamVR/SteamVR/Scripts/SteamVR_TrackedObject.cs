@@ -5,12 +5,16 @@
 //=============================================================================
 
 using UnityEngine;
+using Valve.VR;
 
-namespace Valve.VR {
-    public class SteamVR_TrackedObject: MonoBehaviour {
-        public enum EIndex {
+namespace Valve.VR
+{
+    public class SteamVR_TrackedObject : MonoBehaviour
+    {
+        public enum EIndex
+        {
             None = -1,
-            Hmd = (int) OpenVR.k_unTrackedDeviceIndex_Hmd,
+            Hmd = (int)OpenVR.k_unTrackedDeviceIndex_Hmd,
             Device1,
             Device2,
             Device3,
@@ -36,11 +40,12 @@ namespace Valve.VR {
 
         public bool isValid { get; private set; }
 
-        private void OnNewPoses (TrackedDevicePose_t[] poses) {
+        private void OnNewPoses(TrackedDevicePose_t[] poses)
+        {
             if (index == EIndex.None)
                 return;
 
-            var i = (int) index;
+            var i = (int)index;
 
             isValid = false;
             if (poses.Length <= i)
@@ -56,10 +61,13 @@ namespace Valve.VR {
 
             var pose = new SteamVR_Utils.RigidTransform(poses[i].mDeviceToAbsoluteTracking);
 
-            if (origin != null) {
+            if (origin != null)
+            {
                 transform.position = origin.transform.TransformPoint(pose.pos);
                 transform.rotation = origin.rotation * pose.rot;
-            } else {
+            }
+            else
+            {
                 transform.localPosition = pose.pos;
                 transform.localRotation = pose.rot;
             }
@@ -67,17 +75,21 @@ namespace Valve.VR {
 
         SteamVR_Events.Action newPosesAction;
 
-        SteamVR_TrackedObject () {
+        SteamVR_TrackedObject()
+        {
             newPosesAction = SteamVR_Events.NewPosesAction(OnNewPoses);
         }
 
-        private void Awake () {
+        private void Awake()
+        {
             OnEnable();
         }
 
-        void OnEnable () {
+        void OnEnable()
+        {
             var render = SteamVR_Render.instance;
-            if (render == null) {
+            if (render == null)
+            {
                 enabled = false;
                 return;
             }
@@ -85,14 +97,16 @@ namespace Valve.VR {
             newPosesAction.enabled = true;
         }
 
-        void OnDisable () {
+        void OnDisable()
+        {
             newPosesAction.enabled = false;
             isValid = false;
         }
 
-        public void SetDeviceIndex (int index) {
+        public void SetDeviceIndex(int index)
+        {
             if (System.Enum.IsDefined(typeof(EIndex), index))
-                this.index = (EIndex) index;
+                this.index = (EIndex)index;
         }
     }
 }

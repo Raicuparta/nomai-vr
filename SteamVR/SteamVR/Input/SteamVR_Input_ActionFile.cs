@@ -1,37 +1,49 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEngine;
-using Valve.Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
 
-namespace Valve.VR {
+using System.Linq;
+using Valve.Newtonsoft.Json;
+using System.IO;
+
+namespace Valve.VR
+{
     [System.Serializable]
-    public class SteamVR_Input_ActionFile {
+    public class SteamVR_Input_ActionFile
+    {
         public List<SteamVR_Input_ActionFile_Action> actions = new List<SteamVR_Input_ActionFile_Action>();
         public List<SteamVR_Input_ActionFile_ActionSet> action_sets = new List<SteamVR_Input_ActionFile_ActionSet>();
         public List<SteamVR_Input_ActionFile_DefaultBinding> default_bindings = new List<SteamVR_Input_ActionFile_DefaultBinding>();
         public List<Dictionary<string, string>> localization = new List<Dictionary<string, string>>();
 
         [JsonIgnore]
+        public string filePath;
+
+        [JsonIgnore]
         public List<SteamVR_Input_ActionFile_LocalizationItem> localizationHelperList = new List<SteamVR_Input_ActionFile_LocalizationItem>();
 
-        public void InitializeHelperLists () {
-            foreach (var actionset in action_sets) {
+        public void InitializeHelperLists()
+        {
+            foreach (var actionset in action_sets)
+            {
                 actionset.actionsInList = new List<SteamVR_Input_ActionFile_Action>(actions.Where(action => action.path.StartsWith(actionset.name) && SteamVR_Input_ActionFile_ActionTypes.listIn.Contains(action.type)));
                 actionset.actionsOutList = new List<SteamVR_Input_ActionFile_Action>(actions.Where(action => action.path.StartsWith(actionset.name) && SteamVR_Input_ActionFile_ActionTypes.listOut.Contains(action.type)));
                 actionset.actionsList = new List<SteamVR_Input_ActionFile_Action>(actions.Where(action => action.path.StartsWith(actionset.name)));
             }
 
-            foreach (var item in localization) {
+            foreach (var item in localization)
+            {
                 localizationHelperList.Add(new SteamVR_Input_ActionFile_LocalizationItem(item));
             }
         }
 
-        public void SaveHelperLists () {
+        public void SaveHelperLists()
+        {
             //fix actions list
-            foreach (var actionset in action_sets) {
+            foreach (var actionset in action_sets)
+            {
                 actionset.actionsList.Clear();
                 actionset.actionsList.AddRange(actionset.actionsInList);
                 actionset.actionsList.AddRange(actionset.actionsOutList);
@@ -39,17 +51,20 @@ namespace Valve.VR {
 
             actions.Clear();
 
-            foreach (var actionset in action_sets) {
+            foreach (var actionset in action_sets)
+            {
                 actions.AddRange(actionset.actionsInList);
                 actions.AddRange(actionset.actionsOutList);
             }
 
             localization.Clear();
-            foreach (var item in localizationHelperList) {
+            foreach (var item in localizationHelperList)
+            {
                 Dictionary<string, string> localizationItem = new Dictionary<string, string>();
                 localizationItem.Add(SteamVR_Input_ActionFile_LocalizationItem.languageTagKeyName, item.language);
 
-                foreach (var itemItem in item.items) {
+                foreach (var itemItem in item.items)
+                {
                     localizationItem.Add(itemItem.Key, itemItem.Value);
                 }
 
@@ -57,14 +72,18 @@ namespace Valve.VR {
             }
         }
 
-        public static string GetShortName (string name) {
+        public static string GetShortName(string name)
+        {
             string fullName = name;
             int lastSlash = fullName.LastIndexOf('/');
-            if (lastSlash != -1) {
-                if (lastSlash == fullName.Length - 1) {
+            if (lastSlash != -1)
+            {
+                if (lastSlash == fullName.Length - 1)
+                {
                     fullName = fullName.Remove(lastSlash);
                     lastSlash = fullName.LastIndexOf('/');
-                    if (lastSlash == -1) {
+                    if (lastSlash == -1)
+                    {
                         return GetCodeFriendlyName(fullName);
                     }
                 }
@@ -74,14 +93,17 @@ namespace Valve.VR {
             return GetCodeFriendlyName(fullName);
         }
 
-        public static string GetCodeFriendlyName (string name) {
+        public static string GetCodeFriendlyName(string name)
+        {
             name = name.Replace('/', '_').Replace(' ', '_');
 
             if (char.IsLetter(name[0]) == false)
                 name = "_" + name;
 
-            for (int charIndex = 0; charIndex < name.Length; charIndex++) {
-                if (char.IsLetterOrDigit(name[charIndex]) == false && name[charIndex] != '_') {
+            for (int charIndex = 0; charIndex < name.Length; charIndex++)
+            {
+                if (char.IsLetterOrDigit(name[charIndex]) == false && name[charIndex] != '_')
+                {
                     name = name.Remove(charIndex, 1);
                     name = name.Insert(charIndex, "_");
                 }
@@ -90,21 +112,25 @@ namespace Valve.VR {
             return name;
         }
 
-        public string[] GetFilesToCopy (bool throwErrors = false) {
+        public string[] GetFilesToCopy(bool throwErrors = false)
+        {
             List<string> files = new List<string>();
 
-            FileInfo actionFileInfo = new FileInfo(SteamVR_Input.actionsFilePath);
+            FileInfo actionFileInfo = new FileInfo(this.filePath);
             string path = actionFileInfo.Directory.FullName;
 
-            files.Add(SteamVR_Input.actionsFilePath);
+            files.Add(this.filePath);
 
-            foreach (var binding in default_bindings) {
+            foreach (var binding in default_bindings)
+            {
                 string bindingPath = Path.Combine(path, binding.binding_url);
 
                 if (File.Exists(bindingPath))
                     files.Add(bindingPath);
-                else {
-                    if (throwErrors) {
+                else
+                {
+                    if (throwErrors)
+                    {
                         Debug.LogError("<b>[SteamVR]</b> Could not bind binding file specified by the actions.json manifest: " + bindingPath);
                     }
                 }
@@ -113,13 +139,12 @@ namespace Valve.VR {
             return files.ToArray();
         }
 
-        public void CopyFilesToPath (string toPath, bool overwrite) {
-            if (Directory.Exists(toPath) == false)
-                Directory.CreateDirectory(toPath);
-
+        public void CopyFilesToPath(string toPath, bool overwrite)
+        {
             string[] files = SteamVR_Input.actionFile.GetFilesToCopy();
 
-            foreach (string file in files) {
+            foreach (string file in files)
+            {
                 FileInfo bindingInfo = new FileInfo(file);
                 string newFilePath = Path.Combine(toPath, bindingInfo.Name);
 
@@ -127,8 +152,10 @@ namespace Valve.VR {
                 if (File.Exists(newFilePath))
                     exists = true;
 
-                if (exists) {
-                    if (overwrite) {
+                if (exists)
+                {
+                    if (overwrite)
+                    {
                         FileInfo existingFile = new FileInfo(newFilePath);
                         existingFile.IsReadOnly = false;
                         existingFile.Delete();
@@ -138,10 +165,14 @@ namespace Valve.VR {
                         RemoveAppKey(newFilePath);
 
                         Debug.Log("<b>[SteamVR]</b> Copied (overwrote) SteamVR Input file at path: " + newFilePath);
-                    } else {
+                    }
+                    else
+                    {
                         Debug.Log("<b>[SteamVR]</b> Skipped writing existing file at path: " + newFilePath);
                     }
-                } else {
+                }
+                else
+                {
                     File.Copy(file, newFilePath);
 
                     RemoveAppKey(newFilePath);
@@ -152,15 +183,13 @@ namespace Valve.VR {
             }
         }
 
-        public bool IsInStreamingAssets () {
-            return SteamVR_Input.actionsFilePath.Contains("StreamingAssets");
-        }
-
 
         private const string findString_appKeyStart = "\"app_key\"";
         private const string findString_appKeyEnd = "\",";
-        private static void RemoveAppKey (string newFilePath) {
-            if (File.Exists(newFilePath)) {
+        private static void RemoveAppKey(string newFilePath)
+        {
+            if (File.Exists(newFilePath))
+            {
                 string jsonText = System.IO.File.ReadAllText(newFilePath);
 
                 string findString = "\"app_key\"";
@@ -186,10 +215,28 @@ namespace Valve.VR {
                 File.WriteAllText(newFilePath, newJsonText);
             }
         }
+        public static SteamVR_Input_ActionFile Open(string path)
+        {
+            if (File.Exists(path))
+            {
+                string jsonText = File.ReadAllText(path);
 
-        public void Save (string path) {
+                SteamVR_Input_ActionFile actionFile = Valve.Newtonsoft.Json.JsonConvert.DeserializeObject<SteamVR_Input_ActionFile>(jsonText);
+                actionFile.filePath = path;
+                actionFile.InitializeHelperLists();
+
+                return actionFile;
+            }
+
+            return null;
+        }
+
+
+        public void Save(string path)
+        {
             FileInfo existingActionsFile = new FileInfo(path);
-            if (existingActionsFile.Exists) {
+            if (existingActionsFile.Exists)
+            {
                 existingActionsFile.IsReadOnly = false;
             }
 
@@ -200,23 +247,32 @@ namespace Valve.VR {
             File.WriteAllText(path, json);
         }
     }
-    public enum SteamVR_Input_ActionFile_DefaultBinding_ControllerTypes {
-        vive,
-        vive_pro,
+
+    public enum SteamVR_Input_ActionFile_DefaultBinding_ControllerTypes
+    {
+        vive, //hmd
+        vive_pro, //hmd
         vive_controller,
         generic,
         holographic_controller,
         oculus_touch,
         gamepad,
         knuckles,
+        index_hmd, //hmd
+        vive_cosmos_controller,
+        rift, //hmd
+        vive_tracker_camera,
+        vive_tracker,
     }
 
     [System.Serializable]
-    public class SteamVR_Input_ActionFile_DefaultBinding {
+    public class SteamVR_Input_ActionFile_DefaultBinding
+    {
         public string controller_type;
         public string binding_url;
 
-        public SteamVR_Input_ActionFile_DefaultBinding GetCopy () {
+        public SteamVR_Input_ActionFile_DefaultBinding GetCopy()
+        {
             SteamVR_Input_ActionFile_DefaultBinding newDefaultBinding = new SteamVR_Input_ActionFile_DefaultBinding();
             newDefaultBinding.controller_type = this.controller_type;
             newDefaultBinding.binding_url = this.binding_url;
@@ -225,7 +281,8 @@ namespace Valve.VR {
     }
 
     [System.Serializable]
-    public class SteamVR_Input_ActionFile_ActionSet {
+    public class SteamVR_Input_ActionFile_ActionSet
+    {
         [JsonIgnore]
         private const string actionSetInstancePrefix = "instance_";
 
@@ -233,15 +290,19 @@ namespace Valve.VR {
         public string usage;
 
         [JsonIgnore]
-        public string codeFriendlyName {
-            get {
+        public string codeFriendlyName
+        {
+            get
+            {
                 return SteamVR_Input_ActionFile.GetCodeFriendlyName(name);
             }
         }
 
         [JsonIgnore]
-        public string shortName {
-            get {
+        public string shortName
+        {
+            get
+            {
                 int lastIndex = name.LastIndexOf('/');
                 if (lastIndex == name.Length - 1)
                     return string.Empty;
@@ -250,33 +311,40 @@ namespace Valve.VR {
             }
         }
 
-        public void SetNewShortName (string newShortName) {
+        public void SetNewShortName(string newShortName)
+        {
             name = GetPathFromName(newShortName);
         }
 
-        public static string CreateNewName () {
+        public static string CreateNewName()
+        {
             return GetPathFromName("NewSet");
         }
 
         private const string nameTemplate = "/actions/{0}";
-        public static string GetPathFromName (string name) {
+        public static string GetPathFromName(string name)
+        {
             return string.Format(nameTemplate, name);
         }
 
-        public static SteamVR_Input_ActionFile_ActionSet CreateNew () {
+        public static SteamVR_Input_ActionFile_ActionSet CreateNew()
+        {
             return new SteamVR_Input_ActionFile_ActionSet() { name = CreateNewName() };
         }
 
-        public SteamVR_Input_ActionFile_ActionSet GetCopy () {
+        public SteamVR_Input_ActionFile_ActionSet GetCopy()
+        {
             SteamVR_Input_ActionFile_ActionSet newSet = new SteamVR_Input_ActionFile_ActionSet();
             newSet.name = this.name;
             newSet.usage = this.usage;
             return newSet;
         }
 
-        public override bool Equals (object obj) {
-            if (obj is SteamVR_Input_ActionFile_ActionSet) {
-                SteamVR_Input_ActionFile_ActionSet set = (SteamVR_Input_ActionFile_ActionSet) obj;
+        public override bool Equals(object obj)
+        {
+            if (obj is SteamVR_Input_ActionFile_ActionSet)
+            {
+                SteamVR_Input_ActionFile_ActionSet set = (SteamVR_Input_ActionFile_ActionSet)obj;
                 if (set == this)
                     return true;
 
@@ -289,7 +357,8 @@ namespace Valve.VR {
             return base.Equals(obj);
         }
 
-        public override int GetHashCode () {
+        public override int GetHashCode()
+        {
             return base.GetHashCode();
         }
 
@@ -303,19 +372,23 @@ namespace Valve.VR {
         public List<SteamVR_Input_ActionFile_Action> actionsList = new List<SteamVR_Input_ActionFile_Action>();
     }
 
-    public enum SteamVR_Input_ActionFile_Action_Requirements {
+    public enum SteamVR_Input_ActionFile_Action_Requirements
+    {
         optional,
         suggested,
         mandatory,
     }
 
     [System.Serializable]
-    public class SteamVR_Input_ActionFile_Action {
+    public class SteamVR_Input_ActionFile_Action
+    {
         [JsonIgnore]
         private static string[] _requirementValues;
         [JsonIgnore]
-        public static string[] requirementValues {
-            get {
+        public static string[] requirementValues
+        {
+            get
+            {
                 if (_requirementValues == null)
                     _requirementValues = System.Enum.GetNames(typeof(SteamVR_Input_ActionFile_Action_Requirements));
 
@@ -329,7 +402,8 @@ namespace Valve.VR {
         public string skeleton;
         public string requirement;
 
-        public SteamVR_Input_ActionFile_Action GetCopy () {
+        public SteamVR_Input_ActionFile_Action GetCopy()
+        {
             SteamVR_Input_ActionFile_Action newAction = new SteamVR_Input_ActionFile_Action();
             newAction.name = this.name;
             newAction.type = this.type;
@@ -340,40 +414,52 @@ namespace Valve.VR {
         }
 
         [JsonIgnore]
-        public SteamVR_Input_ActionFile_Action_Requirements requirementEnum {
-            get {
-                for (int index = 0; index < requirementValues.Length; index++) {
-                    if (string.Equals(requirementValues[index], requirement, System.StringComparison.CurrentCultureIgnoreCase)) {
-                        return (SteamVR_Input_ActionFile_Action_Requirements) index;
+        public SteamVR_Input_ActionFile_Action_Requirements requirementEnum
+        {
+            get
+            {
+                for (int index = 0; index < requirementValues.Length; index++)
+                {
+                    if (string.Equals(requirementValues[index], requirement, System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        return (SteamVR_Input_ActionFile_Action_Requirements)index;
                     }
                 }
 
                 return SteamVR_Input_ActionFile_Action_Requirements.suggested;
             }
-            set {
+            set
+            {
                 requirement = value.ToString();
             }
         }
 
         [JsonIgnore]
-        public string codeFriendlyName {
-            get {
+        public string codeFriendlyName
+        {
+            get
+            {
                 return SteamVR_Input_ActionFile.GetCodeFriendlyName(name);
             }
         }
 
         [JsonIgnore]
-        public string shortName {
-            get {
+        public string shortName
+        {
+            get
+            {
                 return SteamVR_Input_ActionFile.GetShortName(name);
             }
         }
 
         [JsonIgnore]
-        public string path {
-            get {
+        public string path
+        {
+            get
+            {
                 int lastIndex = name.LastIndexOf('/');
-                if (lastIndex != -1 && lastIndex + 1 < name.Length) {
+                if (lastIndex != -1 && lastIndex + 1 < name.Length)
+                {
                     return name.Substring(0, lastIndex + 1);
                 }
 
@@ -382,20 +468,25 @@ namespace Valve.VR {
         }
 
         private const string nameTemplate = "/actions/{0}/{1}/{2}";
-        public static string CreateNewName (string actionSet, string direction) {
+        public static string CreateNewName(string actionSet, string direction)
+        {
             return string.Format(nameTemplate, actionSet, direction, "NewAction");
         }
-        public static string CreateNewName (string actionSet, SteamVR_ActionDirections direction, string actionName) {
+        public static string CreateNewName(string actionSet, SteamVR_ActionDirections direction, string actionName)
+        {
             return string.Format(nameTemplate, actionSet, direction.ToString().ToLower(), actionName);
         }
 
-        public static SteamVR_Input_ActionFile_Action CreateNew (string actionSet, SteamVR_ActionDirections direction, string actionType) {
+        public static SteamVR_Input_ActionFile_Action CreateNew(string actionSet, SteamVR_ActionDirections direction, string actionType)
+        {
             return new SteamVR_Input_ActionFile_Action() { name = CreateNewName(actionSet, direction.ToString().ToLower()), type = actionType };
         }
 
         [JsonIgnore]
-        public SteamVR_ActionDirections direction {
-            get {
+        public SteamVR_ActionDirections direction
+        {
+            get
+            {
                 if (type.ToLower() == SteamVR_Input_ActionFile_ActionTypes.vibration)
                     return SteamVR_ActionDirections.Out;
 
@@ -406,8 +497,10 @@ namespace Valve.VR {
         protected const string prefix = "/actions/";
 
         [JsonIgnore]
-        public string actionSet {
-            get {
+        public string actionSet
+        {
+            get
+            {
                 int setEnd = name.IndexOf('/', prefix.Length);
                 if (setEnd == -1)
                     return string.Empty;
@@ -416,17 +509,21 @@ namespace Valve.VR {
             }
         }
 
-        public void SetNewActionSet (string newSetName) {
+        public void SetNewActionSet(string newSetName)
+        {
             name = string.Format(nameTemplate, newSetName, direction.ToString().ToLower(), shortName);
         }
 
-        public override string ToString () {
+        public override string ToString()
+        {
             return shortName;
         }
 
-        public override bool Equals (object obj) {
-            if (obj is SteamVR_Input_ActionFile_Action) {
-                SteamVR_Input_ActionFile_Action action = (SteamVR_Input_ActionFile_Action) obj;
+        public override bool Equals(object obj)
+        {
+            if (obj is SteamVR_Input_ActionFile_Action)
+            {
+                SteamVR_Input_ActionFile_Action action = (SteamVR_Input_ActionFile_Action)obj;
                 if (this == obj)
                     return true;
 
@@ -439,43 +536,50 @@ namespace Valve.VR {
             return base.Equals(obj);
         }
 
-        public override int GetHashCode () {
+        public override int GetHashCode()
+        {
             return base.GetHashCode();
         }
     }
 
-    public class SteamVR_Input_ActionFile_LocalizationItem {
+    public class SteamVR_Input_ActionFile_LocalizationItem
+    {
         public const string languageTagKeyName = "language_tag";
 
         public string language;
         public Dictionary<string, string> items = new Dictionary<string, string>();
 
-        public SteamVR_Input_ActionFile_LocalizationItem (string newLanguage) {
+        public SteamVR_Input_ActionFile_LocalizationItem(string newLanguage)
+        {
             language = newLanguage;
         }
 
-        public SteamVR_Input_ActionFile_LocalizationItem (Dictionary<string, string> dictionary) {
+        public SteamVR_Input_ActionFile_LocalizationItem(Dictionary<string, string> dictionary)
+        {
             if (dictionary == null)
                 return;
 
             if (dictionary.ContainsKey(languageTagKeyName))
-                language = (string) dictionary[languageTagKeyName];
+                language = (string)dictionary[languageTagKeyName];
             else
                 Debug.Log("<b>[SteamVR]</b> Input: Error in actions file, no language_tag in localization array item.");
 
-            foreach (KeyValuePair<string, string> item in dictionary) {
+            foreach (KeyValuePair<string, string> item in dictionary)
+            {
                 if (item.Key != languageTagKeyName)
-                    items.Add(item.Key, (string) item.Value);
+                    items.Add(item.Key, (string)item.Value);
             }
         }
     }
 
-    public class SteamVR_Input_ManifestFile {
+    public class SteamVR_Input_ManifestFile
+    {
         public string source;
         public List<SteamVR_Input_ManifestFile_Application> applications;
     }
 
-    public class SteamVR_Input_ManifestFile_Application {
+    public class SteamVR_Input_ManifestFile_Application
+    {
         public string app_key;
         public string launch_type;
         public string url;
@@ -488,7 +592,8 @@ namespace Valve.VR {
         public Dictionary<string, SteamVR_Input_ManifestFile_ApplicationString> strings = new Dictionary<string, SteamVR_Input_ManifestFile_ApplicationString>();
     }
 
-    public class SteamVR_Input_Unity_AssemblyFile_Definition {
+    public class SteamVR_Input_Unity_AssemblyFile_Definition
+    {
         public string name = "SteamVR_Actions";
         public string[] references = new string[] { "SteamVR" };
         public string[] optionalUnityReferences = new string[0];
@@ -501,16 +606,19 @@ namespace Valve.VR {
         public string[] defineConstraints = new string[0];
     }
 
-    public class SteamVR_Input_ManifestFile_ApplicationString {
+    public class SteamVR_Input_ManifestFile_ApplicationString
+    {
         public string name;
     }
 
-    public class SteamVR_Input_ManifestFile_Application_Binding {
+    public class SteamVR_Input_ManifestFile_Application_Binding
+    {
         public string controller_type;
         public string binding_url;
     }
 
-    public class SteamVR_Input_ManifestFile_Application_Binding_ControllerTypes {
+    public class SteamVR_Input_ManifestFile_Application_Binding_ControllerTypes
+    {
         public static string oculus_touch = "oculus_touch";
         public static string vive_controller = "vive_controller";
         public static string knuckles = "knuckles";
@@ -520,9 +628,13 @@ namespace Valve.VR {
         public static string holographic_hmd = "holographic_hmd";
         public static string rift = "rift";
         public static string vive_tracker_camera = "vive_tracker_camera";
+        public static string vive_cosmos = "vive_cosmos";
+        public static string vive_cosmos_controller = "vive_cosmos_controller";
+        public static string index_hmd = "index_hmd";
     }
 
-    static public class SteamVR_Input_ActionFile_ActionTypes {
+    static public class SteamVR_Input_ActionFile_ActionTypes
+    {
         public static string boolean = "boolean";
         public static string vector1 = "vector1";
         public static string vector2 = "vector2";
@@ -540,7 +652,8 @@ namespace Valve.VR {
         public static string[] listSkeletons = new string[] { skeletonLeftPath, skeletonRightPath };
     }
 
-    static public class SteamVR_Input_ActionFile_ActionSet_Usages {
+    static public class SteamVR_Input_ActionFile_ActionSet_Usages
+    {
         public static string leftright = "leftright";
         public static string single = "single";
         public static string hidden = "hidden";

@@ -7,6 +7,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Reflection;
+using Valve.VR;
 
 #if true
 using UnityEngine.XR;
@@ -42,8 +43,7 @@ namespace Valve.VR {
             set { XRSettings.eyeTextureResolutionScale = value; }
         }
 #else
-        static public float sceneResolutionScale
-        {
+        static public float sceneResolutionScale {
             get { return XRSettings.renderScale; }
             set { if (value == 0) return; XRSettings.renderScale = value; }
         }
@@ -152,7 +152,7 @@ namespace Valve.VR {
 
         #region Expand / Collapse object hierarchy
 
-#if false
+#if UNITY_EDITOR
         public bool isExpanded { get { return head != null && transform.parent == head; } }
 #endif
         const string eyeSuffix = " (eye)";
@@ -192,8 +192,7 @@ namespace Valve.VR {
                     transform.GetChild(0).parent = head;
 #if false
                 var guiLayer = GetComponent<GUILayer>();
-                if (guiLayer != null)
-                {
+                if (guiLayer != null) {
                     DestroyImmediate(guiLayer);
                     head.gameObject.AddComponent<GUILayer>();
                 }
@@ -221,8 +220,7 @@ namespace Valve.VR {
                 head.GetChild(0).parent = transform;
 #if false
             var guiLayer = head.GetComponent<GUILayer>();
-            if (guiLayer != null)
-            {
+            if (guiLayer != null) {
                 DestroyImmediate(guiLayer);
                 gameObject.AddComponent<GUILayer>();
             }

@@ -4,8 +4,9 @@
 //
 //=============================================================================
 
-using System.Collections;
 using UnityEngine;
+using System.Collections;
+using Valve.VR;
 
 
 namespace Valve.VR {
@@ -325,8 +326,7 @@ namespace Valve.VR {
             }
         }
 #else
-        void OnCameraPreCull(Camera cam)
-        {
+        void OnCameraPreCull (Camera cam) {
             if (SteamVR.active == false)
                 return;
 
@@ -341,12 +341,10 @@ namespace Valve.VR {
             }
 #endif
             // Only update poses on the first camera per frame.
-            if (Time.frameCount != lastFrameCount)
-            {
+            if (Time.frameCount != lastFrameCount) {
                 lastFrameCount = Time.frameCount;
 
-                if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
-                {
+                if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull)) {
                     UpdatePoses();
                 }
             }

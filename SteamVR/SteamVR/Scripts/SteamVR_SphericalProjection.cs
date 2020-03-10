@@ -6,15 +6,18 @@
 
 using UnityEngine;
 
-namespace Valve.VR {
+namespace Valve.VR
+{
     [ExecuteInEditMode]
-    public class SteamVR_SphericalProjection: MonoBehaviour {
+    public class SteamVR_SphericalProjection : MonoBehaviour
+    {
         static Material material;
 
-        public void Set (Vector3 N,
+        public void Set(Vector3 N,
             float phi0, float phi1, float theta0, float theta1, // in degrees
             Vector3 uAxis, Vector3 uOrigin, float uScale,
-            Vector3 vAxis, Vector3 vOrigin, float vScale) {
+            Vector3 vAxis, Vector3 vOrigin, float vScale)
+        {
             if (material == null)
                 material = new Material(Shader.Find("Custom/SteamVR_SphericalProjection"));
 
@@ -31,7 +34,8 @@ namespace Valve.VR {
             material.SetFloat("_VScale", vScale);
         }
 
-        void OnRenderImage (RenderTexture src, RenderTexture dest) {
+        void OnRenderImage(RenderTexture src, RenderTexture dest)
+        {
             Graphics.Blit(src, dest, material);
         }
     }
