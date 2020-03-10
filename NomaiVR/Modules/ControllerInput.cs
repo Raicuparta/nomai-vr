@@ -16,7 +16,6 @@ namespace NomaiVR {
         const float holdDuration = 0.3f;
         bool _justHeld;
         ScreenPrompt _repairPrompt;
-        Dictionary<ISteamVR_Action_In, string> _inputNames;
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
