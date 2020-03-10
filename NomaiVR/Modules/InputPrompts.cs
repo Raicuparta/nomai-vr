@@ -7,15 +7,16 @@ using Valve.VR;
 
 namespace NomaiVR {
     class InputPrompts: MonoBehaviour {
+        static PromptManager _manager;
         static TutorialState _tutorialState;
 
         void Start () {
             SetTutorialState(TutorialState.LOOK);
 
-
             SteamVR_Actions.default_Look.onChange += OnLookChange;
             SteamVR_Actions.default_Move.onChange += OnMoveChange;
             SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryChange;
+            _manager = Locator.GetPromptManager();
         }
 
         void SetTutorialState (TutorialState state) {
@@ -71,6 +72,7 @@ namespace NomaiVR {
                 NomaiVR.Pre<JumpPromptTrigger>("OnTriggerExit", typeof(Patches), nameof(HideJumpPrompt));
                 NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
                 NomaiVR.Post<ProbePromptController>("Awake", typeof(Patches), nameof(ChangeProbePrompts));
+                NomaiVR.Post<ShipPromptController>("Awake", typeof(Patches), nameof(ChangeShipPrompts));
                 NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
                 NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patches), nameof(RemoveShipPrompts));
                 NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patches), nameof(RemoveTranslatorPrompts));
@@ -102,16 +104,15 @@ namespace NomaiVR {
                 ScreenPrompt ____centerProbePrompt,
                 ScreenPrompt ____centerSignalscopePrompt
             ) {
-                var manager = Locator.GetPromptManager();
-                manager.RemoveScreenPrompt(____freeLookPrompt);
-                manager.RemoveScreenPrompt(____probePrompt);
-                manager.RemoveScreenPrompt(____signalscopePrompt);
-                manager.RemoveScreenPrompt(____flashlightPrompt);
-                manager.RemoveScreenPrompt(____flashlightPrompt);
-                manager.RemoveScreenPrompt(____centerFlashlightPrompt);
-                manager.RemoveScreenPrompt(____centerTranslatePrompt);
-                manager.RemoveScreenPrompt(____centerProbePrompt);
-                manager.RemoveScreenPrompt(____centerSignalscopePrompt);
+                _manager.RemoveScreenPrompt(____freeLookPrompt);
+                _manager.RemoveScreenPrompt(____probePrompt);
+                _manager.RemoveScreenPrompt(____signalscopePrompt);
+                _manager.RemoveScreenPrompt(____flashlightPrompt);
+                _manager.RemoveScreenPrompt(____flashlightPrompt);
+                _manager.RemoveScreenPrompt(____centerFlashlightPrompt);
+                _manager.RemoveScreenPrompt(____centerTranslatePrompt);
+                _manager.RemoveScreenPrompt(____centerProbePrompt);
+                _manager.RemoveScreenPrompt(____centerSignalscopePrompt);
             }
 
             static void ChangeProbePrompts (
@@ -126,6 +127,16 @@ namespace NomaiVR {
                 ____takeSnapshotPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
             }
 
+            static void ChangeShipPrompts (
+                ref ScreenPrompt ____exitLandingCamPrompt,
+                ref ScreenPrompt ____autopilotPrompt,
+                ref ScreenPrompt ____abortAutopilotPrompt
+            ) {
+                ____exitLandingCamPrompt = new ScreenPrompt(InputLibrary.cancel, ____exitLandingCamPrompt.GetText());
+                ____autopilotPrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, ____autopilotPrompt.GetText());
+                ____abortAutopilotPrompt = new ScreenPrompt(InputLibrary.interact, ____abortAutopilotPrompt.GetText());
+            }
+
             static void RemoveProbePrompts (
                 ScreenPrompt ____unequipPrompt,
                 ScreenPrompt ____aimPrompt,
@@ -135,14 +146,13 @@ namespace NomaiVR {
                 ScreenPrompt ____rotateCenterPrompt,
                 ScreenPrompt ____launchModePrompt
             ) {
-                var manager = Locator.GetPromptManager();
                 //manager.RemoveScreenPrompt(____unequipPrompt);
-                manager.RemoveScreenPrompt(____aimPrompt);
-                manager.RemoveScreenPrompt(____photoModePrompt);
-                manager.RemoveScreenPrompt(____reverseCamPrompt);
-                manager.RemoveScreenPrompt(____rotatePrompt);
-                manager.RemoveScreenPrompt(____rotateCenterPrompt);
-                manager.RemoveScreenPrompt(____launchModePrompt);
+                _manager.RemoveScreenPrompt(____aimPrompt);
+                _manager.RemoveScreenPrompt(____photoModePrompt);
+                _manager.RemoveScreenPrompt(____reverseCamPrompt);
+                _manager.RemoveScreenPrompt(____rotatePrompt);
+                _manager.RemoveScreenPrompt(____rotateCenterPrompt);
+                _manager.RemoveScreenPrompt(____launchModePrompt);
             }
 
             static void RemoveSignalscopePrompts (
@@ -150,10 +160,9 @@ namespace NomaiVR {
                 ScreenPrompt ____changeFrequencyPrompt,
                 ScreenPrompt ____zoomLevelPrompt
             ) {
-                var manager = Locator.GetPromptManager();
                 //manager.RemoveScreenPrompt(____unequipPrompt);
-                manager.RemoveScreenPrompt(____changeFrequencyPrompt);
-                manager.RemoveScreenPrompt(____zoomLevelPrompt);
+                _manager.RemoveScreenPrompt(____changeFrequencyPrompt);
+                _manager.RemoveScreenPrompt(____zoomLevelPrompt);
             }
 
             static void RemoveShipPrompts (
@@ -161,18 +170,16 @@ namespace NomaiVR {
                 ScreenPrompt ____landingModePrompt,
                 ScreenPrompt ____liftoffCamera
             ) {
-                var manager = Locator.GetPromptManager();
-                manager.RemoveScreenPrompt(____freeLookPrompt);
-                manager.RemoveScreenPrompt(____landingModePrompt);
-                manager.RemoveScreenPrompt(____liftoffCamera);
+                _manager.RemoveScreenPrompt(____freeLookPrompt);
+                _manager.RemoveScreenPrompt(____landingModePrompt);
+                _manager.RemoveScreenPrompt(____liftoffCamera);
             }
             static void RemoveTranslatorPrompts (
                 ScreenPrompt ____scrollPrompt,
                 ScreenPrompt ____pagePrompt
             ) {
-                var manager = Locator.GetPromptManager();
-                manager.RemoveScreenPrompt(____scrollPrompt);
-                manager.RemoveScreenPrompt(____pagePrompt);
+                _manager.RemoveScreenPrompt(____scrollPrompt);
+                _manager.RemoveScreenPrompt(____pagePrompt);
             }
         }
 
