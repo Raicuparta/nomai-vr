@@ -94,6 +94,7 @@
     <Compile Include="Modules\FeetMarker.cs" />
     <Compile Include="Modules\FollowTarget.cs" />
     <Compile Include="Modules\ForceSettings.cs" />
+    <Compile Include="Modules\InputPrompts.cs" />
     <Compile Include="Modules\MotionControls\ButtonInteraction.cs" />
     <Compile Include="Modules\MotionControls\Grabbable.cs" />
     <Compile Include="Modules\MotionControls\FlashlightGesture.cs" />
