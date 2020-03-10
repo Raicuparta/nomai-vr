@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
+using System.Linq;
 
 namespace NomaiVR {
     class ControllerInput: MonoBehaviour {
@@ -15,6 +16,7 @@ namespace NomaiVR {
         const float holdDuration = 0.3f;
         bool _justHeld;
         ScreenPrompt _repairPrompt;
+        Dictionary<ISteamVR_Action_In, string> _inputNames;
 
         void Awake () {
             OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
@@ -49,6 +51,36 @@ namespace NomaiVR {
 
         void OnWakeUp () {
             _repairPrompt = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt");
+
+            SetupInputNames();
+            foreach (var action in SteamVR_Input.actionsIn) {
+                NomaiVR.Log("input", _inputNames[action]);
+            }
+        }
+
+        void SetupInputNames () {
+            _inputNames = new Dictionary<ISteamVR_Action_In, string>();
+
+            foreach (var action in SteamVR_Input.actionsIn) {
+                _inputNames.Add(action, GetInputName(action));
+            }
+
+            foreach (var actionA in SteamVR_Input.actionsIn) {
+                var allButA = SteamVR_Input.actionsIn.Except(new[] { actionA });
+                foreach (var actionB in allButA) {
+                    if (_inputNames[actionA] == _inputNames[actionB]) {
+                        _inputNames[actionA] = GetInputName(actionA, true);
+                        _inputNames[actionB] = GetInputName(actionB, true);
+                    }
+                }
+            }
+        }
+
+        string GetInputName (ISteamVR_Action_In action, bool includeHandName = false) {
+            if (includeHandName) {
+                return action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource, EVRInputStringBits.VRInputString_Hand);
+            }
+            return action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource);
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
