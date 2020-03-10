@@ -71,6 +71,7 @@ namespace NomaiVR {
                 NomaiVR.Pre<JumpPromptTrigger>("OnTriggerExit", typeof(Patches), nameof(HideJumpPrompt));
                 NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
                 NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
+                NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patches), nameof(RemoveShipPrompts));
             }
 
             static void ShowJumpPrompt () {
@@ -93,7 +94,7 @@ namespace NomaiVR {
                 ScreenPrompt ____rotateCenterPrompt
             ) {
                 var manager = Locator.GetPromptManager();
-                manager.RemoveScreenPrompt(____unequipPrompt);
+                //manager.RemoveScreenPrompt(____unequipPrompt);
                 manager.RemoveScreenPrompt(____aimPrompt);
                 manager.RemoveScreenPrompt(____photoModePrompt);
                 manager.RemoveScreenPrompt(____forwardCamPrompt);
@@ -108,9 +109,20 @@ namespace NomaiVR {
                 ScreenPrompt ____zoomLevelPrompt
             ) {
                 var manager = Locator.GetPromptManager();
-                manager.RemoveScreenPrompt(____unequipPrompt);
+                //manager.RemoveScreenPrompt(____unequipPrompt);
                 manager.RemoveScreenPrompt(____changeFrequencyPrompt);
                 manager.RemoveScreenPrompt(____zoomLevelPrompt);
+            }
+
+            static void RemoveShipPrompts (
+                ScreenPrompt ____freeLookPrompt,
+                ScreenPrompt ____landingModePrompt,
+                ScreenPrompt ____liftoffCamera
+            ) {
+                var manager = Locator.GetPromptManager();
+                manager.RemoveScreenPrompt(____freeLookPrompt);
+                manager.RemoveScreenPrompt(____landingModePrompt);
+                manager.RemoveScreenPrompt(____liftoffCamera);
             }
         }
 
