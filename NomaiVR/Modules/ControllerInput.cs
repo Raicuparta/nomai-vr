@@ -54,7 +54,7 @@ namespace NomaiVR {
 
             SetupInputNames();
             foreach (var action in SteamVR_Input.actionsIn) {
-                NomaiVR.Log("input", _inputNames[action]);
+                NomaiVR.Log(action.GetShortName(), " :: ", _inputNames[action]);
             }
         }
 
@@ -77,10 +77,18 @@ namespace NomaiVR {
         }
 
         string GetInputName (ISteamVR_Action_In action, bool includeHandName = false) {
+            string name;
             if (includeHandName) {
-                return action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource, EVRInputStringBits.VRInputString_Hand);
+                name = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource, EVRInputStringBits.VRInputString_Hand);
+            } else {
+                name = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource);
             }
-            return action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, EVRInputStringBits.VRInputString_InputSource);
+
+            return name
+                .Replace(" Button", "")
+                .Replace(" Hand", "")
+                .Replace("Left", "L")
+                .Replace("Right", "R");
         }
 
         private void OnBackChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
