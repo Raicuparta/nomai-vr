@@ -70,6 +70,7 @@ namespace NomaiVR {
                 NomaiVR.Pre<JumpPromptTrigger>("OnTriggerEnter", typeof(Patches), nameof(ShowJumpPrompt));
                 NomaiVR.Pre<JumpPromptTrigger>("OnTriggerExit", typeof(Patches), nameof(HideJumpPrompt));
                 NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
+                NomaiVR.Post<ProbePromptController>("Awake", typeof(Patches), nameof(ChangeProbePrompts));
                 NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
                 NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patches), nameof(RemoveShipPrompts));
                 NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patches), nameof(RemoveTranslatorPrompts));
@@ -90,23 +91,35 @@ namespace NomaiVR {
                 ____lookPromptAdded = true;
             }
 
+            static void ChangeProbePrompts (
+                ref ScreenPrompt ____launchPrompt,
+                ref ScreenPrompt ____retrievePrompt,
+                ref ScreenPrompt ____takeSnapshotPrompt,
+                ref ScreenPrompt ____forwardCamPrompt
+            ) {
+                ____launchPrompt = new ScreenPrompt(InputLibrary.interact, ____launchPrompt.GetText());
+                ____forwardCamPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
+                ____retrievePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
+                ____takeSnapshotPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
+            }
+
             static void RemoveProbePrompts (
                 ScreenPrompt ____unequipPrompt,
                 ScreenPrompt ____aimPrompt,
                 ScreenPrompt ____photoModePrompt,
-                ScreenPrompt ____forwardCamPrompt,
                 ScreenPrompt ____reverseCamPrompt,
                 ScreenPrompt ____rotatePrompt,
-                ScreenPrompt ____rotateCenterPrompt
+                ScreenPrompt ____rotateCenterPrompt,
+                ScreenPrompt ____launchModePrompt
             ) {
                 var manager = Locator.GetPromptManager();
                 //manager.RemoveScreenPrompt(____unequipPrompt);
                 manager.RemoveScreenPrompt(____aimPrompt);
                 manager.RemoveScreenPrompt(____photoModePrompt);
-                manager.RemoveScreenPrompt(____forwardCamPrompt);
                 manager.RemoveScreenPrompt(____reverseCamPrompt);
                 manager.RemoveScreenPrompt(____rotatePrompt);
                 manager.RemoveScreenPrompt(____rotateCenterPrompt);
+                manager.RemoveScreenPrompt(____launchModePrompt);
             }
 
             static void RemoveSignalscopePrompts (
