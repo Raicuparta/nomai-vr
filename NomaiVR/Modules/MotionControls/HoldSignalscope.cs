@@ -139,7 +139,7 @@ namespace NomaiVR {
             }
 
             static void ChangeInputMode (InputMode mode) {
-                if (!_reticule || !_shipeWindshield || mode == InputMode.Menu) {
+                if (!_reticule || !_shipeWindshield || mode == InputMode.Menu || mode == InputMode.Map) {
                     return;
                 }
                 if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
