@@ -73,6 +73,7 @@ namespace NomaiVR {
                 NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
                 NomaiVR.Post<ProbePromptController>("Awake", typeof(Patches), nameof(ChangeProbePrompts));
                 NomaiVR.Post<ShipPromptController>("Awake", typeof(Patches), nameof(ChangeShipPrompts));
+                NomaiVR.Post<SignalscopePromptController>("Awake", typeof(Patches), nameof(ChangeSignalscopePrompts));
                 NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
                 NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patches), nameof(RemoveShipPrompts));
                 NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patches), nameof(RemoveTranslatorPrompts));
@@ -153,6 +154,10 @@ namespace NomaiVR {
                 _manager.RemoveScreenPrompt(____rotatePrompt);
                 _manager.RemoveScreenPrompt(____rotateCenterPrompt);
                 _manager.RemoveScreenPrompt(____launchModePrompt);
+            }
+
+            static void ChangeSignalscopePrompts (ref ScreenPrompt ____zoomModePrompt) {
+                ____zoomModePrompt = new ScreenPrompt(InputLibrary.interact, UITextLibrary.GetString(UITextType.SignalscopeZoomInPrompt) + "   <CMD>");
             }
 
             static void RemoveSignalscopePrompts (
