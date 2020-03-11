@@ -16,7 +16,7 @@ namespace NomaiVR {
             var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, LayerMask.NameToLayer("HeadsUpDisplay"));
 
             foreach (var hudElement in hudElements) {
-                hudElement.layer = 0;
+                hudElement.layer = LayerMask.NameToLayer("VisibleToPlayer");
             }
 
             var uiCanvas = playerHUD.transform.Find("HelmetOnUI/UICanvas").GetComponent<Canvas>();

@@ -6,6 +6,7 @@ namespace NomaiVR {
 
         void Awake () {
             var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
+            canvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
             canvas.transform.localScale = Vector3.one * 0.0015f;
             canvas.transform.localPosition = Vector3.zero;
             canvas.transform.localRotation = Quaternion.identity;
