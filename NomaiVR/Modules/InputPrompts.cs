@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NomaiVR {
     class InputPrompts: MonoBehaviour {
@@ -29,11 +30,45 @@ namespace NomaiVR {
                 NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patches), nameof(RemoveJoystickPrompts));
                 NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patches), nameof(RemoveToolModePrompts));
 
+                NomaiVR.Pre<LockOnReticule>("Init", typeof(Patches), nameof(InitLockOnReticule));
+
                 // Prevent probe launcher from moving the prompts around.
                 NomaiVR.Empty<PromptManager>("OnProbeSnapshot");
                 NomaiVR.Empty<PromptManager>("OnProbeSnapshotRemoved");
                 NomaiVR.Empty<PromptManager>("OnProbeLauncherEquipped");
                 NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
+            }
+
+            static bool InitLockOnReticule (
+                ref ScreenPrompt ____lockOnPrompt,
+                ref bool ____initialized,
+                bool ____showFullLockOnPrompt,
+                ref string ____lockOnPromptText,
+                ref string ____lockOnPromptTextShortened,
+                ScreenPromptList ____promptListBlock,
+                ref JetpackPromptController ____jetpackPromptController,
+                ref ScreenPrompt ____matchVelocityPrompt,
+                Text ____readout
+            ) {
+                if (!____initialized) {
+                    ____jetpackPromptController = Locator.GetPlayerTransform().GetComponent<JetpackPromptController>();
+                    ____lockOnPromptText = "<CMD>" + UITextLibrary.GetString(UITextType.PressPrompt) + "   " + UITextLibrary.GetString(UITextType.LockOnPrompt);
+                    ____lockOnPromptTextShortened = "<CMD>";
+                    ____showFullLockOnPrompt = !PlayerData.GetPersistentCondition("HAS_PLAYER_LOCKED_ON");
+                    if (____showFullLockOnPrompt) {
+                        ____lockOnPrompt = new ScreenPrompt(InputLibrary.interact, ____lockOnPromptText, 0, false, false);
+                    } else {
+                        ____lockOnPrompt = new ScreenPrompt(InputLibrary.interact, ____lockOnPromptTextShortened, 0, false, false);
+                    }
+                    ____matchVelocityPrompt = new ScreenPrompt(InputLibrary.matchVelocity, "<CMD>" + UITextLibrary.GetString(UITextType.HoldPrompt) + "   " + UITextLibrary.GetString(UITextType.MatchVelocityPrompt), 0, false, false);
+                    ____readout.gameObject.SetActive(false);
+                    ____promptListBlock.Init();
+                    Locator.GetPromptManager().AddScreenPrompt(____lockOnPrompt, ____promptListBlock, TextAnchor.MiddleLeft, 20, false);
+                    Locator.GetPromptManager().AddScreenPrompt(____matchVelocityPrompt, ____promptListBlock, TextAnchor.MiddleLeft, 20, false);
+                    ____initialized = true;
+                }
+
+                return false;
             }
 
             static void RemoveJoystickPrompts (ref bool ____lookPromptAdded) {
