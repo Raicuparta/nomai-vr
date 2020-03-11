@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OWML\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>

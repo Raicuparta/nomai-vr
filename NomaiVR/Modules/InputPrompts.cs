@@ -1,9 +1,11 @@
-﻿using System;
+﻿using OWML.ModHelper.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using Harmony;
 
 namespace NomaiVR {
     class InputPrompts: MonoBehaviour {
@@ -14,6 +16,8 @@ namespace NomaiVR {
         }
 
         internal static class Patches {
+            static Texture2D textureX;
+
             public static void Patch () {
                 NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
                 NomaiVR.Post<ProbePromptController>("Awake", typeof(Patches), nameof(ChangeProbePrompts));
@@ -37,6 +41,22 @@ namespace NomaiVR {
                 NomaiVR.Empty<PromptManager>("OnProbeSnapshotRemoved");
                 NomaiVR.Empty<PromptManager>("OnProbeLauncherEquipped");
                 NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
+
+                // Load new icons.
+                var harmony = HarmonyInstance.Create("nomaivr");
+                var initMethod = typeof(InputTranslator).GetMethod("GetButtonTexture", new[] { typeof(XboxButton) });
+                var harmonyMethod = new HarmonyMethod(typeof(Patches), nameof(PostInitTranslator));
+                harmony.Patch(initMethod, null, harmonyMethod);
+
+                var str = "ButtonPrompts/Xbox 360/";
+                textureX = (Texture2D) Resources.Load(str + "360_X");
+            }
+
+            static Texture2D PostInitTranslator (Texture2D __result, XboxButton button) {
+                if (button == XboxButton.Y) {
+                    return textureX;
+                }
+                return __result;
             }
 
             static bool InitLockOnReticule (
