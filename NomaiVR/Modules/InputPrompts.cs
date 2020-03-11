@@ -15,9 +15,18 @@ namespace NomaiVR {
         static Texture2D _interactTexture;
         static Texture2D _jumpTexture;
         static Texture2D _backTexture;
+        static List<ScreenPrompt> _toolUnequipPrompts;
 
         void Start () {
             _manager = Locator.GetPromptManager();
+        }
+
+        void LateUpdate () {
+            if (Locator.GetToolModeSwapper().GetToolGroup() != ToolGroup.Ship) {
+                foreach (var prompt in _toolUnequipPrompts) {
+                    prompt.SetVisibility(false);
+                }
+            }
         }
 
         internal static class Patches {
@@ -57,6 +66,8 @@ namespace NomaiVR {
                 _interactTexture = assetBundle.LoadAsset<Texture2D>("assets/interact.png");
                 _jumpTexture = assetBundle.LoadAsset<Texture2D>("assets/jump.png");
                 _backTexture = assetBundle.LoadAsset<Texture2D>("assets/back.png");
+
+                _toolUnequipPrompts = new List<ScreenPrompt>(2);
             }
 
             static Texture2D PostInitTranslator (Texture2D __result, XboxButton button) {
@@ -78,7 +89,7 @@ namespace NomaiVR {
             static bool InitLockOnReticule (
                 ref ScreenPrompt ____lockOnPrompt,
                 ref bool ____initialized,
-                bool ____showFullLockOnPrompt,
+                ref bool ____showFullLockOnPrompt,
                 ref string ____lockOnPromptText,
                 ref string ____lockOnPromptTextShortened,
                 ScreenPromptList ____promptListBlock,
@@ -163,7 +174,8 @@ namespace NomaiVR {
                 ScreenPrompt ____rotateCenterPrompt,
                 ScreenPrompt ____launchModePrompt
             ) {
-                //manager.RemoveScreenPrompt(____unequipPrompt);
+                _toolUnequipPrompts.Add(____unequipPrompt);
+                NomaiVR.Log("adding", _toolUnequipPrompts.Count.ToString());
                 _manager.RemoveScreenPrompt(____aimPrompt);
                 _manager.RemoveScreenPrompt(____photoModePrompt);
                 _manager.RemoveScreenPrompt(____reverseCamPrompt);
@@ -181,7 +193,7 @@ namespace NomaiVR {
                 ScreenPrompt ____changeFrequencyPrompt,
                 ScreenPrompt ____zoomLevelPrompt
             ) {
-                //manager.RemoveScreenPrompt(____unequipPrompt);
+                _toolUnequipPrompts.Add(____unequipPrompt);
                 _manager.RemoveScreenPrompt(____changeFrequencyPrompt);
                 _manager.RemoveScreenPrompt(____zoomLevelPrompt);
             }
@@ -196,9 +208,11 @@ namespace NomaiVR {
                 _manager.RemoveScreenPrompt(____liftoffCamera);
             }
             static void RemoveTranslatorPrompts (
+                ScreenPrompt ____unequipPrompt,
                 ScreenPrompt ____scrollPrompt,
                 ScreenPrompt ____pagePrompt
             ) {
+                _manager.RemoveScreenPrompt(____unequipPrompt);
                 _manager.RemoveScreenPrompt(____scrollPrompt);
                 _manager.RemoveScreenPrompt(____pagePrompt);
             }
