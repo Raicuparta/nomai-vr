@@ -69,6 +69,7 @@ namespace NomaiVR {
 
             var bracketImage = uiCanvas.Find("BracketImage");
             bracketImage.gameObject.AddComponent<FollowTarget>().target = display;
+            bracketImage.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe, ToolGroup.Suit);
 
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
