@@ -11,13 +11,16 @@ using System.IO;
 namespace NomaiVR {
     class InputPrompts: MonoBehaviour {
         static PromptManager _manager;
+        static Texture2D _holdTexture;
+        static Texture2D _interactTexture;
+        static Texture2D _jumpTexture;
+        static Texture2D _backTexture;
 
         void Start () {
             _manager = Locator.GetPromptManager();
         }
 
         internal static class Patches {
-            static Texture2D textureX;
 
             public static void Patch () {
                 NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
@@ -50,13 +53,24 @@ namespace NomaiVR {
                 harmony.Patch(initMethod, null, harmonyMethod);
 
                 var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/input-icons");
-                textureX = assetBundle.LoadAsset<Texture2D>("assets/hold.png");
-                NomaiVR.Log("textureX", textureX.name);
+                _holdTexture = assetBundle.LoadAsset<Texture2D>("assets/hold.png");
+                _interactTexture = assetBundle.LoadAsset<Texture2D>("assets/interact.png");
+                _jumpTexture = assetBundle.LoadAsset<Texture2D>("assets/jump.png");
+                _backTexture = assetBundle.LoadAsset<Texture2D>("assets/back.png");
             }
 
             static Texture2D PostInitTranslator (Texture2D __result, XboxButton button) {
-                if (button == XboxButton.Y && textureX) {
-                    return textureX;
+                if (button == XboxButton.X && _interactTexture) {
+                    return _interactTexture;
+                }
+                if (button == XboxButton.Y && _holdTexture) {
+                    return _holdTexture;
+                }
+                if (button == XboxButton.B && _backTexture) {
+                    return _backTexture;
+                }
+                if (button == XboxButton.A && _jumpTexture) {
+                    return _jumpTexture;
                 }
                 return __result;
             }
