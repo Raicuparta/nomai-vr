@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using Harmony;
+using System.IO;
 
 namespace NomaiVR {
     class InputPrompts: MonoBehaviour {
@@ -48,12 +49,13 @@ namespace NomaiVR {
                 var harmonyMethod = new HarmonyMethod(typeof(Patches), nameof(PostInitTranslator));
                 harmony.Patch(initMethod, null, harmonyMethod);
 
-                var str = "ButtonPrompts/Xbox 360/";
-                textureX = (Texture2D) Resources.Load(str + "360_X");
+                var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/input-icons");
+                textureX = assetBundle.LoadAsset<Texture2D>("assets/hold.png");
+                NomaiVR.Log("textureX", textureX.name);
             }
 
             static Texture2D PostInitTranslator (Texture2D __result, XboxButton button) {
-                if (button == XboxButton.Y) {
+                if (button == XboxButton.Y && textureX) {
                     return textureX;
                 }
                 return __result;
