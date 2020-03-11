@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 namespace NomaiVR {
     public class HoldSignalscope: MonoBehaviour {
         protected static Transform _reticule;
-        protected static Transform _shipeWindshield;
+        protected static Transform _shipWindshield;
         protected static Signalscope _signalscope;
         static AssetBundle _assetBundle;
         static Camera _lensCamera;
@@ -14,7 +14,7 @@ namespace NomaiVR {
 
         void Awake () {
             if (SceneManager.GetActiveScene().name == "SolarSystem") {
-                _shipeWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
+                _shipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
             }
 
             _signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
@@ -139,11 +139,11 @@ namespace NomaiVR {
             }
 
             static void ChangeInputMode (InputMode mode) {
-                if (!_reticule || !_shipeWindshield || mode == InputMode.Menu || mode == InputMode.Map) {
+                if (!_reticule || !_shipWindshield || mode == InputMode.Menu || mode == InputMode.Map) {
                     return;
                 }
                 if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
-                    _reticule.parent = _shipeWindshield;
+                    _reticule.parent = _shipWindshield;
                     _reticule.localScale = Vector3.one * 0.004f;
                     _reticule.localPosition = Vector3.forward * 3f;
                     _reticule.localRotation = Quaternion.identity;
