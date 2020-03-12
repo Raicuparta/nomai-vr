@@ -20,16 +20,20 @@ namespace NomaiVR {
             lineRenderer.startWidth = 0.02f;
             lineRenderer.endWidth = 0.01f;
 
-            Laser.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRender;
-
-            GameObject.FindObjectOfType<FirstPersonManipulator>().enabled = false;
+            FindObjectOfType<FirstPersonManipulator>().enabled = false;
             _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
 
             DisableReticule();
         }
 
-        bool ShouldRender () {
-            return Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item);
+        void Update () {
+            var allowInteraction = Common.ToolSwapper.IsInToolMode(ToolMode.None) && !Common.ToolSwapper.IsInToolMode(ToolMode.Item);
+
+            if (Laser.gameObject.activeSelf && !allowInteraction) {
+                Laser.gameObject.SetActive(false);
+            } else if (!Laser.gameObject.activeSelf && allowInteraction) {
+                Laser.gameObject.SetActive(true);
+            }
         }
 
         void DisableReticule () {
@@ -54,12 +58,13 @@ namespace NomaiVR {
 
             static bool PatchUpdateInteractVolume (
                 InteractZone __instance,
-                OWCamera ____playerCam,
                 float ____viewingWindow,
                 ref bool ____focused
             ) {
                 float num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
-                ____focused = (num <= ____viewingWindow);
+                var swapper = Locator.GetToolModeSwapper();
+                var allowInteraction = swapper.IsInToolMode(ToolMode.None) || swapper.IsInToolMode(ToolMode.Item);
+                ____focused = allowInteraction && num <= ____viewingWindow;
                 var Base = __instance as SingleInteractionVolume;
 
                 var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");

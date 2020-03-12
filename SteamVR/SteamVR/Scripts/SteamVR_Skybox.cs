@@ -5,21 +5,27 @@
 //=============================================================================
 
 using UnityEngine;
+using Valve.VR;
 
-namespace Valve.VR {
-    public class SteamVR_Skybox: MonoBehaviour {
+namespace Valve.VR
+{
+    public class SteamVR_Skybox : MonoBehaviour
+    {
         // Note: Unity's Left and Right Skybox shader variables are switched.
         public Texture front, back, left, right, top, bottom;
 
-        public enum CellSize {
+        public enum CellSize
+        {
             x1024, x64, x32, x16, x8
         }
         public CellSize StereoCellSize = CellSize.x32;
 
         public float StereoIpdMm = 64.0f;
 
-        public void SetTextureByIndex (int i, Texture t) {
-            switch (i) {
+        public void SetTextureByIndex(int i, Texture t)
+        {
+            switch (i)
+            {
                 case 0:
                     front = t;
                     break;
@@ -41,8 +47,10 @@ namespace Valve.VR {
             }
         }
 
-        public Texture GetTextureByIndex (int i) {
-            switch (i) {
+        public Texture GetTextureByIndex(int i)
+        {
+            switch (i)
+            {
                 case 0:
                     return front;
                 case 1:
@@ -59,24 +67,28 @@ namespace Valve.VR {
             return null;
         }
 
-        static public void SetOverride (
+        static public void SetOverride(
             Texture front = null,
             Texture back = null,
             Texture left = null,
             Texture right = null,
             Texture top = null,
-            Texture bottom = null) {
+            Texture bottom = null)
+        {
             var compositor = OpenVR.Compositor;
-            if (compositor != null) {
+            if (compositor != null)
+            {
                 var handles = new Texture[] { front, back, left, right, top, bottom };
                 var textures = new Texture_t[6];
-                for (int i = 0; i < 6; i++) {
+                for (int i = 0; i < 6; i++)
+                {
                     textures[i].handle = (handles[i] != null) ? handles[i].GetNativeTexturePtr() : System.IntPtr.Zero;
                     textures[i].eType = SteamVR.instance.textureType;
                     textures[i].eColorSpace = EColorSpace.Auto;
                 }
                 var error = compositor.SetSkyboxOverride(textures);
-                if (error != EVRCompositorError.None) {
+                if (error != EVRCompositorError.None)
+                {
                     Debug.LogError("<b>[SteamVR]</b> Failed to set skybox override with error: " + error);
                     if (error == EVRCompositorError.TextureIsOnWrongDevice)
                         Debug.Log("<b>[SteamVR]</b> Set your graphics driver to use the same video card as the headset is plugged into for Unity.");
@@ -86,17 +98,20 @@ namespace Valve.VR {
             }
         }
 
-        static public void ClearOverride () {
+        static public void ClearOverride()
+        {
             var compositor = OpenVR.Compositor;
             if (compositor != null)
                 compositor.ClearSkyboxOverride();
         }
 
-        void OnEnable () {
+        void OnEnable()
+        {
             SetOverride(front, back, left, right, top, bottom);
         }
 
-        void OnDisable () {
+        void OnDisable()
+        {
             ClearOverride();
         }
     }

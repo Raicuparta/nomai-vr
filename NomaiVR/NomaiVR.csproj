@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(StartWorkingDirectory)\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -75,6 +78,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -94,6 +101,7 @@
     <Compile Include="Modules\FeetMarker.cs" />
     <Compile Include="Modules\FollowTarget.cs" />
     <Compile Include="Modules\ForceSettings.cs" />
+    <Compile Include="Modules\InputPrompts.cs" />
     <Compile Include="Modules\MotionControls\ButtonInteraction.cs" />
     <Compile Include="Modules\MotionControls\Grabbable.cs" />
     <Compile Include="Modules\MotionControls\FlashlightGesture.cs" />
@@ -116,6 +124,7 @@
     <Compile Include="Modules\ControllerInput.cs" />
     <Compile Include="Modules\MotionControls\HolsterTool.cs" />
     <Compile Include="Modules\SolarSystemMap.cs" />
+    <Compile Include="Modules\VRTutorial.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,14 +1,22 @@
-﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+
+using System.Text;
 
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Valve.VR {
+namespace Valve.VR
+{
     /// <summary>
-    /// This component simplifies using boolean actions. 
+    /// This component simplifies using boolean actions.
     /// <para>Provides editor accessible events: OnPress, OnPressDown, OnPressUp, OnChange, and OnUpdate.</para>
     /// <para>Provides script accessible events: OnPressEvent, OnPressDownEvent, OnPressUpEvent, OnChangeEvent, and OnUpdateEvent.</para>
     /// </summary>
-    public class SteamVR_Behaviour_Boolean: MonoBehaviour {
+    public class SteamVR_Behaviour_Boolean : MonoBehaviour
+    {
         [Tooltip("The SteamVR boolean action that this component should use")]
         public SteamVR_Action_Boolean booleanAction;
 
@@ -53,8 +61,10 @@ namespace Valve.VR {
 
 
 
-        protected virtual void OnEnable () {
-            if (booleanAction == null) {
+        protected virtual void OnEnable()
+        {
+            if (booleanAction == null)
+            {
                 Debug.LogError("[SteamVR] Boolean action not set.", this);
                 return;
             }
@@ -62,11 +72,13 @@ namespace Valve.VR {
             AddHandlers();
         }
 
-        protected virtual void OnDisable () {
+        protected virtual void OnDisable()
+        {
             RemoveHandlers();
         }
 
-        protected void AddHandlers () {
+        protected void AddHandlers()
+        {
             booleanAction[inputSource].onUpdate += SteamVR_Behaviour_Boolean_OnUpdate;
             booleanAction[inputSource].onChange += SteamVR_Behaviour_Boolean_OnChange;
             booleanAction[inputSource].onState += SteamVR_Behaviour_Boolean_OnState;
@@ -74,9 +86,11 @@ namespace Valve.VR {
             booleanAction[inputSource].onStateUp += SteamVR_Behaviour_Boolean_OnStateUp;
         }
 
-        protected void RemoveHandlers () {
+        protected void RemoveHandlers()
+        {
 
-            if (booleanAction != null) {
+            if (booleanAction != null)
+            {
                 booleanAction[inputSource].onUpdate -= SteamVR_Behaviour_Boolean_OnUpdate;
                 booleanAction[inputSource].onChange -= SteamVR_Behaviour_Boolean_OnChange;
                 booleanAction[inputSource].onState -= SteamVR_Behaviour_Boolean_OnState;
@@ -85,58 +99,73 @@ namespace Valve.VR {
             }
         }
 
-        private void SteamVR_Behaviour_Boolean_OnStateUp (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource) {
-            if (onPressUp != null) {
+        private void SteamVR_Behaviour_Boolean_OnStateUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            if (onPressUp != null)
+            {
                 onPressUp.Invoke(this, fromSource, false);
             }
 
-            if (onPressUpEvent != null) {
+            if (onPressUpEvent != null)
+            {
                 onPressUpEvent.Invoke(this, fromSource);
             }
         }
 
-        private void SteamVR_Behaviour_Boolean_OnStateDown (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource) {
-            if (onPressDown != null) {
+        private void SteamVR_Behaviour_Boolean_OnStateDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            if (onPressDown != null)
+            {
                 onPressDown.Invoke(this, fromSource, true);
             }
 
-            if (onPressDownEvent != null) {
+            if (onPressDownEvent != null)
+            {
                 onPressDownEvent.Invoke(this, fromSource);
             }
         }
 
-        private void SteamVR_Behaviour_Boolean_OnState (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource) {
-            if (onPress != null) {
+        private void SteamVR_Behaviour_Boolean_OnState(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            if (onPress != null)
+            {
                 onPress.Invoke(this, fromSource, true);
             }
 
-            if (onPressEvent != null) {
+            if (onPressEvent != null)
+            {
                 onPressEvent.Invoke(this, fromSource);
             }
         }
 
-        private void SteamVR_Behaviour_Boolean_OnUpdate (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            if (onUpdate != null) {
+        private void SteamVR_Behaviour_Boolean_OnUpdate(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+        {
+            if (onUpdate != null)
+            {
                 onUpdate.Invoke(this, fromSource, newState);
             }
 
-            if (onUpdateEvent != null) {
+            if (onUpdateEvent != null)
+            {
                 onUpdateEvent.Invoke(this, fromSource, newState);
             }
         }
 
-        private void SteamVR_Behaviour_Boolean_OnChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            if (onChange != null) {
+        private void SteamVR_Behaviour_Boolean_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+        {
+            if (onChange != null)
+            {
                 onChange.Invoke(this, fromSource, newState);
             }
 
-            if (onChangeEvent != null) {
+            if (onChangeEvent != null)
+            {
                 onChangeEvent.Invoke(this, fromSource, newState);
             }
         }
 
         /// <summary>
-        /// Gets the localized name of the device that the action corresponds to. 
+        /// Gets the localized name of the device that the action corresponds to.
         /// </summary>
         /// <param name="localizedParts">
         /// <list type="bullet">
@@ -146,17 +175,18 @@ namespace Valve.VR {
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
-        public string GetLocalizedName (params EVRInputStringBits[] localizedParts) {
+        public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
+        {
             if (booleanAction != null)
                 return booleanAction.GetLocalizedOriginPart(inputSource, localizedParts);
             return null;
         }
 
-        public delegate void StateDownHandler (SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource);
-        public delegate void StateUpHandler (SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource);
-        public delegate void StateHandler (SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource);
-        public delegate void ActiveChangeHandler (SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource, bool active);
-        public delegate void ChangeHandler (SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState);
-        public delegate void UpdateHandler (SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState);
+        public delegate void StateDownHandler(SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource);
+        public delegate void StateUpHandler(SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource);
+        public delegate void StateHandler(SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource);
+        public delegate void ActiveChangeHandler(SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource, bool active);
+        public delegate void ChangeHandler(SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState);
+        public delegate void UpdateHandler(SteamVR_Behaviour_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState);
     }
 }

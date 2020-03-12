@@ -1,18 +1,22 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
+using System.Collections;
+using System;
+using Valve.VR;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
-namespace Valve.VR {
+namespace Valve.VR
+{
     [Serializable]
     /// <summary>
-    /// In actions are all input type actions. Boolean, Single, Vector2, Vector3, Skeleton, and Pose. 
+    /// In actions are all input type actions. Boolean, Single, Vector2, Vector3, Skeleton, and Pose.
     /// </summary>
-    public abstract class SteamVR_Action_In<SourceMap, SourceElement>: SteamVR_Action<SourceMap, SourceElement>, ISteamVR_Action_In
+    public abstract class SteamVR_Action_In<SourceMap, SourceElement> : SteamVR_Action<SourceMap, SourceElement>, ISteamVR_Action_In
         where SourceMap : SteamVR_Action_In_Source_Map<SourceElement>, new()
-        where SourceElement : SteamVR_Action_In_Source, new() {
+        where SourceElement : SteamVR_Action_In_Source, new()
+    {
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action has been changed since the previous update</summary>
         public bool changed { get { return sourceMap[SteamVR_Input_Sources.Any].changed; } }
 
@@ -44,10 +48,11 @@ namespace Valve.VR {
         public string localizedOriginName { get { return sourceMap[SteamVR_Input_Sources.Any].localizedOriginName; } }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Updates the data for all the input sources the system has detected need to be updated.
         /// </summary>
-        public virtual void UpdateValues () {
+        public virtual void UpdateValues()
+        {
             sourceMap.UpdateValues();
         }
 
@@ -55,7 +60,8 @@ namespace Valve.VR {
         /// The name of the component on the render model that caused the action to be updated (not localized)
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public virtual string GetRenderModelComponentName (SteamVR_Input_Sources inputSource) {
+        public virtual string GetRenderModelComponentName(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].renderModelComponentName;
         }
 
@@ -63,7 +69,8 @@ namespace Valve.VR {
         /// The input source that triggered the action to be updated last
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public virtual SteamVR_Input_Sources GetActiveDevice (SteamVR_Input_Sources inputSource) {
+        public virtual SteamVR_Input_Sources GetActiveDevice(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].activeDevice;
         }
 
@@ -71,7 +78,8 @@ namespace Valve.VR {
         /// Gets the device index for the controller this action is bound to. This can be used for render models or the pose tracking system.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public virtual uint GetDeviceIndex (SteamVR_Input_Sources inputSource) {
+        public virtual uint GetDeviceIndex(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].trackedDeviceIndex;
         }
 
@@ -79,7 +87,8 @@ namespace Valve.VR {
         /// Indicates whether or not the data for this action and specified input source has changed since the last update. Determined by SteamVR or 'changeTolerance'.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public virtual bool GetChanged (SteamVR_Input_Sources inputSource) {
+        public virtual bool GetChanged(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].changed;
         }
 
@@ -87,7 +96,8 @@ namespace Valve.VR {
         /// The time the action was changed (Time.realtimeSinceStartup)
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public override float GetTimeLastChanged (SteamVR_Input_Sources inputSource) {
+        public override float GetTimeLastChanged(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].changedTime;
         }
 
@@ -104,7 +114,8 @@ namespace Valve.VR {
         /// <item><description>VRInputString_All - All of the above. ex: "Left Hand Vive Controller Trackpad". </description></item>
         /// </list>
         /// </param>
-        public string GetLocalizedOriginPart (SteamVR_Input_Sources inputSource, params EVRInputStringBits[] localizedParts) {
+        public string GetLocalizedOriginPart(SteamVR_Input_Sources inputSource, params EVRInputStringBits[] localizedParts)
+        {
             return sourceMap[inputSource].GetLocalizedOriginPart(localizedParts);
         }
 
@@ -112,7 +123,8 @@ namespace Valve.VR {
         /// Gets the localized full name of the device that the action was updated by. ex: "Left Hand Vive Controller Trackpad"
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public string GetLocalizedOrigin (SteamVR_Input_Sources inputSource) {
+        public string GetLocalizedOrigin(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap[inputSource].GetLocalizedOrigin();
         }
 
@@ -122,24 +134,27 @@ namespace Valve.VR {
         /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public override bool IsUpdating (SteamVR_Input_Sources inputSource) {
+        public override bool IsUpdating(SteamVR_Input_Sources inputSource)
+        {
             return sourceMap.IsUpdating(inputSource);
         }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Forces the system to start updating the data for this action and the specified input source.
         /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void ForceAddSourceToUpdateList (SteamVR_Input_Sources inputSource) {
+        public void ForceAddSourceToUpdateList(SteamVR_Input_Sources inputSource)
+        {
             sourceMap.ForceAddSourceToUpdateList(inputSource);
         }
     }
 
-    public class SteamVR_Action_In_Source_Map<SourceElement>: SteamVR_Action_Source_Map<SourceElement>
-        where SourceElement : SteamVR_Action_In_Source, new() {
-        protected List<SteamVR_Input_Sources> updatingSources = new List<SteamVR_Input_Sources>();
+    public class SteamVR_Action_In_Source_Map<SourceElement> : SteamVR_Action_Source_Map<SourceElement>
+        where SourceElement : SteamVR_Action_In_Source, new()
+    {
+        protected List<int> updatingSources = new List<int>();
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
@@ -147,57 +162,75 @@ namespace Valve.VR {
         /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public bool IsUpdating (SteamVR_Input_Sources inputSource) {
-            for (int sourceIndex = 0; sourceIndex < updatingSources.Count; sourceIndex++) {
-                if (inputSource == updatingSources[sourceIndex])
+        public bool IsUpdating(SteamVR_Input_Sources inputSource)
+        {
+            int isUpdatingSourceIndex = (int)inputSource;
+
+            for (int sourceIndex = 0; sourceIndex < updatingSources.Count; sourceIndex++)
+            {
+                if (isUpdatingSourceIndex == updatingSources[sourceIndex])
                     return true;
             }
 
             return false;
         }
 
-        protected override void OnAccessSource (SteamVR_Input_Sources inputSource) {
-            if (SteamVR_Action.startUpdatingSourceOnAccess) {
+        protected override void OnAccessSource(SteamVR_Input_Sources inputSource)
+        {
+            if (SteamVR_Action.startUpdatingSourceOnAccess)
+            {
                 ForceAddSourceToUpdateList(inputSource);
             }
         }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Forces the system to start updating the data for this action and the specified input source.
         /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void ForceAddSourceToUpdateList (SteamVR_Input_Sources inputSource) {
-            if (sources[inputSource].isUpdating == false) {
-                updatingSources.Add(inputSource);
-                sources[inputSource].isUpdating = true;
+        public void ForceAddSourceToUpdateList(SteamVR_Input_Sources inputSource)
+        {
+            int sourceIndex = (int)inputSource;
+
+            if (sources[sourceIndex] == null)
+            {
+                sources[sourceIndex] = new SourceElement();
+            }
+
+            if (sources[sourceIndex].isUpdating == false)
+            {
+                updatingSources.Add(sourceIndex);
+                sources[sourceIndex].isUpdating = true;
 
                 if (SteamVR_Input.isStartupFrame == false)
-                    sources[inputSource].UpdateValue();
+                    sources[sourceIndex].UpdateValue();
             }
         }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Updates the data for all the input sources the system has detected need to be updated.
         /// </summary>
-        public void UpdateValues () {
-            for (int sourceIndex = 0; sourceIndex < updatingSources.Count; sourceIndex++) {
+        public void UpdateValues()
+        {
+            for (int sourceIndex = 0; sourceIndex < updatingSources.Count; sourceIndex++)
+            {
                 sources[updatingSources[sourceIndex]].UpdateValue();
             }
         }
     }
 
     /// <summary>
-    /// In actions are all input type actions. Boolean, Single, Vector2, Vector3, Skeleton, and Pose. 
+    /// In actions are all input type actions. Boolean, Single, Vector2, Vector3, Skeleton, and Pose.
     /// This class fires onChange and onUpdate events.
     /// </summary>
-    public abstract class SteamVR_Action_In_Source: SteamVR_Action_Source, ISteamVR_Action_In_Source {
+    public abstract class SteamVR_Action_In_Source : SteamVR_Action_Source, ISteamVR_Action_In_Source
+    {
         protected static uint inputOriginInfo_size = 0;
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Forces the system to start updating the data for this action and the specified input source.
         /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
         /// </summary>
@@ -219,7 +252,7 @@ namespace Valve.VR {
         public abstract bool lastChanged { get; protected set; }
 
         /// <summary>The input source that triggered the action to be updated</summary>
-        public SteamVR_Input_Sources activeDevice { get { UpdateOriginTrackedDeviceInfo(); return SteamVR_Input_Source.GetSource(inputOriginInfo.devicePath); } }
+        public SteamVR_Input_Sources activeDevice { get { UpdateOriginTrackedDeviceInfo();  return SteamVR_Input_Source.GetSource(inputOriginInfo.devicePath); } }
 
         /// <summary>The device index (used by Render Models) used by the device that triggered the action to be updated</summary>
         public uint trackedDeviceIndex { get { UpdateOriginTrackedDeviceInfo(); return inputOriginInfo.trackedDeviceIndex; } }
@@ -242,19 +275,21 @@ namespace Valve.VR {
         protected InputOriginInfo_t lastInputOriginInfo = new InputOriginInfo_t();
 
         /// <summary><strong>[Should not be called by user code]</strong> Updates the data for this action and this input source</summary>
-        public abstract void UpdateValue ();
+        public abstract void UpdateValue();
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Initializes the handle for the action, the size of the InputOriginInfo struct, and any other related SteamVR data.
         /// </summary>
-        public override void Initialize () {
+        public override void Initialize()
+        {
             base.Initialize();
 
             if (inputOriginInfo_size == 0)
-                inputOriginInfo_size = (uint) Marshal.SizeOf(typeof(InputOriginInfo_t));
+                inputOriginInfo_size = (uint)Marshal.SizeOf(typeof(InputOriginInfo_t));
         }
 
-        protected void UpdateOriginTrackedDeviceInfo () {
+        protected void UpdateOriginTrackedDeviceInfo()
+        {
             if (lastOriginGetFrame != Time.frameCount) //only get once per frame
             {
                 EVRInputError err = OpenVR.Input.GetOriginTrackedDeviceInfo(activeOrigin, ref inputOriginInfo, inputOriginInfo_size);
@@ -279,10 +314,12 @@ namespace Valve.VR {
         /// <item><description>VRInputString_All - All of the above. ex: "Left Hand Vive Controller Trackpad". </description></item>
         /// </list>
         /// </param>
-        public string GetLocalizedOriginPart (params EVRInputStringBits[] localizedParts) {
+        public string GetLocalizedOriginPart(params EVRInputStringBits[] localizedParts)
+        {
             UpdateOriginTrackedDeviceInfo();
 
-            if (active) {
+            if (active)
+            {
                 return SteamVR_Input.GetLocalizedName(activeOrigin, localizedParts);
             }
 
@@ -292,10 +329,12 @@ namespace Valve.VR {
         /// <summary>
         /// Gets the localized full name of the device that the action was updated by. ex: "Left Hand Vive Controller Trackpad"
         /// </summary>
-        public string GetLocalizedOrigin () {
+        public string GetLocalizedOrigin()
+        {
             UpdateOriginTrackedDeviceInfo();
 
-            if (active) {
+            if (active)
+            {
                 return SteamVR_Input.GetLocalizedName(activeOrigin, EVRInputStringBits.VRInputString_All);
             }
 
@@ -303,36 +342,37 @@ namespace Valve.VR {
         }
     }
 
-    public interface ISteamVR_Action_In: ISteamVR_Action, ISteamVR_Action_In_Source {
+    public interface ISteamVR_Action_In : ISteamVR_Action, ISteamVR_Action_In_Source
+    {
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> 
+        /// <strong>[Should not be called by user code]</strong>
         /// Updates the data for all the input sources the system has detected need to be updated.
         /// </summary>
-        void UpdateValues ();
+        void UpdateValues();
 
         /// <summary>
         /// The name of the component on the render model that caused the action to be updated (not localized)
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        string GetRenderModelComponentName (SteamVR_Input_Sources inputSource);
+        string GetRenderModelComponentName(SteamVR_Input_Sources inputSource);
 
         /// <summary>
         /// The input source that triggered the action to be updated last
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        SteamVR_Input_Sources GetActiveDevice (SteamVR_Input_Sources inputSource);
+        SteamVR_Input_Sources GetActiveDevice(SteamVR_Input_Sources inputSource);
 
         /// <summary>
         /// Gets the device index for the controller this action is bound to. This can be used for render models or the pose tracking system.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        uint GetDeviceIndex (SteamVR_Input_Sources inputSource);
+        uint GetDeviceIndex(SteamVR_Input_Sources inputSource);
 
         /// <summary>
         /// Indicates whether or not the data for this action and specified input source has changed since the last update. Determined by SteamVR or 'changeTolerance'.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        bool GetChanged (SteamVR_Input_Sources inputSource);
+        bool GetChanged(SteamVR_Input_Sources inputSource);
 
 
         /// <summary>
@@ -347,16 +387,17 @@ namespace Valve.VR {
         /// <item><description>VRInputString_All - All of the above. ex: "Left Hand Vive Controller Trackpad". </description></item>
         /// </list>
         /// </param>
-        string GetLocalizedOriginPart (SteamVR_Input_Sources inputSource, params EVRInputStringBits[] localizedParts);
+        string GetLocalizedOriginPart(SteamVR_Input_Sources inputSource, params EVRInputStringBits[] localizedParts);
 
         /// <summary>
         /// Gets the localized full name of the device that the action was updated by. ex: "Left Hand Vive Controller Trackpad"
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        string GetLocalizedOrigin (SteamVR_Input_Sources inputSource);
+        string GetLocalizedOrigin(SteamVR_Input_Sources inputSource);
     }
 
-    public interface ISteamVR_Action_In_Source: ISteamVR_Action_Source {
+    public interface ISteamVR_Action_In_Source : ISteamVR_Action_Source
+    {
 
         /// <summary>Returns true if the action has been changed in the most recent update</summary>
         bool changed { get; }

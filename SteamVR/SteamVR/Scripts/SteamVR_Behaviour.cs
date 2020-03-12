@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 #if true
@@ -124,7 +128,7 @@ namespace Valve.VR {
             }
             else
             {
-                Debug.LogError("<b>[SteamVR]</b> Tried to async load: " + openVRDeviceName + ". Loaded: " + deviceName);
+                Debug.LogError("<b>[SteamVR]</b> Tried to async load: " + openVRDeviceName + ". Loaded: " + deviceName, this);
                 loadedOpenVRDeviceSuccess = true; //try anyway
             }
         }
@@ -143,7 +147,7 @@ namespace Valve.VR {
             forcingInitialization = false;
         }
 
-#if false
+#if UNITY_EDITOR
         //only stop playing if the unity editor is running
         private void OnDestroy()
         {
@@ -164,18 +168,15 @@ namespace Valve.VR {
             PreCull();
         }
 #else
-        protected void OnEnable()
-        {
+        protected void OnEnable () {
             Camera.onPreCull += OnCameraPreCull;
             SteamVR_Events.System(EVREventType.VREvent_Quit).Listen(OnQuit);
         }
-        protected void OnDisable()
-        {
+        protected void OnDisable () {
             Camera.onPreCull -= OnCameraPreCull;
             SteamVR_Events.System(EVREventType.VREvent_Quit).Remove(OnQuit);
         }
-        protected void OnCameraPreCull(Camera cam)
-        {
+        protected void OnCameraPreCull (Camera cam) {
             if (!cam.stereoEnabled)
                 return;
 
@@ -206,7 +207,7 @@ namespace Valve.VR {
         }
 
         protected void OnQuit (VREvent_t vrEvent) {
-#if false
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
             Application.Quit();

@@ -33,6 +33,8 @@ namespace NomaiVR {
             PlayerBodyPosition.Patches.Patch();
             ForceSettings.Patches.Patch();
             HoldHUD.Patches.Patch();
+            InputPrompts.Patches.Patch();
+            //VRTutorial.Patches.Patch();
 
             // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
@@ -69,6 +71,8 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<Dialog>();
                 nonPersistentObject.AddComponent<Hands>();
                 nonPersistentObject.AddComponent<FeetMarker>();
+                nonPersistentObject.AddComponent<InputPrompts>();
+                //nonPersistentObject.AddComponent<VRTutorial>();
                 if (isSolarSystem) {
                     nonPersistentObject.AddComponent<ShipTools>();
                     nonPersistentObject.AddComponent<SolarSystemMap>();

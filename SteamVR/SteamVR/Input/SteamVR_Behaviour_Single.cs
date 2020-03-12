@@ -1,13 +1,21 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 using UnityEngine;
+using UnityEngine.Events;
 
 
-namespace Valve.VR {
+namespace Valve.VR
+{
     /// <summary>
     /// SteamVR_Behaviour_Single simplifies the use of single actions. It gives an event to subscribe to for when the action has changed.
     /// </summary>
-    public class SteamVR_Behaviour_Single: MonoBehaviour {
+    public class SteamVR_Behaviour_Single : MonoBehaviour
+    {
         /// <summary>The single action to get data from.</summary>
         public SteamVR_Action_Single singleAction;
 
@@ -39,8 +47,10 @@ namespace Valve.VR {
         /// <summary>Returns whether this action is bound and the action set is active</summary>
         public bool isActive { get { return singleAction.GetActive(inputSource); } }
 
-        protected virtual void OnEnable () {
-            if (singleAction == null) {
+        protected virtual void OnEnable()
+        {
+            if (singleAction == null)
+            {
                 Debug.LogError("[SteamVR] Single action not set.", this);
                 return;
             }
@@ -48,57 +58,70 @@ namespace Valve.VR {
             AddHandlers();
         }
 
-        protected virtual void OnDisable () {
+        protected virtual void OnDisable()
+        {
             RemoveHandlers();
         }
 
-        protected void AddHandlers () {
+        protected void AddHandlers()
+        {
             singleAction[inputSource].onUpdate += SteamVR_Behaviour_Single_OnUpdate;
             singleAction[inputSource].onChange += SteamVR_Behaviour_Single_OnChange;
             singleAction[inputSource].onAxis += SteamVR_Behaviour_Single_OnAxis;
         }
 
-        protected void RemoveHandlers () {
-            if (singleAction != null) {
+        protected void RemoveHandlers()
+        {
+            if (singleAction != null)
+            {
                 singleAction[inputSource].onUpdate -= SteamVR_Behaviour_Single_OnUpdate;
                 singleAction[inputSource].onChange -= SteamVR_Behaviour_Single_OnChange;
                 singleAction[inputSource].onAxis -= SteamVR_Behaviour_Single_OnAxis;
             }
         }
 
-        private void SteamVR_Behaviour_Single_OnUpdate (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
-            if (onUpdate != null) {
+        private void SteamVR_Behaviour_Single_OnUpdate(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
+        {
+            if (onUpdate != null)
+            {
                 onUpdate.Invoke(this, fromSource, newAxis, newDelta);
             }
 
-            if (onUpdateEvent != null) {
+            if (onUpdateEvent != null)
+            {
                 onUpdateEvent.Invoke(this, fromSource, newAxis, newDelta);
             }
         }
 
-        private void SteamVR_Behaviour_Single_OnChange (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
-            if (onChange != null) {
+        private void SteamVR_Behaviour_Single_OnChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
+        {
+            if (onChange != null)
+            {
                 onChange.Invoke(this, fromSource, newAxis, newDelta);
             }
 
-            if (onChangeEvent != null) {
+            if (onChangeEvent != null)
+            {
                 onChangeEvent.Invoke(this, fromSource, newAxis, newDelta);
             }
         }
 
-        private void SteamVR_Behaviour_Single_OnAxis (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
-            if (onAxis != null) {
+        private void SteamVR_Behaviour_Single_OnAxis(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
+        {
+            if (onAxis != null)
+            {
                 onAxis.Invoke(this, fromSource, newAxis, newDelta);
             }
 
-            if (onAxisEvent != null) {
+            if (onAxisEvent != null)
+            {
                 onAxisEvent.Invoke(this, fromSource, newAxis, newDelta);
             }
         }
 
 
         /// <summary>
-        /// Gets the localized name of the device that the action corresponds to. 
+        /// Gets the localized name of the device that the action corresponds to.
         /// </summary>
         /// <param name="localizedParts">
         /// <list type="bullet">
@@ -108,14 +131,15 @@ namespace Valve.VR {
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
-        public string GetLocalizedName (params EVRInputStringBits[] localizedParts) {
+        public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
+        {
             if (singleAction != null)
                 return singleAction.GetLocalizedOriginPart(inputSource, localizedParts);
             return null;
         }
 
-        public delegate void AxisHandler (SteamVR_Behaviour_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
-        public delegate void ChangeHandler (SteamVR_Behaviour_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
-        public delegate void UpdateHandler (SteamVR_Behaviour_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
+        public delegate void AxisHandler(SteamVR_Behaviour_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
+        public delegate void ChangeHandler(SteamVR_Behaviour_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
+        public delegate void UpdateHandler(SteamVR_Behaviour_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
     }
 }

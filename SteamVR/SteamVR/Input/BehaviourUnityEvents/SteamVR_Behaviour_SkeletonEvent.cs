@@ -3,7 +3,8 @@
 using System;
 using UnityEngine.Events;
 
-namespace Valve.VR {
+namespace Valve.VR
+{
     [Serializable]
-    public class SteamVR_Behaviour_SkeletonEvent: UnityEvent<SteamVR_Behaviour_Skeleton, SteamVR_Input_Sources> { }
+    public class SteamVR_Behaviour_SkeletonEvent : UnityEvent<SteamVR_Behaviour_Skeleton, SteamVR_Input_Sources> { }
 }

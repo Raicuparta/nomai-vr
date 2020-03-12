@@ -6,8 +6,10 @@
 
 using UnityEngine;
 
-namespace Valve.VR {
-    public class SteamVR_IK: MonoBehaviour {
+namespace Valve.VR
+{
+    public class SteamVR_IK : MonoBehaviour
+    {
         public Transform target;
         public Transform start, joint, end;
         public Transform poleVector, upVector;
@@ -17,7 +19,8 @@ namespace Valve.VR {
         [HideInInspector]
         public Transform startXform, jointXform, endXform;
 
-        void LateUpdate () {
+        void LateUpdate()
+        {
             const float epsilon = 0.001f;
             if (blendPct < epsilon)
                 return;
@@ -52,7 +55,8 @@ namespace Valve.VR {
             var jointScale = joint.localScale;
             var endScale = end.localScale;
 
-            if (startXform == null) {
+            if (startXform == null)
+            {
                 startXform = new GameObject("startXform").transform;
                 startXform.parent = transform;
             }
@@ -61,7 +65,8 @@ namespace Valve.VR {
             startXform.LookAt(joint, preUp);
             start.parent = startXform;
 
-            if (jointXform == null) {
+            if (jointXform == null)
+            {
                 jointXform = new GameObject("jointXform").transform;
                 jointXform.parent = startXform;
             }
@@ -70,7 +75,8 @@ namespace Valve.VR {
             jointXform.LookAt(end, preUp);
             joint.parent = jointXform;
 
-            if (endXform == null) {
+            if (endXform == null)
+            {
                 endXform = new GameObject("endXform").transform;
                 endXform.parent = jointXform;
             }
@@ -89,7 +95,8 @@ namespace Valve.VR {
             end.rotation = targetRotation; // optionally blend?
 
             // handle blending in/out
-            if (blendPct < 1.0f) {
+            if (blendPct < 1.0f)
+            {
                 start.localRotation = Quaternion.Slerp(startRotationLocal, start.localRotation, blendPct);
                 joint.localRotation = Quaternion.Slerp(jointRotationLocal, joint.localRotation, blendPct);
                 end.localRotation = Quaternion.Slerp(endRotationLocal, end.localRotation, blendPct);
@@ -101,7 +108,7 @@ namespace Valve.VR {
             end.localScale = endScale;
         }
 
-        public static bool Solve (
+        public static bool Solve(
             Vector3 start, // shoulder / hip
             Vector3 end, // desired hand / foot position
             Vector3 poleVector, // point to aim elbow / knee toward
@@ -118,20 +125,25 @@ namespace Valve.VR {
             result = start;
 
             const float epsilon = 0.001f;
-            if (baseDist < epsilon) {
+            if (baseDist < epsilon)
+            {
                 // move jointDist toward jointTarget
                 result += poleVectorDir * jointDist;
 
                 forward = Vector3.Cross(poleVectorDir, Vector3.up);
                 up = Vector3.Cross(forward, poleVectorDir).normalized;
-            } else {
+            }
+            else
+            {
                 forward = start2end * (1.0f / baseDist);
                 up = Vector3.Cross(forward, poleVectorDir).normalized;
 
-                if (baseDist + epsilon < totalDist) {
+                if (baseDist + epsilon < totalDist)
+                {
                     // calculate the area of the triangle to determine its height
                     var p = (totalDist + baseDist) * 0.5f; // half perimeter
-                    if (p > jointDist + epsilon && p > targetDist + epsilon) {
+                    if (p > jointDist + epsilon && p > targetDist + epsilon)
+                    {
                         var A = Mathf.Sqrt(p * (p - jointDist) * (p - targetDist) * (p - baseDist));
                         var height = 2.0f * A / baseDist; // distance of joint from line between root and target
 
@@ -140,11 +152,15 @@ namespace Valve.VR {
 
                         result += (forward * dist) + (right * height);
                         return true; // in range
-                    } else {
+                    }
+                    else
+                    {
                         // move jointDist toward jointTarget
                         result += poleVectorDir * jointDist;
                     }
-                } else {
+                }
+                else
+                {
                     // move elboDist toward target
                     result += forward * jointDist;
                 }
