@@ -13,7 +13,7 @@ namespace NomaiVR {
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
 
             var playerHUD = GameObject.Find("PlayerHUD");
-            var hudElements = Common.GetObjectsInLayer(playerHUD.gameObject, LayerMask.NameToLayer("HeadsUpDisplay"));
+            var hudElements = Common.GetObjectsInLayer("HeadsUpDisplay");
 
             foreach (var hudElement in hudElements) {
                 hudElement.layer = LayerMask.NameToLayer("VisibleToPlayer");

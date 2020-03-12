@@ -7,8 +7,8 @@ namespace NomaiVR {
         private static CharacterDialogueTree currentDialogue;
         private static Transform canvasTransform;
         // distance away from the player the dialog renders
-        private static float dialogRenderDistance = 1f;
-        private static float dialogRenderSize = 0.0015f;
+        private const float dialogRenderDistance = 1f;
+        private const float dialogRenderSize = 0.0015f;
 
         void Start () {
             NomaiVR.Log("Started Dialog Fixes");

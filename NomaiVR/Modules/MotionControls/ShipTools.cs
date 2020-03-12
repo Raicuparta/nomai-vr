@@ -93,8 +93,7 @@ namespace NomaiVR {
             static void PostFindFrame (
                 OWCamera ____activeCam,
                 OWCamera ____landingCam,
-                bool ____isLandingView,
-                bool ____isMapView
+                bool ____isLandingView
             ) {
                 var camera = ____isLandingView ? ____landingCam : ____activeCam;
 

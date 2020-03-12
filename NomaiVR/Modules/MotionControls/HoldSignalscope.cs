@@ -124,11 +124,11 @@ namespace NomaiVR {
                 NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
             }
 
-            static void ShipCockpitStart (Signalscope ____signalscopeTool) {
+            static void ShipCockpitStart (ref Signalscope ____signalscopeTool) {
                 ____signalscopeTool = _signalscope;
             }
 
-            static void PostQuantumInstrumentUpdate (QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut, ScreenPrompt ____scopeGatherPrompt) {
+            static void PostQuantumInstrumentUpdate (QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut) {
                 if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope)) {
                     Vector3 from = __instance.transform.position - _lensCamera.transform.position;
                     float num = Vector3.Angle(from, _lensCamera.transform.forward);

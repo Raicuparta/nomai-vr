@@ -14,7 +14,8 @@ namespace NomaiVR {
             ToolSwapper = FindObjectOfType<ToolModeSwapper>();
         }
 
-        public static List<GameObject> GetObjectsInLayer (GameObject root, int layer) {
+        public static List<GameObject> GetObjectsInLayer (string layerName) {
+            var layer = LayerMask.NameToLayer(layerName);
             var ret = new List<GameObject>();
             var all = FindObjectsOfType<GameObject>();
 

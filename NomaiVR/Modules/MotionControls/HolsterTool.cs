@@ -34,9 +34,7 @@ namespace NomaiVR {
         }
 
         void Equip () {
-            if (onEquip != null) {
-                onEquip();
-            }
+            onEquip?.Invoke();
             Locator.GetToolModeSwapper().EquipToolMode(mode);
 
             if (mode == ToolMode.Translator) {
@@ -45,9 +43,7 @@ namespace NomaiVR {
         }
 
         void Unequip () {
-            if (onUnequip != null) {
-                onUnequip();
-            }
+            onUnequip?.Invoke();
             Common.ToolSwapper.UnequipTool();
         }
 

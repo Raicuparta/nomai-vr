@@ -9,12 +9,9 @@ using Valve.VR;
 namespace NomaiVR {
     public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
-        static NomaiVR _instance;
         public static bool DebugMode;
 
         void Start () {
-            _instance = this;
-
             Log("Start Main");
 
             Helper = ModHelper;
