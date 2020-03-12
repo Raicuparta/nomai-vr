@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
-using System.Linq;
 
 namespace NomaiVR {
     class ControllerInput: MonoBehaviour {

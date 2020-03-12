@@ -1,12 +1,7 @@
-﻿using OWML.ModHelper.Events;
-using System;
+﻿using Harmony;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
-using Harmony;
-using System.IO;
 
 namespace NomaiVR {
     class InputPrompts: MonoBehaviour {
