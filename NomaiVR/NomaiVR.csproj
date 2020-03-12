@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OWML\0Harmony.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -80,7 +80,7 @@
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
