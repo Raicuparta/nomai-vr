@@ -12,6 +12,8 @@ While the game is playable at a surprisingly decent level, a lot of things range
 
 ## Requirements
 
+* Outer Wilds 1.0.5;
+* [Mod Loader (OWML)](https://github.com/amazingalek/owml/releases);
 * A VR Headset;
 * VR controllers (if you want to play with a regular controller, use NomaiVR 0.5 instead of the latest);
 * A VR-Ready PC (and even with that, you'll probably not have amazing performance);
