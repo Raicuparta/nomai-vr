@@ -84,7 +84,7 @@ namespace NomaiVR {
             _lens.parent = _signalscope.transform;
             _lens.localPosition = Vector3.forward * 0.14f;
             _lens.localRotation = Quaternion.identity;
-            _lens.localScale = Vector3.one * 1.5f;
+            _lens.localScale = Vector3.one * 2f;
             _lens.gameObject.SetActive(false);
 
             _lensCamera = _lens.GetComponentInChildren<Camera>();
