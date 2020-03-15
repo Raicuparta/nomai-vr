@@ -17,7 +17,9 @@ namespace NomaiVR {
         }
 
         void LateUpdate () {
-            if (Locator.GetToolModeSwapper().GetToolGroup() != ToolGroup.Ship) {
+            var isInShip = Locator.GetToolModeSwapper().GetToolGroup() == ToolGroup.Ship;
+            var isUsingStationaryProbeLauncher = OWInput.IsInputMode(InputMode.StationaryProbeLauncher);
+            if (!isInShip && !isUsingStationaryProbeLauncher) {
                 foreach (var prompt in _toolUnequipPrompts) {
                     prompt.SetVisibility(false);
                 }
