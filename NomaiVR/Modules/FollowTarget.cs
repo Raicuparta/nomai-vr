@@ -17,14 +17,14 @@ namespace NomaiVR {
             }
 
             var targetRotation = target.rotation * localRotation;
-            if (rotationSmoothSpeed > 0) {
+            if (rotationSmoothSpeed > 0 && Time.timeScale > 0) {
                 transform.rotation = QuaternionHelper.SmoothDamp(transform.rotation, targetRotation, ref rotationVelocity, 0.1f);
             } else {
                 transform.rotation = targetRotation;
             }
 
             var targetPosition = target.TransformPoint(localPosition);
-            if (positionSmoothSpeed > 0) {
+            if (positionSmoothSpeed > 0 && Time.timeScale > 0) {
                 transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, 0.1f);
             } else {
                 transform.position = targetPosition;
