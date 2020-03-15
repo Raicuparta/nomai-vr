@@ -118,14 +118,9 @@ namespace NomaiVR {
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(ChangeInputMode));
-                NomaiVR.Post<ShipCockpitUI>("Start", typeof(Patches), nameof(ShipCockpitStart));
                 NomaiVR.Post<QuantumInstrument>("Update", typeof(Patches), nameof(PostQuantumInstrumentUpdate));
                 NomaiVR.Empty<Signalscope>("EnterSignalscopeZoom");
                 NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
-            }
-
-            static void ShipCockpitStart (ref Signalscope ____signalscopeTool) {
-                ____signalscopeTool = _signalscope;
             }
 
             static void PostQuantumInstrumentUpdate (QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut) {

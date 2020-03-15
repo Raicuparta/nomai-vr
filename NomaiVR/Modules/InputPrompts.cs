@@ -17,7 +17,9 @@ namespace NomaiVR {
         }
 
         void LateUpdate () {
-            if (Locator.GetToolModeSwapper().GetToolGroup() != ToolGroup.Ship) {
+            var isInShip = Locator.GetToolModeSwapper().GetToolGroup() == ToolGroup.Ship;
+            var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
+            if (!isInShip && !isUsingFixedProbeTool) {
                 foreach (var prompt in _toolUnequipPrompts) {
                     prompt.SetVisibility(false);
                 }
@@ -38,6 +40,9 @@ namespace NomaiVR {
 
                 NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
                 NomaiVR.Post<SignalscopePromptController>("Awake", typeof(Patches), nameof(ChangeSignalscopePrompts));
+
+                NomaiVR.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patches), nameof(RemoveSatellitePrompts));
+                NomaiVR.Post<SatelliteSnapshotController>("Awake", typeof(Patches), nameof(ChangeSatellitePrompts));
 
                 NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patches), nameof(RemoveJoystickPrompts));
                 NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patches), nameof(RemoveToolModePrompts));
@@ -113,6 +118,14 @@ namespace NomaiVR {
                 return false;
             }
 
+            static void ChangeSatellitePrompts (ref ScreenPrompt ____forwardPrompt) {
+                ____forwardPrompt = new ScreenPrompt(InputLibrary.interact, ____forwardPrompt.GetText(), 0, false, false);
+            }
+
+            static void RemoveSatellitePrompts (ScreenPrompt ____rearviewPrompt) {
+                _manager.RemoveScreenPrompt(____rearviewPrompt);
+            }
+
             static void RemoveJoystickPrompts (ref bool ____lookPromptAdded) {
                 ____lookPromptAdded = true;
             }
@@ -162,7 +175,6 @@ namespace NomaiVR {
 
             static void RemoveProbePrompts (
                 ScreenPrompt ____unequipPrompt,
-                ScreenPrompt ____aimPrompt,
                 ScreenPrompt ____photoModePrompt,
                 ScreenPrompt ____reverseCamPrompt,
                 ScreenPrompt ____rotatePrompt,
@@ -171,7 +183,6 @@ namespace NomaiVR {
             ) {
                 _toolUnequipPrompts.Add(____unequipPrompt);
                 NomaiVR.Log("adding", _toolUnequipPrompts.Count.ToString());
-                _manager.RemoveScreenPrompt(____aimPrompt);
                 _manager.RemoveScreenPrompt(____photoModePrompt);
                 _manager.RemoveScreenPrompt(____reverseCamPrompt);
                 _manager.RemoveScreenPrompt(____rotatePrompt);
