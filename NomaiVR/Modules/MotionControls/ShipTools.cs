@@ -73,32 +73,35 @@ namespace NomaiVR {
 
             static void PreFindFrame (
                 OWCamera ____activeCam,
-                OWCamera ____landingCam,
                 bool ____isLandingView,
                 bool ____isMapView
             ) {
-                var camera = ____isLandingView ? ____landingCam : ____activeCam;
-                _cameraPosition = camera.transform.position;
-                _cameraRotation = camera.transform.rotation;
+                if (____isLandingView) {
+                    return;
+                }
+
+                _cameraPosition = ____activeCam.transform.position;
+                _cameraRotation = ____activeCam.transform.rotation;
 
                 if (____isMapView) {
-                    camera.transform.position = _mapGridRenderer.position + _mapGridRenderer.up * 10000;
-                    camera.transform.rotation = Quaternion.LookRotation(_mapGridRenderer.up * -1);
+                    ____activeCam.transform.position = _mapGridRenderer.position + _mapGridRenderer.up * 10000;
+                    ____activeCam.transform.rotation = Quaternion.LookRotation(_mapGridRenderer.up * -1);
                 } else {
-                    camera.transform.position = LaserPointer.Laser.position;
-                    camera.transform.rotation = LaserPointer.Laser.rotation;
+                    ____activeCam.transform.position = LaserPointer.Laser.position;
+                    ____activeCam.transform.rotation = LaserPointer.Laser.rotation;
                 }
             }
 
             static void PostFindFrame (
                 OWCamera ____activeCam,
-                OWCamera ____landingCam,
                 bool ____isLandingView
             ) {
-                var camera = ____isLandingView ? ____landingCam : ____activeCam;
+                if (____isLandingView) {
+                    return;
+                }
 
-                camera.transform.position = _cameraPosition;
-                camera.transform.rotation = _cameraRotation;
+                ____activeCam.transform.position = _cameraPosition;
+                ____activeCam.transform.rotation = _cameraRotation;
             }
         }
     }
