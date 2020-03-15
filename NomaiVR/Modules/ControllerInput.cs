@@ -67,9 +67,9 @@ namespace NomaiVR {
             var isUsingTool = !Common.ToolSwapper.IsInToolMode(ToolMode.None) && !Common.ToolSwapper.IsInToolMode(ToolMode.Item);
             var isUsingSignalscope = Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope);
             var isUsingProbeLauncher = Common.ToolSwapper.IsInToolMode(ToolMode.Probe);
-            var isUsingStationaryProbeLauncher = OWInput.IsInputMode(InputMode.StationaryProbeLauncher);
+            var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
-            if (!isUsingStationaryProbeLauncher && !isUsingTool) {
+            if (!isUsingFixedProbeTool && !isUsingTool) {
                 var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
                 var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Locator.GetToolModeSwapper().IsSuitPatchingBlocked();
 
@@ -86,7 +86,7 @@ namespace NomaiVR {
                 } else {
                     _buttons[XboxButton.X] = value;
                 }
-            } else if (!isInShip || isUsingProbeLauncher || isUsingStationaryProbeLauncher) {
+            } else if (!isInShip || isUsingProbeLauncher || isUsingFixedProbeTool) {
                 _buttons[XboxButton.RightBumper] = value;
             } else if (isUsingSignalscope) {
                 _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
