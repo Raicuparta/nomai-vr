@@ -29,7 +29,6 @@ namespace NomaiVR {
         void Update () {
             if ((currentDialogue != null) && (canvasTransform != null)) {
                 Transform attentionPoint = currentDialogue.GetValue<Transform>("_attentionPoint");
-                canvasTransform.parent = attentionPoint;
                 canvasTransform.localPosition = Vector3.zero;
                 canvasTransform.LookAt(2 * attentionPoint.position - Camera.main.transform.position, Common.PlayerHead.up);
 
