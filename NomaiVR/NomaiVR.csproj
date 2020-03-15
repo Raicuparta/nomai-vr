@@ -123,6 +123,7 @@
     <Compile Include="Modules\PlayerBodyPosition.cs" />
     <Compile Include="Modules\ControllerInput.cs" />
     <Compile Include="Modules\MotionControls\HolsterTool.cs" />
+    <Compile Include="Modules\QuaternionHelper.cs" />
     <Compile Include="Modules\SolarSystemMap.cs" />
     <Compile Include="Modules\VRTutorial.cs" />
     <Compile Include="NomaiVR.cs" />

@@ -8,9 +8,11 @@ namespace NomaiVR {
 
         void Awake () {
             Laser = new GameObject("Laser").transform;
+            Laser.gameObject.AddComponent<FollowTarget>();
             Laser.transform.parent = Hands.RightHand;
             Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
             Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+
             var lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
             lineRenderer.useWorldSpace = false;
             lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });

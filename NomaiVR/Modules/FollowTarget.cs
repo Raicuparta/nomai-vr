@@ -1,20 +1,35 @@
 ﻿using UnityEngine;
 
 namespace NomaiVR {
-    // This behaviour is useful for replicating a child / parent hierarchy,
-    // without actually changing the hierarchy, since that can break stuff in the game.
     class FollowTarget: MonoBehaviour {
         public Transform target;
         public Vector3 localPosition;
         public Quaternion localRotation = Quaternion.identity;
+        public float positionSmoothSpeed = 0;
+        public float rotationSmoothSpeed = 0;
+        Quaternion rotationVelocity;
+        Vector3 positionVelocity;
 
-        void LateUpdate () {
+
+        void Update () {
             if (!target) {
                 return;
             }
 
-            transform.rotation = target.rotation * localRotation;
-            transform.position = target.TransformPoint(localPosition);
+            var targetRotation = target.rotation * localRotation;
+            if (rotationSmoothSpeed > 0 && Time.timeScale > 0) {
+                transform.rotation = QuaternionHelper.SmoothDamp(transform.rotation, targetRotation, ref rotationVelocity, 0.1f);
+            } else {
+                transform.rotation = targetRotation;
+            }
+
+            var targetPosition = target.TransformPoint(localPosition);
+            if (positionSmoothSpeed > 0 && Time.timeScale > 0) {
+                transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, 0.1f);
+            } else {
+                transform.position = targetPosition;
+            }
+
         }
     }
 }

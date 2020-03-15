@@ -61,6 +61,8 @@ namespace NomaiVR {
                     canvas.transform.rotation = Camera.main.transform.rotation;
                     canvas.transform.localScale *= 0.001f;
                     var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
+                    followTarget.positionSmoothSpeed = 0.2f;
+                    followTarget.rotationSmoothSpeed = 0.1f;
                     followTarget.target = Camera.main.transform;
                     followTarget.localPosition = Vector3.forward;
 
