@@ -11,7 +11,7 @@ namespace NomaiVR {
         Vector3 positionVelocity;
 
 
-        void LateUpdate () {
+        void Update () {
             if (!target) {
                 return;
             }

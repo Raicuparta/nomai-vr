@@ -92,6 +92,11 @@ namespace NomaiVR {
             _lensCamera.cullingMask = Camera.main.cullingMask;
             _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
             _lensCamera.fieldOfView = 5f;
+            _lensCamera.transform.parent = null;
+            var followTarget = _lensCamera.gameObject.AddComponent<FollowTarget>();
+            followTarget.target = _lens;
+            followTarget.rotationSmoothSpeed = 0.2f;
+            followTarget.positionSmoothSpeed = 0.1f;
 
             var owCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
             owCamera.useFarCamera = true;
