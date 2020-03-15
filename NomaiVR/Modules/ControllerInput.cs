@@ -63,13 +63,17 @@ namespace NomaiVR {
 
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
-
             var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
+            var isUsingTool = !Common.ToolSwapper.IsInToolMode(ToolMode.None) && !Common.ToolSwapper.IsInToolMode(ToolMode.Item);
+            var isUsingSignalscope = Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope);
+            var isUsingProbeLauncher = Common.ToolSwapper.IsInToolMode(ToolMode.Probe);
+            var isUsingStationaryProbeLauncher = OWInput.IsInputMode(InputMode.StationaryProbeLauncher);
 
-            if (!OWInput.IsInputMode(InputMode.StationaryProbeLauncher) && (Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item))) {
+            if (!isUsingStationaryProbeLauncher && !isUsingTool) {
+                var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
                 var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Locator.GetToolModeSwapper().IsSuitPatchingBlocked();
 
-                if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship && !canRepairSuit) {
+                if (isRepairPromptVisible && !isInShip && !canRepairSuit) {
                     if (newState) {
                         _primaryLastTime = fromAction.changedTime;
                     } else {
@@ -82,9 +86,9 @@ namespace NomaiVR {
                 } else {
                     _buttons[XboxButton.X] = value;
                 }
-            } else if (!isInShip || Common.ToolSwapper.IsInToolMode(ToolMode.Probe) || OWInput.IsInputMode(InputMode.StationaryProbeLauncher)) {
+            } else if (!isInShip || isUsingProbeLauncher || isUsingStationaryProbeLauncher) {
                 _buttons[XboxButton.RightBumper] = value;
-            } else if (Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope)) {
+            } else if (isUsingSignalscope) {
                 _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
             }
 
