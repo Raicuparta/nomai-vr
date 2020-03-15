@@ -8,20 +8,19 @@ namespace NomaiVR {
 
         void Awake () {
             Laser = new GameObject("Laser").transform;
-            var followTarget = Laser.gameObject.AddComponent<FollowTarget>();
-            followTarget.target = Hands.RightHand;
-            followTarget.rotationSmoothSpeed = 0.0001f;
-            followTarget.localPosition = new Vector3(0f, -0.05f, 0.01f);
-            followTarget.localRotation = Quaternion.Euler(45f, 0, 0);
+            Laser.gameObject.AddComponent<FollowTarget>();
+            Laser.transform.parent = Hands.RightHand;
+            Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
+            Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
 
             var lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
             lineRenderer.useWorldSpace = false;
             lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });
-            lineRenderer.endColor = new Color(1, 1, 1, 0.2f);
+            lineRenderer.endColor = new Color(1, 1, 1, 0.5f);
             lineRenderer.startColor = Color.clear;
             lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
-            lineRenderer.startWidth = 0.005f;
-            lineRenderer.endWidth = 0.002f;
+            lineRenderer.startWidth = 0.02f;
+            lineRenderer.endWidth = 0.01f;
 
             FindObjectOfType<FirstPersonManipulator>().enabled = false;
             _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
