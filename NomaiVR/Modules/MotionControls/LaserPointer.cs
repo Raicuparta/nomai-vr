@@ -27,11 +27,9 @@ namespace NomaiVR {
         }
 
         void Update () {
-            var allowInteraction = Common.ToolSwapper.IsInToolMode(ToolMode.None) && !Common.ToolSwapper.IsInToolMode(ToolMode.Item);
-
-            if (Laser.gameObject.activeSelf && !allowInteraction) {
+            if (Laser.gameObject.activeSelf && Common.IsUsingTool()) {
                 Laser.gameObject.SetActive(false);
-            } else if (!Laser.gameObject.activeSelf && allowInteraction) {
+            } else if (!Laser.gameObject.activeSelf && !Common.IsUsingTool()) {
                 Laser.gameObject.SetActive(true);
             }
         }

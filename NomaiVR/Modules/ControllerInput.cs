@@ -64,12 +64,11 @@ namespace NomaiVR {
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
             var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
-            var isUsingTool = !Common.ToolSwapper.IsInToolMode(ToolMode.None) && !Common.ToolSwapper.IsInToolMode(ToolMode.Item);
             var isUsingSignalscope = Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope);
             var isUsingProbeLauncher = Common.ToolSwapper.IsInToolMode(ToolMode.Probe);
             var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
-            if (!isUsingFixedProbeTool && !isUsingTool) {
+            if (!isUsingFixedProbeTool && !Common.IsUsingTool()) {
                 var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
                 var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Locator.GetToolModeSwapper().IsSuitPatchingBlocked();
 
@@ -161,7 +160,6 @@ namespace NomaiVR {
             public static void Patch () {
                 NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patches), nameof(Patches.SingleAxisUpdate));
                 NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patches), nameof(Patches.OWInputUpdate));
-                NomaiVR.Post<ItemTool>("Start", typeof(Patches), nameof(Patches.ItemToolStart));
                 NomaiVR.Pre<OWInput>("Awake", typeof(Patches), nameof(Patches.EnableListenForAllJoysticks));
                 NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patches), nameof(Patches.GetAxis));
                 NomaiVR.Post<PlayerResources>("Awake", typeof(Patches), nameof(PlayerResourcesAwake));
@@ -216,12 +214,6 @@ namespace NomaiVR {
             static bool OWInputUpdate (ref bool ____usingGamepad) {
                 ____usingGamepad = true;
                 return false;
-            }
-
-            static void ItemToolStart (ref ScreenPrompt ____interactButtonPrompt) {
-                Locator.GetPromptManager().RemoveScreenPrompt(____interactButtonPrompt);
-                ____interactButtonPrompt = new ScreenPrompt(string.Empty, 0);
-                Locator.GetPromptManager().AddScreenPrompt(____interactButtonPrompt);
             }
 
             static void EnableListenForAllJoysticks () {
