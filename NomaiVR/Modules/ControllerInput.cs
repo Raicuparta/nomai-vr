@@ -156,7 +156,7 @@ namespace NomaiVR {
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patches), nameof(Patches.SingleAxisUpdate));
-                NomaiVR.Pre<OWInput>("Update", typeof(Patches), nameof(Patches.OWInputUpdate));
+                NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patches), nameof(Patches.OWInputUpdate));
                 NomaiVR.Post<ItemTool>("Start", typeof(Patches), nameof(Patches.ItemToolStart));
                 NomaiVR.Pre<OWInput>("Awake", typeof(Patches), nameof(Patches.EnableListenForAllJoysticks));
                 NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patches), nameof(Patches.GetAxis));
@@ -209,8 +209,9 @@ namespace NomaiVR {
                 return false;
             }
 
-            static void OWInputUpdate (ref bool ____usingGamepad) {
+            static bool OWInputUpdate (ref bool ____usingGamepad) {
                 ____usingGamepad = true;
+                return false;
             }
 
             static void ItemToolStart (ref ScreenPrompt ____interactButtonPrompt) {
