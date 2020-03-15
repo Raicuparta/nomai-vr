@@ -15,7 +15,7 @@ namespace NomaiVR {
             NomaiVR.Log("Start Ship Tools");
 
             _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
-            _mapGridRenderer = GameObject.FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
+            _mapGridRenderer = FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
         }
 
         void Update () {
@@ -37,6 +37,14 @@ namespace NomaiVR {
                     ControllerInput.SimulateInput(XboxButton.LeftStickClick);
                 }
                 _pressedInteract = false;
+            }
+
+            var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
+
+            if (_referenceFrameTracker.isActiveAndEnabled && Common.IsUsingTool()) {
+                _referenceFrameTracker.enabled = false;
+            } else if (!_referenceFrameTracker.isActiveAndEnabled && !Common.IsUsingTool()) {
+                _referenceFrameTracker.enabled = true;
             }
         }
 
@@ -66,7 +74,6 @@ namespace NomaiVR {
                 _landingCam.button = XboxButton.DPadDown;
                 _landingCam.text = UITextType.ShipLandingPrompt;
             }
-
 
             static Vector3 _cameraPosition;
             static Quaternion _cameraRotation;

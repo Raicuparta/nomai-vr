@@ -26,5 +26,9 @@ namespace NomaiVR {
             }
             return ret;
         }
+
+        public static bool IsUsingTool () {
+            return !ToolSwapper.IsInToolMode(ToolMode.None) && !ToolSwapper.IsInToolMode(ToolMode.Item);
+        }
     }
 }
