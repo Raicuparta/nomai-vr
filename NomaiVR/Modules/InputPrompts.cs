@@ -41,6 +41,9 @@ namespace NomaiVR {
                 NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
                 NomaiVR.Post<SignalscopePromptController>("Awake", typeof(Patches), nameof(ChangeSignalscopePrompts));
 
+                NomaiVR.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patches), nameof(RemoveSatellitePrompts));
+                NomaiVR.Post<SatelliteSnapshotController>("Awake", typeof(Patches), nameof(ChangeSatellitePrompts));
+
                 NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patches), nameof(RemoveJoystickPrompts));
                 NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patches), nameof(RemoveToolModePrompts));
 
@@ -113,6 +116,14 @@ namespace NomaiVR {
                 }
 
                 return false;
+            }
+
+            static void ChangeSatellitePrompts (ref ScreenPrompt ____forwardPrompt) {
+                ____forwardPrompt = new ScreenPrompt(InputLibrary.interact, ____forwardPrompt.GetText(), 0, false, false);
+            }
+
+            static void RemoveSatellitePrompts (ScreenPrompt ____rearviewPrompt) {
+                _manager.RemoveScreenPrompt(____rearviewPrompt);
             }
 
             static void RemoveJoystickPrompts (ref bool ____lookPromptAdded) {
