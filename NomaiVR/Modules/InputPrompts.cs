@@ -164,7 +164,6 @@ namespace NomaiVR {
 
             static void RemoveProbePrompts (
                 ScreenPrompt ____unequipPrompt,
-                ScreenPrompt ____aimPrompt,
                 ScreenPrompt ____photoModePrompt,
                 ScreenPrompt ____reverseCamPrompt,
                 ScreenPrompt ____rotatePrompt,
@@ -173,7 +172,6 @@ namespace NomaiVR {
             ) {
                 _toolUnequipPrompts.Add(____unequipPrompt);
                 NomaiVR.Log("adding", _toolUnequipPrompts.Count.ToString());
-                _manager.RemoveScreenPrompt(____aimPrompt);
                 _manager.RemoveScreenPrompt(____photoModePrompt);
                 _manager.RemoveScreenPrompt(____reverseCamPrompt);
                 _manager.RemoveScreenPrompt(____rotatePrompt);
