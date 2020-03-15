@@ -66,7 +66,7 @@ namespace NomaiVR {
 
             var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
 
-            if (Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item)) {
+            if (!OWInput.IsInputMode(InputMode.StationaryProbeLauncher) && (Common.ToolSwapper.IsInToolMode(ToolMode.None) || Common.ToolSwapper.IsInToolMode(ToolMode.Item))) {
                 var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Locator.GetToolModeSwapper().IsSuitPatchingBlocked();
 
                 if (_repairPrompt != null && !_repairPrompt.IsVisible() && Common.ToolSwapper.GetToolGroup() != ToolGroup.Ship && !canRepairSuit) {
@@ -82,7 +82,7 @@ namespace NomaiVR {
                 } else {
                     _buttons[XboxButton.X] = value;
                 }
-            } else if (!isInShip || Common.ToolSwapper.IsInToolMode(ToolMode.Probe)) {
+            } else if (!isInShip || Common.ToolSwapper.IsInToolMode(ToolMode.Probe) || OWInput.IsInputMode(InputMode.StationaryProbeLauncher)) {
                 _buttons[XboxButton.RightBumper] = value;
             } else if (Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope)) {
                 _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
