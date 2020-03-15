@@ -10,18 +10,18 @@ namespace NomaiVR {
             Laser = new GameObject("Laser").transform;
             var followTarget = Laser.gameObject.AddComponent<FollowTarget>();
             followTarget.target = Hands.RightHand;
-            followTarget.rotationSmoothSpeed = 0.001f;
+            followTarget.rotationSmoothSpeed = 0.0001f;
             followTarget.localPosition = new Vector3(0f, -0.05f, 0.01f);
             followTarget.localRotation = Quaternion.Euler(45f, 0, 0);
 
             var lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
             lineRenderer.useWorldSpace = false;
             lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });
-            lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
+            lineRenderer.endColor = new Color(1, 1, 1, 0.2f);
             lineRenderer.startColor = Color.clear;
             lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
-            lineRenderer.startWidth = 0.01f;
-            lineRenderer.endWidth = 0.005f;
+            lineRenderer.startWidth = 0.005f;
+            lineRenderer.endWidth = 0.002f;
 
             FindObjectOfType<FirstPersonManipulator>().enabled = false;
             _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
