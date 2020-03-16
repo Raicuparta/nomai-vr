@@ -26,10 +26,7 @@ namespace NomaiVR {
         }
 
         void Update () {
-            _camera.postProcessingSettings.bloomEnabled = false;
             _camera.postProcessingSettings.chromaticAberrationEnabled = false;
-            _camera.postProcessingSettings.colorGradingEnabled = false;
-            _camera.postProcessingSettings.phosphenesEnabled = false;
             _camera.postProcessingSettings.vignetteEnabled = false;
         }
 
