@@ -43,7 +43,9 @@ namespace NomaiVR {
         }
 
         void Update () {
-            if ((Common.PlayerHead.position - _camera.position).sqrMagnitude > 0.5f) {
+            var cameraToHead = Vector3.ProjectOnPlane(Common.PlayerHead.position - _camera.position, Common.PlayerHead.up);
+
+            if (cameraToHead.sqrMagnitude > 0.5f) {
                 MoveCameraToPlayerHead();
             }
             if (NomaiVR.DebugMode) {
