@@ -10,15 +10,28 @@ namespace NomaiVR {
         static ButtonInteraction _probe;
         static ButtonInteraction _signalscope;
         static ButtonInteraction _landingCam;
+        static bool _canInteractWithTools;
+        static ShipCockpitController _cockpitController;
 
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
 
             _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
+            _cockpitController = FindObjectOfType<ShipCockpitController>();
             _mapGridRenderer = FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
         }
 
         void Update () {
+            var isInShip = _cockpitController.IsPlayerAtFlightConsole();
+
+            if (isInShip && !_canInteractWithTools) {
+                NomaiVR.Log("########## Enable");
+                SetEnabled(true);
+            } else if (!isInShip && _canInteractWithTools) {
+                NomaiVR.Log("########## Disable");
+                SetEnabled(false);
+            }
+
             if (_referenceFrameTracker.GetReferenceFrame() == null && _referenceFrameTracker.GetPossibleReferenceFrame() == null) {
                 return;
             }
@@ -39,13 +52,18 @@ namespace NomaiVR {
                 _pressedInteract = false;
             }
 
-            var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
-
             if (_referenceFrameTracker.isActiveAndEnabled && Common.IsUsingTool()) {
                 _referenceFrameTracker.enabled = false;
             } else if (!_referenceFrameTracker.isActiveAndEnabled && !Common.IsUsingTool()) {
                 _referenceFrameTracker.enabled = true;
             }
+        }
+
+        static void SetEnabled (bool enabled) {
+            _canInteractWithTools = enabled;
+            _probe.enabled = enabled;
+            _signalscope.enabled = enabled;
+            _landingCam.enabled = enabled;
         }
 
         internal static class Patches {
@@ -73,6 +91,8 @@ namespace NomaiVR {
                 _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
                 _landingCam.button = XboxButton.DPadDown;
                 _landingCam.text = UITextType.ShipLandingPrompt;
+
+                SetEnabled(false);
             }
 
             static Vector3 _cameraPosition;
