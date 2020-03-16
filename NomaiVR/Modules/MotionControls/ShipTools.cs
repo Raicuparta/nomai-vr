@@ -73,6 +73,10 @@ namespace NomaiVR {
                 NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(PostFindFrame));
                 NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patches), nameof(PreFindFrame));
                 NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patches), nameof(PostFindFrame));
+                NomaiVR.Empty<PlayerCameraController>("OnEnterLandingView");
+                NomaiVR.Empty<PlayerCameraController>("OnExitLandingView");
+                NomaiVR.Empty<PlayerCameraController>("OnEnterShipComputer");
+                NomaiVR.Empty<PlayerCameraController>("OnExitShipComputer");
             }
 
             static void ShipStart (ShipBody __instance) {
