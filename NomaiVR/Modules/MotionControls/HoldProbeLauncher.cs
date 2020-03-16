@@ -100,12 +100,6 @@ namespace NomaiVR {
             _probeLauncherHolster.SetActive(false);
         }
 
-        void Update () {
-            var probe = Locator.GetProbe().transform.Find("CameraPivot");
-            probe.rotation = _probeLauncherModel.rotation;
-            probe.Rotate(Vector3.right * 90);
-        }
-
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patches), nameof(Patches.SuitUp));
