@@ -46,6 +46,13 @@ namespace NomaiVR {
 
                 // Fix for the reprojection stone camera position.
                 NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patches), nameof(Patches.SwitchToRemoteCamera));
+
+                // Prevent flashing on energy death.
+                NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patches), nameof(PostTriggerFlashback));
+            }
+
+            static void PostTriggerFlashback (CanvasGroupAnimator ____whiteFadeAnimator) {
+                ____whiteFadeAnimator.gameObject.SetActive(false);
             }
 
             static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
