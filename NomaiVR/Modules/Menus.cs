@@ -24,7 +24,8 @@ namespace NomaiVR {
             ScreenCanvasesToWorld();
 
             if (SceneManager.GetActiveScene().name == "SolarSystem") {
-                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+                // Make sleep timer canvas visible while eyes closed.
+                Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
 
                 if (_farClipPlane == -1) {
                     _cullingMask = Camera.main.cullingMask;
@@ -33,6 +34,8 @@ namespace NomaiVR {
                     Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
                     Camera.main.farClipPlane = 5;
                 }
+
+                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
         }
 
