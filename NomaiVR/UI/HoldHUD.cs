@@ -18,10 +18,10 @@ namespace NomaiVR {
 
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
-            surface.transform.localPosition = new Vector3(-0.08f, -0.46f, 0.04f);
-            surface.gameObject.AddComponent<DebugTransform>();
+            surface.transform.localPosition = new Vector3(-0.08f, -0.56f, 0.04f);
 
-            var notifications = FindObjectOfType<SuitNotificationDisplay>().transform;
+            var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
+            notifications.anchoredPosition = new Vector2(-200, -100);
 
             //surface.transform.localPosition = Vector3.forward * 3;
 
