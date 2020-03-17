@@ -43,17 +43,12 @@ namespace NomaiVR {
 
             Application.runInBackground = true;
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            LoadManager.OnCompleteSceneLoad += OnSceneLoaded;
         }
 
-        void OnDisable () {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        void OnSceneLoaded (Scene scene, LoadSceneMode mode) {
-
-            var isSolarSystem = scene.name == "SolarSystem";
-            var isEye = scene.name == "EyeOfTheUniverse";
+        void OnSceneLoaded (OWScene originalScene, OWScene scene) {
+            var isSolarSystem = scene == OWScene.SolarSystem;
+            var isEye = scene == OWScene.EyeOfTheUniverse;
 
             // The GameObject associated with this ModBehaviour is set to persist between scene loads.
             // Some modules need to be restarted on every scene load.

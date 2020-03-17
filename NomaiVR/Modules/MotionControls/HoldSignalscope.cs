@@ -13,7 +13,7 @@ namespace NomaiVR {
         static GameObject _lensPrefab;
 
         void Awake () {
-            if (SceneManager.GetActiveScene().name == "SolarSystem") {
+            if (LoadManager.GetCurrentScene() == OWScene.SolarSystem) {
                 _shipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
             }
 
