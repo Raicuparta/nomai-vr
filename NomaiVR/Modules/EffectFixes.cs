@@ -1,11 +1,18 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NomaiVR {
     public class EffectFixes: MonoBehaviour {
         OWCamera _camera;
+        static float _farClipPlane = -1;
+        static int _cullingMask;
+        static EffectFixes _instance;
 
         void Start () {
+            _instance = this;
+
             NomaiVR.Log("Started FogFix");
 
             // Make dark bramble lights visible in the fog.
@@ -23,11 +30,32 @@ namespace NomaiVR {
             visorEffects.SetValue("_waterFadeInLength", 0);
 
             _camera = Locator.GetPlayerCamera();
+
+            if (SceneManager.GetActiveScene().name == "SolarSystem") {
+                CloseEyes();
+            }
         }
 
         void Update () {
             _camera.postProcessingSettings.chromaticAberrationEnabled = false;
             _camera.postProcessingSettings.vignetteEnabled = false;
+        }
+
+        void CloseEyesDelayed () {
+            Invoke(nameof(CloseEyes), 3);
+        }
+
+        void CloseEyes () {
+            _cullingMask = Camera.main.cullingMask;
+            _farClipPlane = Camera.main.farClipPlane;
+            Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
+            Camera.main.farClipPlane = 5;
+            Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
+        }
+
+        void OpenEyes () {
+            Camera.main.cullingMask = _cullingMask;
+            Camera.main.farClipPlane = _farClipPlane;
         }
 
         internal static class Patches {
@@ -46,6 +74,28 @@ namespace NomaiVR {
 
                 // Prevent flashing on energy death.
                 NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patches), nameof(PostTriggerFlashback));
+
+                NomaiVR.Post<Campfire>("StartFastForwarding", typeof(Patches), nameof(PostStartFastForwarding));
+
+                var openEyesMethod =
+                    typeof(PlayerCameraEffectController)
+                    .GetMethod("OpenEyes", new[] { typeof(float), typeof(AnimationCurve) });
+                NomaiVR.Helper.HarmonyHelper.AddPostfix(openEyesMethod, typeof(Patches), nameof(PostOpenEyes));
+
+                NomaiVR.Post<PlayerCameraEffectController>("CloseEyes", typeof(Patches), nameof(PostCloseEyes));
+
+            }
+
+            static void PostStartFastForwarding () {
+                Locator.GetPlayerCamera().enabled = true;
+            }
+
+            static void PostOpenEyes () {
+                _instance.OpenEyes();
+            }
+
+            static void PostCloseEyes () {
+                _instance.CloseEyesDelayed();
             }
 
             static void PostTriggerFlashback (CanvasGroupAnimator ____whiteFadeAnimator) {
