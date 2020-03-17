@@ -12,10 +12,6 @@ namespace NomaiVR {
             // Move helmet forward to make it a bit more visible.
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
 
-            var helmetVisor = GameObject.Find("HelmetUVRenderer").transform;
-            helmetVisor.transform.localScale *= 3;
-            helmetVisor.transform.localPosition = Vector3.forward * 3;
-
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
             surface.transform.localPosition = new Vector3(-0.08f, -0.56f, 0.04f);
