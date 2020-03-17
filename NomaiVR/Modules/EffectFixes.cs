@@ -1,7 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace NomaiVR {
     public class EffectFixes: MonoBehaviour {
@@ -31,7 +30,7 @@ namespace NomaiVR {
 
             _camera = Locator.GetPlayerCamera();
 
-            if (SceneManager.GetActiveScene().name == "SolarSystem") {
+            if (LoadManager.GetPreviousScene() == OWScene.TitleScreen && LoadManager.GetCurrentScene() == OWScene.SolarSystem) {
                 CloseEyes();
             }
         }
