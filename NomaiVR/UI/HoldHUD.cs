@@ -7,30 +7,43 @@ namespace NomaiVR {
         private static Transform _thrusterHUD;
 
         void Awake () {
-            SetupThrusterHUD();
+            //SetupThrusterHUD();
 
             // Move helmet forward to make it a bit more visible.
             FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
 
+            var helmetVisor = GameObject.Find("HelmetUVRenderer").transform;
+            helmetVisor.transform.localScale *= 3;
+            helmetVisor.transform.localPosition = Vector3.forward * 3;
+
+            var surface = GameObject.Find("HUD_CurvedSurface").transform;
+            surface.transform.localScale = Vector3.one * 3.28f;
+            surface.transform.localPosition = new Vector3(-0.08f, -0.46f, 0.04f);
+            surface.gameObject.AddComponent<DebugTransform>();
+
+            var notifications = FindObjectOfType<SuitNotificationDisplay>().transform;
+
+            //surface.transform.localPosition = Vector3.forward * 3;
+
             var playerHUD = GameObject.Find("PlayerHUD");
-            var hudElements = Common.GetObjectsInLayer("HeadsUpDisplay");
+            //var hudElements = Common.GetObjectsInLayer("HeadsUpDisplay");
 
-            foreach (var hudElement in hudElements) {
-                hudElement.layer = LayerMask.NameToLayer("VisibleToPlayer");
-            }
+            //foreach (var hudElement in hudElements) {
+            //    hudElement.layer = LayerMask.NameToLayer("VisibleToPlayer");
+            //}
 
-            var uiCanvas = playerHUD.transform.Find("HelmetOnUI/UICanvas").GetComponent<Canvas>();
-            uiCanvas.transform.localScale = Vector3.one * 0.0005f;
-            uiCanvas.renderMode = RenderMode.WorldSpace;
-            uiCanvas.transform.localPosition = Vector3.zero;
-            uiCanvas.transform.localRotation = Quaternion.identity;
+            //var uiCanvas = playerHUD.transform.Find("HelmetOnUI/UICanvas").GetComponent<Canvas>();
+            //uiCanvas.transform.localScale = Vector3.one * 0.0005f;
+            //uiCanvas.renderMode = RenderMode.WorldSpace;
+            //uiCanvas.transform.localPosition = Vector3.zero;
+            //uiCanvas.transform.localRotation = Quaternion.identity;
 
-            _holdTransform = Hands.HoldObject(uiCanvas.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
+            //_holdTransform = Hands.HoldObject(uiCanvas.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
 
-            GlobalMessenger.AddListener("SuitUp", Enable);
-            GlobalMessenger.AddListener("RemoveSuit", Disable);
+            //GlobalMessenger.AddListener("SuitUp", Enable);
+            //GlobalMessenger.AddListener("RemoveSuit", Disable);
 
-            SetEnabled();
+            //SetEnabled();
 
             // Fix lock on UI on suit mode.
             var lockOnCanvas = playerHUD.transform.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
@@ -66,7 +79,7 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Helper.HarmonyHelper.AddPostfix<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), nameof(PatchLateUpdate));
+                //NomaiVR.Helper.HarmonyHelper.AddPostfix<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), nameof(PatchLateUpdate));
             }
 
             static void PatchLateUpdate () {
