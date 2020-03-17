@@ -1,9 +1,12 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 
 namespace NomaiVR {
     public class EffectFixes: MonoBehaviour {
         OWCamera _camera;
+        static float _farClipPlane = -1;
+        static int _cullingMask;
 
         void Start () {
             NomaiVR.Log("Started FogFix");
@@ -30,6 +33,19 @@ namespace NomaiVR {
             _camera.postProcessingSettings.vignetteEnabled = false;
         }
 
+        static void CloseEyes () {
+            _cullingMask = Camera.main.cullingMask;
+            _farClipPlane = Camera.main.farClipPlane;
+            Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
+            Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
+            Camera.main.farClipPlane = 5;
+        }
+
+        static void OpenEyes () {
+            Camera.main.cullingMask = _cullingMask;
+            Camera.main.farClipPlane = _farClipPlane;
+        }
+
         internal static class Patches {
             public static void Patch () {
                 // Fixes for fog stereo problems.
@@ -46,6 +62,28 @@ namespace NomaiVR {
 
                 // Prevent flashing on energy death.
                 NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patches), nameof(PostTriggerFlashback));
+
+                NomaiVR.Post<Campfire>("StartFastForwarding", typeof(Patches), nameof(PostStartFastForwarding));
+
+                var openEyesMethod =
+                    typeof(PlayerCameraEffectController)
+                    .GetMethod("OpenEyes", new[] { typeof(float), typeof(AnimationCurve) });
+                NomaiVR.Helper.HarmonyHelper.AddPostfix(openEyesMethod, typeof(Patches), nameof(PostOpenEyes));
+
+                NomaiVR.Post<PlayerCameraEffectController>("CloseEyes", typeof(Patches), nameof(PostCloseEyes));
+
+            }
+
+            static void PostStartFastForwarding () {
+                Locator.GetPlayerCamera().enabled = true;
+            }
+
+            static void PostOpenEyes () {
+                OpenEyes();
+            }
+
+            static void PostCloseEyes () {
+                CloseEyes();
             }
 
             static void PostTriggerFlashback (CanvasGroupAnimator ____whiteFadeAnimator) {
