@@ -2,18 +2,18 @@
 using UnityEngine;
 
 namespace NomaiVR {
-    public class Dialog: MonoBehaviour {
+    public class Dialogue: MonoBehaviour {
 
         private Transform _canvasTransform;
         private static Transform _attentionPoint = null;
-        private const float _dialogRenderSize = 0.0015f;
+        private const float _dialogeRenderSize = 0.0015f;
 
         void Start () {
-            NomaiVR.Log("Started Dialog Fixes");
+            NomaiVR.Log("Started Dialogue Fixes");
 
             _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
-            _canvasTransform.localScale *= _dialogRenderSize;
+            _canvasTransform.localScale *= _dialogeRenderSize;
             _canvasTransform.parent = Locator.GetPlayerTransform();
 
             var canvas = _canvasTransform.gameObject.GetComponent<Canvas>();

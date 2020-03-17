@@ -20,7 +20,7 @@ namespace NomaiVR {
 
             ShipTools.Patches.Patch();
             ControllerInput.Patches.Patch();
-            Dialog.Patches.Patch();
+            Dialogue.Patches.Patch();
             EffectFixes.Patches.Patch();
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
@@ -59,7 +59,7 @@ namespace NomaiVR {
                 Common.InitGame();
                 nonPersistentObject.AddComponent<EffectFixes>();
                 nonPersistentObject.AddComponent<PlayerBodyPosition>();
-                nonPersistentObject.AddComponent<Dialog>();
+                nonPersistentObject.AddComponent<Dialogue>();
                 nonPersistentObject.AddComponent<Hands>();
                 nonPersistentObject.AddComponent<FeetMarker>();
                 nonPersistentObject.AddComponent<InputPrompts>();
