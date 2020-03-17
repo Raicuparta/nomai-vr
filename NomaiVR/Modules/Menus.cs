@@ -7,8 +7,6 @@ using UnityEngine.UI;
 namespace NomaiVR {
     public class Menus: MonoBehaviour {
         public bool isInGame;
-        static float _farClipPlane = -1;
-        static int _cullingMask;
 
         void Awake () {
             NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
@@ -26,16 +24,6 @@ namespace NomaiVR {
             if (SceneManager.GetActiveScene().name == "SolarSystem") {
                 // Make sleep timer canvas visible while eyes closed.
                 Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
-
-                if (_farClipPlane == -1) {
-                    _cullingMask = Camera.main.cullingMask;
-                    _farClipPlane = Camera.main.farClipPlane;
-                    Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
-                    Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
-                    Camera.main.farClipPlane = 5;
-                }
-
-                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
         }
 
@@ -44,15 +32,6 @@ namespace NomaiVR {
                 var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
                 canvas.planeDistance = 5;
             }
-        }
-
-        public static void Reset () {
-            _farClipPlane = -1;
-        }
-
-        void OnWakeUp () {
-            Camera.main.cullingMask = _cullingMask;
-            Camera.main.farClipPlane = _farClipPlane;
         }
 
         void ScreenCanvasesToWorld () {

@@ -54,7 +54,6 @@ namespace NomaiVR {
 
             var isSolarSystem = scene.name == "SolarSystem";
             var isEye = scene.name == "EyeOfTheUniverse";
-            var isTitle = scene.name == "TitleScreen";
 
             // The GameObject associated with this ModBehaviour is set to persist between scene loads.
             // Some modules need to be restarted on every scene load.
@@ -74,8 +73,6 @@ namespace NomaiVR {
                     nonPersistentObject.AddComponent<ShipTools>();
                     nonPersistentObject.AddComponent<SolarSystemMap>();
                 }
-            } else if (isTitle) {
-                Menus.Reset();
             }
 
             nonPersistentObject.AddComponent<Menus>().isInGame = isSolarSystem || isEye;

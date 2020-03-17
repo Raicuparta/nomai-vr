@@ -1,14 +1,18 @@
 ﻿using OWML.ModHelper.Events;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NomaiVR {
     public class EffectFixes: MonoBehaviour {
         OWCamera _camera;
         static float _farClipPlane = -1;
         static int _cullingMask;
+        static EffectFixes _instance;
 
         void Start () {
+            _instance = this;
+
             NomaiVR.Log("Started FogFix");
 
             // Make dark bramble lights visible in the fog.
@@ -26,6 +30,10 @@ namespace NomaiVR {
             visorEffects.SetValue("_waterFadeInLength", 0);
 
             _camera = Locator.GetPlayerCamera();
+
+            if (SceneManager.GetActiveScene().name == "SolarSystem") {
+                CloseEyes();
+            }
         }
 
         void Update () {
@@ -33,15 +41,19 @@ namespace NomaiVR {
             _camera.postProcessingSettings.vignetteEnabled = false;
         }
 
-        static void CloseEyes () {
-            _cullingMask = Camera.main.cullingMask;
-            _farClipPlane = Camera.main.farClipPlane;
-            Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
-            Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
-            Camera.main.farClipPlane = 5;
+        void CloseEyesDelayed () {
+            Invoke(nameof(CloseEyes), 3);
         }
 
-        static void OpenEyes () {
+        void CloseEyes () {
+            _cullingMask = Camera.main.cullingMask;
+            _farClipPlane = Camera.main.farClipPlane;
+            Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
+            Camera.main.farClipPlane = 5;
+            Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
+        }
+
+        void OpenEyes () {
             Camera.main.cullingMask = _cullingMask;
             Camera.main.farClipPlane = _farClipPlane;
         }
@@ -79,11 +91,11 @@ namespace NomaiVR {
             }
 
             static void PostOpenEyes () {
-                OpenEyes();
+                _instance.OpenEyes();
             }
 
             static void PostCloseEyes () {
-                CloseEyes();
+                _instance.CloseEyesDelayed();
             }
 
             static void PostTriggerFlashback (CanvasGroupAnimator ____whiteFadeAnimator) {
