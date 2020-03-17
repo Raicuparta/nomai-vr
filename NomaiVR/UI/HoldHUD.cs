@@ -80,6 +80,12 @@ namespace NomaiVR {
         internal static class Patches {
             public static void Patch () {
                 //NomaiVR.Helper.HarmonyHelper.AddPostfix<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), nameof(PatchLateUpdate));
+                NomaiVR.Post<HUDCamera>("Awake", typeof(Patches), nameof(PostHUDCameraAwake));
+            }
+
+            static void PostHUDCameraAwake (Camera ____camera) {
+                // Prevent distortion of helmet HUD.
+                ____camera.fieldOfView = 60;
             }
 
             static void PatchLateUpdate () {
