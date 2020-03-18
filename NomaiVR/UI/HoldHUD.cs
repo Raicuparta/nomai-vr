@@ -15,7 +15,8 @@ namespace NomaiVR {
 
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
-            surface.transform.localPosition = new Vector3(-0.08f, -0.56f, 0.04f);
+            surface.transform.localPosition = new Vector3(-0.06f, -0.56f, 0.06f);
+            surface.gameObject.AddComponent<DebugTransform>();
 
             var followTarget = helmet.gameObject.AddComponent<FollowTarget>();
             followTarget.target = Camera.main.transform;
