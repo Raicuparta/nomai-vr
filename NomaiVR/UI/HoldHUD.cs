@@ -10,11 +10,20 @@ namespace NomaiVR {
             //SetupThrusterHUD();
 
             // Move helmet forward to make it a bit more visible.
-            FindObjectOfType<HUDHelmetAnimator>().transform.localPosition += Vector3.forward * 0.2f;
+            var helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
+            helmet.localPosition += Vector3.forward * 0.2f;
 
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
             surface.transform.localPosition = new Vector3(-0.08f, -0.56f, 0.04f);
+
+            var followTarget = helmet.gameObject.AddComponent<FollowTarget>();
+            followTarget.target = Camera.main.transform;
+            followTarget.localPosition = Vector3.forward * 0.2f;
+            followTarget.rotationSmoothTime = 0.1f;
+            //followTarget.positionSmoothTime = 0.1f;
+
+            helmet.parent = null;
 
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
