@@ -10,8 +10,7 @@ namespace NomaiVR {
 
             // Move helmet forward to make it a bit more visible.
             _helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
-            _helmet.localPosition += Vector3.forward * 0.2f;
-            _helmet.parent = null;
+            _helmet.parent = Locator.GetPlayerTransform();
 
             // Adjust projected HUD.
             var surface = GameObject.Find("HUD_CurvedSurface").transform;

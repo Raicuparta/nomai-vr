@@ -79,16 +79,6 @@ namespace NomaiVR {
             bracketImage.localPosition = Vector3.zero;
             bracketImage.localRotation = Quaternion.identity;
             bracketImage.localScale *= 0.5f;
-            //bracketImage.gameObject.AddComponent<FollowTarget>().target = display;
-            //bracketImage.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe, ToolGroup.Suit);
-
-            //var notifications = uiCanvas.Find("Notifications");
-            //notifications.parent = Hands.RightHand;
-            //notifications.localPosition = new Vector3(-0.08f, 0f, -0.12f);
-            //notifications.localRotation = Quaternion.Euler(0, 90, 50);
-            //notifications.localScale = Vector3.one * 0.001f;
-            //var conditionalRenderer = notifications.gameObject.AddComponent<ConditionalRenderer>();
-            //conditionalRenderer.getShouldRender = () => Locator.GetPlayerSuit().IsWearingSuit();
 
             probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
 
