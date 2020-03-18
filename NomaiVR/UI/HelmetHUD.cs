@@ -4,25 +4,26 @@ namespace NomaiVR {
     public class HelmetHUD: MonoBehaviour {
         private static Transform _thrusterParent;
         private static Transform _thrusterHUD;
+        private static Transform _helmet;
 
         void Awake () {
-            //SetupThrusterHUD();
+            SetupThrusterHUD();
 
             // Move helmet forward to make it a bit more visible.
-            var helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
-            helmet.localPosition += Vector3.forward * 0.2f;
+            _helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
+            _helmet.localPosition += Vector3.forward * 0.2f;
 
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
             surface.transform.localPosition = new Vector3(-0.06f, -0.56f, 0.06f);
             surface.gameObject.AddComponent<DebugTransform>();
 
-            var followTarget = helmet.gameObject.AddComponent<FollowTarget>();
+            var followTarget = _helmet.gameObject.AddComponent<FollowTarget>();
             followTarget.target = Camera.main.transform;
             followTarget.localPosition = Vector3.forward * 0.2f;
             followTarget.rotationSmoothTime = 0.1f;
 
-            helmet.parent = null;
+            _helmet.parent = null;
 
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
@@ -51,17 +52,17 @@ namespace NomaiVR {
 
         void SetupThrusterHUD () {
             _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
-            _thrusterParent = new GameObject().transform;
-            _thrusterParent.parent = _thrusterHUD.parent;
-            _thrusterParent.localRotation = Quaternion.identity;
-            _thrusterParent.localPosition = _thrusterHUD.localPosition;
-            _thrusterHUD.parent = _thrusterParent;
-            _thrusterHUD.localPosition = Vector3.zero;
+            //_thrusterParent = new GameObject().transform;
+            //_thrusterParent.parent = _thrusterHUD.parent;
+            //_thrusterParent.localRotation = Quaternion.identity;
+            //_thrusterParent.localPosition = _thrusterHUD.localPosition;
+            //_thrusterHUD.parent = _thrusterParent;
+            //_thrusterHUD.localPosition = Vector3.zero;
         }
 
         internal static class Patches {
             public static void Patch () {
-                //NomaiVR.Helper.HarmonyHelper.AddPostfix<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), nameof(PatchLateUpdate));
+                NomaiVR.Helper.HarmonyHelper.AddPostfix<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), nameof(PatchLateUpdate));
                 NomaiVR.Post<HUDCamera>("Awake", typeof(Patches), nameof(PostHUDCameraAwake));
             }
 
@@ -71,10 +72,17 @@ namespace NomaiVR {
             }
 
             static void PatchLateUpdate () {
-                // only allow rotation around the up/down axis, always face forward
-                _thrusterParent.transform.rotation = Quaternion.LookRotation(Common.PlayerHead.up, Locator.GetPlayerTransform().forward);
-                // gets updated elsewhere and needs to be reset to proper local rotation
-                _thrusterHUD.localRotation = Quaternion.Euler(-90f, 0f, 180f);
+                //// only allow rotation around the up/down axis, always face forward
+
+                var rotation = _helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
+
+
+                _thrusterHUD.transform.rotation = rotation;
+                //// gets updated elsewhere and needs to be reset to proper local rotation
+                //_thrusterHUD.localRotation = Quaternion.Euler(-90f, 0f, 180f);
+
+                //_thrusterHUD.forward = Locator.GetPlayerTransform().forward;
+                //_thrusterHUD.up = Locator.GetPlayerTransform().up;
             }
         }
     }
