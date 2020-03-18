@@ -29,7 +29,7 @@ namespace NomaiVR {
             LaserPointer.Patches.Patch();
             PlayerBodyPosition.Patches.Patch();
             ForceSettings.Patches.Patch();
-            HoldHUD.Patches.Patch();
+            HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
             //VRTutorial.Patches.Patch();
 

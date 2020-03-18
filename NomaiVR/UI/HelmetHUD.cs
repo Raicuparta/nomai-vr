@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
 namespace NomaiVR {
-    public class HoldHUD: MonoBehaviour {
-        Transform _holdTransform;
+    public class HelmetHUD: MonoBehaviour {
         private static Transform _thrusterParent;
         private static Transform _thrusterHUD;
 
@@ -22,7 +21,6 @@ namespace NomaiVR {
             followTarget.target = Camera.main.transform;
             followTarget.localPosition = Vector3.forward * 0.2f;
             followTarget.rotationSmoothTime = 0.1f;
-            //followTarget.positionSmoothTime = 0.1f;
 
             helmet.parent = null;
 
@@ -46,31 +44,9 @@ namespace NomaiVR {
 
             //_holdTransform = Hands.HoldObject(uiCanvas.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
 
-            //GlobalMessenger.AddListener("SuitUp", Enable);
-            //GlobalMessenger.AddListener("RemoveSuit", Disable);
-
-            //SetEnabled();
-
             // Fix lock on UI on suit mode.
             var lockOnCanvas = playerHUD.transform.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
             lockOnCanvas.planeDistance = 10;
-        }
-
-        void Enable () {
-            _holdTransform.gameObject.SetActive(true);
-        }
-
-        void Disable () {
-            _holdTransform.gameObject.SetActive(false);
-        }
-
-
-        void SetEnabled () {
-            if (Locator.GetPlayerSuit().IsWearingSuit(true) && Common.ToolSwapper.GetToolGroup() == ToolGroup.Suit) {
-                Enable();
-            } else {
-                Disable();
-            }
         }
 
         void SetupThrusterHUD () {

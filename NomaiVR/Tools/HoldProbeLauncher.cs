@@ -67,16 +67,20 @@ namespace NomaiVR {
             hudProbeDisplay.localPosition = Vector3.zero;
             hudProbeDisplay.localRotation = Quaternion.identity;
 
-            var bracketImage = uiCanvas.Find("BracketImage");
-            bracketImage.gameObject.AddComponent<FollowTarget>().target = display;
-            bracketImage.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe, ToolGroup.Suit);
-
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
             displayImage.anchorMax = Vector2.one * 0.5f;
             displayImage.pivot = Vector2.one * 0.5f;
             displayImage.localPosition = Vector3.zero;
             displayImage.localRotation = Quaternion.identity;
+
+            var bracketImage = uiCanvas.Find("BracketImage");
+            bracketImage.transform.parent = display;
+            bracketImage.localPosition = Vector3.zero;
+            bracketImage.localRotation = Quaternion.identity;
+            bracketImage.localScale *= 0.5f;
+            //bracketImage.gameObject.AddComponent<FollowTarget>().target = display;
+            //bracketImage.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe, ToolGroup.Suit);
 
             //var notifications = uiCanvas.Find("Notifications");
             //notifications.parent = Hands.RightHand;

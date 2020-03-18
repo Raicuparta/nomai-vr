@@ -106,7 +106,7 @@
     <Compile Include="ReusableBehaviours\Grabbable.cs" />
     <Compile Include="Tools\FlashlightGesture.cs" />
     <Compile Include="Tools\HoldItem.cs" />
-    <Compile Include="UI\HoldHUD.cs" />
+    <Compile Include="UI\HelmetHUD.cs" />
     <Compile Include="Tools\HoldMallowStick.cs" />
     <Compile Include="Tools\HoldProbeLauncher.cs" />
     <Compile Include="UI\HoldPrompts.cs" />
