@@ -2,7 +2,6 @@
 
 namespace NomaiVR {
     public class HelmetHUD: MonoBehaviour {
-        private static Transform _thrusterParent;
         private static Transform _thrusterHUD;
         private static Transform _helmet;
 
@@ -28,22 +27,7 @@ namespace NomaiVR {
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
 
-            //surface.transform.localPosition = Vector3.forward * 3;
-
             var playerHUD = GameObject.Find("PlayerHUD");
-            //var hudElements = Common.GetObjectsInLayer("HeadsUpDisplay");
-
-            //foreach (var hudElement in hudElements) {
-            //    hudElement.layer = LayerMask.NameToLayer("VisibleToPlayer");
-            //}
-
-            //var uiCanvas = playerHUD.transform.Find("HelmetOnUI/UICanvas").GetComponent<Canvas>();
-            //uiCanvas.transform.localScale = Vector3.one * 0.0005f;
-            //uiCanvas.renderMode = RenderMode.WorldSpace;
-            //uiCanvas.transform.localPosition = Vector3.zero;
-            //uiCanvas.transform.localRotation = Quaternion.identity;
-
-            //_holdTransform = Hands.HoldObject(uiCanvas.transform, Hands.LeftHand, new Vector3(0.12f, -0.09f, 0.01f), Quaternion.Euler(47f, 220f, 256f));
 
             // Fix lock on UI on suit mode.
             var lockOnCanvas = playerHUD.transform.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
@@ -52,12 +36,6 @@ namespace NomaiVR {
 
         void SetupThrusterHUD () {
             _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
-            //_thrusterParent = new GameObject().transform;
-            //_thrusterParent.parent = _thrusterHUD.parent;
-            //_thrusterParent.localRotation = Quaternion.identity;
-            //_thrusterParent.localPosition = _thrusterHUD.localPosition;
-            //_thrusterHUD.parent = _thrusterParent;
-            //_thrusterHUD.localPosition = Vector3.zero;
         }
 
         internal static class Patches {
@@ -72,17 +50,8 @@ namespace NomaiVR {
             }
 
             static void PatchLateUpdate () {
-                //// only allow rotation around the up/down axis, always face forward
-
                 var rotation = _helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
-
-
                 _thrusterHUD.transform.rotation = rotation;
-                //// gets updated elsewhere and needs to be reset to proper local rotation
-                //_thrusterHUD.localRotation = Quaternion.Euler(-90f, 0f, 180f);
-
-                //_thrusterHUD.forward = Locator.GetPlayerTransform().forward;
-                //_thrusterHUD.up = Locator.GetPlayerTransform().up;
             }
         }
     }
