@@ -36,7 +36,6 @@ namespace NomaiVR {
             gameObject.AddComponent<HoldItem>();
             gameObject.AddComponent<HoldPrompts>();
             gameObject.AddComponent<LaserPointer>();
-            gameObject.AddComponent<HelmetHUD>();
         }
 
         bool ShouldRenderGloves () {
