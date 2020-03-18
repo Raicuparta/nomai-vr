@@ -71,6 +71,12 @@ namespace NomaiVR {
             if (_visible && Common.ToolSwapper.IsInToolMode(mode)) {
                 SetVisible(false);
             }
+        }
+
+        void LateUpdate () {
+            if (!_enabled) {
+                return;
+            }
             if (_enabled && _visible) {
                 transform.position = Camera.main.transform.position + Common.PlayerBody.transform.TransformVector(position);
                 transform.rotation = Common.PlayerBody.transform.rotation;
