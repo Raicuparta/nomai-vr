@@ -96,8 +96,8 @@ namespace NomaiVR {
             _lensCamera.transform.parent = null;
             var followTarget = _lensCamera.gameObject.AddComponent<FollowTarget>();
             followTarget.target = _lens;
-            followTarget.rotationSmoothTime = 0.05f;
-            followTarget.positionSmoothTime = 0.05f;
+            followTarget.rotationSmoothTime = 0.1f;
+            followTarget.positionSmoothTime = 0.1f;
 
             var owCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
             owCamera.useFarCamera = true;
