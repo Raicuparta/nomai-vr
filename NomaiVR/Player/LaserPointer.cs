@@ -96,12 +96,12 @@ namespace NomaiVR {
                 }
             }
 
-            static Vector3 _cameraForward;
+            static Quaternion _cameraRotation;
             static Vector3 _cameraPosition;
 
             static void PreUpdateIsDroppable () {
                 var camera = Locator.GetPlayerCamera();
-                _cameraForward = camera.transform.forward;
+                _cameraRotation = camera.transform.rotation;
                 _cameraPosition = camera.transform.position;
                 camera.transform.position = Laser.position;
                 camera.transform.forward = Laser.forward;
@@ -110,7 +110,7 @@ namespace NomaiVR {
             static void PostUpdateIsDroppable () {
                 var camera = Locator.GetPlayerCamera();
                 camera.transform.position = _cameraPosition;
-                camera.transform.forward = _cameraForward;
+                camera.transform.rotation = _cameraRotation;
             }
         }
 
