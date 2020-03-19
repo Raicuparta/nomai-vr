@@ -6,7 +6,7 @@ namespace NomaiVR {
     public class EffectFixes: MonoBehaviour {
         OWCamera _camera;
         static float _farClipPlane = -1;
-        static int _cullingMask;
+        public static int cullingMask = -1;
         static EffectFixes _instance;
 
         void Start () {
@@ -45,7 +45,7 @@ namespace NomaiVR {
         }
 
         void CloseEyes () {
-            _cullingMask = Camera.main.cullingMask;
+            cullingMask = Camera.main.cullingMask;
             _farClipPlane = Camera.main.farClipPlane;
             Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
             Camera.main.farClipPlane = 5;
@@ -53,7 +53,7 @@ namespace NomaiVR {
         }
 
         void OpenEyes () {
-            Camera.main.cullingMask = _cullingMask;
+            Camera.main.cullingMask = cullingMask;
             Camera.main.farClipPlane = _farClipPlane;
         }
 

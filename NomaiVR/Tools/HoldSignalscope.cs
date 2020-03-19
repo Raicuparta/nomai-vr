@@ -90,14 +90,14 @@ namespace NomaiVR {
 
             _lensCamera = _lens.GetComponentInChildren<Camera>();
             _lensCamera.gameObject.SetActive(false);
-            _lensCamera.cullingMask = Camera.main.cullingMask;
+            _lensCamera.cullingMask = EffectFixes.cullingMask == -1 ? Locator.GetPlayerCamera().cullingMask : EffectFixes.cullingMask;
             _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
-            _lensCamera.fieldOfView = 5f;
+            _lensCamera.fieldOfView = 5;
             _lensCamera.transform.parent = null;
             var followTarget = _lensCamera.gameObject.AddComponent<FollowTarget>();
             followTarget.target = _lens;
-            followTarget.rotationSmoothTime = 0.2f;
-            followTarget.positionSmoothTime = 0.1f;
+            followTarget.rotationSmoothTime = 0.05f;
+            followTarget.positionSmoothTime = 0.05f;
 
             var owCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
             owCamera.useFarCamera = true;
