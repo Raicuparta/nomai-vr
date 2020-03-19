@@ -44,8 +44,6 @@ namespace NomaiVR {
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
             _reticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
-            var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
-            var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
 
             // Attatch Signalscope UI to the Signalscope.
             _reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
@@ -56,10 +54,13 @@ namespace NomaiVR {
 
             _signalscope.gameObject.AddComponent<ToolModeInteraction>();
 
+            var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
             SetupSignalscopeUI(helmetOff);
-            SetupSignalscopeUI(helmetOn);
             helmetOff.localPosition += Vector3.up * 0.63f;
 
+            var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
+            SetupSignalscopeUI(helmetOn);
+            Common.ChangeLayerRecursive(helmetOn.gameObject, LayerMask.NameToLayer("UI"));
             SetupScopeLens();
         }
 
