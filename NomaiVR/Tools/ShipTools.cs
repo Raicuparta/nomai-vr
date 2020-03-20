@@ -25,10 +25,8 @@ namespace NomaiVR {
             var isInShip = _cockpitController.IsPlayerAtFlightConsole();
 
             if (isInShip && !_canInteractWithTools) {
-                NomaiVR.Log("########## Enable");
                 SetEnabled(true);
             } else if (!isInShip && _canInteractWithTools) {
-                NomaiVR.Log("########## Disable");
                 SetEnabled(false);
             }
 
