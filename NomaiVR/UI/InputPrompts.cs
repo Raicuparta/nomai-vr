@@ -182,7 +182,6 @@ namespace NomaiVR {
                 ScreenPrompt ____launchModePrompt
             ) {
                 _toolUnequipPrompts.Add(____unequipPrompt);
-                NomaiVR.Log("adding", _toolUnequipPrompts.Count.ToString());
                 _manager.RemoveScreenPrompt(____photoModePrompt);
                 _manager.RemoveScreenPrompt(____reverseCamPrompt);
                 _manager.RemoveScreenPrompt(____rotatePrompt);

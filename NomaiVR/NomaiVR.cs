@@ -29,7 +29,7 @@ namespace NomaiVR {
             LaserPointer.Patches.Patch();
             PlayerBodyPosition.Patches.Patch();
             ForceSettings.Patches.Patch();
-            HoldHUD.Patches.Patch();
+            HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
             //VRTutorial.Patches.Patch();
 
@@ -63,6 +63,7 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<Hands>();
                 nonPersistentObject.AddComponent<FeetMarker>();
                 nonPersistentObject.AddComponent<InputPrompts>();
+                nonPersistentObject.AddComponent<HelmetHUD>();
                 //nonPersistentObject.AddComponent<VRTutorial>();
                 if (isSolarSystem) {
                     nonPersistentObject.AddComponent<ShipTools>();

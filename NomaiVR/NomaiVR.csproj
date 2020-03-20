@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
+    <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
     <Compile Include="UI\Dialogue.cs" />
     <Compile Include="Player\FeetMarker.cs" />
     <Compile Include="ReusableBehaviours\FollowTarget.cs" />
@@ -106,7 +107,7 @@
     <Compile Include="ReusableBehaviours\Grabbable.cs" />
     <Compile Include="Tools\FlashlightGesture.cs" />
     <Compile Include="Tools\HoldItem.cs" />
-    <Compile Include="UI\HoldHUD.cs" />
+    <Compile Include="UI\HelmetHUD.cs" />
     <Compile Include="Tools\HoldMallowStick.cs" />
     <Compile Include="Tools\HoldProbeLauncher.cs" />
     <Compile Include="UI\HoldPrompts.cs" />

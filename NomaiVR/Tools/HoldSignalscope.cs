@@ -44,8 +44,6 @@ namespace NomaiVR {
 
             var playerHUD = GameObject.Find("PlayerHUD").transform;
             _reticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
-            var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
-            var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
 
             // Attatch Signalscope UI to the Signalscope.
             _reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
@@ -56,10 +54,13 @@ namespace NomaiVR {
 
             _signalscope.gameObject.AddComponent<ToolModeInteraction>();
 
+            var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
             SetupSignalscopeUI(helmetOff);
-            SetupSignalscopeUI(helmetOn);
             helmetOff.localPosition += Vector3.up * 0.63f;
 
+            var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
+            SetupSignalscopeUI(helmetOn);
+            Common.ChangeLayerRecursive(helmetOn.gameObject, LayerMask.NameToLayer("UI"));
             SetupScopeLens();
         }
 
@@ -89,14 +90,14 @@ namespace NomaiVR {
 
             _lensCamera = _lens.GetComponentInChildren<Camera>();
             _lensCamera.gameObject.SetActive(false);
-            _lensCamera.cullingMask = Camera.main.cullingMask;
-            _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
-            _lensCamera.fieldOfView = 5f;
+            _lensCamera.cullingMask = EffectFixes.cullingMask == -1 ? Locator.GetPlayerCamera().cullingMask : EffectFixes.cullingMask;
+            _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI")) & ~(1 << LayerMask.NameToLayer("VisibleToPlayer"));
+            _lensCamera.fieldOfView = 5;
             _lensCamera.transform.parent = null;
             var followTarget = _lensCamera.gameObject.AddComponent<FollowTarget>();
             followTarget.target = _lens;
-            followTarget.rotationSmoothSpeed = 0.2f;
-            followTarget.positionSmoothSpeed = 0.1f;
+            followTarget.rotationSmoothTime = 0.1f;
+            followTarget.positionSmoothTime = 0.1f;
 
             var owCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
             owCamera.useFarCamera = true;

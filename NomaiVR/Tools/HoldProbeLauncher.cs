@@ -5,7 +5,7 @@ namespace NomaiVR {
     public class HoldProbeLauncher: MonoBehaviour {
         Transform _probeLauncherModel;
         GameObject _probeLauncherHolster;
-        protected static ProbeLauncherUI ProbeUI;
+        static ProbeLauncherUI _probeUI;
 
         void Awake () {
             var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
@@ -41,6 +41,7 @@ namespace NomaiVR {
             launchOrigin.localPosition = Vector3.forward * 0.2f;
             launchOrigin.localRotation = Quaternion.identity;
 
+            // Create and adjust hip holster model.
             _probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
             _probeLauncherHolster.SetActive(false);
             var holster = _probeLauncherHolster.AddComponent<HolsterTool>();
@@ -50,6 +51,7 @@ namespace NomaiVR {
             holster.scale = 0.15f;
             holster.angle = Vector3.right * 90;
 
+            // Move probe picture to probe launcher.
             var playerHUD = GameObject.Find("PlayerHUD").transform;
             var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
             display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
@@ -57,7 +59,7 @@ namespace NomaiVR {
             display.localScale = Vector3.one * 0.0014f;
             display.localRotation = Quaternion.identity;
             display.localPosition = Vector3.forward * -0.8f;
-            ProbeUI = display.GetComponent<ProbeLauncherUI>();
+            _probeUI = display.GetComponent<ProbeLauncherUI>();
 
             var uiCanvas = playerHUD.Find("HelmetOnUI/UICanvas");
             uiCanvas.Find("HUDProbeDisplay/Image").gameObject.SetActive(false);
@@ -67,10 +69,7 @@ namespace NomaiVR {
             hudProbeDisplay.localPosition = Vector3.zero;
             hudProbeDisplay.localRotation = Quaternion.identity;
 
-            var bracketImage = uiCanvas.Find("BracketImage");
-            bracketImage.gameObject.AddComponent<FollowTarget>().target = display;
-            bracketImage.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe, ToolGroup.Suit);
-
+            // Adjust probe picture position.
             var displayImage = display.GetChild(0).GetComponent<RectTransform>();
             displayImage.anchorMin = Vector2.one * 0.5f;
             displayImage.anchorMax = Vector2.one * 0.5f;
@@ -78,13 +77,12 @@ namespace NomaiVR {
             displayImage.localPosition = Vector3.zero;
             displayImage.localRotation = Quaternion.identity;
 
-            var notifications = uiCanvas.Find("Notifications");
-            notifications.parent = Hands.RightHand;
-            notifications.localPosition = new Vector3(-0.08f, 0f, -0.12f);
-            notifications.localRotation = Quaternion.Euler(0, 90, 50);
-            notifications.localScale = Vector3.one * 0.001f;
-            var conditionalRenderer = notifications.gameObject.AddComponent<ConditionalRenderer>();
-            conditionalRenderer.getShouldRender = () => Locator.GetPlayerSuit().IsWearingSuit();
+            // Move photo mode bracket to probe launcher.
+            var bracketImage = uiCanvas.Find("BracketImage");
+            bracketImage.transform.parent = display;
+            bracketImage.localPosition = Vector3.zero;
+            bracketImage.localRotation = Quaternion.identity;
+            bracketImage.localScale *= 0.5f;
 
             probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
 
@@ -104,14 +102,22 @@ namespace NomaiVR {
             public static void Patch () {
                 NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patches), nameof(Patches.SuitUp));
                 NomaiVR.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patches), nameof(Patches.RemoveSuit));
+                NomaiVR.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patches), nameof(Patches.PostHideHUD));
+            }
+
+            static void PostHideHUD (Canvas ____canvas) {
+                // Prevent the photo mode bracket from disappearing.
+                if (____canvas != null) {
+                    ____canvas.enabled = true;
+                }
             }
 
             static void SuitUp () {
-                ProbeUI.SetValue("_nonSuitUI", false);
+                _probeUI.SetValue("_nonSuitUI", false);
             }
 
             static void RemoveSuit () {
-                ProbeUI.SetValue("_nonSuitUI", true);
+                _probeUI.SetValue("_nonSuitUI", true);
             }
         }
     }
