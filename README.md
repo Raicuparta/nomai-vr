@@ -44,10 +44,9 @@ Since most VR controllers have less buttons than a normal game controller, input
 * Make sure the translator tool is set to "manual" in the settings;
 * Disable button prompts in the settings (they will be wrong and annoying anyway);
 
-### If you have Oculus
+## Compatibility with other mods
 
-* Create a shortcut to `OWML.Launcher.exe` and add the params `-vrmode openvr` ([like in this image](https://i.imgur.com/5uv88Nk.png))
-* Use the shortcut you just created to launch the game;
+NomaiVR affects code in pretty much the whole game, and drastically changes things in ways that are sure to break other mods. If you are having issues, make sure you disable any other mods you might have installed.
 
 ## Contributing
 
