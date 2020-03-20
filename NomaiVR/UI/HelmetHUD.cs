@@ -10,7 +10,9 @@ namespace NomaiVR {
 
             // Move helmet forward to make it a bit more visible.
             _helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
-            _helmet.parent = null;
+            _helmet.localPosition = Vector3.forward * 0.2f;
+            _helmet.gameObject.AddComponent<SmoothFoolowParent>();
+
 
             // Adjust projected HUD.
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
@@ -19,12 +21,6 @@ namespace NomaiVR {
             surface.gameObject.AddComponent<DebugTransform>();
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
-
-            // Make helmet follow camera smoothly.
-            var followTarget = _helmet.gameObject.AddComponent<FollowTarget>();
-            followTarget.target = Camera.main.transform;
-            followTarget.localPosition = Vector3.forward * 0.2f;
-            followTarget.rotationSmoothTime = 0.05f;
 
             var playerHUD = GameObject.Find("PlayerHUD");
 
