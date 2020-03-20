@@ -23,9 +23,14 @@ namespace NomaiVR {
                 fromRot = lastFrameRot;
             }
 
-            lastFrameRot = QuaternionHelper.SmoothDamp(fromRot, newDesiredRot, ref rotationVelocity, smoothTime);
-
-            transform.rotation = lastFrameRot;
+            if (Time.timeScale != 1) {
+                lastFrameRot = newDesiredRot;
+                rotationVelocity = Quaternion.identity;
+                transform.localRotation = startLocalRot;
+            } else {
+                lastFrameRot = QuaternionHelper.SmoothDamp(fromRot, newDesiredRot, ref rotationVelocity, smoothTime);
+                transform.rotation = lastFrameRot;
+            }
         }
     }
 }
