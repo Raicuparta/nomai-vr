@@ -124,19 +124,9 @@ namespace NomaiVR {
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(ChangeInputMode));
-                NomaiVR.Pre<SignalscopeReticleController>("Start", typeof(Patches), nameof(PreStartReticleController));
                 NomaiVR.Post<QuantumInstrument>("Update", typeof(Patches), nameof(PostQuantumInstrumentUpdate));
                 NomaiVR.Empty<Signalscope>("EnterSignalscopeZoom");
                 NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
-            }
-
-            static bool PreStartReticleController (SignalscopeReticleController __instance) {
-                GameObject.Find("HUDController").GetComponent<HUDCanvas>().RegisterSignalscopeReticuleController(__instance);
-                if (Locator.GetShipTransform() != null) {
-                    Locator.GetShipTransform().GetComponentInChildren<ShipCockpitUI>().RegisterSignalscopeReticuleController(__instance);
-                }
-
-                return false;
             }
 
             static void PostQuantumInstrumentUpdate (QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut) {
