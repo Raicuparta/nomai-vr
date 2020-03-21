@@ -16,6 +16,17 @@ namespace NomaiVR {
 
             _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
 
+            // Add a stronger line pointing forward in the thruster HUD
+            var forwardIndicator = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
+            forwardIndicator.parent = _thrusterHUD.Find("ThrusterArrows/Positive_Z");
+            forwardIndicator.localPosition = Vector3.forward * 0.75f;
+            forwardIndicator.localRotation = Quaternion.identity;
+            forwardIndicator.localScale = new Vector3(0.05f, 0.05f, 1.5f);
+            forwardIndicator.gameObject.AddComponent<DebugTransform>();
+            forwardIndicator.gameObject.layer = LayerMask.NameToLayer("HeadsUpDisplay");
+            forwardIndicator.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
+            forwardIndicator.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+
             var animator = FindObjectOfType<HUDHelmetAnimator>();
             animator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
 
