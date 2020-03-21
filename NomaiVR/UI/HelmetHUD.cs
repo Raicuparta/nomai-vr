@@ -4,14 +4,29 @@ namespace NomaiVR {
     public class HelmetHUD: MonoBehaviour {
         private static Transform _thrusterHUD;
         private static Transform _helmet;
+        static AssetBundle _assetBundle;
+        static GameObject _helmetPrefab;
 
         void Awake () {
+            if (!_assetBundle) {
+                _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/helmet");
+                _helmetPrefab = _assetBundle.LoadAsset<GameObject>("assets/helmet.prefab");
+            }
+
             _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
 
             // Move helmet forward to make it a bit more visible.
             _helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
             _helmet.localPosition = Vector3.forward * 0.2f;
             _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();
+
+
+            // Replace helmet model to prevent looking outside the edge.
+            var helmetModelParent = _helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
+            Instantiate(_helmetPrefab, helmetModelParent);
+            Destroy(helmetModelParent.Find("Helmet").gameObject);
+            Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
+            //helmetModel.AddComponent<DebugTransform>();
 
 
             // Adjust projected HUD.
