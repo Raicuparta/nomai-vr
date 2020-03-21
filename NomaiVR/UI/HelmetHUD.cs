@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using OWML.ModHelper.Events;
+using UnityEngine;
 
 namespace NomaiVR {
     public class HelmetHUD: MonoBehaviour {
@@ -15,8 +16,11 @@ namespace NomaiVR {
 
             _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
 
+            var animator = FindObjectOfType<HUDHelmetAnimator>();
+            animator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
+
             // Move helmet forward to make it a bit more visible.
-            _helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
+            _helmet = animator.transform;
             _helmet.localPosition = Vector3.forward * 0.05f;
             _helmet.localScale = Vector3.one * 0.5f;
             _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();

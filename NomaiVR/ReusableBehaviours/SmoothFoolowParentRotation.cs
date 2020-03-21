@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NomaiVR {
     public class SmoothFoolowParentRotation: MonoBehaviour {
-        private float smoothTime = 0.05f;
+        private float smoothTime = 0.08f;
 
         private Quaternion rotationVelocity;
         private Quaternion startLocalRot, lastFrameRot, lastDesiredRot, fromRot;
@@ -14,7 +14,7 @@ namespace NomaiVR {
             lastFrameRot = transform.rotation;
         }
 
-        void Update () {
+        void LateUpdate () {
             Quaternion newDesiredRot = transform.parent.rotation * startLocalRot;
 
             if (lastDesiredRot != newDesiredRot) {
