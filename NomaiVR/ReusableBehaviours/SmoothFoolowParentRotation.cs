@@ -14,7 +14,7 @@ namespace NomaiVR {
             lastFrameRot = transform.rotation;
         }
 
-        void LateUpdate () {
+        void Update () {
             Quaternion newDesiredRot = transform.parent.rotation * startLocalRot;
 
             if (lastDesiredRot != newDesiredRot) {
