@@ -17,7 +17,8 @@ namespace NomaiVR {
 
             // Move helmet forward to make it a bit more visible.
             _helmet = FindObjectOfType<HUDHelmetAnimator>().transform;
-            _helmet.localPosition = Vector3.forward * 0.2f;
+            _helmet.localPosition = Vector3.forward * 0.05f;
+            _helmet.localScale = Vector3.one * 0.5f;
             _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();
 
 
