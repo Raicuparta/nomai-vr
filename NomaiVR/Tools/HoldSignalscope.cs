@@ -60,7 +60,7 @@ namespace NomaiVR {
 
             var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
             SetupSignalscopeUI(helmetOn);
-            Common.ChangeLayerRecursive(helmetOn.gameObject, LayerMask.NameToLayer("UI"));
+            Common.ChangeLayerRecursive(helmetOn.gameObject, "UI");
             SetupScopeLens();
         }
 
