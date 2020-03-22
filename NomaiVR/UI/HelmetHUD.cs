@@ -34,7 +34,6 @@ namespace NomaiVR {
             _helmet.localPosition = Vector3.forward * -0.07f;
             _helmet.localScale = Vector3.one * 0.5f;
             _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();
-            _helmet.gameObject.AddComponent<DebugTransform>();
 
             Camera.main.nearClipPlane = 0.01f;
 
@@ -47,7 +46,8 @@ namespace NomaiVR {
             // Adjust projected HUD.
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
-            surface.transform.localPosition = new Vector3(-0.06f, -0.56f, 0.06f);
+            surface.transform.localPosition = new Vector3(-0.06f, -0.76f, 0.06f);
+            surface.gameObject.AddComponent<DebugTransform>();
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
 
