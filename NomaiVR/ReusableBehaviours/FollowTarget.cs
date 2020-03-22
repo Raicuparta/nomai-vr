@@ -29,7 +29,6 @@ namespace NomaiVR {
             } else {
                 transform.position = targetPosition;
             }
-
         }
     }
 }

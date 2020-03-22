@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace NomaiVR {
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-
     public class SmoothFoolowParentRotation: MonoBehaviour {
-        [SerializeField] private float step = .1f;
+        [SerializeField] private float step = 10f;
 
         private Quaternion startLocalRot, lastFrameRot, lastDesiredRot, fromRot;
 
@@ -29,7 +25,7 @@ namespace NomaiVR {
             }
 
             if (percent <= 1) {
-                percent += step;
+                percent += step * Time.unscaledDeltaTime;
                 lastFrameRot = Quaternion.Lerp(fromRot, newDesiredRot, percent);
                 transform.rotation = lastFrameRot;
             }
