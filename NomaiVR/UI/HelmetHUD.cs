@@ -47,7 +47,6 @@ namespace NomaiVR {
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
             surface.transform.localPosition = new Vector3(-0.06f, -0.76f, 0.06f);
-            surface.gameObject.AddComponent<DebugTransform>();
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
 
