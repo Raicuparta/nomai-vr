@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace NomaiVR {
     public class SmoothFoolowParentRotation: MonoBehaviour {
-        private float smoothTime = 0.08f;
+        [SerializeField] private float step = 10f;
 
-        private Quaternion rotationVelocity;
         private Quaternion startLocalRot, lastFrameRot, lastDesiredRot, fromRot;
+
+        private float percent;
 
         void Start () {
             startLocalRot = transform.localRotation;
@@ -18,17 +19,14 @@ namespace NomaiVR {
             Quaternion newDesiredRot = transform.parent.rotation * startLocalRot;
 
             if (lastDesiredRot != newDesiredRot) {
+                percent = 0;
                 lastDesiredRot = newDesiredRot;
-
                 fromRot = lastFrameRot;
             }
 
-            if (Time.timeScale != 1) {
-                lastFrameRot = newDesiredRot;
-                rotationVelocity = Quaternion.identity;
-                transform.localRotation = startLocalRot;
-            } else {
-                lastFrameRot = QuaternionHelper.SmoothDamp(fromRot, newDesiredRot, ref rotationVelocity, smoothTime);
+            if (percent <= 1) {
+                percent += step * Time.unscaledDeltaTime;
+                lastFrameRot = Quaternion.Lerp(fromRot, newDesiredRot, percent);
                 transform.rotation = lastFrameRot;
             }
         }

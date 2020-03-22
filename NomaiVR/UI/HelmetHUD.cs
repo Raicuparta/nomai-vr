@@ -22,7 +22,6 @@ namespace NomaiVR {
             forwardIndicator.localPosition = Vector3.forward * 0.75f;
             forwardIndicator.localRotation = Quaternion.identity;
             forwardIndicator.localScale = new Vector3(0.05f, 0.05f, 1.5f);
-            forwardIndicator.gameObject.AddComponent<DebugTransform>();
             forwardIndicator.gameObject.layer = LayerMask.NameToLayer("HeadsUpDisplay");
             forwardIndicator.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
             forwardIndicator.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
@@ -32,23 +31,22 @@ namespace NomaiVR {
 
             // Move helmet forward to make it a bit more visible.
             _helmet = animator.transform;
-            _helmet.localPosition = Vector3.forward * 0.05f;
+            _helmet.localPosition = Vector3.forward * -0.07f;
             _helmet.localScale = Vector3.one * 0.5f;
             _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();
 
+            Camera.main.nearClipPlane = 0.01f;
 
             // Replace helmet model to prevent looking outside the edge.
             var helmetModelParent = _helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
             Instantiate(_helmetPrefab, helmetModelParent);
             Destroy(helmetModelParent.Find("Helmet").gameObject);
             Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
-            //helmetModel.AddComponent<DebugTransform>();
-
 
             // Adjust projected HUD.
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
-            surface.transform.localPosition = new Vector3(-0.06f, -0.56f, 0.06f);
+            surface.transform.localPosition = new Vector3(-0.06f, -0.76f, 0.06f);
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
 
