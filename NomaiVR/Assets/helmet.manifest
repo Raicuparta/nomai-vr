@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1945284956
+CRC: 2142283045
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7f26a6ba99e5aaf6049ec709d70a5a85
+    Hash: 9e694e8a7590bf736db5bdd07d42d6db
   TypeTreeHash:
     serializedVersion: 2
     Hash: 6fa9ce387392089bc59dd886979cd053
@@ -24,8 +24,8 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 Assets:
-- Assets/Materials/HelmetRim.mat
-- Assets/Meshes/helmets.fbx
-- Assets/Materials/HelmetInside.mat
+- Assets/helmets.fbx
 - Assets/Helmet.prefab
+- Assets/HelmetInside.mat
+- Assets/HelmetRim.mat
 Dependencies: []
