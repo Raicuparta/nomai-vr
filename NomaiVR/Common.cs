@@ -31,6 +31,10 @@ namespace NomaiVR {
             return !ToolSwapper.IsInToolMode(ToolMode.None) && !ToolSwapper.IsInToolMode(ToolMode.Item);
         }
 
+        public static void ChangeLayerRecursive (GameObject obj, string maskName) {
+            ChangeLayerRecursive(obj, LayerMask.NameToLayer(maskName));
+        }
+
         public static void ChangeLayerRecursive (GameObject obj, LayerMask mask) {
             obj.layer = mask;
             foreach (Transform child in obj.transform) {
