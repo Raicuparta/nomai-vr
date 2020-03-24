@@ -49,6 +49,7 @@ namespace NomaiVR {
 
             var renderTexture = _assetBundle.LoadAsset<RenderTexture>("assets/screen.renderTexture");
 
+            originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UNUSED"));
             originalCamera.transform.position = new Vector3(1075, 505, -765);
             originalCamera.transform.rotation = Quaternion.identity;
             originalCamera.rect.Set(0, 0, 1, 0.5f);
