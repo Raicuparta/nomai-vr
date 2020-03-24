@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 namespace NomaiVR {
     public class Menus: MonoBehaviour {
-        public bool isInGame;
-
         void Awake () {
             NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
@@ -19,12 +17,31 @@ namespace NomaiVR {
             // Make UI elements draw on top of everything.
             Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
 
-            ScreenCanvasesToWorld();
+            var scene = LoadManager.GetCurrentScene();
 
-            if (LoadManager.GetCurrentScene() == OWScene.SolarSystem) {
+            if (scene == OWScene.SolarSystem) {
                 // Make sleep timer canvas visible while eyes closed.
                 Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+            } else if (scene == OWScene.TitleScreen) {
+                var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
+                animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
+
+                var animatedTitleChild = animatedTitle.transform.GetChild(0).GetComponent<RectTransform>();
+                animatedTitleChild.anchorMax = Vector2.one * 0.5f;
+                animatedTitleChild.anchorMin = Vector2.one * 0.5f;
+
+                var mainMenu = GameObject.Find("TitleLayoutGroup").GetComponent<RectTransform>();
+                mainMenu.position = Vector3.zero;
+
+                // Cant't get the footer to look good, so I'm hiding it.
+                GameObject.Find("FooterBlock").SetActive(false);
+
+                // Make the camera start looking forward instead of some random direction.
+                var cameraSocket = GameObject.Find("CameraSocket").transform;
+                cameraSocket.rotation = Quaternion.identity;
             }
+
+            ScreenCanvasesToWorld();
         }
 
         private void OnEvent (MonoBehaviour behaviour, Events ev) {

@@ -70,8 +70,6 @@ namespace NomaiVR {
                     nonPersistentObject.AddComponent<SolarSystemMap>();
                 }
             }
-
-            nonPersistentObject.AddComponent<Menus>().isInGame = isSolarSystem || isEye;
         }
 
         public override void Configure (IModConfig config) {
