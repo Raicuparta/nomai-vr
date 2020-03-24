@@ -25,6 +25,8 @@ namespace NomaiVR {
             } else if (scene == OWScene.TitleScreen) {
                 var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
                 animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
+
+                GameObject.Find("FooterBlock").SetActive(false);
             }
 
             ScreenCanvasesToWorld();
