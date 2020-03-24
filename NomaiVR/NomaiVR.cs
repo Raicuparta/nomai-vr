@@ -73,6 +73,8 @@ namespace NomaiVR {
             } else if (isPostCredits) {
                 nonPersistentObject.AddComponent<PostCreditsScene>();
             }
+
+            nonPersistentObject.AddComponent<Menus>();
         }
 
         public override void Configure (IModConfig config) {
