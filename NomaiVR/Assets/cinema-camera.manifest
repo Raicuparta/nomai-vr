@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 3770024796
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: dab4e33a2e75587d51c47d4fdc365370
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cf75b3f683e9002572fa03d7833616a6
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 84
+  Script: {instanceID: 0}
+- Class: 124
+  Script: {instanceID: 0}
+Assets:
+- Assets/Screen.mat
+- Assets/PostCreditsCamera.prefab
+- Assets/screen.renderTexture
+Dependencies: []

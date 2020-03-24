@@ -44,11 +44,14 @@ namespace NomaiVR {
             Application.runInBackground = true;
 
             LoadManager.OnCompleteSceneLoad += OnSceneLoaded;
+
+            LoadManager.LoadScene(OWScene.PostCreditsScene);
         }
 
         void OnSceneLoaded (OWScene originalScene, OWScene scene) {
             var isSolarSystem = scene == OWScene.SolarSystem;
             var isEye = scene == OWScene.EyeOfTheUniverse;
+            var isPostCredits = scene == OWScene.PostCreditsScene;
 
             // The GameObject associated with this ModBehaviour is set to persist between scene loads.
             // Some modules need to be restarted on every scene load.
@@ -69,6 +72,8 @@ namespace NomaiVR {
                     nonPersistentObject.AddComponent<ShipTools>();
                     nonPersistentObject.AddComponent<SolarSystemMap>();
                 }
+            } else if (isPostCredits) {
+                nonPersistentObject.AddComponent<PostCreditsScene>();
             }
 
             nonPersistentObject.AddComponent<Menus>().isInGame = isSolarSystem || isEye;
