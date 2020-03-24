@@ -21,9 +21,18 @@ namespace NomaiVR {
 
             ScreenCanvasesToWorld();
 
-            if (LoadManager.GetCurrentScene() == OWScene.SolarSystem) {
+            var scene = LoadManager.GetCurrentScene();
+
+            if (scene == OWScene.SolarSystem) {
                 // Make sleep timer canvas visible while eyes closed.
                 Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+            } else if (scene == OWScene.TitleScreen) {
+                var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<RectTransform>();
+                animatedTitle.parent = GameObject.Find("TitleCanvas").transform;
+                animatedTitle.localPosition = Vector3.zero;
+                animatedTitle.localRotation = Quaternion.identity;
+                animatedTitle.anchorMin = Vector2.one * 0.5f;
+                animatedTitle.anchorMax = Vector2.one * 0.5f;
             }
         }
 
