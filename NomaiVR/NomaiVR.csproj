@@ -37,10 +37,6 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
     <Reference Include="NAudio-Unity, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OWML.0.3.40\lib\net35\NAudio-Unity.dll</HintPath>
     </Reference>
