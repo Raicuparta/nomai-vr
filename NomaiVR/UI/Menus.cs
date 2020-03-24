@@ -26,8 +26,10 @@ namespace NomaiVR {
                 var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
                 animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
 
+                // Cant't get the footer to look good, so I'm hiding it.
                 GameObject.Find("FooterBlock").SetActive(false);
 
+                // Make the camera start looking forward instead of some random direction.
                 var cameraSocket = GameObject.Find("CameraSocket").transform;
                 cameraSocket.rotation = Quaternion.identity;
             }
