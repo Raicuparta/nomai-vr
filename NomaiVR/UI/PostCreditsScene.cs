@@ -17,38 +17,13 @@ namespace NomaiVR {
                 _prefab = _assetBundle.LoadAsset<GameObject>("assets/postcreditscamera.prefab");
             }
 
-
-            var originalCamera = Camera.main;
-
-            //var vrCamera = new GameObject().AddComponent<Camera>();
-            //vrCamera.gameObject.SetActive(false);
-            //vrCamera.transform.parent = originalCamera.transform;
-            //vrCamera.transform.localPosition = Vector3.zero;
-            //vrCamera.transform.localRotation = Quaternion.identity;
-            //vrCamera.nearClipPlane = 0.01f;
-            //vrCamera.farClipPlane = 10000;
-            //vrCamera.cullingMask = originalCamera.cullingMask;
-            //vrCamera.backgroundColor = Color.black;
-            //vrCamera.clearFlags = CameraClearFlags.Color;
-            //var owCamera = vrCamera.gameObject.AddComponent<OWCamera>();
-            //owCamera.renderSkybox = true;
-            //originalCamera.enabled = false;
-            //vrCamera.gameObject.SetActive(true);
-            //var postProcessing = vrCamera.gameObject.AddComponent<PostProcessingBehaviour>();
-            //postProcessing.profile = originalCamera.gameObject.GetComponent<PostProcessingBehaviour>().profile;
-            //var canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-            ////canvas.
-            //Destroy(GameObject.Find("DisconnectedPauseMenu"));
-
-            //originalCamera.enabled = false;
-            originalCamera.tag = "Untagged";
-
             var camera = Instantiate(_prefab);
             camera.transform.GetChild(0).parent = null;
-            //camera.tag = "MainCamera";
 
             var renderTexture = _assetBundle.LoadAsset<RenderTexture>("assets/screen.renderTexture");
 
+            var originalCamera = Camera.main;
+            originalCamera.tag = "Untagged";
             originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UNUSED"));
             originalCamera.transform.position = new Vector3(1075, 505, -765);
             originalCamera.transform.rotation = Quaternion.identity;
