@@ -26,6 +26,13 @@ namespace NomaiVR {
                 var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
                 animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
 
+                var animatedTitleChild = animatedTitle.transform.GetChild(0).GetComponent<RectTransform>();
+                animatedTitleChild.anchorMax = Vector2.one * 0.5f;
+                animatedTitleChild.anchorMin = Vector2.one * 0.5f;
+
+                var mainMenu = GameObject.Find("TitleLayoutGroup").GetComponent<RectTransform>();
+                mainMenu.position = Vector3.zero;
+
                 // Cant't get the footer to look good, so I'm hiding it.
                 GameObject.Find("FooterBlock").SetActive(false);
 
