@@ -27,6 +27,9 @@ namespace NomaiVR {
                 animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
 
                 GameObject.Find("FooterBlock").SetActive(false);
+
+                var cameraSocket = GameObject.Find("CameraSocket").transform;
+                cameraSocket.rotation = Quaternion.identity;
             }
 
             ScreenCanvasesToWorld();
