@@ -31,13 +31,5 @@ namespace NomaiVR {
             originalCamera.targetTexture = renderTexture;
 
         }
-
-        void Update () {
-            if (Input.GetKey(KeyCode.Equals)) {
-                Time.timeScale = 10;
-            } else {
-                Time.timeScale = 1;
-            }
-        }
     }
 }
