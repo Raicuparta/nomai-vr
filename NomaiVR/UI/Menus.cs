@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 namespace NomaiVR {
     public class Menus: MonoBehaviour {
-        public bool isInGame;
-
         void Awake () {
             NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
