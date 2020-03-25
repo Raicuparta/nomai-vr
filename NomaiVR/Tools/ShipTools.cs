@@ -44,7 +44,7 @@ namespace NomaiVR {
                 if (_wasHoldingInteract) {
                     ControllerInput.SimulateInput(XboxAxis.dPadY, 0);
                     _wasHoldingInteract = false;
-                } else if (_pressedInteract && !_probe.receiver.IsFocused() && !_signalscope.receiver.IsFocused() && !_landingCam.receiver.IsFocused()) {
+                } else if (_pressedInteract && !IsFocused(_probe) && !IsFocused(_signalscope) && !IsFocused(_landingCam)) {
                     ControllerInput.SimulateInput(XboxButton.LeftStickClick);
                 }
                 _pressedInteract = false;
@@ -57,6 +57,10 @@ namespace NomaiVR {
             }
         }
 
+        bool IsFocused (ButtonInteraction interaction) {
+            return interaction && interaction.receiver && interaction.receiver.IsFocused();
+        }
+
         static void SetEnabled (bool enabled) {
             _canInteractWithTools = enabled;
             _probe.enabled = enabled;
@@ -66,7 +70,7 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Post<ShipBody>("Start", typeof(Patches), nameof(Patches.ShipStart));
+                NomaiVR.Post<ShipBody>("Start", typeof(Patches), nameof(ShipStart));
                 NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(PreFindFrame));
                 NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patches), nameof(PostFindFrame));
                 NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patches), nameof(PreFindFrame));
