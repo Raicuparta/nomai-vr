@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 499499963
+CRC: 201087255
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a39fb6846f1e8033c710906aee5e12cd
+    Hash: 0f7e948fabcfeebb7da6d4da2b79d2a3
   TypeTreeHash:
     serializedVersion: 2
     Hash: 97475b384836061e380e7443a2963a09
@@ -35,6 +35,6 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/FeetPosition.prefab
-- Assets/player-feet.png
 - Assets/feet-position-material.mat
+- Assets/player-feet.png
 Dependencies: []

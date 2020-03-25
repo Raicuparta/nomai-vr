@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.PostProcessing;
-using UnityEngine.UI;
 
 namespace NomaiVR {
     class PostCreditsScene: MonoBehaviour {
