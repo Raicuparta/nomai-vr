@@ -16,12 +16,16 @@ namespace NomaiVR {
             Screen.SetResolution(displayResWidth, displayResHeight, fullScreen);
         }
 
+        static void SetFOV () {
+            PlayerData.GetGraphicSettings().fieldOfView = Camera.main.fieldOfView;
+            GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
+        }
+
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Post<GraphicSettings>("ApplyAllGraphicSettings", typeof(Patches), nameof(PreApplySettings));
-
-                // Force default key bindings
                 NomaiVR.Empty<InputRebindableLibrary>("SetKeyBindings");
+                NomaiVR.Empty<GraphicSettings>("SetSliderValFOV");
             }
 
             static void PreApplySettings () {
