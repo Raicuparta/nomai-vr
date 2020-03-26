@@ -30,6 +30,12 @@ namespace NomaiVR {
                 SetEnabled(false);
             }
 
+            if (_referenceFrameTracker.isActiveAndEnabled && Common.IsUsingAnyTool()) {
+                _referenceFrameTracker.enabled = false;
+            } else if (!_referenceFrameTracker.isActiveAndEnabled && !Common.IsUsingAnyTool()) {
+                _referenceFrameTracker.enabled = true;
+            }
+
             if (_referenceFrameTracker.GetReferenceFrame() == null && _referenceFrameTracker.GetPossibleReferenceFrame() == null) {
                 return;
             }
@@ -48,12 +54,6 @@ namespace NomaiVR {
                     ControllerInput.SimulateInput(XboxButton.LeftStickClick);
                 }
                 _pressedInteract = false;
-            }
-
-            if (_referenceFrameTracker.isActiveAndEnabled && Common.IsUsingAnyTool()) {
-                _referenceFrameTracker.enabled = false;
-            } else if (!_referenceFrameTracker.isActiveAndEnabled && !Common.IsUsingAnyTool()) {
-                _referenceFrameTracker.enabled = true;
             }
         }
 
