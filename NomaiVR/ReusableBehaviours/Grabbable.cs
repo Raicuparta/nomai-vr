@@ -18,7 +18,7 @@ namespace NomaiVR {
             onGrab?.Invoke();
         }
 
-        void Release () {
+        public void Release () {
             _isGrabbing = false;
             onRelease?.Invoke();
         }

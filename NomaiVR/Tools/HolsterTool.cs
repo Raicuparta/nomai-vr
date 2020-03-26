@@ -23,6 +23,13 @@ namespace NomaiVR {
             _grabbable.onRelease += OnRelease;
             _grabbable.detector.minDistance = 0.2f;
             transform.localScale = Vector3.one * scale;
+
+            GlobalMessenger.AddListener("SuitUp", ForceRelease);
+            GlobalMessenger.AddListener("RemoveSuit", ForceRelease);
+        }
+
+        void ForceRelease () {
+            _grabbable.Release();
         }
 
         void OnGrab () {
