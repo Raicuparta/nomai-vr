@@ -12,32 +12,23 @@ namespace NomaiVR {
         MeshRenderer[] _renderers;
         bool _visible;
         bool _enabled = true;
-        Grabbable _grabbable;
         public Action onEquip;
         public Action onUnequip;
 
+        public ProximityDetector detector { get; private set; }
+
+        void Awake () {
+            detector = gameObject.AddComponent<ProximityDetector>();
+            detector.other = Hands.RightHand;
+            detector.minDistance = 0.2f;
+        }
+
         void Start () {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
-            _grabbable = gameObject.AddComponent<Grabbable>();
-            _grabbable.onGrab += OnGrab;
-            _grabbable.onRelease += OnRelease;
-            _grabbable.detector.minDistance = 0.2f;
             transform.localScale = Vector3.one * scale;
 
-            GlobalMessenger.AddListener("SuitUp", ForceRelease);
-            GlobalMessenger.AddListener("RemoveSuit", ForceRelease);
-        }
-
-        void ForceRelease () {
-            _grabbable.Release();
-        }
-
-        void OnGrab () {
-            Equip();
-        }
-
-        void OnRelease () {
-            Unequip();
+            GlobalMessenger.AddListener("SuitUp", Unequip);
+            GlobalMessenger.AddListener("RemoveSuit", Unequip);
         }
 
         void Equip () {
@@ -61,7 +52,26 @@ namespace NomaiVR {
             _visible = visible;
         }
 
-        void Update () {
+        bool IsEquipped () {
+            return Locator.GetToolModeSwapper().IsInToolMode(mode, ToolGroup.Suit);
+        }
+
+        void UpdateGrab () {
+            if (!OWInput.IsInputMode(InputMode.Character)) {
+                if (IsEquipped()) {
+                    Unequip();
+                }
+                return;
+            }
+            if (ControllerInput.IsGripping && !IsEquipped() && detector.isInside && _visible) {
+                Equip();
+            }
+            if (!ControllerInput.IsGripping && IsEquipped()) {
+                Unequip();
+            }
+        }
+
+        void UpdateVisibility () {
             if (_enabled && !OWInput.IsInputMode(InputMode.Character)) {
                 _enabled = false;
                 SetVisible(false);
@@ -72,12 +82,17 @@ namespace NomaiVR {
             if (!_enabled) {
                 return;
             }
-            if (!_visible && !Common.ToolSwapper.IsInToolMode(mode)) {
+            if (!_visible && !Common.IsUsingTool()) {
                 SetVisible(true);
             }
-            if (_visible && Common.ToolSwapper.IsInToolMode(mode)) {
+            if (_visible && Common.IsUsingTool()) {
                 SetVisible(false);
             }
+        }
+
+        void Update () {
+            UpdateGrab();
+            UpdateVisibility();
         }
 
         void LateUpdate () {
