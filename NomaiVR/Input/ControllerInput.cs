@@ -68,7 +68,7 @@ namespace NomaiVR {
             var isUsingProbeLauncher = Common.ToolSwapper.IsInToolMode(ToolMode.Probe);
             var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
-            if (!isUsingFixedProbeTool && !Common.IsUsingTool()) {
+            if (!isUsingFixedProbeTool && !Common.IsUsingAnyTool()) {
                 var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
                 var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Locator.GetToolModeSwapper().IsSuitPatchingBlocked();
 

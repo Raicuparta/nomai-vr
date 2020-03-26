@@ -82,10 +82,10 @@ namespace NomaiVR {
             if (!_enabled) {
                 return;
             }
-            if (!_visible && !Common.IsUsingTool()) {
+            if (!_visible && !Common.IsUsingAnyTool()) {
                 SetVisible(true);
             }
-            if (_visible && Common.IsUsingTool()) {
+            if (_visible && Common.IsUsingAnyTool()) {
                 SetVisible(false);
             }
         }

@@ -27,8 +27,8 @@ namespace NomaiVR {
             return ret;
         }
 
-        public static bool IsUsingTool () {
-            return !ToolSwapper.IsInToolMode(ToolMode.None) && !ToolSwapper.IsInToolMode(ToolMode.Item);
+        public static bool IsUsingAnyTool () {
+            return ToolSwapper.IsInToolMode(ToolMode.Probe) || ToolSwapper.IsInToolMode(ToolMode.Translator) || ToolSwapper.IsInToolMode(ToolMode.SignalScope);
         }
 
         public static void ChangeLayerRecursive (GameObject obj, string maskName) {

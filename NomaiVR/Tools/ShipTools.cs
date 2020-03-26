@@ -50,9 +50,9 @@ namespace NomaiVR {
                 _pressedInteract = false;
             }
 
-            if (_referenceFrameTracker.isActiveAndEnabled && Common.IsUsingTool()) {
+            if (_referenceFrameTracker.isActiveAndEnabled && Common.IsUsingAnyTool()) {
                 _referenceFrameTracker.enabled = false;
-            } else if (!_referenceFrameTracker.isActiveAndEnabled && !Common.IsUsingTool()) {
+            } else if (!_referenceFrameTracker.isActiveAndEnabled && !Common.IsUsingAnyTool()) {
                 _referenceFrameTracker.enabled = true;
             }
         }
