@@ -10,8 +10,7 @@ namespace NomaiVR {
         public Vector3 angle;
         public float scale;
         MeshRenderer[] _renderers;
-        bool _visible;
-        bool _enabled = true;
+        bool _visible = true;
         public Action onEquip;
         public Action onUnequip;
 
@@ -72,20 +71,13 @@ namespace NomaiVR {
         }
 
         void UpdateVisibility () {
-            if (_enabled && !OWInput.IsInputMode(InputMode.Character)) {
-                _enabled = false;
-                SetVisible(false);
-            }
-            if (!_enabled && OWInput.IsInputMode(InputMode.Character)) {
-                _enabled = true;
-            }
-            if (!_enabled) {
-                return;
-            }
-            if (!_visible && !Common.IsUsingAnyTool()) {
+            var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
+            var shouldBeVisible = !Common.IsUsingAnyTool() && isCharacterMode;
+
+            if (!_visible && shouldBeVisible) {
                 SetVisible(true);
             }
-            if (_visible && Common.IsUsingAnyTool()) {
+            if (_visible && !shouldBeVisible) {
                 SetVisible(false);
             }
         }
@@ -96,10 +88,7 @@ namespace NomaiVR {
         }
 
         void LateUpdate () {
-            if (!_enabled) {
-                return;
-            }
-            if (_enabled && _visible) {
+            if (_visible) {
                 transform.position = Camera.main.transform.position + Common.PlayerBody.transform.TransformVector(position);
                 transform.rotation = Common.PlayerBody.transform.rotation;
                 transform.Rotate(angle);
