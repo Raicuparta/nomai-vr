@@ -104,7 +104,6 @@
     <Compile Include="ForceSettings.cs" />
     <Compile Include="UI\InputPrompts.cs" />
     <Compile Include="ReusableBehaviours\ButtonInteraction.cs" />
-    <Compile Include="ReusableBehaviours\Grabbable.cs" />
     <Compile Include="Tools\FlashlightGesture.cs" />
     <Compile Include="Tools\HoldItem.cs" />
     <Compile Include="UI\HelmetHUD.cs" />
