@@ -1,5 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace NomaiVR {
     public class HelmetHUD: MonoBehaviour {
@@ -35,8 +36,11 @@ namespace NomaiVR {
             _helmet.localScale = Vector3.one * 0.5f;
             _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();
 
-            GameObject.Find("HUD_CurvedSurface").GetComponent<MeshRenderer>().material.shader = Shader.Find("UI/Default");
-            GameObject.Find("HelmetVisorUVRenderer").GetComponent<MeshRenderer>().material.shader = Shader.Find("UI/Default");
+            var material = GameObject.Find("HUD_CurvedSurface").GetComponent<MeshRenderer>().material;
+            material.shader = Canvas.GetDefaultCanvasMaterial().shader;
+            material.SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
+            material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
+            //GameObject.Find("HelmetVisorUVRenderer").GetComponent<MeshRenderer>().material.shader = Shader.Find("UI/Default");
             Destroy(GameObject.Find("HelmetVisorMaskRenderer"));
 
             Camera.main.nearClipPlane = 0.01f;
