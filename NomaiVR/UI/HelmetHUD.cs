@@ -39,11 +39,6 @@ namespace NomaiVR {
             GameObject.Find("HelmetVisorUVRenderer").GetComponent<MeshRenderer>().material.shader = Shader.Find("UI/Default");
             Destroy(GameObject.Find("HelmetVisorMaskRenderer"));
 
-            var uiCanvas = _helmet.Find("PlayerHUD/HelmetOnUI/UICanvas").GetComponent<Canvas>();
-            uiCanvas.renderMode = RenderMode.WorldSpace;
-            uiCanvas.gameObject.AddComponent<DebugTransform>();
-            uiCanvas.transform.localPosition = new Vector3(0.14f, 0.58f, 0.82f);
-
             Camera.main.nearClipPlane = 0.01f;
 
             // Replace helmet model to prevent looking outside the edge.
