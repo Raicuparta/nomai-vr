@@ -66,15 +66,6 @@ namespace NomaiVR {
             lockOnCanvas.planeDistance = 10;
         }
 
-        //void LateUpdate () {
-        //    if (_helmet == null) {
-        //        return;
-        //    }
-
-        //    _helmet.position = Hands.LeftHand.position;
-        //    _helmet.rotation = Hands.LeftHand.rotation;
-        //}
-
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Post<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), nameof(PatchLateUpdate));
