@@ -36,13 +36,6 @@ namespace NomaiVR {
             _helmet.localScale = Vector3.one * 0.5f;
             _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();
 
-            var material = GameObject.Find("HUD_CurvedSurface").GetComponent<MeshRenderer>().material;
-            material.shader = Canvas.GetDefaultCanvasMaterial().shader;
-            material.SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
-            material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
-            //GameObject.Find("HelmetVisorUVRenderer").GetComponent<MeshRenderer>().material.shader = Shader.Find("UI/Default");
-            Destroy(GameObject.Find("HelmetVisorMaskRenderer"));
-
             Camera.main.nearClipPlane = 0.01f;
 
             // Replace helmet model to prevent looking outside the edge.
@@ -55,9 +48,16 @@ namespace NomaiVR {
             // Adjust projected HUD.
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
             surface.transform.localScale = Vector3.one * 3.28f;
-            surface.transform.localPosition = new Vector3(-0.06f, -0.76f, 0.06f);
+            surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
+            surface.gameObject.AddComponent<DebugTransform>();
+
+            // Use default UI material so it doesn't look funky in stereo.
+            var surfaceMaterial = surface.gameObject.GetComponent<MeshRenderer>().material;
+            surfaceMaterial.shader = Canvas.GetDefaultCanvasMaterial().shader;
+            surfaceMaterial.SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
+            surfaceMaterial.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
 
             var playerHUD = GameObject.Find("PlayerHUD");
 
