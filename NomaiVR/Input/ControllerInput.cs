@@ -170,9 +170,6 @@ namespace NomaiVR {
             }
 
             static bool PreUpdateRumble (object[] ___m_theList, bool ___m_isEnabled) {
-                //var haptic = SteamVR_Actions.default_Haptic;
-                //haptic.Execute(0, 0.1f, 100, 0.5f, SteamVR_Input_Sources.RightHand);
-                //NomaiVR.Log("runbleLow");
                 Vector2 a = Vector2.zero;
                 if (___m_isEnabled && OWInput.UsingGamepad()) {
                     float deltaTime = Time.deltaTime;
