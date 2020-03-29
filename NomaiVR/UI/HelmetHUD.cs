@@ -51,7 +51,6 @@ namespace NomaiVR {
             surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
             notifications.anchoredPosition = new Vector2(-200, -100);
-            surface.gameObject.AddComponent<DebugTransform>();
 
             // Use default UI material so it doesn't look funky in stereo.
             var surfaceMaterial = surface.gameObject.GetComponent<MeshRenderer>().material;
