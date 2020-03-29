@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using PadEZ;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -158,11 +159,47 @@ namespace NomaiVR {
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patches), nameof(Patches.SingleAxisUpdate));
-                NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patches), nameof(Patches.OWInputUpdate));
-                NomaiVR.Pre<OWInput>("Awake", typeof(Patches), nameof(Patches.EnableListenForAllJoysticks));
-                NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patches), nameof(Patches.GetAxis));
+                NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patches), nameof(SingleAxisUpdate));
+                NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patches), nameof(OWInputUpdate));
+                NomaiVR.Pre<OWInput>("Awake", typeof(Patches), nameof(EnableListenForAllJoysticks));
+                NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patches), nameof(GetAxis));
                 NomaiVR.Post<PlayerResources>("Awake", typeof(Patches), nameof(PlayerResourcesAwake));
+
+                var rumbleMethod = typeof(RumbleManager).GetAnyMethod("Update");
+                NomaiVR.Helper.HarmonyHelper.AddPrefix(rumbleMethod, typeof(Patches), nameof(PreUpdateRumble));
+            }
+
+            static bool PreUpdateRumble (object[] ___m_theList, bool ___m_isEnabled) {
+                Vector2 a = Vector2.zero;
+                if (___m_isEnabled && OWInput.UsingGamepad()) {
+                    float deltaTime = Time.deltaTime;
+                    for (int i = 0; i < ___m_theList.Length; i++) {
+                        object rumble = ___m_theList[i];
+                        var isAlive = (bool) rumble.GetType().GetMethod("IsAlive").Invoke(rumble, new object[] { });
+
+                        if (isAlive) {
+                            rumble.Invoke("Update", deltaTime);
+                        }
+
+                        var isAliveAgain = (bool) rumble.GetType().GetMethod("IsAlive").Invoke(rumble, new object[] { });
+
+                        if (isAliveAgain) {
+
+                            var power = (Vector2) rumble.GetType().GetMethod("GetPower").Invoke(rumble, new object[] { });
+                            a += power;
+                        }
+                    }
+                    a.x *= 1.42857146f;
+                    a.y *= 1.42857146f;
+
+                    var haptic = SteamVR_Actions.default_Haptic;
+                    haptic.Execute(0, 0.1f, 10, a.y, SteamVR_Input_Sources.RightHand);
+                    haptic.Execute(0, 0.1f, 50, a.x, SteamVR_Input_Sources.RightHand);
+                    haptic.Execute(0, 0.1f, 10, a.y, SteamVR_Input_Sources.LeftHand);
+                    haptic.Execute(0, 0.1f, 50, a.x, SteamVR_Input_Sources.LeftHand);
+                }
+
+                return false;
             }
 
             static void PlayerResourcesAwake () {
