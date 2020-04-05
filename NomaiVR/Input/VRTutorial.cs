@@ -18,7 +18,8 @@ namespace NomaiVR {
             _tutorialState = state;
 
             if (state == TutorialState.LOOK) {
-                SteamVR_Actions.default_Look.ShowOrigins();
+                //SteamVR_Actions.default_Look.ShowOrigins();
+                SteamVR_Actions._default.ShowBindingHints();
             } else if (state == TutorialState.MOVE) {
                 SteamVR_Actions.default_Move.ShowOrigins();
             } else if (state == TutorialState.INTERACT) {
