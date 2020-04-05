@@ -73,6 +73,8 @@ namespace NomaiVR {
             public bool isDone;
             public SteamVR_Action action;
 
+            bool _isShowing;
+
             public TutorialInput (SteamVR_Action vrAction) {
                 action = vrAction;
                 action.HideOrigins();
@@ -101,18 +103,24 @@ namespace NomaiVR {
             }
 
             private void OnChange () {
-                Hide();
-                isDone = true;
+                if (_isShowing) {
+                    Hide();
+                    isDone = true;
+                }
             }
 
             public void Hide () {
+                NomaiVR.Log("####### Hide", action.GetShortName());
+                _isShowing = false;
                 action.HideOrigins();
             }
 
             public void Show () {
-                if (isDone) {
+                if (isDone || _isShowing) {
                     return;
                 }
+                NomaiVR.Log("####### Show", action.GetShortName());
+                _isShowing = true;
                 action.ShowOrigins();
             }
         }
