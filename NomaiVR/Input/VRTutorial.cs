@@ -11,7 +11,48 @@ namespace NomaiVR {
 
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
-            tutorialInputs[InputLibrary.interact] = new TutorialInput(actions.PrimaryAction);
+            var interact = new TutorialInput(actions.PrimaryAction);
+            tutorialInputs[InputLibrary.interact] = interact;
+            tutorialInputs[InputLibrary.swapShipLogMode] = interact;
+            tutorialInputs[InputLibrary.sleep] = interact;
+            tutorialInputs[InputLibrary.suitMenu] = interact;
+            tutorialInputs[InputLibrary.translate] = interact;
+            tutorialInputs[InputLibrary.scopeView] = interact;
+            tutorialInputs[InputLibrary.probeForward] = interact;
+            tutorialInputs[InputLibrary.probeRetrieve] = interact;
+            tutorialInputs[InputLibrary.lockOn] = interact;
+            tutorialInputs[InputLibrary.autopilot] = interact;
+
+            var jump = new TutorialInput(actions.Jump);
+            tutorialInputs[InputLibrary.jump] = jump;
+            tutorialInputs[InputLibrary.boost] = jump;
+            tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
+            tutorialInputs[InputLibrary.matchVelocity] = jump;
+
+            var map = new TutorialInput(actions.Map);
+            tutorialInputs[InputLibrary.map] = map;
+
+            var move = new TutorialInput(actions.Move);
+            tutorialInputs[InputLibrary.moveXZ] = move;
+            tutorialInputs[InputLibrary.thrustX] = move;
+            tutorialInputs[InputLibrary.thrustZ] = move;
+
+            var look = new TutorialInput(actions.Look);
+            tutorialInputs[InputLibrary.look] = look;
+            tutorialInputs[InputLibrary.yaw] = look;
+            tutorialInputs[InputLibrary.pitch] = look;
+
+            var thrustUp = new TutorialInput(actions.ThrottleUp);
+            tutorialInputs[InputLibrary.thrustUp] = thrustUp;
+            tutorialInputs[InputLibrary.extendStick] = thrustUp;
+
+            var thrustDown = new TutorialInput(actions.ThrottleDown);
+            tutorialInputs[InputLibrary.thrustDown] = thrustDown;
+
+            var rollMode = new TutorialInput(actions.SecondaryAction);
+            tutorialInputs[InputLibrary.probeReverse] = rollMode;
+            tutorialInputs[InputLibrary.rollMode] = rollMode;
+
         }
 
         internal static class Patches {
@@ -34,14 +75,16 @@ namespace NomaiVR {
 
             public TutorialInput (SteamVR_Action vrAction) {
                 action = vrAction;
-                if (vrAction is SteamVR_Action_Vector2) {
-                    ((SteamVR_Action_Vector2) vrAction).onChange += OnChange;
+                action.HideOrigins();
+
+                if (action is SteamVR_Action_Vector2) {
+                    ((SteamVR_Action_Vector2) action).onChange += OnChange;
                 }
-                if (vrAction is SteamVR_Action_Single) {
-                    ((SteamVR_Action_Single) vrAction).onChange += OnChange;
+                if (action is SteamVR_Action_Single) {
+                    ((SteamVR_Action_Single) action).onChange += OnChange;
                 }
-                if (vrAction is SteamVR_Action_Boolean) {
-                    ((SteamVR_Action_Boolean) vrAction).onChange += OnChange;
+                if (action is SteamVR_Action_Boolean) {
+                    ((SteamVR_Action_Boolean) action).onChange += OnChange;
                 }
             }
 
@@ -59,6 +102,7 @@ namespace NomaiVR {
 
             private void OnChange () {
                 Hide();
+                isDone = true;
             }
 
             public void Hide () {
@@ -66,6 +110,9 @@ namespace NomaiVR {
             }
 
             public void Show () {
+                if (isDone) {
+                    return;
+                }
                 action.ShowOrigins();
             }
         }
