@@ -17,7 +17,7 @@ namespace NomaiVR {
 
             CreateControllerModel(Hands.RightHand);
             CreateControllerModel(Hands.LeftHand);
-            HideControllerModels();
+            controllerModels.ForEach(model => model.enabled = false);
 
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
@@ -81,12 +81,18 @@ namespace NomaiVR {
 
         void ShowControllerModels () {
             isShowingControlleModels = true;
-            controllerModels.ForEach(model => model.enabled = true);
+            controllerModels.ForEach(model => {
+                model.enabled = true;
+                model.gameObject.SetActive(true);
+            });
         }
 
         void HideControllerModels () {
             isShowingControlleModels = false;
-            controllerModels.ForEach(model => model.enabled = false);
+            controllerModels.ForEach(model => {
+                model.enabled = false;
+                model.gameObject.SetActive(false);
+            });
         }
 
         void CreateControllerModel (Transform hand) {
