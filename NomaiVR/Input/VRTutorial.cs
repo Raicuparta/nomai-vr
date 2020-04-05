@@ -1,86 +1,73 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR {
     class VRTutorial: MonoBehaviour {
-        static TutorialState _tutorialState;
+        static Dictionary<InputCommand, TutorialInput> tutorialInputs;
 
         void Start () {
             NomaiVR.Log("Start VRTutorial");
-            SetTutorialState(TutorialState.LOOK);
 
-            SteamVR_Actions.default_Look.onChange += OnLookChange;
-            SteamVR_Actions.default_Move.onChange += OnMoveChange;
-            SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryChange;
-        }
-
-        void SetTutorialState (TutorialState state) {
-            _tutorialState = state;
-
-            if (state == TutorialState.LOOK) {
-                //SteamVR_Actions.default_Look.ShowOrigins();
-                SteamVR_Actions._default.ShowBindingHints();
-            } else if (state == TutorialState.MOVE) {
-                SteamVR_Actions.default_Move.ShowOrigins();
-            } else if (state == TutorialState.INTERACT) {
-                SteamVR_Actions.default_PrimaryAction.ShowOrigins();
-            } else if (state == TutorialState.JUMP) {
-                SteamVR_Actions.default_PrimaryAction.HideOrigins();
-            }
-        }
-
-        void GoToMoveState () {
-            SetTutorialState(TutorialState.MOVE);
-        }
-
-        void GoToInteractState () {
-            SetTutorialState(TutorialState.INTERACT);
-        }
-
-        void GoToJumpState () {
-            SetTutorialState(TutorialState.JUMP);
-        }
-
-        void OnLookChange (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
-            if (_tutorialState == TutorialState.LOOK && delta.magnitude > 0.1f) {
-                Invoke(nameof(GoToMoveState), 3);
-            }
-        }
-
-        void OnMoveChange (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
-            if (_tutorialState == TutorialState.MOVE && delta.magnitude > 0.1f) {
-                Invoke(nameof(GoToInteractState), 3);
-            }
-        }
-
-        private void OnPrimaryChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
-            if (_tutorialState == TutorialState.INTERACT && newState) {
-                Invoke(nameof(GoToJumpState), 3);
-            }
+            var actions = SteamVR_Actions._default;
+            tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
+            tutorialInputs[InputLibrary.interact] = new TutorialInput(actions.PrimaryAction);
         }
 
         internal static class Patches {
             public static void Patch () {
-                NomaiVR.Pre<JumpPromptTrigger>("OnTriggerEnter", typeof(Patches), nameof(ShowJumpPrompt));
-                NomaiVR.Pre<JumpPromptTrigger>("OnTriggerExit", typeof(Patches), nameof(HideJumpPrompt));
+                NomaiVR.Post<ScreenPrompt>("SetVisibility", typeof(Patches), nameof(SetPromptVisibility));
             }
 
-            static void ShowJumpPrompt () {
-                if (_tutorialState == TutorialState.JUMP) {
-                    SteamVR_Actions.default_Jump.ShowOrigins();
+            static void SetPromptVisibility (bool isVisible, List<InputCommand> ____commandList) {
+                foreach (var command in ____commandList) {
+                    if (isVisible && tutorialInputs.ContainsKey(command)) {
+                        tutorialInputs[command].Show();
+                    }
                 }
-            }
-
-            static void HideJumpPrompt () {
-                SteamVR_Actions.default_Jump.HideOrigins();
             }
         }
 
-        enum TutorialState {
-            LOOK,
-            MOVE,
-            INTERACT,
-            JUMP,
+        class TutorialInput {
+            public bool isDone;
+            public SteamVR_Action action;
+
+            public TutorialInput (SteamVR_Action vrAction) {
+                action = vrAction;
+                if (vrAction is SteamVR_Action_Vector2) {
+                    ((SteamVR_Action_Vector2) vrAction).onChange += OnChange;
+                }
+                if (vrAction is SteamVR_Action_Single) {
+                    ((SteamVR_Action_Single) vrAction).onChange += OnChange;
+                }
+                if (vrAction is SteamVR_Action_Boolean) {
+                    ((SteamVR_Action_Boolean) vrAction).onChange += OnChange;
+                }
+            }
+
+            private void OnChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
+                OnChange();
+            }
+
+            private void OnChange (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) {
+                OnChange();
+            }
+
+            private void OnChange (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) {
+                OnChange();
+            }
+
+            private void OnChange () {
+                Hide();
+            }
+
+            public void Hide () {
+                action.HideOrigins();
+            }
+
+            public void Show () {
+                action.ShowOrigins();
+            }
         }
     }
 }
