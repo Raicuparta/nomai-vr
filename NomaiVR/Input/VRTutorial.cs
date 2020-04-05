@@ -21,47 +21,49 @@ namespace NomaiVR {
 
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
+
             var interact = new TutorialInput(actions.PrimaryAction, 0);
             tutorialInputs[InputLibrary.interact] = interact;
-            tutorialInputs[InputLibrary.swapShipLogMode] = interact;
-            tutorialInputs[InputLibrary.sleep] = interact;
-            tutorialInputs[InputLibrary.suitMenu] = interact;
             tutorialInputs[InputLibrary.translate] = interact;
             tutorialInputs[InputLibrary.scopeView] = interact;
             tutorialInputs[InputLibrary.probeForward] = interact;
-            tutorialInputs[InputLibrary.probeRetrieve] = interact;
             tutorialInputs[InputLibrary.lockOn] = interact;
-            tutorialInputs[InputLibrary.autopilot] = interact;
 
-            var jump = new TutorialInput(actions.Jump, 1);
+            var holdInteract = new TutorialInput(actions.PrimaryAction, 1);
+            tutorialInputs[InputLibrary.suitMenu] = holdInteract;
+            tutorialInputs[InputLibrary.probeRetrieve] = holdInteract;
+            tutorialInputs[InputLibrary.sleep] = holdInteract;
+            tutorialInputs[InputLibrary.swapShipLogMode] = holdInteract;
+            tutorialInputs[InputLibrary.autopilot] = holdInteract;
+
+            var jump = new TutorialInput(actions.Jump, 2);
             tutorialInputs[InputLibrary.jump] = jump;
-            tutorialInputs[InputLibrary.boost] = jump;
             tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
             tutorialInputs[InputLibrary.matchVelocity] = jump;
 
-            var map = new TutorialInput(actions.Map, 3);
-            tutorialInputs[InputLibrary.map] = map;
+            tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput(actions.Jump, 2);
+            tutorialInputs[InputLibrary.boost] = new TutorialInput(actions.Jump, 2);
+
+            tutorialInputs[InputLibrary.map] = new TutorialInput(actions.Map, 3);
 
             var move = new TutorialInput(actions.Move, 6);
             tutorialInputs[InputLibrary.moveXZ] = move;
             tutorialInputs[InputLibrary.thrustX] = move;
             tutorialInputs[InputLibrary.thrustZ] = move;
 
-            var look = new TutorialInput(actions.Look, 7);
-            tutorialInputs[InputLibrary.look] = look;
-            tutorialInputs[InputLibrary.yaw] = look;
-            tutorialInputs[InputLibrary.pitch] = look;
+            tutorialInputs[InputLibrary.look] = new TutorialInput(actions.Look, 7);
 
-            var thrustUp = new TutorialInput(actions.ThrottleUp, 4);
-            tutorialInputs[InputLibrary.thrustUp] = thrustUp;
-            tutorialInputs[InputLibrary.extendStick] = thrustUp;
+            var zeroGLook = new TutorialInput(actions.Look, 7);
+            tutorialInputs[InputLibrary.yaw] = zeroGLook;
+            tutorialInputs[InputLibrary.pitch] = zeroGLook;
 
-            var thrustDown = new TutorialInput(actions.ThrottleDown, 5);
-            tutorialInputs[InputLibrary.thrustDown] = thrustDown;
+            tutorialInputs[InputLibrary.extendStick] = new TutorialInput(actions.ThrottleUp, 0);
+            tutorialInputs[InputLibrary.thrustUp] = new TutorialInput(actions.ThrottleUp, 4);
+            tutorialInputs[InputLibrary.thrustDown] = new TutorialInput(actions.ThrottleDown, 5);
 
-            var rollMode = new TutorialInput(actions.SecondaryAction, 8);
-            tutorialInputs[InputLibrary.probeReverse] = rollMode;
-            tutorialInputs[InputLibrary.rollMode] = rollMode;
+            tutorialInputs[InputLibrary.rollMode] = new TutorialInput(actions.SecondaryAction, 8);
+
+            tutorialInputs[InputLibrary.probeReverse] = new TutorialInput(actions.SecondaryAction, 8);
 
             var back = new TutorialInput(actions.Back, 9);
             tutorialInputs[InputLibrary.cancel] = back;
@@ -120,7 +122,6 @@ namespace NomaiVR {
                             queue.Add(tutorialInputs[command]);
                             queue.Sort((a, b) => a.priority - b.priority);
                         }
-
                     }
                 }
             }
