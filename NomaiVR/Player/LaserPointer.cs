@@ -15,12 +15,12 @@ namespace NomaiVR {
 
             var lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
             lineRenderer.useWorldSpace = false;
-            lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 3 });
-            lineRenderer.endColor = new Color(1, 1, 1, 0.5f);
+            lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 0.5f });
+            lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
             lineRenderer.startColor = Color.clear;
+            lineRenderer.startWidth = 0.005f;
+            lineRenderer.endWidth = 0.001f;
             lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
-            lineRenderer.startWidth = 0.02f;
-            lineRenderer.endWidth = 0.01f;
 
             FindObjectOfType<FirstPersonManipulator>().enabled = false;
             _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
