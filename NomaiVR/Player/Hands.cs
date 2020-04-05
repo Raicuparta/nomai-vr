@@ -75,13 +75,6 @@ namespace NomaiVR {
             poseDriver.poseAction = pose;
             handParent.gameObject.SetActive(true);
 
-            var controllerModel = new GameObject().AddComponent<SteamVR_RenderModel>();
-            controllerModel.updateDynamically = true;
-            controllerModel.createComponents = true;
-            controllerModel.transform.parent = handParent;
-            controllerModel.transform.localPosition = Vector3.zero;
-            controllerModel.transform.localRotation = Quaternion.identity;
-
             return handParent;
         }
 

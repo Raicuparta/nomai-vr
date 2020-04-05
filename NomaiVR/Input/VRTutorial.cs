@@ -6,11 +6,18 @@ namespace NomaiVR {
     class VRTutorial: MonoBehaviour {
         static Dictionary<InputCommand, TutorialInput> tutorialInputs;
         static List<TutorialInput> queue;
+        List<SteamVR_RenderModel> controllerModels;
+        bool isShowingControlleModels;
 
         void Start () {
             NomaiVR.Log("Start VRTutorial");
 
             queue = new List<TutorialInput>();
+            controllerModels = new List<SteamVR_RenderModel>();
+
+            CreateControllerModel(Hands.RightHand);
+            CreateControllerModel(Hands.LeftHand);
+            HideControllerModels();
 
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
@@ -65,6 +72,32 @@ namespace NomaiVR {
             if (queue.Count > 0) {
                 queue[0].Show();
             }
+            if (!isShowingControlleModels && queue.Count > 0) {
+                ShowControllerModels();
+            } else if (isShowingControlleModels && queue.Count == 0) {
+                HideControllerModels();
+            }
+        }
+
+        void ShowControllerModels () {
+            isShowingControlleModels = true;
+            controllerModels.ForEach(model => model.enabled = true);
+        }
+
+        void HideControllerModels () {
+            isShowingControlleModels = false;
+            controllerModels.ForEach(model => model.enabled = false);
+        }
+
+        void CreateControllerModel (Transform hand) {
+            var controllerModel = new GameObject().AddComponent<SteamVR_RenderModel>();
+            controllerModel.updateDynamically = true;
+            controllerModel.createComponents = true;
+            controllerModel.transform.parent = hand;
+            controllerModel.transform.localPosition = Vector3.zero;
+            controllerModel.transform.localRotation = Quaternion.identity;
+
+            controllerModels.Add(controllerModel);
         }
 
         internal static class Patches {
