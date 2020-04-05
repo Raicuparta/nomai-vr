@@ -14,7 +14,7 @@ namespace NomaiVR {
 
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
-            var interact = new TutorialInput(actions.PrimaryAction);
+            var interact = new TutorialInput(actions.PrimaryAction, 0);
             tutorialInputs[InputLibrary.interact] = interact;
             tutorialInputs[InputLibrary.swapShipLogMode] = interact;
             tutorialInputs[InputLibrary.sleep] = interact;
@@ -26,37 +26,37 @@ namespace NomaiVR {
             tutorialInputs[InputLibrary.lockOn] = interact;
             tutorialInputs[InputLibrary.autopilot] = interact;
 
-            var jump = new TutorialInput(actions.Jump);
+            var jump = new TutorialInput(actions.Jump, 1);
             tutorialInputs[InputLibrary.jump] = jump;
             tutorialInputs[InputLibrary.boost] = jump;
             tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
             tutorialInputs[InputLibrary.matchVelocity] = jump;
 
-            var map = new TutorialInput(actions.Map);
+            var map = new TutorialInput(actions.Map, 3);
             tutorialInputs[InputLibrary.map] = map;
 
-            var move = new TutorialInput(actions.Move);
+            var move = new TutorialInput(actions.Move, 6);
             tutorialInputs[InputLibrary.moveXZ] = move;
             tutorialInputs[InputLibrary.thrustX] = move;
             tutorialInputs[InputLibrary.thrustZ] = move;
 
-            var look = new TutorialInput(actions.Look);
+            var look = new TutorialInput(actions.Look, 7);
             tutorialInputs[InputLibrary.look] = look;
             tutorialInputs[InputLibrary.yaw] = look;
             tutorialInputs[InputLibrary.pitch] = look;
 
-            var thrustUp = new TutorialInput(actions.ThrottleUp);
+            var thrustUp = new TutorialInput(actions.ThrottleUp, 4);
             tutorialInputs[InputLibrary.thrustUp] = thrustUp;
             tutorialInputs[InputLibrary.extendStick] = thrustUp;
 
-            var thrustDown = new TutorialInput(actions.ThrottleDown);
+            var thrustDown = new TutorialInput(actions.ThrottleDown, 5);
             tutorialInputs[InputLibrary.thrustDown] = thrustDown;
 
-            var rollMode = new TutorialInput(actions.SecondaryAction);
+            var rollMode = new TutorialInput(actions.SecondaryAction, 8);
             tutorialInputs[InputLibrary.probeReverse] = rollMode;
             tutorialInputs[InputLibrary.rollMode] = rollMode;
 
-            var back = new TutorialInput(actions.Back);
+            var back = new TutorialInput(actions.Back, 9);
             tutorialInputs[InputLibrary.cancel] = back;
 
         }
@@ -79,6 +79,7 @@ namespace NomaiVR {
 
                         if (!tutorialInput.isDone && !queue.Contains(tutorialInput)) {
                             queue.Add(tutorialInputs[command]);
+                            queue.Sort((a, b) => a.priority - b.priority);
                         }
 
                     }
@@ -90,10 +91,11 @@ namespace NomaiVR {
             public bool isDone;
             public SteamVR_Action action;
             public bool isShowing;
+            public int priority;
 
-
-            public TutorialInput (SteamVR_Action vrAction) {
-                action = vrAction;
+            public TutorialInput (SteamVR_Action action, int priority) {
+                this.action = action;
+                this.priority = priority;
                 action.HideOrigins();
 
                 if (action is SteamVR_Action_Vector2) {
