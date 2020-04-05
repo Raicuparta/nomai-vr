@@ -5,9 +5,12 @@ using Valve.VR;
 namespace NomaiVR {
     class VRTutorial: MonoBehaviour {
         static Dictionary<InputCommand, TutorialInput> tutorialInputs;
+        static List<TutorialInput> queue;
 
         void Start () {
             NomaiVR.Log("Start VRTutorial");
+
+            queue = new List<TutorialInput>();
 
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
@@ -55,6 +58,12 @@ namespace NomaiVR {
 
         }
 
+        void Update () {
+            if (queue.Count > 0) {
+                queue[0].Show();
+            }
+        }
+
         internal static class Patches {
             public static void Patch () {
                 NomaiVR.Post<ScreenPrompt>("SetVisibility", typeof(Patches), nameof(SetPromptVisibility));
@@ -63,7 +72,12 @@ namespace NomaiVR {
             static void SetPromptVisibility (bool isVisible, List<InputCommand> ____commandList) {
                 foreach (var command in ____commandList) {
                     if (isVisible && tutorialInputs.ContainsKey(command)) {
-                        tutorialInputs[command].Show();
+                        var tutorialInput = tutorialInputs[command];
+
+                        if (!tutorialInput.isDone && !queue.Contains(tutorialInput)) {
+                            queue.Add(tutorialInputs[command]);
+                        }
+
                     }
                 }
             }
@@ -72,8 +86,8 @@ namespace NomaiVR {
         class TutorialInput {
             public bool isDone;
             public SteamVR_Action action;
+            public bool isShowing;
 
-            bool _isShowing;
 
             public TutorialInput (SteamVR_Action vrAction) {
                 action = vrAction;
@@ -103,24 +117,23 @@ namespace NomaiVR {
             }
 
             private void OnChange () {
-                if (_isShowing) {
+                if (isShowing) {
                     Hide();
                     isDone = true;
                 }
             }
 
             public void Hide () {
-                NomaiVR.Log("####### Hide", action.GetShortName());
-                _isShowing = false;
+                isShowing = false;
                 action.HideOrigins();
+                queue.Remove(this);
             }
 
             public void Show () {
-                if (isDone || _isShowing) {
+                if (isDone || isShowing) {
                     return;
                 }
-                NomaiVR.Log("####### Show", action.GetShortName());
-                _isShowing = true;
+                isShowing = true;
                 action.ShowOrigins();
             }
         }
