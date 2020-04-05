@@ -44,9 +44,11 @@ namespace NomaiVR {
             Common.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
             Destroy(helmetModelParent.Find("Helmet").gameObject);
             Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
+            helmetModel.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
 
             // Adjust projected HUD.
             var surface = GameObject.Find("HUD_CurvedSurface").transform;
+            surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
             surface.transform.localScale = Vector3.one * 3.28f;
             surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
             var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
