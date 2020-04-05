@@ -17,7 +17,7 @@ namespace NomaiVR {
 
             CreateControllerModel(Hands.RightHand);
             CreateControllerModel(Hands.LeftHand);
-            controllerModels.ForEach(model => model.enabled = false);
+            Invoke(nameof(HideControllerModels), 0.1f);
 
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
@@ -97,8 +97,8 @@ namespace NomaiVR {
 
         void CreateControllerModel (Transform hand) {
             var controllerModel = new GameObject().AddComponent<SteamVR_RenderModel>();
-            controllerModel.updateDynamically = true;
-            controllerModel.createComponents = true;
+            controllerModel.updateDynamically = false;
+            controllerModel.createComponents = false;
             controllerModel.transform.parent = hand;
             controllerModel.transform.localPosition = Vector3.zero;
             controllerModel.transform.localRotation = Quaternion.identity;
