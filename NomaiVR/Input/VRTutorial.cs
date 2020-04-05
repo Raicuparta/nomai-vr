@@ -56,6 +56,9 @@ namespace NomaiVR {
             tutorialInputs[InputLibrary.probeReverse] = rollMode;
             tutorialInputs[InputLibrary.rollMode] = rollMode;
 
+            var back = new TutorialInput(actions.Back);
+            tutorialInputs[InputLibrary.cancel] = back;
+
         }
 
         void Update () {
