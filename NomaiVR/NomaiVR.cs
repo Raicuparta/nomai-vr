@@ -10,10 +10,12 @@ namespace NomaiVR {
     public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
         public static bool DebugMode;
+        public static ModSaveFile SaveFile;
 
         void Start () {
             Log("Start Main");
 
+            SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
             Helper = ModHelper;
 
             SteamVR.Initialize();

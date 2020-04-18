@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Valve.VR;
 
@@ -22,51 +23,49 @@ namespace NomaiVR {
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
 
-            var interact = new TutorialInput(actions.PrimaryAction, 0);
+            var interact = new TutorialInput("interact", actions.PrimaryAction, 0);
             tutorialInputs[InputLibrary.interact] = interact;
             tutorialInputs[InputLibrary.translate] = interact;
             tutorialInputs[InputLibrary.scopeView] = interact;
             tutorialInputs[InputLibrary.probeForward] = interact;
             tutorialInputs[InputLibrary.lockOn] = interact;
 
-            var holdInteract = new TutorialInput(actions.PrimaryAction, 1);
+            var holdInteract = new TutorialInput("holdInteract", actions.PrimaryAction, 1);
             tutorialInputs[InputLibrary.suitMenu] = holdInteract;
             tutorialInputs[InputLibrary.probeRetrieve] = holdInteract;
             tutorialInputs[InputLibrary.sleep] = holdInteract;
             tutorialInputs[InputLibrary.swapShipLogMode] = holdInteract;
             tutorialInputs[InputLibrary.autopilot] = holdInteract;
 
-            var jump = new TutorialInput(actions.Jump, 2);
+            var jump = new TutorialInput("jump", actions.Jump, 2);
             tutorialInputs[InputLibrary.jump] = jump;
             tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
 
-            tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput(actions.Jump, 2);
-            tutorialInputs[InputLibrary.boost] = new TutorialInput(actions.Jump, 2);
+            tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput("matchVelocity", actions.Jump, 2);
+            tutorialInputs[InputLibrary.boost] = new TutorialInput("boost", actions.Jump, 2);
 
-            tutorialInputs[InputLibrary.map] = new TutorialInput(actions.Map, 3);
+            tutorialInputs[InputLibrary.map] = new TutorialInput("map", actions.Map, 3);
 
-            var move = new TutorialInput(actions.Move, 6);
+            var move = new TutorialInput("move", actions.Move, 6);
             tutorialInputs[InputLibrary.moveXZ] = move;
             tutorialInputs[InputLibrary.thrustX] = move;
             tutorialInputs[InputLibrary.thrustZ] = move;
 
-            tutorialInputs[InputLibrary.look] = new TutorialInput(actions.Look, 7);
+            tutorialInputs[InputLibrary.look] = new TutorialInput("look", actions.Look, 7);
 
-            var zeroGLook = new TutorialInput(actions.Look, 7);
+            var zeroGLook = new TutorialInput("zeroGLook", actions.Look, 7);
             tutorialInputs[InputLibrary.yaw] = zeroGLook;
             tutorialInputs[InputLibrary.pitch] = zeroGLook;
 
-            tutorialInputs[InputLibrary.extendStick] = new TutorialInput(actions.ThrottleUp, 0);
-            tutorialInputs[InputLibrary.thrustUp] = new TutorialInput(actions.ThrottleUp, 4);
-            tutorialInputs[InputLibrary.thrustDown] = new TutorialInput(actions.ThrottleDown, 5);
+            tutorialInputs[InputLibrary.extendStick] = new TutorialInput("extendStick", actions.ThrottleUp, 0);
+            tutorialInputs[InputLibrary.thrustUp] = new TutorialInput("thrustUp", actions.ThrottleUp, 4);
+            tutorialInputs[InputLibrary.thrustDown] = new TutorialInput("thrustDown", actions.ThrottleDown, 5);
 
-            tutorialInputs[InputLibrary.rollMode] = new TutorialInput(actions.SecondaryAction, 8);
+            tutorialInputs[InputLibrary.rollMode] = new TutorialInput("rollMode", actions.SecondaryAction, 8);
 
-            tutorialInputs[InputLibrary.probeReverse] = new TutorialInput(actions.SecondaryAction, 8);
+            tutorialInputs[InputLibrary.probeReverse] = new TutorialInput("probeReverse", actions.SecondaryAction, 8);
 
-            var back = new TutorialInput(actions.Back, 9);
-            tutorialInputs[InputLibrary.cancel] = back;
-
+            tutorialInputs[InputLibrary.cancel] = new TutorialInput("back", actions.Back, 9);
         }
 
         void Update () {
@@ -131,8 +130,10 @@ namespace NomaiVR {
             public SteamVR_Action action;
             public bool isShowing;
             public int priority;
+            string name;
 
-            public TutorialInput (SteamVR_Action action, int priority) {
+            public TutorialInput (string name, SteamVR_Action action, int priority) {
+                this.name = name;
                 this.action = action;
                 this.priority = priority;
                 action.HideOrigins();
@@ -163,6 +164,7 @@ namespace NomaiVR {
             private void OnChange () {
                 if (isShowing) {
                     isDone = true;
+                    NomaiVR.SaveFile.AddTutorialStep(name);
                     Hide();
                 }
             }
