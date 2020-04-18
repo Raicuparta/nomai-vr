@@ -162,8 +162,8 @@ namespace NomaiVR {
 
             private void OnChange () {
                 if (isShowing) {
-                    Hide();
                     isDone = true;
+                    Hide();
                 }
             }
 
