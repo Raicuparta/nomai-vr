@@ -39,7 +39,6 @@ namespace NomaiVR {
             var jump = new TutorialInput(actions.Jump, 2);
             tutorialInputs[InputLibrary.jump] = jump;
             tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
-            tutorialInputs[InputLibrary.matchVelocity] = jump;
 
             tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput(actions.Jump, 2);
             tutorialInputs[InputLibrary.boost] = new TutorialInput(actions.Jump, 2);
