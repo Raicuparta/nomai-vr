@@ -10,10 +10,12 @@ namespace NomaiVR {
     public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
         public static bool DebugMode;
+        public static ModSaveFile SaveFile;
 
         void Start () {
             Log("Start Main");
 
+            SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
             Helper = ModHelper;
 
             SteamVR.Initialize();
@@ -31,7 +33,7 @@ namespace NomaiVR {
             ForceSettings.Patches.Patch();
             HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
-            //VRTutorial.Patches.Patch();
+            VRTutorial.Patches.Patch();
 
             // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
@@ -65,7 +67,7 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<FeetMarker>();
                 nonPersistentObject.AddComponent<InputPrompts>();
                 nonPersistentObject.AddComponent<HelmetHUD>();
-                //nonPersistentObject.AddComponent<VRTutorial>();
+                nonPersistentObject.AddComponent<VRTutorial>();
                 if (isSolarSystem) {
                     nonPersistentObject.AddComponent<ShipTools>();
                     nonPersistentObject.AddComponent<SolarSystemMap>();

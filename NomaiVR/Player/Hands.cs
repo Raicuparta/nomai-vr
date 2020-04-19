@@ -20,8 +20,8 @@ namespace NomaiVR {
             }
 
             _wrapper = new GameObject().transform;
-            RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(314f, 12.7f, 281f), new Vector3(0.02f, 0.06f, -0.2f), _wrapper);
-            LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(317.032f, 347.616f, 76.826f), new Vector3(-0.05f, 0.07f, -0.2f), _wrapper, true);
+            RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(313f, 10f, 295f), new Vector3(0.03f, 0.05f, -0.2f), _wrapper);
+            LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(313f, 350f, 65f), new Vector3(-0.03f, 0.05f, -0.2f), _wrapper, true);
 
             _wrapper.parent = Camera.main.transform.parent;
             _wrapper.localRotation = Quaternion.identity;

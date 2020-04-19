@@ -5,19 +5,19 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/ThrottleUp",
+      "name": "/actions/default/in/ThrustUp",
       "type": "vector1"
     },
     {
-      "name": "/actions/default/in/ThrottleDown",
+      "name": "/actions/default/in/ThrustDown",
       "type": "vector1"
     },
     {
-      "name": "/actions/default/in/SecondaryAction",
+      "name": "/actions/default/in/RollMode",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/PrimaryAction",
+      "name": "/actions/default/in/Interact",
       "type": "boolean"
     },
     {
@@ -81,5 +81,22 @@
       "binding_url": "wmr-controller.json"
     }
   ],
-  "localization": []
+  "localization": [{
+    "language_tag": "en_us",
+    "/actions/default": "Default NomaiVR bindings",
+    "/actions/default/in/Grip": "Grip (hold tools)",
+    "/actions/default/in/ThrustUp": "Thrust Up",
+    "/actions/default/in/ThrustDown": "Thrust Down",
+    "/actions/default/in/RollMode": "Roll Mode",
+    "/actions/default/in/Interact": "Interact",
+    "/actions/default/in/Jump": "Jump",
+    "/actions/default/in/Back": "Back",
+    "/actions/default/in/Menu": "Menu",
+    "/actions/default/in/Map": "Map",
+    "/actions/default/in/Look": "Look",
+    "/actions/default/in/Move": "Move",
+    "/actions/default/in/LeftHand": "Left Hand",
+    "/actions/default/in/RightHand": "Right Hand",
+    "/actions/default/out/Haptic": "Haptic"
+  }]
 }

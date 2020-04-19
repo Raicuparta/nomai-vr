@@ -31,16 +31,16 @@ namespace NomaiVR {
 
             SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
             SteamVR_Actions.default_Back.onChange += OnBackChange;
-            SteamVR_Actions.default_PrimaryAction.onChange += OnPrimaryActionChange;
-            SteamVR_Actions.default_SecondaryAction.onChange += CreateButtonHandler(XboxButton.LeftBumper);
+            SteamVR_Actions.default_Interact.onChange += OnPrimaryActionChange;
+            SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(XboxButton.LeftBumper);
             SteamVR_Actions.default_Grip.onChange += OnGripChange;
 
             SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(XboxButton.Start);
             SteamVR_Actions.default_Map.onChange += CreateButtonHandler(XboxButton.Select);
 
-            SteamVR_Actions.default_ThrottleDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
-            SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
-            SteamVR_Actions.default_ThrottleUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+            SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
+            SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+            SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
 
             SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
             SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);

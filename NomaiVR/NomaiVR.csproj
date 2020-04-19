@@ -95,6 +95,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Timers.cs" />
+    <Compile Include="ModSaveFile.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
     <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
@@ -137,6 +139,7 @@
     <None Include="Bindings\wmr-controller.json" />
     <None Include="Bindings\vive_wands.json" />
     <None Include="ModConfig\default-config.json" />
+    <None Include="ModConfig\save.json" />
     <None Include="ModConfig\manifest.json" />
     <None Include="packages.config" />
   </ItemGroup>

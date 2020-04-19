@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 namespace NomaiVR {
     class InputPrompts: MonoBehaviour {
-        static PromptManager _manager;
         static Texture2D _holdTexture;
         static Texture2D _interactTexture;
         static Texture2D _jumpTexture;
         static Texture2D _backTexture;
         static List<ScreenPrompt> _toolUnequipPrompts;
-
-        void Start () {
-            _manager = Locator.GetPromptManager();
+        static PromptManager _manager {
+            get {
+                return Locator.GetPromptManager();
+            }
         }
 
         void LateUpdate () {
@@ -45,6 +45,7 @@ namespace NomaiVR {
                 NomaiVR.Post<SatelliteSnapshotController>("Awake", typeof(Patches), nameof(ChangeSatellitePrompts));
 
                 NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patches), nameof(RemoveJoystickPrompts));
+                NomaiVR.Post<RoastingStickController>("LateInitialize", typeof(Patches), nameof(RemoveRoastingStickPrompts));
                 NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patches), nameof(RemoveToolModePrompts));
 
                 NomaiVR.Pre<LockOnReticule>("Init", typeof(Patches), nameof(InitLockOnReticule));
@@ -128,6 +129,14 @@ namespace NomaiVR {
 
             static void RemoveJoystickPrompts (ref bool ____lookPromptAdded) {
                 ____lookPromptAdded = true;
+            }
+
+            static void RemoveRoastingStickPrompts (
+                ScreenPrompt ____tiltPrompt,
+                ScreenPrompt ____mallowPrompt
+            ) {
+                _manager.RemoveScreenPrompt(____tiltPrompt);
+                _manager.RemoveScreenPrompt(____mallowPrompt);
             }
 
             static void RemoveToolModePrompts (

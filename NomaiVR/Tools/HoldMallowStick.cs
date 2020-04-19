@@ -64,9 +64,6 @@ namespace NomaiVR {
             public static void Patch () {
                 // Stop stick rotation animation.
                 NomaiVR.Empty<RoastingStickController>("UpdateRotation");
-
-                // Hide prompts.
-                NomaiVR.Empty<RoastingStickController>("LateInitialize");
             }
         }
     }
