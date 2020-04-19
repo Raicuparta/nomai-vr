@@ -23,14 +23,14 @@ namespace NomaiVR {
             var actions = SteamVR_Actions._default;
             tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
 
-            var interact = new TutorialInput("interact", actions.PrimaryAction, 0);
+            var interact = new TutorialInput("interact", actions.Interact, 0);
             tutorialInputs[InputLibrary.interact] = interact;
             tutorialInputs[InputLibrary.translate] = interact;
             tutorialInputs[InputLibrary.scopeView] = interact;
             tutorialInputs[InputLibrary.probeForward] = interact;
             tutorialInputs[InputLibrary.lockOn] = interact;
 
-            var holdInteract = new TutorialInput("holdInteract", actions.PrimaryAction, 1);
+            var holdInteract = new TutorialInput("holdInteract", actions.Interact, 1);
             tutorialInputs[InputLibrary.suitMenu] = holdInteract;
             tutorialInputs[InputLibrary.probeRetrieve] = holdInteract;
             tutorialInputs[InputLibrary.sleep] = holdInteract;
@@ -50,13 +50,13 @@ namespace NomaiVR {
             tutorialInputs[InputLibrary.yaw] = zeroGLook;
             tutorialInputs[InputLibrary.pitch] = zeroGLook;
 
-            tutorialInputs[InputLibrary.extendStick] = new TutorialInput("extendStick", actions.ThrottleUp, 0);
-            tutorialInputs[InputLibrary.thrustUp] = new TutorialInput("thrustUp", actions.ThrottleUp, 4);
-            tutorialInputs[InputLibrary.thrustDown] = new TutorialInput("thrustDown", actions.ThrottleDown, 5);
+            tutorialInputs[InputLibrary.extendStick] = new TutorialInput("extendStick", actions.ThrustUp, 0);
+            tutorialInputs[InputLibrary.thrustUp] = new TutorialInput("thrustUp", actions.ThrustUp, 4);
+            tutorialInputs[InputLibrary.thrustDown] = new TutorialInput("thrustDown", actions.ThrustDown, 5);
 
-            tutorialInputs[InputLibrary.rollMode] = new TutorialInput("rollMode", actions.SecondaryAction, 8);
+            tutorialInputs[InputLibrary.rollMode] = new TutorialInput("rollMode", actions.RollMode, 8);
 
-            tutorialInputs[InputLibrary.probeReverse] = new TutorialInput("probeReverse", actions.SecondaryAction, 8);
+            tutorialInputs[InputLibrary.probeReverse] = new TutorialInput("probeReverse", actions.RollMode, 8);
 
             tutorialInputs[InputLibrary.cancel] = new TutorialInput("back", actions.Back, 9);
 

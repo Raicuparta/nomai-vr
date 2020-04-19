@@ -48,7 +48,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/secondaryaction"
+                     "output" : "/actions/default/in/RollMode"
                   }
                },
                "mode" : "button",
@@ -57,7 +57,7 @@
             {
                "inputs" : {
                   "pull" : {
-                     "output" : "/actions/default/in/throttledown"
+                     "output" : "/actions/default/in/ThrustDown"
                   }
                },
                "mode" : "trigger",
@@ -66,7 +66,7 @@
             {
                "inputs" : {
                   "pull" : {
-                     "output" : "/actions/default/in/throttleup"
+                     "output" : "/actions/default/in/ThrustUp"
                   }
                },
                "mode" : "trigger",
@@ -84,7 +84,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/primaryaction"
+                     "output" : "/actions/default/in/Interact"
                   }
                },
                "mode" : "button",

@@ -5,19 +5,19 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/ThrottleUp",
+      "name": "/actions/default/in/ThrustUp",
       "type": "vector1"
     },
     {
-      "name": "/actions/default/in/ThrottleDown",
+      "name": "/actions/default/in/ThrustDown",
       "type": "vector1"
     },
     {
-      "name": "/actions/default/in/SecondaryAction",
+      "name": "/actions/default/in/RollMode",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/PrimaryAction",
+      "name": "/actions/default/in/Interact",
       "type": "boolean"
     },
     {
