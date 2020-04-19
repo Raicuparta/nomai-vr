@@ -46,10 +46,6 @@ namespace NomaiVR {
 
             tutorialInputs[InputLibrary.map] = new TutorialInput("map", actions.Map, 3);
 
-            var move = new TutorialInput("move", actions.Move, 6);
-
-            tutorialInputs[InputLibrary.look] = new TutorialInput("look", actions.Look, 7);
-
             var zeroGLook = new TutorialInput("zeroGLook", actions.Look, 7);
             tutorialInputs[InputLibrary.yaw] = zeroGLook;
             tutorialInputs[InputLibrary.pitch] = zeroGLook;
@@ -63,6 +59,18 @@ namespace NomaiVR {
             tutorialInputs[InputLibrary.probeReverse] = new TutorialInput("probeReverse", actions.SecondaryAction, 8);
 
             tutorialInputs[InputLibrary.cancel] = new TutorialInput("back", actions.Back, 9);
+
+            // Show these right away instead of waiting for a prompt.
+            var move = new TutorialInput("move", actions.Move, 6);
+            var look = new TutorialInput("look", actions.Look, 7);
+            AddToQueue(move);
+            AddToQueue(look);
+        }
+
+        static void AddToQueue (TutorialInput input) {
+            NomaiVR.Log("add to quyeue", input.action.GetShortName());
+            queue.Add(input);
+            queue.Sort((a, b) => a.priority - b.priority);
         }
 
         void Update () {
@@ -112,12 +120,12 @@ namespace NomaiVR {
                 foreach (var command in ____commandList) {
                     if (isVisible && tutorialInputs.ContainsKey(command)) {
                         var tutorialInput = tutorialInputs[command];
-                        if (tutorialInput != null) {
+                        if (tutorialInput == null) {
                             continue;
                         }
 
                         if (!tutorialInput.isDone && !queue.Contains(tutorialInput)) {
-                            queue.Add(tutorialInputs[command]);
+                            AddToQueue(tutorialInputs[command]);
                             queue.Sort((a, b) => a.priority - b.priority);
                         }
                     }
