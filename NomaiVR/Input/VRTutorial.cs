@@ -47,9 +47,6 @@ namespace NomaiVR {
             tutorialInputs[InputLibrary.map] = new TutorialInput("map", actions.Map, 3);
 
             var move = new TutorialInput("move", actions.Move, 6);
-            tutorialInputs[InputLibrary.moveXZ] = move;
-            tutorialInputs[InputLibrary.thrustX] = move;
-            tutorialInputs[InputLibrary.thrustZ] = move;
 
             tutorialInputs[InputLibrary.look] = new TutorialInput("look", actions.Look, 7);
 
@@ -115,6 +112,9 @@ namespace NomaiVR {
                 foreach (var command in ____commandList) {
                     if (isVisible && tutorialInputs.ContainsKey(command)) {
                         var tutorialInput = tutorialInputs[command];
+                        if (tutorialInput != null) {
+                            continue;
+                        }
 
                         if (!tutorialInput.isDone && !queue.Contains(tutorialInput)) {
                             queue.Add(tutorialInputs[command]);
