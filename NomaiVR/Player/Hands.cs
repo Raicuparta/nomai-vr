@@ -21,8 +21,6 @@ namespace NomaiVR {
 
             _wrapper = new GameObject().transform;
             RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(313f, 10f, 295f), new Vector3(0.03f, 0.05f, -0.2f), _wrapper);
-            RightHand.GetChild(0).gameObject.AddComponent<DebugTransform>();
-
             LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(313f, 350f, 65f), new Vector3(-0.03f, 0.05f, -0.2f), _wrapper, true);
 
             _wrapper.parent = Camera.main.transform.parent;
