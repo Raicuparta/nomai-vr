@@ -10,7 +10,6 @@ namespace NomaiVR {
 
         public void AddTutorialStep (string step) {
             tutorialSteps.Add(step);
-            NomaiVR.Log("saving............" + String.Join(", ", tutorialSteps.ToArray()));
             Save();
         }
 

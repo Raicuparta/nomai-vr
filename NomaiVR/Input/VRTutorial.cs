@@ -138,6 +138,10 @@ namespace NomaiVR {
                 this.priority = priority;
                 action.HideOrigins();
 
+                if (NomaiVR.SaveFile.tutorialSteps.Contains(name)) {
+                    isDone = true;
+                }
+
                 if (action is SteamVR_Action_Vector2) {
                     ((SteamVR_Action_Vector2) action).onChange += OnChange;
                 }
