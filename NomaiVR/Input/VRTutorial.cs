@@ -41,8 +41,8 @@ namespace NomaiVR {
             tutorialInputs[InputLibrary.jump] = jump;
             tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
 
-            tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput("matchVelocity", actions.Jump, 2);
-            tutorialInputs[InputLibrary.boost] = new TutorialInput("boost", actions.Jump, 2);
+            tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput("matchVelocity", actions.Jump, 3);
+            tutorialInputs[InputLibrary.boost] = new TutorialInput("boost", actions.Jump, 3);
 
             tutorialInputs[InputLibrary.map] = new TutorialInput("map", actions.Map, 3);
 
@@ -68,7 +68,6 @@ namespace NomaiVR {
         }
 
         static void AddToQueue (TutorialInput input) {
-            NomaiVR.Log("add to quyeue", input.action.GetShortName());
             queue.Add(input);
             queue.Sort((a, b) => a.priority - b.priority);
         }
@@ -175,20 +174,27 @@ namespace NomaiVR {
 
             private void OnChange () {
                 if (isShowing) {
-                    isDone = true;
-                    NomaiVR.SaveFile.AddTutorialStep(name);
                     Hide();
                 }
             }
 
             public void Hide () {
-                isShowing = false;
                 action.HideOrigins();
-                queue.Remove(this);
+
+                Timers.ExecuteAfter(() => {
+                    isShowing = false;
+                    isDone = true;
+                    queue.Remove(this);
+                }, 500);
+                NomaiVR.SaveFile.AddTutorialStep(name);
             }
 
             public void Show () {
-                if (isDone || isShowing) {
+                if (isDone) {
+                    queue.Remove(this);
+                    return;
+                }
+                if (isShowing) {
                     return;
                 }
                 isShowing = true;

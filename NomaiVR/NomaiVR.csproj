@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Timers.cs" />
     <Compile Include="ModSaveFile.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
