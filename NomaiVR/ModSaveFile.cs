@@ -6,7 +6,7 @@ using System.Text;
 namespace NomaiVR {
     public class ModSaveFile {
         public const string FileName = "save.json";
-        public List<string> tutorialSteps = new List<string>();
+        public HashSet<string> tutorialSteps = new HashSet<string>();
 
         public void AddTutorialStep (string step) {
             tutorialSteps.Add(step);
