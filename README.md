@@ -22,16 +22,15 @@ While the game is playable at a surprisingly decent level, a lot of things range
 
 ## VR Controller Inputs
 
-Since most VR controllers have less buttons than a normal game controller, input mappings can't be one-to-one. This led to some creative use of motion controls in order to reduce the number of required buttons. The game will control a lot different than it did originally, and there won't be any tutorials teaching you how to play with these controls. Important things:
+There are some extra in-game tutorials for teaching you VR inputs, but some stuff doesn't have any tutorials yet.
 
-* Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
-* In SteamVR's settings you can see the default controls that I set up for the game;
 * You can't change the control bindings in-game (they will always reset);
-* You can interact with most stuff by aiming with the right-hand laser and pressing the "primary interaction" button;
+* Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
+* You can interact with most stuff by aiming with the right-hand laser and pressing the interact button;
 * Right hand grip can be used to grab tools from the toolbelt;
-* While holding a tool, press the "primary interaction" button to use the tool;
 * Change tool modes by holding a tool on your right hand and touching it with your left hand;
 * While piloting the ship, you can aim at and interact with stuff inside the ship (interact with the screens to equip that tool);
+* Turn on the flashlight by touching the side of your head with your right hand;
 * Experiment with the controls. When in doubt, aim laser and press interact.
 
 ## Installation
@@ -48,6 +47,13 @@ Since most VR controllers have less buttons than a normal game controller, input
 
 * Create a shortcut to `OWML.Launcher.exe` and add the params `-vrmode openvr` ([like in this image](https://i.imgur.com/5uv88Nk.png))
 * Use the shortcut you just created to launch the game;
+
+## Performance
+
+* This game was not developed with VR in mind;
+* It was never a super lightweight game, and shoving VR down its throat isn't helping;
+* The game's physics is locked at 60 FPS. So even though the game reports more FPS than that, it will look stuttery;
+* You'll probably need to lower your quality settings to get acceptable performance.
 
 ## Compatibility with other mods
 
