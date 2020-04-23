@@ -34,6 +34,7 @@ namespace NomaiVR {
             HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
             VRTutorial.Patches.Patch();
+            Menus.Patches.Patch();
 
             // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();

@@ -77,5 +77,19 @@ namespace NomaiVR {
                 }
             }
         }
+
+        internal static class Patches {
+            public static void Patch () {
+                NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patches), nameof(PostPopulateProfiles));
+            }
+
+            static void PostPopulateProfiles (GameObject ____profileListRoot) {
+                foreach (Transform child in ____profileListRoot.transform) {
+                    child.localPosition = Vector3.zero;
+                    child.localRotation = Quaternion.identity;
+                    child.localScale = Vector3.one;
+                }
+            }
+        }
     }
 }
