@@ -1,9 +1,20 @@
-﻿using UnityEngine;
+﻿using OWML.ModHelper.Events;
+using UnityEngine;
+using Valve.VR;
 
 namespace NomaiVR {
     class ForceSettings: MonoBehaviour {
         void Awake () {
             SetResolution();
+            SetRefreshRate();
+        }
+
+        void SetRefreshRate () {
+            var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
+            var fixedTimeStep = 1f / deviceRefreshRate;
+            var owTime = typeof(OWTime);
+            owTime.SetValue("s_fixedTimestep", fixedTimeStep);
+            Time.fixedDeltaTime = fixedTimeStep;
         }
 
         static void SetResolution () {
