@@ -2,15 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartAction>Program</StartAction>
-    <StartWorkingDirectory>C:\Program Files\Epic Games\OuterWilds\OWML</StartWorkingDirectory>
-    <StartProgram>$(StartWorkingDirectory)\OWML.Launcher.exe</StartProgram>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartAction>Program</StartAction>
-    <StartWorkingDirectory>C:\Program Files\Epic Games\OuterWilds\OWML</StartWorkingDirectory>
-    <StartProgram>$(StartWorkingDirectory)\OWML.Launcher.exe</StartProgram>
+    <GameDir>C:\Program Files\Epic Games\OuterWilds</GameDir>
+    <OwmlDir>C:\Users\ricar\Repos\mod-installer\out\Outer Wilds Mod Manager-win32-x64\OWML</OwmlDir>
   </PropertyGroup>
 </Project>

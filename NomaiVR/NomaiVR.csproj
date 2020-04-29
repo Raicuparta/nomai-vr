@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(StartWorkingDirectory)\0Harmony.dll</HintPath>
+      <HintPath>$(OwmlDir)\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="NAudio-Unity, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OWML.0.3.40\lib\net35\NAudio-Unity.dll</HintPath>
@@ -65,33 +65,33 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(StartWorkingDirectory)\..\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -152,19 +152,19 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del "$(StartWorkingDirectory)\Mods\NomaiVR\config.json"
+    <PostBuildEvent>del "$(GameDir)\Mods\$(SolutionName)\config.json"
 
-md "$(StartWorkingDirectory)\Mods\NomaiVR"
-md "$(StartWorkingDirectory)\Mods\NomaiVR\bindings"
-md "$(StartWorkingDirectory)\Mods\NomaiVR\assets"
+md "$(OwmlDir)\Mods\$(SolutionName)"
+md "$(OwmlDir)\Mods\$(SolutionName)\bindings"
+md "$(OwmlDir)\Mods\$(SolutionName)\assets"
 
-copy /y "$(TargetPath)" "$(StartWorkingDirectory)\Mods\NomaiVR\NomaiVR.dll"
+copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(SolutionName)"
 
-copy /y "$(ProjectDir)\Bindings\*.json" "$(StartWorkingDirectory)\Mods\NomaiVR\bindings"
+copy /y "$(ProjectDir)\Bindings\*.json" "$(OwmlDir)\Mods\$(SolutionName)\bindings"
 
-copy /y "$(ProjectDir)\Assets\*" "$(StartWorkingDirectory)\Mods\NomaiVR\assets"
+copy /y "$(ProjectDir)\Assets\*" "$(OwmlDir)\Mods\$(SolutionName)\assets"
 
-copy /y "$(ProjectDir)\ModConfig\*.json" "$(StartWorkingDirectory)\Mods\NomaiVR"</PostBuildEvent>
+copy /y "$(ProjectDir)\ModConfig\*.json" "$(OwmlDir)\Mods\$(SolutionName)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
