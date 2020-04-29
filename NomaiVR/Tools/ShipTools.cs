@@ -12,6 +12,7 @@ namespace NomaiVR {
         static ButtonInteraction _landingCam;
         static bool _canInteractWithTools;
         static ShipCockpitController _cockpitController;
+        static bool _isLandingCamEnabled;
 
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
@@ -79,6 +80,53 @@ namespace NomaiVR {
                 NomaiVR.Empty<PlayerCameraController>("OnExitLandingView");
                 NomaiVR.Empty<PlayerCameraController>("OnEnterShipComputer");
                 NomaiVR.Empty<PlayerCameraController>("OnExitShipComputer");
+
+                NomaiVR.Pre<ShipCockpitController>("EnterLandingView", typeof(Patches), nameof(PreEnterLandingView));
+                NomaiVR.Pre<ShipCockpitController>("ExitLandingView", typeof(Patches), nameof(PreExitLandingView));
+                NomaiVR.Pre<ShipCockpitUI>("Update", typeof(Patches), nameof(PreCockpitUIUpdate));
+                NomaiVR.Post<ShipCockpitUI>("Update", typeof(Patches), nameof(PostCockpitUIUpdate));
+            }
+
+            static void PreCockpitUIUpdate (ShipCockpitController ____shipSystemsCtrlr) {
+                ____shipSystemsCtrlr.SetValue("_usingLandingCam", _isLandingCamEnabled);
+            }
+
+            static void PostCockpitUIUpdate (ShipCockpitController ____shipSystemsCtrlr) {
+                ____shipSystemsCtrlr.SetValue("_usingLandingCam", false);
+            }
+
+            static bool PreEnterLandingView (
+                ShipCockpitController __instance,
+                LandingCamera ____landingCam,
+                ShipLight ____landingLight,
+                ShipCameraComponent ____landingCamComponent,
+                ShipAudioController ____shipAudioController,
+                ref bool ____usingLandingCam,
+                ref bool ____enteringLandingCam,
+                ref float ____initLandingCamTime
+            ) {
+                _isLandingCamEnabled = true;
+                ____landingCam.enabled = true;
+                ____landingLight.SetOn(true);
+
+                if (____landingCamComponent.isDamaged) {
+                    ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamStatic_LP);
+                    ____shipAudioController.PlayLandingCamStatic(0.25f);
+                } else {
+                    ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamAmbient_LP);
+                    ____shipAudioController.PlayLandingCamAmbient(0.25f);
+                }
+
+                return false;
+            }
+
+            static bool PreExitLandingView (
+                LandingCamera ____landingCam,
+                ShipLight ____landingLight
+            ) {
+                ____landingCam.enabled = false;
+                ____landingLight.SetOn(false);
+                return false;
             }
 
             static void ShipStart (ShipBody __instance) {
