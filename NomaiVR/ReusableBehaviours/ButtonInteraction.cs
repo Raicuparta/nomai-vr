@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 
 namespace NomaiVR {
@@ -6,6 +7,7 @@ namespace NomaiVR {
         public XboxButton button;
         public UITextType text;
         public InteractReceiver receiver;
+        public Func<bool> skipPressCallback;
         BoxCollider _collider;
 
         void Start () {
@@ -21,7 +23,10 @@ namespace NomaiVR {
         }
 
         void OnPress () {
-            ControllerInput.SimulateInput(button, 1);
+            var skip = skipPressCallback != null && skipPressCallback.Invoke();
+            if (!skip) {
+                ControllerInput.SimulateInput(button, 1);
+            }
         }
 
         void OnRelease () {

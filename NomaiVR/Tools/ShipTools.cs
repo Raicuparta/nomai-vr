@@ -12,6 +12,7 @@ namespace NomaiVR {
         static ButtonInteraction _landingCam;
         static bool _canInteractWithTools;
         static ShipCockpitController _cockpitController;
+        static bool _isLandingCamEnabled;
 
         void Awake () {
             NomaiVR.Log("Start Ship Tools");
@@ -79,6 +80,52 @@ namespace NomaiVR {
                 NomaiVR.Empty<PlayerCameraController>("OnExitLandingView");
                 NomaiVR.Empty<PlayerCameraController>("OnEnterShipComputer");
                 NomaiVR.Empty<PlayerCameraController>("OnExitShipComputer");
+
+                NomaiVR.Pre<ShipCockpitController>("EnterLandingView", typeof(Patches), nameof(PreEnterLandingView));
+                NomaiVR.Pre<ShipCockpitController>("ExitLandingView", typeof(Patches), nameof(PreExitLandingView));
+                NomaiVR.Pre<ShipCockpitUI>("Update", typeof(Patches), nameof(PreCockpitUIUpdate));
+                NomaiVR.Post<ShipCockpitUI>("Update", typeof(Patches), nameof(PostCockpitUIUpdate));
+            }
+
+            static void PreCockpitUIUpdate (ShipCockpitController ____shipSystemsCtrlr) {
+                ____shipSystemsCtrlr.SetValue("_usingLandingCam", _isLandingCamEnabled);
+            }
+
+            static void PostCockpitUIUpdate (ShipCockpitController ____shipSystemsCtrlr) {
+                ____shipSystemsCtrlr.SetValue("_usingLandingCam", false);
+            }
+
+            static bool PreEnterLandingView (
+                LandingCamera ____landingCam,
+                ShipLight ____landingLight,
+                ShipCameraComponent ____landingCamComponent,
+                ShipAudioController ____shipAudioController
+            ) {
+                _isLandingCamEnabled = true;
+                ____landingCam.enabled = true;
+                ____landingLight.SetOn(true);
+
+                if (____landingCamComponent.isDamaged) {
+                    ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamStatic_LP);
+                } else {
+                    ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamAmbient_LP);
+                }
+
+                return false;
+            }
+
+            static bool PreExitLandingView (
+                LandingCamera ____landingCam,
+                ShipLight ____landingLight,
+                ShipCameraComponent ____landingCamComponent,
+                ShipAudioController ____shipAudioController
+            ) {
+                _isLandingCamEnabled = false;
+                ____landingCam.enabled = false;
+                ____landingLight.SetOn(false);
+                ____shipAudioController.PlayLandingCamOff();
+
+                return false;
             }
 
             static void ShipStart (ShipBody __instance) {
@@ -96,6 +143,13 @@ namespace NomaiVR {
 
                 _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
                 _landingCam.button = XboxButton.DPadDown;
+                _landingCam.skipPressCallback = () => {
+                    if (_isLandingCamEnabled) {
+                        _cockpitController.Invoke("ExitLandingView");
+                        return true;
+                    }
+                    return false;
+                };
                 _landingCam.text = UITextType.ShipLandingPrompt;
 
                 SetEnabled(false);
