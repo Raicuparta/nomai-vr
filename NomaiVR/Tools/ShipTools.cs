@@ -96,14 +96,10 @@ namespace NomaiVR {
             }
 
             static bool PreEnterLandingView (
-                ShipCockpitController __instance,
                 LandingCamera ____landingCam,
                 ShipLight ____landingLight,
                 ShipCameraComponent ____landingCamComponent,
-                ShipAudioController ____shipAudioController,
-                ref bool ____usingLandingCam,
-                ref bool ____enteringLandingCam,
-                ref float ____initLandingCamTime
+                ShipAudioController ____shipAudioController
             ) {
                 _isLandingCamEnabled = true;
                 ____landingCam.enabled = true;
@@ -111,10 +107,8 @@ namespace NomaiVR {
 
                 if (____landingCamComponent.isDamaged) {
                     ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamStatic_LP);
-                    ____shipAudioController.PlayLandingCamStatic(0.25f);
                 } else {
                     ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamAmbient_LP);
-                    ____shipAudioController.PlayLandingCamAmbient(0.25f);
                 }
 
                 return false;
@@ -122,10 +116,15 @@ namespace NomaiVR {
 
             static bool PreExitLandingView (
                 LandingCamera ____landingCam,
-                ShipLight ____landingLight
+                ShipLight ____landingLight,
+                ShipCameraComponent ____landingCamComponent,
+                ShipAudioController ____shipAudioController
             ) {
+                _isLandingCamEnabled = false;
                 ____landingCam.enabled = false;
                 ____landingLight.SetOn(false);
+                ____shipAudioController.PlayLandingCamOff();
+
                 return false;
             }
 
@@ -144,6 +143,13 @@ namespace NomaiVR {
 
                 _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
                 _landingCam.button = XboxButton.DPadDown;
+                _landingCam.skipPressCallback = () => {
+                    if (_isLandingCamEnabled) {
+                        _cockpitController.Invoke("ExitLandingView");
+                        return true;
+                    }
+                    return false;
+                };
                 _landingCam.text = UITextType.ShipLandingPrompt;
 
                 SetEnabled(false);
