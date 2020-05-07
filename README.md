@@ -25,10 +25,10 @@
 
 The game should be playable from start to finish in VR, but it's not gonna be super comfortable:
 
-- A good portion of the game is spent spinning around in zero-g, completely disoriented;
+- A good portion of the game is spent spinning around in zero-g, which can be very disorienting;
 - It's not uncommon to get motion sickness playing this game in pancake mode, let alone in VR;
-- The game physics is locked to 60FPS;
 - No comfort features like teleport and snap turning were implemented;
+- The game was not optimized for VR so you might notice some stuttering;
 - It's all dirty hacks on top of even dirtier hacks.
 
 Expect nausea, low performance, flashing images, crashes, blue screens, house fires, etc. Have a look at the [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) to have an idea of some of the stuff that needs fixing.
@@ -83,8 +83,8 @@ There are some extra in-game tutorials for teaching you VR inputs, but some stuf
 
 - This game was not developed with VR in mind;
 - It was never a super lightweight game, and shoving VR down its throat isn't helping;
-- The game's physics is locked at 60 FPS. So even though the game reports more FPS than that, it will look stuttery;
-- You'll probably need to lower your quality settings to get acceptable performance.
+- The game was originally locked to 60 FPS. To work around this, NomaiVR forces the game's physics refresh rate to match your VR headset's refresh rate. This can have a high impact in performance. Try lowering your refresh rate through SteamVR's settings (if your headset supports this) to get a more stable framerate.
+- You'll probably need to lower your quality settings to get acceptable performance. Shadows and ambient occlusion usually have a big impact.
 
 ## Compatibility with other mods
 
