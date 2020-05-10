@@ -81,10 +81,13 @@ There are some extra in-game tutorials for teaching you VR inputs, but some stuf
 
 ## Performance
 
-- This game was not developed with VR in mind;
-- It was never a super lightweight game, and shoving VR down its throat isn't helping;
-- The game was originally locked to 60 FPS. To work around this, NomaiVR forces the game's physics refresh rate to match your VR headset's refresh rate. This can have a high impact in performance. Try lowering your refresh rate through SteamVR's settings (if your headset supports this) to get a more stable framerate.
-- You'll probably need to lower your quality settings to get acceptable performance. Shadows and ambient occlusion usually have a big impact.
+This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance. Shadows and ambient occlusion usually have a big impact.
+
+### Framerate
+
+Outer Wilds was originally locked to 60 FPS. To work around this, NomaiVR forces the game's physics refresh rate to match your VR headset's refresh rate. This can have a high impact in performance. Try lowering your refresh rate through SteamVR's settings (if your headset supports this) to get a more stable framerate.
+
+If your headset doesn't support this, you can override the refresh rate the NomaiVR's settings file (`OWML/Mods/NomaiVR/config.json`). Change `overrideRefreshRate` to whatever framerate you desire. Setting it to zero makes it follow your VR headset's refresh rate.
 
 ## Compatibility with other mods
 
