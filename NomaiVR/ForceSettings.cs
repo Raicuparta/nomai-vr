@@ -11,7 +11,9 @@ namespace NomaiVR {
 
         void SetRefreshRate () {
             var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
-            var fixedTimeStep = 1f / deviceRefreshRate;
+            var overrideRefreshRate = NomaiVR.RefreshRate;
+            var refreshRate = overrideRefreshRate > 0 ? overrideRefreshRate : deviceRefreshRate;
+            var fixedTimeStep = 1f / refreshRate;
             var owTime = typeof(OWTime);
             owTime.SetValue("s_fixedTimestep", fixedTimeStep);
             Time.fixedDeltaTime = fixedTimeStep;
