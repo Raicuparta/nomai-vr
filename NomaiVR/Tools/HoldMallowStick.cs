@@ -13,7 +13,7 @@ namespace NomaiVR {
 
             var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
             stickRoot.localScale = scale;
-            Hands.HoldObject(stickRoot, Hands.RightHand, new Vector3(-0.08f, -0.07f, -0.32f));
+            Hands.HoldObject(stickRoot, Hands.RightHand, new Vector3(-0.02f, -0.023f, -0.34f));
 
             var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
