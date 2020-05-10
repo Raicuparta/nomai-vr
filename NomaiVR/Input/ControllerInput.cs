@@ -64,6 +64,12 @@ namespace NomaiVR {
 
         private void OnPrimaryActionChange (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) {
             var value = newState ? 1 : 0;
+
+            if (!Common.IsInGame()) {
+                _buttons[XboxButton.X] = value;
+                return;
+            }
+
             var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
             var isUsingSignalscope = Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope);
             var isUsingProbeLauncher = Common.ToolSwapper.IsInToolMode(ToolMode.Probe);
