@@ -116,7 +116,7 @@
     <Compile Include="Tools\HoldTranslator.cs" />
     <Compile Include="Player\LaserPointer.cs" />
     <Compile Include="Tools\ShipTools.cs" />
-    <Compile Include="ReusableBehaviours\ToolModeInteraction.cs" />
+    <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="EffectFixes.cs" />
