@@ -89,15 +89,6 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/grip"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/grip"
-            },
-            {
-               "inputs" : {
-                  "click" : {
                      "output" : "/actions/default/in/jump"
                   }
                },
@@ -163,6 +154,28 @@
                },
                "mode" : "button",
                "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/back"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "grab" : {
+                     "output" : "/actions/default/in/grip"
+                  }
+               },
+               "mode" : "grab",
+               "parameters" : {
+                  "value_hold_threshold" : "1.2",
+                  "value_release_threshold" : "1"
+               },
+               "path" : "/user/hand/right/input/grip"
             }
          ]
       }
