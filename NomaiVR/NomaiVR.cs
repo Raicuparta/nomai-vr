@@ -10,6 +10,7 @@ namespace NomaiVR {
     public class NomaiVR: ModBehaviour {
         public static IModHelper Helper;
         public static bool DebugMode;
+        public static int RefreshRate;
         public static ModSaveFile SaveFile;
 
         void Start () {
@@ -82,6 +83,7 @@ namespace NomaiVR {
 
         public override void Configure (IModConfig config) {
             DebugMode = config.GetSettingsValue<bool>("debugMode");
+            RefreshRate = config.GetSettingsValue<int>("overrideRefreshRate");
             XRSettings.showDeviceView = config.GetSettingsValue<bool>("showMirrorView");
             // Prevent application from stealing mouse focus;
             ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
