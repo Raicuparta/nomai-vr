@@ -41,5 +41,9 @@ namespace NomaiVR {
                 ChangeLayerRecursive(child.gameObject, mask);
             }
         }
+
+        public static bool IsInGame () {
+            return LoadManager.GetCurrentScene() == OWScene.SolarSystem || LoadManager.GetCurrentScene() == OWScene.EyeOfTheUniverse;
+        }
     }
 }
