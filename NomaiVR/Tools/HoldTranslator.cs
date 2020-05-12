@@ -7,7 +7,7 @@ namespace NomaiVR {
         void Awake () {
             var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 
-            Hands.HoldObject(translator, Hands.RightHand, new Vector3(-0.24f, 0.08f, 0.06f), Quaternion.Euler(32.8f, 0f, 0f));
+            Hands.HoldObject(translator, Hands.RightHand, new Vector3(-0.2f, 0.107f, 0.02f), Quaternion.Euler(32.8f, 0f, 0f));
 
             var translatorGroup = translator.Find("TranslatorGroup");
             translatorGroup.localPosition = Vector3.zero;
