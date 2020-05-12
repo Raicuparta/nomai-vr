@@ -9,8 +9,8 @@ namespace NomaiVR {
 
         void Awake () {
             var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
-            probeLauncher.localScale = Vector3.one * 0.2f;
-            Hands.HoldObject(probeLauncher, Hands.RightHand, new Vector3(-0.04f, 0.09f, 0.03f), Quaternion.Euler(45, 0, 0));
+            probeLauncher.localScale = Vector3.one * 0.35f;
+            Hands.HoldObject(probeLauncher, Hands.RightHand, new Vector3(0f, 0.21f, 0.05f), Quaternion.Euler(45, 0, 0));
 
             _probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
             _probeLauncherModel.gameObject.layer = 0;
