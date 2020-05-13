@@ -98,6 +98,7 @@
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\Timers.cs" />
     <Compile Include="ModSaveFile.cs" />
+    <Compile Include="Player\Hand.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
     <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />

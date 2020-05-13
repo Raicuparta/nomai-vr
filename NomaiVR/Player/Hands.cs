@@ -24,8 +24,25 @@ namespace NomaiVR
             }
 
             _wrapper = new GameObject().transform;
-            RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(313f, 10f, 295f), new Vector3(0.03f, 0.05f, -0.2f), _wrapper);
-            LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(313f, 350f, 65f), new Vector3(-0.03f, 0.05f, -0.2f), _wrapper, true);
+
+            var right = new GameObject().AddComponent<Hand>();
+            right.pose = SteamVR_Actions.default_RightHand;
+            right.transform.parent = _wrapper;
+            right.transform.localPosition = new Vector3(0.03f, 0.05f, -0.2f);
+            right.transform.localRotation = Quaternion.Euler(313f, 10f, 295f);
+            right.handPrefab = _handPrefab;
+            right.glovePrefab = _glovePrefab;
+            RightHand = right.transform;
+
+            var left = new GameObject().AddComponent<Hand>();
+            left.pose = SteamVR_Actions.default_LeftHand;
+            left.transform.parent = _wrapper;
+            left.transform.localPosition = new Vector3(-0.03f, 0.05f, -0.2f);
+            left.transform.localRotation = Quaternion.Euler(313f, 350f, 65f);
+            left.isLeft = true;
+            left.handPrefab = _handPrefab;
+            left.glovePrefab = _glovePrefab;
+            LeftHand = left.transform;
 
             _wrapper.parent = Camera.main.transform.parent;
             _wrapper.localRotation = Quaternion.identity;
