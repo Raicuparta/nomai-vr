@@ -99,6 +99,8 @@
     <Compile Include="Helpers\Timers.cs" />
     <Compile Include="ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
+    <Compile Include="NomaiVRModule.cs" />
+    <Compile Include="NomaiVRPatch.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
     <Compile Include="ReusableBehaviours\Holdable.cs" />

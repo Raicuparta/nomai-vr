@@ -13,10 +13,13 @@ namespace NomaiVR
         public static bool DebugMode;
         public static int RefreshRate;
         public static ModSaveFile SaveFile;
+        public static GameObject persistentParent;
 
         void Start()
         {
             Log("Start Main");
+
+            persistentParent = gameObject;
 
             SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
             Helper = ModHelper;
@@ -33,16 +36,18 @@ namespace NomaiVR
             HoldMallowStick.Patches.Patch();
             LaserPointer.Patches.Patch();
             PlayerBodyPosition.Patches.Patch();
-            ForceSettings.Patches.Patch();
+            //ForceSettings.Patches.Patch();
+            new ForceSettings();
             HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
             VRTutorial.Patches.Patch();
             Menus.Patches.Patch();
 
+
             // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<ControllerInput>();
-            gameObject.AddComponent<ForceSettings>();
+            //gameObject.AddComponent<ForceSettings>();
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
