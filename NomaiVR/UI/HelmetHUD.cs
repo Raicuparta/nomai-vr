@@ -2,15 +2,19 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace NomaiVR {
-    public class HelmetHUD: MonoBehaviour {
+namespace NomaiVR
+{
+    public class HelmetHUD : MonoBehaviour
+    {
         private static Transform _thrusterHUD;
         private static Transform _helmet;
         static AssetBundle _assetBundle;
         static GameObject _helmetPrefab;
 
-        void Awake () {
-            if (!_assetBundle) {
+        void Awake()
+        {
+            if (!_assetBundle)
+            {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/helmet");
                 _helmetPrefab = _assetBundle.LoadAsset<GameObject>("assets/helmet.prefab");
             }
@@ -57,7 +61,7 @@ namespace NomaiVR {
             // Use default UI material so it doesn't look funky in stereo.
             var surfaceMaterial = surface.gameObject.GetComponent<MeshRenderer>().material;
             surfaceMaterial.shader = Canvas.GetDefaultCanvasMaterial().shader;
-            surfaceMaterial.SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
+            surfaceMaterial.SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
             surfaceMaterial.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
 
             var playerHUD = GameObject.Find("PlayerHUD");
@@ -67,18 +71,22 @@ namespace NomaiVR {
             lockOnCanvas.planeDistance = 10;
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Post<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patches), nameof(PatchLateUpdate));
                 NomaiVR.Post<HUDCamera>("Awake", typeof(Patches), nameof(PostHUDCameraAwake));
             }
 
-            static void PostHUDCameraAwake (Camera ____camera) {
+            static void PostHUDCameraAwake(Camera ____camera)
+            {
                 // Prevent distortion of helmet HUD.
                 ____camera.fieldOfView = 60;
             }
 
-            static void PatchLateUpdate () {
+            static void PatchLateUpdate()
+            {
                 // Fix thruster HUD rotation.
                 var rotation = _helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
                 _thrusterHUD.transform.rotation = rotation;

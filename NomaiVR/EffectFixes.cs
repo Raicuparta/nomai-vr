@@ -1,15 +1,17 @@
 ﻿using OWML.ModHelper.Events;
-using System;
 using UnityEngine;
 
-namespace NomaiVR {
-    public class EffectFixes: MonoBehaviour {
+namespace NomaiVR
+{
+    public class EffectFixes : MonoBehaviour
+    {
         OWCamera _camera;
         static float _farClipPlane = -1;
         public static int cullingMask = -1;
         static EffectFixes _instance;
 
-        void Start () {
+        void Start()
+        {
             _instance = this;
 
             NomaiVR.Log("Started FogFix");
@@ -30,21 +32,25 @@ namespace NomaiVR {
 
             _camera = Locator.GetPlayerCamera();
 
-            if (LoadManager.GetPreviousScene() == OWScene.TitleScreen && LoadManager.GetCurrentScene() == OWScene.SolarSystem) {
+            if (LoadManager.GetPreviousScene() == OWScene.TitleScreen && LoadManager.GetCurrentScene() == OWScene.SolarSystem)
+            {
                 CloseEyes();
             }
         }
 
-        void Update () {
+        void Update()
+        {
             _camera.postProcessingSettings.chromaticAberrationEnabled = false;
             _camera.postProcessingSettings.vignetteEnabled = false;
         }
 
-        void CloseEyesDelayed () {
+        void CloseEyesDelayed()
+        {
             Invoke(nameof(CloseEyes), 3);
         }
 
-        void CloseEyes () {
+        void CloseEyes()
+        {
             cullingMask = Camera.main.cullingMask;
             _farClipPlane = Camera.main.farClipPlane;
             Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
@@ -52,13 +58,16 @@ namespace NomaiVR {
             Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
         }
 
-        void OpenEyes () {
+        void OpenEyes()
+        {
             Camera.main.cullingMask = cullingMask;
             Camera.main.farClipPlane = _farClipPlane;
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 // Fixes for fog stereo problems.
                 NomaiVR.Pre<PlanetaryFogController>("ResetFogSettings", typeof(Patches), nameof(Patches.PatchResetFog));
                 NomaiVR.Pre<PlanetaryFogController>("UpdateFogSettings", typeof(Patches), nameof(Patches.PatchUpdateFog));
@@ -85,25 +94,31 @@ namespace NomaiVR {
 
             }
 
-            static void PostStartFastForwarding () {
+            static void PostStartFastForwarding()
+            {
                 Locator.GetPlayerCamera().enabled = true;
             }
 
-            static void PostOpenEyes () {
+            static void PostOpenEyes()
+            {
                 _instance.OpenEyes();
             }
 
-            static void PostCloseEyes () {
+            static void PostCloseEyes()
+            {
                 _instance.CloseEyesDelayed();
             }
 
-            static void PostTriggerFlashback (CanvasGroupAnimator ____whiteFadeAnimator) {
+            static void PostTriggerFlashback(CanvasGroupAnimator ____whiteFadeAnimator)
+            {
                 ____whiteFadeAnimator.gameObject.SetActive(false);
             }
 
-            static void SwitchToRemoteCamera (NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram) {
+            static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)
+            {
                 var camera = ____slavePlatform.GetOwnedCamera().transform;
-                if (camera.parent.name == "Prefab_NOM_RemoteViewer") {
+                if (camera.parent.name == "Prefab_NOM_RemoteViewer")
+                {
                     var parent = new GameObject().transform;
                     parent.parent = ____playerHologram;
                     parent.localPosition = new Vector3(0, -2.5f, 0);
@@ -113,29 +128,37 @@ namespace NomaiVR {
                 }
             }
 
-            static bool PatchResetFog () {
+            static bool PatchResetFog()
+            {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
             }
 
-            static bool PatchUpdateFog () {
+            static bool PatchUpdateFog()
+            {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
             }
 
-            static bool PatchOverrideFog () {
+            static bool PatchOverrideFog()
+            {
                 return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
             }
 
-            static void PatchTriggerFlashback (Flashback __instance, Transform ____maskTransform, Transform ____screenTransform) {
+            static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
+            {
                 Transform parent;
 
-                if (____screenTransform.parent == __instance.transform) {
+                if (____screenTransform.parent == __instance.transform)
+                {
                     parent = new GameObject().transform;
                     parent.position = __instance.transform.position;
                     parent.rotation = __instance.transform.rotation;
-                    foreach (Transform child in __instance.transform) {
+                    foreach (Transform child in __instance.transform)
+                    {
                         child.parent = parent;
                     }
-                } else {
+                }
+                else
+                {
                     parent = ____screenTransform.parent;
                 }
 
@@ -146,7 +169,8 @@ namespace NomaiVR {
                 ____maskTransform.parent = parent;
             }
 
-            static void FlashbackUpdate (Flashback __instance, Transform ____maskTransform) {
+            static void FlashbackUpdate(Flashback __instance, Transform ____maskTransform)
+            {
                 var parent = ____maskTransform.parent;
                 var angle = Quaternion.Angle(parent.rotation, __instance.transform.rotation) * 0.5f;
                 parent.rotation = Quaternion.RotateTowards(parent.rotation, __instance.transform.rotation, Time.fixedDeltaTime * angle);

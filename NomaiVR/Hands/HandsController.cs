@@ -1,10 +1,11 @@
-﻿using OWML.ModHelper.Events;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
 
-namespace NomaiVR {
-    public class Hands: MonoBehaviour {
+namespace NomaiVR
+{
+    public class HandsController : MonoBehaviour
+    {
         public static Transform RightHand;
         public static Transform LeftHand;
         static AssetBundle _assetBundle;
@@ -12,16 +13,35 @@ namespace NomaiVR {
         static GameObject _glovePrefab;
         Transform _wrapper;
 
-        private void Start () {
-            if (!_assetBundle) {
+        private void Start()
+        {
+            if (!_assetBundle)
+            {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
                 _handPrefab = _assetBundle.LoadAsset<GameObject>("assets/righthandprefab.prefab");
                 _glovePrefab = _assetBundle.LoadAsset<GameObject>("assets/rightgloveprefab.prefab");
             }
 
             _wrapper = new GameObject().transform;
-            RightHand = CreateHand(SteamVR_Actions.default_RightHand, Quaternion.Euler(313f, 10f, 295f), new Vector3(0.03f, 0.05f, -0.2f), _wrapper);
-            LeftHand = CreateHand(SteamVR_Actions.default_LeftHand, Quaternion.Euler(313f, 350f, 65f), new Vector3(-0.03f, 0.05f, -0.2f), _wrapper, true);
+
+            var right = new GameObject().AddComponent<Hand>();
+            right.pose = SteamVR_Actions.default_RightHand;
+            right.transform.parent = _wrapper;
+            right.transform.localPosition = new Vector3(0.03f, 0.05f, -0.2f);
+            right.transform.localRotation = Quaternion.Euler(313f, 10f, 295f);
+            right.handPrefab = _handPrefab;
+            right.glovePrefab = _glovePrefab;
+            RightHand = right.transform;
+
+            var left = new GameObject().AddComponent<Hand>();
+            left.pose = SteamVR_Actions.default_LeftHand;
+            left.transform.parent = _wrapper;
+            left.transform.localPosition = new Vector3(-0.03f, 0.05f, -0.2f);
+            left.transform.localRotation = Quaternion.Euler(313f, 350f, 65f);
+            left.isLeft = true;
+            left.handPrefab = _handPrefab;
+            left.glovePrefab = _glovePrefab;
+            LeftHand = left.transform;
 
             _wrapper.parent = Camera.main.transform.parent;
             _wrapper.localRotation = Quaternion.identity;
@@ -38,15 +58,18 @@ namespace NomaiVR {
             gameObject.AddComponent<LaserPointer>();
         }
 
-        bool ShouldRenderGloves () {
+        bool ShouldRenderGloves()
+        {
             return Locator.GetPlayerSuit().IsWearingSuit(true);
         }
 
-        bool ShouldRenderHands () {
+        bool ShouldRenderHands()
+        {
             return !Locator.GetPlayerSuit().IsWearingSuit(true);
         }
 
-        Transform CreateHand (SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false) {
+        Transform CreateHand(SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false)
+        {
             var handParent = new GameObject().transform;
             handParent.parent = wrapper;
 
@@ -55,12 +78,14 @@ namespace NomaiVR {
             hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
             glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
 
-            void setupHandModel (Transform model) {
+            void setupHandModel(Transform model)
+            {
                 model.parent = handParent;
                 model.localPosition = position;
                 model.localRotation = rotation;
                 model.localScale = Vector3.one * 6;
-                if (isLeft) {
+                if (isLeft)
+                {
                     model.localScale = new Vector3(-model.localScale.x, model.localScale.y, model.localScale.z);
                 }
             }
@@ -76,14 +101,17 @@ namespace NomaiVR {
             return handParent;
         }
 
-        void HideBody () {
+        void HideBody()
+        {
             var bodyModels = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
 
             // Legs, torso and head are kept visible to the probe camera,
             // so we can still take some selfies when we're feelinf cute.
             var renderers = bodyModels.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-            foreach (var renderer in renderers) {
-                if (renderer.name.Contains("ShadowCaster") || renderer.name.Contains("Head") || renderer.name.Contains("Helmet")) {
+            foreach (var renderer in renderers)
+            {
+                if (renderer.name.Contains("ShadowCaster") || renderer.name.Contains("Head") || renderer.name.Contains("Helmet"))
+                {
                     continue;
                 }
 
@@ -105,36 +133,10 @@ namespace NomaiVR {
             withSuit.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
         }
 
-        public static Transform HoldObject (Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation) {
-            var objectParent = new GameObject().transform;
-            objectParent.parent = hand;
-            objectParent.localPosition = position;
-            objectParent.localRotation = rotation;
-            objectTransform.transform.parent = objectParent;
-            objectTransform.transform.localPosition = Vector3.zero;
-            objectTransform.transform.localRotation = Quaternion.identity;
-
-            var tool = objectTransform.gameObject.GetComponent<PlayerTool>();
-            if (tool) {
-                tool.SetValue("_stowTransform", null);
-                tool.SetValue("_holdTransform", null);
-            }
-
-            return objectParent;
-        }
-
-        public static Transform HoldObject (Transform objectTransform, Transform hand) {
-            return HoldObject(objectTransform, hand, Vector3.zero, Quaternion.identity);
-        }
-        public static Transform HoldObject (Transform objectTransform, Transform hand, Quaternion rotation) {
-            return HoldObject(objectTransform, hand, Vector3.zero, rotation);
-        }
-        public static Transform HoldObject (Transform objectTransform, Transform hand, Vector3 position) {
-            return HoldObject(objectTransform, hand, position, Quaternion.identity);
-        }
-
-        void Update () {
-            if (_wrapper && Camera.main) {
+        void Update()
+        {
+            if (_wrapper && Camera.main)
+            {
                 _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
             }
         }

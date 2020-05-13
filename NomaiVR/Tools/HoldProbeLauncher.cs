@@ -1,16 +1,22 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR {
-    public class HoldProbeLauncher: MonoBehaviour {
+namespace NomaiVR
+{
+    public class HoldProbeLauncher : MonoBehaviour
+    {
         Transform _probeLauncherModel;
         GameObject _probeLauncherHolster;
         static ProbeLauncherUI _probeUI;
 
-        void Awake () {
+        void Awake()
+        {
             var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
             probeLauncher.localScale = Vector3.one * 0.35f;
-            Hands.HoldObject(probeLauncher, Hands.RightHand, new Vector3(0f, 0.21f, 0.05f), Quaternion.Euler(45, 0, 0));
+
+            var holdProbeLauncher = probeLauncher.gameObject.AddComponent<Holdable>();
+            holdProbeLauncher.transform.localPosition = new Vector3(0f, 0.21f, 0.05f);
+            holdProbeLauncher.transform.localRotation = Quaternion.Euler(45, 0, 0);
 
             _probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
             _probeLauncherModel.gameObject.layer = 0;
@@ -22,11 +28,14 @@ namespace NomaiVR {
 
             var renderers = probeLauncher.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
-            foreach (var renderer in renderers) {
-                if (renderer.name == "RecallEffect") {
+            foreach (var renderer in renderers)
+            {
+                if (renderer.name == "RecallEffect")
+                {
                     continue;
                 }
-                foreach (var material in renderer.materials) {
+                foreach (var material in renderer.materials)
+                {
                     material.shader = Shader.Find("Standard");
                 }
             }
@@ -45,7 +54,7 @@ namespace NomaiVR {
             _probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
             _probeLauncherHolster.SetActive(false);
             var holster = _probeLauncherHolster.AddComponent<HolsterTool>();
-            holster.hand = Hands.RightHand;
+            holster.hand = HandsController.RightHand;
             holster.position = new Vector3(0, -0.55f, 0.2f);
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;
@@ -90,33 +99,41 @@ namespace NomaiVR {
             GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
         }
 
-        void OnSuitUp () {
+        void OnSuitUp()
+        {
             _probeLauncherHolster.SetActive(true);
         }
 
-        void OnRemoveSuit () {
+        void OnRemoveSuit()
+        {
             _probeLauncherHolster.SetActive(false);
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patches), nameof(Patches.SuitUp));
                 NomaiVR.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patches), nameof(Patches.RemoveSuit));
                 NomaiVR.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patches), nameof(Patches.PostHideHUD));
             }
 
-            static void PostHideHUD (Canvas ____canvas) {
+            static void PostHideHUD(Canvas ____canvas)
+            {
                 // Prevent the photo mode bracket from disappearing.
-                if (____canvas != null) {
+                if (____canvas != null)
+                {
                     ____canvas.enabled = true;
                 }
             }
 
-            static void SuitUp () {
+            static void SuitUp()
+            {
                 _probeUI.SetValue("_nonSuitUI", false);
             }
 
-            static void RemoveSuit () {
+            static void RemoveSuit()
+            {
                 _probeUI.SetValue("_nonSuitUI", true);
             }
         }

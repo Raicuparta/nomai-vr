@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR {
-    class FeetMarker: MonoBehaviour {
+namespace NomaiVR
+{
+    class FeetMarker : MonoBehaviour
+    {
         static AssetBundle _assetBundle;
         static GameObject _prefab;
 
-        void Start () {
-            if (!_assetBundle) {
+        void Start()
+        {
+            if (!_assetBundle)
+            {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/feetposition");
                 _prefab = _assetBundle.LoadAsset<GameObject>("assets/feetposition.prefab");
             }

@@ -2,15 +2,18 @@
 using System;
 using UnityEngine;
 
-namespace NomaiVR {
-    class ButtonInteraction: MonoBehaviour {
+namespace NomaiVR
+{
+    class ButtonInteraction : MonoBehaviour
+    {
         public XboxButton button;
         public UITextType text;
         public InteractReceiver receiver;
         public Func<bool> skipPressCallback;
         BoxCollider _collider;
 
-        void Start () {
+        void Start()
+        {
             _collider = gameObject.AddComponent<BoxCollider>();
             _collider.isTrigger = true;
 
@@ -22,26 +25,33 @@ namespace NomaiVR {
             receiver.OnReleaseInteract += OnRelease;
         }
 
-        void OnPress () {
+        void OnPress()
+        {
             var skip = skipPressCallback != null && skipPressCallback.Invoke();
-            if (!skip) {
+            if (!skip)
+            {
                 ControllerInput.SimulateInput(button, 1);
             }
         }
 
-        void OnRelease () {
+        void OnRelease()
+        {
             ControllerInput.SimulateInput(button, 0);
             receiver.ResetInteraction();
         }
 
-        void OnDisable () {
-            if (_collider != null) {
+        void OnDisable()
+        {
+            if (_collider != null)
+            {
                 _collider.enabled = false;
             }
         }
 
-        void OnEnable () {
-            if (_collider != null) {
+        void OnEnable()
+        {
+            if (_collider != null)
+            {
                 _collider.enabled = true;
             }
         }

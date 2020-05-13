@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR {
-    class FlashlightGesture: MonoBehaviour {
-        void Awake () {
+namespace NomaiVR
+{
+    class FlashlightGesture : MonoBehaviour
+    {
+        void Awake()
+        {
             var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
-            detector.other = Hands.RightHand;
+            detector.other = HandsController.RightHand;
             detector.localOffset = Vector3.right * 0.15f;
             detector.onEnter += FlashlightPress;
             detector.onExit += FlashlightRelease;
@@ -18,10 +21,12 @@ namespace NomaiVR {
             fillLight.localRotation = spotLight.localRotation = flashLight.transform.localRotation = Quaternion.identity;
         }
 
-        void FlashlightPress () {
+        void FlashlightPress()
+        {
             ControllerInput.SimulateInput(XboxButton.RightStickClick, 1);
         }
-        void FlashlightRelease () {
+        void FlashlightRelease()
+        {
             ControllerInput.SimulateInput(XboxButton.RightStickClick, 0);
         }
     }

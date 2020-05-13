@@ -2,12 +2,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR {
-    public class HoldTranslator: MonoBehaviour {
-        void Awake () {
+namespace NomaiVR
+{
+    public class HoldTranslator : MonoBehaviour
+    {
+        void Awake()
+        {
             var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 
-            Hands.HoldObject(translator, Hands.RightHand, new Vector3(-0.2f, 0.107f, 0.02f), Quaternion.Euler(32.8f, 0f, 0f));
+            var holdTranslator = translator.gameObject.AddComponent<Holdable>();
+            holdTranslator.transform.localPosition = new Vector3(-0.2f, 0.107f, 0.02f);
+            holdTranslator.transform.localRotation = Quaternion.Euler(32.8f, 0f, 0f);
 
             var translatorGroup = translator.Find("TranslatorGroup");
             translatorGroup.localPosition = Vector3.zero;
@@ -26,22 +31,25 @@ namespace NomaiVR {
 
             var renderers = translatorModel.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
-            foreach (var renderer in renderers) {
-                foreach (var material in renderer.materials) {
+            foreach (var renderer in renderers)
+            {
+                foreach (var material in renderer.materials)
+                {
                     material.shader = Shader.Find("Standard");
                 }
             }
 
             var texts = translator.gameObject.GetComponentsInChildren<Graphic>(true);
 
-            foreach (var text in texts) {
+            foreach (var text in texts)
+            {
                 text.material = null;
             }
 
             var translatorHolster = Instantiate(translatorModel).gameObject;
             translatorHolster.SetActive(true);
             var holster = translatorHolster.AddComponent<HolsterTool>();
-            holster.hand = Hands.RightHand;
+            holster.hand = HandsController.RightHand;
             holster.position = new Vector3(-0.3f, -0.55f, 0);
             holster.mode = ToolMode.Translator;
             holster.scale = 0.15f;
@@ -52,14 +60,17 @@ namespace NomaiVR {
             translator.gameObject.AddComponent<ToolModeInteraction>();
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Post<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patches), nameof(IsPromptAllowed));
                 NomaiVR.Post<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patches), nameof(IsPromptAllowed));
                 NomaiVR.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patches), nameof(IsPromptAllowed));
             }
 
-            static bool IsPromptAllowed (bool __result) {
+            static bool IsPromptAllowed(bool __result)
+            {
                 return false;
             }
         }

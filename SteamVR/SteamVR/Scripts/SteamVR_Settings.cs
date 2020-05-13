@@ -1,9 +1,6 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.Serialization;
 
 namespace Valve.VR
@@ -11,10 +8,8 @@ namespace Valve.VR
     public class SteamVR_Settings : ScriptableObject
     {
         private static SteamVR_Settings _instance;
-        public static SteamVR_Settings instance
-        {
-            get
-            {
+        public static SteamVR_Settings instance {
+            get {
                 LoadInstance();
 
                 return _instance;
@@ -23,14 +18,11 @@ namespace Valve.VR
 
         public bool pauseGameWhenDashboardVisible = true;
         public bool lockPhysicsUpdateRateToRenderFrequency = true;
-        public ETrackingUniverseOrigin trackingSpace
-        {
-            get
-            {
+        public ETrackingUniverseOrigin trackingSpace {
+            get {
                 return trackingSpaceOrigin;
             }
-            set
-            {
+            set {
                 trackingSpaceOrigin = value;
                 if (SteamVR_Behaviour.isPlaying)
                     SteamVR_Action_Pose.SetTrackingUniverseOrigin(trackingSpaceOrigin);

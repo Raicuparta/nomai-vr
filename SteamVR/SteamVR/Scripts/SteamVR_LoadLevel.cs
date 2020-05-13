@@ -4,10 +4,9 @@
 //
 //=============================================================================
 
-using UnityEngine;
 using System.Collections;
-using Valve.VR;
 using System.IO;
+using UnityEngine;
 
 namespace Valve.VR
 {
@@ -15,12 +14,10 @@ namespace Valve.VR
     {
         private static SteamVR_LoadLevel _active = null;
         public static bool loading { get { return _active != null; } }
-        public static float progress
-        {
+        public static float progress {
             get { return (_active != null && _active.async != null) ? _active.async.progress : 0.0f; }
         }
-        public static Texture progressTexture
-        {
+        public static Texture progressTexture {
             get { return (_active != null) ? _active.renderTexture : null; }
         }
 
@@ -351,7 +348,7 @@ namespace Valve.VR
 #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
 #elif !UNITY_METRO
-				System.Diagnostics.Process.GetCurrentProcess().Kill();
+                    System.Diagnostics.Process.GetCurrentProcess().Kill();
 #endif
                 }
             }

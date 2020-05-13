@@ -1,9 +1,12 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR {
-    public class HoldMallowStick: MonoBehaviour {
-        void Awake () {
+namespace NomaiVR
+{
+    public class HoldMallowStick : MonoBehaviour
+    {
+        void Awake()
+        {
 
             var scale = Vector3.one * 0.75f;
             var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
@@ -13,23 +16,30 @@ namespace NomaiVR {
 
             var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
             stickRoot.localScale = scale;
-            Hands.HoldObject(stickRoot, Hands.RightHand, new Vector3(-0.02f, -0.023f, -0.34f));
+
+            var holdStick = stickRoot.gameObject.AddComponent<Holdable>();
+            holdStick.transform.localPosition = new Vector3(-0.02f, -0.023f, -0.34f);
 
             var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
-            void EatMallow () {
-                if (mallow.GetState() != Marshmallow.MallowState.Gone) {
+            void EatMallow()
+            {
+                if (mallow.GetState() != Marshmallow.MallowState.Gone)
+                {
                     mallow.Eat();
                 }
             }
 
-            void ReplaceMallow () {
-                if (mallow.GetState() == Marshmallow.MallowState.Gone) {
+            void ReplaceMallow()
+            {
+                if (mallow.GetState() == Marshmallow.MallowState.Gone)
+                {
                     mallow.SpawnMallow(true);
                 }
             }
 
-            bool ShouldRenderMallowClone () {
+            bool ShouldRenderMallowClone()
+            {
                 return stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
             }
 
@@ -49,7 +59,11 @@ namespace NomaiVR {
             var mallowClone = Instantiate(mallowModel);
             mallowClone.GetComponent<MeshRenderer>().material.color = Color.white;
             mallowClone.localScale = scale;
-            Hands.HoldObject(mallowClone, Hands.LeftHand, new Vector3(0.06f, -0.03f, -0.02f));
+
+            var holdMallow = mallowClone.gameObject.AddComponent<Holdable>();
+            holdMallow.transform.localPosition = new Vector3(0.02f, -0.03f, -0.08f);
+            holdMallow.transform.localRotation = Quaternion.Euler(80f, 100f, 110f);
+            holdMallow.hand = HandsController.LeftHand;
 
             // Replace right hand mallow on proximity with left hand mallow.
             var replaceDetector = mallowClone.gameObject.AddComponent<ProximityDetector>();
@@ -60,8 +74,10 @@ namespace NomaiVR {
             mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 // Stop stick rotation animation.
                 NomaiVR.Empty<RoastingStickController>("UpdateRotation");
             }

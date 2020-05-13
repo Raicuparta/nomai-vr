@@ -1,15 +1,18 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NomaiVR {
-    class LaserPointer: MonoBehaviour {
+namespace NomaiVR
+{
+    class LaserPointer : MonoBehaviour
+    {
         static FirstPersonManipulator _manipulator;
         public static Transform Laser;
 
-        void Awake () {
+        void Awake()
+        {
             Laser = new GameObject("Laser").transform;
             Laser.gameObject.AddComponent<FollowTarget>();
-            Laser.transform.parent = Hands.RightHand;
+            Laser.transform.parent = HandsController.RightHand;
             Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
             Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
 
@@ -28,26 +31,35 @@ namespace NomaiVR {
             DisableReticule();
         }
 
-        void Update () {
-            if (Laser.gameObject.activeSelf && Common.IsUsingAnyTool()) {
+        void Update()
+        {
+            if (Laser.gameObject.activeSelf && Common.IsUsingAnyTool())
+            {
                 Laser.gameObject.SetActive(false);
-            } else if (!Laser.gameObject.activeSelf && !Common.IsUsingAnyTool()) {
+            }
+            else if (!Laser.gameObject.activeSelf && !Common.IsUsingAnyTool())
+            {
                 Laser.gameObject.SetActive(true);
             }
         }
 
-        void DisableReticule () {
+        void DisableReticule()
+        {
             var rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-            foreach (var rootObject in rootObjects) {
-                if (rootObject.name == "Reticule") {
+            foreach (var rootObject in rootObjects)
+            {
+                if (rootObject.name == "Reticule")
+                {
                     rootObject.SetActive(false);
                     return;
                 }
             }
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Pre<InteractZone>("UpdateInteractVolume", typeof(Patches), nameof(Patches.PatchUpdateInteractVolume));
                 NomaiVR.Pre<InteractZone>("OnEntry", typeof(Patches), nameof(Patches.InteractZoneEntry));
                 NomaiVR.Pre<InteractZone>("OnExit", typeof(Patches), nameof(Patches.InteractZoneExit));
@@ -56,11 +68,12 @@ namespace NomaiVR {
                 NomaiVR.Post<ItemTool>("UpdateIsDroppable", typeof(Patches), nameof(Patches.PostUpdateIsDroppable));
             }
 
-            static bool PatchUpdateInteractVolume (
+            static bool PatchUpdateInteractVolume(
                 InteractZone __instance,
                 float ____viewingWindow,
                 ref bool ____focused
-            ) {
+            )
+            {
                 float num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
                 var swapper = Locator.GetToolModeSwapper();
                 var allowInteraction = swapper.IsInToolMode(ToolMode.None) || swapper.IsInToolMode(ToolMode.Item);
@@ -69,29 +82,35 @@ namespace NomaiVR {
 
                 var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
                 var ftn = method.MethodHandle.GetFunctionPointer();
-                var func = (Action) Activator.CreateInstance(typeof(Action), __instance, ftn);
+                var func = (Action)Activator.CreateInstance(typeof(Action), __instance, ftn);
 
                 func();
 
                 return false;
             }
 
-            static bool InteractZoneEntry (GameObject hitObj, InteractZone __instance) {
-                if (hitObj.CompareTag("PlayerDetector")) {
+            static bool InteractZoneEntry(GameObject hitObj, InteractZone __instance)
+            {
+                if (hitObj.CompareTag("PlayerDetector"))
+                {
                     _manipulator.OnEnterInteractZone(__instance);
                 }
                 return false;
             }
 
-            static bool InteractZoneExit (GameObject hitObj, InteractZone __instance) {
-                if (hitObj.CompareTag("PlayerDetector")) {
+            static bool InteractZoneExit(GameObject hitObj, InteractZone __instance)
+            {
+                if (hitObj.CompareTag("PlayerDetector"))
+                {
                     _manipulator.OnExitInteractZone(__instance);
                 }
                 return false;
             }
 
-            static void ToolModeUpdate (ref FirstPersonManipulator ____firstPersonManipulator) {
-                if (____firstPersonManipulator != _manipulator) {
+            static void ToolModeUpdate(ref FirstPersonManipulator ____firstPersonManipulator)
+            {
+                if (____firstPersonManipulator != _manipulator)
+                {
                     ____firstPersonManipulator = _manipulator;
                 }
             }
@@ -99,7 +118,8 @@ namespace NomaiVR {
             static Quaternion _cameraRotation;
             static Vector3 _cameraPosition;
 
-            static void PreUpdateIsDroppable () {
+            static void PreUpdateIsDroppable()
+            {
                 var camera = Locator.GetPlayerCamera();
                 _cameraRotation = camera.transform.rotation;
                 _cameraPosition = camera.transform.position;
@@ -107,7 +127,8 @@ namespace NomaiVR {
                 camera.transform.forward = Laser.forward;
             }
 
-            static void PostUpdateIsDroppable () {
+            static void PostUpdateIsDroppable()
+            {
                 var camera = Locator.GetPlayerCamera();
                 camera.transform.position = _cameraPosition;
                 camera.transform.rotation = _cameraRotation;

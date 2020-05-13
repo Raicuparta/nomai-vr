@@ -95,10 +95,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\Timers.cs" />
     <Compile Include="ModSaveFile.cs" />
+    <Compile Include="Hands\Hand.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
+    <Compile Include="ReusableBehaviours\Holdable.cs" />
     <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
     <Compile Include="UI\Dialogue.cs" />
     <Compile Include="Player\FeetMarker.cs" />
@@ -114,14 +117,13 @@
     <Compile Include="UI\HoldPrompts.cs" />
     <Compile Include="Tools\HoldSignalscope.cs" />
     <Compile Include="Tools\HoldTranslator.cs" />
-    <Compile Include="Player\LaserPointer.cs" />
+    <Compile Include="Hands\LaserPointer.cs" />
     <Compile Include="Tools\ShipTools.cs" />
     <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
-    <Compile Include="Common.cs" />
     <Compile Include="EffectFixes.cs" />
     <Compile Include="UI\Menus.cs" />
-    <Compile Include="Player\Hands.cs" />
+    <Compile Include="Hands\HandsController.cs" />
     <Compile Include="Player\PlayerBodyPosition.cs" />
     <Compile Include="Input\ControllerInput.cs" />
     <Compile Include="Tools\HolsterTool.cs" />

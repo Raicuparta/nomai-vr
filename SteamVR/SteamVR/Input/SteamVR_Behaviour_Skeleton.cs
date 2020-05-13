@@ -1,10 +1,7 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
-using Valve.VR;
 
 namespace Valve.VR
 {
@@ -117,10 +114,8 @@ namespace Valve.VR
 
 
         /// <summary>An array of five 0-1 values representing how curled a finger is. 0 being straight, 1 being fully curled. 0 being thumb, 4 being pinky</summary>
-        public float[] fingerCurls
-        {
-            get
-            {
+        public float[] fingerCurls {
+            get {
                 if (skeletonAvailable)
                 {
                     return skeletonAction.GetFingerCurls();
@@ -139,10 +134,8 @@ namespace Valve.VR
         }
 
         /// <summary>An 0-1 value representing how curled a finger is. 0 being straight, 1 being fully curled.</summary>
-        public float thumbCurl
-        {
-            get
-            {
+        public float thumbCurl {
+            get {
                 if (skeletonAvailable)
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.thumb);
                 else
@@ -151,10 +144,8 @@ namespace Valve.VR
         }
 
         /// <summary>An 0-1 value representing how curled a finger is. 0 being straight, 1 being fully curled.</summary>
-        public float indexCurl
-        {
-            get
-            {
+        public float indexCurl {
+            get {
                 if (skeletonAvailable)
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.index);
                 else
@@ -163,10 +154,8 @@ namespace Valve.VR
         }
 
         /// <summary>An 0-1 value representing how curled a finger is. 0 being straight, 1 being fully curled.</summary>
-        public float middleCurl
-        {
-            get
-            {
+        public float middleCurl {
+            get {
                 if (skeletonAvailable)
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.middle);
                 else
@@ -175,10 +164,8 @@ namespace Valve.VR
         }
 
         /// <summary>An 0-1 value representing how curled a finger is. 0 being straight, 1 being fully curled.</summary>
-        public float ringCurl
-        {
-            get
-            {
+        public float ringCurl {
+            get {
                 if (skeletonAvailable)
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.ring);
                 else
@@ -187,10 +174,8 @@ namespace Valve.VR
         }
 
         /// <summary>An 0-1 value representing how curled a finger is. 0 being straight, 1 being fully curled.</summary>
-        public float pinkyCurl
-        {
-            get
-            {
+        public float pinkyCurl {
+            get {
                 if (skeletonAvailable)
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.pinky);
                 else
@@ -263,10 +248,8 @@ namespace Valve.VR
         /// <para/>* Partial: Body part location can be measured directly but with fewer degrees of freedom than the actual body part.Certain body part positions may be unmeasured by the device and estimated from other input data.Examples include Knuckles or gloves that only measure finger curl
         /// <para/>* Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.
         /// </summary>
-        public EVRSkeletalTrackingLevel skeletalTrackingLevel
-        {
-            get
-            {
+        public EVRSkeletalTrackingLevel skeletalTrackingLevel {
+            get {
                 if (skeletonAvailable)
                 {
                     return skeletonAction.skeletalTrackingLevel;
@@ -279,10 +262,8 @@ namespace Valve.VR
         }
 
         /// <summary>Returns true if we are in the process of blending the skeletonBlend field (between animation and bone data)</summary>
-        public bool isBlending
-        {
-            get
-            {
+        public bool isBlending {
+            get {
                 return blendRoutine != null;
             }
         }
@@ -301,18 +282,14 @@ namespace Valve.VR
             }
         }
         */
-        public SteamVR_ActionSet actionSet
-        {
-            get
-            {
+        public SteamVR_ActionSet actionSet {
+            get {
                 return skeletonAction.actionSet;
             }
         }
 
-        public SteamVR_ActionDirections direction
-        {
-            get
-            {
+        public SteamVR_ActionDirections direction {
+            get {
                 return skeletonAction.direction;
             }
         }

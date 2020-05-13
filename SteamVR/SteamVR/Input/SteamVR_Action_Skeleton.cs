@@ -1,12 +1,9 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using UnityEngine;
-using System.Collections;
 using System;
-
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace Valve.VR
 {
@@ -27,32 +24,25 @@ namespace Valve.VR
         public delegate void DeviceConnectedChangeHandler(SteamVR_Action_Skeleton fromAction, bool deviceConnected);
 
         /// <summary>Event fires when the active state (ActionSet active and binding active) changes</summary>
-        public event ActiveChangeHandler onActiveChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
+        public event ActiveChangeHandler onActiveChange { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
 
         /// <summary>Event fires when the active state of the binding changes</summary>
-        public event ActiveChangeHandler onActiveBindingChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
+        public event ActiveChangeHandler onActiveBindingChange { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
         /// <summary>Event fires when the state of the pose or bones moves more than the changeTolerance</summary>
-        public event ChangeHandler onChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onChange -= value; } }
+        public event ChangeHandler onChange { add { sourceMap[SteamVR_Input_Sources.Any].onChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onChange -= value; } }
 
         /// <summary>Event fires when the action is updated</summary>
-        public event UpdateHandler onUpdate
-        { add { sourceMap[SteamVR_Input_Sources.Any].onUpdate += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onUpdate -= value; } }
+        public event UpdateHandler onUpdate { add { sourceMap[SteamVR_Input_Sources.Any].onUpdate += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onUpdate -= value; } }
 
         /// <summary>Event fires when the state of the tracking system that is used to create pose data (position, rotation, etc) changes</summary>
-        public event TrackingChangeHandler onTrackingChanged
-        { add { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged -= value; } }
+        public event TrackingChangeHandler onTrackingChanged { add { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged -= value; } }
 
         /// <summary>Event fires when the state of the pose data retrieved for this action changes validity (good/bad data from the tracking source)</summary>
-        public event ValidPoseChangeHandler onValidPoseChanged
-        { add { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged -= value; } }
+        public event ValidPoseChangeHandler onValidPoseChanged { add { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged -= value; } }
 
         /// <summary>Event fires when the device bound to this action is connected or disconnected</summary>
-        public event DeviceConnectedChangeHandler onDeviceConnectedChanged
-        { add { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged -= value; } }
+        public event DeviceConnectedChangeHandler onDeviceConnectedChanged { add { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged -= value; } }
 
         public SteamVR_Action_Skeleton() { }
 
@@ -97,22 +87,19 @@ namespace Valve.VR
         public Quaternion[] lastBoneRotations { get { return sourceMap[SteamVR_Input_Sources.Any].lastBoneRotations; } }
 
         /// <summary>The range of motion the we're using to get bone data from. With Controller being your hand while holding the controller.</summary>
-        public EVRSkeletalMotionRange rangeOfMotion
-        {
+        public EVRSkeletalMotionRange rangeOfMotion {
             get { return sourceMap[SteamVR_Input_Sources.Any].rangeOfMotion; }
             set { sourceMap[SteamVR_Input_Sources.Any].rangeOfMotion = value; }
         }
 
         /// <summary>The space to get bone data in. Parent space by default</summary>
-        public EVRSkeletalTransformSpace skeletalTransformSpace
-        {
+        public EVRSkeletalTransformSpace skeletalTransformSpace {
             get { return sourceMap[SteamVR_Input_Sources.Any].skeletalTransformSpace; }
             set { sourceMap[SteamVR_Input_Sources.Any].skeletalTransformSpace = value; }
         }
 
         /// <summary>The type of summary data that will be retrieved by default. FromAnimation is smoothed data to based on the skeletal animation system. FromDevice is as recent from the device as we can get - may be different data from smoothed. </summary>
-        public EVRSummaryType summaryDataType
-        {
+        public EVRSummaryType summaryDataType {
             get { return sourceMap[SteamVR_Input_Sources.Any].summaryDataType; }
             set { sourceMap[SteamVR_Input_Sources.Any].summaryDataType = value; }
         }
@@ -123,8 +110,7 @@ namespace Valve.VR
         /// <para/>* Partial: Body part location can be measured directly but with fewer degrees of freedom than the actual body part.Certain body part positions may be unmeasured by the device and estimated from other input data.Examples include Knuckles or gloves that only measure finger curl
         /// <para/>* Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.
         /// </summary>
-        public EVRSkeletalTrackingLevel skeletalTrackingLevel
-        {
+        public EVRSkeletalTrackingLevel skeletalTrackingLevel {
             get { return sourceMap[SteamVR_Input_Sources.Any].skeletalTrackingLevel; }
         }
 

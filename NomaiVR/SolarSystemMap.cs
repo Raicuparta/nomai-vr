@@ -1,9 +1,12 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR {
-    class SolarSystemMap: MonoBehaviour {
-        void Start () {
+namespace NomaiVR
+{
+    class SolarSystemMap : MonoBehaviour
+    {
+        void Start()
+        {
             var mapCameraTransform = Locator.GetRootTransform().Find("MapCamera");
 
             var originalCamera = mapCameraTransform.GetComponent<Camera>();

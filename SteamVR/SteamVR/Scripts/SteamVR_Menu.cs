@@ -5,7 +5,6 @@
 //=============================================================================
 
 using UnityEngine;
-using Valve.VR;
 
 namespace Valve.VR
 {
@@ -182,8 +181,8 @@ namespace Valve.VR
             }
 
 #if !UNITY_EDITOR
-		if (GUILayout.Button("Exit"))
-			Application.Quit();
+            if (GUILayout.Button("Exit"))
+                Application.Quit();
 #endif
             GUILayout.Space(menuOffset);
 

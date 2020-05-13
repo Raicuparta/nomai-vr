@@ -9,12 +9,8 @@
 //     * Action Source: This is a collection of cached data retrieved by calls to the underlying SteamVR Input system.
 //          Each Action Source has an inputSource that it is associated with.
 
-using UnityEngine;
-using System.Collections;
 using System;
-using Valve.VR;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace Valve.VR
 {
@@ -35,19 +31,15 @@ namespace Valve.VR
         /// Access this action restricted to individual input sources.
         /// </summary>
         /// <param name="inputSource">The input source to access for this action</param>
-        public virtual SourceElement this[SteamVR_Input_Sources inputSource]
-        {
-            get
-            {
+        public virtual SourceElement this[SteamVR_Input_Sources inputSource] {
+            get {
                 return sourceMap[inputSource];
             }
         }
 
         /// <summary>The full string path for this action</summary>
-        public override string fullPath
-        {
-            get
-            {
+        public override string fullPath {
+            get {
                 return sourceMap.fullPath;
             }
         }
@@ -56,19 +48,15 @@ namespace Valve.VR
         public override ulong handle { get { return sourceMap.handle; } }
 
         /// <summary>The actionset this action is contained within</summary>
-        public override SteamVR_ActionSet actionSet
-        {
-            get
-            {
+        public override SteamVR_ActionSet actionSet {
+            get {
                 return sourceMap.actionSet;
             }
         }
 
         /// <summary>The action direction of this action (in for input - most actions, out for output - mainly haptics)</summary>
-        public override SteamVR_ActionDirections direction
-        {
-            get
-            {
+        public override SteamVR_ActionDirections direction {
+            get {
                 return sourceMap.direction;
             }
         }
@@ -556,7 +544,7 @@ namespace Valve.VR
 
         public void HideOrigins()
         {
-            OpenVR.Input.ShowActionOrigins(0,0);
+            OpenVR.Input.ShowActionOrigins(0, 0);
         }
     }
 
@@ -566,10 +554,8 @@ namespace Valve.VR
         /// Gets a reference to the action restricted to a certain input source. LeftHand or RightHand for example.
         /// </summary>
         /// <param name="inputSource">The device you would like data from</param>
-        public SourceElement this[SteamVR_Input_Sources inputSource]
-        {
-            get
-            {
+        public SourceElement this[SteamVR_Input_Sources inputSource] {
+            get {
                 return GetSourceElementForIndexer(inputSource);
             }
         }

@@ -1,26 +1,31 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR {
-    public class PlayerBodyPosition: MonoBehaviour {
+namespace NomaiVR
+{
+    public class PlayerBodyPosition : MonoBehaviour
+    {
         Transform _cameraParent;
         static Transform _playArea;
         Transform _camera;
 
-        void Start () {
+        void Start()
+        {
             NomaiVR.Log("Start PlayerBodyPosition");
 
             // This component is messing with our ability to read the VR camera's rotation.
             // Seems to be responsible for controlling the camera rotation with the mouse / joystick.
             PlayerCameraController playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
-            if (playerCameraController) {
+            if (playerCameraController)
+            {
                 playerCameraController.enabled = false;
             }
 
             SetupCamera();
         }
 
-        private void SetupCamera () {
+        private void SetupCamera()
+        {
             // Make an empty parent object for moving the camera around.
             _camera = Camera.main.transform;
             _cameraParent = new GameObject().transform;
@@ -37,29 +42,37 @@ namespace NomaiVR {
 
         }
 
-        void MoveCameraToPlayerHead () {
+        void MoveCameraToPlayerHead()
+        {
             Vector3 movement = Common.PlayerHead.position - _camera.position;
             _cameraParent.position += movement;
         }
 
-        void Update () {
+        void Update()
+        {
             var cameraToHead = Vector3.ProjectOnPlane(Common.PlayerHead.position - _camera.position, Common.PlayerHead.up);
 
-            if (cameraToHead.sqrMagnitude > 0.5f) {
+            if (cameraToHead.sqrMagnitude > 0.5f)
+            {
                 MoveCameraToPlayerHead();
             }
-            if (NomaiVR.DebugMode) {
-                if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
+            if (NomaiVR.DebugMode)
+            {
+                if (Input.GetKeyDown(KeyCode.KeypadPlus))
+                {
                     _cameraParent.localScale *= 0.9f;
                 }
-                if (Input.GetKeyDown(KeyCode.KeypadMinus)) {
+                if (Input.GetKeyDown(KeyCode.KeypadMinus))
+                {
                     _cameraParent.localScale /= 0.9f;
                 }
             }
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Post<PlayerCharacterController>("UpdateTurning", typeof(Patches), nameof(Patches.PatchTurning));
 
                 // Prevent camera from locking on to model ship.
@@ -68,15 +81,19 @@ namespace NomaiVR {
                 NomaiVR.Helper.HarmonyHelper.AddPrefix(lockOnMethod, typeof(Patches), nameof(PreLockOn));
             }
 
-            static bool PreLockOn (Transform targetTransform) {
-                if (targetTransform.GetComponent<ModelShipController>() != null) {
+            static bool PreLockOn(Transform targetTransform)
+            {
+                if (targetTransform.GetComponent<ModelShipController>() != null)
+                {
                     return false;
                 }
                 return true;
             }
 
-            static void PatchTurning (PlayerCharacterController __instance) {
-                if (OWInput.GetInputMode() != InputMode.Character) {
+            static void PatchTurning(PlayerCharacterController __instance)
+            {
+                if (OWInput.GetInputMode() != InputMode.Character)
+                {
                     return;
                 }
 
@@ -89,7 +106,8 @@ namespace NomaiVR {
                 var magnitudeForward = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.right).magnitude;
                 var magnitude = magnitudeUp + magnitudeForward;
 
-                if (magnitude < 0.3f) {
+                if (magnitude < 0.3f)
+                {
                     return;
                 }
 

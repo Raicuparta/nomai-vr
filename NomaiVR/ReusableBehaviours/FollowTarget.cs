@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR {
-    class FollowTarget: MonoBehaviour {
+namespace NomaiVR
+{
+    class FollowTarget : MonoBehaviour
+    {
         public Transform target;
         public Vector3 localPosition;
         public Quaternion localRotation = Quaternion.identity;
@@ -11,22 +13,30 @@ namespace NomaiVR {
         Vector3 positionVelocity;
 
 
-        void LateUpdate () {
-            if (!target) {
+        void LateUpdate()
+        {
+            if (!target)
+            {
                 return;
             }
 
             var targetRotation = target.rotation * localRotation;
-            if (rotationSmoothTime > 0 && Time.timeScale > 0) {
+            if (rotationSmoothTime > 0 && Time.timeScale > 0)
+            {
                 transform.rotation = QuaternionHelper.SmoothDamp(transform.rotation, targetRotation, ref rotationVelocity, rotationSmoothTime);
-            } else {
+            }
+            else
+            {
                 transform.rotation = targetRotation;
             }
 
             var targetPosition = target.TransformPoint(localPosition);
-            if (positionSmoothTime > 0 && Time.timeScale > 0) {
+            if (positionSmoothTime > 0 && Time.timeScale > 0)
+            {
                 transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, rotationSmoothTime);
-            } else {
+            }
+            else
+            {
                 transform.position = targetPosition;
             }
         }

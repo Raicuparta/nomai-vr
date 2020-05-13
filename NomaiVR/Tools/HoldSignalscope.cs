@@ -1,9 +1,10 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace NomaiVR {
-    public class HoldSignalscope: MonoBehaviour {
+namespace NomaiVR
+{
+    public class HoldSignalscope : MonoBehaviour
+    {
         protected static Transform _reticule;
         protected static Transform _shipWindshield;
         protected static Signalscope _signalscope;
@@ -12,13 +13,18 @@ namespace NomaiVR {
         static Transform _lens;
         static GameObject _lensPrefab;
 
-        void Awake () {
-            if (LoadManager.GetCurrentScene() == OWScene.SolarSystem) {
+        void Awake()
+        {
+            if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
+            {
                 _shipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
             }
 
             _signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
-            Hands.HoldObject(_signalscope.transform, Hands.RightHand, new Vector3(0.013f, 0.1f, 0.123f), Quaternion.Euler(32.8f, 0, 0));
+
+            var holdSignalscope = _signalscope.gameObject.AddComponent<Holdable>();
+            holdSignalscope.transform.localPosition = new Vector3(0.013f, 0.1f, 0.123f);
+            holdSignalscope.transform.localRotation = Quaternion.Euler(32.8f, 0, 0);
 
             var signalScopeModel = _signalscope.transform.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -35,7 +41,7 @@ namespace NomaiVR {
             var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<HolsterTool>();
-            holster.hand = Hands.RightHand;
+            holster.hand = HandsController.RightHand;
             holster.position = new Vector3(0.3f, -0.55f, 0);
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;
@@ -64,7 +70,8 @@ namespace NomaiVR {
             SetupScopeLens();
         }
 
-        void SetupSignalscopeUI (Transform parent) {
+        void SetupSignalscopeUI(Transform parent)
+        {
             parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
             parent.parent = _signalscope.transform;
             parent.localScale = Vector3.one * 0.0005f;
@@ -72,12 +79,15 @@ namespace NomaiVR {
             parent.localRotation = Quaternion.Euler(0, 90, 0);
         }
 
-        void OnUnequip () {
+        void OnUnequip()
+        {
             _lens.gameObject.SetActive(false);
         }
 
-        void SetupScopeLens () {
-            if (!_assetBundle) {
+        void SetupScopeLens()
+        {
+            if (!_assetBundle)
+            {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/scope-lens");
                 _lensPrefab = _assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab");
             }
@@ -115,40 +125,52 @@ namespace NomaiVR {
             _lensCamera.gameObject.SetActive(true);
         }
 
-        void Update () {
-            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit)) {
+        void Update()
+        {
+            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
+            {
                 _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
             }
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patches), nameof(ChangeInputMode));
                 NomaiVR.Post<QuantumInstrument>("Update", typeof(Patches), nameof(PostQuantumInstrumentUpdate));
                 NomaiVR.Empty<Signalscope>("EnterSignalscopeZoom");
                 NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
             }
 
-            static void PostQuantumInstrumentUpdate (QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut) {
-                if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope)) {
+            static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)
+            {
+                if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope))
+                {
                     Vector3 from = __instance.transform.position - _lensCamera.transform.position;
                     float num = Vector3.Angle(from, _lensCamera.transform.forward);
-                    if (num < 1f && _lens.gameObject.activeSelf) {
+                    if (num < 1f && _lens.gameObject.activeSelf)
+                    {
                         __instance.Invoke("Gather");
                     }
                 }
             }
 
-            static void ChangeInputMode (InputMode mode) {
-                if (!_reticule || !_shipWindshield || mode == InputMode.Menu || mode == InputMode.Map) {
+            static void ChangeInputMode(InputMode mode)
+            {
+                if (!_reticule || !_shipWindshield || mode == InputMode.Menu || mode == InputMode.Map)
+                {
                     return;
                 }
-                if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam) {
+                if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam)
+                {
                     _reticule.parent = _shipWindshield;
                     _reticule.localScale = Vector3.one * 0.004f;
                     _reticule.localPosition = Vector3.forward * 3f;
                     _reticule.localRotation = Quaternion.identity;
-                } else {
+                }
+                else
+                {
                     _reticule.parent = _signalscope.transform;
                     _reticule.localScale = Vector3.one * 0.0003f;
                     _reticule.localPosition = Vector3.forward * 0.14f;
