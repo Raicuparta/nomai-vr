@@ -10,7 +10,9 @@ namespace NomaiVR
         {
             var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 
-            HandsController.HoldObject(translator, HandsController.RightHand, new Vector3(-0.2f, 0.107f, 0.02f), Quaternion.Euler(32.8f, 0f, 0f));
+            var holdTranslator = translator.gameObject.AddComponent<Holdable>();
+            holdTranslator.transform.localPosition = new Vector3(-0.2f, 0.107f, 0.02f);
+            holdTranslator.transform.localRotation = Quaternion.Euler(32.8f, 0f, 0f);
 
             var translatorGroup = translator.Find("TranslatorGroup");
             translatorGroup.localPosition = Vector3.zero;

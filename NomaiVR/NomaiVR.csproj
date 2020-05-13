@@ -101,6 +101,7 @@
     <Compile Include="Player\Hand.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
+    <Compile Include="ReusableBehaviours\Holdable.cs" />
     <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
     <Compile Include="UI\Dialogue.cs" />
     <Compile Include="Player\FeetMarker.cs" />

@@ -134,39 +134,6 @@ namespace NomaiVR
             withSuit.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
         }
 
-        public static Transform HoldObject(Transform objectTransform, Transform hand, Vector3 position, Quaternion rotation)
-        {
-            var objectParent = new GameObject().transform;
-            objectParent.parent = hand;
-            objectParent.localPosition = position;
-            objectParent.localRotation = rotation;
-            objectTransform.transform.parent = objectParent;
-            objectTransform.transform.localPosition = Vector3.zero;
-            objectTransform.transform.localRotation = Quaternion.identity;
-
-            var tool = objectTransform.gameObject.GetComponent<PlayerTool>();
-            if (tool)
-            {
-                tool.SetValue("_stowTransform", null);
-                tool.SetValue("_holdTransform", null);
-            }
-
-            return objectParent;
-        }
-
-        public static Transform HoldObject(Transform objectTransform, Transform hand)
-        {
-            return HoldObject(objectTransform, hand, Vector3.zero, Quaternion.identity);
-        }
-        public static Transform HoldObject(Transform objectTransform, Transform hand, Quaternion rotation)
-        {
-            return HoldObject(objectTransform, hand, Vector3.zero, rotation);
-        }
-        public static Transform HoldObject(Transform objectTransform, Transform hand, Vector3 position)
-        {
-            return HoldObject(objectTransform, hand, position, Quaternion.identity);
-        }
-
         void Update()
         {
             if (_wrapper && Camera.main)
