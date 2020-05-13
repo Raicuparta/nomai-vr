@@ -2,9 +2,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR {
-    public class HoldTranslator: MonoBehaviour {
-        void Awake () {
+namespace NomaiVR
+{
+    public class HoldTranslator : MonoBehaviour
+    {
+        void Awake()
+        {
             var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 
             Hands.HoldObject(translator, Hands.RightHand, new Vector3(-0.2f, 0.107f, 0.02f), Quaternion.Euler(32.8f, 0f, 0f));
@@ -26,15 +29,18 @@ namespace NomaiVR {
 
             var renderers = translatorModel.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
-            foreach (var renderer in renderers) {
-                foreach (var material in renderer.materials) {
+            foreach (var renderer in renderers)
+            {
+                foreach (var material in renderer.materials)
+                {
                     material.shader = Shader.Find("Standard");
                 }
             }
 
             var texts = translator.gameObject.GetComponentsInChildren<Graphic>(true);
 
-            foreach (var text in texts) {
+            foreach (var text in texts)
+            {
                 text.material = null;
             }
 
@@ -52,14 +58,17 @@ namespace NomaiVR {
             translator.gameObject.AddComponent<ToolModeInteraction>();
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Post<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patches), nameof(IsPromptAllowed));
                 NomaiVR.Post<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patches), nameof(IsPromptAllowed));
                 NomaiVR.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patches), nameof(IsPromptAllowed));
             }
 
-            static bool IsPromptAllowed (bool __result) {
+            static bool IsPromptAllowed(bool __result)
+            {
                 return false;
             }
         }

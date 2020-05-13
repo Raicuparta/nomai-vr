@@ -1,14 +1,12 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using UnityEngine;
-using Valve.VR;
-using System.IO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
-using System.Linq;
-using Valve.Newtonsoft.Json;
 using System.Text;
+using UnityEngine;
+using Valve.Newtonsoft.Json;
 
 namespace Valve.VR
 {
@@ -46,11 +44,9 @@ namespace Valve.VR
         protected static bool initializing = false;
 
         protected static int startupFrame = 0;
-        public static bool isStartupFrame
-        {
-            get
-            {
-                return Time.frameCount >= (startupFrame-1) && Time.frameCount <= (startupFrame+1);
+        public static bool isStartupFrame {
+            get {
+                return Time.frameCount >= (startupFrame - 1) && Time.frameCount <= (startupFrame + 1);
             }
         }
 

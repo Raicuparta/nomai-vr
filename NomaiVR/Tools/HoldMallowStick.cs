@@ -1,9 +1,12 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
 
-namespace NomaiVR {
-    public class HoldMallowStick: MonoBehaviour {
-        void Awake () {
+namespace NomaiVR
+{
+    public class HoldMallowStick : MonoBehaviour
+    {
+        void Awake()
+        {
 
             var scale = Vector3.one * 0.75f;
             var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
@@ -17,19 +20,24 @@ namespace NomaiVR {
 
             var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
-            void EatMallow () {
-                if (mallow.GetState() != Marshmallow.MallowState.Gone) {
+            void EatMallow()
+            {
+                if (mallow.GetState() != Marshmallow.MallowState.Gone)
+                {
                     mallow.Eat();
                 }
             }
 
-            void ReplaceMallow () {
-                if (mallow.GetState() == Marshmallow.MallowState.Gone) {
+            void ReplaceMallow()
+            {
+                if (mallow.GetState() == Marshmallow.MallowState.Gone)
+                {
                     mallow.SpawnMallow(true);
                 }
             }
 
-            bool ShouldRenderMallowClone () {
+            bool ShouldRenderMallowClone()
+            {
                 return stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
             }
 
@@ -60,8 +68,10 @@ namespace NomaiVR {
             mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 // Stop stick rotation animation.
                 NomaiVR.Empty<RoastingStickController>("UpdateRotation");
             }

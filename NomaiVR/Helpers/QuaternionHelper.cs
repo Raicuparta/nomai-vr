@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR {
-    public static class QuaternionHelper {
+namespace NomaiVR
+{
+    public static class QuaternionHelper
+    {
         // Stolen from here: https://gist.github.com/maxattack/4c7b4de00f5c1b95a33b
-        public static Quaternion SmoothDamp (Quaternion rot, Quaternion target, ref Quaternion deriv, float time) {
+        public static Quaternion SmoothDamp(Quaternion rot, Quaternion target, ref Quaternion deriv, float time)
+        {
             // account for double-cover
             var dot = Quaternion.Dot(rot, target);
             var multi = dot > 0f ? 1f : -1f;

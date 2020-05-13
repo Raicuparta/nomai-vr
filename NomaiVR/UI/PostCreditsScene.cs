@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace NomaiVR {
-    class PostCreditsScene: MonoBehaviour {
+namespace NomaiVR
+{
+    class PostCreditsScene : MonoBehaviour
+    {
         static AssetBundle _assetBundle;
         static GameObject _prefab;
 
-        void Start () {
-            if (!_assetBundle) {
+        void Start()
+        {
+            if (!_assetBundle)
+            {
                 _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/cinema-camera");
                 _prefab = _assetBundle.LoadAsset<GameObject>("assets/postcreditscamera.prefab");
             }

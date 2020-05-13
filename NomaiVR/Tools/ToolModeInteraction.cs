@@ -2,9 +2,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR {
-    class ToolModeInteraction: MonoBehaviour {
-        void Awake () {
+namespace NomaiVR
+{
+    class ToolModeInteraction : MonoBehaviour
+    {
+        void Awake()
+        {
             var proximityDetector = gameObject.AddComponent<ProximityDetector>();
             proximityDetector.onEnter = OnDetectorEnter;
             proximityDetector.onExit = OnDetectorExit;
@@ -12,8 +15,10 @@ namespace NomaiVR {
             proximityDetector.exitThreshold = 0.1f;
         }
 
-        void OnDetectorEnter () {
-            if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Translator)) {
+        void OnDetectorEnter()
+        {
+            if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Translator))
+            {
                 var translator = FindObjectOfType<NomaiTranslatorProp>();
                 var currentTextId = translator.GetValue<int>("_currentTextID");
                 var nomaiText = translator.GetValue<NomaiText>("_nomaiTextComponent");
@@ -23,16 +28,19 @@ namespace NomaiVR {
                 // Using very low value instead of zero, because the final scroll position never gets to exactly zero.
                 var hasMoreToScroll = scrollRect.verticalNormalizedPosition > 0.001f;
 
-                if (!nomaiText) {
+                if (!nomaiText)
+                {
                     return;
                 }
 
-                if (isScrollable && hasMoreToScroll) {
+                if (isScrollable && hasMoreToScroll)
+                {
                     ControllerInput.SimulateInput(XboxAxis.dPadY, -1);
                     return;
                 }
 
-                if (currentTextId == nomaiText.GetNumTextBlocks()) {
+                if (currentTextId == nomaiText.GetNumTextBlocks())
+                {
                     translator.SetValue("_currentTextID", 0);
                 }
             }
@@ -40,7 +48,8 @@ namespace NomaiVR {
             ControllerInput.SimulateInput(XboxAxis.dPadX, 1);
         }
 
-        void OnDetectorExit () {
+        void OnDetectorExit()
+        {
             ControllerInput.SimulateInput(XboxAxis.dPadX, 0);
             ControllerInput.SimulateInput(XboxAxis.dPadY, 0);
         }

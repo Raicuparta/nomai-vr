@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace NomaiVR {
-    public static class Timers {
-        public static void ExecuteAfter (Action action, int milliseconds) {
+namespace NomaiVR
+{
+    public static class Timers
+    {
+        public static void ExecuteAfter(Action action, int milliseconds)
+        {
             System.Threading.Timer timer = null;
-            timer = new System.Threading.Timer(s => {
+            timer = new System.Threading.Timer(s =>
+            {
                 action();
                 timer.Dispose();
                 lock (timers)

@@ -2,8 +2,10 @@
 using System;
 using UnityEngine;
 
-namespace NomaiVR {
-    class HolsterTool: MonoBehaviour {
+namespace NomaiVR
+{
+    class HolsterTool : MonoBehaviour
+    {
         public Transform hand;
         public ToolMode mode;
         public Vector3 position;
@@ -16,13 +18,15 @@ namespace NomaiVR {
 
         public ProximityDetector detector { get; private set; }
 
-        void Awake () {
+        void Awake()
+        {
             detector = gameObject.AddComponent<ProximityDetector>();
             detector.other = Hands.RightHand;
             detector.minDistance = 0.2f;
         }
 
-        void Start () {
+        void Start()
+        {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
 
@@ -30,65 +34,82 @@ namespace NomaiVR {
             GlobalMessenger.AddListener("RemoveSuit", Unequip);
         }
 
-        void Equip () {
+        void Equip()
+        {
             onEquip?.Invoke();
             Locator.GetToolModeSwapper().EquipToolMode(mode);
 
-            if (mode == ToolMode.Translator) {
+            if (mode == ToolMode.Translator)
+            {
                 GameObject.FindObjectOfType<NomaiTranslatorProp>().SetValue("_currentTextID", 1);
             }
         }
 
-        void Unequip () {
+        void Unequip()
+        {
             onUnequip?.Invoke();
             Common.ToolSwapper.UnequipTool();
         }
 
-        void SetVisible (bool visible) {
-            foreach (var renderer in _renderers) {
+        void SetVisible(bool visible)
+        {
+            foreach (var renderer in _renderers)
+            {
                 renderer.enabled = visible;
             }
             _visible = visible;
         }
 
-        bool IsEquipped () {
+        bool IsEquipped()
+        {
             return Locator.GetToolModeSwapper().IsInToolMode(mode, ToolGroup.Suit);
         }
 
-        void UpdateGrab () {
-            if (!OWInput.IsInputMode(InputMode.Character)) {
-                if (IsEquipped()) {
+        void UpdateGrab()
+        {
+            if (!OWInput.IsInputMode(InputMode.Character))
+            {
+                if (IsEquipped())
+                {
                     Unequip();
                 }
                 return;
             }
-            if (ControllerInput.IsGripping && !IsEquipped() && detector.isInside && _visible) {
+            if (ControllerInput.IsGripping && !IsEquipped() && detector.isInside && _visible)
+            {
                 Equip();
             }
-            if (!ControllerInput.IsGripping && IsEquipped()) {
+            if (!ControllerInput.IsGripping && IsEquipped())
+            {
                 Unequip();
             }
         }
 
-        void UpdateVisibility () {
+        void UpdateVisibility()
+        {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
             var shouldBeVisible = !Common.IsUsingAnyTool() && isCharacterMode;
 
-            if (!_visible && shouldBeVisible) {
+            if (!_visible && shouldBeVisible)
+            {
                 SetVisible(true);
             }
-            if (_visible && !shouldBeVisible) {
+            if (_visible && !shouldBeVisible)
+            {
                 SetVisible(false);
             }
         }
 
-        void Update () {
+        void Update()
+        {
             UpdateGrab();
             UpdateVisibility();
         }
 
-        void LateUpdate () {
-            if (_visible) {
+        void LateUpdate()
+        {
+            if (_visible)
+            {
                 transform.position = Camera.main.transform.position + Common.PlayerBody.transform.TransformVector(position);
                 transform.rotation = Common.PlayerBody.transform.rotation;
                 transform.Rotate(angle);

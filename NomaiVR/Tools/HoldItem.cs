@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR {
-    class HoldItem: MonoBehaviour {
+namespace NomaiVR
+{
+    class HoldItem : MonoBehaviour
+    {
         ItemTool _itemTool;
 
-        void Awake () {
+        void Awake()
+        {
             _itemTool = FindObjectOfType<ItemTool>();
             _itemTool.transform.localScale = 1.8f * Vector3.one;
             Hands.HoldObject(_itemTool.transform.Find("ItemSocket"), Hands.RightHand);
@@ -15,26 +18,34 @@ namespace NomaiVR {
             Hands.HoldObject(_itemTool.transform.Find("LanternSocket"), Hands.RightHand);
         }
 
-        void SetActive (bool active) {
+        void SetActive(bool active)
+        {
             var heldItem = _itemTool.GetHeldItem();
-            if (!heldItem) {
+            if (!heldItem)
+            {
                 return;
             }
             heldItem.gameObject.SetActive(active);
         }
 
-        bool IsActive () {
+        bool IsActive()
+        {
             var heldItem = _itemTool.GetHeldItem();
-            if (!heldItem) {
+            if (!heldItem)
+            {
                 return false;
             }
             return heldItem.gameObject.activeSelf;
         }
 
-        void Update () {
-            if (IsActive() && Common.IsUsingAnyTool()) {
+        void Update()
+        {
+            if (IsActive() && Common.IsUsingAnyTool())
+            {
                 SetActive(false);
-            } else if (!IsActive() && !Common.IsUsingAnyTool()) {
+            }
+            else if (!IsActive() && !Common.IsUsingAnyTool())
+            {
                 SetActive(true);
             }
         }

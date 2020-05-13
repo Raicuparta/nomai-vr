@@ -1,12 +1,8 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using UnityEngine;
-using System.Collections;
 using System;
-using Valve.VR;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using System.Text;
+using UnityEngine;
 
 namespace Valve.VR
 {
@@ -26,10 +22,8 @@ namespace Valve.VR
 
 
         /// <summary>All actions within this set (including out actions)</summary>
-        public SteamVR_Action[] allActions
-        {
-            get
-            {
+        public SteamVR_Action[] allActions {
+            get {
                 if (initialized == false)
                     Initialize();
 
@@ -38,10 +32,8 @@ namespace Valve.VR
         }
 
         /// <summary>All IN actions within this set that are NOT pose or skeleton actions</summary>
-        public ISteamVR_Action_In[] nonVisualInActions
-        {
-            get
-            {
+        public ISteamVR_Action_In[] nonVisualInActions {
+            get {
                 if (initialized == false)
                     Initialize();
 
@@ -50,10 +42,8 @@ namespace Valve.VR
         }
 
         /// <summary>All pose and skeleton actions within this set</summary>
-        public ISteamVR_Action_In[] visualActions
-        {
-            get
-            {
+        public ISteamVR_Action_In[] visualActions {
+            get {
                 if (initialized == false)
                     Initialize();
 
@@ -62,10 +52,8 @@ namespace Valve.VR
         }
 
         /// <summary>All pose actions within this set</summary>
-        public SteamVR_Action_Pose[] poseActions
-        {
-            get
-            {
+        public SteamVR_Action_Pose[] poseActions {
+            get {
                 if (initialized == false)
                     Initialize();
 
@@ -74,10 +62,8 @@ namespace Valve.VR
         }
 
         /// <summary>All skeleton actions within this set</summary>
-        public SteamVR_Action_Skeleton[] skeletonActions
-        {
-            get
-            {
+        public SteamVR_Action_Skeleton[] skeletonActions {
+            get {
                 if (initialized == false)
                     Initialize();
 
@@ -86,10 +72,8 @@ namespace Valve.VR
         }
 
         /// <summary>All out actions within this set</summary>
-        public ISteamVR_Action_Out[] outActionArray
-        {
-            get
-            {
+        public ISteamVR_Action_Out[] outActionArray {
+            get {
                 if (initialized == false)
                     Initialize();
 
@@ -99,20 +83,16 @@ namespace Valve.VR
 
 
         /// <summary>The full path to this action set (ex: /actions/in/default)</summary>
-        public string fullPath
-        {
-            get
-            {
+        public string fullPath {
+            get {
                 if (initialized == false)
                     Initialize();
 
                 return setData.fullPath;
             }
         }
-        public string usage
-        {
-            get
-            {
+        public string usage {
+            get {
                 if (initialized == false)
                     Initialize();
 
@@ -120,10 +100,8 @@ namespace Valve.VR
             }
         }
 
-        public ulong handle
-        {
-            get
-            {
+        public ulong handle {
+            get {
                 if (initialized == false)
                     Initialize();
 

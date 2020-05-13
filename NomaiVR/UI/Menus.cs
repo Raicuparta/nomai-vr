@@ -1,28 +1,34 @@
 ﻿using OWML.Common;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace NomaiVR {
-    public class Menus: MonoBehaviour {
-        void Awake () {
+namespace NomaiVR
+{
+    public class Menus : MonoBehaviour
+    {
+        void Awake()
+        {
             NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
             NomaiVR.Helper.Events.OnEvent += OnEvent;
         }
 
-        void Start () {
+        void Start()
+        {
             NomaiVR.Log("Start Menus");
 
             // Make UI elements draw on top of everything.
-            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int) CompareFunction.Always);
+            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
 
             var scene = LoadManager.GetCurrentScene();
 
-            if (scene == OWScene.SolarSystem) {
+            if (scene == OWScene.SolarSystem)
+            {
                 // Make sleep timer canvas visible while eyes closed.
                 Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
-            } else if (scene == OWScene.TitleScreen) {
+            }
+            else if (scene == OWScene.TitleScreen)
+            {
                 var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
                 animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
 
@@ -44,17 +50,22 @@ namespace NomaiVR {
             ScreenCanvasesToWorld();
         }
 
-        private void OnEvent (MonoBehaviour behaviour, Events ev) {
-            if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart) {
+        private void OnEvent(MonoBehaviour behaviour, Events ev)
+        {
+            if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart)
+            {
                 var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
                 canvas.planeDistance = 5;
             }
         }
 
-        void ScreenCanvasesToWorld () {
+        void ScreenCanvasesToWorld()
+        {
             var canvases = FindObjectsOfType<Canvas>();
-            foreach (var canvas in canvases) {
-                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name != "PauseBackdropCanvas") {
+            foreach (var canvas in canvases)
+            {
+                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name != "PauseBackdropCanvas")
+                {
                     canvas.renderMode = RenderMode.WorldSpace;
                     canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
                     canvas.transform.rotation = Camera.main.transform.rotation;
@@ -70,7 +81,8 @@ namespace NomaiVR {
                     // and I'm not sure how to change unity_GUIZTestMode there.
                     // So for now I'm disabling the mask completely, which breaks some menus.
                     var masks = canvas.GetComponentsInChildren<Mask>(true);
-                    foreach (var mask in masks) {
+                    foreach (var mask in masks)
+                    {
                         mask.enabled = false;
                         mask.graphic.enabled = false;
                     }
@@ -78,13 +90,17 @@ namespace NomaiVR {
             }
         }
 
-        internal static class Patches {
-            public static void Patch () {
+        internal static class Patches
+        {
+            public static void Patch()
+            {
                 NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patches), nameof(PostPopulateProfiles));
             }
 
-            static void PostPopulateProfiles (GameObject ____profileListRoot) {
-                foreach (Transform child in ____profileListRoot.transform) {
+            static void PostPopulateProfiles(GameObject ____profileListRoot)
+            {
+                foreach (Transform child in ____profileListRoot.transform)
+                {
                     child.localPosition = Vector3.zero;
                     child.localRotation = Quaternion.identity;
                     child.localScale = Vector3.one;

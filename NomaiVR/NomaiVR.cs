@@ -2,18 +2,20 @@
 using OWML.ModHelper;
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using Valve.VR;
 
-namespace NomaiVR {
-    public class NomaiVR: ModBehaviour {
+namespace NomaiVR
+{
+    public class NomaiVR : ModBehaviour
+    {
         public static IModHelper Helper;
         public static bool DebugMode;
         public static int RefreshRate;
         public static ModSaveFile SaveFile;
 
-        void Start () {
+        void Start()
+        {
             Log("Start Main");
 
             SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
@@ -50,7 +52,8 @@ namespace NomaiVR {
             LoadManager.OnCompleteSceneLoad += OnSceneLoaded;
         }
 
-        void OnSceneLoaded (OWScene originalScene, OWScene scene) {
+        void OnSceneLoaded(OWScene originalScene, OWScene scene)
+        {
             var isSolarSystem = scene == OWScene.SolarSystem;
             var isEye = scene == OWScene.EyeOfTheUniverse;
             var isPostCredits = scene == OWScene.PostCreditsScene;
@@ -60,7 +63,8 @@ namespace NomaiVR {
             // This GameObject is for them.
             var nonPersistentObject = new GameObject();
 
-            if (isSolarSystem || isEye) {
+            if (isSolarSystem || isEye)
+            {
                 Common.InitGame();
                 nonPersistentObject.AddComponent<EffectFixes>();
                 nonPersistentObject.AddComponent<PlayerBodyPosition>();
@@ -70,18 +74,22 @@ namespace NomaiVR {
                 nonPersistentObject.AddComponent<InputPrompts>();
                 nonPersistentObject.AddComponent<HelmetHUD>();
                 nonPersistentObject.AddComponent<VRTutorial>();
-                if (isSolarSystem) {
+                if (isSolarSystem)
+                {
                     nonPersistentObject.AddComponent<ShipTools>();
                     nonPersistentObject.AddComponent<SolarSystemMap>();
                 }
-            } else if (isPostCredits) {
+            }
+            else if (isPostCredits)
+            {
                 nonPersistentObject.AddComponent<PostCreditsScene>();
             }
 
             nonPersistentObject.AddComponent<Menus>();
         }
 
-        public override void Configure (IModConfig config) {
+        public override void Configure(IModConfig config)
+        {
             DebugMode = config.GetSettingsValue<bool>("debugMode");
             RefreshRate = config.GetSettingsValue<int>("overrideRefreshRate");
             XRSettings.showDeviceView = config.GetSettingsValue<bool>("showMirrorView");
@@ -91,21 +99,26 @@ namespace NomaiVR {
             Cursor.visible = true;
         }
 
-        public static void Log (params string[] strings) {
-            if (DebugMode && Helper != null) {
+        public static void Log(params string[] strings)
+        {
+            if (DebugMode && Helper != null)
+            {
                 Helper.Console.WriteLine(string.Join(" ", strings));
             }
         }
 
-        public static void Pre<T> (string methodName, Type patchType, string patchMethodName) {
+        public static void Pre<T>(string methodName, Type patchType, string patchMethodName)
+        {
             Helper.HarmonyHelper.AddPrefix<T>(methodName, patchType, patchMethodName);
         }
 
-        public static void Post<T> (string methodName, Type patchType, string patchMethodName) {
+        public static void Post<T>(string methodName, Type patchType, string patchMethodName)
+        {
             Helper.HarmonyHelper.AddPostfix<T>(methodName, patchType, patchMethodName);
         }
 
-        public static void Empty<T> (string methodName) {
+        public static void Empty<T>(string methodName)
+        {
             Helper.HarmonyHelper.EmptyMethod<T>(methodName);
         }
     }

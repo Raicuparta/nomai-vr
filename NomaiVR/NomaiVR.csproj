@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\Timers.cs" />
     <Compile Include="ModSaveFile.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="Tools\ShipTools.cs" />
     <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
-    <Compile Include="Common.cs" />
     <Compile Include="EffectFixes.cs" />
     <Compile Include="UI\Menus.cs" />
     <Compile Include="Player\Hands.cs" />

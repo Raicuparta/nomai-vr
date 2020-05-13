@@ -4,11 +4,10 @@
 //
 //=============================================================================
 
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Valve.VR;
+using UnityEngine;
 
 namespace Valve.VR
 {
@@ -80,10 +79,8 @@ namespace Valve.VR
         {
             private bool needsShutdown, failedLoadInterface;
             private CVRRenderModels _instance;
-            public CVRRenderModels instance
-            {
-                get
-                {
+            public CVRRenderModels instance {
+                get {
                     if (_instance == null && !failedLoadInterface)
                     {
                         if (Application.isEditor && Application.isPlaying == false)
@@ -473,7 +470,7 @@ namespace Valve.VR
                 renderModels.FreeRenderModel(pRenderModel);
             else
 #endif
-                StartCoroutine(FreeRenderModel(pRenderModel));
+            StartCoroutine(FreeRenderModel(pRenderModel));
 
             return new RenderModel(mesh, material);
         }
