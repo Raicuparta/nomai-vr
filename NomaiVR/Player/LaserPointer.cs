@@ -12,7 +12,7 @@ namespace NomaiVR
         {
             Laser = new GameObject("Laser").transform;
             Laser.gameObject.AddComponent<FollowTarget>();
-            Laser.transform.parent = Hands.RightHand;
+            Laser.transform.parent = HandsController.RightHand;
             Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
             Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
 

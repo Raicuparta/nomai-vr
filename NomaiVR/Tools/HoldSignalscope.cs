@@ -21,7 +21,7 @@ namespace NomaiVR
             }
 
             _signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
-            Hands.HoldObject(_signalscope.transform, Hands.RightHand, new Vector3(0.013f, 0.1f, 0.123f), Quaternion.Euler(32.8f, 0, 0));
+            HandsController.HoldObject(_signalscope.transform, HandsController.RightHand, new Vector3(0.013f, 0.1f, 0.123f), Quaternion.Euler(32.8f, 0, 0));
 
             var signalScopeModel = _signalscope.transform.GetChild(0);
             // Tools have a special shader that draws them on top of everything
@@ -38,7 +38,7 @@ namespace NomaiVR
             var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
             signalScopeHolster.SetActive(true);
             var holster = signalScopeHolster.AddComponent<HolsterTool>();
-            holster.hand = Hands.RightHand;
+            holster.hand = HandsController.RightHand;
             holster.position = new Vector3(0.3f, -0.55f, 0);
             holster.mode = ToolMode.SignalScope;
             holster.scale = 0.8f;

@@ -18,7 +18,7 @@ namespace NomaiVR
             canvas.transform.localPosition = Vector3.zero;
             canvas.transform.localRotation = Quaternion.identity;
 
-            _holdTransform = Hands.HoldObject(canvas.transform, Hands.RightHand, new Vector3(-0.09f, -0.11f, 0.13f));
+            _holdTransform = HandsController.HoldObject(canvas.transform, HandsController.RightHand, new Vector3(-0.09f, -0.11f, 0.13f));
 
             foreach (Transform child in canvas.transform)
             {

@@ -18,8 +18,8 @@ namespace NomaiVR
             queue = new List<TutorialInput>();
             controllerModels = new List<SteamVR_RenderModel>();
 
-            CreateControllerModel(Hands.RightHand);
-            CreateControllerModel(Hands.LeftHand);
+            CreateControllerModel(HandsController.RightHand);
+            CreateControllerModel(HandsController.LeftHand);
             Invoke(nameof(HideControllerModels), 0.1f);
 
             var actions = SteamVR_Actions._default;

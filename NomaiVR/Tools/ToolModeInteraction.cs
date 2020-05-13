@@ -11,7 +11,7 @@ namespace NomaiVR
             var proximityDetector = gameObject.AddComponent<ProximityDetector>();
             proximityDetector.onEnter = OnDetectorEnter;
             proximityDetector.onExit = OnDetectorExit;
-            proximityDetector.other = Hands.LeftHand;
+            proximityDetector.other = HandsController.LeftHand;
             proximityDetector.exitThreshold = 0.1f;
         }
 

@@ -69,7 +69,7 @@ namespace NomaiVR
                 nonPersistentObject.AddComponent<EffectFixes>();
                 nonPersistentObject.AddComponent<PlayerBodyPosition>();
                 nonPersistentObject.AddComponent<Dialogue>();
-                nonPersistentObject.AddComponent<Hands>();
+                nonPersistentObject.AddComponent<HandsController>();
                 nonPersistentObject.AddComponent<FeetMarker>();
                 nonPersistentObject.AddComponent<InputPrompts>();
                 nonPersistentObject.AddComponent<HelmetHUD>();

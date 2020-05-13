@@ -5,7 +5,7 @@ using Valve.VR;
 
 namespace NomaiVR
 {
-    public class Hands : MonoBehaviour
+    public class HandsController : MonoBehaviour
     {
         public static Transform RightHand;
         public static Transform LeftHand;

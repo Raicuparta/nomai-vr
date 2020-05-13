@@ -122,7 +122,7 @@
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
     <Compile Include="EffectFixes.cs" />
     <Compile Include="UI\Menus.cs" />
-    <Compile Include="Player\Hands.cs" />
+    <Compile Include="Player\HandsController.cs" />
     <Compile Include="Player\PlayerBodyPosition.cs" />
     <Compile Include="Input\ControllerInput.cs" />
     <Compile Include="Tools\HolsterTool.cs" />

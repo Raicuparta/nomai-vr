@@ -21,7 +21,7 @@ namespace NomaiVR
         void Awake()
         {
             detector = gameObject.AddComponent<ProximityDetector>();
-            detector.other = Hands.RightHand;
+            detector.other = HandsController.RightHand;
             detector.minDistance = 0.2f;
         }
 
