@@ -29,7 +29,7 @@ namespace NomaiVR
 
             ShipTools.Patches.Patch();
             ControllerInput.Patches.Patch();
-            Dialogue.Patches.Patch();
+            new Dialogue();
             new EffectFixes();
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
@@ -70,7 +70,6 @@ namespace NomaiVR
             if (isSolarSystem || isEye)
             {
                 Common.InitGame();
-                nonPersistentParent.AddComponent<Dialogue>();
                 nonPersistentParent.AddComponent<HandsController>();
                 nonPersistentParent.AddComponent<FeetMarker>();
                 nonPersistentParent.AddComponent<InputPrompts>();
