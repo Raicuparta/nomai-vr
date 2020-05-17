@@ -54,7 +54,7 @@ namespace NomaiVR
             _probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
             _probeLauncherHolster.SetActive(false);
             var holster = _probeLauncherHolster.AddComponent<HolsterTool>();
-            holster.hand = HandsController.RightHand;
+            holster.hand = HandsController.Behaviour.RightHand;
             holster.position = new Vector3(0, -0.55f, 0.2f);
             holster.mode = ToolMode.Probe;
             holster.scale = 0.15f;

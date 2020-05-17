@@ -38,6 +38,7 @@ namespace NomaiVR
             LaserPointer.Patches.Patch();
             new PlayerBodyPosition();
             new ForceSettings();
+            new HandsController();
             HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
             VRTutorial.Patches.Patch();
@@ -70,7 +71,6 @@ namespace NomaiVR
             if (isSolarSystem || isEye)
             {
                 Common.InitGame();
-                nonPersistentParent.AddComponent<HandsController>();
                 nonPersistentParent.AddComponent<FeetMarker>();
                 nonPersistentParent.AddComponent<InputPrompts>();
                 nonPersistentParent.AddComponent<HelmetHUD>();

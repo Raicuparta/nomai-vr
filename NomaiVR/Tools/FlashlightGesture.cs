@@ -7,7 +7,7 @@ namespace NomaiVR
         void Awake()
         {
             var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
-            detector.other = HandsController.RightHand;
+            detector.other = HandsController.Behaviour.RightHand;
             detector.localOffset = Vector3.right * 0.15f;
             detector.onEnter += FlashlightPress;
             detector.onExit += FlashlightRelease;
