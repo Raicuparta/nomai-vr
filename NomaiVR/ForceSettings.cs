@@ -6,7 +6,8 @@ namespace NomaiVR
 {
     public class ForceSettings : NomaiVRModule<ForceSettings.Behaviour, ForceSettings.Patch>
     {
-        public ForceSettings(bool isPersistent, OWScene[] scenes) : base(isPersistent, scenes) { }
+        protected override bool isPersistent => true;
+        protected override OWScene[] scenes => TitleScene;
 
         public class Behaviour : MonoBehaviour
         {
@@ -18,7 +19,6 @@ namespace NomaiVR
 
             void SetRefreshRate()
             {
-                NomaiVR.Log("######## Set Refresh Rate");
                 var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
                 var overrideRefreshRate = NomaiVR.RefreshRate;
                 var refreshRate = overrideRefreshRate > 0 ? overrideRefreshRate : deviceRefreshRate;
@@ -50,7 +50,6 @@ namespace NomaiVR
         {
             public override void ApplyPatches()
             {
-                NomaiVR.Log("######### Applying ForceSettings patches");
                 NomaiVR.Post<GraphicSettings>("ApplyAllGraphicSettings", typeof(Patch), nameof(PreApplySettings));
                 NomaiVR.Empty<InputRebindableLibrary>("SetKeyBindings");
                 NomaiVR.Empty<GraphicSettings>("SetSliderValFOV");

@@ -10,15 +10,14 @@ namespace NomaiVR
     {
         public static Type EmptyPatch = typeof(EmptyPatchClass);
         public static Type EmptyBehaviour = typeof(EmptyBehaviourClass);
+        protected static OWScene[] PlayableScenes = new[] { OWScene.SolarSystem, OWScene.EyeOfTheUniverse };
+        protected static OWScene[] TitleScene = new[] { OWScene.TitleScreen };
 
-        private bool _isPersistent;
-        private OWScene[] _scenes;
+        protected abstract bool isPersistent { get; }
+        protected abstract OWScene[] scenes { get; }
 
-        public NomaiVRModule(bool isPersistent, OWScene[] scenes)
+        public NomaiVRModule()
         {
-            _isPersistent = isPersistent;
-            _scenes = scenes;
-
             if (scenes.Contains(LoadManager.GetCurrentScene()))
             {
                 SetupBehaviour();
@@ -31,7 +30,7 @@ namespace NomaiVR
 
         private void OnSceneLoad(OWScene originalScene, OWScene loadScene)
         {
-            if (_scenes.Contains(loadScene))
+            if (scenes.Contains(loadScene))
             {
                 SetupBehaviour();
             }
@@ -41,7 +40,7 @@ namespace NomaiVR
         {
             var gameObject = new GameObject();
             gameObject.AddComponent<Behaviour>();
-            if (_isPersistent)
+            if (isPersistent)
             {
                 gameObject.AddComponent<PersistObject>();
             }

@@ -27,20 +27,17 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
-            var playableScenes = new[] { OWScene.SolarSystem, OWScene.EyeOfTheUniverse };
-            var title = new[] { OWScene.TitleScreen };
-
             ShipTools.Patches.Patch();
             ControllerInput.Patches.Patch();
             Dialogue.Patches.Patch();
-            new EffectFixes(false, playableScenes);
+            new EffectFixes();
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
             HoldTranslator.Patches.Patch();
             HoldMallowStick.Patches.Patch();
             LaserPointer.Patches.Patch();
-            PlayerBodyPosition.Patches.Patch();
-            new ForceSettings(true, title);
+            new PlayerBodyPosition();
+            new ForceSettings();
             HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
             VRTutorial.Patches.Patch();
@@ -50,7 +47,6 @@ namespace NomaiVR
             // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
             gameObject.AddComponent<ControllerInput>();
-            //gameObject.AddComponent<ForceSettings>();
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
@@ -74,7 +70,6 @@ namespace NomaiVR
             if (isSolarSystem || isEye)
             {
                 Common.InitGame();
-                nonPersistentParent.AddComponent<PlayerBodyPosition>();
                 nonPersistentParent.AddComponent<Dialogue>();
                 nonPersistentParent.AddComponent<HandsController>();
                 nonPersistentParent.AddComponent<FeetMarker>();

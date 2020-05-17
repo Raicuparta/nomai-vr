@@ -5,7 +5,8 @@ namespace NomaiVR
 {
     public class EffectFixes : NomaiVRModule<EffectFixes.Behaviour, EffectFixes.Behaviour.Patch>
     {
-        public EffectFixes(bool isPersistent, OWScene[] scenes) : base(isPersistent, scenes) { }
+        protected override bool isPersistent => false;
+        protected override OWScene[] scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
