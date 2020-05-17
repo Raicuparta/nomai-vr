@@ -27,7 +27,7 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
-            ShipTools.Patches.Patch();
+            new ShipTools();
             ControllerInput.Patches.Patch();
             new Dialogue();
             new EffectFixes();
@@ -74,7 +74,6 @@ namespace NomaiVR
                 Common.InitGame();
                 if (isSolarSystem)
                 {
-                    nonPersistentParent.AddComponent<ShipTools>();
                     nonPersistentParent.AddComponent<SolarSystemMap>();
                 }
             }
