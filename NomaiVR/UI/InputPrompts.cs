@@ -40,26 +40,26 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patches), nameof(RemoveProbePrompts));
-                    NomaiVR.Post<ProbePromptController>("Awake", typeof(Patches), nameof(ChangeProbePrompts));
+                    NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patch), nameof(RemoveProbePrompts));
+                    NomaiVR.Post<ProbePromptController>("Awake", typeof(Patch), nameof(ChangeProbePrompts));
 
-                    NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patches), nameof(RemoveShipPrompts));
-                    NomaiVR.Post<ShipPromptController>("Awake", typeof(Patches), nameof(ChangeShipPrompts));
+                    NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patch), nameof(RemoveShipPrompts));
+                    NomaiVR.Post<ShipPromptController>("Awake", typeof(Patch), nameof(ChangeShipPrompts));
 
-                    NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patches), nameof(RemoveTranslatorPrompts));
-                    NomaiVR.Post<NomaiTranslatorProp>("Awake", typeof(Patches), nameof(ChangeTranslatorPrompts));
+                    NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patch), nameof(RemoveTranslatorPrompts));
+                    NomaiVR.Post<NomaiTranslatorProp>("Awake", typeof(Patch), nameof(ChangeTranslatorPrompts));
 
-                    NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patches), nameof(RemoveSignalscopePrompts));
-                    NomaiVR.Post<SignalscopePromptController>("Awake", typeof(Patches), nameof(ChangeSignalscopePrompts));
+                    NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patch), nameof(RemoveSignalscopePrompts));
+                    NomaiVR.Post<SignalscopePromptController>("Awake", typeof(Patch), nameof(ChangeSignalscopePrompts));
 
-                    NomaiVR.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patches), nameof(RemoveSatellitePrompts));
-                    NomaiVR.Post<SatelliteSnapshotController>("Awake", typeof(Patches), nameof(ChangeSatellitePrompts));
+                    NomaiVR.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patch), nameof(RemoveSatellitePrompts));
+                    NomaiVR.Post<SatelliteSnapshotController>("Awake", typeof(Patch), nameof(ChangeSatellitePrompts));
 
-                    NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patches), nameof(RemoveJoystickPrompts));
-                    NomaiVR.Post<RoastingStickController>("LateInitialize", typeof(Patches), nameof(RemoveRoastingStickPrompts));
-                    NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patches), nameof(RemoveToolModePrompts));
+                    NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patch), nameof(RemoveJoystickPrompts));
+                    NomaiVR.Post<RoastingStickController>("LateInitialize", typeof(Patch), nameof(RemoveRoastingStickPrompts));
+                    NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patch), nameof(RemoveToolModePrompts));
 
-                    NomaiVR.Pre<LockOnReticule>("Init", typeof(Patches), nameof(InitLockOnReticule));
+                    NomaiVR.Pre<LockOnReticule>("Init", typeof(Patch), nameof(InitLockOnReticule));
 
                     // Prevent probe launcher from moving the prompts around.
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshot");
@@ -70,7 +70,7 @@ namespace NomaiVR
                     // Load new icons.
                     var harmony = HarmonyInstance.Create("nomaivr");
                     var initMethod = typeof(InputTranslator).GetMethod("GetButtonTexture", new[] { typeof(XboxButton) });
-                    var harmonyMethod = new HarmonyMethod(typeof(Patches), nameof(PostInitTranslator));
+                    var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
                     harmony.Patch(initMethod, null, harmonyMethod);
 
                     var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/input-icons");
