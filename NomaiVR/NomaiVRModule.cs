@@ -10,6 +10,7 @@ namespace NomaiVR
     {
         public static Type EmptyPatch = typeof(EmptyPatchClass);
         public static Type EmptyBehaviour = typeof(EmptyBehaviourClass);
+
         protected static OWScene[] PlayableScenes = new[] { OWScene.SolarSystem, OWScene.EyeOfTheUniverse };
         protected static OWScene[] TitleScene = new[] { OWScene.TitleScreen };
 
