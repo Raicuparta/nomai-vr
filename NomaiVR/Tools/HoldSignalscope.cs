@@ -100,7 +100,7 @@ namespace NomaiVR
 
             _lensCamera = _lens.GetComponentInChildren<Camera>();
             _lensCamera.gameObject.SetActive(false);
-            _lensCamera.cullingMask = EffectFixes.cullingMask == -1 ? Locator.GetPlayerCamera().cullingMask : EffectFixes.cullingMask;
+            _lensCamera.cullingMask = EffectFixes.Behaviour.cullingMask == -1 ? Locator.GetPlayerCamera().cullingMask : EffectFixes.Behaviour.cullingMask;
             _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI")) & ~(1 << LayerMask.NameToLayer("VisibleToPlayer"));
             _lensCamera.fieldOfView = 5;
             _lensCamera.transform.parent = null;

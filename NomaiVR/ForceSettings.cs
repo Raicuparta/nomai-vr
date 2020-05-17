@@ -1,5 +1,4 @@
 ﻿using OWML.ModHelper.Events;
-using System;
 using UnityEngine;
 using Valve.VR;
 
@@ -7,6 +6,8 @@ namespace NomaiVR
 {
     public class ForceSettings : NomaiVRModule<ForceSettings.Behaviour, ForceSettings.Patch>
     {
+        public ForceSettings(bool isPersistent, OWScene[] scenes) : base(isPersistent, scenes) { }
+
         public class Behaviour : MonoBehaviour
         {
             void Awake()

@@ -1,9 +1,6 @@
-﻿using OWML.ModHelper.Events;
-using System;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using System.Linq;
-using System.Text;
-using UnityEngine;
+using System;
 
 namespace NomaiVR
 {
@@ -11,26 +8,58 @@ namespace NomaiVR
         where Patch : NomaiVRPatch, new()
         where Behaviour : MonoBehaviour
     {
-        public NomaiVRModule()
+        public static Type EmptyPatch = typeof(EmptyPatchClass);
+        public static Type EmptyBehaviour = typeof(EmptyBehaviourClass);
+
+        private bool _isPersistent;
+        private OWScene[] _scenes;
+
+        public NomaiVRModule(bool isPersistent, OWScene[] scenes)
         {
-            NomaiVR.persistentParent.AddComponent<Behaviour>();
+            _isPersistent = isPersistent;
+            _scenes = scenes;
+
+            if (scenes.Contains(LoadManager.GetCurrentScene()))
+            {
+                SetupBehaviour();
+            }
+
+            LoadManager.OnCompleteSceneLoad += OnSceneLoad;
+
+            SetupPatch();
+        }
+
+        private void OnSceneLoad(OWScene originalScene, OWScene loadScene)
+        {
+            if (_scenes.Contains(loadScene))
+            {
+                SetupBehaviour();
+            }
+        }
+
+        private void SetupBehaviour()
+        {
+            var gameObject = new GameObject();
+            gameObject.AddComponent<Behaviour>();
+            if (_isPersistent)
+            {
+                gameObject.AddComponent<PersistObject>();
+            }
+        }
+
+        private void SetupPatch()
+        {
             var patch = new Patch();
             patch.ApplyPatches();
         }
-    }
 
-    public abstract class NomaiVRModule<Behaviour>
-        where Behaviour : MonoBehaviour
-    {
-        public NomaiVRModule()
+        public class EmptyPatchClass : NomaiVRPatch
         {
-            NomaiVR.persistentParent.AddComponent<Behaviour>();
+            public override void ApplyPatches()
+            { }
         }
-    }
 
-    public abstract class NomaiVRModule
-    {
-        public NomaiVRModule()
+        public class EmptyBehaviourClass : MonoBehaviour
         { }
     }
 }

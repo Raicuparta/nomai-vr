@@ -14,6 +14,7 @@ namespace NomaiVR
         public static int RefreshRate;
         public static ModSaveFile SaveFile;
         public static GameObject persistentParent;
+        public static GameObject nonPersistentParent;
 
         void Start()
         {
@@ -26,18 +27,20 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
+            var playableScenes = new[] { OWScene.SolarSystem, OWScene.EyeOfTheUniverse };
+            var title = new[] { OWScene.TitleScreen };
+
             ShipTools.Patches.Patch();
             ControllerInput.Patches.Patch();
             Dialogue.Patches.Patch();
-            EffectFixes.Patches.Patch();
+            new EffectFixes(false, playableScenes);
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
             HoldTranslator.Patches.Patch();
             HoldMallowStick.Patches.Patch();
             LaserPointer.Patches.Patch();
             PlayerBodyPosition.Patches.Patch();
-            //ForceSettings.Patches.Patch();
-            new ForceSettings();
+            new ForceSettings(true, title);
             HelmetHUD.Patches.Patch();
             InputPrompts.Patches.Patch();
             VRTutorial.Patches.Patch();
@@ -66,31 +69,30 @@ namespace NomaiVR
             // The GameObject associated with this ModBehaviour is set to persist between scene loads.
             // Some modules need to be restarted on every scene load.
             // This GameObject is for them.
-            var nonPersistentObject = new GameObject();
+            nonPersistentParent = new GameObject();
 
             if (isSolarSystem || isEye)
             {
                 Common.InitGame();
-                nonPersistentObject.AddComponent<EffectFixes>();
-                nonPersistentObject.AddComponent<PlayerBodyPosition>();
-                nonPersistentObject.AddComponent<Dialogue>();
-                nonPersistentObject.AddComponent<HandsController>();
-                nonPersistentObject.AddComponent<FeetMarker>();
-                nonPersistentObject.AddComponent<InputPrompts>();
-                nonPersistentObject.AddComponent<HelmetHUD>();
-                nonPersistentObject.AddComponent<VRTutorial>();
+                nonPersistentParent.AddComponent<PlayerBodyPosition>();
+                nonPersistentParent.AddComponent<Dialogue>();
+                nonPersistentParent.AddComponent<HandsController>();
+                nonPersistentParent.AddComponent<FeetMarker>();
+                nonPersistentParent.AddComponent<InputPrompts>();
+                nonPersistentParent.AddComponent<HelmetHUD>();
+                nonPersistentParent.AddComponent<VRTutorial>();
                 if (isSolarSystem)
                 {
-                    nonPersistentObject.AddComponent<ShipTools>();
-                    nonPersistentObject.AddComponent<SolarSystemMap>();
+                    nonPersistentParent.AddComponent<ShipTools>();
+                    nonPersistentParent.AddComponent<SolarSystemMap>();
                 }
             }
             else if (isPostCredits)
             {
-                nonPersistentObject.AddComponent<PostCreditsScene>();
+                nonPersistentParent.AddComponent<PostCreditsScene>();
             }
 
-            nonPersistentObject.AddComponent<Menus>();
+            nonPersistentParent.AddComponent<Menus>();
         }
 
         public override void Configure(IModConfig config)
