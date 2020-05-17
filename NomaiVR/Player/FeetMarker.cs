@@ -2,27 +2,33 @@
 
 namespace NomaiVR
 {
-    class FeetMarker : MonoBehaviour
+    public class FeetMarker : NomaiVRModule<FeetMarker.Behaviour, NomaiVRModule.EmptyPatch>
     {
-        static AssetBundle _assetBundle;
-        static GameObject _prefab;
+        protected override bool isPersistent => false;
+        protected override OWScene[] scenes => PlayableScenes;
 
-        void Start()
+        public class Behaviour : MonoBehaviour
         {
-            if (!_assetBundle)
+            static AssetBundle _assetBundle;
+            static GameObject _prefab;
+
+            void Start()
             {
-                _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/feetposition");
-                _prefab = _assetBundle.LoadAsset<GameObject>("assets/feetposition.prefab");
+                if (!_assetBundle)
+                {
+                    _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/feetposition");
+                    _prefab = _assetBundle.LoadAsset<GameObject>("assets/feetposition.prefab");
+                }
+
+                var marker = Instantiate(_prefab).transform;
+                marker.parent = Locator.GetPlayerTransform();
+                marker.position = Locator.GetPlayerTransform().Find("Traveller_HEA_Player_v2").position;
+                marker.localRotation = Quaternion.Euler(90, 0, 0);
+                marker.localScale *= 0.75f;
+                Common.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
+
+                marker.GetComponentInChildren<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
             }
-
-            var marker = Instantiate(_prefab).transform;
-            marker.parent = Locator.GetPlayerTransform();
-            marker.position = Locator.GetPlayerTransform().Find("Traveller_HEA_Player_v2").position;
-            marker.localRotation = Quaternion.Euler(90, 0, 0);
-            marker.localScale *= 0.75f;
-            Common.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
-
-            marker.GetComponentInChildren<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
         }
     }
 }
