@@ -42,7 +42,7 @@ namespace NomaiVR
             new FeetMarker();
             new HelmetHUD();
             new InputPrompts();
-            VRTutorial.Patches.Patch();
+            new VRTutorial();
             Menus.Patches.Patch();
 
 
@@ -72,7 +72,6 @@ namespace NomaiVR
             if (isSolarSystem || isEye)
             {
                 Common.InitGame();
-                nonPersistentParent.AddComponent<VRTutorial>();
                 if (isSolarSystem)
                 {
                     nonPersistentParent.AddComponent<ShipTools>();

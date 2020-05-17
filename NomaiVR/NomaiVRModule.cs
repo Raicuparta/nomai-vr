@@ -10,6 +10,7 @@ namespace NomaiVR
     {
         protected static OWScene[] PlayableScenes = new[] { OWScene.SolarSystem, OWScene.EyeOfTheUniverse };
         protected static OWScene[] TitleScene = new[] { OWScene.TitleScreen };
+        protected static OWScene[] SolarSystemScene = new[] { OWScene.SolarSystem };
 
         protected abstract bool isPersistent { get; }
         protected abstract OWScene[] scenes { get; }
