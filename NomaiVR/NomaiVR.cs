@@ -59,11 +59,13 @@ namespace NomaiVR
             DebugMode = config.GetSettingsValue<bool>("debugMode");
             RefreshRate = config.GetSettingsValue<int>("overrideRefreshRate");
             XRSettings.showDeviceView = config.GetSettingsValue<bool>("showMirrorView");
-            // Prevent application from stealing mouse focus;
-            ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Application.runInBackground = true;
+
+            if (config.GetSettingsValue<bool>("preventCursorLock"))
+            {
+                ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
 
         public static void Log(params object[] strings)

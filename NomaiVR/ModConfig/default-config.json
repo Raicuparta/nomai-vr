@@ -4,6 +4,7 @@
   "settings": {
     "showMirrorView": true,
     "debugMode": true,
-    "overrideRefreshRate": 0
+    "overrideRefreshRate": 0,
+    "preventCursorLock": true
   }
 }
