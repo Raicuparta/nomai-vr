@@ -9,7 +9,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Awake()
+            void Start()
             {
                 var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
                 detector.other = HandsController.Behaviour.RightHand;

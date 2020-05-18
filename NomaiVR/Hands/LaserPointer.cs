@@ -13,7 +13,7 @@ namespace NomaiVR
             static FirstPersonManipulator _manipulator;
             public static Transform Laser;
 
-            void Awake()
+            void Start()
             {
                 Laser = new GameObject("Laser").transform;
                 Laser.gameObject.AddComponent<FollowTarget>();

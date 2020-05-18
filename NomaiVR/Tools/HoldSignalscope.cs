@@ -18,7 +18,7 @@ namespace NomaiVR
             static Transform _lens;
             static GameObject _lensPrefab;
 
-            void Awake()
+            void Start()
             {
                 if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
                 {

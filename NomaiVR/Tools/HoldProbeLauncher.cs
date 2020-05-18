@@ -14,7 +14,7 @@ namespace NomaiVR
             GameObject _probeLauncherHolster;
             static ProbeLauncherUI _probeUI;
 
-            void Awake()
+            void Start()
             {
                 var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
                 probeLauncher.localScale = Vector3.one * 0.35f;

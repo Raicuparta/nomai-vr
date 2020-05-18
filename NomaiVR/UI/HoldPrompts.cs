@@ -11,7 +11,7 @@ namespace NomaiVR
         {
             Transform _holdTransform;
 
-            void Awake()
+            void Start()
             {
                 var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
                 canvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");

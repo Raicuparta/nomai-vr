@@ -11,7 +11,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Awake()
+            void Start()
             {
                 var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 

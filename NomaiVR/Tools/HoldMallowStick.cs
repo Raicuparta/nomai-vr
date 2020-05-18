@@ -10,7 +10,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Awake()
+            void Start()
             {
 
                 var scale = Vector3.one * 0.75f;

@@ -18,15 +18,11 @@ namespace NomaiVR
 
         public ProximityDetector detector { get; private set; }
 
-        void Awake()
+        void Start()
         {
             detector = gameObject.AddComponent<ProximityDetector>();
             detector.other = HandsController.Behaviour.RightHand;
             detector.minDistance = 0.2f;
-        }
-
-        void Start()
-        {
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
 

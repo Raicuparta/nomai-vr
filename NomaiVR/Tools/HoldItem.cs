@@ -11,7 +11,7 @@ namespace NomaiVR
         {
             ItemTool _itemTool;
 
-            void Awake()
+            void Start()
             {
                 _itemTool = FindObjectOfType<ItemTool>();
                 _itemTool.transform.localScale = 1.8f * Vector3.one;
