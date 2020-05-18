@@ -16,7 +16,7 @@ namespace NomaiVR
 
         void Start()
         {
-            Log("Start Main");
+            Log("Start NomaiVR");
 
             SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
             Helper = ModHelper;
@@ -65,11 +65,11 @@ namespace NomaiVR
             Application.runInBackground = true;
         }
 
-        public static void Log(params string[] strings)
+        public static void Log(params object[] strings)
         {
             if (DebugMode && Helper != null)
             {
-                Helper.Console.WriteLine(string.Join(" ", strings));
+                Helper.Console.WriteLine(strings);
             }
         }
 

@@ -28,10 +28,7 @@ namespace NomaiVR
             SetupPatch();
         }
 
-        private bool IsSceneRelevant(OWScene scene)
-        {
-            return scenes.Length == 0 ? true : scenes.Contains(scene);
-        }
+        protected virtual void OnSceneLoad() { }
 
         private void OnSceneLoad(OWScene originalScene, OWScene loadScene)
         {
@@ -42,12 +39,22 @@ namespace NomaiVR
             }
         }
 
-        protected virtual void OnSceneLoad() { }
+        private bool IsSceneRelevant(OWScene scene)
+        {
+            return scenes.Length == 0 ? true : scenes.Contains(scene);
+        }
 
         private void SetupBehaviour()
         {
+            if (typeof(Behaviour) == typeof(NomaiVRModule.EmptyBehaviour))
+            {
+                return;
+            }
+
+            NomaiVR.Log("Creating NomaiVR behaviour for", this.GetType().Name);
             var gameObject = new GameObject();
             gameObject.AddComponent<Behaviour>();
+
             if (isPersistent)
             {
                 gameObject.AddComponent<PersistObject>();
@@ -56,6 +63,12 @@ namespace NomaiVR
 
         private void SetupPatch()
         {
+            if (typeof(Patch) == typeof(NomaiVRModule.EmptyPatch))
+            {
+                return;
+            }
+
+            NomaiVR.Log("Applying NomaiVR patches for", this.GetType().Name);
             var patch = new Patch();
             patch.ApplyPatches();
         }

@@ -30,8 +30,6 @@ namespace NomaiVR
 
             void Start()
             {
-                NomaiVR.Log("Started ControllerInput");
-
                 _instance = this;
                 _buttons = new Dictionary<XboxButton, float>();
                 _singleAxes = new Dictionary<string, float>();

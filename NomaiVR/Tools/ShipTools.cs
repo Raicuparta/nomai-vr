@@ -23,8 +23,6 @@ namespace NomaiVR
 
             void Awake()
             {
-                NomaiVR.Log("Start Ship Tools");
-
                 _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
                 _cockpitController = FindObjectOfType<ShipCockpitController>();
                 _mapGridRenderer = FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;

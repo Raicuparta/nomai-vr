@@ -16,8 +16,6 @@ namespace NomaiVR
 
             void Start()
             {
-                NomaiVR.Log("Start PlayerBodyPosition");
-
                 // This component is messing with our ability to read the VR camera's rotation.
                 // Seems to be responsible for controlling the camera rotation with the mouse / joystick.
                 PlayerCameraController playerCameraController = Camera.main.GetComponent<PlayerCameraController>();

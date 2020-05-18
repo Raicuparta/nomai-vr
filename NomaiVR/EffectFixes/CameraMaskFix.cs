@@ -19,8 +19,6 @@ namespace NomaiVR
             {
                 _instance = this;
 
-                NomaiVR.Log("Started EffectFixes");
-
                 _camera = Locator.GetPlayerCamera();
 
                 if (LoadManager.GetPreviousScene() == OWScene.TitleScreen && LoadManager.GetCurrentScene() == OWScene.SolarSystem)

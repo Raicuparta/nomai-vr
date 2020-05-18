@@ -20,8 +20,6 @@ namespace NomaiVR
 
             void Start()
             {
-                NomaiVR.Log("Start Menus");
-
                 // Make UI elements draw on top of everything.
                 Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
 

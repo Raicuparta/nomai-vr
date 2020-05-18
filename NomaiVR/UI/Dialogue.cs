@@ -16,8 +16,6 @@ namespace NomaiVR
 
             void Start()
             {
-                NomaiVR.Log("Started Dialogue Fixes");
-
                 _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
                 _canvasTransform.localScale *= _dialogeRenderSize;

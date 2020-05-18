@@ -18,8 +18,6 @@ namespace NomaiVR
 
             void Start()
             {
-                NomaiVR.Log("Start VRTutorial");
-
                 queue = new List<TutorialInput>();
                 controllerModels = new List<SteamVR_RenderModel>();
 
