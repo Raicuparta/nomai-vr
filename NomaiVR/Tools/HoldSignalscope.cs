@@ -127,7 +127,7 @@ namespace NomaiVR
 
         void Update()
         {
-            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
+            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && Tools.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
             {
                 _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
             }
@@ -145,7 +145,7 @@ namespace NomaiVR
 
             static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)
             {
-                if (____gatherWithScope && !____waitToFlickerOut && Locator.GetToolModeSwapper().IsInToolMode(ToolMode.SignalScope))
+                if (____gatherWithScope && !____waitToFlickerOut && Tools.Swapper.IsInToolMode(ToolMode.SignalScope))
                 {
                     Vector3 from = __instance.transform.position - _lensCamera.transform.position;
                     float num = Vector3.Angle(from, _lensCamera.transform.forward);

@@ -25,7 +25,7 @@ namespace NomaiVR
 
             void LateUpdate()
             {
-                var isInShip = Locator.GetToolModeSwapper().GetToolGroup() == ToolGroup.Ship;
+                var isInShip = Tools.Swapper.GetToolGroup() == ToolGroup.Ship;
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
                 if (!isInShip && !isUsingFixedProbeTool)
                 {

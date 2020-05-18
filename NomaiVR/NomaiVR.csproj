@@ -96,7 +96,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Common.cs" />
+    <Compile Include="Helpers\Layers.cs" />
+    <Compile Include="Helpers\Scenes.cs" />
     <Compile Include="Helpers\Timers.cs" />
+    <Compile Include="Helpers\Tools.cs" />
     <Compile Include="ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
     <Compile Include="NomaiVRModule.cs" />

@@ -35,7 +35,7 @@ namespace NomaiVR
                 _camera = Camera.main.transform;
                 _cameraParent = new GameObject().transform;
                 _playArea = new GameObject().transform;
-                _playArea.parent = Common.PlayerBody.transform;
+                _playArea.parent = Locator.GetPlayerTransform();
                 _playArea.position = Common.PlayerHead.position;
                 _playArea.rotation = Common.PlayerHead.rotation;
                 _cameraParent.parent = _playArea;

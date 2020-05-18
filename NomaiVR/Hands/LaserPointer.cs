@@ -33,11 +33,11 @@ namespace NomaiVR
 
         void Update()
         {
-            if (Laser.gameObject.activeSelf && Common.IsUsingAnyTool())
+            if (Laser.gameObject.activeSelf && Tools.IsUsingAnyTool())
             {
                 Laser.gameObject.SetActive(false);
             }
-            else if (!Laser.gameObject.activeSelf && !Common.IsUsingAnyTool())
+            else if (!Laser.gameObject.activeSelf && !Tools.IsUsingAnyTool())
             {
                 Laser.gameObject.SetActive(true);
             }
@@ -75,7 +75,7 @@ namespace NomaiVR
             )
             {
                 float num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
-                var swapper = Locator.GetToolModeSwapper();
+                var swapper = Tools.Swapper;
                 var allowInteraction = swapper.IsInToolMode(ToolMode.None) || swapper.IsInToolMode(ToolMode.Item);
                 ____focused = allowInteraction && num <= ____viewingWindow;
                 var Base = __instance as SingleInteractionVolume;

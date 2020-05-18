@@ -78,21 +78,22 @@ namespace NomaiVR
             {
                 var value = newState ? 1 : 0;
 
-                if (!Common.IsInGame())
+                if (!Scenes.IsInGame())
                 {
                     _buttons[XboxButton.X] = value;
                     return;
                 }
 
-                var isInShip = Common.ToolSwapper.GetToolGroup() == ToolGroup.Ship;
-                var isUsingSignalscope = Common.ToolSwapper.IsInToolMode(ToolMode.SignalScope);
-                var isUsingProbeLauncher = Common.ToolSwapper.IsInToolMode(ToolMode.Probe);
+                var toolSwapper = Tools.Swapper;
+                var isInShip = toolSwapper.GetToolGroup() == ToolGroup.Ship;
+                var isUsingSignalscope = toolSwapper.IsInToolMode(ToolMode.SignalScope);
+                var isUsingProbeLauncher = toolSwapper.IsInToolMode(ToolMode.Probe);
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
-                if (!isUsingFixedProbeTool && !Common.IsUsingAnyTool())
+                if (!isUsingFixedProbeTool && !Tools.IsUsingAnyTool())
                 {
                     var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
-                    var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Locator.GetToolModeSwapper().IsSuitPatchingBlocked();
+                    var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Tools.Swapper.IsSuitPatchingBlocked();
 
                     if (isRepairPromptVisible && !isInShip && !canRepairSuit)
                     {
