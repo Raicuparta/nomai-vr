@@ -41,6 +41,7 @@ namespace NomaiVR
             new HoldProbeLauncher();
             new HoldSignalscope();
             new HoldTranslator();
+            new HoldItem();
             new LaserPointer();
             new PlayerBodyPosition();
             new FeetMarker();

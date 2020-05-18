@@ -53,7 +53,6 @@ namespace NomaiVR
                 _wrapper.localPosition = Camera.main.transform.localPosition;
 
                 HideBody();
-                gameObject.AddComponent<HoldItem>();
                 gameObject.AddComponent<HoldPrompts>();
             }
 
