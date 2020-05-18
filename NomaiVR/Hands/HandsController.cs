@@ -54,7 +54,6 @@ namespace NomaiVR
 
                 HideBody();
                 gameObject.AddComponent<HoldTranslator>();
-                gameObject.AddComponent<HoldSignalscope>();
                 gameObject.AddComponent<HoldItem>();
                 gameObject.AddComponent<HoldPrompts>();
                 gameObject.AddComponent<LaserPointer>();
