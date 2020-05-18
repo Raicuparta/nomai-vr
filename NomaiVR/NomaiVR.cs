@@ -50,6 +50,7 @@ namespace NomaiVR
             new HelmetHUD();
             new InputPrompts();
             new VRTutorial();
+            new PostCreditsFix();
             new Menus();
 
             Application.runInBackground = true;
@@ -65,11 +66,6 @@ namespace NomaiVR
             // Some modules need to be restarted on every scene load.
             // This GameObject is for them.
             nonPersistentParent = new GameObject();
-
-            if (isPostCredits)
-            {
-                nonPersistentParent.AddComponent<PostCreditsScene>();
-            }
         }
 
         public override void Configure(IModConfig config)

@@ -142,7 +142,7 @@
     <Compile Include="Input\VRTutorial.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\PostCreditsScene.cs" />
+    <Compile Include="EffectFixes\PostCreditsFix.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bindings\actions.json" />
