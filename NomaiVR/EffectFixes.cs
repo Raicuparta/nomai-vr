@@ -21,14 +21,6 @@ namespace NomaiVR
 
                 NomaiVR.Log("Started EffectFixes");
 
-                // Disable underwater effect.
-                FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
-
-                // Disable water entering and exiting effect.
-                var visorEffects = FindObjectOfType<VisorEffectController>();
-                visorEffects.SetValue("_waterClearLength", 0);
-                visorEffects.SetValue("_waterFadeInLength", 0);
-
                 _camera = Locator.GetPlayerCamera();
 
                 if (LoadManager.GetPreviousScene() == OWScene.TitleScreen && LoadManager.GetCurrentScene() == OWScene.SolarSystem)
