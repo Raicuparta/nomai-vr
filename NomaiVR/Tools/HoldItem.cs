@@ -53,11 +53,11 @@ namespace NomaiVR
 
         void Update()
         {
-            if (IsActive() && Tools.IsUsingAnyTool())
+            if (IsActive() && ToolHelper.IsUsingAnyTool())
             {
                 SetActive(false);
             }
-            else if (!IsActive() && !Tools.IsUsingAnyTool())
+            else if (!IsActive() && !ToolHelper.IsUsingAnyTool())
             {
                 SetActive(true);
             }

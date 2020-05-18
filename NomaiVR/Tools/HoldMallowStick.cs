@@ -45,7 +45,7 @@ namespace NomaiVR
 
             // Eat mallow by moving it to player head.
             var eatDetector = mallow.gameObject.AddComponent<ProximityDetector>();
-            eatDetector.other = Common.PlayerHead;
+            eatDetector.other = PlayerHelper.PlayerHead;
             eatDetector.minDistance = 0.2f;
             eatDetector.onEnter += EatMallow;
 

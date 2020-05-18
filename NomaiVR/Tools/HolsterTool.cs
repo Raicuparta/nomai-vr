@@ -37,7 +37,7 @@ namespace NomaiVR
         void Equip()
         {
             onEquip?.Invoke();
-            Tools.Swapper.EquipToolMode(mode);
+            ToolHelper.Swapper.EquipToolMode(mode);
 
             if (mode == ToolMode.Translator)
             {
@@ -48,7 +48,7 @@ namespace NomaiVR
         void Unequip()
         {
             onUnequip?.Invoke();
-            Tools.Swapper.UnequipTool();
+            ToolHelper.Swapper.UnequipTool();
         }
 
         void SetVisible(bool visible)
@@ -62,7 +62,7 @@ namespace NomaiVR
 
         bool IsEquipped()
         {
-            return Tools.Swapper.IsInToolMode(mode, ToolGroup.Suit);
+            return ToolHelper.Swapper.IsInToolMode(mode, ToolGroup.Suit);
         }
 
         void UpdateGrab()
@@ -88,7 +88,7 @@ namespace NomaiVR
         void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
-            var shouldBeVisible = !Tools.IsUsingAnyTool() && isCharacterMode;
+            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode;
 
             if (!_visible && shouldBeVisible)
             {

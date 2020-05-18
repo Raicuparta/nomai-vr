@@ -17,7 +17,7 @@ namespace NomaiVR
 
         void OnDetectorEnter()
         {
-            if (Tools.Swapper.IsInToolMode(ToolMode.Translator))
+            if (ToolHelper.Swapper.IsInToolMode(ToolMode.Translator))
             {
                 var translator = FindObjectOfType<NomaiTranslatorProp>();
                 var currentTextId = translator.GetValue<int>("_currentTextID");

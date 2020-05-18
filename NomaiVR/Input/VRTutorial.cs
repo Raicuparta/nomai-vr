@@ -218,7 +218,7 @@ namespace NomaiVR
                 {
                     action.HideOrigins();
 
-                    Timers.ExecuteAfter(() =>
+                    TimerHelper.ExecuteAfter(() =>
                     {
                         isShowing = false;
                         isDone = true;

@@ -95,11 +95,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Common.cs" />
-    <Compile Include="Helpers\Layers.cs" />
-    <Compile Include="Helpers\Scenes.cs" />
-    <Compile Include="Helpers\Timers.cs" />
-    <Compile Include="Helpers\Tools.cs" />
+    <Compile Include="Helpers\LayerHelper.cs" />
+    <Compile Include="Helpers\PlayerHelper.cs" />
+    <Compile Include="Helpers\SceneHelper.cs" />
+    <Compile Include="Helpers\TimerHelper.cs" />
+    <Compile Include="Helpers\ToolHelper.cs" />
     <Compile Include="ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
     <Compile Include="NomaiVRModule.cs" />

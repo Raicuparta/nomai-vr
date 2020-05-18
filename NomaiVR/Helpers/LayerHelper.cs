@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public static class Layers
+    public static class LayerHelper
     {
         public static List<GameObject> GetObjectsInLayer(string layerName)
         {

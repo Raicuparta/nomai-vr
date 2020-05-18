@@ -26,7 +26,14 @@ namespace NomaiVR
                     playerCameraController.enabled = false;
                 }
 
+                AdjustPlayerHeadPosition();
                 SetupCamera();
+            }
+
+            private void AdjustPlayerHeadPosition()
+            {
+                var playerhead = PlayerHelper.PlayerHead;
+                playerhead.localPosition = new Vector3(playerhead.localPosition.x, playerhead.localPosition.y, 0);
             }
 
             private void SetupCamera()
@@ -36,26 +43,26 @@ namespace NomaiVR
                 _cameraParent = new GameObject().transform;
                 _playArea = new GameObject().transform;
                 _playArea.parent = Locator.GetPlayerTransform();
-                _playArea.position = Common.PlayerHead.position;
-                _playArea.rotation = Common.PlayerHead.rotation;
+                _playArea.position = PlayerHelper.PlayerHead.position;
+                _playArea.rotation = PlayerHelper.PlayerHead.rotation;
                 _cameraParent.parent = _playArea;
                 _cameraParent.localRotation = Quaternion.identity;
                 _camera.parent = _cameraParent;
 
-                Vector3 movement = Common.PlayerHead.position - _camera.position;
+                Vector3 movement = PlayerHelper.PlayerHead.position - _camera.position;
                 _cameraParent.position += movement;
 
             }
 
             void MoveCameraToPlayerHead()
             {
-                Vector3 movement = Common.PlayerHead.position - _camera.position;
+                Vector3 movement = PlayerHelper.PlayerHead.position - _camera.position;
                 _cameraParent.position += movement;
             }
 
             void Update()
             {
-                var cameraToHead = Vector3.ProjectOnPlane(Common.PlayerHead.position - _camera.position, Common.PlayerHead.up);
+                var cameraToHead = Vector3.ProjectOnPlane(PlayerHelper.PlayerHead.position - _camera.position, PlayerHelper.PlayerHead.up);
 
                 if (cameraToHead.sqrMagnitude > 0.5f)
                 {

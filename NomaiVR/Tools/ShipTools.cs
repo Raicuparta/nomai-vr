@@ -43,11 +43,11 @@ namespace NomaiVR
                     SetEnabled(false);
                 }
 
-                if (_referenceFrameTracker.isActiveAndEnabled && Tools.IsUsingAnyTool())
+                if (_referenceFrameTracker.isActiveAndEnabled && ToolHelper.IsUsingAnyTool())
                 {
                     _referenceFrameTracker.enabled = false;
                 }
-                else if (!_referenceFrameTracker.isActiveAndEnabled && !Tools.IsUsingAnyTool())
+                else if (!_referenceFrameTracker.isActiveAndEnabled && !ToolHelper.IsUsingAnyTool())
                 {
                     _referenceFrameTracker.enabled = true;
                 }

@@ -32,7 +32,7 @@ namespace NomaiVR
         {
             if (Camera.main)
             {
-                _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, Common.PlayerHead.up);
+                _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, PlayerHelper.PlayerHead.up);
             }
         }
     }

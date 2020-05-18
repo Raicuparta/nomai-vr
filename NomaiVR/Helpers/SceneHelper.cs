@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NomaiVR
 {
-    public static class Scenes
+    public static class SceneHelper
     {
         public static bool IsInGame()
         {

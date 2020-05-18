@@ -27,7 +27,6 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
-            new Common();
             new ShipTools();
             new ControllerInput();
             new Dialogue();

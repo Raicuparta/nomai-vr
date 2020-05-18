@@ -66,7 +66,7 @@ namespace NomaiVR
 
             var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
             SetupSignalscopeUI(helmetOn);
-            Layers.ChangeLayerRecursive(helmetOn.gameObject, "UI");
+            LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
             SetupScopeLens();
         }
 
@@ -127,7 +127,7 @@ namespace NomaiVR
 
         void Update()
         {
-            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && Tools.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
+            if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
             {
                 _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
             }
@@ -145,7 +145,7 @@ namespace NomaiVR
 
             static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)
             {
-                if (____gatherWithScope && !____waitToFlickerOut && Tools.Swapper.IsInToolMode(ToolMode.SignalScope))
+                if (____gatherWithScope && !____waitToFlickerOut && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope))
                 {
                     Vector3 from = __instance.transform.position - _lensCamera.transform.position;
                     float num = Vector3.Angle(from, _lensCamera.transform.forward);

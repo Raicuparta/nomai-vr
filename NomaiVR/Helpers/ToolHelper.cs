@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NomaiVR
 {
-    public static class Tools
+    public static class ToolHelper
     {
         public static ToolModeSwapper Swapper => Locator.GetToolModeSwapper();
 

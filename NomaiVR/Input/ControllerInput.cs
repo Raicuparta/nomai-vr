@@ -78,22 +78,22 @@ namespace NomaiVR
             {
                 var value = newState ? 1 : 0;
 
-                if (!Scenes.IsInGame())
+                if (!SceneHelper.IsInGame())
                 {
                     _buttons[XboxButton.X] = value;
                     return;
                 }
 
-                var toolSwapper = Tools.Swapper;
+                var toolSwapper = ToolHelper.Swapper;
                 var isInShip = toolSwapper.GetToolGroup() == ToolGroup.Ship;
                 var isUsingSignalscope = toolSwapper.IsInToolMode(ToolMode.SignalScope);
                 var isUsingProbeLauncher = toolSwapper.IsInToolMode(ToolMode.Probe);
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
-                if (!isUsingFixedProbeTool && !Tools.IsUsingAnyTool())
+                if (!isUsingFixedProbeTool && !ToolHelper.IsUsingAnyTool())
                 {
                     var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
-                    var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !Tools.Swapper.IsSuitPatchingBlocked();
+                    var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
 
                     if (isRepairPromptVisible && !isInShip && !canRepairSuit)
                     {

@@ -31,9 +31,9 @@ namespace NomaiVR
             {
                 if (_attentionPoint != null && _canvasTransform != null)
                 {
-                    var headPosition = Common.PlayerHead.position;
+                    var headPosition = PlayerHelper.PlayerHead.position;
 
-                    _canvasTransform.LookAt(2 * _attentionPoint.position - headPosition, Common.PlayerHead.up);
+                    _canvasTransform.LookAt(2 * _attentionPoint.position - headPosition, PlayerHelper.PlayerHead.up);
 
                     // Move so it is 1 unit away from the player
                     var offset = (_attentionPoint.position - headPosition).normalized;
