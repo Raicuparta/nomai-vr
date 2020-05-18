@@ -12,10 +12,6 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            static Texture2D _holdTexture;
-            static Texture2D _interactTexture;
-            static Texture2D _jumpTexture;
-            static Texture2D _backTexture;
             static List<ScreenPrompt> _toolUnequipPrompts;
             static PromptManager _manager {
                 get {
@@ -73,32 +69,26 @@ namespace NomaiVR
                     var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
                     harmony.Patch(initMethod, null, harmonyMethod);
 
-                    var assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/input-icons");
-                    _holdTexture = assetBundle.LoadAsset<Texture2D>("assets/hold.png");
-                    _interactTexture = assetBundle.LoadAsset<Texture2D>("assets/interact.png");
-                    _jumpTexture = assetBundle.LoadAsset<Texture2D>("assets/jump.png");
-                    _backTexture = assetBundle.LoadAsset<Texture2D>("assets/back.png");
-
                     _toolUnequipPrompts = new List<ScreenPrompt>(2);
                 }
 
                 static Texture2D PostInitTranslator(Texture2D __result, XboxButton button)
                 {
-                    if (button == XboxButton.X && _interactTexture)
+                    if (button == XboxButton.X)
                     {
-                        return _interactTexture;
+                        return AssetLoader.InteractIcon;
                     }
-                    if (button == XboxButton.Y && _holdTexture)
+                    if (button == XboxButton.Y)
                     {
-                        return _holdTexture;
+                        return AssetLoader.HoldIcon;
                     }
-                    if (button == XboxButton.B && _backTexture)
+                    if (button == XboxButton.B)
                     {
-                        return _backTexture;
+                        return AssetLoader.BackIcon;
                     }
-                    if (button == XboxButton.A && _jumpTexture)
+                    if (button == XboxButton.A)
                     {
-                        return _jumpTexture;
+                        return AssetLoader.JumpIcon;
                     }
                     return __result;
                 }

@@ -25,6 +25,7 @@ namespace NomaiVR
 
             // Load all modules.
             // I'm sorry to say that order does matter here.
+            new AssetLoader();
             new ForceSettings();
             new ControllerInput();
             new Dialogue();

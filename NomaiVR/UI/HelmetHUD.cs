@@ -13,17 +13,9 @@ namespace NomaiVR
         {
             private static Transform _thrusterHUD;
             private static Transform _helmet;
-            static AssetBundle _assetBundle;
-            static GameObject _helmetPrefab;
 
             void Awake()
             {
-                if (!_assetBundle)
-                {
-                    _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/helmet");
-                    _helmetPrefab = _assetBundle.LoadAsset<GameObject>("assets/helmet.prefab");
-                }
-
                 _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
 
                 // Add a stronger line pointing forward in the thruster HUD
@@ -49,7 +41,7 @@ namespace NomaiVR
 
                 // Replace helmet model to prevent looking outside the edge.
                 var helmetModelParent = _helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
-                var helmetModel = Instantiate(_helmetPrefab, helmetModelParent);
+                var helmetModel = Instantiate(AssetLoader.HelmetPrefab, helmetModelParent);
                 LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
                 Destroy(helmetModelParent.Find("Helmet").gameObject);
                 Destroy(helmetModelParent.Find("HelmetFrame").gameObject);

@@ -13,20 +13,10 @@ namespace NomaiVR
         {
             public static Transform RightHand;
             public static Transform LeftHand;
-            static AssetBundle _assetBundle;
-            static GameObject _handPrefab;
-            static GameObject _glovePrefab;
             Transform _wrapper;
 
             private void Start()
             {
-                if (!_assetBundle)
-                {
-                    _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/hands");
-                    _handPrefab = _assetBundle.LoadAsset<GameObject>("assets/righthandprefab.prefab");
-                    _glovePrefab = _assetBundle.LoadAsset<GameObject>("assets/rightgloveprefab.prefab");
-                }
-
                 _wrapper = new GameObject().transform;
 
                 var right = new GameObject().AddComponent<Hand>();
@@ -34,8 +24,8 @@ namespace NomaiVR
                 right.transform.parent = _wrapper;
                 right.transform.localPosition = new Vector3(0.03f, 0.05f, -0.2f);
                 right.transform.localRotation = Quaternion.Euler(313f, 10f, 295f);
-                right.handPrefab = _handPrefab;
-                right.glovePrefab = _glovePrefab;
+                right.handPrefab = AssetLoader.HandPrefab;
+                right.glovePrefab = AssetLoader.GlovePrefab;
                 RightHand = right.transform;
 
                 var left = new GameObject().AddComponent<Hand>();
@@ -44,8 +34,8 @@ namespace NomaiVR
                 left.transform.localPosition = new Vector3(-0.03f, 0.05f, -0.2f);
                 left.transform.localRotation = Quaternion.Euler(313f, 350f, 65f);
                 left.isLeft = true;
-                left.handPrefab = _handPrefab;
-                left.glovePrefab = _glovePrefab;
+                left.handPrefab = AssetLoader.HandPrefab;
+                left.glovePrefab = AssetLoader.GlovePrefab;
                 LeftHand = left.transform;
 
                 _wrapper.parent = Camera.main.transform.parent;
@@ -53,49 +43,6 @@ namespace NomaiVR
                 _wrapper.localPosition = Camera.main.transform.localPosition;
 
                 HideBody();
-            }
-
-            bool ShouldRenderGloves()
-            {
-                return Locator.GetPlayerSuit().IsWearingSuit(true);
-            }
-
-            bool ShouldRenderHands()
-            {
-                return !Locator.GetPlayerSuit().IsWearingSuit(true);
-            }
-
-            Transform CreateHand(SteamVR_Action_Pose pose, Quaternion rotation, Vector3 position, Transform wrapper, bool isLeft = false)
-            {
-                var handParent = new GameObject().transform;
-                handParent.parent = wrapper;
-
-                var hand = Instantiate(_handPrefab).transform;
-                var glove = Instantiate(_glovePrefab).transform;
-                hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
-                glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
-
-                void setupHandModel(Transform model)
-                {
-                    model.parent = handParent;
-                    model.localPosition = position;
-                    model.localRotation = rotation;
-                    model.localScale = Vector3.one * 6;
-                    if (isLeft)
-                    {
-                        model.localScale = new Vector3(-model.localScale.x, model.localScale.y, model.localScale.z);
-                    }
-                }
-
-                setupHandModel(hand);
-                setupHandModel(glove);
-
-                handParent.gameObject.SetActive(false);
-                var poseDriver = handParent.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
-                poseDriver.poseAction = pose;
-                handParent.gameObject.SetActive(true);
-
-                return handParent;
             }
 
             void HideBody()

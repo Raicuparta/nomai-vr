@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetLoader.cs" />
     <Compile Include="EffectFixes\FogFix.cs" />
     <Compile Include="EffectFixes\LoopTransitionFix.cs" />
     <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />

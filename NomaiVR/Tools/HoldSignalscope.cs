@@ -13,10 +13,8 @@ namespace NomaiVR
             protected static Transform _reticule;
             protected static Transform _shipWindshield;
             protected static Signalscope _signalscope;
-            static AssetBundle _assetBundle;
             static Camera _lensCamera;
             static Transform _lens;
-            static GameObject _lensPrefab;
 
             void Start()
             {
@@ -91,12 +89,7 @@ namespace NomaiVR
 
             void SetupScopeLens()
             {
-                if (!_assetBundle)
-                {
-                    _assetBundle = NomaiVR.Helper.Assets.LoadBundle("assets/scope-lens");
-                    _lensPrefab = _assetBundle.LoadAsset<GameObject>("assets/scopelens.prefab");
-                }
-                _lens = Instantiate(_lensPrefab).transform;
+                _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
                 _lens.localPosition = Vector3.forward * 0.14f;
                 _lens.localRotation = Quaternion.identity;
