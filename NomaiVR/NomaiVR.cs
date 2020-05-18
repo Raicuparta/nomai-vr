@@ -35,6 +35,7 @@ namespace NomaiVR
             new WaterFix();
             new ProjectionStoneCameraFix();
             new CameraMaskFix();
+            new MapFix();
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
             HoldTranslator.Patches.Patch();
@@ -68,14 +69,7 @@ namespace NomaiVR
             // This GameObject is for them.
             nonPersistentParent = new GameObject();
 
-            if (isSolarSystem || isEye)
-            {
-                if (isSolarSystem)
-                {
-                    nonPersistentParent.AddComponent<SolarSystemMap>();
-                }
-            }
-            else if (isPostCredits)
+            if (isPostCredits)
             {
                 nonPersistentParent.AddComponent<PostCreditsScene>();
             }

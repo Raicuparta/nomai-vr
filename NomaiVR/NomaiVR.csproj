@@ -98,7 +98,7 @@
     <Compile Include="EffectFixes\FogFix.cs" />
     <Compile Include="EffectFixes\LoopTransitionFix.cs" />
     <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
-    <Compile Include="EffectFixes\WakeUpFix.cs" />
+    <Compile Include="EffectFixes\CameraMaskFix.cs" />
     <Compile Include="EffectFixes\WaterFix.cs" />
     <Compile Include="Helpers\LayerHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
@@ -138,7 +138,7 @@
     <Compile Include="Input\ControllerInput.cs" />
     <Compile Include="Tools\HolsterTool.cs" />
     <Compile Include="Helpers\QuaternionHelper.cs" />
-    <Compile Include="SolarSystemMap.cs" />
+    <Compile Include="EffectFixes\MapFix.cs" />
     <Compile Include="Input\VRTutorial.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
