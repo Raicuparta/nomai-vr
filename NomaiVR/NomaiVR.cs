@@ -30,10 +30,11 @@ namespace NomaiVR
             new ShipTools();
             new ControllerInput();
             new Dialogue();
-            new EffectFixes();
             new FogFix();
             new LoopTransitionFix();
             new WaterFix();
+            new ProjectionStoneCameraFix();
+            new CameraMaskFix();
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
             HoldTranslator.Patches.Patch();

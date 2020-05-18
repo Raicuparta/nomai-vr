@@ -96,6 +96,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EffectFixes\FogFix.cs" />
+    <Compile Include="EffectFixes\LoopTransitionFix.cs" />
+    <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
+    <Compile Include="EffectFixes\WakeUpFix.cs" />
+    <Compile Include="EffectFixes\WaterFix.cs" />
     <Compile Include="Helpers\LayerHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="Helpers\SceneHelper.cs" />
@@ -128,7 +132,6 @@
     <Compile Include="Tools\ShipTools.cs" />
     <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
-    <Compile Include="EffectFixes.cs" />
     <Compile Include="UI\Menus.cs" />
     <Compile Include="Hands\HandsController.cs" />
     <Compile Include="Player\PlayerBodyPosition.cs" />

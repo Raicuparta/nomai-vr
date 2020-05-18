@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class EffectFixes : NomaiVRModule<EffectFixes.Behaviour, EffectFixes.Behaviour.Patch>
+    public class CameraMaskFix : NomaiVRModule<CameraMaskFix.Behaviour, CameraMaskFix.Behaviour.Patch>
     {
         protected override bool isPersistent => false;
         protected override OWScene[] scenes => PlayableScenes;
@@ -59,9 +59,6 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    // Fix for the reprojection stone camera position.
-                    NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patch), nameof(Patch.SwitchToRemoteCamera));
-
                     NomaiVR.Post<Campfire>("StartFastForwarding", typeof(Patch), nameof(PostStartFastForwarding));
 
                     var openEyesMethod =
@@ -85,20 +82,6 @@ namespace NomaiVR
                 static void PostCloseEyes()
                 {
                     _instance.CloseEyesDelayed();
-                }
-
-                static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)
-                {
-                    var camera = ____slavePlatform.GetOwnedCamera().transform;
-                    if (camera.parent.name == "Prefab_NOM_RemoteViewer")
-                    {
-                        var parent = new GameObject().transform;
-                        parent.parent = ____playerHologram;
-                        parent.localPosition = new Vector3(0, -2.5f, 0);
-                        parent.localRotation = Quaternion.identity;
-                        ____slavePlatform.GetOwnedCamera().transform.parent = parent;
-                        ____playerHologram.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
-                    }
                 }
             }
         }
