@@ -27,6 +27,7 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
+            new Common();
             new ShipTools();
             new ControllerInput();
             new Dialogue();
@@ -44,10 +45,6 @@ namespace NomaiVR
             new InputPrompts();
             new VRTutorial();
             Menus.Patches.Patch();
-
-
-            // These components will remain active between scene loads.
-            gameObject.AddComponent<Common>();
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
@@ -70,7 +67,6 @@ namespace NomaiVR
 
             if (isSolarSystem || isEye)
             {
-                Common.InitGame();
                 if (isSolarSystem)
                 {
                     nonPersistentParent.AddComponent<SolarSystemMap>();

@@ -32,8 +32,11 @@ namespace NomaiVR
             if (scenes.Contains(loadScene))
             {
                 SetupBehaviour();
+                OnSceneLoad();
             }
         }
+
+        protected virtual void OnSceneLoad() { }
 
         private void SetupBehaviour()
         {

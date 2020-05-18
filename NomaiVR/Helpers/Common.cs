@@ -3,25 +3,29 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class Common : MonoBehaviour
+    public class Common : NomaiVRModule<NomaiVRModule.EmptyBehaviour, NomaiVRModule.EmptyPatch>
     {
+        protected override bool isPersistent => true;
+        protected override OWScene[] scenes => PlayableScenes;
+
         public static PlayerCharacterController PlayerBody { get; private set; }
         public static Transform PlayerHead { get; private set; }
         public static ToolModeSwapper ToolSwapper { get; private set; }
 
-        public static void InitGame()
+        protected override void OnSceneLoad()
         {
+            base.OnSceneLoad();
             PlayerBody = GameObject.Find("Player_Body").GetComponent<PlayerCharacterController>();
-            PlayerHead = FindObjectOfType<ToolModeUI>().transform;
+            PlayerHead = GameObject.FindObjectOfType<ToolModeUI>().transform;
             PlayerHead.localPosition = new Vector3(PlayerHead.localPosition.x, PlayerHead.localPosition.y, 0);
-            ToolSwapper = FindObjectOfType<ToolModeSwapper>();
+            ToolSwapper = GameObject.FindObjectOfType<ToolModeSwapper>();
         }
 
         public static List<GameObject> GetObjectsInLayer(string layerName)
         {
             var layer = LayerMask.NameToLayer(layerName);
             var ret = new List<GameObject>();
-            var all = FindObjectsOfType<GameObject>();
+            var all = GameObject.FindObjectsOfType<GameObject>();
 
             foreach (GameObject t in all)
             {
