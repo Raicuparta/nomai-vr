@@ -27,6 +27,8 @@ namespace NomaiVR
 
             SteamVR.Initialize();
 
+            // Load all modules.
+            // I'm sorry to say that order does matter here.
             new ShipTools();
             new ControllerInput();
             new Dialogue();
@@ -48,10 +50,7 @@ namespace NomaiVR
             new HelmetHUD();
             new InputPrompts();
             new VRTutorial();
-            Menus.Patches.Patch();
-
-            var gameModules = new GameObject();
-            gameModules.AddComponent<Menus>();
+            new Menus();
 
             Application.runInBackground = true;
 
@@ -60,8 +59,6 @@ namespace NomaiVR
 
         void OnSceneLoaded(OWScene originalScene, OWScene scene)
         {
-            var isSolarSystem = scene == OWScene.SolarSystem;
-            var isEye = scene == OWScene.EyeOfTheUniverse;
             var isPostCredits = scene == OWScene.PostCreditsScene;
 
             // The GameObject associated with this ModBehaviour is set to persist between scene loads.
@@ -73,8 +70,6 @@ namespace NomaiVR
             {
                 nonPersistentParent.AddComponent<PostCreditsScene>();
             }
-
-            nonPersistentParent.AddComponent<Menus>();
         }
 
         public override void Configure(IModConfig config)

@@ -11,13 +11,14 @@ namespace NomaiVR
         protected static OWScene[] PlayableScenes = new[] { OWScene.SolarSystem, OWScene.EyeOfTheUniverse };
         protected static OWScene[] TitleScene = new[] { OWScene.TitleScreen };
         protected static OWScene[] SolarSystemScene = new[] { OWScene.SolarSystem };
+        protected static OWScene[] AllScenes = new OWScene[] { };
 
         protected abstract bool isPersistent { get; }
         protected abstract OWScene[] scenes { get; }
 
         public NomaiVRModule()
         {
-            if (scenes.Contains(LoadManager.GetCurrentScene()))
+            if (IsSceneRelevant(LoadManager.GetCurrentScene()))
             {
                 SetupBehaviour();
             }
@@ -27,9 +28,14 @@ namespace NomaiVR
             SetupPatch();
         }
 
+        private bool IsSceneRelevant(OWScene scene)
+        {
+            return scenes.Length == 0 ? true : scenes.Contains(scene);
+        }
+
         private void OnSceneLoad(OWScene originalScene, OWScene loadScene)
         {
-            if (scenes.Contains(loadScene))
+            if (IsSceneRelevant(loadScene))
             {
                 SetupBehaviour();
                 OnSceneLoad();
