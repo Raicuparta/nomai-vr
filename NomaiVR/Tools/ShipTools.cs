@@ -215,8 +215,8 @@ namespace NomaiVR
                     }
                     else
                     {
-                        ____activeCam.transform.position = LaserPointer.Laser.position;
-                        ____activeCam.transform.rotation = LaserPointer.Laser.rotation;
+                        ____activeCam.transform.position = LaserPointer.Behaviour.Laser.position;
+                        ____activeCam.transform.rotation = LaserPointer.Behaviour.Laser.rotation;
                     }
                 }
 
