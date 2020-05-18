@@ -44,7 +44,7 @@ namespace NomaiVR
             new HoldMallowStick();
             new HoldProbeLauncher();
             new HoldSignalscope();
-            HoldTranslator.Patches.Patch();
+            new HoldTranslator();
             LaserPointer.Patches.Patch();
             new PlayerBodyPosition();
             new FeetMarker();
