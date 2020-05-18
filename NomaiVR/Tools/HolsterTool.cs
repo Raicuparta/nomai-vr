@@ -75,11 +75,11 @@ namespace NomaiVR
                 }
                 return;
             }
-            if (ControllerInput.IsGripping && !IsEquipped() && detector.isInside && _visible)
+            if (ControllerInput.Behaviour.IsGripping && !IsEquipped() && detector.isInside && _visible)
             {
                 Equip();
             }
-            if (!ControllerInput.IsGripping && IsEquipped())
+            if (!ControllerInput.Behaviour.IsGripping && IsEquipped())
             {
                 Unequip();
             }

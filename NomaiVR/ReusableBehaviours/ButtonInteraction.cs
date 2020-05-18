@@ -30,13 +30,13 @@ namespace NomaiVR
             var skip = skipPressCallback != null && skipPressCallback.Invoke();
             if (!skip)
             {
-                ControllerInput.SimulateInput(button, 1);
+                ControllerInput.Behaviour.SimulateInput(button, 1);
             }
         }
 
         void OnRelease()
         {
-            ControllerInput.SimulateInput(button, 0);
+            ControllerInput.Behaviour.SimulateInput(button, 0);
             receiver.ResetInteraction();
         }
 

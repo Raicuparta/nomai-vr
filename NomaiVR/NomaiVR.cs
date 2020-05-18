@@ -28,7 +28,7 @@ namespace NomaiVR
             SteamVR.Initialize();
 
             new ShipTools();
-            ControllerInput.Patches.Patch();
+            new ControllerInput();
             new Dialogue();
             new EffectFixes();
             HoldProbeLauncher.Patches.Patch();
@@ -48,7 +48,6 @@ namespace NomaiVR
 
             // These components will remain active between scene loads.
             gameObject.AddComponent<Common>();
-            gameObject.AddComponent<ControllerInput>();
 
             var gameModules = new GameObject();
             gameModules.AddComponent<Menus>();
