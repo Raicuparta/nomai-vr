@@ -67,15 +67,8 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    // Improvements for the "loop reset" effect.
-                    NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(Patch.PatchTriggerFlashback));
-                    NomaiVR.Pre<Flashback>("Update", typeof(Patch), nameof(Patch.FlashbackUpdate));
-
                     // Fix for the reprojection stone camera position.
                     NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patch), nameof(Patch.SwitchToRemoteCamera));
-
-                    // Prevent flashing on energy death.
-                    NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
 
                     NomaiVR.Post<Campfire>("StartFastForwarding", typeof(Patch), nameof(PostStartFastForwarding));
 
@@ -85,7 +78,6 @@ namespace NomaiVR
                     NomaiVR.Helper.HarmonyHelper.AddPostfix(openEyesMethod, typeof(Patch), nameof(PostOpenEyes));
 
                     NomaiVR.Post<PlayerCameraEffectController>("CloseEyes", typeof(Patch), nameof(PostCloseEyes));
-
                 }
 
                 static void PostStartFastForwarding()
@@ -103,11 +95,6 @@ namespace NomaiVR
                     _instance.CloseEyesDelayed();
                 }
 
-                static void PostTriggerFlashback(CanvasGroupAnimator ____whiteFadeAnimator)
-                {
-                    ____whiteFadeAnimator.gameObject.SetActive(false);
-                }
-
                 static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)
                 {
                     var camera = ____slavePlatform.GetOwnedCamera().transform;
@@ -120,40 +107,6 @@ namespace NomaiVR
                         ____slavePlatform.GetOwnedCamera().transform.parent = parent;
                         ____playerHologram.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
                     }
-                }
-
-                static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
-                {
-                    Transform parent;
-
-                    if (____screenTransform.parent == __instance.transform)
-                    {
-                        parent = new GameObject().transform;
-                        parent.position = __instance.transform.position;
-                        parent.rotation = __instance.transform.rotation;
-                        foreach (Transform child in __instance.transform)
-                        {
-                            child.parent = parent;
-                        }
-                    }
-                    else
-                    {
-                        parent = ____screenTransform.parent;
-                    }
-
-
-                    parent.position = __instance.transform.position;
-                    parent.rotation = __instance.transform.rotation;
-
-                    ____maskTransform.parent = parent;
-                }
-
-                static void FlashbackUpdate(Flashback __instance, Transform ____maskTransform)
-                {
-                    var parent = ____maskTransform.parent;
-                    var angle = Quaternion.Angle(parent.rotation, __instance.transform.rotation) * 0.5f;
-                    parent.rotation = Quaternion.RotateTowards(parent.rotation, __instance.transform.rotation, Time.fixedDeltaTime * angle);
-                    parent.position = __instance.transform.position;
                 }
             }
         }
