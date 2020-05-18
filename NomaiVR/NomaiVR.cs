@@ -41,10 +41,10 @@ namespace NomaiVR
             new MapFix();
             new HandsController();
             new FlashlightGesture();
+            new HoldMallowStick();
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
             HoldTranslator.Patches.Patch();
-            HoldMallowStick.Patches.Patch();
             LaserPointer.Patches.Patch();
             new PlayerBodyPosition();
             new FeetMarker();
