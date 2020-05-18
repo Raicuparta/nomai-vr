@@ -19,13 +19,7 @@ namespace NomaiVR
             {
                 _instance = this;
 
-                NomaiVR.Log("Started FogFix");
-
-                // Make dark bramble lights visible in the fog.
-                var fogLightCanvas = GameObject.Find("FogLightCanvas").GetComponent<Canvas>();
-                fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                fogLightCanvas.worldCamera = Locator.GetActiveCamera().mainCamera;
-                fogLightCanvas.planeDistance = 100;
+                NomaiVR.Log("Started EffectFixes");
 
                 // Disable underwater effect.
                 FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
@@ -73,11 +67,6 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    // Fixes for fog stereo problems.
-                    NomaiVR.Pre<PlanetaryFogController>("ResetFogSettings", typeof(Patch), nameof(Patch.PatchResetFog));
-                    NomaiVR.Pre<PlanetaryFogController>("UpdateFogSettings", typeof(Patch), nameof(Patch.PatchUpdateFog));
-                    NomaiVR.Pre<FogOverrideVolume>("OverrideFogSettings", typeof(Patch), nameof(Patch.PatchOverrideFog));
-
                     // Improvements for the "loop reset" effect.
                     NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(Patch.PatchTriggerFlashback));
                     NomaiVR.Pre<Flashback>("Update", typeof(Patch), nameof(Patch.FlashbackUpdate));
@@ -131,21 +120,6 @@ namespace NomaiVR
                         ____slavePlatform.GetOwnedCamera().transform.parent = parent;
                         ____playerHologram.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
                     }
-                }
-
-                static bool PatchResetFog()
-                {
-                    return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
-                }
-
-                static bool PatchUpdateFog()
-                {
-                    return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
-                }
-
-                static bool PatchOverrideFog()
-                {
-                    return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
                 }
 
                 static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)

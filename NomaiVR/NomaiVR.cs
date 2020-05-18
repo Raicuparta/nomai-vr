@@ -31,6 +31,7 @@ namespace NomaiVR
             new ControllerInput();
             new Dialogue();
             new EffectFixes();
+            new FogFix();
             HoldProbeLauncher.Patches.Patch();
             HoldSignalscope.Patches.Patch();
             HoldTranslator.Patches.Patch();
