@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NomaiVR
 {
-    public static class Timers
+    public static class TimerHelper
     {
         public static void ExecuteAfter(Action action, int milliseconds)
         {

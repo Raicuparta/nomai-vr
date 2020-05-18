@@ -5,7 +5,7 @@ namespace NomaiVR
 {
     public class Holdable : MonoBehaviour
     {
-        public Transform hand = HandsController.RightHand;
+        public Transform hand = HandsController.Behaviour.RightHand;
 
         private void Start()
         {

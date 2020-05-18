@@ -5,105 +5,109 @@ using UnityEngine.UI;
 
 namespace NomaiVR
 {
-    public class Menus : MonoBehaviour
+    public class Menus : NomaiVRModule<Menus.Behaviour, Menus.Behaviour.Patch>
     {
-        void Awake()
+        protected override bool isPersistent => false;
+        protected override OWScene[] scenes => AllScenes;
+
+        public class Behaviour : MonoBehaviour
         {
-            NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
-            NomaiVR.Helper.Events.OnEvent += OnEvent;
-        }
-
-        void Start()
-        {
-            NomaiVR.Log("Start Menus");
-
-            // Make UI elements draw on top of everything.
-            Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
-
-            var scene = LoadManager.GetCurrentScene();
-
-            if (scene == OWScene.SolarSystem)
+            void Awake()
             {
-                // Make sleep timer canvas visible while eyes closed.
-                Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
-            }
-            else if (scene == OWScene.TitleScreen)
-            {
-                var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
-                animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
-
-                var animatedTitleChild = animatedTitle.transform.GetChild(0).GetComponent<RectTransform>();
-                animatedTitleChild.anchorMax = Vector2.one * 0.5f;
-                animatedTitleChild.anchorMin = Vector2.one * 0.5f;
-
-                var mainMenu = GameObject.Find("TitleLayoutGroup").GetComponent<RectTransform>();
-                mainMenu.position = Vector3.zero;
-
-                // Cant't get the footer to look good, so I'm hiding it.
-                GameObject.Find("FooterBlock").SetActive(false);
-
-                // Make the camera start looking forward instead of some random direction.
-                var cameraSocket = GameObject.Find("CameraSocket").transform;
-                cameraSocket.rotation = Quaternion.identity;
+                NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
+                NomaiVR.Helper.Events.OnEvent += OnEvent;
             }
 
-            ScreenCanvasesToWorld();
-        }
-
-        private void OnEvent(MonoBehaviour behaviour, Events ev)
-        {
-            if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart)
+            void Start()
             {
-                var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
-                canvas.planeDistance = 5;
-            }
-        }
+                // Make UI elements draw on top of everything.
+                Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
 
-        void ScreenCanvasesToWorld()
-        {
-            var canvases = FindObjectsOfType<Canvas>();
-            foreach (var canvas in canvases)
-            {
-                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name != "PauseBackdropCanvas")
+                var scene = LoadManager.GetCurrentScene();
+
+                if (scene == OWScene.SolarSystem)
                 {
-                    canvas.renderMode = RenderMode.WorldSpace;
-                    canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-                    canvas.transform.rotation = Camera.main.transform.rotation;
-                    canvas.transform.localScale *= 0.001f;
-                    var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                    followTarget.positionSmoothTime = 0.2f;
-                    followTarget.rotationSmoothTime = 0.1f;
-                    followTarget.target = Camera.main.transform;
-                    followTarget.localPosition = Vector3.forward;
+                    // Make sleep timer canvas visible while eyes closed.
+                    Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+                }
+                else if (scene == OWScene.TitleScreen)
+                {
+                    var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
+                    animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
 
-                    // Masks are used for hiding the overflowing elements in scrollable menus.
-                    // Apparently masks change the material of the canvas element being masked,
-                    // and I'm not sure how to change unity_GUIZTestMode there.
-                    // So for now I'm disabling the mask completely, which breaks some menus.
-                    var masks = canvas.GetComponentsInChildren<Mask>(true);
-                    foreach (var mask in masks)
+                    var animatedTitleChild = animatedTitle.transform.GetChild(0).GetComponent<RectTransform>();
+                    animatedTitleChild.anchorMax = Vector2.one * 0.5f;
+                    animatedTitleChild.anchorMin = Vector2.one * 0.5f;
+
+                    var mainMenu = GameObject.Find("TitleLayoutGroup").GetComponent<RectTransform>();
+                    mainMenu.position = Vector3.zero;
+
+                    // Cant't get the footer to look good, so I'm hiding it.
+                    GameObject.Find("FooterBlock").SetActive(false);
+
+                    // Make the camera start looking forward instead of some random direction.
+                    var cameraSocket = GameObject.Find("CameraSocket").transform;
+                    cameraSocket.rotation = Quaternion.identity;
+                }
+
+                ScreenCanvasesToWorld();
+            }
+
+            private void OnEvent(MonoBehaviour behaviour, Events ev)
+            {
+                if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart)
+                {
+                    var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
+                    canvas.planeDistance = 5;
+                }
+            }
+
+            void ScreenCanvasesToWorld()
+            {
+                var canvases = FindObjectsOfType<Canvas>();
+                foreach (var canvas in canvases)
+                {
+                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name != "PauseBackdropCanvas")
                     {
-                        mask.enabled = false;
-                        mask.graphic.enabled = false;
+                        canvas.renderMode = RenderMode.WorldSpace;
+                        canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
+                        canvas.transform.rotation = Camera.main.transform.rotation;
+                        canvas.transform.localScale *= 0.001f;
+                        var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
+                        followTarget.positionSmoothTime = 0.2f;
+                        followTarget.rotationSmoothTime = 0.1f;
+                        followTarget.target = Camera.main.transform;
+                        followTarget.localPosition = Vector3.forward;
+
+                        // Masks are used for hiding the overflowing elements in scrollable menus.
+                        // Apparently masks change the material of the canvas element being masked,
+                        // and I'm not sure how to change unity_GUIZTestMode there.
+                        // So for now I'm disabling the mask completely, which breaks some menus.
+                        var masks = canvas.GetComponentsInChildren<Mask>(true);
+                        foreach (var mask in masks)
+                        {
+                            mask.enabled = false;
+                            mask.graphic.enabled = false;
+                        }
                     }
                 }
             }
-        }
 
-        internal static class Patches
-        {
-            public static void Patch()
+            public class Patch : NomaiVRPatch
             {
-                NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patches), nameof(PostPopulateProfiles));
-            }
-
-            static void PostPopulateProfiles(GameObject ____profileListRoot)
-            {
-                foreach (Transform child in ____profileListRoot.transform)
+                public override void ApplyPatches()
                 {
-                    child.localPosition = Vector3.zero;
-                    child.localRotation = Quaternion.identity;
-                    child.localScale = Vector3.one;
+                    NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
+                }
+
+                static void PostPopulateProfiles(GameObject ____profileListRoot)
+                {
+                    foreach (Transform child in ____profileListRoot.transform)
+                    {
+                        child.localPosition = Vector3.zero;
+                        child.localRotation = Quaternion.identity;
+                        child.localScale = Vector3.one;
+                    }
                 }
             }
         }

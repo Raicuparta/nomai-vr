@@ -95,13 +95,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Common.cs" />
-    <Compile Include="Helpers\Timers.cs" />
+    <Compile Include="AssetLoader.cs" />
+    <Compile Include="EffectFixes\FogFix.cs" />
+    <Compile Include="EffectFixes\LoopTransitionFix.cs" />
+    <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
+    <Compile Include="EffectFixes\CameraMaskFix.cs" />
+    <Compile Include="EffectFixes\WaterFix.cs" />
+    <Compile Include="Helpers\LayerHelper.cs" />
+    <Compile Include="Helpers\PlayerHelper.cs" />
+    <Compile Include="Helpers\SceneHelper.cs" />
+    <Compile Include="Helpers\TimerHelper.cs" />
+    <Compile Include="Helpers\ToolHelper.cs" />
     <Compile Include="ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
+    <Compile Include="NomaiVRModule.cs" />
+    <Compile Include="NomaiVRPatch.cs" />
     <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
     <Compile Include="ReusableBehaviours\Holdable.cs" />
+    <Compile Include="ReusableBehaviours\PersistObject.cs" />
     <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
     <Compile Include="UI\Dialogue.cs" />
     <Compile Include="Player\FeetMarker.cs" />
@@ -121,18 +133,17 @@
     <Compile Include="Tools\ShipTools.cs" />
     <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
-    <Compile Include="EffectFixes.cs" />
     <Compile Include="UI\Menus.cs" />
     <Compile Include="Hands\HandsController.cs" />
     <Compile Include="Player\PlayerBodyPosition.cs" />
     <Compile Include="Input\ControllerInput.cs" />
     <Compile Include="Tools\HolsterTool.cs" />
     <Compile Include="Helpers\QuaternionHelper.cs" />
-    <Compile Include="SolarSystemMap.cs" />
+    <Compile Include="EffectFixes\MapFix.cs" />
     <Compile Include="Input\VRTutorial.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\PostCreditsScene.cs" />
+    <Compile Include="EffectFixes\PostCreditsFix.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bindings\actions.json" />

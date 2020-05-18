@@ -18,15 +18,11 @@ namespace NomaiVR
 
         public ProximityDetector detector { get; private set; }
 
-        void Awake()
-        {
-            detector = gameObject.AddComponent<ProximityDetector>();
-            detector.other = HandsController.RightHand;
-            detector.minDistance = 0.2f;
-        }
-
         void Start()
         {
+            detector = gameObject.AddComponent<ProximityDetector>();
+            detector.other = HandsController.Behaviour.RightHand;
+            detector.minDistance = 0.2f;
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
 
@@ -37,7 +33,7 @@ namespace NomaiVR
         void Equip()
         {
             onEquip?.Invoke();
-            Locator.GetToolModeSwapper().EquipToolMode(mode);
+            ToolHelper.Swapper.EquipToolMode(mode);
 
             if (mode == ToolMode.Translator)
             {
@@ -48,7 +44,7 @@ namespace NomaiVR
         void Unequip()
         {
             onUnequip?.Invoke();
-            Common.ToolSwapper.UnequipTool();
+            ToolHelper.Swapper.UnequipTool();
         }
 
         void SetVisible(bool visible)
@@ -62,7 +58,7 @@ namespace NomaiVR
 
         bool IsEquipped()
         {
-            return Locator.GetToolModeSwapper().IsInToolMode(mode, ToolGroup.Suit);
+            return ToolHelper.Swapper.IsInToolMode(mode, ToolGroup.Suit);
         }
 
         void UpdateGrab()
@@ -75,11 +71,11 @@ namespace NomaiVR
                 }
                 return;
             }
-            if (ControllerInput.IsGripping && !IsEquipped() && detector.isInside && _visible)
+            if (ControllerInput.Behaviour.IsGripping && !IsEquipped() && detector.isInside && _visible)
             {
                 Equip();
             }
-            if (!ControllerInput.IsGripping && IsEquipped())
+            if (!ControllerInput.Behaviour.IsGripping && IsEquipped())
             {
                 Unequip();
             }
@@ -88,7 +84,7 @@ namespace NomaiVR
         void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
-            var shouldBeVisible = !Common.IsUsingAnyTool() && isCharacterMode;
+            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode;
 
             if (!_visible && shouldBeVisible)
             {
@@ -110,8 +106,9 @@ namespace NomaiVR
         {
             if (_visible)
             {
-                transform.position = Camera.main.transform.position + Common.PlayerBody.transform.TransformVector(position);
-                transform.rotation = Common.PlayerBody.transform.rotation;
+                var player = Locator.GetPlayerTransform();
+                transform.position = Camera.main.transform.position + player.TransformVector(position);
+                transform.rotation = player.rotation;
                 transform.Rotate(angle);
             }
         }

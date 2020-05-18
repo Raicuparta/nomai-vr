@@ -6,18 +6,18 @@ namespace NomaiVR
 {
     class ToolModeInteraction : MonoBehaviour
     {
-        void Awake()
+        void Start()
         {
             var proximityDetector = gameObject.AddComponent<ProximityDetector>();
             proximityDetector.onEnter = OnDetectorEnter;
             proximityDetector.onExit = OnDetectorExit;
-            proximityDetector.other = HandsController.LeftHand;
+            proximityDetector.other = HandsController.Behaviour.LeftHand;
             proximityDetector.exitThreshold = 0.1f;
         }
 
         void OnDetectorEnter()
         {
-            if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Translator))
+            if (ToolHelper.Swapper.IsInToolMode(ToolMode.Translator))
             {
                 var translator = FindObjectOfType<NomaiTranslatorProp>();
                 var currentTextId = translator.GetValue<int>("_currentTextID");
@@ -35,7 +35,7 @@ namespace NomaiVR
 
                 if (isScrollable && hasMoreToScroll)
                 {
-                    ControllerInput.SimulateInput(XboxAxis.dPadY, -1);
+                    ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, -1);
                     return;
                 }
 
@@ -45,13 +45,13 @@ namespace NomaiVR
                 }
             }
 
-            ControllerInput.SimulateInput(XboxAxis.dPadX, 1);
+            ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadX, 1);
         }
 
         void OnDetectorExit()
         {
-            ControllerInput.SimulateInput(XboxAxis.dPadX, 0);
-            ControllerInput.SimulateInput(XboxAxis.dPadY, 0);
+            ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadX, 0);
+            ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, 0);
         }
     }
 }

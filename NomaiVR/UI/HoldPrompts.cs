@@ -2,37 +2,43 @@
 
 namespace NomaiVR
 {
-    public class HoldPrompts : MonoBehaviour
+    public class HoldPrompts : NomaiVRModule<HoldPrompts.Behaviour, NomaiVRModule.EmptyPatch>
     {
-        Transform _holdTransform;
+        protected override bool isPersistent => false;
+        protected override OWScene[] scenes => PlayableScenes;
 
-        void Awake()
+        public class Behaviour : MonoBehaviour
         {
-            var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
-            canvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
-            canvas.transform.localScale = Vector3.one * 0.0015f;
-            canvas.transform.localPosition = Vector3.zero;
-            canvas.transform.localRotation = Quaternion.identity;
+            Transform _holdTransform;
 
-            canvas.renderMode = RenderMode.WorldSpace;
-            canvas.transform.localPosition = Vector3.zero;
-            canvas.transform.localRotation = Quaternion.identity;
-
-            var holdCanvas = canvas.gameObject.AddComponent<Holdable>();
-            holdCanvas.transform.localPosition = new Vector3(-0.09f, -0.11f, 0.13f);
-            _holdTransform = holdCanvas.transform;
-
-            foreach (Transform child in canvas.transform)
+            void Start()
             {
-                child.localPosition = Vector3.zero;
+                var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
+                canvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+                canvas.transform.localScale = Vector3.one * 0.0015f;
+                canvas.transform.localPosition = Vector3.zero;
+                canvas.transform.localRotation = Quaternion.identity;
+
+                canvas.renderMode = RenderMode.WorldSpace;
+                canvas.transform.localPosition = Vector3.zero;
+                canvas.transform.localRotation = Quaternion.identity;
+
+                var holdCanvas = canvas.gameObject.AddComponent<Holdable>();
+                holdCanvas.transform.localPosition = new Vector3(-0.09f, -0.11f, 0.13f);
+                _holdTransform = holdCanvas.transform;
+
+                foreach (Transform child in canvas.transform)
+                {
+                    child.localPosition = Vector3.zero;
+                }
             }
-        }
 
-        void Update()
-        {
-            if (Camera.main)
+            void Update()
             {
-                _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, Common.PlayerHead.up);
+                if (Camera.main)
+                {
+                    _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, PlayerHelper.PlayerHead.up);
+                }
             }
         }
     }

@@ -16,76 +16,42 @@ namespace NomaiVR
 
         void Start()
         {
-            Log("Start Main");
+            Log("Start NomaiVR");
 
             SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
             Helper = ModHelper;
 
             SteamVR.Initialize();
 
-            ShipTools.Patches.Patch();
-            ControllerInput.Patches.Patch();
-            Dialogue.Patches.Patch();
-            EffectFixes.Patches.Patch();
-            HoldProbeLauncher.Patches.Patch();
-            HoldSignalscope.Patches.Patch();
-            HoldTranslator.Patches.Patch();
-            HoldMallowStick.Patches.Patch();
-            LaserPointer.Patches.Patch();
-            PlayerBodyPosition.Patches.Patch();
-            ForceSettings.Patches.Patch();
-            HelmetHUD.Patches.Patch();
-            InputPrompts.Patches.Patch();
-            VRTutorial.Patches.Patch();
-            Menus.Patches.Patch();
-
-            // These components will remain active between scene loads.
-            gameObject.AddComponent<Common>();
-            gameObject.AddComponent<ControllerInput>();
-            gameObject.AddComponent<ForceSettings>();
-
-            var gameModules = new GameObject();
-            gameModules.AddComponent<Menus>();
-
-            Application.runInBackground = true;
-
-            LoadManager.OnCompleteSceneLoad += OnSceneLoaded;
-        }
-
-        void OnSceneLoaded(OWScene originalScene, OWScene scene)
-        {
-            var isSolarSystem = scene == OWScene.SolarSystem;
-            var isEye = scene == OWScene.EyeOfTheUniverse;
-            var isPostCredits = scene == OWScene.PostCreditsScene;
-
-            // The GameObject associated with this ModBehaviour is set to persist between scene loads.
-            // Some modules need to be restarted on every scene load.
-            // This GameObject is for them.
-            var nonPersistentObject = new GameObject();
-
-            if (isSolarSystem || isEye)
-            {
-                Common.InitGame();
-                nonPersistentObject.AddComponent<EffectFixes>();
-                nonPersistentObject.AddComponent<PlayerBodyPosition>();
-                nonPersistentObject.AddComponent<Dialogue>();
-                nonPersistentObject.AddComponent<HandsController>();
-                nonPersistentObject.AddComponent<FeetMarker>();
-                nonPersistentObject.AddComponent<InputPrompts>();
-                nonPersistentObject.AddComponent<HelmetHUD>();
-                nonPersistentObject.AddComponent<VRTutorial>();
-                if (isSolarSystem)
-                {
-                    nonPersistentObject.AddComponent<ShipTools>();
-                    nonPersistentObject.AddComponent<SolarSystemMap>();
-                }
-            }
-            else if (isPostCredits)
-            {
-                nonPersistentObject.AddComponent<PostCreditsScene>();
-            }
-
-            nonPersistentObject.AddComponent<Menus>();
+            // Load all modules.
+            // I'm sorry to say that order does matter here.
+            new AssetLoader();
+            new ForceSettings();
+            new ControllerInput();
+            new Dialogue();
+            new FogFix();
+            new LoopTransitionFix();
+            new WaterFix();
+            new ProjectionStoneCameraFix();
+            new CameraMaskFix();
+            new MapFix();
+            new PlayerBodyPosition();
+            new HandsController();
+            new ShipTools();
+            new FlashlightGesture();
+            new HoldMallowStick();
+            new HoldProbeLauncher();
+            new HoldSignalscope();
+            new HoldTranslator();
+            new HoldItem();
+            new HoldPrompts();
+            new LaserPointer();
+            new FeetMarker();
+            new HelmetHUD();
+            new InputPrompts();
+            new VRTutorial();
+            new PostCreditsFix();
+            new Menus();
         }
 
         public override void Configure(IModConfig config)
@@ -93,17 +59,21 @@ namespace NomaiVR
             DebugMode = config.GetSettingsValue<bool>("debugMode");
             RefreshRate = config.GetSettingsValue<int>("overrideRefreshRate");
             XRSettings.showDeviceView = config.GetSettingsValue<bool>("showMirrorView");
-            // Prevent application from stealing mouse focus;
-            ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+
+            if (config.GetSettingsValue<bool>("preventCursorLock"))
+            {
+                ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+
         }
 
-        public static void Log(params string[] strings)
+        public static void Log(params object[] strings)
         {
             if (DebugMode && Helper != null)
             {
-                Helper.Console.WriteLine(string.Join(" ", strings));
+                Helper.Console.WriteLine(strings);
             }
         }
 
