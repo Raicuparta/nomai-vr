@@ -21,39 +21,9 @@ namespace NomaiVR
             ToolSwapper = GameObject.FindObjectOfType<ToolModeSwapper>();
         }
 
-        public static List<GameObject> GetObjectsInLayer(string layerName)
-        {
-            var layer = LayerMask.NameToLayer(layerName);
-            var ret = new List<GameObject>();
-            var all = GameObject.FindObjectsOfType<GameObject>();
-
-            foreach (GameObject t in all)
-            {
-                if (t.layer == layer)
-                {
-                    ret.Add(t.gameObject);
-                }
-            }
-            return ret;
-        }
-
         public static bool IsUsingAnyTool()
         {
             return ToolSwapper.IsInToolMode(ToolMode.Probe) || ToolSwapper.IsInToolMode(ToolMode.Translator) || ToolSwapper.IsInToolMode(ToolMode.SignalScope);
-        }
-
-        public static void ChangeLayerRecursive(GameObject obj, string maskName)
-        {
-            ChangeLayerRecursive(obj, LayerMask.NameToLayer(maskName));
-        }
-
-        public static void ChangeLayerRecursive(GameObject obj, LayerMask mask)
-        {
-            obj.layer = mask;
-            foreach (Transform child in obj.transform)
-            {
-                ChangeLayerRecursive(child.gameObject, mask);
-            }
         }
 
         public static bool IsInGame()

@@ -25,7 +25,7 @@ namespace NomaiVR
                 marker.position = Locator.GetPlayerTransform().Find("Traveller_HEA_Player_v2").position;
                 marker.localRotation = Quaternion.Euler(90, 0, 0);
                 marker.localScale *= 0.75f;
-                Common.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
+                Layers.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
 
                 marker.GetComponentInChildren<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
             }
