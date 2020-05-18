@@ -13,14 +13,10 @@ namespace NomaiVR
         public static bool DebugMode;
         public static int RefreshRate;
         public static ModSaveFile SaveFile;
-        public static GameObject persistentParent;
-        public static GameObject nonPersistentParent;
 
         void Start()
         {
             Log("Start Main");
-
-            persistentParent = gameObject;
 
             SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
             Helper = ModHelper;
@@ -53,20 +49,6 @@ namespace NomaiVR
             new VRTutorial();
             new PostCreditsFix();
             new Menus();
-
-            Application.runInBackground = true;
-
-            LoadManager.OnCompleteSceneLoad += OnSceneLoaded;
-        }
-
-        void OnSceneLoaded(OWScene originalScene, OWScene scene)
-        {
-            var isPostCredits = scene == OWScene.PostCreditsScene;
-
-            // The GameObject associated with this ModBehaviour is set to persist between scene loads.
-            // Some modules need to be restarted on every scene load.
-            // This GameObject is for them.
-            nonPersistentParent = new GameObject();
         }
 
         public override void Configure(IModConfig config)
@@ -78,6 +60,7 @@ namespace NomaiVR
             ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            Application.runInBackground = true;
         }
 
         public static void Log(params string[] strings)
