@@ -66,6 +66,7 @@ namespace NomaiVR
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
+
         }
 
         public static void Log(params object[] strings)

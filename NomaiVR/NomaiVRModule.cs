@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Linq;
-using System;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace NomaiVR
 {
@@ -28,14 +27,11 @@ namespace NomaiVR
             SetupPatch();
         }
 
-        protected virtual void OnSceneLoad() { }
-
         private void OnSceneLoad(OWScene originalScene, OWScene loadScene)
         {
             if (IsSceneRelevant(loadScene))
             {
                 SetupBehaviour();
-                OnSceneLoad();
             }
         }
 
