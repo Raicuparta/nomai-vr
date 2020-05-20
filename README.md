@@ -117,6 +117,12 @@ If for some reason none of this is working, you might have to set everything man
 - To fix the references, right-click "References" in the Solution Explorer > "Add Reference", and add all the missing DLLs (references with yellow warning icon). You can find these DLLs in the game's directory (`OuterWilds\OuterWilds_Data\Managed`);
 - If Visual Studio isn't able to automatically copy the files, you'll have to copy the built dlls manually to OWML.
 
+## Special Thanks
+
+- Logan Van Hoef, for assisting us with the game's code;
+- Everyone over at the Outer Wilds Discord server for all the support;
+- Mobius Digital for making a neat game.
+
 ## Help / Discuss development / Tell me about your day
 
 [Join the Outer Wilds Discord](https://discord.gg/Sftcc9Z), we have a nice `#modding` channel where you can discuss all types of things.
