@@ -14,6 +14,7 @@
   - [Manual installation](#manual-installation)
   - [If you have Oculus](#if-you-have-oculus)
 - [Performance](#performance)
+  - [Framerate](#framerate)
 - [Compatibility with other mods](#compatibility-with-other-mods)
 - [Contributing](#contributing)
 - [Development Setup](#development-setup)
@@ -58,20 +59,16 @@ There are some extra in-game tutorials for teaching you VR inputs, but some stuf
 
 ### Easy installation (recommended)
 
-- [Download the Outer Wilds Mod Manager](https://github.com/Raicuparta/ow-mod-manager);
-- [Follow the instalation instructions on the Mod Manager's page](https://github.com/Raicuparta/ow-mod-manager#how-do-i-use-this);
+- [Install the Outer Wilds Mod Manager](https://github.com/Raicuparta/ow-mod-manager#how-do-i-use-this);
 - Install NomaiVR from the mod list displayed in the application;
 - If you can't get the mod manager to work, follow the instructions for manual installation.
 
 ### Manual installation
 
-- [Download OWML](https://github.com/amazingalek/owml/releases);
-- [Follow OWML's instalation instructions](https://github.com/amazingalek/owml#installation);
+- [Install OWML](https://github.com/amazingalek/owml#installation);
 - [Download the latest NomaiVR release](https://github.com/Raicuparta/NomaiVR/releases/latest);
 - Extract the `NomaiVR` directory to the `OWML/Mods` directory;
 - Run `OWML.Launcher.exe` to start the game.
-- Make sure the translator tool is set to "manual" in the settings;
-- Disable button prompts in the settings (they will be wrong and annoying anyway);
 
 ### If you have Oculus
 
@@ -103,22 +100,22 @@ Look at through [currently open issues](https://github.com/Raicuparta/NomaiVR/is
 
 ## Development Setup
 
-- [Install OWML](https://github.com/amazingalek/owml#installation) in the game's directory (should be something like `C:\Program Files\Epic Games\OuterWilds\OWML`);
-- If you already have NomaiVR installed, remove it from the `OWML/Mods` directory;
+- [Download the Outer Wilds Mod Manager](https://github.com/Raicuparta/ow-mod-manager) and install it anywhere you like;
+- Install OWML using the Mod Manager;
 - Clone NomaiVR's source;
+- Open the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
+- Edit the entry `<GameDir>` to point to the directory where Outer Wilds is installed;
+- Edit the entry `<OwmlDir>` to point to your OWML directory (it is installed inside the Mod Manager directory);
+- Repeat this process for the file `SteamVR/SteamVR.csproj.user`;
 - Open the project solution file `NomaiVR.sln` in Visual Studio;
-- On the Solution Explorer (usually the right side panel), under the project-name (NomaiVR), double click "Properties";
-- Go to "Debug" and change (if needed) "Working Directory" to **OWML's directory**;
-- Do the same thing for the SteamVR project (also inside NomaiVR's solution);
 - If needed, right click `References` in the Solution Explorer > Manage NuGet Packages > Update OWML to fix missing references;
-- In the top menu go to "Project" > "Unload Project", and then "Project" > "Reload Project".
 
-After doing this, the project references should be working. When you build the solution, the dll and json files will be copied to `OWML/NomaiVR`, so you can start the game and test right away. Pressing "Start" on Visual Studio will start the game through OWML.
+After doing this, the project references should be working. When you build the solution, the dll and json files will be copied to `[Mod Manager directory]/OWML/NomaiVR`. If this process is successful, you should see the mod show up in the Mod Manager.
 
 If for some reason none of this is working, you might have to set everything manually:
 
-- To fix the build paths and automatically copy the files to OWML, edit the "Build Events" in the properties menu.
-- To fix the references, right-click "References" in the Solution Explorer > "Add Reference", and add all the missing DLLs (references with yello warning icon). You can find these DLLs in the game's directory (`OuterWilds\OuterWilds_Data\Managed`).
+- To fix the references, right-click "References" in the Solution Explorer > "Add Reference", and add all the missing DLLs (references with yellow warning icon). You can find these DLLs in the game's directory (`OuterWilds\OuterWilds_Data\Managed`);
+- If Visual Studio isn't able to automatically copy the files, you'll have to copy the built dlls manually to OWML.
 
 ## Help / Discuss development / Tell me about your day
 
