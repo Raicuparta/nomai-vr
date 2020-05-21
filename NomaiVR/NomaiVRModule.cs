@@ -70,7 +70,7 @@ namespace NomaiVR
         }
     }
 
-    public class NomaiVRModule
+    public static class NomaiVRModule
     {
         public class EmptyPatch : NomaiVRPatch
         {
