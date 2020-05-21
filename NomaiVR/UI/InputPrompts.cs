@@ -14,11 +14,7 @@ namespace NomaiVR
         {
             private static List<ScreenPrompt> _toolUnequipPrompts;
 
-            private static PromptManager _manager {
-                get {
-                    return Locator.GetPromptManager();
-                }
-            }
+            private static PromptManager _manager => Locator.GetPromptManager();
 
             private void LateUpdate()
             {

@@ -161,7 +161,7 @@ namespace NomaiVR
                 public SteamVR_Action action;
                 public bool isShowing;
                 public int priority;
-                private string name;
+                private readonly string name;
 
                 public TutorialInput(string name, SteamVR_Action action, int priority)
                 {
