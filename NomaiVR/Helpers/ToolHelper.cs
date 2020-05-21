@@ -1,6 +1,4 @@
-﻿using OWML.ModHelper.Events;
-
-namespace NomaiVR
+﻿namespace NomaiVR
 {
     public static class ToolHelper
     {
