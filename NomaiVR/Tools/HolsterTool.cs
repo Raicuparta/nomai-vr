@@ -61,6 +61,12 @@ namespace NomaiVR
             return ToolHelper.Swapper.IsInToolMode(mode, ToolGroup.Suit);
         }
 
+        bool IsInTrigger()
+        {
+            var promptReceiver = ToolHelper.Swapper.GetProbeLauncher().GetValue<ProbePromptReceiver>("_promptTrigger");
+            return promptReceiver != null;
+        }
+
         void UpdateGrab()
         {
             if (!OWInput.IsInputMode(InputMode.Character))
@@ -75,7 +81,7 @@ namespace NomaiVR
             {
                 Equip();
             }
-            if (!ControllerInput.Behaviour.IsGripping && IsEquipped())
+            if (!ControllerInput.Behaviour.IsGripping && IsEquipped() && !IsInTrigger())
             {
                 Unequip();
             }
