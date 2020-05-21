@@ -15,6 +15,7 @@ namespace NomaiVR
             {
                 SetResolution();
                 SetRefreshRate();
+                SetFov();
             }
 
             private void SetRefreshRate()
@@ -39,7 +40,7 @@ namespace NomaiVR
                 Screen.SetResolution(displayResWidth, displayResHeight, fullScreen);
             }
 
-            private static void SetFOV()
+            public static void SetFov()
             {
                 PlayerData.GetGraphicSettings().fieldOfView = Camera.main.fieldOfView;
                 GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
@@ -58,6 +59,7 @@ namespace NomaiVR
             private static void PreApplySettings()
             {
                 Behaviour.SetResolution();
+                Behaviour.SetFov();
             }
         }
     }

@@ -74,7 +74,7 @@ namespace NomaiVR
                     NomaiVR.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patch), nameof(IsPromptAllowed));
                 }
 
-                private static bool IsPromptAllowed(bool __result)
+                private static bool IsPromptAllowed()
                 {
                     return false;
                 }

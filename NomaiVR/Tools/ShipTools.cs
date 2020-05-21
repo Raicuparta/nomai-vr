@@ -147,7 +147,6 @@ namespace NomaiVR
                 private static bool PreExitLandingView(
                     LandingCamera ____landingCam,
                     ShipLight ____landingLight,
-                    ShipCameraComponent ____landingCamComponent,
                     ShipAudioController ____shipAudioController
                 )
                 {
