@@ -1,4 +1,6 @@
-﻿namespace NomaiVR
+﻿using OWML.ModHelper.Events;
+
+namespace NomaiVR
 {
     public static class ToolHelper
     {
@@ -7,6 +9,12 @@
         public static bool IsUsingAnyTool()
         {
             return Swapper.IsInToolMode(ToolMode.Probe) || Swapper.IsInToolMode(ToolMode.Translator) || Swapper.IsInToolMode(ToolMode.SignalScope);
+        }
+
+        public static bool IsInProbeTrigger()
+        {
+            var promptReceiver = ToolHelper.Swapper.GetProbeLauncher().GetValue<ProbePromptReceiver>("_promptTrigger");
+            return promptReceiver != null;
         }
     }
 }

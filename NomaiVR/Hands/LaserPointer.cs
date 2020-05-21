@@ -38,7 +38,7 @@ namespace NomaiVR
 
             private void Update()
             {
-                if (Laser.gameObject.activeSelf && ToolHelper.IsUsingAnyTool())
+                if (Laser.gameObject.activeSelf && ToolHelper.IsUsingAnyTool() && !ToolHelper.IsInProbeTrigger())
                 {
                     Laser.gameObject.SetActive(false);
                 }
