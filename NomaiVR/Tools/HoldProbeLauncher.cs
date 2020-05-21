@@ -10,14 +10,14 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            Transform _probeLauncherModel;
-            GameObject _probeLauncherHolster;
-            static ProbeLauncherUI _probeUI;
+            private Transform _probeLauncherModel;
+            private GameObject _probeLauncherHolster;
+            private static ProbeLauncherUI _probeUI;
 
-            void Start()
+            private void Start()
             {
                 var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
-                probeLauncher.localScale = Vector3.one * 0.35f;
+                probeLauncher.localScale = Vector3.one * 0.3f;
 
                 var holdProbeLauncher = probeLauncher.gameObject.AddComponent<Holdable>();
                 holdProbeLauncher.transform.localPosition = new Vector3(0f, 0.21f, 0.05f);
@@ -37,6 +37,7 @@ namespace NomaiVR
                 {
                     if (renderer.name == "RecallEffect")
                     {
+                        renderer.GetComponent<SingularityController>().SetValue("_targetRadius", renderer.sharedMaterial.GetFloat("_Radius") * 0.2f);
                         continue;
                     }
                     foreach (var material in renderer.materials)
@@ -104,26 +105,66 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
             }
 
-            void OnSuitUp()
+            private void OnSuitUp()
             {
                 _probeLauncherHolster.SetActive(true);
             }
 
-            void OnRemoveSuit()
+            private void OnRemoveSuit()
             {
                 _probeLauncherHolster.SetActive(false);
             }
 
             public class Patch : NomaiVRPatch
             {
+                private static ToolMode? currentToolMode = null;
+                private static bool isWearingSuit = false;
+
                 public override void ApplyPatches()
                 {
                     NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patch), nameof(Patch.SuitUp));
                     NomaiVR.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patch), nameof(Patch.RemoveSuit));
                     NomaiVR.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patch), nameof(Patch.PostHideHUD));
+
+                    // Prevent probe prompt zones from equipping / unequipping the probe launcher.
+                    NomaiVR.Pre<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PreLoseFocus));
+                    NomaiVR.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PostLoseFocus));
+                    NomaiVR.Pre<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PreGainFocus));
+                    NomaiVR.Post<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PostGainFocus));
                 }
 
-                static void PostHideHUD(Canvas ____canvas)
+                private static void PreLoseFocus()
+                {
+                    ToolMode? toolMode = ToolHelper.Swapper.GetValue<ToolMode>("_currentToolMode");
+                    if (toolMode == null)
+                    {
+                        return;
+                    }
+                    currentToolMode = toolMode;
+                    ToolHelper.Swapper.SetValue("_currentToolMode", null);
+                }
+
+                private static void PostLoseFocus()
+                {
+                    if (currentToolMode == null)
+                    {
+                        return;
+                    }
+                    ToolHelper.Swapper.SetValue("_currentToolMode", currentToolMode);
+                }
+
+                private static void PreGainFocus()
+                {
+                    isWearingSuit = Locator.GetPlayerSuit().GetValue<bool>("_isWearingSuit");
+                    Locator.GetPlayerSuit().SetValue("_isWearingSuit", false);
+                }
+
+                private static void PostGainFocus()
+                {
+                    Locator.GetPlayerSuit().SetValue("_isWearingSuit", isWearingSuit);
+                }
+
+                private static void PostHideHUD(Canvas ____canvas)
                 {
                     // Prevent the photo mode bracket from disappearing.
                     if (____canvas != null)
@@ -132,12 +173,12 @@ namespace NomaiVR
                     }
                 }
 
-                static void SuitUp()
+                private static void SuitUp()
                 {
                     _probeUI.SetValue("_nonSuitUI", false);
                 }
 
-                static void RemoveSuit()
+                private static void RemoveSuit()
                 {
                     _probeUI.SetValue("_nonSuitUI", true);
                 }

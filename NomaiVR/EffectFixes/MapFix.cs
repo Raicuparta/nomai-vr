@@ -10,7 +10,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Start()
+            private void Start()
             {
                 var mapCameraTransform = Locator.GetRootTransform().Find("MapCamera");
 

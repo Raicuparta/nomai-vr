@@ -11,13 +11,14 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Awake()
+            private void Awake()
             {
                 SetResolution();
                 SetRefreshRate();
+                SetFov();
             }
 
-            void SetRefreshRate()
+            private void SetRefreshRate()
             {
                 var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
                 var overrideRefreshRate = NomaiVR.RefreshRate;
@@ -39,7 +40,7 @@ namespace NomaiVR
                 Screen.SetResolution(displayResWidth, displayResHeight, fullScreen);
             }
 
-            static void SetFOV()
+            public static void SetFov()
             {
                 PlayerData.GetGraphicSettings().fieldOfView = Camera.main.fieldOfView;
                 GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
@@ -55,9 +56,10 @@ namespace NomaiVR
                 NomaiVR.Empty<GraphicSettings>("SetSliderValFOV");
             }
 
-            static void PreApplySettings()
+            private static void PreApplySettings()
             {
                 Behaviour.SetResolution();
+                Behaviour.SetFov();
             }
         }
     }

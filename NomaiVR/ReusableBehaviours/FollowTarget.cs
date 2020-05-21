@@ -2,18 +2,17 @@
 
 namespace NomaiVR
 {
-    class FollowTarget : MonoBehaviour
+    internal class FollowTarget : MonoBehaviour
     {
         public Transform target;
         public Vector3 localPosition;
         public Quaternion localRotation = Quaternion.identity;
         public float positionSmoothTime = 0;
         public float rotationSmoothTime = 0;
-        Quaternion rotationVelocity;
-        Vector3 positionVelocity;
+        private Quaternion rotationVelocity;
+        private Vector3 positionVelocity;
 
-
-        void LateUpdate()
+        private void LateUpdate()
         {
             if (!target)
             {

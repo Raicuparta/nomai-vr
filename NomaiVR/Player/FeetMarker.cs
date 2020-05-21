@@ -9,7 +9,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Start()
+            private void Start()
             {
                 var marker = Instantiate(AssetLoader.FeetPositionPrefab).transform;
                 marker.parent = Locator.GetPlayerTransform();

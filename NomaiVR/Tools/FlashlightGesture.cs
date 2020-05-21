@@ -9,7 +9,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Start()
+            private void Start()
             {
                 var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
                 detector.other = HandsController.Behaviour.RightHand;
@@ -26,11 +26,12 @@ namespace NomaiVR
                 fillLight.localRotation = spotLight.localRotation = flashLight.transform.localRotation = Quaternion.identity;
             }
 
-            void FlashlightPress()
+            private void FlashlightPress()
             {
                 ControllerInput.Behaviour.SimulateInput(XboxButton.RightStickClick, 1);
             }
-            void FlashlightRelease()
+
+            private void FlashlightRelease()
             {
                 ControllerInput.Behaviour.SimulateInput(XboxButton.RightStickClick, 0);
             }

@@ -13,10 +13,10 @@ namespace NomaiVR
             protected static Transform _reticule;
             protected static Transform _shipWindshield;
             protected static Signalscope _signalscope;
-            static Camera _lensCamera;
-            static Transform _lens;
+            private static Camera _lensCamera;
+            private static Transform _lens;
 
-            void Start()
+            private void Start()
             {
                 if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
                 {
@@ -73,7 +73,7 @@ namespace NomaiVR
                 SetupScopeLens();
             }
 
-            void SetupSignalscopeUI(Transform parent)
+            private void SetupSignalscopeUI(Transform parent)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 parent.parent = _signalscope.transform;
@@ -82,12 +82,12 @@ namespace NomaiVR
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
             }
 
-            void OnUnequip()
+            private void OnUnequip()
             {
                 _lens.gameObject.SetActive(false);
             }
 
-            void SetupScopeLens()
+            private void SetupScopeLens()
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
@@ -123,7 +123,7 @@ namespace NomaiVR
                 _lensCamera.gameObject.SetActive(true);
             }
 
-            void Update()
+            private void Update()
             {
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
@@ -141,12 +141,12 @@ namespace NomaiVR
                     NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
                 }
 
-                static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)
+                private static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)
                 {
                     if (____gatherWithScope && !____waitToFlickerOut && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope))
                     {
-                        Vector3 from = __instance.transform.position - _lensCamera.transform.position;
-                        float num = Vector3.Angle(from, _lensCamera.transform.forward);
+                        var from = __instance.transform.position - _lensCamera.transform.position;
+                        var num = Vector3.Angle(from, _lensCamera.transform.forward);
                         if (num < 1f && _lens.gameObject.activeSelf)
                         {
                             __instance.Invoke("Gather");
@@ -154,7 +154,7 @@ namespace NomaiVR
                     }
                 }
 
-                static void ChangeInputMode(InputMode mode)
+                private static void ChangeInputMode(InputMode mode)
                 {
                     if (!_reticule || !_shipWindshield || mode == InputMode.Menu || mode == InputMode.Map)
                     {

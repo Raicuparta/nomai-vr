@@ -4,21 +4,21 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    class HolsterTool : MonoBehaviour
+    internal class HolsterTool : MonoBehaviour
     {
         public Transform hand;
         public ToolMode mode;
         public Vector3 position;
         public Vector3 angle;
         public float scale;
-        MeshRenderer[] _renderers;
-        bool _visible = true;
+        private MeshRenderer[] _renderers;
+        private bool _visible = true;
         public Action onEquip;
         public Action onUnequip;
 
         public ProximityDetector detector { get; private set; }
 
-        void Start()
+        private void Start()
         {
             detector = gameObject.AddComponent<ProximityDetector>();
             detector.other = HandsController.Behaviour.RightHand;
@@ -30,7 +30,7 @@ namespace NomaiVR
             GlobalMessenger.AddListener("RemoveSuit", Unequip);
         }
 
-        void Equip()
+        private void Equip()
         {
             onEquip?.Invoke();
             ToolHelper.Swapper.EquipToolMode(mode);
@@ -41,13 +41,13 @@ namespace NomaiVR
             }
         }
 
-        void Unequip()
+        private void Unequip()
         {
             onUnequip?.Invoke();
             ToolHelper.Swapper.UnequipTool();
         }
 
-        void SetVisible(bool visible)
+        private void SetVisible(bool visible)
         {
             foreach (var renderer in _renderers)
             {
@@ -56,12 +56,12 @@ namespace NomaiVR
             _visible = visible;
         }
 
-        bool IsEquipped()
+        private bool IsEquipped()
         {
             return ToolHelper.Swapper.IsInToolMode(mode, ToolGroup.Suit);
         }
 
-        void UpdateGrab()
+        private void UpdateGrab()
         {
             if (!OWInput.IsInputMode(InputMode.Character))
             {
@@ -81,7 +81,7 @@ namespace NomaiVR
             }
         }
 
-        void UpdateVisibility()
+        private void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
             var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode;
@@ -96,14 +96,10 @@ namespace NomaiVR
             }
         }
 
-        void Update()
+        private void LateUpdate()
         {
             UpdateGrab();
             UpdateVisibility();
-        }
-
-        void LateUpdate()
-        {
             if (_visible)
             {
                 var player = Locator.GetPlayerTransform();

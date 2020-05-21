@@ -10,25 +10,25 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            bool _wasHoldingInteract;
-            bool _pressedInteract;
-            ReferenceFrameTracker _referenceFrameTracker;
-            static Transform _mapGridRenderer;
-            static ButtonInteraction _probe;
-            static ButtonInteraction _signalscope;
-            static ButtonInteraction _landingCam;
-            static bool _canInteractWithTools;
-            static ShipCockpitController _cockpitController;
-            static bool _isLandingCamEnabled;
+            private bool _wasHoldingInteract;
+            private bool _pressedInteract;
+            private ReferenceFrameTracker _referenceFrameTracker;
+            private static Transform _mapGridRenderer;
+            private static ButtonInteraction _probe;
+            private static ButtonInteraction _signalscope;
+            private static ButtonInteraction _landingCam;
+            private static bool _canInteractWithTools;
+            private static ShipCockpitController _cockpitController;
+            private static bool _isLandingCamEnabled;
 
-            void Awake()
+            private void Awake()
             {
                 _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
                 _cockpitController = FindObjectOfType<ShipCockpitController>();
                 _mapGridRenderer = FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
             }
 
-            void Update()
+            private void Update()
             {
                 var isInShip = _cockpitController.IsPlayerAtFlightConsole();
 
@@ -78,12 +78,12 @@ namespace NomaiVR
                 }
             }
 
-            bool IsFocused(ButtonInteraction interaction)
+            private bool IsFocused(ButtonInteraction interaction)
             {
                 return interaction && interaction.receiver && interaction.receiver.IsFocused();
             }
 
-            static void SetEnabled(bool enabled)
+            private static void SetEnabled(bool enabled)
             {
                 _canInteractWithTools = enabled;
                 _probe.enabled = enabled;
@@ -111,17 +111,17 @@ namespace NomaiVR
                     NomaiVR.Post<ShipCockpitUI>("Update", typeof(Patch), nameof(PostCockpitUIUpdate));
                 }
 
-                static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
+                private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
                     ____shipSystemsCtrlr.SetValue("_usingLandingCam", _isLandingCamEnabled);
                 }
 
-                static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
+                private static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
                     ____shipSystemsCtrlr.SetValue("_usingLandingCam", false);
                 }
 
-                static bool PreEnterLandingView(
+                private static bool PreEnterLandingView(
                     LandingCamera ____landingCam,
                     ShipLight ____landingLight,
                     ShipCameraComponent ____landingCamComponent,
@@ -144,10 +144,9 @@ namespace NomaiVR
                     return false;
                 }
 
-                static bool PreExitLandingView(
+                private static bool PreExitLandingView(
                     LandingCamera ____landingCam,
                     ShipLight ____landingLight,
-                    ShipCameraComponent ____landingCamComponent,
                     ShipAudioController ____shipAudioController
                 )
                 {
@@ -159,7 +158,7 @@ namespace NomaiVR
                     return false;
                 }
 
-                static void ShipStart(ShipBody __instance)
+                private static void ShipStart(ShipBody __instance)
                 {
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
 
@@ -189,10 +188,10 @@ namespace NomaiVR
                     SetEnabled(false);
                 }
 
-                static Vector3 _cameraPosition;
-                static Quaternion _cameraRotation;
+                private static Vector3 _cameraPosition;
+                private static Quaternion _cameraRotation;
 
-                static void PreFindFrame(
+                private static void PreFindFrame(
                     OWCamera ____activeCam,
                     bool ____isLandingView,
                     bool ____isMapView
@@ -218,7 +217,7 @@ namespace NomaiVR
                     }
                 }
 
-                static void PostFindFrame(
+                private static void PostFindFrame(
                     OWCamera ____activeCam,
                     bool ____isLandingView
                 )

@@ -10,15 +10,15 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            Transform _cameraParent;
-            static Transform _playArea;
-            Transform _camera;
+            private Transform _cameraParent;
+            private static Transform _playArea;
+            private Transform _camera;
 
-            void Start()
+            private void Start()
             {
                 // This component is messing with our ability to read the VR camera's rotation.
                 // Seems to be responsible for controlling the camera rotation with the mouse / joystick.
-                PlayerCameraController playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+                var playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
                 if (playerCameraController)
                 {
                     playerCameraController.enabled = false;
@@ -47,18 +47,18 @@ namespace NomaiVR
                 _cameraParent.localRotation = Quaternion.identity;
                 _camera.parent = _cameraParent;
 
-                Vector3 movement = PlayerHelper.PlayerHead.position - _camera.position;
+                var movement = PlayerHelper.PlayerHead.position - _camera.position;
                 _cameraParent.position += movement;
 
             }
 
-            void MoveCameraToPlayerHead()
+            private void MoveCameraToPlayerHead()
             {
-                Vector3 movement = PlayerHelper.PlayerHead.position - _camera.position;
+                var movement = PlayerHelper.PlayerHead.position - _camera.position;
                 _cameraParent.position += movement;
             }
 
-            void Update()
+            private void Update()
             {
                 var cameraToHead = Vector3.ProjectOnPlane(PlayerHelper.PlayerHead.position - _camera.position, PlayerHelper.PlayerHead.up);
 
@@ -91,7 +91,7 @@ namespace NomaiVR
                     NomaiVR.Helper.HarmonyHelper.AddPrefix(lockOnMethod, typeof(Patch), nameof(PreLockOn));
                 }
 
-                static bool PreLockOn(Transform targetTransform)
+                private static bool PreLockOn(Transform targetTransform)
                 {
                     if (targetTransform.GetComponent<ModelShipController>() != null)
                     {
@@ -100,7 +100,7 @@ namespace NomaiVR
                     return true;
                 }
 
-                static void PatchTurning(PlayerCharacterController __instance)
+                private static void PatchTurning(PlayerCharacterController __instance)
                 {
                     if (OWInput.GetInputMode() != InputMode.Character)
                     {
@@ -110,7 +110,7 @@ namespace NomaiVR
                     var playerCam = __instance.GetValue<OWCamera>("_playerCam");
                     var transform = __instance.GetValue<Transform>("_transform");
 
-                    Quaternion fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
+                    var fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
 
                     var magnitudeUp = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.up).magnitude;
                     var magnitudeForward = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.right).magnitude;

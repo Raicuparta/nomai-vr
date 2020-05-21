@@ -11,7 +11,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Start()
+            private void Start()
             {
                 var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 
@@ -74,7 +74,7 @@ namespace NomaiVR
                     NomaiVR.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patch), nameof(IsPromptAllowed));
                 }
 
-                static bool IsPromptAllowed(bool __result)
+                private static bool IsPromptAllowed(bool __result)
                 {
                     return false;
                 }

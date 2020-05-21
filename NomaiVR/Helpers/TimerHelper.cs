@@ -13,12 +13,16 @@ namespace NomaiVR
                 action();
                 timer.Dispose();
                 lock (timers)
+                {
                     timers.Remove(timer);
-            }, null, milliseconds, UInt32.MaxValue - 10);
+                }
+            }, null, milliseconds, uint.MaxValue - 10);
             lock (timers)
+            {
                 timers.Add(timer);
+            }
         }
 
-        private static HashSet<System.Threading.Timer> timers = new HashSet<System.Threading.Timer>();
+        private static readonly HashSet<System.Threading.Timer> timers = new HashSet<System.Threading.Timer>();
     }
 }

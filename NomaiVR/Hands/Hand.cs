@@ -10,7 +10,7 @@ namespace NomaiVR
         public SteamVR_Action_Pose pose;
         public bool isLeft;
 
-        void Start()
+        private void Start()
         {
             var hand = Instantiate(handPrefab).transform;
             var glove = Instantiate(glovePrefab).transform;
@@ -38,12 +38,12 @@ namespace NomaiVR
             transform.gameObject.SetActive(true);
         }
 
-        bool ShouldRenderGloves()
+        private bool ShouldRenderGloves()
         {
             return Locator.GetPlayerSuit().IsWearingSuit(true);
         }
 
-        bool ShouldRenderHands()
+        private bool ShouldRenderHands()
         {
             return !Locator.GetPlayerSuit().IsWearingSuit(true);
         }

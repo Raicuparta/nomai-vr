@@ -14,7 +14,7 @@ namespace NomaiVR
         public static int RefreshRate;
         public static ModSaveFile SaveFile;
 
-        void Start()
+        private void Start()
         {
             Log("Start NomaiVR");
 

@@ -2,21 +2,21 @@
 
 namespace NomaiVR
 {
-    class DebugTransform : MonoBehaviour
+    internal class DebugTransform : MonoBehaviour
     {
-        bool _angleMode;
+        private bool _angleMode;
         public float positionDelta = 0.02f;
         public float angleDelta = 10;
         public Vector3 scaleDelta = Vector3.one * 0.02f;
 
-        float Round(float value)
+        private float Round(float value)
         {
             return Mathf.Round(value * 1000f) / 1000f;
         }
 
-        void Update()
+        private void Update()
         {
-            Vector3 position = transform.localPosition;
+            var position = transform.localPosition;
 
             if (!_angleMode)
             {
@@ -46,7 +46,7 @@ namespace NomaiVR
                 }
             }
 
-            Quaternion rotation = transform.localRotation;
+            var rotation = transform.localRotation;
 
             if (_angleMode)
             {
@@ -76,7 +76,7 @@ namespace NomaiVR
                 }
             }
 
-            Vector3 scale = transform.localScale;
+            var scale = transform.localScale;
 
             if (Input.GetKeyDown(KeyCode.Keypad1))
             {

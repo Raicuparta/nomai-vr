@@ -9,9 +9,9 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            Transform _holdTransform;
+            private Transform _holdTransform;
 
-            void Start()
+            private void Start()
             {
                 var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
                 canvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
@@ -33,7 +33,7 @@ namespace NomaiVR
                 }
             }
 
-            void Update()
+            private void Update()
             {
                 if (Camera.main)
                 {

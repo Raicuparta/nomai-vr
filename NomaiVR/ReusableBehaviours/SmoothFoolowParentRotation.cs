@@ -4,21 +4,21 @@ namespace NomaiVR
 {
     public class SmoothFoolowParentRotation : MonoBehaviour
     {
-        [SerializeField] private float step = 10f;
+        [SerializeField] private readonly float step = 10f;
 
         private Quaternion startLocalRot, lastFrameRot, lastDesiredRot, fromRot;
 
         private float percent;
 
-        void Start()
+        private void Start()
         {
             startLocalRot = transform.localRotation;
             lastFrameRot = transform.rotation;
         }
 
-        void Update()
+        private void Update()
         {
-            Quaternion newDesiredRot = transform.parent.rotation * startLocalRot;
+            var newDesiredRot = transform.parent.rotation * startLocalRot;
 
             if (lastDesiredRot != newDesiredRot)
             {

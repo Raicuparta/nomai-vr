@@ -18,7 +18,7 @@ namespace NomaiVR
                 NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
             }
 
-            static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
+            private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
             {
                 Transform parent;
 
@@ -44,7 +44,7 @@ namespace NomaiVR
                 ____maskTransform.parent = parent;
             }
 
-            static void FlashbackUpdate(Flashback __instance, Transform ____maskTransform)
+            private static void FlashbackUpdate(Flashback __instance, Transform ____maskTransform)
             {
                 var parent = ____maskTransform.parent;
                 var angle = Quaternion.Angle(parent.rotation, __instance.transform.rotation) * 0.5f;
@@ -52,7 +52,7 @@ namespace NomaiVR
                 parent.position = __instance.transform.position;
             }
 
-            static void PostTriggerFlashback(CanvasGroupAnimator ____whiteFadeAnimator)
+            private static void PostTriggerFlashback(CanvasGroupAnimator ____whiteFadeAnimator)
             {
                 ____whiteFadeAnimator.gameObject.SetActive(false);
             }

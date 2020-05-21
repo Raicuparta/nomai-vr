@@ -9,7 +9,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Start()
+            private void Start()
             {
                 var camera = Instantiate(AssetLoader.PostCreditsPrefab);
                 camera.transform.GetChild(0).parent = null;

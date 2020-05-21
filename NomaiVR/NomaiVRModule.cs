@@ -47,7 +47,7 @@ namespace NomaiVR
                 return;
             }
 
-            NomaiVR.Log("Creating NomaiVR behaviour for", this.GetType().Name);
+            NomaiVR.Log("Creating NomaiVR behaviour for", GetType().Name);
             var gameObject = new GameObject();
             gameObject.AddComponent<Behaviour>();
 
@@ -64,13 +64,13 @@ namespace NomaiVR
                 return;
             }
 
-            NomaiVR.Log("Applying NomaiVR patches for", this.GetType().Name);
+            NomaiVR.Log("Applying NomaiVR patches for", GetType().Name);
             var patch = new Patch();
             patch.ApplyPatches();
         }
     }
 
-    public class NomaiVRModule
+    public static class NomaiVRModule
     {
         public class EmptyPatch : NomaiVRPatch
         {

@@ -13,7 +13,7 @@ namespace NomaiVR
         {
             public static Transform RightHand;
             public static Transform LeftHand;
-            Transform _wrapper;
+            private Transform _wrapper;
 
             private void Start()
             {
@@ -45,7 +45,7 @@ namespace NomaiVR
                 HideBody();
             }
 
-            void HideBody()
+            private void HideBody()
             {
                 var bodyModels = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
 
@@ -77,7 +77,7 @@ namespace NomaiVR
                 withSuit.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
             }
 
-            void Update()
+            private void Update()
             {
                 if (_wrapper && Camera.main)
                 {

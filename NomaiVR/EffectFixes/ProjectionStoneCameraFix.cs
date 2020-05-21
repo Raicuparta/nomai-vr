@@ -14,7 +14,7 @@ namespace NomaiVR
                 NomaiVR.Post<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", typeof(Patch), nameof(Patch.SwitchToRemoteCamera));
             }
 
-            static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)
+            private static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)
             {
                 var camera = ____slavePlatform.GetOwnedCamera().transform;
                 if (camera.parent.name == "Prefab_NOM_RemoteViewer")

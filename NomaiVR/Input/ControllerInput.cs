@@ -12,23 +12,24 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            static Behaviour _instance;
-            static Dictionary<XboxButton, float> _buttons;
-            static Dictionary<string, float> _singleAxes;
-            static Dictionary<DoubleAxis, Vector2> _doubleAxes;
-            static PlayerResources _playerResources;
+            private static Behaviour _instance;
+            private static Dictionary<XboxButton, float> _buttons;
+            private static Dictionary<string, float> _singleAxes;
+            private static Dictionary<DoubleAxis, Vector2> _doubleAxes;
+            private static PlayerResources _playerResources;
             public static bool IsGripping { get; private set; }
-            float _primaryLastTime = -1;
-            const float holdDuration = 0.3f;
-            bool _justHeld;
-            ScreenPrompt _repairPrompt;
 
-            void Awake()
+            private float _primaryLastTime = -1;
+            private const float holdDuration = 0.3f;
+            private bool _justHeld;
+            private ScreenPrompt _repairPrompt;
+
+            private void Awake()
             {
                 OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
             }
 
-            void Start()
+            private void Start()
             {
                 _instance = this;
                 _buttons = new Dictionary<XboxButton, float>();
@@ -54,7 +55,7 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
-            void OnWakeUp()
+            private void OnWakeUp()
             {
                 _repairPrompt = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt");
             }
@@ -132,7 +133,7 @@ namespace NomaiVR
                 }
             }
 
-            static IEnumerator<WaitForSecondsRealtime> ResetInput(XboxButton button)
+            private static IEnumerator<WaitForSecondsRealtime> ResetInput(XboxButton button)
             {
                 yield return new WaitForSecondsRealtime(0.1f);
                 SimulateInput(button, 0);
@@ -154,7 +155,7 @@ namespace NomaiVR
                 _singleAxes[axis.GetInputAxisName(0)] = value;
             }
 
-            SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection)
+            private SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection)
             {
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
@@ -162,12 +163,12 @@ namespace NomaiVR
                 };
             }
 
-            SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
+            private SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
             {
                 return CreateSingleAxisHandler(singleAxis, 1);
             }
 
-            SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(SingleAxis singleAxis, int axisDirection)
+            private SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(SingleAxis singleAxis, int axisDirection)
             {
                 return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
                 {
@@ -175,7 +176,7 @@ namespace NomaiVR
                 };
             }
 
-            SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)
+            private SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)
             {
                 return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
                 {
@@ -183,7 +184,7 @@ namespace NomaiVR
                 };
             }
 
-            SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY)
+            private SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY)
             {
                 return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) =>
                 {
@@ -195,7 +196,7 @@ namespace NomaiVR
                 };
             }
 
-            void Update()
+            private void Update()
             {
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {
@@ -219,15 +220,15 @@ namespace NomaiVR
                     NomaiVR.Helper.HarmonyHelper.AddPrefix(rumbleMethod, typeof(Patch), nameof(PreUpdateRumble));
                 }
 
-                static bool PreUpdateRumble(object[] ___m_theList, bool ___m_isEnabled)
+                private static bool PreUpdateRumble(object[] ___m_theList, bool ___m_isEnabled)
                 {
-                    Vector2 a = Vector2.zero;
+                    var a = Vector2.zero;
                     if (___m_isEnabled && OWInput.UsingGamepad())
                     {
-                        float deltaTime = Time.deltaTime;
-                        for (int i = 0; i < ___m_theList.Length; i++)
+                        var deltaTime = Time.deltaTime;
+                        for (var i = 0; i < ___m_theList.Length; i++)
                         {
-                            object rumble = ___m_theList[i];
+                            var rumble = ___m_theList[i];
                             var isAlive = (bool)rumble.GetType().GetMethod("IsAlive").Invoke(rumble, new object[] { });
 
                             if (isAlive)
@@ -257,12 +258,12 @@ namespace NomaiVR
                     return false;
                 }
 
-                static void PlayerResourcesAwake()
+                private static void PlayerResourcesAwake()
                 {
                     _playerResources = GameObject.FindObjectOfType<PlayerResources>();
                 }
 
-                static float GetAxis(float __result, string axisName)
+                private static float GetAxis(float __result, string axisName)
                 {
                     if (_singleAxes.ContainsKey(axisName))
                     {
@@ -271,7 +272,7 @@ namespace NomaiVR
                     return __result;
                 }
 
-                static bool SingleAxisUpdate(
+                private static bool SingleAxisUpdate(
                     SingleAxisCommand __instance,
                     XboxButton ____xboxButtonPositive,
                     XboxButton ____xboxButtonNegative,
@@ -310,13 +311,13 @@ namespace NomaiVR
                     return false;
                 }
 
-                static bool OWInputUpdate(ref bool ____usingGamepad)
+                private static bool OWInputUpdate(ref bool ____usingGamepad)
                 {
                     ____usingGamepad = true;
                     return false;
                 }
 
-                static void EnableListenForAllJoysticks()
+                private static void EnableListenForAllJoysticks()
                 {
                     InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
                     InputLibrary.signalscope.ChangeBinding(XboxButton.DPadRight, KeyCode.None);
