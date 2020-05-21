@@ -117,19 +117,51 @@ namespace NomaiVR
 
             public class Patch : NomaiVRPatch
             {
+                private static ToolMode? currentToolMode = null;
+                private static bool isWearingSuit = false;
+
                 public override void ApplyPatches()
                 {
                     NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patch), nameof(Patch.SuitUp));
                     NomaiVR.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patch), nameof(Patch.RemoveSuit));
                     NomaiVR.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patch), nameof(Patch.PostHideHUD));
-                    NomaiVR.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.FocusPocus));
+
+                    // Prevent probe prompt zones from equipping / unequipping the probe launcher.
+                    NomaiVR.Pre<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PreLoseFocus));
+                    NomaiVR.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PostLoseFocus));
+                    NomaiVR.Pre<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PreGainFocus));
+                    NomaiVR.Post<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PostGainFocus));
                 }
 
-                private static void FocusPocus()
+                private static void PreLoseFocus()
                 {
-                    NomaiVR.Log("Lose Focus");
-                    NomaiVR.Log("Is Probe?", Locator.GetToolModeSwapper().GetToolMode() == ToolMode.Probe);
-                    NomaiVR.Log("Is Actrivbe?", Locator.GetToolModeSwapper().GetProbeLauncher().GetActiveProbe() == null);
+                    ToolMode? toolMode = ToolHelper.Swapper.GetValue<ToolMode>("_currentToolMode");
+                    if (toolMode == null)
+                    {
+                        return;
+                    }
+                    currentToolMode = toolMode;
+                    ToolHelper.Swapper.SetValue("_currentToolMode", null);
+                }
+
+                private static void PostLoseFocus()
+                {
+                    if (currentToolMode == null)
+                    {
+                        return;
+                    }
+                    ToolHelper.Swapper.SetValue("_currentToolMode", currentToolMode);
+                }
+
+                private static void PreGainFocus()
+                {
+                    isWearingSuit = Locator.GetPlayerSuit().GetValue<bool>("_isWearingSuit");
+                    Locator.GetPlayerSuit().SetValue("_isWearingSuit", false);
+                }
+
+                private static void PostGainFocus()
+                {
+                    Locator.GetPlayerSuit().SetValue("_isWearingSuit", isWearingSuit);
                 }
 
                 private static void PostHideHUD(Canvas ____canvas)

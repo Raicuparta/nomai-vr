@@ -75,7 +75,7 @@ namespace NomaiVR
             {
                 Equip();
             }
-            if (!ControllerInput.Behaviour.IsGripping && IsEquipped() && !ToolHelper.IsInProbeTrigger())
+            if (!ControllerInput.Behaviour.IsGripping && IsEquipped())
             {
                 Unequip();
             }
@@ -96,14 +96,10 @@ namespace NomaiVR
             }
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             UpdateGrab();
             UpdateVisibility();
-        }
-
-        private void LateUpdate()
-        {
             if (_visible)
             {
                 var player = Locator.GetPlayerTransform();
