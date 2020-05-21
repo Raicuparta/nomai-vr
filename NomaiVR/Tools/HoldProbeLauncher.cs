@@ -17,7 +17,7 @@ namespace NomaiVR
             void Start()
             {
                 var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
-                probeLauncher.localScale = Vector3.one * 0.35f;
+                probeLauncher.localScale = Vector3.one * 0.3f;
 
                 var holdProbeLauncher = probeLauncher.gameObject.AddComponent<Holdable>();
                 holdProbeLauncher.transform.localPosition = new Vector3(0f, 0.21f, 0.05f);
@@ -37,6 +37,7 @@ namespace NomaiVR
                 {
                     if (renderer.name == "RecallEffect")
                     {
+                        renderer.GetComponent<SingularityController>().SetValue("_targetRadius", renderer.sharedMaterial.GetFloat("_Radius") * 0.2f);
                         continue;
                     }
                     foreach (var material in renderer.materials)
@@ -121,6 +122,14 @@ namespace NomaiVR
                     NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patch), nameof(Patch.SuitUp));
                     NomaiVR.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patch), nameof(Patch.RemoveSuit));
                     NomaiVR.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patch), nameof(Patch.PostHideHUD));
+                    NomaiVR.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.FocusPocus));
+                }
+
+                static void FocusPocus()
+                {
+                    NomaiVR.Log("Lose Focus");
+                    NomaiVR.Log("Is Probe?", Locator.GetToolModeSwapper().GetToolMode() == ToolMode.Probe);
+                    NomaiVR.Log("Is Actrivbe?", Locator.GetToolModeSwapper().GetProbeLauncher().GetActiveProbe() == null);
                 }
 
                 static void PostHideHUD(Canvas ____canvas)
