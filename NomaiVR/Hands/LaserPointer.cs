@@ -12,6 +12,7 @@ namespace NomaiVR
         {
             private static FirstPersonManipulator _manipulator;
             public static Transform Laser;
+            private LineRenderer _lineRenderer;
 
             private void Start()
             {
@@ -21,14 +22,14 @@ namespace NomaiVR
                 Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
                 Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
 
-                var lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
-                lineRenderer.useWorldSpace = false;
-                lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 0.5f });
-                lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
-                lineRenderer.startColor = Color.clear;
-                lineRenderer.startWidth = 0.005f;
-                lineRenderer.endWidth = 0.001f;
-                lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
+                _lineRenderer.useWorldSpace = false;
+                _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 0.5f });
+                _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
+                _lineRenderer.startColor = Color.clear;
+                _lineRenderer.startWidth = 0.005f;
+                _lineRenderer.endWidth = 0.001f;
+                _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
 
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
@@ -38,13 +39,13 @@ namespace NomaiVR
 
             private void Update()
             {
-                if (Laser.gameObject.activeSelf && ToolHelper.IsUsingAnyTool() && !ToolHelper.IsInProbeTrigger())
+                if (_lineRenderer.enabled && ToolHelper.IsUsingAnyTool())
                 {
-                    Laser.gameObject.SetActive(false);
+                    _lineRenderer.enabled = false;
                 }
-                else if (!Laser.gameObject.activeSelf && !ToolHelper.IsUsingAnyTool())
+                else if (!_lineRenderer.enabled && !ToolHelper.IsUsingAnyTool())
                 {
-                    Laser.gameObject.SetActive(true);
+                    _lineRenderer.enabled = true;
                 }
             }
 
