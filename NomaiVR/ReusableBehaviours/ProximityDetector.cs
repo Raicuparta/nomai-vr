@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    class ProximityDetector : MonoBehaviour
+    internal class ProximityDetector : MonoBehaviour
     {
         public float minDistance = 0.15f;
         public float exitThreshold = 0.01f;
@@ -13,7 +13,7 @@ namespace NomaiVR
         public Vector3 localOffset;
         public bool isInside;
 
-        void Update()
+        private void Update()
         {
             if (!other.gameObject.activeSelf)
             {

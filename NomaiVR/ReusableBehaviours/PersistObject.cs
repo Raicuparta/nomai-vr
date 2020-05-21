@@ -4,7 +4,7 @@ namespace NomaiVR
 {
     public class PersistObject : MonoBehaviour
     {
-        void Awake()
+        private void Awake()
         {
             DontDestroyOnLoad(this);
         }

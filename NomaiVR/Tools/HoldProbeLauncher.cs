@@ -10,11 +10,11 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            Transform _probeLauncherModel;
-            GameObject _probeLauncherHolster;
-            static ProbeLauncherUI _probeUI;
+            private Transform _probeLauncherModel;
+            private GameObject _probeLauncherHolster;
+            private static ProbeLauncherUI _probeUI;
 
-            void Start()
+            private void Start()
             {
                 var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
                 probeLauncher.localScale = Vector3.one * 0.3f;
@@ -105,12 +105,12 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
             }
 
-            void OnSuitUp()
+            private void OnSuitUp()
             {
                 _probeLauncherHolster.SetActive(true);
             }
 
-            void OnRemoveSuit()
+            private void OnRemoveSuit()
             {
                 _probeLauncherHolster.SetActive(false);
             }
@@ -125,14 +125,14 @@ namespace NomaiVR
                     NomaiVR.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.FocusPocus));
                 }
 
-                static void FocusPocus()
+                private static void FocusPocus()
                 {
                     NomaiVR.Log("Lose Focus");
                     NomaiVR.Log("Is Probe?", Locator.GetToolModeSwapper().GetToolMode() == ToolMode.Probe);
                     NomaiVR.Log("Is Actrivbe?", Locator.GetToolModeSwapper().GetProbeLauncher().GetActiveProbe() == null);
                 }
 
-                static void PostHideHUD(Canvas ____canvas)
+                private static void PostHideHUD(Canvas ____canvas)
                 {
                     // Prevent the photo mode bracket from disappearing.
                     if (____canvas != null)
@@ -141,12 +141,12 @@ namespace NomaiVR
                     }
                 }
 
-                static void SuitUp()
+                private static void SuitUp()
                 {
                     _probeUI.SetValue("_nonSuitUI", false);
                 }
 
-                static void RemoveSuit()
+                private static void RemoveSuit()
                 {
                     _probeUI.SetValue("_nonSuitUI", true);
                 }

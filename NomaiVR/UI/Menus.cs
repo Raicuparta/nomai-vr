@@ -12,13 +12,13 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Awake()
+            private void Awake()
             {
                 NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
                 NomaiVR.Helper.Events.OnEvent += OnEvent;
             }
 
-            void Start()
+            private void Start()
             {
                 // Make UI elements draw on top of everything.
                 Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
@@ -62,7 +62,7 @@ namespace NomaiVR
                 }
             }
 
-            void ScreenCanvasesToWorld()
+            private void ScreenCanvasesToWorld()
             {
                 var canvases = FindObjectsOfType<Canvas>();
                 foreach (var canvas in canvases)
@@ -100,7 +100,7 @@ namespace NomaiVR
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
                 }
 
-                static void PostPopulateProfiles(GameObject ____profileListRoot)
+                private static void PostPopulateProfiles(GameObject ____profileListRoot)
                 {
                     foreach (Transform child in ____profileListRoot.transform)
                     {

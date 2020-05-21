@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 namespace NomaiVR
 {
-    class ToolModeInteraction : MonoBehaviour
+    internal class ToolModeInteraction : MonoBehaviour
     {
-        void Start()
+        private void Start()
         {
             var proximityDetector = gameObject.AddComponent<ProximityDetector>();
             proximityDetector.onEnter = OnDetectorEnter;
@@ -15,7 +15,7 @@ namespace NomaiVR
             proximityDetector.exitThreshold = 0.1f;
         }
 
-        void OnDetectorEnter()
+        private void OnDetectorEnter()
         {
             if (ToolHelper.Swapper.IsInToolMode(ToolMode.Translator))
             {
@@ -48,7 +48,7 @@ namespace NomaiVR
             ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadX, 1);
         }
 
-        void OnDetectorExit()
+        private void OnDetectorExit()
         {
             ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadX, 0);
             ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, 0);

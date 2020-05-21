@@ -11,7 +11,7 @@ namespace NomaiVR
             var ret = new List<GameObject>();
             var all = GameObject.FindObjectsOfType<GameObject>();
 
-            foreach (GameObject t in all)
+            foreach (var t in all)
             {
                 if (t.layer == layer)
                 {

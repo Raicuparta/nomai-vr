@@ -13,7 +13,7 @@ namespace NomaiVR
             Save();
         }
 
-        void Save()
+        private void Save()
         {
             NomaiVR.Helper.Storage.Save(this, FileName);
         }

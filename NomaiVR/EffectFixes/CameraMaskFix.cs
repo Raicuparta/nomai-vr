@@ -9,12 +9,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            OWCamera _camera;
-            static float _farClipPlane = -1;
+            private OWCamera _camera;
+            private static float _farClipPlane = -1;
             public static int cullingMask = -1;
-            static Behaviour _instance;
+            private static Behaviour _instance;
 
-            void Start()
+            private void Start()
             {
                 _instance = this;
 
@@ -26,18 +26,18 @@ namespace NomaiVR
                 }
             }
 
-            void Update()
+            private void Update()
             {
                 _camera.postProcessingSettings.chromaticAberrationEnabled = false;
                 _camera.postProcessingSettings.vignetteEnabled = false;
             }
 
-            void CloseEyesDelayed()
+            private void CloseEyesDelayed()
             {
                 Invoke(nameof(CloseEyes), 3);
             }
 
-            void CloseEyes()
+            private void CloseEyes()
             {
                 cullingMask = Camera.main.cullingMask;
                 _farClipPlane = Camera.main.farClipPlane;
@@ -46,7 +46,7 @@ namespace NomaiVR
                 Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
             }
 
-            void OpenEyes()
+            private void OpenEyes()
             {
                 Camera.main.cullingMask = cullingMask;
                 Camera.main.farClipPlane = _farClipPlane;
@@ -66,17 +66,17 @@ namespace NomaiVR
                     NomaiVR.Post<PlayerCameraEffectController>("CloseEyes", typeof(Patch), nameof(PostCloseEyes));
                 }
 
-                static void PostStartFastForwarding()
+                private static void PostStartFastForwarding()
                 {
                     Locator.GetPlayerCamera().enabled = true;
                 }
 
-                static void PostOpenEyes()
+                private static void PostOpenEyes()
                 {
                     _instance.OpenEyes();
                 }
 
-                static void PostCloseEyes()
+                private static void PostCloseEyes()
                 {
                     _instance.CloseEyesDelayed();
                 }

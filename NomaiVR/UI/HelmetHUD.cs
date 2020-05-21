@@ -14,7 +14,7 @@ namespace NomaiVR
             private static Transform _thrusterHUD;
             private static Transform _helmet;
 
-            void Awake()
+            private void Awake()
             {
                 _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
 
@@ -76,13 +76,13 @@ namespace NomaiVR
                     NomaiVR.Post<HUDCamera>("Awake", typeof(Patch), nameof(PostHUDCameraAwake));
                 }
 
-                static void PostHUDCameraAwake(Camera ____camera)
+                private static void PostHUDCameraAwake(Camera ____camera)
                 {
                     // Prevent distortion of helmet HUD.
                     ____camera.fieldOfView = 60;
                 }
 
-                static void PatchLateUpdate()
+                private static void PatchLateUpdate()
                 {
                     // Fix thruster HUD rotation.
                     var rotation = _helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);

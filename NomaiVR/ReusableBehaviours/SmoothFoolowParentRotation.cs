@@ -10,15 +10,15 @@ namespace NomaiVR
 
         private float percent;
 
-        void Start()
+        private void Start()
         {
             startLocalRot = transform.localRotation;
             lastFrameRot = transform.rotation;
         }
 
-        void Update()
+        private void Update()
         {
-            Quaternion newDesiredRot = transform.parent.rotation * startLocalRot;
+            var newDesiredRot = transform.parent.rotation * startLocalRot;
 
             if (lastDesiredRot != newDesiredRot)
             {

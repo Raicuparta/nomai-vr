@@ -11,12 +11,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            static Dictionary<InputCommand, TutorialInput> tutorialInputs;
-            static List<TutorialInput> queue;
-            List<SteamVR_RenderModel> controllerModels;
-            bool isShowingControlleModels;
+            private static Dictionary<InputCommand, TutorialInput> tutorialInputs;
+            private static List<TutorialInput> queue;
+            private List<SteamVR_RenderModel> controllerModels;
+            private bool isShowingControlleModels;
 
-            void Start()
+            private void Start()
             {
                 queue = new List<TutorialInput>();
                 controllerModels = new List<SteamVR_RenderModel>();
@@ -72,13 +72,13 @@ namespace NomaiVR
                 AddToQueue(look);
             }
 
-            static void AddToQueue(TutorialInput input)
+            private static void AddToQueue(TutorialInput input)
             {
                 queue.Add(input);
                 queue.Sort((a, b) => a.priority - b.priority);
             }
 
-            void Update()
+            private void Update()
             {
                 if (queue.Count > 0)
                 {
@@ -94,7 +94,7 @@ namespace NomaiVR
                 }
             }
 
-            void ShowControllerModels()
+            private void ShowControllerModels()
             {
                 isShowingControlleModels = true;
                 controllerModels.ForEach(model =>
@@ -104,7 +104,7 @@ namespace NomaiVR
                 });
             }
 
-            void HideControllerModels()
+            private void HideControllerModels()
             {
                 isShowingControlleModels = false;
                 controllerModels.ForEach(model =>
@@ -114,7 +114,7 @@ namespace NomaiVR
                 });
             }
 
-            void CreateControllerModel(Transform hand)
+            private void CreateControllerModel(Transform hand)
             {
                 var controllerModel = new GameObject().AddComponent<SteamVR_RenderModel>();
                 controllerModel.updateDynamically = false;
@@ -133,7 +133,7 @@ namespace NomaiVR
                     NomaiVR.Post<ScreenPrompt>("SetVisibility", typeof(Patch), nameof(SetPromptVisibility));
                 }
 
-                static void SetPromptVisibility(bool isVisible, List<InputCommand> ____commandList)
+                private static void SetPromptVisibility(bool isVisible, List<InputCommand> ____commandList)
                 {
                     foreach (var command in ____commandList)
                     {
@@ -155,13 +155,13 @@ namespace NomaiVR
                 }
             }
 
-            class TutorialInput
+            private class TutorialInput
             {
                 public bool isDone;
                 public SteamVR_Action action;
                 public bool isShowing;
                 public int priority;
-                string name;
+                private string name;
 
                 public TutorialInput(string name, SteamVR_Action action, int priority)
                 {

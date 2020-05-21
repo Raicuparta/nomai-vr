@@ -12,14 +12,15 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            static List<ScreenPrompt> _toolUnequipPrompts;
-            static PromptManager _manager {
+            private static List<ScreenPrompt> _toolUnequipPrompts;
+
+            private static PromptManager _manager {
                 get {
                     return Locator.GetPromptManager();
                 }
             }
 
-            void LateUpdate()
+            private void LateUpdate()
             {
                 var isInShip = ToolHelper.Swapper.GetToolGroup() == ToolGroup.Ship;
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
@@ -72,7 +73,7 @@ namespace NomaiVR
                     _toolUnequipPrompts = new List<ScreenPrompt>(2);
                 }
 
-                static Texture2D PostInitTranslator(Texture2D __result, XboxButton button)
+                private static Texture2D PostInitTranslator(Texture2D __result, XboxButton button)
                 {
                     if (button == XboxButton.X)
                     {
@@ -93,7 +94,7 @@ namespace NomaiVR
                     return __result;
                 }
 
-                static bool InitLockOnReticule(
+                private static bool InitLockOnReticule(
                     ref ScreenPrompt ____lockOnPrompt,
                     ref bool ____initialized,
                     ref bool ____showFullLockOnPrompt,
@@ -130,22 +131,22 @@ namespace NomaiVR
                     return false;
                 }
 
-                static void ChangeSatellitePrompts(ref ScreenPrompt ____forwardPrompt)
+                private static void ChangeSatellitePrompts(ref ScreenPrompt ____forwardPrompt)
                 {
                     ____forwardPrompt = new ScreenPrompt(InputLibrary.interact, ____forwardPrompt.GetText(), 0, false, false);
                 }
 
-                static void RemoveSatellitePrompts(ScreenPrompt ____rearviewPrompt)
+                private static void RemoveSatellitePrompts(ScreenPrompt ____rearviewPrompt)
                 {
                     _manager.RemoveScreenPrompt(____rearviewPrompt);
                 }
 
-                static void RemoveJoystickPrompts(ref bool ____lookPromptAdded)
+                private static void RemoveJoystickPrompts(ref bool ____lookPromptAdded)
                 {
                     ____lookPromptAdded = true;
                 }
 
-                static void RemoveRoastingStickPrompts(
+                private static void RemoveRoastingStickPrompts(
                     ScreenPrompt ____tiltPrompt,
                     ScreenPrompt ____mallowPrompt
                 )
@@ -154,7 +155,7 @@ namespace NomaiVR
                     _manager.RemoveScreenPrompt(____mallowPrompt);
                 }
 
-                static void RemoveToolModePrompts(
+                private static void RemoveToolModePrompts(
                     ScreenPrompt ____freeLookPrompt,
                     ScreenPrompt ____probePrompt,
                     ScreenPrompt ____signalscopePrompt,
@@ -176,7 +177,7 @@ namespace NomaiVR
                     _manager.RemoveScreenPrompt(____centerSignalscopePrompt);
                 }
 
-                static void ChangeProbePrompts(
+                private static void ChangeProbePrompts(
                     ref ScreenPrompt ____launchPrompt,
                     ref ScreenPrompt ____retrievePrompt,
                     ref ScreenPrompt ____takeSnapshotPrompt,
@@ -189,7 +190,7 @@ namespace NomaiVR
                     ____takeSnapshotPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
                 }
 
-                static void ChangeShipPrompts(
+                private static void ChangeShipPrompts(
                     ref ScreenPrompt ____exitLandingCamPrompt,
                     ref ScreenPrompt ____autopilotPrompt,
                     ref ScreenPrompt ____abortAutopilotPrompt
@@ -200,7 +201,7 @@ namespace NomaiVR
                     ____abortAutopilotPrompt = new ScreenPrompt(InputLibrary.interact, ____abortAutopilotPrompt.GetText());
                 }
 
-                static void RemoveProbePrompts(
+                private static void RemoveProbePrompts(
                     ScreenPrompt ____unequipPrompt,
                     ScreenPrompt ____photoModePrompt,
                     ScreenPrompt ____reverseCamPrompt,
@@ -217,12 +218,12 @@ namespace NomaiVR
                     _manager.RemoveScreenPrompt(____launchModePrompt);
                 }
 
-                static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
+                private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
                 {
                     ____zoomModePrompt = new ScreenPrompt(InputLibrary.interact, UITextLibrary.GetString(UITextType.SignalscopeZoomInPrompt) + "   <CMD>");
                 }
 
-                static void RemoveSignalscopePrompts(
+                private static void RemoveSignalscopePrompts(
                     ScreenPrompt ____unequipPrompt,
                     ScreenPrompt ____changeFrequencyPrompt,
                     ScreenPrompt ____zoomLevelPrompt
@@ -233,7 +234,7 @@ namespace NomaiVR
                     _manager.RemoveScreenPrompt(____zoomLevelPrompt);
                 }
 
-                static void RemoveShipPrompts(
+                private static void RemoveShipPrompts(
                     ScreenPrompt ____freeLookPrompt,
                     ScreenPrompt ____landingModePrompt,
                     ScreenPrompt ____liftoffCamera
@@ -243,7 +244,8 @@ namespace NomaiVR
                     _manager.RemoveScreenPrompt(____landingModePrompt);
                     _manager.RemoveScreenPrompt(____liftoffCamera);
                 }
-                static void RemoveTranslatorPrompts(
+
+                private static void RemoveTranslatorPrompts(
                     ScreenPrompt ____unequipPrompt,
                     ScreenPrompt ____scrollPrompt,
                     ScreenPrompt ____pagePrompt
@@ -254,7 +256,7 @@ namespace NomaiVR
                     _manager.RemoveScreenPrompt(____pagePrompt);
                 }
 
-                static void ChangeTranslatorPrompts(ref ScreenPrompt ____translatePrompt)
+                private static void ChangeTranslatorPrompts(ref ScreenPrompt ____translatePrompt)
                 {
                     ____translatePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.TranslatorUsePrompt) + "   <CMD>");
                 }

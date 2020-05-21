@@ -9,9 +9,9 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            ItemTool _itemTool;
+            private ItemTool _itemTool;
 
-            void Start()
+            private void Start()
             {
                 _itemTool = FindObjectOfType<ItemTool>();
                 _itemTool.transform.localScale = 1.8f * Vector3.one;
@@ -36,7 +36,7 @@ namespace NomaiVR
                 vesselCore.transform.localRotation = Quaternion.Euler(31.1f, 70.4f, 26f);
             }
 
-            void SetActive(bool active)
+            private void SetActive(bool active)
             {
                 var heldItem = _itemTool.GetHeldItem();
                 if (!heldItem)
@@ -46,7 +46,7 @@ namespace NomaiVR
                 heldItem.gameObject.SetActive(active);
             }
 
-            bool IsActive()
+            private bool IsActive()
             {
                 var heldItem = _itemTool.GetHeldItem();
                 if (!heldItem)
@@ -56,7 +56,7 @@ namespace NomaiVR
                 return heldItem.gameObject.activeSelf;
             }
 
-            void Update()
+            private void Update()
             {
                 if (IsActive() && ToolHelper.IsUsingAnyTool())
                 {

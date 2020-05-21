@@ -14,7 +14,7 @@ namespace NomaiVR
             private static Transform _attentionPoint = null;
             private const float _dialogeRenderSize = 0.0015f;
 
-            void Start()
+            private void Start()
             {
                 _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
@@ -25,7 +25,7 @@ namespace NomaiVR
                 canvas.renderMode = RenderMode.WorldSpace;
             }
 
-            void Update()
+            private void Update()
             {
                 if (_attentionPoint != null && _canvasTransform != null)
                 {
@@ -46,11 +46,13 @@ namespace NomaiVR
                     NomaiVR.Pre<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(Behaviour.Patch.PatchStartConversation));
                     NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(Behaviour.Patch.PatchEndConversation));
                 }
-                static void PatchStartConversation(CharacterDialogueTree __instance)
+
+                private static void PatchStartConversation(CharacterDialogueTree __instance)
                 {
                     _attentionPoint = __instance.GetValue<Transform>("_attentionPoint");
                 }
-                static void PatchEndConversation()
+
+                private static void PatchEndConversation()
                 {
                     _attentionPoint = null;
                 }

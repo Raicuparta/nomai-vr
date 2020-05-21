@@ -9,12 +9,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            void Start()
+            private void Start()
             {
                 FixDarkBrambleLights();
             }
 
-            void FixDarkBrambleLights()
+            private void FixDarkBrambleLights()
             {
                 var fogLightCanvas = GameObject.Find("FogLightCanvas").GetComponent<Canvas>();
                 fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;
@@ -31,17 +31,17 @@ namespace NomaiVR
                     NomaiVR.Pre<FogOverrideVolume>("OverrideFogSettings", typeof(Patch), nameof(Patch.PatchOverrideFog));
                 }
 
-                static bool PatchResetFog()
+                private static bool PatchResetFog()
                 {
                     return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
                 }
 
-                static bool PatchUpdateFog()
+                private static bool PatchUpdateFog()
                 {
                     return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
                 }
 
-                static bool PatchOverrideFog()
+                private static bool PatchOverrideFog()
                 {
                     return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
                 }

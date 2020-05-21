@@ -3,25 +3,25 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    class ConditionalRenderer : MonoBehaviour
+    internal class ConditionalRenderer : MonoBehaviour
     {
         public Func<bool> getShouldRender;
-        bool _shouldRender;
-        Vector3 _scale;
+        private bool _shouldRender;
+        private Vector3 _scale;
 
-        void Start()
+        private void Start()
         {
             _scale = transform.localScale;
             SetShow(false);
         }
 
-        void SetShow(bool show)
+        private void SetShow(bool show)
         {
             _shouldRender = show;
             transform.localScale = show ? _scale : Vector3.zero;
         }
 
-        void Update()
+        private void Update()
         {
             var shouldRender = getShouldRender.Invoke();
             if (!_shouldRender && shouldRender)
