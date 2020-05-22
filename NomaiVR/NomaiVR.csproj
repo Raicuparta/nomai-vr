@@ -159,11 +159,11 @@
     <None Include="Assets\AssetFiles\input-icons.manifest" />
     <None Include="Assets\AssetFiles\scope-lens" />
     <None Include="Assets\AssetFiles\scope-lens.manifest" />
-    <None Include="Bindings\actions.json" />
-    <None Include="Bindings\index_knuckles.json" />
-    <None Include="Bindings\oculus_touch.json" />
-    <None Include="Bindings\wmr-controller.json" />
-    <None Include="Bindings\vive_wands.json" />
+    <None Include="Input\Bindings\actions.json" />
+    <None Include="Input\Bindings\index_knuckles.json" />
+    <None Include="Input\Bindings\oculus_touch.json" />
+    <None Include="Input\Bindings\wmr-controller.json" />
+    <None Include="Input\Bindings\vive_wands.json" />
     <None Include="ModConfig\default-config.json" />
     <None Include="Saves\save.json" />
     <None Include="manifest.json" />
@@ -186,7 +186,7 @@ md "$(OwmlDir)\Mods\$(SolutionName)\assets"
 
 copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(SolutionName)"
 
-copy /y "$(ProjectDir)\Bindings\*.json" "$(OwmlDir)\Mods\$(SolutionName)\bindings"
+copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\Mods\$(SolutionName)\bindings"
 
 copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(SolutionName)\assets"
 
