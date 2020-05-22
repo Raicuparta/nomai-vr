@@ -5,6 +5,7 @@
     "showMirrorView": true,
     "debugMode": true,
     "overrideRefreshRate": 0,
-    "preventCursorLock": true
+    "preventCursorLock": true,
+    "showHelmet": true,
   }
 }
