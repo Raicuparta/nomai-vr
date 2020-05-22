@@ -41,6 +41,9 @@ namespace NomaiVR
 
                 // Replace helmet model to prevent looking outside the edge.
                 var helmetModelParent = _helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
+                helmetModelParent.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                    NomaiVR.Config.showHelmet;
+
                 var helmetModel = Instantiate(AssetLoader.HelmetPrefab, helmetModelParent);
                 LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
                 Destroy(helmetModelParent.Find("Helmet").gameObject);

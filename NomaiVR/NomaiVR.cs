@@ -1,8 +1,6 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
 using System;
-using UnityEngine;
-using UnityEngine.XR;
 using Valve.VR;
 
 namespace NomaiVR
@@ -10,16 +8,13 @@ namespace NomaiVR
     public class NomaiVR : ModBehaviour
     {
         public static IModHelper Helper;
-        public static bool DebugMode;
-        public static int RefreshRate;
-        public static ModSaveFile SaveFile;
+        public static ModSaveFile Save;
+        public static ModConfig Config;
 
         private void Start()
         {
-            Log("Start NomaiVR");
-
-            SaveFile = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
-            Helper = ModHelper;
+            Helper.Console.WriteLine("Start NomaiVR");
+            Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
 
             SteamVR.Initialize();
 
@@ -56,22 +51,20 @@ namespace NomaiVR
 
         public override void Configure(IModConfig config)
         {
-            DebugMode = config.GetSettingsValue<bool>("debugMode");
-            RefreshRate = config.GetSettingsValue<int>("overrideRefreshRate");
-            XRSettings.showDeviceView = config.GetSettingsValue<bool>("showMirrorView");
-
-            if (config.GetSettingsValue<bool>("preventCursorLock"))
+            Helper = ModHelper;
+            Config = new ModConfig
             {
-                ModHelper.HarmonyHelper.EmptyMethod<CursorManager>("Update");
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-
+                debugMode = config.GetSettingsValue<bool>("debugMode"),
+                showMirrorView = config.GetSettingsValue<bool>("showMirrorView"),
+                overrideRefreshRate = config.GetSettingsValue<int>("overrideRefreshRate"),
+                preventCursorLock = config.GetSettingsValue<bool>("preventCursorLock"),
+                showHelmet = config.GetSettingsValue<bool>("showHelmet"),
+            };
         }
 
         public static void Log(params object[] strings)
         {
-            if (DebugMode && Helper != null)
+            if (Helper != null && (Config == null || Config.debugMode))
             {
                 Helper.Console.WriteLine(strings);
             }

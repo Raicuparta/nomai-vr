@@ -170,7 +170,7 @@ namespace NomaiVR
                     this.priority = priority;
                     action.HideOrigins();
 
-                    if (NomaiVR.SaveFile.tutorialSteps.Contains(name))
+                    if (NomaiVR.Save.tutorialSteps.Contains(name))
                     {
                         isDone = true;
                     }
@@ -222,7 +222,7 @@ namespace NomaiVR
                         isDone = true;
                         queue.Remove(this);
                     }, 500);
-                    NomaiVR.SaveFile.AddTutorialStep(name);
+                    NomaiVR.Save.AddTutorialStep(name);
                 }
 
                 public void Show()

@@ -66,7 +66,7 @@ namespace NomaiVR
                 {
                     MoveCameraToPlayerHead();
                 }
-                if (NomaiVR.DebugMode)
+                if (NomaiVR.Config.debugMode)
                 {
                     if (Input.GetKeyDown(KeyCode.KeypadPlus))
                     {

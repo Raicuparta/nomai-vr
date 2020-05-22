@@ -95,7 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssetLoader.cs" />
+    <Compile Include="Assets\AssetLoader.cs" />
     <Compile Include="EffectFixes\FogFix.cs" />
     <Compile Include="EffectFixes\LoopTransitionFix.cs" />
     <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
@@ -106,7 +106,8 @@
     <Compile Include="Helpers\SceneHelper.cs" />
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Helpers\ToolHelper.cs" />
-    <Compile Include="ModSaveFile.cs" />
+    <Compile Include="ModConfig\ModConfig.cs" />
+    <Compile Include="Saves\ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
     <Compile Include="NomaiVRModule.cs" />
     <Compile Include="NomaiVRPatch.cs" />
@@ -146,14 +147,26 @@
     <Compile Include="EffectFixes\PostCreditsFix.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bindings\actions.json" />
-    <None Include="Bindings\index_knuckles.json" />
-    <None Include="Bindings\oculus_touch.json" />
-    <None Include="Bindings\wmr-controller.json" />
-    <None Include="Bindings\vive_wands.json" />
+    <None Include="Assets\AssetFiles\cinema-camera" />
+    <None Include="Assets\AssetFiles\cinema-camera.manifest" />
+    <None Include="Assets\AssetFiles\feetposition" />
+    <None Include="Assets\AssetFiles\feetposition.manifest" />
+    <None Include="Assets\AssetFiles\hands" />
+    <None Include="Assets\AssetFiles\hands.manifest" />
+    <None Include="Assets\AssetFiles\helmet" />
+    <None Include="Assets\AssetFiles\helmet.manifest" />
+    <None Include="Assets\AssetFiles\input-icons" />
+    <None Include="Assets\AssetFiles\input-icons.manifest" />
+    <None Include="Assets\AssetFiles\scope-lens" />
+    <None Include="Assets\AssetFiles\scope-lens.manifest" />
+    <None Include="Input\Bindings\actions.json" />
+    <None Include="Input\Bindings\index_knuckles.json" />
+    <None Include="Input\Bindings\oculus_touch.json" />
+    <None Include="Input\Bindings\wmr-controller.json" />
+    <None Include="Input\Bindings\vive_wands.json" />
     <None Include="ModConfig\default-config.json" />
-    <None Include="ModConfig\save.json" />
-    <None Include="ModConfig\manifest.json" />
+    <None Include="Saves\save.json" />
+    <None Include="manifest.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -173,11 +186,13 @@ md "$(OwmlDir)\Mods\$(SolutionName)\assets"
 
 copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(SolutionName)"
 
-copy /y "$(ProjectDir)\Bindings\*.json" "$(OwmlDir)\Mods\$(SolutionName)\bindings"
+copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\Mods\$(SolutionName)\bindings"
 
-copy /y "$(ProjectDir)\Assets\*" "$(OwmlDir)\Mods\$(SolutionName)\assets"
+copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(SolutionName)\assets"
 
-copy /y "$(ProjectDir)\ModConfig\*.json" "$(OwmlDir)\Mods\$(SolutionName)"</PostBuildEvent>
+copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\Mods\$(SolutionName)"
+copy /y "$(ProjectDir)\Saves\save.json" "$(OwmlDir)\Mods\$(SolutionName)"
+copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\Mods\$(SolutionName)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

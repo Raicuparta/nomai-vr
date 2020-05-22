@@ -37,7 +37,7 @@ namespace NomaiVR
 
         private bool IsSceneRelevant(OWScene scene)
         {
-            return scenes.Length == 0 ? true : scenes.Contains(scene);
+            return scenes.Length == 0 || scenes.Contains(scene);
         }
 
         private void SetupBehaviour()
