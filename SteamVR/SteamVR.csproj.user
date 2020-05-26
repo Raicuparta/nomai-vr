@@ -3,6 +3,6 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
     <GameDir>C:\Program Files\Epic Games\OuterWilds</GameDir>
-    <OwmlDir>C:\Users\ricar\Repos\mod-installer\out\Outer Wilds Mod Manager-win32-x64\OWML</OwmlDir>
+    <OwmlDir>C:\Users\ricar\Repos\mod-installer\out\OuterWildsModManager-win32-x64\OWML</OwmlDir>
   </PropertyGroup>
 </Project>

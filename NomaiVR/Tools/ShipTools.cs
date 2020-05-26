@@ -107,6 +107,7 @@ namespace NomaiVR
 
                     NomaiVR.Pre<ShipCockpitController>("EnterLandingView", typeof(Patch), nameof(PreEnterLandingView));
                     NomaiVR.Pre<ShipCockpitController>("ExitLandingView", typeof(Patch), nameof(PreExitLandingView));
+                    NomaiVR.Post<ShipCockpitController>("ExitFlightConsole", typeof(Patch), nameof(PostExitFlightConsole));
                     NomaiVR.Pre<ShipCockpitUI>("Update", typeof(Patch), nameof(PreCockpitUIUpdate));
                     NomaiVR.Post<ShipCockpitUI>("Update", typeof(Patch), nameof(PostCockpitUIUpdate));
                 }
@@ -156,6 +157,11 @@ namespace NomaiVR
                     ____shipAudioController.PlayLandingCamOff();
 
                     return false;
+                }
+
+                private static void PostExitFlightConsole(ShipCockpitController __instance)
+                {
+                    __instance.Invoke("ExitLandingView");
                 }
 
                 private static void ShipStart(ShipBody __instance)
