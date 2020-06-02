@@ -26,6 +26,7 @@ namespace NomaiVR
 
                 AdjustPlayerHeadPosition();
                 SetupCamera();
+                CreateRecenterMenuEntry();
             }
 
             private void AdjustPlayerHeadPosition()
@@ -56,6 +57,12 @@ namespace NomaiVR
             {
                 var movement = PlayerHelper.PlayerHead.position - _camera.position;
                 _cameraParent.position += movement;
+            }
+
+            private void CreateRecenterMenuEntry()
+            {
+                var button = NomaiVR.Helper.Menus.PauseMenu.OptionsButton.Duplicate("RESET VR POSITION");
+                button.OnClick += MoveCameraToPlayerHead;
             }
 
             private void Update()
