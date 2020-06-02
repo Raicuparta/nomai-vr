@@ -18,6 +18,7 @@ namespace NomaiVR
         public static Texture2D InteractIcon;
         public static Texture2D JumpIcon;
         public static Texture2D BackIcon;
+        public static GameObject LookArrow;
 
         public class Behaviour : MonoBehaviour
         {
@@ -45,6 +46,9 @@ namespace NomaiVR
                 InteractIcon = LoadAsset<Texture2D>(inputIconsBundle, "interact.png");
                 JumpIcon = LoadAsset<Texture2D>(inputIconsBundle, "jump.png");
                 BackIcon = LoadAsset<Texture2D>(inputIconsBundle, "back.png");
+
+                var lookArrowBundle = LoadBundle("look-arrow");
+                LookArrow = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");
             }
 
             private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object

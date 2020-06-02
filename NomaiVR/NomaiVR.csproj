@@ -134,6 +134,7 @@
     <Compile Include="Tools\ShipTools.cs" />
     <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
+    <Compile Include="UI\LookArrow.cs" />
     <Compile Include="UI\Menus.cs" />
     <Compile Include="Hands\HandsController.cs" />
     <Compile Include="Player\PlayerBodyPosition.cs" />

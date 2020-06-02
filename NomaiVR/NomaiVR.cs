@@ -46,6 +46,7 @@ namespace NomaiVR
             new InputPrompts();
             new VRTutorial();
             new PostCreditsFix();
+            new LookArrow();
             new Menus();
         }
 
