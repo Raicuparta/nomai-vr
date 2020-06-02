@@ -15,7 +15,7 @@ namespace NomaiVR
         {
             private Transform _rightArrow;
             private Transform _leftArrow;
-            public static bool IsLockedOn = false;
+            public static Transform Target;
 
             private void Start()
             {
@@ -33,10 +33,37 @@ namespace NomaiVR
 
             }
 
+            float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
+            {
+                Vector3 perp = Vector3.Cross(fwd, targetDir);
+                float dir = Vector3.Dot(perp, up);
+
+                if (dir > 0f)
+                {
+                    return 1f;
+                }
+                else if (dir < 0f)
+                {
+                    return -1f;
+                }
+                else
+                {
+                    return 0f;
+                }
+            }
+
             private void Update()
             {
-                _rightArrow.gameObject.SetActive(IsLockedOn);
-                _leftArrow.gameObject.SetActive(IsLockedOn);
+                if (Target == null)
+                {
+                    return;
+                }
+                var camera = Locator.GetPlayerCamera().transform;
+                var targetDirection = Target.position - camera.position;
+                var dir = AngleDir(camera.forward, targetDirection, camera.up);
+
+                _rightArrow.gameObject.SetActive(dir > 0);
+                _leftArrow.gameObject.SetActive(dir < 0);
             }
         }
 
@@ -56,17 +83,17 @@ namespace NomaiVR
                 }
             }
 
-            public static bool PreLockOn()
+            public static bool PreLockOn(Transform targetTransform)
             {
                 NomaiVR.Log("Locked On!!");
-                Behaviour.IsLockedOn = true;
+                Behaviour.Target = targetTransform;
                 return false;
             }
 
             public static bool PreBreakLock()
             {
                 NomaiVR.Log("Locked Off!!");
-                Behaviour.IsLockedOn = false;
+                Behaviour.Target = null;
                 return false;
             }
         }
