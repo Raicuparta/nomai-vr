@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,6 +73,14 @@ namespace NomaiVR
                             {
                                 optionsSelector.OnArrowSelectableOnRightClick();
                                 optionsSelector.OnArrowSelectableOnDownClick();
+                            }
+
+                            var twoButtonToggle = selectable.GetComponent<TwoButtonToggleElement>();
+                            if (twoButtonToggle != null)
+                            {
+                                var selection = twoButtonToggle.GetValue();
+                                twoButtonToggle.SetValue("_selection", !selection);
+                                twoButtonToggle.Invoke("UpdateToggleColors");
                             }
                         }
                     }
