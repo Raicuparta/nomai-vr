@@ -82,6 +82,19 @@ namespace NomaiVR
                                 twoButtonToggle.SetValue("_selection", !selection);
                                 twoButtonToggle.Invoke("UpdateToggleColors");
                             }
+
+                            var slider = selectable.GetComponentInChildren<Slider>();
+                            if (slider != null)
+                            {
+                                if (slider.value < slider.maxValue)
+                                {
+                                    slider.value += 1;
+                                }
+                                else
+                                {
+                                    slider.value = slider.minValue;
+                                }
+                            }
                         }
                     }
                 }
