@@ -281,10 +281,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>md "$(OwmlDir)\Mods\$(SolutionName)"
+    <PostBuildEvent>md "$(OwmlDir)\Mods\$(ModDir)"
 
-copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(SolutionName)"
+copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(ModDir)"
 
-copy /y "$(ProjectDir)\lib\*" "$(OwmlDir)\Mods\$(SolutionName)"</PostBuildEvent>
+copy /y "$(ProjectDir)\lib\*" "$(OwmlDir)\Mods\$(ModDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
