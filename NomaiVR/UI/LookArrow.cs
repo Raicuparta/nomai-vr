@@ -10,7 +10,7 @@ namespace NomaiVR
     {
         protected override bool isPersistent => false;
         protected override OWScene[] scenes => PlayableScenes;
-
+        private const float margin = 0.6f;
 
         public class Behaviour : MonoBehaviour
         {
@@ -21,8 +21,6 @@ namespace NomaiVR
             private void Start()
             {
                 var canvas = Instantiate(AssetLoader.LookArrow).GetComponent<Canvas>();
-                //canvas.worldCamera = Locator.GetPlayerCamera().mainCamera;
-                //canvas.renderMode = RenderMode.WorldSpace;
                 canvas.transform.parent = Locator.GetPlayerCamera().transform;
                 canvas.transform.localPosition = new Vector3(0, 0, 4);
                 canvas.transform.localRotation = Quaternion.identity;
@@ -47,9 +45,8 @@ namespace NomaiVR
                 var perpendicular = Vector3.Cross(camera.forward, targetDirection);
                 var dir = Vector3.Dot(perpendicular, camera.up);
 
-                _rightArrow.gameObject.SetActive(dir > 0.5f);
-                _leftArrow.gameObject.SetActive(dir < -0.5f);
-                NomaiVR.Log("dir", dir);
+                _rightArrow.gameObject.SetActive(dir > margin);
+                _leftArrow.gameObject.SetActive(dir < -margin);
             }
         }
 
@@ -71,14 +68,16 @@ namespace NomaiVR
 
             public static bool PreLockOn(Transform targetTransform)
             {
-                NomaiVR.Log("Locked On!!");
-                Behaviour.Target = targetTransform;
+                if (targetTransform.GetComponent<ModelShipController>() == null)
+                {
+                    Behaviour.Target = targetTransform;
+                }
+
                 return false;
             }
 
             public static bool PreBreakLock()
             {
-                NomaiVR.Log("Locked Off!!");
                 Behaviour.Target = null;
                 return false;
             }
