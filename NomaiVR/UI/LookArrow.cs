@@ -26,7 +26,6 @@ namespace NomaiVR
                 _wrapper.parent = Locator.GetPlayerCamera().transform;
                 _wrapper.localPosition = new Vector3(0, 0, 4);
                 _wrapper.localRotation = Quaternion.identity;
-                _wrapper.localScale = new Vector3(-0.01f, 0.01f, 0.01f);
 
                 _rightArrow = canvas.transform.Find("look-right");
                 _rightArrow.GetComponent<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
@@ -51,12 +50,22 @@ namespace NomaiVR
 
                 _rightArrow.gameObject.SetActive(dir > margin);
                 _leftArrow.gameObject.SetActive(dir < -margin);
-                _wrapper.up = player.up;
 
 
-                var headPosition = PlayerHelper.PlayerHead.position;
-                _wrapper.LookAt(headPosition, targetDirection);
-                _wrapper.Rotate(Vector3.forward * (dir > margin ? -90 : 90));
+                var forwardDot = Vector3.Dot(camera.forward, targetDirection);
+                var isInFront = forwardDot > 0;
+
+                if (isInFront)
+                {
+                    _wrapper.up = player.up;
+                    var headPosition = PlayerHelper.PlayerHead.position;
+                    _wrapper.LookAt(headPosition, targetDirection);
+                    _wrapper.Rotate(new Vector3(0, 180, dir > margin ? 90 : -90));
+                }
+                else
+                {
+                    _wrapper.localRotation = Quaternion.identity;
+                }
             }
         }
 
