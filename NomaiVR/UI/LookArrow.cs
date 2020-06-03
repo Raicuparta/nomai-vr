@@ -10,7 +10,6 @@ namespace NomaiVR
     {
         protected override bool isPersistent => false;
         protected override OWScene[] scenes => PlayableScenes;
-        private const float margin = 0;
 
         public class Behaviour : MonoBehaviour
         {
@@ -42,25 +41,34 @@ namespace NomaiVR
                 {
                     return;
                 }
+                Vector3 screenPoint = Locator.GetPlayerCamera().mainCamera.WorldToViewportPoint(Target.position);
+                bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+
+                if (onScreen)
+                {
+                    _wrapper.gameObject.SetActive(false);
+                    return;
+                }
+                _wrapper.gameObject.SetActive(true);
+
                 var camera = Locator.GetPlayerCamera().transform;
                 var targetDirection = (Target.position - camera.position).normalized;
                 var perpendicular = Vector3.Cross(camera.forward, targetDirection);
                 var player = Locator.GetPlayerTransform();
                 var dir = Vector3.Dot(perpendicular, player.up);
 
-                _rightArrow.gameObject.SetActive(dir > margin);
-                _leftArrow.gameObject.SetActive(dir < -margin);
-
-
                 var forwardDot = Vector3.Dot(camera.forward, targetDirection);
-                var isInFront = forwardDot > 0;
+                var isInFront = forwardDot > -0.5f;
+
+                _rightArrow.gameObject.SetActive(dir > 0);
+                _leftArrow.gameObject.SetActive(dir < 0);
 
                 if (isInFront)
                 {
-                    _wrapper.up = player.up;
                     var headPosition = PlayerHelper.PlayerHead.position;
+                    _wrapper.up = player.up;
                     _wrapper.LookAt(headPosition, targetDirection);
-                    _wrapper.Rotate(new Vector3(0, 180, dir > margin ? 90 : -90));
+                    _wrapper.Rotate(new Vector3(0, 180, dir > 0 ? 90 : -90));
                 }
                 else
                 {
