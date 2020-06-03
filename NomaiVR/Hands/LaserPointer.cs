@@ -44,7 +44,7 @@ namespace NomaiVR
                 {
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
                     var rect = selectable.GetComponent<RectTransform>();
-                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, rect.sizeDelta.x);
+                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, 10f);
                 }
             }
 
