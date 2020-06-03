@@ -16,6 +16,8 @@ namespace NomaiVR
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
             private bool isLongLine;
+            private const float _gameLineLength = 0.5f;
+            private const float _menuLineLength = 2f;
 
             private void Start()
             {
@@ -51,7 +53,7 @@ namespace NomaiVR
             private void UpdateUiRayCast()
             {
                 RaycastHit hit;
-                if (Physics.Raycast(Laser.position, Laser.forward, out hit, 100))
+                if (Physics.Raycast(Laser.position, Laser.forward, out hit, _menuLineLength))
                 {
 
                     var selectable = hit.transform.GetComponent<Selectable>();
@@ -121,12 +123,12 @@ namespace NomaiVR
             {
                 if (!isLongLine && OWInput.IsInputMode(InputMode.Menu))
                 {
-                    SetLineLength(1);
+                    SetLineLength(_menuLineLength);
                     isLongLine = true;
                 }
                 if (isLongLine && !OWInput.IsInputMode(InputMode.Menu))
                 {
-                    SetLineLength(0.5f);
+                    SetLineLength(_gameLineLength);
                     isLongLine = false;
                 }
             }
