@@ -11,6 +11,7 @@ namespace NomaiVR
         protected override bool isPersistent => false;
         protected override OWScene[] scenes => PlayableScenes;
 
+
         public class Behaviour : MonoBehaviour
         {
             private Transform _rightArrow;
@@ -28,28 +29,11 @@ namespace NomaiVR
 
                 _rightArrow = canvas.transform.Find("look-right");
                 _rightArrow.GetComponent<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
+                _rightArrow.gameObject.SetActive(false);
                 _leftArrow = canvas.transform.Find("look-left");
                 _leftArrow.GetComponent<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
+                _leftArrow.gameObject.SetActive(false);
 
-            }
-
-            float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
-            {
-                Vector3 perp = Vector3.Cross(fwd, targetDir);
-                float dir = Vector3.Dot(perp, up);
-
-                if (dir > 0f)
-                {
-                    return 1f;
-                }
-                else if (dir < 0f)
-                {
-                    return -1f;
-                }
-                else
-                {
-                    return 0f;
-                }
             }
 
             private void Update()
@@ -59,11 +43,13 @@ namespace NomaiVR
                     return;
                 }
                 var camera = Locator.GetPlayerCamera().transform;
-                var targetDirection = Target.position - camera.position;
-                var dir = AngleDir(camera.forward, targetDirection, camera.up);
+                var targetDirection = (Target.position - camera.position).normalized;
+                var perpendicular = Vector3.Cross(camera.forward, targetDirection);
+                var dir = Vector3.Dot(perpendicular, camera.up);
 
-                _rightArrow.gameObject.SetActive(dir > 0);
-                _leftArrow.gameObject.SetActive(dir < 0);
+                _rightArrow.gameObject.SetActive(dir > 0.5f);
+                _leftArrow.gameObject.SetActive(dir < -0.5f);
+                NomaiVR.Log("dir", dir);
             }
         }
 
