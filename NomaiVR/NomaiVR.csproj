@@ -134,6 +134,7 @@
     <Compile Include="Tools\ShipTools.cs" />
     <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
+    <Compile Include="UI\LookArrow.cs" />
     <Compile Include="UI\Menus.cs" />
     <Compile Include="Hands\HandsController.cs" />
     <Compile Include="Player\PlayerBodyPosition.cs" />
@@ -157,6 +158,8 @@
     <None Include="Assets\AssetFiles\helmet.manifest" />
     <None Include="Assets\AssetFiles\input-icons" />
     <None Include="Assets\AssetFiles\input-icons.manifest" />
+    <None Include="Assets\AssetFiles\look-arrow" />
+    <None Include="Assets\AssetFiles\look-arrow.manifest" />
     <None Include="Assets\AssetFiles\scope-lens" />
     <None Include="Assets\AssetFiles\scope-lens.manifest" />
     <None Include="Input\Bindings\actions.json" />

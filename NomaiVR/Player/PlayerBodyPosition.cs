@@ -91,20 +91,6 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     NomaiVR.Post<PlayerCharacterController>("UpdateTurning", typeof(Patch), nameof(Patch.PatchTurning));
-
-                    // Prevent camera from locking on to model ship.
-                    var lockOnArgs = new[] { typeof(Transform), typeof(float), typeof(bool), typeof(float) };
-                    var lockOnMethod = typeof(PlayerLockOnTargeting).GetMethod("LockOn", lockOnArgs);
-                    NomaiVR.Helper.HarmonyHelper.AddPrefix(lockOnMethod, typeof(Patch), nameof(PreLockOn));
-                }
-
-                private static bool PreLockOn(Transform targetTransform)
-                {
-                    if (targetTransform.GetComponent<ModelShipController>() != null)
-                    {
-                        return false;
-                    }
-                    return true;
                 }
 
                 private static void PatchTurning(PlayerCharacterController __instance)
