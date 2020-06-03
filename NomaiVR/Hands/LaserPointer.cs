@@ -36,6 +36,16 @@ namespace NomaiVR
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
 
                 DisableReticule();
+
+                var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
+                NomaiVR.Log("found", selectables.Length, "selectables");
+                foreach (var selectable in selectables)
+                {
+                    selectable.gameObject.layer = 0;
+                    var collider = selectable.gameObject.AddComponent<BoxCollider2D>();
+                    var rect = selectable.GetComponent<RectTransform>();
+                    collider.size = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y);
+                }
             }
 
             private void Update()
@@ -48,12 +58,15 @@ namespace NomaiVR
                 {
                     _lineRenderer.enabled = true;
                 }
-                RaycastHit hit;
-                if (Physics.Raycast(Laser.position, Laser.forward, out hit))
+
+                var ray = new Ray(Laser.position, Laser.forward);
+                var hit = Physics2D.GetRayIntersection(ray);
+                if (hit.collider != null)
                 {
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
+                        selectable.Select();
                         NomaiVR.Log("## Found selectable", hit.transform.name);
                     }
                     else
