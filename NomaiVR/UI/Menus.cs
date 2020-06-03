@@ -21,7 +21,8 @@ namespace NomaiVR
             private void Start()
             {
                 // Make UI elements draw on top of everything.
-                Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+                // TODO thing about this
+                //Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
 
                 var scene = LoadManager.GetCurrentScene();
 
@@ -76,8 +77,8 @@ namespace NomaiVR
                         var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                         followTarget.positionSmoothTime = 0.2f;
                         followTarget.rotationSmoothTime = 0.1f;
-                        followTarget.target = Camera.main.transform;
-                        followTarget.localPosition = Vector3.forward;
+                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform;
+                        followTarget.localPosition = SceneHelper.IsInGame() ? Vector3.forward + Vector3.up * 0.5f : Vector3.forward;
 
                         // Masks are used for hiding the overflowing elements in scrollable menus.
                         // Apparently masks change the material of the canvas element being masked,

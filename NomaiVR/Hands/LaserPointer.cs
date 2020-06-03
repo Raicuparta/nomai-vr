@@ -41,7 +41,6 @@ namespace NomaiVR
                 NomaiVR.Log("found", selectables.Length, "selectables");
                 foreach (var selectable in selectables)
                 {
-                    selectable.gameObject.layer = 0;
                     var collider = selectable.gameObject.AddComponent<BoxCollider2D>();
                     var rect = selectable.GetComponent<RectTransform>();
                     collider.size = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y);
@@ -60,18 +59,13 @@ namespace NomaiVR
                 }
 
                 var ray = new Ray(Laser.position, Laser.forward);
-                var hit = Physics2D.GetRayIntersection(ray);
+                var hit = Physics2D.GetRayIntersection(ray, 100);
                 if (hit.collider != null)
                 {
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
                         selectable.Select();
-                        NomaiVR.Log("## Found selectable", hit.transform.name);
-                    }
-                    else
-                    {
-                        NomaiVR.Log("## Not selectable", hit.transform.name);
                     }
                 }
             }
