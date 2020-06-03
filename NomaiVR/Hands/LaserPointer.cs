@@ -11,9 +11,10 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static FirstPersonManipulator _manipulator;
             public static Transform Laser;
+            private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
+            private bool isLongLine;
 
             private void Start()
             {
@@ -41,9 +42,9 @@ namespace NomaiVR
                 NomaiVR.Log("found", selectables.Length, "selectables");
                 foreach (var selectable in selectables)
                 {
-                    var collider = selectable.gameObject.AddComponent<BoxCollider2D>();
+                    var collider = selectable.gameObject.AddComponent<BoxCollider>();
                     var rect = selectable.GetComponent<RectTransform>();
-                    collider.size = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y);
+                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, rect.sizeDelta.x);
                 }
             }
 
@@ -58,9 +59,8 @@ namespace NomaiVR
                     _lineRenderer.enabled = true;
                 }
 
-                var ray = new Ray(Laser.position, Laser.forward);
-                var hit = Physics2D.GetRayIntersection(ray, 100);
-                if (hit.collider != null)
+                RaycastHit hit;
+                if (Physics.Raycast(Laser.position, Laser.forward, out hit, 100))
                 {
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
