@@ -6,6 +6,7 @@
     "debugMode": true,
     "overrideRefreshRate": 0,
     "preventCursorLock": true,
-    "showHelmet": true
+    "showHelmet": true,
+    "vibrationStrength": 1,
   }
 }

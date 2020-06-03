@@ -60,6 +60,7 @@ namespace NomaiVR
                 overrideRefreshRate = config.GetSettingsValue<int>("overrideRefreshRate"),
                 preventCursorLock = config.GetSettingsValue<bool>("preventCursorLock"),
                 showHelmet = config.GetSettingsValue<bool>("showHelmet"),
+                vibrationStrength = config.GetSettingsValue<float>("vibrationStrength"),
             };
         }
 
