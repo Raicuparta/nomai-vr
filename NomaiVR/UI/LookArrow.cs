@@ -10,20 +10,23 @@ namespace NomaiVR
     {
         protected override bool isPersistent => false;
         protected override OWScene[] scenes => PlayableScenes;
-        private const float margin = 0.6f;
+        private const float margin = 0;
 
         public class Behaviour : MonoBehaviour
         {
             private Transform _rightArrow;
             private Transform _leftArrow;
+            private Transform _wrapper;
             public static Transform Target;
 
             private void Start()
             {
                 var canvas = Instantiate(AssetLoader.LookArrow).GetComponent<Canvas>();
-                canvas.transform.parent = Locator.GetPlayerCamera().transform;
-                canvas.transform.localPosition = new Vector3(0, 0, 4);
-                canvas.transform.localRotation = Quaternion.identity;
+                _wrapper = canvas.transform;
+                _wrapper.parent = Locator.GetPlayerCamera().transform;
+                _wrapper.localPosition = new Vector3(0, 0, 4);
+                _wrapper.localRotation = Quaternion.identity;
+                _wrapper.localScale = new Vector3(-0.01f, 0.01f, 0.01f);
 
                 _rightArrow = canvas.transform.Find("look-right");
                 _rightArrow.GetComponent<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
@@ -43,10 +46,17 @@ namespace NomaiVR
                 var camera = Locator.GetPlayerCamera().transform;
                 var targetDirection = (Target.position - camera.position).normalized;
                 var perpendicular = Vector3.Cross(camera.forward, targetDirection);
-                var dir = Vector3.Dot(perpendicular, camera.up);
+                var player = Locator.GetPlayerTransform();
+                var dir = Vector3.Dot(perpendicular, player.up);
 
                 _rightArrow.gameObject.SetActive(dir > margin);
                 _leftArrow.gameObject.SetActive(dir < -margin);
+                _wrapper.up = player.up;
+
+
+                var headPosition = PlayerHelper.PlayerHead.position;
+                _wrapper.LookAt(headPosition, targetDirection);
+                _wrapper.Rotate(Vector3.forward * (dir > margin ? -90 : 90));
             }
         }
 
