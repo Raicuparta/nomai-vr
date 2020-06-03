@@ -65,8 +65,19 @@ namespace NomaiVR
                     if (selectable != null)
                     {
                         selectable.Select();
+                        if (OWInput.IsNewlyPressed(InputLibrary.interact))
+                        {
+                            var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
+                            if (optionsSelector != null)
+                            {
+                                optionsSelector.OnArrowSelectableOnRightClick();
+                                optionsSelector.OnArrowSelectableOnDownClick();
+                            }
+                        }
                     }
                 }
+
+
             }
 
             private void DisableReticule()
