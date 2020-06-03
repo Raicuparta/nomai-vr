@@ -27,7 +27,7 @@ namespace NomaiVR
 
                 _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
                 _lineRenderer.useWorldSpace = false;
-                _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 0.5f });
+                _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
                 _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
                 _lineRenderer.startColor = Color.clear;
                 _lineRenderer.startWidth = 0.005f;
@@ -57,6 +57,8 @@ namespace NomaiVR
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
+                        isLongLine = false;
+                        SetLineLength(hit.distance);
                         var tab = hit.transform.GetComponent<TabButton>();
                         if (tab != null)
                         {
@@ -109,6 +111,26 @@ namespace NomaiVR
                 }
             }
 
+            private void SetLineLength(float length)
+            {
+                _lineRenderer.SetPosition(1, Vector3.forward * length);
+
+            }
+
+            private void UpdateLineLength()
+            {
+                if (!isLongLine && OWInput.IsInputMode(InputMode.Menu))
+                {
+                    SetLineLength(1);
+                    isLongLine = true;
+                }
+                if (isLongLine && !OWInput.IsInputMode(InputMode.Menu))
+                {
+                    SetLineLength(0.5f);
+                    isLongLine = false;
+                }
+            }
+
             private void Update()
             {
                 if (_lineRenderer.enabled && ToolHelper.IsUsingAnyTool())
@@ -120,6 +142,7 @@ namespace NomaiVR
                     _lineRenderer.enabled = true;
                 }
 
+                UpdateLineLength();
                 UpdateUiRayCast();
             }
 
