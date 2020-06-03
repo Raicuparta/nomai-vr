@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NomaiVR
 {
@@ -46,6 +47,19 @@ namespace NomaiVR
                 else if (!_lineRenderer.enabled && !ToolHelper.IsUsingAnyTool())
                 {
                     _lineRenderer.enabled = true;
+                }
+                RaycastHit hit;
+                if (Physics.Raycast(Laser.position, Laser.forward, out hit))
+                {
+                    var selectable = hit.transform.GetComponent<Selectable>();
+                    if (selectable != null)
+                    {
+                        NomaiVR.Log("## Found selectable", hit.transform.name);
+                    }
+                    else
+                    {
+                        NomaiVR.Log("## Not selectable", hit.transform.name);
+                    }
                 }
             }
 
