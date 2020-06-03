@@ -39,7 +39,6 @@ namespace NomaiVR
                 DisableReticule();
 
                 var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
-                NomaiVR.Log("found", selectables.Length, "selectables");
                 foreach (var selectable in selectables)
                 {
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
