@@ -60,16 +60,17 @@ namespace NomaiVR
                 _rightArrow.gameObject.SetActive(dir > 0);
                 _leftArrow.gameObject.SetActive(dir < 0);
 
+                var playerHead = PlayerHelper.PlayerHead;
                 if (isInFront)
                 {
-                    var headPosition = PlayerHelper.PlayerHead.position;
                     _wrapper.up = player.up;
-                    _wrapper.LookAt(headPosition, targetDirection);
+                    _wrapper.LookAt(playerHead.position, targetDirection);
                     _wrapper.Rotate(new Vector3(0, 180, dir > 0 ? 90 : -90));
                 }
                 else
                 {
-                    _wrapper.localRotation = Quaternion.identity;
+                    _wrapper.up = player.up;
+                    _wrapper.LookAt(2 * _wrapper.position - playerHead.position, playerHead.up);
                 }
             }
         }
