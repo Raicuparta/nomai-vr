@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace NomaiVR
@@ -41,8 +38,8 @@ namespace NomaiVR
                 {
                     return;
                 }
-                Vector3 screenPoint = Locator.GetPlayerCamera().mainCamera.WorldToViewportPoint(Target.position);
-                bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+                var screenPoint = Locator.GetPlayerCamera().mainCamera.WorldToViewportPoint(Target.position);
+                var onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
 
                 if (onScreen)
                 {
