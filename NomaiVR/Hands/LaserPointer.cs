@@ -48,24 +48,29 @@ namespace NomaiVR
                 }
             }
 
-            private void Update()
+            private void UpdateUiRayCast()
             {
-                if (_lineRenderer.enabled && ToolHelper.IsUsingAnyTool())
-                {
-                    _lineRenderer.enabled = false;
-                }
-                else if (!_lineRenderer.enabled && !ToolHelper.IsUsingAnyTool())
-                {
-                    _lineRenderer.enabled = true;
-                }
-
                 RaycastHit hit;
                 if (Physics.Raycast(Laser.position, Laser.forward, out hit, 100))
                 {
+
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
-                        selectable.Select();
+                        var tab = hit.transform.GetComponent<TabButton>();
+                        if (tab != null)
+                        {
+                            var siblings = tab.transform.parent.GetComponentsInChildren<TabButton>();
+                            foreach (var sibling in siblings)
+                            {
+                                sibling.OnPointerExit(null);
+                            }
+                            tab.OnPointerEnter(null);
+                        }
+                        else
+                        {
+                            selectable.Select();
+                        }
                         if (OWInput.IsNewlyPressed(InputLibrary.interact))
                         {
                             var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
@@ -95,11 +100,27 @@ namespace NomaiVR
                                     slider.value = slider.minValue;
                                 }
                             }
+                            if (tab != null)
+                            {
+                                selectable.Select();
+                            }
                         }
                     }
                 }
+            }
 
+            private void Update()
+            {
+                if (_lineRenderer.enabled && ToolHelper.IsUsingAnyTool())
+                {
+                    _lineRenderer.enabled = false;
+                }
+                else if (!_lineRenderer.enabled && !ToolHelper.IsUsingAnyTool())
+                {
+                    _lineRenderer.enabled = true;
+                }
 
+                UpdateUiRayCast();
             }
 
             private void DisableReticule()
