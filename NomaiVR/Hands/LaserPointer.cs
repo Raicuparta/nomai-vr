@@ -18,6 +18,7 @@ namespace NomaiVR
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
             private const float _menuLineLength = 1.5f;
+            private TabButton[] _tabButtons;
 
             private void Start()
             {
@@ -47,19 +48,24 @@ namespace NomaiVR
                     collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, 10f);
                 }
 
-                var all = Resources.FindObjectsOfTypeAll<TabbedOptionMenu>();
-                foreach (var one in all)
-                {
-                    one.transform.Find("Blocker").gameObject.SetActive(false);
-                }
+                _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
             }
 
             private void UpdateUiRayCast()
             {
+                if (OWInput.GetInputMode() != InputMode.Menu)
+                {
+                    return;
+                }
+
+                foreach (var tabButton in _tabButtons)
+                {
+                    tabButton.OnPointerExit(null);
+                }
+
                 RaycastHit hit;
                 if (Physics.Raycast(Laser.position, Laser.forward, out hit, _menuLineLength))
                 {
-
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
@@ -67,11 +73,6 @@ namespace NomaiVR
                         var tab = hit.transform.GetComponent<TabButton>();
                         if (tab != null)
                         {
-                            var siblings = tab.transform.parent.GetComponentsInChildren<TabButton>();
-                            foreach (var sibling in siblings)
-                            {
-                                sibling.OnPointerExit(null);
-                            }
                             tab.OnPointerEnter(null);
                         }
                         else
