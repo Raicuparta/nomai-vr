@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NomaiVR
 {
@@ -10,9 +12,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static FirstPersonManipulator _manipulator;
             public static Transform Laser;
+            private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
+            private const float _gameLineLength = 0.5f;
+            private const float _menuLineLength = 1.5f;
+            private TabButton[] _tabButtons;
 
             private void Start()
             {
@@ -24,17 +29,112 @@ namespace NomaiVR
 
                 _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
                 _lineRenderer.useWorldSpace = false;
-                _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.forward * 0.5f });
-                _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
-                _lineRenderer.startColor = Color.clear;
+                _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
-                _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
-
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
+                _lineRenderer.material = Canvas.GetDefaultCanvasMaterial();
+                UpdateLineAppearance();
 
                 DisableReticule();
+
+                var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
+                foreach (var selectable in selectables)
+                {
+                    var collider = selectable.gameObject.AddComponent<BoxCollider>();
+                    var rect = selectable.GetComponent<RectTransform>();
+                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, 10f);
+                }
+
+                _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
+            }
+
+            private void UpdateUiRayCast()
+            {
+                if (OWInput.GetInputMode() != InputMode.Menu)
+                {
+                    return;
+                }
+
+                foreach (var tabButton in _tabButtons)
+                {
+                    tabButton.OnPointerExit(null);
+                }
+
+                if (Physics.Raycast(Laser.position, Laser.forward, out var hit, _menuLineLength, LayerMask.GetMask("UI")))
+                {
+                    var selectable = hit.transform.GetComponent<Selectable>();
+                    if (selectable != null)
+                    {
+                        SetLineLength(hit.distance);
+                        var tab = hit.transform.GetComponent<TabButton>();
+                        if (tab != null)
+                        {
+                            tab.OnPointerEnter(null);
+                        }
+                        else
+                        {
+                            selectable.Select();
+                        }
+                        if (OWInput.IsNewlyPressed(InputLibrary.interact))
+                        {
+                            var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
+                            if (optionsSelector != null)
+                            {
+                                optionsSelector.OnArrowSelectableOnRightClick();
+                                optionsSelector.OnArrowSelectableOnDownClick();
+                            }
+
+                            var twoButtonToggle = selectable.GetComponent<TwoButtonToggleElement>();
+                            if (twoButtonToggle != null)
+                            {
+                                var selection = twoButtonToggle.GetValue();
+                                twoButtonToggle.SetValue("_selection", !selection);
+                                twoButtonToggle.Invoke("UpdateToggleColors");
+                            }
+
+                            var slider = selectable.GetComponentInChildren<Slider>();
+                            if (slider != null)
+                            {
+                                if (slider.value < slider.maxValue)
+                                {
+                                    slider.value += 1;
+                                }
+                                else
+                                {
+                                    slider.value = slider.minValue;
+                                }
+                            }
+                            if (tab != null)
+                            {
+                                selectable.Select();
+                            }
+                        }
+                    }
+                }
+            }
+
+            private void SetLineLength(float length)
+            {
+                _lineRenderer.SetPosition(1, Vector3.forward * length);
+
+            }
+
+            private void UpdateLineAppearance()
+            {
+                if (OWInput.IsInputMode(InputMode.Menu))
+                {
+                    SetLineLength(_menuLineLength);
+                    _lineRenderer.endColor = Color.white;
+                    _lineRenderer.startColor = new Color(1, 1, 1, 0.5f);
+                }
+                else
+                {
+                    SetLineLength(_gameLineLength);
+                    _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
+                    _lineRenderer.startColor = Color.clear;
+                }
             }
 
             private void Update()
@@ -47,6 +147,9 @@ namespace NomaiVR
                 {
                     _lineRenderer.enabled = true;
                 }
+
+                UpdateLineAppearance();
+                UpdateUiRayCast();
             }
 
             private void DisableReticule()

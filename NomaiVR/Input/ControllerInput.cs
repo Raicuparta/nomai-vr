@@ -324,6 +324,13 @@ namespace NomaiVR
                 {
                     InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
                     InputLibrary.signalscope.ChangeBinding(XboxButton.DPadRight, KeyCode.None);
+
+                    // TODO: uncomment this after laser is implemented in main menu.
+                    //InputLibrary.tabL.ChangeBinding(XboxButton.None, KeyCode.None);
+                    //InputLibrary.tabR.ChangeBinding(XboxButton.None, KeyCode.None);
+                    //InputLibrary.setDefaults.ChangeBinding(XboxButton.None, KeyCode.None);
+                    //InputLibrary.confirm.ChangeBinding(XboxButton.None, KeyCode.None);
+                    //InputLibrary.confirm2.ChangeBinding(XboxButton.None, KeyCode.None);
                 }
             }
         }

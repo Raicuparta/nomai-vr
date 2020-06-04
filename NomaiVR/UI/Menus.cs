@@ -76,8 +76,8 @@ namespace NomaiVR
                         var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                         followTarget.positionSmoothTime = 0.2f;
                         followTarget.rotationSmoothTime = 0.1f;
-                        followTarget.target = Camera.main.transform;
-                        followTarget.localPosition = Vector3.forward;
+                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform;
+                        followTarget.localPosition = SceneHelper.IsInGame() ? Vector3.forward + Vector3.up * 0.5f : Vector3.forward;
 
                         // Masks are used for hiding the overflowing elements in scrollable menus.
                         // Apparently masks change the material of the canvas element being masked,
@@ -98,6 +98,20 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
+
+                    // Make options menu background color transparent,
+                    // to prevent obscuring the laser
+                    NomaiVR.Post<TabbedOptionMenu>("Initialize", typeof(Patch), nameof(PostOptionMenuInitialize));
+                }
+
+                private static void PostOptionMenuInitialize(TabbedOptionMenu __instance)
+                {
+                    var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
+                    displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
+                    displayPanel.Find("Background").gameObject.SetActive(false);
+
+                    var tabsBackground = __instance.transform.Find("Tabs/Background");
+                    tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)

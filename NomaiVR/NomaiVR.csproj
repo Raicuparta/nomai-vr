@@ -181,21 +181,21 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del "$(GameDir)\Mods\$(SolutionName)\config.json"
+    <PostBuildEvent>del "$(GameDir)\Mods\$(ModDir)\config.json"
 
-md "$(OwmlDir)\Mods\$(SolutionName)"
-md "$(OwmlDir)\Mods\$(SolutionName)\bindings"
-md "$(OwmlDir)\Mods\$(SolutionName)\assets"
+md "$(OwmlDir)\Mods\$(ModDir)"
+md "$(OwmlDir)\Mods\$(ModDir)\bindings"
+md "$(OwmlDir)\Mods\$(ModDir)\assets"
 
-copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(SolutionName)"
+copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(ModDir)"
 
-copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\Mods\$(SolutionName)\bindings"
+copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\Mods\$(ModDir)\bindings"
 
-copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(SolutionName)\assets"
+copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(ModDir)\assets"
 
-copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\Mods\$(SolutionName)"
-copy /y "$(ProjectDir)\Saves\save.json" "$(OwmlDir)\Mods\$(SolutionName)"
-copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\Mods\$(SolutionName)"</PostBuildEvent>
+copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\Mods\$(ModDir)"
+copy /y "$(ProjectDir)\Saves\save.json" "$(OwmlDir)\Mods\$(ModDir)"
+copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\Mods\$(ModDir)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
