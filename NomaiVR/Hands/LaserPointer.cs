@@ -63,8 +63,7 @@ namespace NomaiVR
                     tabButton.OnPointerExit(null);
                 }
 
-                RaycastHit hit;
-                if (Physics.Raycast(Laser.position, Laser.forward, out hit, _menuLineLength))
+                if (Physics.Raycast(Laser.position, Laser.forward, out var hit, _menuLineLength, LayerMask.GetMask("UI")))
                 {
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
