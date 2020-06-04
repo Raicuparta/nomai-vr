@@ -7,7 +7,7 @@ namespace NomaiVR
     public class HandsController : NomaiVRModule<HandsController.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override OWScene[] scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {
@@ -42,7 +42,10 @@ namespace NomaiVR
                 _wrapper.localRotation = Quaternion.identity;
                 _wrapper.localPosition = Camera.main.transform.localPosition;
 
-                HideBody();
+                if (SceneHelper.IsInGame())
+                {
+                    HideBody();
+                }
             }
 
             private void HideBody()
