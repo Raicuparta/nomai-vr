@@ -1,6 +1,7 @@
 ﻿using OWML.ModHelper.Events;
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -15,9 +16,10 @@ namespace NomaiVR
             public static Transform Laser;
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
-            private bool isLongLine;
             private const float _gameLineLength = 0.5f;
-            private const float _menuLineLength = 2f;
+            private const float _menuLineLength = 1.5f;
+            private readonly Shader _gameLineShader = Shader.Find("Particles/Alpha Blended Premultiply");
+            private readonly Shader _menuLineShader = Shader.Find("Unlit/Texture");
 
             private void Start()
             {
@@ -34,10 +36,9 @@ namespace NomaiVR
                 _lineRenderer.startColor = Color.clear;
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
-                _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
-
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
+                UpdateLineAppearance();
 
                 DisableReticule();
 
@@ -47,6 +48,12 @@ namespace NomaiVR
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
                     var rect = selectable.GetComponent<RectTransform>();
                     collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, 10f);
+                }
+
+                var all = Resources.FindObjectsOfTypeAll<TabbedOptionMenu>();
+                foreach (var one in all)
+                {
+                    one.transform.Find("Blocker").gameObject.SetActive(false);
                 }
             }
 
@@ -59,7 +66,6 @@ namespace NomaiVR
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
-                        isLongLine = false;
                         SetLineLength(hit.distance);
                         var tab = hit.transform.GetComponent<TabButton>();
                         if (tab != null)
@@ -119,17 +125,17 @@ namespace NomaiVR
 
             }
 
-            private void UpdateLineLength()
+            private void UpdateLineAppearance()
             {
-                if (!isLongLine && OWInput.IsInputMode(InputMode.Menu))
+                if (OWInput.IsInputMode(InputMode.Menu))
                 {
                     SetLineLength(_menuLineLength);
-                    isLongLine = true;
+                    _lineRenderer.material.shader = _menuLineShader;
                 }
-                if (isLongLine && !OWInput.IsInputMode(InputMode.Menu))
+                else
                 {
                     SetLineLength(_gameLineLength);
-                    isLongLine = false;
+                    _lineRenderer.material.shader = _gameLineShader;
                 }
             }
 
@@ -144,7 +150,7 @@ namespace NomaiVR
                     _lineRenderer.enabled = true;
                 }
 
-                UpdateLineLength();
+                UpdateLineAppearance();
                 UpdateUiRayCast();
             }
 
