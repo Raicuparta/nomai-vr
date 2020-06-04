@@ -12,7 +12,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static List<ScreenPrompt> _toolUnequipPrompts;
+            private static List<ScreenPrompt> _toolUnequipPrompts = new List<ScreenPrompt>(2);
 
             private static PromptManager _manager => Locator.GetPromptManager();
 
@@ -65,8 +65,6 @@ namespace NomaiVR
                     var initMethod = typeof(InputTranslator).GetMethod("GetButtonTexture", new[] { typeof(XboxButton) });
                     var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
                     harmony.Patch(initMethod, null, harmonyMethod);
-
-                    _toolUnequipPrompts = new List<ScreenPrompt>(2);
                 }
 
                 private static Texture2D PostInitTranslator(Texture2D __result, XboxButton button)
