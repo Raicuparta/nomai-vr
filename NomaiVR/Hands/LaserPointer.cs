@@ -35,7 +35,7 @@ namespace NomaiVR
                 _lineRenderer.endWidth = 0.001f;
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
-                _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                _lineRenderer.material = Canvas.GetDefaultCanvasMaterial();
                 UpdateLineAppearance();
 
                 DisableReticule();
