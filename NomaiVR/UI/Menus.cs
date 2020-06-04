@@ -21,8 +21,7 @@ namespace NomaiVR
             private void Start()
             {
                 // Make UI elements draw on top of everything.
-                // TODO thing about this
-                //Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+                Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
 
                 var scene = LoadManager.GetCurrentScene();
 
@@ -99,6 +98,20 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
+
+                    // Make options menu background color transparent,
+                    // to prevent obscuring the laser
+                    NomaiVR.Post<TabbedOptionMenu>("Initialize", typeof(Patch), nameof(PostOptionMenuInitialize));
+                }
+
+                private static void PostOptionMenuInitialize(TabbedOptionMenu __instance)
+                {
+                    var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
+                    displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
+                    displayPanel.Find("Background").gameObject.SetActive(false);
+
+                    var tabsBackground = __instance.transform.Find("Tabs/Background");
+                    tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)

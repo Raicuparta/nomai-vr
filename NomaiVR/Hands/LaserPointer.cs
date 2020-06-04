@@ -18,8 +18,6 @@ namespace NomaiVR
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
             private const float _menuLineLength = 1.5f;
-            private readonly Shader _gameLineShader = Shader.Find("Particles/Alpha Blended Premultiply");
-            private readonly Shader _menuLineShader = Shader.Find("Unlit/Texture");
 
             private void Start()
             {
@@ -32,12 +30,11 @@ namespace NomaiVR
                 _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
                 _lineRenderer.useWorldSpace = false;
                 _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
-                _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
-                _lineRenderer.startColor = Color.clear;
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
+                _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
                 UpdateLineAppearance();
 
                 DisableReticule();
@@ -130,12 +127,14 @@ namespace NomaiVR
                 if (OWInput.IsInputMode(InputMode.Menu))
                 {
                     SetLineLength(_menuLineLength);
-                    _lineRenderer.material.shader = _menuLineShader;
+                    _lineRenderer.endColor = Color.white;
+                    _lineRenderer.startColor = new Color(1, 1, 1, 0.5f);
                 }
                 else
                 {
                     SetLineLength(_gameLineLength);
-                    _lineRenderer.material.shader = _gameLineShader;
+                    _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
+                    _lineRenderer.startColor = Color.clear;
                 }
             }
 
