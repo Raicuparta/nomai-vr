@@ -12,7 +12,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static List<ScreenPrompt> _toolUnequipPrompts = new List<ScreenPrompt>(2);
+            private static readonly List<ScreenPrompt> _toolUnequipPrompts = new List<ScreenPrompt>(2);
 
             private static PromptManager _manager => Locator.GetPromptManager();
 
