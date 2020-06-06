@@ -74,17 +74,6 @@ namespace NomaiVR
                         var z = SceneHelper.IsInGame() ? 1f : 1.5f;
                         var y = SceneHelper.IsInGame() ? 0.5f : 1f;
                         followTarget.localPosition = new Vector3(0, y, z);
-
-                        // Masks are used for hiding the overflowing elements in scrollable menus.
-                        // Apparently masks change the material of the canvas element being masked,
-                        // and I'm not sure how to change unity_GUIZTestMode there.
-                        // So for now I'm disabling the mask completely, which breaks some menus.
-                        var masks = canvas.GetComponentsInChildren<Mask>(true);
-                        foreach (var mask in masks)
-                        {
-                            mask.enabled = false;
-                            mask.graphic.enabled = false;
-                        }
                     }
                 }
             }
