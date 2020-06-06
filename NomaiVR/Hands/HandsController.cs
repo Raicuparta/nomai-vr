@@ -28,6 +28,7 @@ namespace NomaiVR
                 camera.transform.localPosition = Vector3.zero;
                 camera.transform.localRotation = Quaternion.identity;
 
+                camera.nearClipPlane = activeCamera.nearClipPlane;
                 camera.farClipPlane = activeCamera.farClipPlane;
                 camera.clearFlags = activeCamera.clearFlags;
                 camera.backgroundColor = activeCamera.backgroundColor;
