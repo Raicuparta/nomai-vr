@@ -34,7 +34,8 @@ namespace NomaiVR
                 _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
-                _lineRenderer.material.shader = Shader.Find("Standard");
+                _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
+                _lineRenderer.startColor = Color.clear;
                 UpdateLineAppearance();
 
                 DisableReticule();
@@ -136,14 +137,13 @@ namespace NomaiVR
                 if (OWInput.IsInputMode(InputMode.Menu))
                 {
                     SetLineLength(_menuLineLength);
-                    _lineRenderer.endColor = Color.white;
-                    _lineRenderer.startColor = new Color(1, 1, 1, 0.5f);
+                    _lineRenderer.material.shader = Shader.Find("Unlit/Color");
+                    _lineRenderer.material.SetColor("_Color", new Color(0.8f, 0.8f, 0.8f));
                 }
                 else
                 {
                     SetLineLength(_gameLineLength);
-                    _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
-                    _lineRenderer.startColor = Color.clear;
+                    _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
                 }
             }
 
