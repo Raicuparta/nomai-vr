@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace NomaiVR
 {
@@ -18,7 +19,9 @@ namespace NomaiVR
                 marker.localScale *= 0.75f;
                 LayerHelper.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
 
-                marker.GetComponentInChildren<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
+                var material = Instantiate(Canvas.GetDefaultCanvasMaterial());
+                material.SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+                marker.GetComponentInChildren<SpriteRenderer>().material = material;
             }
         }
     }
