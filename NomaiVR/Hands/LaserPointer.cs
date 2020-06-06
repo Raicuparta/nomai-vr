@@ -41,9 +41,11 @@ namespace NomaiVR
                 foreach (var selectable in selectables)
                 {
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
-                    var rect = selectable.GetComponent<RectTransform>();
+                    var rectTransform = selectable.GetComponent<RectTransform>();
                     var thickness = 100f;
-                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, thickness);
+                    var height = Math.Max(60f, rectTransform.rect.height);
+                    var width = Math.Max(60f, rectTransform.rect.width);
+                    collider.size = new Vector3(width, height, rectTransform.rect.height);
                     collider.center = new Vector3(0, 0, thickness * 0.5f);
                 }
 
