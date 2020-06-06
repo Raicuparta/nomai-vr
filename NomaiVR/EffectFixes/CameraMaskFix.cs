@@ -13,6 +13,7 @@ namespace NomaiVR
             private static float _farClipPlane = -1;
             public static int cullingMask = -1;
             private static Behaviour _instance;
+            private bool _isPaused;
 
             private void Start()
             {
@@ -30,6 +31,18 @@ namespace NomaiVR
             {
                 _camera.postProcessingSettings.chromaticAberrationEnabled = false;
                 _camera.postProcessingSettings.vignetteEnabled = false;
+
+                if (OWInput.IsInputMode(InputMode.Menu) && !_isPaused)
+                {
+                    _isPaused = true;
+                    cullingMask = Camera.main.cullingMask;
+                    Camera.main.cullingMask = LayerMask.GetMask("UI");
+                }
+                if (!OWInput.IsInputMode(InputMode.Menu) && _isPaused)
+                {
+                    _isPaused = false;
+                    Camera.main.cullingMask = cullingMask;
+                }
             }
 
             private void CloseEyesDelayed()

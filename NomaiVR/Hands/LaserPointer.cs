@@ -22,6 +22,7 @@ namespace NomaiVR
             private void Start()
             {
                 Laser = new GameObject("Laser").transform;
+                Laser.gameObject.layer = LayerMask.NameToLayer("UI");
                 Laser.gameObject.AddComponent<FollowTarget>();
                 Laser.transform.parent = HandsController.Behaviour.RightHand;
                 Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
