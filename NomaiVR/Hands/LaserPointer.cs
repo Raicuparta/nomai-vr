@@ -8,7 +8,7 @@ namespace NomaiVR
     public class LaserPointer : NomaiVRModule<LaserPointer.Behaviour, LaserPointer.Behaviour.Patch>
     {
         protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override OWScene[] scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {
@@ -32,8 +32,6 @@ namespace NomaiVR
                 _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
-                FindObjectOfType<FirstPersonManipulator>().enabled = false;
-                _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
                 _lineRenderer.material = Canvas.GetDefaultCanvasMaterial();
                 UpdateLineAppearance();
 
@@ -44,10 +42,18 @@ namespace NomaiVR
                 {
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
                     var rect = selectable.GetComponent<RectTransform>();
-                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, 10f);
+                    var thickness = 100f;
+                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, thickness);
+                    collider.center = new Vector3(0, 0, thickness * 0.5f);
                 }
 
                 _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
+
+                if (SceneHelper.IsInGame())
+                {
+                    FindObjectOfType<FirstPersonManipulator>().enabled = false;
+                    _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
+                }
             }
 
             private void UpdateUiRayCast()
@@ -139,11 +145,12 @@ namespace NomaiVR
 
             private void Update()
             {
-                if (_lineRenderer.enabled && ToolHelper.IsUsingAnyTool())
+                var isUsingTool = SceneHelper.IsInGame() && ToolHelper.IsUsingAnyTool();
+                if (_lineRenderer.enabled && isUsingTool)
                 {
                     _lineRenderer.enabled = false;
                 }
-                else if (!_lineRenderer.enabled && !ToolHelper.IsUsingAnyTool())
+                else if (!_lineRenderer.enabled && !isUsingTool)
                 {
                     _lineRenderer.enabled = true;
                 }

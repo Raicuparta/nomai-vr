@@ -106,12 +106,13 @@ namespace NomaiVR
 
                 private static void PostOptionMenuInitialize(TabbedOptionMenu __instance)
                 {
-                    var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
-                    displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
-                    displayPanel.Find("Background").gameObject.SetActive(false);
+                    // TODO: fix this in main menu.
+                    //var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
+                    //displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
+                    //displayPanel.Find("Background").gameObject.SetActive(false);
 
-                    var tabsBackground = __instance.transform.Find("Tabs/Background");
-                    tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
+                    //var tabsBackground = __instance.transform.Find("Tabs/Background");
+                    //tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)
