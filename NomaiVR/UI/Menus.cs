@@ -21,9 +21,6 @@ namespace NomaiVR
 
             private void Start()
             {
-                // Make UI elements draw on top of everything.
-                Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
-
                 var scene = LoadManager.GetCurrentScene();
 
                 if (scene == OWScene.SolarSystem)
@@ -45,10 +42,6 @@ namespace NomaiVR
 
                     // Cant't get the footer to look good, so I'm hiding it.
                     GameObject.Find("FooterBlock").SetActive(false);
-
-                    // Make the camera start looking forward instead of some random direction.
-                    //var cameraSocket = GameObject.Find("CameraSocket").transform;
-                    //cameraSocket.rotation = Quaternion.identity;
                 }
 
                 ScreenCanvasesToWorld();
@@ -101,27 +94,6 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
-
-                    // Make options menu background color transparent,
-                    // to prevent obscuring the laser
-                    NomaiVR.Post<TabbedOptionMenu>("Initialize", typeof(Patch), nameof(PostOptionMenuInitialize));
-                }
-
-                private static void PostOptionMenuInitialize(TabbedOptionMenu __instance)
-                {
-                    if (SceneHelper.IsInGame())
-                    {
-                        var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
-                        displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
-                        displayPanel.Find("Background").gameObject.SetActive(false);
-                    }
-                    else
-                    {
-                        var background = __instance.transform.Find("OptionsDisplayPanel/Background");
-                        background.gameObject.SetActive(false);
-                    }
-                    var tabsBackground = __instance.transform.Find("Tabs/Background");
-                    tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)

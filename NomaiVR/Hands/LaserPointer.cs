@@ -1,6 +1,7 @@
 ﻿using OWML.ModHelper.Events;
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -33,7 +34,7 @@ namespace NomaiVR
                 _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
-                _lineRenderer.material = Canvas.GetDefaultCanvasMaterial();
+                _lineRenderer.material.shader = Shader.Find("Standard");
                 UpdateLineAppearance();
 
                 DisableReticule();
