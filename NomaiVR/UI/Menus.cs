@@ -76,8 +76,10 @@ namespace NomaiVR
                         var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                         followTarget.positionSmoothTime = 0.2f;
                         followTarget.rotationSmoothTime = 0.1f;
-                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform;
-                        followTarget.localPosition = SceneHelper.IsInGame() ? Vector3.forward + Vector3.up * 0.5f : Vector3.forward;
+                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
+                        var z = SceneHelper.IsInGame() ? 1f : 1.5f;
+                        var y = SceneHelper.IsInGame() ? 0.5f : 1f;
+                        followTarget.localPosition = new Vector3(0, y, z);
 
                         // Masks are used for hiding the overflowing elements in scrollable menus.
                         // Apparently masks change the material of the canvas element being masked,
