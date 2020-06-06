@@ -1,6 +1,7 @@
 ﻿using OWML.Common;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -108,13 +109,19 @@ namespace NomaiVR
 
                 private static void PostOptionMenuInitialize(TabbedOptionMenu __instance)
                 {
-                    // TODO: fix this in main menu.
-                    //var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
-                    //displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
-                    //displayPanel.Find("Background").gameObject.SetActive(false);
-
-                    //var tabsBackground = __instance.transform.Find("Tabs/Background");
-                    //tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
+                    if (SceneHelper.IsInGame())
+                    {
+                        var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
+                        displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
+                        displayPanel.Find("Background").gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        var background = __instance.transform.Find("OptionsDisplayPanel/Background");
+                        background.gameObject.SetActive(false);
+                    }
+                    var tabsBackground = __instance.transform.Find("Tabs/Background");
+                    tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)
