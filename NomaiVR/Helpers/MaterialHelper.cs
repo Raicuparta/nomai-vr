@@ -24,7 +24,7 @@ namespace NomaiVR
         public static void MakeMaterialDrawOnTop(Material material)
         {
             material.shader = Canvas.GetDefaultCanvasMaterial().shader;
-            _overlayMaterial.SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+            material.SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
         }
     }
 }
