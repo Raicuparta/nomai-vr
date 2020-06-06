@@ -21,12 +21,30 @@ namespace NomaiVR
                 activeCamera.gameObject.SetActive(false);
                 _wrapper = activeCamera.transform.parent;
                 var cameraObject = new GameObject();
+                cameraObject.SetActive(false);
                 cameraObject.tag = "MainCamera";
                 var camera = cameraObject.AddComponent<Camera>();
                 camera.transform.parent = _wrapper;
                 camera.transform.localPosition = Vector3.zero;
                 camera.transform.localRotation = Quaternion.identity;
 
+                camera.farClipPlane = activeCamera.farClipPlane;
+                camera.clearFlags = activeCamera.clearFlags;
+                camera.backgroundColor = activeCamera.backgroundColor;
+                camera.cullingMask = activeCamera.cullingMask;
+                camera.depth = activeCamera.mainCamera.depth;
+                camera.tag = activeCamera.tag;
+
+                var owCamera = cameraObject.AddComponent<OWCamera>();
+                owCamera.renderSkybox = true;
+
+                var flashbackEffect = cameraObject.AddComponent<FlashbackScreenGrabImageEffect>();
+                flashbackEffect._downsampleShader = cameraObject.GetComponent<FlashbackScreenGrabImageEffect>()._downsampleShader;
+
+                cameraObject.AddComponent<FlareLayer>();
+                cameraObject.SetActive(true);
+
+                cameraObject.AddComponent<Light>();
 
                 var right = new GameObject().AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
