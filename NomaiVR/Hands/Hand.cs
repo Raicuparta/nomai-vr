@@ -32,10 +32,10 @@ namespace NomaiVR
             setupHandModel(hand);
             setupHandModel(glove);
 
-            transform.gameObject.SetActive(false);
+            gameObject.SetActive(false);
             var poseDriver = transform.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseDriver.poseAction = pose;
-            transform.gameObject.SetActive(true);
+            gameObject.SetActive(true);
         }
 
         private bool ShouldRenderGloves()

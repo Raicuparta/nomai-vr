@@ -17,7 +17,16 @@ namespace NomaiVR
 
             private void Start()
             {
-                _wrapper = new GameObject().transform;
+                var activeCamera = Locator.GetActiveCamera();
+                activeCamera.gameObject.SetActive(false);
+                _wrapper = activeCamera.transform.parent;
+                var cameraObject = new GameObject();
+                cameraObject.tag = "MainCamera";
+                var camera = cameraObject.AddComponent<Camera>();
+                camera.transform.parent = _wrapper;
+                camera.transform.localPosition = Vector3.zero;
+                camera.transform.localRotation = Quaternion.identity;
+
 
                 var right = new GameObject().AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
@@ -38,9 +47,9 @@ namespace NomaiVR
                 left.glovePrefab = AssetLoader.GlovePrefab;
                 LeftHand = left.transform;
 
-                _wrapper.parent = Camera.main.transform.parent;
-                _wrapper.localRotation = Quaternion.identity;
-                _wrapper.localPosition = Camera.main.transform.localPosition;
+                //_wrapper.parent = Camera.main.transform.parent;
+                //_wrapper.localRotation = Quaternion.identity;
+                //_wrapper.localPosition = Camera.main.transform.localPosition;
 
                 if (SceneHelper.IsInGame())
                 {
@@ -84,7 +93,7 @@ namespace NomaiVR
             {
                 if (_wrapper && Camera.main)
                 {
-                    _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+                    //_wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
                 }
             }
         }

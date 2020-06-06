@@ -46,8 +46,8 @@ namespace NomaiVR
                     GameObject.Find("FooterBlock").SetActive(false);
 
                     // Make the camera start looking forward instead of some random direction.
-                    var cameraSocket = GameObject.Find("CameraSocket").transform;
-                    cameraSocket.rotation = Quaternion.identity;
+                    //var cameraSocket = GameObject.Find("CameraSocket").transform;
+                    //cameraSocket.rotation = Quaternion.identity;
                 }
 
                 ScreenCanvasesToWorld();
