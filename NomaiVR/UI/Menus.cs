@@ -13,6 +13,8 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            private static bool _shouldRenderStarLogos;
+
             private void Start()
             {
                 var scene = LoadManager.GetCurrentScene();
@@ -24,13 +26,23 @@ namespace NomaiVR
                 else if (scene == OWScene.TitleScreen)
                 {
                     FixTitleMenuCanvases();
-                    var annapurna = GameObject.Find("StarfieldMobius_Pivot").transform;
-                    var mobius = GameObject.Find("StarfieldAnnapurna_Pivot").transform;
-                    mobius.localRotation *= Quaternion.Euler(30, 0, 0);
-                    annapurna.localRotation = mobius.localRotation;
+                    FixStarLogos();
+
                 }
                 ScreenCanvasesToWorld();
+            }
 
+            private void FixStarLogo(string objectName)
+            {
+                var logo = GameObject.Find(objectName).transform;
+                logo.localRotation *= Quaternion.Euler(30, 0, 0);
+                logo.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => _shouldRenderStarLogos;
+            }
+
+            private void FixStarLogos()
+            {
+                FixStarLogo("StarfieldMobius_Pivot");
+                FixStarLogo("StarfieldAnnapurna_Pivot");
             }
 
             private void FixSleepTimerCanvas()
@@ -77,6 +89,12 @@ namespace NomaiVR
                 {
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
                     NomaiVR.Post<CanvasMarkerManager>("Start", typeof(Patch), nameof(PostMarkerManagerStart));
+                    NomaiVR.Post<TitleScreenAnimation>("FadeInMusic", typeof(Patch), nameof(PostTitleScreenFadeInMusic));
+                }
+
+                private static void PostTitleScreenFadeInMusic()
+                {
+                    _shouldRenderStarLogos = true;
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)
