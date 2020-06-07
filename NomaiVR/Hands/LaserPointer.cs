@@ -19,6 +19,7 @@ namespace NomaiVR
             private const float _gameLineLength = 0.5f;
             private const float _menuLineLength = 1.5f;
             private TabButton[] _tabButtons;
+            private bool _isReady;
 
             private void Start()
             {
@@ -58,12 +59,24 @@ namespace NomaiVR
                 {
                     FindObjectOfType<FirstPersonManipulator>().enabled = false;
                     _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
+                    _isReady = true;
                 }
+
+                if (SceneHelper.IsInTitle())
+                {
+                    var titleAnimationController = FindObjectOfType<TitleAnimationController>();
+                    titleAnimationController.OnTitleMenuAnimationComplete += OnTitleMenuAnimationComplete;
+                }
+            }
+
+            private void OnTitleMenuAnimationComplete()
+            {
+                _isReady = true;
             }
 
             private void UpdateUiRayCast()
             {
-                if (OWInput.GetInputMode() != InputMode.Menu)
+                if (!_isReady || OWInput.GetInputMode() != InputMode.Menu)
                 {
                     return;
                 }
