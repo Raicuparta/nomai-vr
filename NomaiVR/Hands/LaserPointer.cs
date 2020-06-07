@@ -1,7 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using System;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace NomaiVR
