@@ -63,13 +63,23 @@ namespace NomaiVR
                 var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
                 foreach (var selectable in selectables)
                 {
+                    var tooltipSelectable = selectable.GetComponent<TooltipSelectable>();
+                    if (tooltipSelectable != null)
+                    {
+                        // Move children to avoid ray z-fighting;
+                        foreach (Transform child in selectable.transform)
+                        {
+                            child.localPosition += Vector3.forward;
+                        }
+                    }
+
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
 
                     var rectTransform = selectable.GetComponent<RectTransform>();
-                    var thickness = 100f;
+                    var thickness = 10f;
                     var height = Math.Max(60f, rectTransform.rect.height);
                     var width = Math.Max(60f, rectTransform.rect.width);
-                    collider.size = new Vector3(width, height, rectTransform.rect.height);
+                    collider.size = new Vector3(width, height, thickness);
                     collider.center = new Vector3(0, 0, thickness * 0.5f);
                 }
             }
