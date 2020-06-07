@@ -22,13 +22,35 @@ namespace NomaiVR
 
             private void Start()
             {
+                SetUpLaserObject();
+                SetUpLineRenderer();
+                UpdateLineAppearance();
+                DisableReticule();
+                CreateButtonColliders();
+
+                if (SceneHelper.IsInGame())
+                {
+                    SetUpFirstPersonManipulator();
+                }
+
+                if (SceneHelper.IsInTitle())
+                {
+                    SetUpTitleAnimationHandler();
+                }
+            }
+
+            private void SetUpLaserObject()
+            {
                 Laser = new GameObject("Laser").transform;
                 Laser.gameObject.layer = LayerMask.NameToLayer("UI");
                 Laser.gameObject.AddComponent<FollowTarget>();
                 Laser.transform.parent = HandsController.Behaviour.RightHand;
                 Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
                 Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+            }
 
+            private void SetUpLineRenderer()
+            {
                 _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
                 _lineRenderer.useWorldSpace = false;
                 _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
@@ -36,23 +58,19 @@ namespace NomaiVR
                 _lineRenderer.endWidth = 0.001f;
                 _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
                 _lineRenderer.startColor = Color.clear;
-                UpdateLineAppearance();
+            }
 
-                DisableReticule();
-                CreateButtonColliders();
+            private void SetUpFirstPersonManipulator()
+            {
+                FindObjectOfType<FirstPersonManipulator>().enabled = false;
+                _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
+                _isReady = true;
+            }
 
-                if (SceneHelper.IsInGame())
-                {
-                    FindObjectOfType<FirstPersonManipulator>().enabled = false;
-                    _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
-                    _isReady = true;
-                }
-
-                if (SceneHelper.IsInTitle())
-                {
-                    var titleAnimationController = FindObjectOfType<TitleAnimationController>();
-                    titleAnimationController.OnTitleMenuAnimationComplete += OnTitleMenuAnimationComplete;
-                }
+            private void SetUpTitleAnimationHandler()
+            {
+                var titleAnimationController = FindObjectOfType<TitleAnimationController>();
+                titleAnimationController.OnTitleMenuAnimationComplete += () => _isReady = true;
             }
 
             private void CreateButtonColliders()
@@ -81,11 +99,6 @@ namespace NomaiVR
                     collider.size = new Vector3(width, height, thickness);
                     collider.center = new Vector3(0, 0, thickness * 0.5f);
                 }
-            }
-
-            private void OnTitleMenuAnimationComplete()
-            {
-                _isReady = true;
             }
 
             private void UpdateUiRayCast()
