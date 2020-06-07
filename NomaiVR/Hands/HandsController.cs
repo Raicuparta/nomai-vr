@@ -55,9 +55,6 @@ namespace NomaiVR
                 var owCamera = cameraObject.AddComponent<OWCamera>();
                 owCamera.renderSkybox = true;
 
-                var flashbackEffect = cameraObject.AddComponent<FlashbackScreenGrabImageEffect>();
-                flashbackEffect._downsampleShader = cameraObject.GetComponent<FlashbackScreenGrabImageEffect>()._downsampleShader;
-
                 cameraObject.AddComponent<FlareLayer>();
                 cameraObject.SetActive(true);
 
