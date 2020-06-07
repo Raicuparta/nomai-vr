@@ -64,6 +64,7 @@ namespace NomaiVR
                 foreach (var selectable in selectables)
                 {
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
+
                     var rectTransform = selectable.GetComponent<RectTransform>();
                     var thickness = 100f;
                     var height = Math.Max(60f, rectTransform.rect.height);
@@ -80,7 +81,7 @@ namespace NomaiVR
 
             private void UpdateUiRayCast()
             {
-                if (!_isReady || OWInput.GetInputMode() != InputMode.Menu)
+                if (!_isReady || !OWInput.IsInputMode(InputMode.Menu))
                 {
                     return;
                 }
