@@ -62,7 +62,10 @@ namespace NomaiVR
                 titleCanvas.Find("FooterBlock").gameObject.SetActive(false);
 
                 // Replace splash image.
-                var splashImage = titleMenu.Find("GamepadSplashCanvas/GamepadSplashImage").GetComponent<Image>(); ;
+                var splashCanvas = titleMenu.Find("GamepadSplashCanvas");
+                var splashText = splashCanvas.Find("Text").GetComponent<Text>();
+                splashText.text = "<color=orange>NomaiVR</color> requires VR controllers...";
+                var splashImage = splashCanvas.Find("GamepadSplashImage").GetComponent<Image>(); ;
                 splashImage.sprite = AssetLoader.SplashSprite;
             }
 
