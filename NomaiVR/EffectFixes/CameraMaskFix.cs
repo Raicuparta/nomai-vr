@@ -32,13 +32,13 @@ namespace NomaiVR
                 _camera.postProcessingSettings.chromaticAberrationEnabled = false;
                 _camera.postProcessingSettings.vignetteEnabled = false;
 
-                if (OWInput.IsInputMode(InputMode.Menu) && !_isPaused)
+                if (LaserPointer.IsUIPointer() && !_isPaused)
                 {
                     _isPaused = true;
                     cullingMask = Camera.main.cullingMask;
                     Camera.main.cullingMask = LayerMask.GetMask("UI");
                 }
-                if (!OWInput.IsInputMode(InputMode.Menu) && _isPaused)
+                if (!LaserPointer.IsUIPointer() && _isPaused)
                 {
                     _isPaused = false;
                     Camera.main.cullingMask = cullingMask;

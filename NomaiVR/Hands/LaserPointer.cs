@@ -11,6 +11,11 @@ namespace NomaiVR
         protected override bool isPersistent => false;
         protected override OWScene[] scenes => AllScenes;
 
+        public static bool IsUIPointer()
+        {
+            return OWInput.IsInputMode(InputMode.Menu | InputMode.KeyboardInput);
+        }
+
         public class Behaviour : MonoBehaviour
         {
             public static Transform Laser;
@@ -91,7 +96,7 @@ namespace NomaiVR
 
             private void UpdateUiRayCast()
             {
-                if (!_isReady || !OWInput.IsInputMode(InputMode.Menu))
+                if (!_isReady || !LaserPointer.IsUIPointer())
                 {
                     return;
                 }
@@ -114,7 +119,6 @@ namespace NomaiVR
                         }
                         else
                         {
-                            NomaiVR.Log("selecting", selectable.name);
                             selectable.Select();
                         }
                         if (OWInput.IsNewlyPressed(InputLibrary.interact))
@@ -163,7 +167,7 @@ namespace NomaiVR
 
             private void UpdateLineAppearance()
             {
-                if (OWInput.IsInputMode(InputMode.Menu))
+                if (LaserPointer.IsUIPointer())
                 {
                     SetLineLength(_menuLineLength);
                     _lineRenderer.material.shader = Shader.Find("Unlit/Color");
@@ -171,6 +175,7 @@ namespace NomaiVR
                 }
                 else
                 {
+                    NomaiVR.Log(" Input mode", OWInput.GetInputMode());
                     SetLineLength(_gameLineLength);
                     _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
                 }

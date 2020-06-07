@@ -38,7 +38,7 @@ namespace NomaiVR
 
                 private static bool PatchUpdateFog()
                 {
-                    if (OWInput.IsInputMode(InputMode.Menu))
+                    if (LaserPointer.IsUIPointer())
                     {
                         return false;
                     }
@@ -47,7 +47,7 @@ namespace NomaiVR
 
                 private static bool PatchOverrideFog()
                 {
-                    if (OWInput.IsInputMode(InputMode.Menu))
+                    if (LaserPointer.IsUIPointer())
                     {
                         return false;
                     }
