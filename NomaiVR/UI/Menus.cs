@@ -60,6 +60,10 @@ namespace NomaiVR
 
                 // Cant't get the footer to look good, so I'm hiding it.
                 titleCanvas.Find("FooterBlock").gameObject.SetActive(false);
+
+                // Replace splash image.
+                var splashImage = titleMenu.Find("GamepadSplashCanvas/GamepadSplashImage").GetComponent<Image>(); ;
+                splashImage.sprite = AssetLoader.SplashSprite;
             }
 
             private void ScreenCanvasesToWorld()

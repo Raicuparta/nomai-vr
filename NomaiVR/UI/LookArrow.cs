@@ -17,7 +17,7 @@ namespace NomaiVR
 
             private void Start()
             {
-                var canvas = Instantiate(AssetLoader.LookArrow).GetComponent<Canvas>();
+                var canvas = Instantiate(AssetLoader.LookArrowPrefab).GetComponent<Canvas>();
                 _wrapper = canvas.transform;
                 _wrapper.parent = Locator.GetPlayerCamera().transform;
                 _wrapper.localPosition = new Vector3(0, 0, 4);
