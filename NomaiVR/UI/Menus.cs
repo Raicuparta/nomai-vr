@@ -25,29 +25,33 @@ namespace NomaiVR
 
                 if (scene == OWScene.SolarSystem)
                 {
-                    // Make sleep timer canvas visible while eyes closed.
-                    Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+                    FixSleepTimerCanvas();
                 }
                 else if (scene == OWScene.TitleScreen)
                 {
-                    var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
-                    animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
-
-                    var animatedTitleChild = animatedTitle.transform.GetChild(0).GetComponent<RectTransform>();
-                    animatedTitleChild.anchorMax = Vector2.one * 0.5f;
-                    animatedTitleChild.anchorMin = Vector2.one * 0.5f;
-
-                    var titleMenu = GameObject.Find("TitleMenu").transform;
-
-                    var titleCanvas = titleMenu.Find("TitleCanvas");
-                    titleMenu.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
-                        MenuStackManager.SharedInstance.GetMenuCount() == 0;
-
-                    // Cant't get the footer to look good, so I'm hiding it.
-                    titleCanvas.Find("FooterBlock").gameObject.SetActive(false);
+                    FixTitleMenuCanvases();
                 }
-
                 ScreenCanvasesToWorld();
+            }
+
+            private void FixSleepTimerCanvas()
+            {
+                // Make sleep timer canvas visible while eyes closed.
+                Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+            }
+
+            private void FixTitleMenuCanvases()
+            {
+                var titleMenu = GameObject.Find("TitleMenu").transform;
+
+                // Hide the main menu while other menus are open,
+                // to prevent selecting with laser.
+                var titleCanvas = titleMenu.Find("TitleCanvas");
+                titleMenu.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                    MenuStackManager.SharedInstance.GetMenuCount() == 0;
+
+                // Cant't get the footer to look good, so I'm hiding it.
+                titleCanvas.Find("FooterBlock").gameObject.SetActive(false);
             }
 
             private void OnEvent(MonoBehaviour behaviour, Events ev)
