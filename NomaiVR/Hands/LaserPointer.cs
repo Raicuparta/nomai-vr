@@ -17,7 +17,7 @@ namespace NomaiVR
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
-            private const float _menuLineLength = 1.5f;
+            private const float _menuLineLength = 2f;
             private TabButton[] _tabButtons;
             private bool _isReady;
 
