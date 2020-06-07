@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using OWML.ModHelper.Events;
+using UnityEngine;
 
 namespace NomaiVR
 {
@@ -16,10 +17,50 @@ namespace NomaiVR
 
                 // Prevent flashing on energy death.
                 NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
+                NomaiVR.Post<Flashback>("OnTriggerMemoryUplink", typeof(Patch), nameof(PostTriggerMemoryUplink));
+            }
+
+            private static void PostTriggerMemoryUplink(
+                GameObject ____reverseStreams,
+                Transform ____screenTransform,
+                ref Vector3 ____origScreenScale,
+                ref float ____reverseScreenEndDist,
+                ref float ____reverseScreenStartDist
+            )
+            {
+                ____reverseScreenEndDist = 0f;
+                ____reverseScreenStartDist = 3f;
+                ____origScreenScale *= 0.5f;
+                var scale = ____origScreenScale;
+
+                var uplinkTrigger = GameObject.FindObjectOfType<MemoryUplinkTrigger>();
+                var statue = uplinkTrigger.GetValue<Transform>("_lockOnTransform");
+                var eye = statue.Find("Props_NOM_StatueHead/eyelid_mid");
+                var focus = new GameObject().transform;
+                focus.SetParent(eye, false);
+                focus.LookAt(Camera.main.transform);
+
+                var streams = ____reverseStreams.transform;
+                LayerHelper.ChangeLayerRecursive(____reverseStreams, LayerMask.NameToLayer("UI"));
+                streams.SetParent(focus, false);
+                streams.LookAt(2 * streams.position - Camera.main.transform.position);
+                streams.localPosition = -Vector3.forward;
+                streams.localScale *= 0.3f;
+
+                var screen = ____screenTransform;
+                LayerHelper.ChangeLayerRecursive(screen.gameObject, LayerMask.NameToLayer("UI"));
+                screen.SetParent(focus, false);
+                screen.localRotation = Quaternion.identity;
+                screen.LookAt(Camera.main.transform.position, Locator.GetPlayerTransform().up);
+                //var scale = screen.localScale * 0.5f;
+                //scale.z *= -1;
+                screen.localScale = scale;
+                screen.localPosition = Camera.main.transform.position;
             }
 
             private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
             {
+                NomaiVR.Log("Trigger flashback");
                 Transform parent;
 
                 if (____screenTransform.parent == __instance.transform)
