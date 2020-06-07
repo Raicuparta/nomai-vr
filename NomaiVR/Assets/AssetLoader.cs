@@ -11,11 +11,12 @@ namespace NomaiVR
         public static GameObject FeetPositionPrefab;
         public static GameObject ScopeLensPrefab;
         public static GameObject HelmetPrefab;
+        public static GameObject LookArrowPrefab;
+        public static Sprite SplashSprite;
         public static Texture2D HoldIcon;
         public static Texture2D InteractIcon;
         public static Texture2D JumpIcon;
         public static Texture2D BackIcon;
-        public static GameObject LookArrow;
 
         public AssetLoader()
         {
@@ -43,7 +44,10 @@ namespace NomaiVR
             BackIcon = LoadAsset<Texture2D>(inputIconsBundle, "back.png");
 
             var lookArrowBundle = LoadBundle("look-arrow");
-            LookArrow = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");
+            LookArrowPrefab = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");
+
+            var splashBundle = LoadBundle("splash-screen");
+            SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");
         }
 
         private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object
