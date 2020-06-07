@@ -40,6 +40,8 @@ namespace NomaiVR
                     var mainMenu = GameObject.Find("TitleLayoutGroup").GetComponent<RectTransform>();
                     mainMenu.position = Vector3.zero;
 
+                    GameObject.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => MenuStackManager.SharedInstance.GetMenuCount() == 0;
+
                     // Cant't get the footer to look good, so I'm hiding it.
                     GameObject.Find("FooterBlock").SetActive(false);
                 }
