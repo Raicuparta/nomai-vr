@@ -1,6 +1,5 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace NomaiVR
 {
@@ -58,11 +57,10 @@ namespace NomaiVR
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
                 notifications.anchoredPosition = new Vector2(-200, -100);
 
-                // Use default UI material so it doesn't look funky in stereo.
-                var surfaceMaterial = surface.gameObject.GetComponent<MeshRenderer>().material;
-                surfaceMaterial.shader = Canvas.GetDefaultCanvasMaterial().shader;
-                surfaceMaterial.SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
-                surfaceMaterial.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
+                // Default HUD shader looks funky in stereo, so we need to replace it with something more standard.
+                var surfaceRenderer = surface.gameObject.GetComponent<MeshRenderer>();
+                surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
+                MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
 
                 var playerHUD = GameObject.Find("PlayerHUD");
 

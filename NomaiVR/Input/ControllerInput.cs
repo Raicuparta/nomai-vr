@@ -53,6 +53,8 @@ namespace NomaiVR
                 SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+
+                OWInput.EnableListenForAllJoysticks(true);
             }
 
             private void OnWakeUp()
@@ -212,7 +214,8 @@ namespace NomaiVR
                 {
                     NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patch), nameof(SingleAxisUpdate));
                     NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patch), nameof(OWInputUpdate));
-                    NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(EnableListenForAllJoysticks));
+                    NomaiVR.Pre<OWInput>("EnableListenForAllJoysticks", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
+                    NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
                     NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patch), nameof(GetAxis));
                     NomaiVR.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
 
@@ -320,17 +323,16 @@ namespace NomaiVR
                     return false;
                 }
 
-                private static void EnableListenForAllJoysticks()
+                private static void PostEnableListanForAllJoysticks()
                 {
                     InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
                     InputLibrary.signalscope.ChangeBinding(XboxButton.DPadRight, KeyCode.None);
 
-                    // TODO: uncomment this after laser is implemented in main menu.
-                    //InputLibrary.tabL.ChangeBinding(XboxButton.None, KeyCode.None);
-                    //InputLibrary.tabR.ChangeBinding(XboxButton.None, KeyCode.None);
-                    //InputLibrary.setDefaults.ChangeBinding(XboxButton.None, KeyCode.None);
-                    //InputLibrary.confirm.ChangeBinding(XboxButton.None, KeyCode.None);
-                    //InputLibrary.confirm2.ChangeBinding(XboxButton.None, KeyCode.None);
+                    InputLibrary.tabL.ChangeBinding(XboxButton.None, KeyCode.None);
+                    InputLibrary.tabR.ChangeBinding(XboxButton.None, KeyCode.None);
+                    InputLibrary.setDefaults.ChangeBinding(XboxButton.None, KeyCode.None);
+                    InputLibrary.confirm.ChangeBinding(XboxButton.None, KeyCode.None);
+                    InputLibrary.confirm2.ChangeBinding(XboxButton.None, KeyCode.None);
                 }
             }
         }

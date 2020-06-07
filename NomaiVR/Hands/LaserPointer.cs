@@ -8,7 +8,7 @@ namespace NomaiVR
     public class LaserPointer : NomaiVRModule<LaserPointer.Behaviour, LaserPointer.Behaviour.Patch>
     {
         protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override OWScene[] scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {
@@ -16,43 +16,94 @@ namespace NomaiVR
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
-            private const float _menuLineLength = 1.5f;
+            private const float _menuLineLength = 2f;
             private TabButton[] _tabButtons;
+            private bool _isReady;
 
             private void Start()
             {
+                SetUpLaserObject();
+                SetUpLineRenderer();
+                UpdateLineAppearance();
+                DisableReticule();
+                CreateButtonColliders();
+
+                if (SceneHelper.IsInGame())
+                {
+                    SetUpFirstPersonManipulator();
+                }
+
+                if (SceneHelper.IsInTitle())
+                {
+                    SetUpTitleAnimationHandler();
+                }
+            }
+
+            private void SetUpLaserObject()
+            {
                 Laser = new GameObject("Laser").transform;
+                Laser.gameObject.layer = LayerMask.NameToLayer("UI");
                 Laser.gameObject.AddComponent<FollowTarget>();
                 Laser.transform.parent = HandsController.Behaviour.RightHand;
                 Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
                 Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+            }
 
+            private void SetUpLineRenderer()
+            {
                 _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
                 _lineRenderer.useWorldSpace = false;
                 _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
+                _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
+                _lineRenderer.startColor = Color.clear;
+            }
+
+            private void SetUpFirstPersonManipulator()
+            {
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
-                _lineRenderer.material = Canvas.GetDefaultCanvasMaterial();
-                UpdateLineAppearance();
+                _isReady = true;
+            }
 
-                DisableReticule();
+            private void SetUpTitleAnimationHandler()
+            {
+                var titleAnimationController = FindObjectOfType<TitleAnimationController>();
+                titleAnimationController.OnTitleMenuAnimationComplete += () => _isReady = true;
+            }
+
+            private void CreateButtonColliders()
+            {
+                _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
 
                 var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
                 foreach (var selectable in selectables)
                 {
-                    var collider = selectable.gameObject.AddComponent<BoxCollider>();
-                    var rect = selectable.GetComponent<RectTransform>();
-                    collider.size = new Vector3(rect.sizeDelta.x, rect.sizeDelta.y, 10f);
-                }
+                    var tooltipSelectable = selectable.GetComponent<TooltipSelectable>();
+                    if (tooltipSelectable != null)
+                    {
+                        // Move children to avoid ray z-fighting;
+                        foreach (Transform child in selectable.transform)
+                        {
+                            child.localPosition += Vector3.forward;
+                        }
+                    }
 
-                _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
+                    var collider = selectable.gameObject.AddComponent<BoxCollider>();
+
+                    var rectTransform = selectable.GetComponent<RectTransform>();
+                    var thickness = 10f;
+                    var height = Math.Max(60f, rectTransform.rect.height);
+                    var width = Math.Max(60f, rectTransform.rect.width);
+                    collider.size = new Vector3(width, height, thickness);
+                    collider.center = new Vector3(0, 0, thickness * 0.5f);
+                }
             }
 
             private void UpdateUiRayCast()
             {
-                if (OWInput.GetInputMode() != InputMode.Menu)
+                if (!_isReady || !InputHelper.IsUIInteractionMode())
                 {
                     return;
                 }
@@ -123,31 +174,35 @@ namespace NomaiVR
 
             private void UpdateLineAppearance()
             {
-                if (OWInput.IsInputMode(InputMode.Menu))
+                if (InputHelper.IsUIInteractionMode())
                 {
                     SetLineLength(_menuLineLength);
-                    _lineRenderer.endColor = Color.white;
-                    _lineRenderer.startColor = new Color(1, 1, 1, 0.5f);
+                    _lineRenderer.material.shader = Shader.Find("Unlit/Color");
+                    _lineRenderer.material.SetColor("_Color", new Color(0.8f, 0.8f, 0.8f));
                 }
                 else
                 {
                     SetLineLength(_gameLineLength);
-                    _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
-                    _lineRenderer.startColor = Color.clear;
+                    _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                }
+            }
+
+            private void UpdateLineVisibility()
+            {
+                var isUsingTool = SceneHelper.IsInGame() && ToolHelper.IsUsingAnyTool();
+                if (_lineRenderer.enabled && isUsingTool)
+                {
+                    _lineRenderer.enabled = false;
+                }
+                else if (!_lineRenderer.enabled && !isUsingTool)
+                {
+                    _lineRenderer.enabled = true;
                 }
             }
 
             private void Update()
             {
-                if (_lineRenderer.enabled && ToolHelper.IsUsingAnyTool())
-                {
-                    _lineRenderer.enabled = false;
-                }
-                else if (!_lineRenderer.enabled && !ToolHelper.IsUsingAnyTool())
-                {
-                    _lineRenderer.enabled = true;
-                }
-
+                UpdateLineVisibility();
                 UpdateLineAppearance();
                 UpdateUiRayCast();
             }

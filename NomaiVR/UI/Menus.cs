@@ -1,7 +1,4 @@
-﻿using OWML.Common;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace NomaiVR
 {
@@ -12,54 +9,56 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private void Awake()
-            {
-                NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
-                NomaiVR.Helper.Events.OnEvent += OnEvent;
-            }
+            private static bool _shouldRenderStarLogos;
 
             private void Start()
             {
-                // Make UI elements draw on top of everything.
-                Canvas.GetDefaultCanvasMaterial().SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
-
                 var scene = LoadManager.GetCurrentScene();
 
                 if (scene == OWScene.SolarSystem)
                 {
-                    // Make sleep timer canvas visible while eyes closed.
-                    Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+                    FixSleepTimerCanvas();
                 }
                 else if (scene == OWScene.TitleScreen)
                 {
-                    var animatedTitle = GameObject.Find("TitleCanvasHack").GetComponent<Canvas>();
-                    animatedTitle.renderMode = RenderMode.ScreenSpaceOverlay;
+                    FixTitleMenuCanvases();
+                    FixStarLogos();
 
-                    var animatedTitleChild = animatedTitle.transform.GetChild(0).GetComponent<RectTransform>();
-                    animatedTitleChild.anchorMax = Vector2.one * 0.5f;
-                    animatedTitleChild.anchorMin = Vector2.one * 0.5f;
-
-                    var mainMenu = GameObject.Find("TitleLayoutGroup").GetComponent<RectTransform>();
-                    mainMenu.position = Vector3.zero;
-
-                    // Cant't get the footer to look good, so I'm hiding it.
-                    GameObject.Find("FooterBlock").SetActive(false);
-
-                    // Make the camera start looking forward instead of some random direction.
-                    var cameraSocket = GameObject.Find("CameraSocket").transform;
-                    cameraSocket.rotation = Quaternion.identity;
                 }
-
                 ScreenCanvasesToWorld();
             }
 
-            private void OnEvent(MonoBehaviour behaviour, Events ev)
+            private void FixStarLogo(string objectName)
             {
-                if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart)
-                {
-                    var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
-                    canvas.planeDistance = 5;
-                }
+                var logo = GameObject.Find(objectName).transform;
+                logo.localRotation *= Quaternion.Euler(30, 0, 0);
+                logo.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => _shouldRenderStarLogos;
+            }
+
+            private void FixStarLogos()
+            {
+                FixStarLogo("StarfieldMobius_Pivot");
+                FixStarLogo("StarfieldAnnapurna_Pivot");
+            }
+
+            private void FixSleepTimerCanvas()
+            {
+                // Make sleep timer canvas visible while eyes closed.
+                Locator.GetUIStyleManager().transform.Find("SleepTimerCanvas").gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+            }
+
+            private void FixTitleMenuCanvases()
+            {
+                var titleMenu = GameObject.Find("TitleMenu").transform;
+
+                // Hide the main menu while other menus are open,
+                // to prevent selecting with laser.
+                var titleCanvas = titleMenu.Find("TitleCanvas");
+                titleMenu.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                    MenuStackManager.SharedInstance.GetMenuCount() == 0;
+
+                // Cant't get the footer to look good, so I'm hiding it.
+                titleCanvas.Find("FooterBlock").gameObject.SetActive(false);
             }
 
             private void ScreenCanvasesToWorld()
@@ -67,28 +66,15 @@ namespace NomaiVR
                 var canvases = FindObjectsOfType<Canvas>();
                 foreach (var canvas in canvases)
                 {
-                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name != "PauseBackdropCanvas")
+                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
                     {
                         canvas.renderMode = RenderMode.WorldSpace;
-                        canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
-                        canvas.transform.rotation = Camera.main.transform.rotation;
                         canvas.transform.localScale *= 0.001f;
                         var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                        followTarget.positionSmoothTime = 0.2f;
-                        followTarget.rotationSmoothTime = 0.1f;
-                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform;
-                        followTarget.localPosition = SceneHelper.IsInGame() ? Vector3.forward + Vector3.up * 0.5f : Vector3.forward;
-
-                        // Masks are used for hiding the overflowing elements in scrollable menus.
-                        // Apparently masks change the material of the canvas element being masked,
-                        // and I'm not sure how to change unity_GUIZTestMode there.
-                        // So for now I'm disabling the mask completely, which breaks some menus.
-                        var masks = canvas.GetComponentsInChildren<Mask>(true);
-                        foreach (var mask in masks)
-                        {
-                            mask.enabled = false;
-                            mask.graphic.enabled = false;
-                        }
+                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
+                        var z = SceneHelper.IsInGame() ? 1f : 1.5f;
+                        var y = SceneHelper.IsInGame() ? 0.5f : 1f;
+                        followTarget.localPosition = new Vector3(0, y, z);
                     }
                 }
             }
@@ -98,20 +84,22 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
-
-                    // Make options menu background color transparent,
-                    // to prevent obscuring the laser
-                    NomaiVR.Post<TabbedOptionMenu>("Initialize", typeof(Patch), nameof(PostOptionMenuInitialize));
+                    NomaiVR.Post<CanvasMarkerManager>("Start", typeof(Patch), nameof(PostMarkerManagerStart));
+                    NomaiVR.Post<TitleScreenAnimation>("FadeInMusic", typeof(Patch), nameof(PostTitleScreenFadeInMusic));
+                    NomaiVR.Post<PopupMenu>("SetUpPopupCommands", typeof(Patch), nameof(PostSetPopupCommands));
                 }
 
-                private static void PostOptionMenuInitialize(TabbedOptionMenu __instance)
+                private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
                 {
-                    var displayPanel = __instance.transform.Find("OptionsDisplayPanel");
-                    displayPanel.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
-                    displayPanel.Find("Background").gameObject.SetActive(false);
+                    if (okCommand == InputLibrary.select)
+                    {
+                        ____okCommand = InputLibrary.confirm;
+                    }
+                }
 
-                    var tabsBackground = __instance.transform.Find("Tabs/Background");
-                    tabsBackground.GetComponent<Image>().color = new Color(0, 0, 0, 0.78f);
+                private static void PostTitleScreenFadeInMusic()
+                {
+                    _shouldRenderStarLogos = true;
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)
@@ -122,6 +110,11 @@ namespace NomaiVR
                         child.localRotation = Quaternion.identity;
                         child.localScale = Vector3.one;
                     }
+                }
+
+                private static void PostMarkerManagerStart(CanvasMarkerManager __instance)
+                {
+                    __instance.GetComponent<Canvas>().planeDistance = 5;
                 }
             }
         }

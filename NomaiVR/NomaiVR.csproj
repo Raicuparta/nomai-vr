@@ -101,7 +101,9 @@
     <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
     <Compile Include="EffectFixes\CameraMaskFix.cs" />
     <Compile Include="EffectFixes\WaterFix.cs" />
+    <Compile Include="Helpers\InputHelper.cs" />
     <Compile Include="Helpers\LayerHelper.cs" />
+    <Compile Include="Helpers\MaterialHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="Helpers\SceneHelper.cs" />
     <Compile Include="Helpers\TimerHelper.cs" />

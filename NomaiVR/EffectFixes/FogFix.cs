@@ -38,11 +38,19 @@ namespace NomaiVR
 
                 private static bool PatchUpdateFog()
                 {
+                    if (InputHelper.IsUIInteractionMode())
+                    {
+                        return false;
+                    }
                     return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
                 }
 
                 private static bool PatchOverrideFog()
                 {
+                    if (InputHelper.IsUIInteractionMode())
+                    {
+                        return false;
+                    }
                     return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
                 }
             }

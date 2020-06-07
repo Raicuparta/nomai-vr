@@ -7,7 +7,7 @@ namespace NomaiVR
     public class HandsController : NomaiVRModule<HandsController.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override OWScene[] scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {
@@ -17,8 +17,63 @@ namespace NomaiVR
 
             private void Start()
             {
-                _wrapper = new GameObject().transform;
+                if (SceneHelper.IsInTitle())
+                {
+                    SetUpWrapperTittle();
+                }
 
+                if (SceneHelper.IsInGame())
+                {
+                    SetUpWrapperInGame();
+                    HideBody();
+                }
+
+                SetUpHands();
+            }
+
+            private void SetUpWrapperTittle()
+            {
+                var activeCamera = Locator.GetActiveCamera();
+                activeCamera.gameObject.SetActive(false);
+                _wrapper = activeCamera.transform.parent;
+                var cameraObject = new GameObject();
+                cameraObject.SetActive(false);
+                cameraObject.tag = "MainCamera";
+                var camera = cameraObject.AddComponent<Camera>();
+                camera.transform.parent = _wrapper;
+                camera.transform.localPosition = Vector3.zero;
+                camera.transform.localRotation = Quaternion.identity;
+
+                camera.nearClipPlane = activeCamera.nearClipPlane;
+                camera.farClipPlane = activeCamera.farClipPlane;
+                camera.clearFlags = activeCamera.clearFlags;
+                camera.backgroundColor = activeCamera.backgroundColor;
+                camera.cullingMask = activeCamera.cullingMask;
+                camera.depth = activeCamera.mainCamera.depth;
+                camera.tag = activeCamera.tag;
+
+                var owCamera = cameraObject.AddComponent<OWCamera>();
+                owCamera.renderSkybox = true;
+
+                var flashbackEffect = cameraObject.AddComponent<FlashbackScreenGrabImageEffect>();
+                flashbackEffect._downsampleShader = cameraObject.GetComponent<FlashbackScreenGrabImageEffect>()._downsampleShader;
+
+                cameraObject.AddComponent<FlareLayer>();
+                cameraObject.SetActive(true);
+
+                cameraObject.AddComponent<Light>();
+            }
+
+            private void SetUpWrapperInGame()
+            {
+                _wrapper = new GameObject().transform;
+                _wrapper.parent = Camera.main.transform.parent;
+                _wrapper.localRotation = Quaternion.identity;
+                _wrapper.localPosition = Camera.main.transform.localPosition;
+            }
+
+            private void SetUpHands()
+            {
                 var right = new GameObject().AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
                 right.transform.parent = _wrapper;
@@ -37,12 +92,6 @@ namespace NomaiVR
                 left.handPrefab = AssetLoader.HandPrefab;
                 left.glovePrefab = AssetLoader.GlovePrefab;
                 LeftHand = left.transform;
-
-                _wrapper.parent = Camera.main.transform.parent;
-                _wrapper.localRotation = Quaternion.identity;
-                _wrapper.localPosition = Camera.main.transform.localPosition;
-
-                HideBody();
             }
 
             private void HideBody()
@@ -79,7 +128,7 @@ namespace NomaiVR
 
             private void Update()
             {
-                if (_wrapper && Camera.main)
+                if (SceneHelper.IsInGame() && _wrapper && Camera.main)
                 {
                     _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
                 }

@@ -24,10 +24,10 @@ namespace NomaiVR
                 _wrapper.localRotation = Quaternion.identity;
 
                 _rightArrow = canvas.transform.Find("look-right");
-                _rightArrow.GetComponent<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
+                _rightArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
                 _rightArrow.gameObject.SetActive(false);
                 _leftArrow = canvas.transform.Find("look-left");
-                _leftArrow.GetComponent<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
+                _leftArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
                 _leftArrow.gameObject.SetActive(false);
 
             }

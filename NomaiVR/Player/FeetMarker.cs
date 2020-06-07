@@ -18,7 +18,7 @@ namespace NomaiVR
                 marker.localScale *= 0.75f;
                 LayerHelper.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
 
-                marker.GetComponentInChildren<SpriteRenderer>().material = Canvas.GetDefaultCanvasMaterial();
+                marker.GetComponentInChildren<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
             }
         }
     }
