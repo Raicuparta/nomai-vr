@@ -38,7 +38,7 @@ namespace NomaiVR
 
                 private static bool PatchUpdateFog()
                 {
-                    if (LaserPointer.IsUIPointer())
+                    if (InputHelper.IsUIInteractionMode())
                     {
                         return false;
                     }
@@ -47,7 +47,7 @@ namespace NomaiVR
 
                 private static bool PatchOverrideFog()
                 {
-                    if (LaserPointer.IsUIPointer())
+                    if (InputHelper.IsUIInteractionMode())
                     {
                         return false;
                     }

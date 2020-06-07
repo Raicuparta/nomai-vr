@@ -11,11 +11,6 @@ namespace NomaiVR
         protected override bool isPersistent => false;
         protected override OWScene[] scenes => AllScenes;
 
-        public static bool IsUIPointer()
-        {
-            return OWInput.IsInputMode(InputMode.Menu | InputMode.KeyboardInput);
-        }
-
         public class Behaviour : MonoBehaviour
         {
             public static Transform Laser;
@@ -96,7 +91,7 @@ namespace NomaiVR
 
             private void UpdateUiRayCast()
             {
-                if (!_isReady || !LaserPointer.IsUIPointer())
+                if (!_isReady || !InputHelper.IsUIInteractionMode())
                 {
                     return;
                 }
@@ -167,7 +162,7 @@ namespace NomaiVR
 
             private void UpdateLineAppearance()
             {
-                if (LaserPointer.IsUIPointer())
+                if (InputHelper.IsUIInteractionMode())
                 {
                     SetLineLength(_menuLineLength);
                     _lineRenderer.material.shader = Shader.Find("Unlit/Color");
