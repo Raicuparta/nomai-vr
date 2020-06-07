@@ -90,6 +90,15 @@ namespace NomaiVR
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
                     NomaiVR.Post<CanvasMarkerManager>("Start", typeof(Patch), nameof(PostMarkerManagerStart));
                     NomaiVR.Post<TitleScreenAnimation>("FadeInMusic", typeof(Patch), nameof(PostTitleScreenFadeInMusic));
+                    NomaiVR.Post<PopupMenu>("SetUpPopupCommands", typeof(Patch), nameof(PreSetPopup));
+                }
+
+                private static void PreSetPopup(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
+                {
+                    if (okCommand == InputLibrary.select)
+                    {
+                        ____okCommand = InputLibrary.confirm;
+                    }
                 }
 
                 private static void PostTitleScreenFadeInMusic()
