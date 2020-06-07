@@ -14,5 +14,11 @@ namespace NomaiVR
                 return _playerHead;
             }
         }
+
+        public static bool IsWearingSuit()
+        {
+            var suit = Locator.GetPlayerSuit();
+            return suit != null && suit.IsWearingSuit(true);
+        }
     }
 }

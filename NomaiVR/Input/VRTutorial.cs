@@ -11,59 +11,59 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static Dictionary<InputCommand, TutorialInput> tutorialInputs;
-            private static List<TutorialInput> queue;
-            private List<SteamVR_RenderModel> controllerModels;
-            private bool isShowingControlleModels;
+            private static Dictionary<InputCommand, TutorialInput> _tutorialInputs;
+            private static List<TutorialInput> _queue;
+            private List<SteamVR_RenderModel> _controllerModels;
+            private bool _isShowingControlleModels;
 
             private void Start()
             {
-                queue = new List<TutorialInput>();
-                controllerModels = new List<SteamVR_RenderModel>();
+                _queue = new List<TutorialInput>();
+                _controllerModels = new List<SteamVR_RenderModel>();
 
                 CreateControllerModel(HandsController.Behaviour.RightHand);
                 CreateControllerModel(HandsController.Behaviour.LeftHand);
                 Invoke(nameof(HideControllerModels), 0.1f);
 
                 var actions = SteamVR_Actions._default;
-                tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
+                _tutorialInputs = new Dictionary<InputCommand, TutorialInput>();
 
                 var interact = new TutorialInput("interact", actions.Interact, 0);
-                tutorialInputs[InputLibrary.interact] = interact;
-                tutorialInputs[InputLibrary.translate] = interact;
-                tutorialInputs[InputLibrary.scopeView] = interact;
-                tutorialInputs[InputLibrary.probeForward] = interact;
-                tutorialInputs[InputLibrary.lockOn] = interact;
+                _tutorialInputs[InputLibrary.interact] = interact;
+                _tutorialInputs[InputLibrary.translate] = interact;
+                _tutorialInputs[InputLibrary.scopeView] = interact;
+                _tutorialInputs[InputLibrary.probeForward] = interact;
+                _tutorialInputs[InputLibrary.lockOn] = interact;
 
                 var holdInteract = new TutorialInput("holdInteract", actions.Interact, 1);
-                tutorialInputs[InputLibrary.suitMenu] = holdInteract;
-                tutorialInputs[InputLibrary.probeRetrieve] = holdInteract;
-                tutorialInputs[InputLibrary.sleep] = holdInteract;
-                tutorialInputs[InputLibrary.swapShipLogMode] = holdInteract;
-                tutorialInputs[InputLibrary.autopilot] = holdInteract;
+                _tutorialInputs[InputLibrary.suitMenu] = holdInteract;
+                _tutorialInputs[InputLibrary.probeRetrieve] = holdInteract;
+                _tutorialInputs[InputLibrary.sleep] = holdInteract;
+                _tutorialInputs[InputLibrary.swapShipLogMode] = holdInteract;
+                _tutorialInputs[InputLibrary.autopilot] = holdInteract;
 
                 var jump = new TutorialInput("jump", actions.Jump, 2);
-                tutorialInputs[InputLibrary.jump] = jump;
-                tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
+                _tutorialInputs[InputLibrary.jump] = jump;
+                _tutorialInputs[InputLibrary.markEntryOnHUD] = jump;
 
-                tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput("matchVelocity", actions.Jump, 3);
-                tutorialInputs[InputLibrary.boost] = new TutorialInput("boost", actions.Jump, 3);
+                _tutorialInputs[InputLibrary.matchVelocity] = new TutorialInput("matchVelocity", actions.Jump, 3);
+                _tutorialInputs[InputLibrary.boost] = new TutorialInput("boost", actions.Jump, 3);
 
-                tutorialInputs[InputLibrary.map] = new TutorialInput("map", actions.Map, 3);
+                _tutorialInputs[InputLibrary.map] = new TutorialInput("map", actions.Map, 3);
 
                 var zeroGLook = new TutorialInput("zeroGLook", actions.Look, 7);
-                tutorialInputs[InputLibrary.yaw] = zeroGLook;
-                tutorialInputs[InputLibrary.pitch] = zeroGLook;
+                _tutorialInputs[InputLibrary.yaw] = zeroGLook;
+                _tutorialInputs[InputLibrary.pitch] = zeroGLook;
 
-                tutorialInputs[InputLibrary.extendStick] = new TutorialInput("extendStick", actions.ThrustUp, 0);
-                tutorialInputs[InputLibrary.thrustUp] = new TutorialInput("thrustUp", actions.ThrustUp, 4);
-                tutorialInputs[InputLibrary.thrustDown] = new TutorialInput("thrustDown", actions.ThrustDown, 5);
+                _tutorialInputs[InputLibrary.extendStick] = new TutorialInput("extendStick", actions.ThrustUp, 0);
+                _tutorialInputs[InputLibrary.thrustUp] = new TutorialInput("thrustUp", actions.ThrustUp, 4);
+                _tutorialInputs[InputLibrary.thrustDown] = new TutorialInput("thrustDown", actions.ThrustDown, 5);
 
-                tutorialInputs[InputLibrary.rollMode] = new TutorialInput("rollMode", actions.RollMode, 8);
+                _tutorialInputs[InputLibrary.rollMode] = new TutorialInput("rollMode", actions.RollMode, 8);
 
-                tutorialInputs[InputLibrary.probeReverse] = new TutorialInput("probeReverse", actions.RollMode, 8);
+                _tutorialInputs[InputLibrary.probeReverse] = new TutorialInput("probeReverse", actions.RollMode, 8);
 
-                tutorialInputs[InputLibrary.cancel] = new TutorialInput("back", actions.Back, 9);
+                _tutorialInputs[InputLibrary.cancel] = new TutorialInput("back", actions.Back, 9);
 
                 // Show these right away instead of waiting for a prompt.
                 var move = new TutorialInput("move", actions.Move, 6);
@@ -74,21 +74,21 @@ namespace NomaiVR
 
             private static void AddToQueue(TutorialInput input)
             {
-                queue.Add(input);
-                queue.Sort((a, b) => a.priority - b.priority);
+                _queue.Add(input);
+                _queue.Sort((a, b) => a.priority - b.priority);
             }
 
             private void Update()
             {
-                if (queue.Count > 0)
+                if (_queue.Count > 0)
                 {
-                    queue[0].Show();
+                    _queue[0].Show();
                 }
-                if (!isShowingControlleModels && queue.Count > 0)
+                if (!_isShowingControlleModels && _queue.Count > 0)
                 {
                     ShowControllerModels();
                 }
-                else if (isShowingControlleModels && queue.Count == 0)
+                else if (_isShowingControlleModels && _queue.Count == 0)
                 {
                     HideControllerModels();
                 }
@@ -96,8 +96,8 @@ namespace NomaiVR
 
             private void ShowControllerModels()
             {
-                isShowingControlleModels = true;
-                controllerModels.ForEach(model =>
+                _isShowingControlleModels = true;
+                _controllerModels.ForEach(model =>
                 {
                     model.enabled = true;
                     model.gameObject.SetActive(true);
@@ -106,8 +106,8 @@ namespace NomaiVR
 
             private void HideControllerModels()
             {
-                isShowingControlleModels = false;
-                controllerModels.ForEach(model =>
+                _isShowingControlleModels = false;
+                _controllerModels.ForEach(model =>
                 {
                     model.enabled = false;
                     model.gameObject.SetActive(false);
@@ -123,7 +123,7 @@ namespace NomaiVR
                 controllerModel.transform.localPosition = Vector3.zero;
                 controllerModel.transform.localRotation = Quaternion.identity;
 
-                controllerModels.Add(controllerModel);
+                _controllerModels.Add(controllerModel);
             }
 
             public class Patch : NomaiVRPatch
@@ -135,20 +135,24 @@ namespace NomaiVR
 
                 private static void SetPromptVisibility(bool isVisible, List<InputCommand> ____commandList)
                 {
+                    if (_tutorialInputs == null || _queue == null)
+                    {
+                        return;
+                    }
                     foreach (var command in ____commandList)
                     {
-                        if (isVisible && tutorialInputs.ContainsKey(command))
+                        if (isVisible && _tutorialInputs.ContainsKey(command))
                         {
-                            var tutorialInput = tutorialInputs[command];
+                            var tutorialInput = _tutorialInputs[command];
                             if (tutorialInput == null)
                             {
                                 continue;
                             }
 
-                            if (!tutorialInput.isDone && !queue.Contains(tutorialInput))
+                            if (!tutorialInput.isDone && !_queue.Contains(tutorialInput))
                             {
-                                AddToQueue(tutorialInputs[command]);
-                                queue.Sort((a, b) => a.priority - b.priority);
+                                AddToQueue(_tutorialInputs[command]);
+                                _queue.Sort((a, b) => a.priority - b.priority);
                             }
                         }
                     }
@@ -220,7 +224,7 @@ namespace NomaiVR
                     {
                         isShowing = false;
                         isDone = true;
-                        queue.Remove(this);
+                        _queue.Remove(this);
                     }, 500);
                     NomaiVR.Save.AddTutorialStep(name);
                 }
@@ -229,7 +233,7 @@ namespace NomaiVR
                 {
                     if (isDone)
                     {
-                        queue.Remove(this);
+                        _queue.Remove(this);
                         return;
                     }
                     if (isShowing)

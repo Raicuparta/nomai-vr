@@ -38,14 +38,16 @@ namespace NomaiVR
             gameObject.SetActive(true);
         }
 
+
+
         private bool ShouldRenderGloves()
         {
-            return SceneHelper.IsInGame() && Locator.GetPlayerSuit().IsWearingSuit(true);
+            return SceneHelper.IsInGame() && PlayerHelper.IsWearingSuit();
         }
 
         private bool ShouldRenderHands()
         {
-            return !SceneHelper.IsInGame() || !Locator.GetPlayerSuit().IsWearingSuit(true);
+            return !SceneHelper.IsInGame() || !PlayerHelper.IsWearingSuit();
         }
     }
 }
