@@ -38,11 +38,19 @@ namespace NomaiVR
 
                 private static bool PatchUpdateFog()
                 {
+                    if (OWInput.IsInputMode(InputMode.Menu))
+                    {
+                        return false;
+                    }
                     return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
                 }
 
                 private static bool PatchOverrideFog()
                 {
+                    if (OWInput.IsInputMode(InputMode.Menu))
+                    {
+                        return false;
+                    }
                     return Camera.current.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
                 }
             }
