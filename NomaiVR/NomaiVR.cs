@@ -17,10 +17,10 @@ namespace NomaiVR
             Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
 
             SteamVR.Initialize();
+            new AssetLoader();
 
             // Load all modules.
             // I'm sorry to say that order does matter here.
-            new AssetLoader();
             new ForceSettings();
             new ControllerInput();
             new Dialogue();
