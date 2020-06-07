@@ -175,7 +175,6 @@ namespace NomaiVR
                 }
                 else
                 {
-                    NomaiVR.Log(" Input mode", OWInput.GetInputMode());
                     SetLineLength(_gameLineLength);
                     _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
                 }
