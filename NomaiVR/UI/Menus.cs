@@ -75,8 +75,6 @@ namespace NomaiVR
                         canvas.transform.rotation = Camera.main.transform.rotation;
                         canvas.transform.localScale *= 0.001f;
                         var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                        followTarget.positionSmoothTime = 0.2f;
-                        followTarget.rotationSmoothTime = 0.1f;
                         followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
                         var z = SceneHelper.IsInGame() ? 1f : 1.5f;
                         var y = SceneHelper.IsInGame() ? 0.5f : 1f;
