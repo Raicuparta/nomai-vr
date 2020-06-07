@@ -67,7 +67,9 @@ namespace NomaiVR
                 var canvases = FindObjectsOfType<Canvas>();
                 foreach (var canvas in canvases)
                 {
-                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                    // Filter out backdrop, to disable the background canvas during conversations.
+                    var isBackdrop = canvas.name == "PauseBackdropCanvas";
+                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && !isBackdrop)
                     {
                         var scaler = canvas.GetComponent<CanvasScaler>();
                         if (scaler != null)
