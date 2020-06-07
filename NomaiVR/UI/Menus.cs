@@ -24,8 +24,13 @@ namespace NomaiVR
                 else if (scene == OWScene.TitleScreen)
                 {
                     FixTitleMenuCanvases();
+                    var annapurna = GameObject.Find("StarfieldMobius_Pivot").transform;
+                    var mobius = GameObject.Find("StarfieldAnnapurna_Pivot").transform;
+                    mobius.localRotation *= Quaternion.Euler(30, 0, 0);
+                    annapurna.localRotation = mobius.localRotation;
                 }
                 ScreenCanvasesToWorld();
+
             }
 
             private void FixSleepTimerCanvas()

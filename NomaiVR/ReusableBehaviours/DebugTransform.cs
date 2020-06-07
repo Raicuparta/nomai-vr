@@ -6,7 +6,7 @@ namespace NomaiVR
     {
         private bool _angleMode;
         public float positionDelta = 0.02f;
-        public float angleDelta = 10;
+        public float angleDelta = 45f;
         public Vector3 scaleDelta = Vector3.one * 0.02f;
 
         private float Round(float value)
