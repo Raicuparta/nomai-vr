@@ -10,14 +10,31 @@ namespace NomaiVR
 
         public class Patch : NomaiVRPatch
         {
+            private static Transform _focus;
+
             public override void ApplyPatches()
             {
-                NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(Patch.PatchTriggerFlashback));
-                NomaiVR.Pre<Flashback>("Update", typeof(Patch), nameof(Patch.FlashbackUpdate));
+                NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PatchTriggerFlashback));
+                NomaiVR.Pre<Flashback>("Update", typeof(Patch), nameof(FlashbackUpdate));
+                NomaiVR.Pre<Flashback>("UpdateMemoryUplink", typeof(Patch), nameof(PostUpdateMemoryLink));
+                NomaiVR.Post<Flashback>("OnTriggerMemoryUplink", typeof(Patch), nameof(PostTriggerMemoryUplink));
 
                 // Prevent flashing on energy death.
                 NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
-                NomaiVR.Post<Flashback>("OnTriggerMemoryUplink", typeof(Patch), nameof(PostTriggerMemoryUplink));
+            }
+
+            private static void PostUpdateMemoryLink(
+                GameObject ____reverseStreams,
+                Transform ____screenTransform,
+                ref Vector3 ____origScreenScale,
+                ref float ____reverseScreenEndDist,
+                ref float ____reverseScreenStartDist
+            )
+            {
+                if (_focus != null)
+                {
+                    _focus.LookAt(Camera.main.transform, Locator.GetPlayerTransform().up);
+                }
             }
 
             private static void PostTriggerMemoryUplink(
@@ -36,21 +53,19 @@ namespace NomaiVR
                 var uplinkTrigger = GameObject.FindObjectOfType<MemoryUplinkTrigger>();
                 var statue = uplinkTrigger.GetValue<Transform>("_lockOnTransform");
                 var eye = statue.Find("Props_NOM_StatueHead/eyelid_mid");
-                var focus = new GameObject().transform;
-                focus.SetParent(eye, false);
-                focus.LookAt(Camera.main.transform);
+                _focus = new GameObject().transform;
+                _focus.SetParent(eye, false);
 
                 var streams = ____reverseStreams.transform;
                 LayerHelper.ChangeLayerRecursive(____reverseStreams, LayerMask.NameToLayer("UI"));
-                streams.SetParent(focus, false);
+                streams.SetParent(_focus, false);
                 streams.Rotate(0, 180, 0);
                 streams.localScale *= 0.5f;
 
                 var screen = ____screenTransform;
                 LayerHelper.ChangeLayerRecursive(screen.gameObject, LayerMask.NameToLayer("UI"));
-                screen.SetParent(focus, false);
+                screen.SetParent(_focus, false);
                 screen.localRotation = Quaternion.identity;
-                screen.LookAt(Camera.main.transform.position, Locator.GetPlayerTransform().up);
                 screen.localScale = scale;
             }
 
