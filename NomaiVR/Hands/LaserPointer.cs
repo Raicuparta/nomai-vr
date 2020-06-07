@@ -40,20 +40,7 @@ namespace NomaiVR
                 UpdateLineAppearance();
 
                 DisableReticule();
-
-                var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
-                foreach (var selectable in selectables)
-                {
-                    var collider = selectable.gameObject.AddComponent<BoxCollider>();
-                    var rectTransform = selectable.GetComponent<RectTransform>();
-                    var thickness = 100f;
-                    var height = Math.Max(60f, rectTransform.rect.height);
-                    var width = Math.Max(60f, rectTransform.rect.width);
-                    collider.size = new Vector3(width, height, rectTransform.rect.height);
-                    collider.center = new Vector3(0, 0, thickness * 0.5f);
-                }
-
-                _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
+                CreateButtonColliders();
 
                 if (SceneHelper.IsInGame())
                 {
@@ -66,6 +53,23 @@ namespace NomaiVR
                 {
                     var titleAnimationController = FindObjectOfType<TitleAnimationController>();
                     titleAnimationController.OnTitleMenuAnimationComplete += OnTitleMenuAnimationComplete;
+                }
+            }
+
+            private void CreateButtonColliders()
+            {
+                _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
+
+                var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
+                foreach (var selectable in selectables)
+                {
+                    var collider = selectable.gameObject.AddComponent<BoxCollider>();
+                    var rectTransform = selectable.GetComponent<RectTransform>();
+                    var thickness = 100f;
+                    var height = Math.Max(60f, rectTransform.rect.height);
+                    var width = Math.Max(60f, rectTransform.rect.width);
+                    collider.size = new Vector3(width, height, rectTransform.rect.height);
+                    collider.center = new Vector3(0, 0, thickness * 0.5f);
                 }
             }
 
@@ -99,6 +103,7 @@ namespace NomaiVR
                         }
                         else
                         {
+                            NomaiVR.Log("selecting", selectable.name);
                             selectable.Select();
                         }
                         if (OWInput.IsNewlyPressed(InputLibrary.interact))
