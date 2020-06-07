@@ -147,7 +147,7 @@ namespace NomaiVR
                 }
             }
 
-            private void Update()
+            private void UpdateLineVisibility()
             {
                 var isUsingTool = SceneHelper.IsInGame() && ToolHelper.IsUsingAnyTool();
                 if (_lineRenderer.enabled && isUsingTool)
@@ -158,7 +158,11 @@ namespace NomaiVR
                 {
                     _lineRenderer.enabled = true;
                 }
+            }
 
+            private void Update()
+            {
+                UpdateLineVisibility();
                 UpdateLineAppearance();
                 UpdateUiRayCast();
             }
