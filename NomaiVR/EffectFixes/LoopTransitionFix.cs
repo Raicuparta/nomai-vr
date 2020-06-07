@@ -44,18 +44,14 @@ namespace NomaiVR
                 LayerHelper.ChangeLayerRecursive(____reverseStreams, LayerMask.NameToLayer("UI"));
                 streams.SetParent(focus, false);
                 streams.Rotate(0, 180, 0);
-                //streams.localPosition = -Vector3.forward;
-                streams.localScale *= 0.2f;
+                streams.localScale *= 0.5f;
 
                 var screen = ____screenTransform;
                 LayerHelper.ChangeLayerRecursive(screen.gameObject, LayerMask.NameToLayer("UI"));
                 screen.SetParent(focus, false);
                 screen.localRotation = Quaternion.identity;
                 screen.LookAt(Camera.main.transform.position, Locator.GetPlayerTransform().up);
-                //var scale = screen.localScale * 0.5f;
-                //scale.z *= -1;
                 screen.localScale = scale;
-                //screen.localPosition = Camera.main.transform.position;
             }
 
             private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
