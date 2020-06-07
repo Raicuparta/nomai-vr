@@ -13,12 +13,6 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private void Awake()
-            {
-                NomaiVR.Helper.Events.Subscribe<CanvasMarkerManager>(Events.AfterStart);
-                NomaiVR.Helper.Events.OnEvent += OnEvent;
-            }
-
             private void Start()
             {
                 var scene = LoadManager.GetCurrentScene();
@@ -54,15 +48,6 @@ namespace NomaiVR
                 titleCanvas.Find("FooterBlock").gameObject.SetActive(false);
             }
 
-            private void OnEvent(MonoBehaviour behaviour, Events ev)
-            {
-                if (behaviour.GetType() == typeof(CanvasMarkerManager) && ev == Events.AfterStart)
-                {
-                    var canvas = GameObject.Find("CanvasMarkerManager").GetComponent<Canvas>();
-                    canvas.planeDistance = 5;
-                }
-            }
-
             private void ScreenCanvasesToWorld()
             {
                 var canvases = FindObjectsOfType<Canvas>();
@@ -88,6 +73,7 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
+                    NomaiVR.Post<CanvasMarkerManager>("Start", typeof(Patch), nameof(PostMarkerManagerStart));
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)
@@ -98,6 +84,11 @@ namespace NomaiVR
                         child.localRotation = Quaternion.identity;
                         child.localScale = Vector3.one;
                     }
+                }
+
+                private static void PostMarkerManagerStart(CanvasMarkerManager __instance)
+                {
+                    __instance.GetComponent<Canvas>().planeDistance = 5;
                 }
             }
         }
