@@ -37,13 +37,14 @@ namespace NomaiVR
                     animatedTitleChild.anchorMax = Vector2.one * 0.5f;
                     animatedTitleChild.anchorMin = Vector2.one * 0.5f;
 
-                    var mainMenu = GameObject.Find("TitleLayoutGroup").GetComponent<RectTransform>();
-                    mainMenu.position = Vector3.zero;
+                    var titleMenu = GameObject.Find("TitleMenu").transform;
 
-                    GameObject.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => MenuStackManager.SharedInstance.GetMenuCount() == 0;
+                    var titleCanvas = titleMenu.Find("TitleCanvas");
+                    titleMenu.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                        MenuStackManager.SharedInstance.GetMenuCount() == 0;
 
                     // Cant't get the footer to look good, so I'm hiding it.
-                    GameObject.Find("FooterBlock").SetActive(false);
+                    titleCanvas.Find("FooterBlock").gameObject.SetActive(false);
                 }
 
                 ScreenCanvasesToWorld();
