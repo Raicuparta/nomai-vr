@@ -28,8 +28,8 @@ namespace NomaiVR
                 ref float ____reverseScreenStartDist
             )
             {
-                ____reverseScreenEndDist = 0f;
-                ____reverseScreenStartDist = 3f;
+                ____reverseScreenEndDist = 0.2f;
+                ____reverseScreenStartDist = 2.5f;
                 ____origScreenScale *= 0.5f;
                 var scale = ____origScreenScale;
 
@@ -43,9 +43,9 @@ namespace NomaiVR
                 var streams = ____reverseStreams.transform;
                 LayerHelper.ChangeLayerRecursive(____reverseStreams, LayerMask.NameToLayer("UI"));
                 streams.SetParent(focus, false);
-                streams.LookAt(2 * streams.position - Camera.main.transform.position);
-                streams.localPosition = -Vector3.forward;
-                streams.localScale *= 0.3f;
+                streams.Rotate(0, 180, 0);
+                //streams.localPosition = -Vector3.forward;
+                streams.localScale *= 0.2f;
 
                 var screen = ____screenTransform;
                 LayerHelper.ChangeLayerRecursive(screen.gameObject, LayerMask.NameToLayer("UI"));
@@ -55,7 +55,7 @@ namespace NomaiVR
                 //var scale = screen.localScale * 0.5f;
                 //scale.z *= -1;
                 screen.localScale = scale;
-                screen.localPosition = Camera.main.transform.position;
+                //screen.localPosition = Camera.main.transform.position;
             }
 
             private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
