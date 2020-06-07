@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace NomaiVR
 {
@@ -68,12 +69,19 @@ namespace NomaiVR
                 {
                     if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
                     {
+                        var scaler = canvas.GetComponent<CanvasScaler>();
+                        if (scaler != null)
+                        {
+                            scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+                            scaler.scaleFactor = 1;
+                            scaler.referencePixelsPerUnit = 100;
+                        }
                         canvas.renderMode = RenderMode.WorldSpace;
-                        canvas.transform.localScale *= 0.001f;
+                        canvas.transform.localScale = Vector3.one * 0.001f;
                         var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                         followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
-                        var z = SceneHelper.IsInGame() ? 1f : 1.5f;
-                        var y = SceneHelper.IsInGame() ? 0.5f : 1f;
+                        var z = SceneHelper.IsInGame() ? 1.5f : 2f;
+                        var y = SceneHelper.IsInGame() ? 0.75f : 1f;
                         followTarget.localPosition = new Vector3(0, y, z);
                     }
                 }
