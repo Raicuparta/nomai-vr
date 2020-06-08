@@ -2,9 +2,13 @@
 {
     public static class InputHelper
     {
-        public static bool IsUIInteractionMode()
+        public static bool IsUIInteractionMode(bool includeDialogue = true)
         {
-            return OWInput.IsInputMode(InputMode.Menu | InputMode.KeyboardInput | InputMode.Dialogue);
+            return OWInput.IsInputMode(
+                InputMode.Menu |
+                InputMode.KeyboardInput |
+                (includeDialogue ? InputMode.Dialogue : 0)
+            );
         }
     }
 }
