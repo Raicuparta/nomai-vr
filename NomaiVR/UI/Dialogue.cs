@@ -54,31 +54,21 @@ namespace NomaiVR
 
                 private static void PreSetButtonPromptImage(Image ____buttonPromptImage)
                 {
-                    NomaiVR.Log("Pre set");
                     var texture = AssetLoader.InteractIcon;
                     ____buttonPromptImage.sprite = Sprite.Create(texture, new Rect(0f, 0f, (float)texture.width, (float)texture.height), new Vector2(0.5f, 0.5f), (float)texture.width);
                 }
 
                 private static void PostDialogueOptionAwake(DialogueOptionUI __instance)
                 {
-                    NomaiVR.Log("found one");
                     var text = __instance.GetComponentInChildren<Text>();
                     var collider = __instance.gameObject.AddComponent<BoxCollider>();
 
                     var rectTransform = text.GetComponent<RectTransform>();
                     var thickness = 10f;
-                    var height = Math.Max(60f, rectTransform.rect.height);
-                    var width = Math.Max(60f, rectTransform.rect.width);
-                    NomaiVR.Log("size", height, width);
+                    var height = 40;
+                    var width = rectTransform.rect.width;
                     collider.size = new Vector3(width, height, thickness);
-                    collider.center = new Vector3(0, 0, thickness * 0.5f);
-
-                    var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.transform.SetParent(__instance.transform);
-                    cube.transform.localPosition = Vector3.zero;
-                    cube.transform.localRotation = Quaternion.identity;
-                    cube.transform.localScale = collider.size;
-                    //cube.GetComponent<Collider>().enabled = false;
+                    collider.center = new Vector3(0, -height * 0.5f, thickness * 0.5f);
                 }
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)
