@@ -115,10 +115,11 @@ namespace NomaiVR
 
                 if (Physics.Raycast(Laser.position, Laser.forward, out var hit, _menuLineLength, LayerMask.GetMask("UI")))
                 {
+                    SetLineLength(hit.distance);
+
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
-                        SetLineLength(hit.distance);
                         var tab = hit.transform.GetComponent<TabButton>();
                         if (tab != null)
                         {
@@ -163,6 +164,13 @@ namespace NomaiVR
                             }
                         }
                     }
+                    var dialogueOption = hit.transform.GetComponent<DialogueOptionUI>();
+                    if (dialogueOption != null)
+                    {
+                        NomaiVR.Log("select an option");
+                        dialogueOption.SetSelected(true);
+                    }
+                    NomaiVR.Log("point at", hit.transform.name);
                 }
             }
 

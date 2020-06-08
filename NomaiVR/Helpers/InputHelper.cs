@@ -4,7 +4,7 @@
     {
         public static bool IsUIInteractionMode()
         {
-            return OWInput.IsInputMode(InputMode.Menu | InputMode.KeyboardInput);
+            return OWInput.IsInputMode(InputMode.Menu | InputMode.KeyboardInput | InputMode.Dialogue);
         }
     }
 }

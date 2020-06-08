@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +21,7 @@ namespace NomaiVR
                 _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
                 _canvasTransform.localScale *= _dialogeRenderSize;
-                _canvasTransform.parent = Locator.GetPlayerTransform();
+                //_canvasTransform.parent = Locator.GetPlayerTransform();
 
                 var canvas = _canvasTransform.gameObject.GetComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
@@ -47,6 +48,30 @@ namespace NomaiVR
                     NomaiVR.Pre<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PreStartConversation));
                     NomaiVR.Post<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PostStartConversation));
                     NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PreEndConversation));
+                    NomaiVR.Post<DialogueOptionUI>("Awake", typeof(Patch), nameof(PostDialogueOptionAwake));
+                }
+
+                private static void PostDialogueOptionAwake(DialogueOptionUI __instance)
+                {
+                    NomaiVR.Log("found one");
+                    var text = __instance.GetComponentInChildren<Text>();
+                    var collider = __instance.gameObject.AddComponent<BoxCollider>();
+
+                    var rectTransform = text.GetComponent<RectTransform>();
+                    var thickness = 10f;
+                    var height = Math.Max(60f, rectTransform.rect.height);
+                    var width = Math.Max(60f, rectTransform.rect.width);
+                    NomaiVR.Log("size", height, width);
+                    collider.size = new Vector3(1200, 60, 60);
+                    collider.center = new Vector3(0, 0, thickness * 0.5f);
+
+                    //var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    //cube.layer = LayerMask.NameToLayer("UI");
+                    //cube.transform.SetParent(__instance.transform);
+                    //cube.transform.localPosition = Vector3.zero;
+                    //cube.transform.localRotation = Quaternion.identity;
+                    //cube.transform.localScale = collider.size;
+                    //cube.GetComponent<Collider>();
                 }
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)
@@ -63,14 +88,12 @@ namespace NomaiVR
                         MaterialHelper.MakeMaterialDrawOnTop(graphic.material);
                     }
                 }
+            }
 
-                private static void PreEndConversation()
-                {
-                    _attentionPoint = null;
-                }
+            private static void PreEndConversation()
+            {
+                _attentionPoint = null;
             }
         }
-
-
     }
 }
