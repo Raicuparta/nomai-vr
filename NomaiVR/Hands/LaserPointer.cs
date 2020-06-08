@@ -128,7 +128,7 @@ namespace NomaiVR
                         {
                             selectable.Select();
                         }
-                        if (OWInput.IsNewlyPressed(InputLibrary.interact))
+                        if (OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.select2))
                         {
                             var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
                             if (optionsSelector != null)
