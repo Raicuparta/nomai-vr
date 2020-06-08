@@ -1,5 +1,4 @@
 ﻿using OWML.ModHelper.Events;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,7 +54,7 @@ namespace NomaiVR
                 private static void PreSetButtonPromptImage(Image ____buttonPromptImage)
                 {
                     var texture = AssetLoader.InteractIcon;
-                    ____buttonPromptImage.sprite = Sprite.Create(texture, new Rect(0f, 0f, (float)texture.width, (float)texture.height), new Vector2(0.5f, 0.5f), (float)texture.width);
+                    ____buttonPromptImage.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), texture.width);
                 }
 
                 private static void PostDialogueOptionAwake(DialogueOptionUI __instance)
