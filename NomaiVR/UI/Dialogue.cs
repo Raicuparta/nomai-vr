@@ -88,11 +88,11 @@ namespace NomaiVR
                         MaterialHelper.MakeMaterialDrawOnTop(graphic.material);
                     }
                 }
-            }
 
-            private static void PreEndConversation()
-            {
-                _attentionPoint = null;
+                private static void PreEndConversation()
+                {
+                    _attentionPoint = null;
+                }
             }
         }
     }
