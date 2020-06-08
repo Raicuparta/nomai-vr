@@ -49,6 +49,14 @@ namespace NomaiVR
                     NomaiVR.Post<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PostStartConversation));
                     NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PreEndConversation));
                     NomaiVR.Post<DialogueOptionUI>("Awake", typeof(Patch), nameof(PostDialogueOptionAwake));
+                    NomaiVR.Post<DialogueOptionUI>("SetSelected", typeof(Patch), nameof(PreSetButtonPromptImage));
+                }
+
+                private static void PreSetButtonPromptImage(Image ____buttonPromptImage)
+                {
+                    NomaiVR.Log("Pre set");
+                    var texture = AssetLoader.InteractIcon;
+                    ____buttonPromptImage.sprite = Sprite.Create(texture, new Rect(0f, 0f, (float)texture.width, (float)texture.height), new Vector2(0.5f, 0.5f), (float)texture.width);
                 }
 
                 private static void PostDialogueOptionAwake(DialogueOptionUI __instance)
@@ -62,16 +70,15 @@ namespace NomaiVR
                     var height = Math.Max(60f, rectTransform.rect.height);
                     var width = Math.Max(60f, rectTransform.rect.width);
                     NomaiVR.Log("size", height, width);
-                    collider.size = new Vector3(1200, 60, 60);
+                    collider.size = new Vector3(width, height, thickness);
                     collider.center = new Vector3(0, 0, thickness * 0.5f);
 
-                    //var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    //cube.layer = LayerMask.NameToLayer("UI");
-                    //cube.transform.SetParent(__instance.transform);
-                    //cube.transform.localPosition = Vector3.zero;
-                    //cube.transform.localRotation = Quaternion.identity;
-                    //cube.transform.localScale = collider.size;
-                    //cube.GetComponent<Collider>();
+                    var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    cube.transform.SetParent(__instance.transform);
+                    cube.transform.localPosition = Vector3.zero;
+                    cube.transform.localRotation = Quaternion.identity;
+                    cube.transform.localScale = collider.size;
+                    //cube.GetComponent<Collider>().enabled = false;
                 }
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)

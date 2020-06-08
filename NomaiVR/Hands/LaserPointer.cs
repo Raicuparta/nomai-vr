@@ -180,9 +180,8 @@ namespace NomaiVR
                         var options = dialogueBox.GetValue<List<DialogueOptionUI>>("_optionsUIElements");
                         options[selectedOption].SetSelected(false);
                         dialogueBox.SetValue("_selectedOption", options.IndexOf(dialogueOption));
-                        dialogueBox.Invoke("HighlightSelectedOption", selectedOption);
+                        dialogueOption.SetSelected(true);
                     }
-                    NomaiVR.Log("point at", hit.transform.name);
                 }
                 else
                 {
