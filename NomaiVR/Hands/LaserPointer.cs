@@ -1,5 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,7 @@ namespace NomaiVR
             private const float _menuLineLength = 2f;
             private TabButton[] _tabButtons;
             private bool _isReady;
+            private Transform _prevRayHit;
 
             private void Start()
             {
@@ -116,6 +118,11 @@ namespace NomaiVR
                 if (Physics.Raycast(Laser.position, Laser.forward, out var hit, _menuLineLength, LayerMask.GetMask("UI")))
                 {
                     SetLineLength(hit.distance);
+                    if (hit.transform == _prevRayHit)
+                    {
+                        return;
+                    }
+                    _prevRayHit = hit.transform;
 
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
@@ -167,10 +174,19 @@ namespace NomaiVR
                     var dialogueOption = hit.transform.GetComponent<DialogueOptionUI>();
                     if (dialogueOption != null)
                     {
-                        NomaiVR.Log("select an option");
                         dialogueOption.SetSelected(true);
+                        var dialogueBox = GameObject.FindObjectOfType<DialogueBoxVer2>();
+                        var selectedOption = dialogueBox.GetSelectedOption();
+                        var options = dialogueBox.GetValue<List<DialogueOptionUI>>("_optionsUIElements");
+                        options[selectedOption].SetSelected(false);
+                        dialogueBox.SetValue("_selectedOption", options.IndexOf(dialogueOption));
+                        dialogueBox.Invoke("HighlightSelectedOption", selectedOption);
                     }
                     NomaiVR.Log("point at", hit.transform.name);
+                }
+                else
+                {
+                    _prevRayHit = null;
                 }
             }
 
