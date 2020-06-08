@@ -71,7 +71,6 @@ namespace NomaiVR
 
             private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
             {
-                NomaiVR.Log("Trigger flashback");
                 Transform parent;
 
                 if (____screenTransform.parent == __instance.transform)
