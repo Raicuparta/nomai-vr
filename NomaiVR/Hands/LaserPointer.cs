@@ -21,6 +21,7 @@ namespace NomaiVR
             private TabButton[] _tabButtons;
             private bool _isReady;
             private Transform _prevRayHit;
+            private DialogueBoxVer2 _dialogueBox;
 
             private void Start()
             {
@@ -33,6 +34,7 @@ namespace NomaiVR
                 if (SceneHelper.IsInGame())
                 {
                     SetUpFirstPersonManipulator();
+                    SetUpDialogueOptions();
                 }
 
                 if (SceneHelper.IsInTitle())
@@ -67,6 +69,11 @@ namespace NomaiVR
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
                 _isReady = true;
+            }
+
+            private void SetUpDialogueOptions()
+            {
+                _dialogueBox = FindObjectOfType<DialogueBoxVer2>();
             }
 
             private void SetUpTitleAnimationHandler()
@@ -152,12 +159,14 @@ namespace NomaiVR
 
             private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
             {
-                dialogueOption.SetSelected(true);
-                var dialogueBox = GameObject.FindObjectOfType<DialogueBoxVer2>();
-                var selectedOption = dialogueBox.GetSelectedOption();
-                var options = dialogueBox.GetValue<List<DialogueOptionUI>>("_optionsUIElements");
+                if (_dialogueBox.GetValue<bool>("_revealingOptions"))
+                {
+                    return;
+                }
+                var selectedOption = _dialogueBox.GetSelectedOption();
+                var options = _dialogueBox.GetValue<List<DialogueOptionUI>>("_optionsUIElements");
                 options[selectedOption].SetSelected(false);
-                dialogueBox.SetValue("_selectedOption", options.IndexOf(dialogueOption));
+                _dialogueBox.SetValue("_selectedOption", options.IndexOf(dialogueOption));
                 dialogueOption.SetSelected(true);
             }
 
