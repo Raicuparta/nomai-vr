@@ -198,7 +198,7 @@ namespace NomaiVR
 
             private void UpdateUiRayCast()
             {
-                if (!_isReady || !InputHelper.IsUIInteractionMode())
+                if (!_isReady || !InputHelper.IsUIInteractionMode(true))
                 {
                     return;
                 }
@@ -240,7 +240,7 @@ namespace NomaiVR
 
             private void UpdateLineAppearance()
             {
-                if (InputHelper.IsUIInteractionMode())
+                if (InputHelper.IsUIInteractionMode(true))
                 {
                     SetLineLength(_menuLineLength);
                     _lineRenderer.material.shader = Shader.Find("Unlit/Color");
