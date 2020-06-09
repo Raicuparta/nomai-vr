@@ -20,7 +20,6 @@ namespace NomaiVR
                 _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
                 _canvasTransform.localScale *= _dialogeRenderSize;
-                //_canvasTransform.parent = Locator.GetPlayerTransform();
 
                 var canvas = _canvasTransform.gameObject.GetComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
