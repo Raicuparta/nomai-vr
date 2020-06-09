@@ -21,8 +21,7 @@ namespace NomaiVR
 
                 _canvasTransform.localScale *= _dialogeRenderSize;
 
-                // This is needed. It might seem like everything works without changing the parent,
-                // but without this the dialogue box flies off into infinity after a while.
+                // Prevent dialogue box from flying off after a while.
                 _canvasTransform.parent = new GameObject().transform;
                 _canvasTransform.parent.gameObject.AddComponent<FollowTarget>().target = Locator.GetPlayerTransform();
 
