@@ -98,9 +98,7 @@ namespace NomaiVR
                             child.localPosition += Vector3.forward;
                         }
                     }
-
                     var collider = selectable.gameObject.AddComponent<BoxCollider>();
-
                     var rectTransform = selectable.GetComponent<RectTransform>();
                     var thickness = 10f;
                     var height = Math.Max(60f, rectTransform.rect.height);
@@ -110,51 +108,71 @@ namespace NomaiVR
                 }
             }
 
+            private bool IsSelectNewlyPressed()
+            {
+                return OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.select2);
+            }
+
             private void HandleSelectableHit(Selectable selectable)
             {
                 var tab = selectable.transform.GetComponent<TabButton>();
-                if (tab != null)
-                {
-                    tab.OnPointerEnter(null);
-                }
-                else
+                if (tab == null)
                 {
                     selectable.Select();
                 }
-                if (OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.select2))
+                else
                 {
-                    var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
-                    if (optionsSelector != null)
-                    {
-                        optionsSelector.OnArrowSelectableOnRightClick();
-                        optionsSelector.OnArrowSelectableOnDownClick();
-                    }
+                    DeselectAllTabs();
+                    tab.OnPointerEnter(null);
+                }
 
-                    var twoButtonToggle = selectable.GetComponent<TwoButtonToggleElement>();
-                    if (twoButtonToggle != null)
+                if (IsSelectNewlyPressed())
+                {
+                    if (tab == null)
                     {
-                        var selection = twoButtonToggle.GetValue();
-                        twoButtonToggle.SetValue("_selection", !selection);
-                        twoButtonToggle.Invoke("UpdateToggleColors");
+                        HandleSelectableClick(selectable);
                     }
-
-                    var slider = selectable.GetComponentInChildren<Slider>();
-                    if (slider != null)
+                    else
                     {
-                        if (slider.value < slider.maxValue)
-                        {
-                            slider.value += 1;
-                        }
-                        else
-                        {
-                            slider.value = slider.minValue;
-                        }
-                    }
-                    if (tab != null)
-                    {
-                        selectable.Select();
+                        HandleTabClick(tab);
                     }
                 }
+            }
+
+            private void HandleSelectableClick(Selectable selectable)
+            {
+                var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
+                if (optionsSelector != null)
+                {
+                    optionsSelector.OnArrowSelectableOnRightClick();
+                    optionsSelector.OnArrowSelectableOnDownClick();
+                }
+
+                var twoButtonToggle = selectable.GetComponent<TwoButtonToggleElement>();
+                if (twoButtonToggle != null)
+                {
+                    var selection = twoButtonToggle.GetValue();
+                    twoButtonToggle.SetValue("_selection", !selection);
+                    twoButtonToggle.Invoke("UpdateToggleColors");
+                }
+
+                var slider = selectable.GetComponentInChildren<Slider>();
+                if (slider != null)
+                {
+                    if (slider.value < slider.maxValue)
+                    {
+                        slider.value += 1;
+                    }
+                    else
+                    {
+                        slider.value = slider.minValue;
+                    }
+                }
+            }
+
+            private void HandleTabClick(TabButton tab)
+            {
+                tab.OnSelect(null);
             }
 
             private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
@@ -170,6 +188,14 @@ namespace NomaiVR
                 dialogueOption.SetSelected(true);
             }
 
+            private void DeselectAllTabs()
+            {
+                foreach (var tabButton in _tabButtons)
+                {
+                    tabButton.OnPointerExit(null);
+                }
+            }
+
             private void UpdateUiRayCast()
             {
                 if (!_isReady || !InputHelper.IsUIInteractionMode())
@@ -177,15 +203,10 @@ namespace NomaiVR
                     return;
                 }
 
-                foreach (var tabButton in _tabButtons)
-                {
-                    tabButton.OnPointerExit(null);
-                }
-
                 if (Physics.Raycast(Laser.position, Laser.forward, out var hit, _menuLineLength, LayerMask.GetMask("UI")))
                 {
                     SetLineLength(hit.distance);
-                    if (hit.transform == _prevRayHit)
+                    if (hit.transform == _prevRayHit && !IsSelectNewlyPressed())
                     {
                         return;
                     }
@@ -195,16 +216,19 @@ namespace NomaiVR
                     if (selectable != null)
                     {
                         HandleSelectableHit(selectable);
+                        return;
                     }
                     var dialogueOption = hit.transform.GetComponent<DialogueOptionUI>();
                     if (dialogueOption != null)
                     {
                         HandleDialogueOptionHit(dialogueOption);
+                        return;
                     }
                 }
                 else
                 {
                     _prevRayHit = null;
+                    DeselectAllTabs();
                 }
             }
 
