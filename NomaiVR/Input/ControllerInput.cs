@@ -327,7 +327,6 @@ namespace NomaiVR
                 {
                     InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
                     InputLibrary.signalscope.ChangeBinding(XboxButton.DPadRight, KeyCode.None);
-
                     InputLibrary.tabL.ChangeBinding(XboxButton.None, KeyCode.None);
                     InputLibrary.tabR.ChangeBinding(XboxButton.None, KeyCode.None);
                     InputLibrary.setDefaults.ChangeBinding(XboxButton.None, KeyCode.None);

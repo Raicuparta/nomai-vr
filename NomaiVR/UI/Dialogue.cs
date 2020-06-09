@@ -20,7 +20,10 @@ namespace NomaiVR
                 _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
                 _canvasTransform.localScale *= _dialogeRenderSize;
-                _canvasTransform.parent = Locator.GetPlayerTransform();
+
+                // Prevent dialogue box from flying off after a while.
+                _canvasTransform.parent = new GameObject().transform;
+                _canvasTransform.parent.gameObject.AddComponent<FollowTarget>().target = Locator.GetPlayerTransform();
 
                 var canvas = _canvasTransform.gameObject.GetComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
@@ -47,6 +50,27 @@ namespace NomaiVR
                     NomaiVR.Pre<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PreStartConversation));
                     NomaiVR.Post<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PostStartConversation));
                     NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PreEndConversation));
+                    NomaiVR.Post<DialogueOptionUI>("Awake", typeof(Patch), nameof(PostDialogueOptionAwake));
+                    NomaiVR.Post<DialogueOptionUI>("SetSelected", typeof(Patch), nameof(PreSetButtonPromptImage));
+                }
+
+                private static void PreSetButtonPromptImage(Image ____buttonPromptImage)
+                {
+                    var texture = AssetLoader.InteractIcon;
+                    ____buttonPromptImage.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), texture.width);
+                }
+
+                private static void PostDialogueOptionAwake(DialogueOptionUI __instance)
+                {
+                    var text = __instance.GetComponentInChildren<Text>();
+                    var collider = __instance.gameObject.AddComponent<BoxCollider>();
+
+                    var rectTransform = text.GetComponent<RectTransform>();
+                    var thickness = 10f;
+                    var height = 40;
+                    var width = rectTransform.rect.width;
+                    collider.size = new Vector3(width, height, thickness);
+                    collider.center = new Vector3(0, -height * 0.5f, thickness * 0.5f);
                 }
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)
@@ -70,7 +94,5 @@ namespace NomaiVR
                 }
             }
         }
-
-
     }
 }
