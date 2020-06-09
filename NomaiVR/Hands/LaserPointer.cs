@@ -198,7 +198,7 @@ namespace NomaiVR
 
             private void UpdateUiRayCast()
             {
-                if (!_isReady || !InputHelper.IsUIInteractionMode(true))
+                if (!_isReady || !InputHelper.IsUIInteractionMode(true) || LoadManager.IsBusy())
                 {
                     return;
                 }
