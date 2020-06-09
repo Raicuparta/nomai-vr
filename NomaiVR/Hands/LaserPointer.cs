@@ -113,7 +113,7 @@ namespace NomaiVR
                 return OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.select2);
             }
 
-            private void HandleSelectableHit(Selectable selectable)
+            private void HandleSelectableRayHit(Selectable selectable)
             {
                 var tab = selectable.transform.GetComponent<TabButton>();
                 if (tab == null)
@@ -139,34 +139,51 @@ namespace NomaiVR
                 }
             }
 
+            private void HandleOptionsSelectorClick(OptionsSelectorElement optionsSelector)
+            {
+                optionsSelector.OnArrowSelectableOnRightClick();
+                optionsSelector.OnArrowSelectableOnDownClick();
+            }
+
+            private void handleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
+            {
+                var selection = twoButtonToggle.GetValue();
+                twoButtonToggle.SetValue("_selection", !selection);
+                twoButtonToggle.Invoke("UpdateToggleColors");
+            }
+
+            private void handleSliderClick(Slider slider)
+            {
+                if (slider.value < slider.maxValue)
+                {
+                    slider.value += 1;
+                }
+                else
+                {
+                    slider.value = slider.minValue;
+                }
+            }
+
             private void HandleSelectableClick(Selectable selectable)
             {
                 var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
                 if (optionsSelector != null)
                 {
-                    optionsSelector.OnArrowSelectableOnRightClick();
-                    optionsSelector.OnArrowSelectableOnDownClick();
+                    HandleOptionsSelectorClick(optionsSelector);
+                    return;
                 }
 
                 var twoButtonToggle = selectable.GetComponent<TwoButtonToggleElement>();
                 if (twoButtonToggle != null)
                 {
-                    var selection = twoButtonToggle.GetValue();
-                    twoButtonToggle.SetValue("_selection", !selection);
-                    twoButtonToggle.Invoke("UpdateToggleColors");
+                    handleTwoButtonToggleClick(twoButtonToggle);
+                    return;
                 }
 
                 var slider = selectable.GetComponentInChildren<Slider>();
                 if (slider != null)
                 {
-                    if (slider.value < slider.maxValue)
-                    {
-                        slider.value += 1;
-                    }
-                    else
-                    {
-                        slider.value = slider.minValue;
-                    }
+                    handleSliderClick(slider);
                 }
             }
 
@@ -215,7 +232,7 @@ namespace NomaiVR
                     var selectable = hit.transform.GetComponent<Selectable>();
                     if (selectable != null)
                     {
-                        HandleSelectableHit(selectable);
+                        HandleSelectableRayHit(selectable);
                         return;
                     }
                     var dialogueOption = hit.transform.GetComponent<DialogueOptionUI>();
