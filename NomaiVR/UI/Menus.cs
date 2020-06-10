@@ -82,6 +82,18 @@ namespace NomaiVR
                 followTarget.localPosition = new Vector3(0, y, z);
             }
 
+            private void AdjustScaler(Canvas canvas)
+            {
+                var scaler = canvas.GetComponent<CanvasScaler>();
+                if (scaler != null)
+                {
+                    scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+                    scaler.scaleFactor = 1;
+                    scaler.referencePixelsPerUnit = 100;
+                }
+                canvas.transform.localScale = Vector3.one * 0.001f;
+            }
+
             private void ScreenCanvasesToWorld()
             {
                 var canvases = FindObjectsOfType<Canvas>();
@@ -98,15 +110,11 @@ namespace NomaiVR
 
                     if ((isScreenSpaceOverlay || isPatched) && !isBackdrop)
                     {
-                        var scaler = canvas.GetComponent<CanvasScaler>();
-                        if (scaler != null)
+                        if (!isPatched)
                         {
-                            scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-                            scaler.scaleFactor = 1;
-                            scaler.referencePixelsPerUnit = 100;
+                            canvas.renderMode = RenderMode.WorldSpace;
+                            AdjustScaler(canvas);
                         }
-                        canvas.renderMode = RenderMode.WorldSpace;
-                        canvas.transform.localScale = Vector3.one * 0.001f;
 
                         AddFollowTarget(canvas);
 
