@@ -145,14 +145,14 @@ namespace NomaiVR
                 optionsSelector.OnArrowSelectableOnDownClick();
             }
 
-            private void handleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
+            private void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
             {
                 var selection = twoButtonToggle.GetValue();
                 twoButtonToggle.SetValue("_selection", !selection);
                 twoButtonToggle.Invoke("UpdateToggleColors");
             }
 
-            private void handleSliderClick(Slider slider)
+            private void HandleSliderClick(Slider slider)
             {
                 if (slider.value < slider.maxValue)
                 {
@@ -162,6 +162,11 @@ namespace NomaiVR
                 {
                     slider.value = slider.minValue;
                 }
+            }
+
+            private void HandleButtonWithHotkeyClick(Button button)
+            {
+                button.onClick.Invoke();
             }
 
             private void HandleSelectableClick(Selectable selectable)
@@ -176,14 +181,22 @@ namespace NomaiVR
                 var twoButtonToggle = selectable.GetComponent<TwoButtonToggleElement>();
                 if (twoButtonToggle != null)
                 {
-                    handleTwoButtonToggleClick(twoButtonToggle);
+                    HandleTwoButtonToggleClick(twoButtonToggle);
                     return;
                 }
 
                 var slider = selectable.GetComponentInChildren<Slider>();
                 if (slider != null)
                 {
-                    handleSliderClick(slider);
+                    HandleSliderClick(slider);
+                    return;
+                }
+
+                var button = selectable.GetComponent<Button>();
+                if (button != null)
+                {
+                    HandleButtonWithHotkeyClick(button);
+                    return;
                 }
             }
 
