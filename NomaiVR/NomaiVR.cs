@@ -1,7 +1,6 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
 using System;
-using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR

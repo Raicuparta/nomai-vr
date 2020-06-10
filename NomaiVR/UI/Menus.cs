@@ -1,6 +1,4 @@
-﻿using Harmony;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +12,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static bool _shouldRenderStarLogos;
-            private static List<Canvas> patchedCanvases = new List<Canvas>();
+            private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
 
             private void Start()
             {
