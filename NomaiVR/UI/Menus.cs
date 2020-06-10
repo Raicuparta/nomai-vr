@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using Harmony;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -11,6 +14,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static bool _shouldRenderStarLogos;
+            private static List<Canvas> patchedCanvases = new List<Canvas>();
 
             private void Start()
             {
@@ -76,7 +80,14 @@ namespace NomaiVR
                 {
                     // Filter out backdrop, to disable the background canvas during conversations.
                     var isBackdrop = canvas.name == "PauseBackdropCanvas";
-                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && !isBackdrop)
+
+                    // We want to patch all other ScreenSpaceOverlay canvases;
+                    var isScreenSpaceOverlay = canvas.renderMode == RenderMode.ScreenSpaceOverlay;
+
+                    // We also need to re-patch canvases that have already been patched;
+                    var isPatched = patchedCanvases.Contains(canvas);
+
+                    if ((isScreenSpaceOverlay || isPatched) && !isBackdrop)
                     {
                         var scaler = canvas.GetComponent<CanvasScaler>();
                         if (scaler != null)
@@ -92,6 +103,10 @@ namespace NomaiVR
                         var z = SceneHelper.IsInGame() ? 1.5f : 2f;
                         var y = SceneHelper.IsInGame() ? 0.75f : 1f;
                         followTarget.localPosition = new Vector3(0, y, z);
+                        if (!isPatched)
+                        {
+                            patchedCanvases.Add(canvas);
+                        }
                     }
                 }
             }
@@ -104,6 +119,12 @@ namespace NomaiVR
                     NomaiVR.Post<CanvasMarkerManager>("Start", typeof(Patch), nameof(PostMarkerManagerStart));
                     NomaiVR.Post<TitleScreenAnimation>("FadeInMusic", typeof(Patch), nameof(PostTitleScreenFadeInMusic));
                     NomaiVR.Post<PopupMenu>("SetUpPopupCommands", typeof(Patch), nameof(PostSetPopupCommands));
+                    //NomaiVR.Post<Canvas>("OnEnable", typeof(Patch), nameof(PostCanvasAwake));
+                }
+
+                private static void PostCanvasAwake()
+                {
+                    NomaiVR.Log("PostCanvasAwake");
                 }
 
                 private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
