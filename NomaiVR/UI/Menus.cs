@@ -114,14 +114,10 @@ namespace NomaiVR
                         {
                             canvas.renderMode = RenderMode.WorldSpace;
                             AdjustScaler(canvas);
+                            patchedCanvases.Add(canvas);
                         }
 
                         AddFollowTarget(canvas);
-
-                        if (!isPatched)
-                        {
-                            patchedCanvases.Add(canvas);
-                        }
                     }
                 }
             }
