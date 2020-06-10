@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -11,6 +12,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static bool _shouldRenderStarLogos;
+            private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
 
             private void Start()
             {
@@ -69,29 +71,51 @@ namespace NomaiVR
                 splashImage.sprite = AssetLoader.SplashSprite;
             }
 
+            private void AddFollowTarget(Canvas canvas)
+            {
+                var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
+                followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
+                var z = SceneHelper.IsInGame() ? 1.5f : 2f;
+                var y = SceneHelper.IsInGame() ? 0.75f : 1f;
+                followTarget.localPosition = new Vector3(0, y, z);
+            }
+
+            private void AdjustScaler(Canvas canvas)
+            {
+                var scaler = canvas.GetComponent<CanvasScaler>();
+                if (scaler != null)
+                {
+                    scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+                    scaler.scaleFactor = 1;
+                    scaler.referencePixelsPerUnit = 100;
+                }
+                canvas.transform.localScale = Vector3.one * 0.001f;
+            }
+
             private void ScreenCanvasesToWorld()
             {
                 var canvases = FindObjectsOfType<Canvas>();
                 foreach (var canvas in canvases)
                 {
                     // Filter out backdrop, to disable the background canvas during conversations.
-                    var isBackdrop = canvas.name == "PauseBackdropCanvas";
-                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && !isBackdrop)
+                    if (canvas.name == "PauseBackdropCanvas")
                     {
-                        var scaler = canvas.GetComponent<CanvasScaler>();
-                        if (scaler != null)
-                        {
-                            scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-                            scaler.scaleFactor = 1;
-                            scaler.referencePixelsPerUnit = 100;
-                        }
+                        continue;
+                    }
+
+                    var isScreenSpaceOverlay = canvas.renderMode == RenderMode.ScreenSpaceOverlay;
+                    var isPatched = patchedCanvases.Contains(canvas);
+
+                    if (isScreenSpaceOverlay)
+                    {
                         canvas.renderMode = RenderMode.WorldSpace;
-                        canvas.transform.localScale = Vector3.one * 0.001f;
-                        var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
-                        var z = SceneHelper.IsInGame() ? 1.5f : 2f;
-                        var y = SceneHelper.IsInGame() ? 0.75f : 1f;
-                        followTarget.localPosition = new Vector3(0, y, z);
+                        AdjustScaler(canvas);
+                        patchedCanvases.Add(canvas);
+                    }
+
+                    if (isScreenSpaceOverlay || isPatched)
+                    {
+                        AddFollowTarget(canvas);
                     }
                 }
             }
