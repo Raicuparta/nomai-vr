@@ -128,12 +128,6 @@ namespace NomaiVR
                     NomaiVR.Post<CanvasMarkerManager>("Start", typeof(Patch), nameof(PostMarkerManagerStart));
                     NomaiVR.Post<TitleScreenAnimation>("FadeInMusic", typeof(Patch), nameof(PostTitleScreenFadeInMusic));
                     NomaiVR.Post<PopupMenu>("SetUpPopupCommands", typeof(Patch), nameof(PostSetPopupCommands));
-                    //NomaiVR.Post<Canvas>("OnEnable", typeof(Patch), nameof(PostCanvasAwake));
-                }
-
-                private static void PostCanvasAwake()
-                {
-                    NomaiVR.Log("PostCanvasAwake");
                 }
 
                 private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
