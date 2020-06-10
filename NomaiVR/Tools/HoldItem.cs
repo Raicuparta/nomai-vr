@@ -2,7 +2,7 @@
 
 namespace NomaiVR
 {
-    public class HoldItem : NomaiVRModule<HoldItem.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class HoldItem : NomaiVRModule<HoldItem.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -11,7 +11,7 @@ namespace NomaiVR
         {
             private ItemTool _itemTool;
 
-            private void Start()
+            internal void Start()
             {
                 _itemTool = FindObjectOfType<ItemTool>();
                 _itemTool.transform.localScale = 1.8f * Vector3.one;
@@ -56,7 +56,7 @@ namespace NomaiVR
                 return heldItem.gameObject.activeSelf;
             }
 
-            private void Update()
+            internal void Update()
             {
                 if (IsActive() && ToolHelper.IsUsingAnyTool())
                 {

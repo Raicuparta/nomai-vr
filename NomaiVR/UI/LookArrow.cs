@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class LookArrow : NomaiVRModule<LookArrow.Behaviour, LookArrow.Patch>
+    internal class LookArrow : NomaiVRModule<LookArrow.Behaviour, LookArrow.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -15,7 +15,7 @@ namespace NomaiVR
             private Transform _wrapper;
             public static Transform Target;
 
-            private void Start()
+            internal void Start()
             {
                 var canvas = Instantiate(AssetLoader.LookArrowPrefab).GetComponent<Canvas>();
                 _wrapper = canvas.transform;
@@ -32,7 +32,7 @@ namespace NomaiVR
 
             }
 
-            private void Update()
+            internal void Update()
             {
                 if (Target == null)
                 {

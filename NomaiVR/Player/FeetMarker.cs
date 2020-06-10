@@ -2,14 +2,14 @@
 
 namespace NomaiVR
 {
-    public class FeetMarker : NomaiVRModule<FeetMarker.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class FeetMarker : NomaiVRModule<FeetMarker.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
                 var marker = Instantiate(AssetLoader.FeetPositionPrefab).transform;
                 marker.parent = Locator.GetPlayerTransform();

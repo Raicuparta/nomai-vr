@@ -2,7 +2,7 @@
 
 namespace NomaiVR
 {
-    public class HoldPrompts : NomaiVRModule<HoldPrompts.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class HoldPrompts : NomaiVRModule<HoldPrompts.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -11,7 +11,7 @@ namespace NomaiVR
         {
             private Transform _holdTransform;
 
-            private void Start()
+            internal void Start()
             {
                 var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
                 canvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
@@ -33,7 +33,7 @@ namespace NomaiVR
                 }
             }
 
-            private void Update()
+            internal void Update()
             {
                 if (Camera.main)
                 {

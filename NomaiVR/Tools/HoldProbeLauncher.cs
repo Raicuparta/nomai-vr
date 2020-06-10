@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class HoldProbeLauncher : NomaiVRModule<HoldProbeLauncher.Behaviour, HoldProbeLauncher.Behaviour.Patch>
+    internal class HoldProbeLauncher : NomaiVRModule<HoldProbeLauncher.Behaviour, HoldProbeLauncher.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -14,7 +14,7 @@ namespace NomaiVR
             private GameObject _probeLauncherHolster;
             private static ProbeLauncherUI _probeUI;
 
-            private void Start()
+            internal void Start()
             {
                 var probeLauncher = Camera.main.transform.Find("ProbeLauncher");
                 probeLauncher.localScale = Vector3.one * 0.3f;

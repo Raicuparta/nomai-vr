@@ -12,7 +12,7 @@ namespace NomaiVR
         private Quaternion rotationVelocity;
         private Vector3 positionVelocity;
 
-        private void LateUpdate()
+        internal void LateUpdate()
         {
             if (!target)
             {

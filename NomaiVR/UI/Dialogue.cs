@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace NomaiVR
 {
-    public class Dialogue : NomaiVRModule<Dialogue.Behaviour, Dialogue.Behaviour.Patch>
+    internal class Dialogue : NomaiVRModule<Dialogue.Behaviour, Dialogue.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -15,7 +15,7 @@ namespace NomaiVR
             private static Transform _attentionPoint = null;
             private const float _dialogeRenderSize = 0.0015f;
 
-            private void Start()
+            internal void Start()
             {
                 _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
@@ -29,7 +29,7 @@ namespace NomaiVR
                 canvas.renderMode = RenderMode.WorldSpace;
             }
 
-            private void Update()
+            internal void Update()
             {
                 if (_attentionPoint != null && _canvasTransform != null)
                 {

@@ -4,7 +4,7 @@ using Valve.VR;
 
 namespace NomaiVR
 {
-    public class HandsController : NomaiVRModule<HandsController.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class HandsController : NomaiVRModule<HandsController.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => AllScenes;
@@ -15,7 +15,7 @@ namespace NomaiVR
             public static Transform LeftHand;
             private Transform _wrapper;
 
-            private void Start()
+            internal void Start()
             {
                 if (SceneHelper.IsInTitle())
                 {
@@ -91,7 +91,7 @@ namespace NomaiVR
                 LeftHand = left.transform;
             }
 
-            private void HideBody()
+            static void HideBody()
             {
                 var bodyModels = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
 
@@ -123,7 +123,7 @@ namespace NomaiVR
                 withSuit.Find("Traveller_Mesh_v01:PlayerSuit_RightArm").gameObject.SetActive(false);
             }
 
-            private void Update()
+            internal void Update()
             {
                 if (SceneHelper.IsInGame() && _wrapper && Camera.main)
                 {

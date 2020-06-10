@@ -13,12 +13,11 @@ namespace NomaiVR
         public float scale;
         private MeshRenderer[] _renderers;
         private bool _visible = true;
-        public Action onEquip;
         public Action onUnequip;
 
         public ProximityDetector Detector { get; private set; }
 
-        private void Start()
+        internal void Start()
         {
             Detector = gameObject.AddComponent<ProximityDetector>();
             Detector.other = HandsController.Behaviour.RightHand;
@@ -32,7 +31,6 @@ namespace NomaiVR
 
         private void Equip()
         {
-            onEquip?.Invoke();
             ToolHelper.Swapper.EquipToolMode(mode);
 
             if (mode == ToolMode.Translator)
@@ -96,7 +94,7 @@ namespace NomaiVR
             }
         }
 
-        private void LateUpdate()
+        internal void LateUpdate()
         {
             UpdateGrab();
             UpdateVisibility();

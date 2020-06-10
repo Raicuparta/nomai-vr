@@ -2,14 +2,14 @@
 
 namespace NomaiVR
 {
-    public class FlashlightGesture : NomaiVRModule<FlashlightGesture.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class FlashlightGesture : NomaiVRModule<FlashlightGesture.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
                 var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
                 detector.other = HandsController.Behaviour.RightHand;

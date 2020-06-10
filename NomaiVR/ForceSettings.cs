@@ -4,21 +4,21 @@ using Valve.VR;
 
 namespace NomaiVR
 {
-    public class ForceSettings : NomaiVRModule<ForceSettings.Behaviour, ForceSettings.Patch>
+    internal class ForceSettings : NomaiVRModule<ForceSettings.Behaviour, ForceSettings.Patch>
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Awake()
+            internal void Awake()
             {
                 SetResolution();
                 SetRefreshRate();
                 SetFov();
             }
 
-            private void SetRefreshRate()
+            static void SetRefreshRate()
             {
                 var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
                 var overrideRefreshRate = NomaiVR.Config.overrideRefreshRate;

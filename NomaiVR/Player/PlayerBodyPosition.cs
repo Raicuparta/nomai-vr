@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class PlayerBodyPosition : NomaiVRModule<PlayerBodyPosition.Behaviour, PlayerBodyPosition.Behaviour.Patch>
+    internal class PlayerBodyPosition : NomaiVRModule<PlayerBodyPosition.Behaviour, PlayerBodyPosition.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -14,7 +14,7 @@ namespace NomaiVR
             private static Transform _playArea;
             private Transform _camera;
 
-            private void Start()
+            internal void Start()
             {
                 // This component is messing with our ability to read the VR camera's rotation.
                 // Seems to be responsible for controlling the camera rotation with the mouse / joystick.
@@ -29,7 +29,7 @@ namespace NomaiVR
                 CreateRecenterMenuEntry();
             }
 
-            private void AdjustPlayerHeadPosition()
+            static void AdjustPlayerHeadPosition()
             {
                 var playerhead = PlayerHelper.PlayerHead;
                 playerhead.localPosition = new Vector3(playerhead.localPosition.x, playerhead.localPosition.y, 0);
@@ -65,7 +65,7 @@ namespace NomaiVR
                 button.OnClick += MoveCameraToPlayerHead;
             }
 
-            private void Update()
+            internal void Update()
             {
                 var cameraToHead = Vector3.ProjectOnPlane(PlayerHelper.PlayerHead.position - _camera.position, PlayerHelper.PlayerHead.up);
 

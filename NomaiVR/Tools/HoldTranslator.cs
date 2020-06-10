@@ -4,14 +4,14 @@ using UnityEngine.UI;
 
 namespace NomaiVR
 {
-    public class HoldTranslator : NomaiVRModule<HoldTranslator.Behaviour, HoldTranslator.Behaviour.Patch>
+    internal class HoldTranslator : NomaiVRModule<HoldTranslator.Behaviour, HoldTranslator.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
                 var translator = Camera.main.transform.Find("NomaiTranslatorProp");
 
@@ -74,6 +74,7 @@ namespace NomaiVR
                     NomaiVR.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patch), nameof(IsPromptAllowed));
                 }
 
+#pragma warning disable IDE0060 // Unusued parameter is needed for return value passthrough.
                 private static bool IsPromptAllowed(bool __result)
                 {
                     return false;

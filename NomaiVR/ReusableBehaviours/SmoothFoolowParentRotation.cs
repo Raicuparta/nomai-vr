@@ -10,13 +10,13 @@ namespace NomaiVR
 
         private float percent;
 
-        private void Start()
+        internal void Start()
         {
             startLocalRot = transform.localRotation;
             lastFrameRot = transform.rotation;
         }
 
-        private void Update()
+        internal void Update()
         {
             var newDesiredRot = transform.parent.rotation * startLocalRot;
 

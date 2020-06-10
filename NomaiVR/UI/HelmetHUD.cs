@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class HelmetHUD : NomaiVRModule<HelmetHUD.Behaviour, HelmetHUD.Behaviour.Patch>
+    internal class HelmetHUD : NomaiVRModule<HelmetHUD.Behaviour, HelmetHUD.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -13,7 +13,7 @@ namespace NomaiVR
             private static Transform _thrusterHUD;
             private static Transform _helmet;
 
-            private void Awake()
+            internal void Awake()
             {
                 _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
 

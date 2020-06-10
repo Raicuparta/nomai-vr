@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class HoldMallowStick : NomaiVRModule<HoldMallowStick.Behaviour, HoldMallowStick.Behaviour.Patch>
+    internal class HoldMallowStick : NomaiVRModule<HoldMallowStick.Behaviour, HoldMallowStick.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
 
                 var scale = Vector3.one * 0.75f;

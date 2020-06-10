@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace NomaiVR
 {
-    public class InputPrompts : NomaiVRModule<InputPrompts.Behaviour, InputPrompts.Behaviour.Patch>
+    internal class InputPrompts : NomaiVRModule<InputPrompts.Behaviour, InputPrompts.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -16,7 +16,7 @@ namespace NomaiVR
 
             private static PromptManager Manager => Locator.GetPromptManager();
 
-            private void LateUpdate()
+            internal void LateUpdate()
             {
                 var isInShip = ToolHelper.Swapper.GetToolGroup() == ToolGroup.Ship;
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);

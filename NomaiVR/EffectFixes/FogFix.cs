@@ -2,19 +2,19 @@
 
 namespace NomaiVR
 {
-    public class FogFix : NomaiVRModule<FogFix.Behaviour, FogFix.Behaviour.Patch>
+    internal class FogFix : NomaiVRModule<FogFix.Behaviour, FogFix.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
                 FixDarkBrambleLights();
             }
 
-            private void FixDarkBrambleLights()
+            static void FixDarkBrambleLights()
             {
                 var fogLightCanvas = GameObject.Find("FogLightCanvas").GetComponent<Canvas>();
                 fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;

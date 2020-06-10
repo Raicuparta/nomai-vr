@@ -4,7 +4,7 @@ using Valve.VR;
 
 namespace NomaiVR
 {
-    public class VRTutorial : NomaiVRModule<VRTutorial.Behaviour, VRTutorial.Behaviour.Patch>
+    internal class VRTutorial : NomaiVRModule<VRTutorial.Behaviour, VRTutorial.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -16,7 +16,7 @@ namespace NomaiVR
             private List<SteamVR_RenderModel> _controllerModels;
             private bool _isShowingControlleModels;
 
-            private void Start()
+            internal void Start()
             {
                 _queue = new List<TutorialInput>();
                 _controllerModels = new List<SteamVR_RenderModel>();
@@ -78,7 +78,7 @@ namespace NomaiVR
                 _queue.Sort((a, b) => a.priority - b.priority);
             }
 
-            private void Update()
+            internal void Update()
             {
                 if (_queue.Count > 0)
                 {
@@ -179,17 +179,17 @@ namespace NomaiVR
                         isDone = true;
                     }
 
-                    if (action is SteamVR_Action_Vector2)
+                    if (action is SteamVR_Action_Vector2 vector2Action)
                     {
-                        ((SteamVR_Action_Vector2)action).onChange += OnChange;
+                        vector2Action.onChange += OnChange;
                     }
-                    if (action is SteamVR_Action_Single)
+                    if (action is SteamVR_Action_Single singleAction)
                     {
-                        ((SteamVR_Action_Single)action).onChange += OnChange;
+                        singleAction.onChange += OnChange;
                     }
-                    if (action is SteamVR_Action_Boolean)
+                    if (action is SteamVR_Action_Boolean booleanAction)
                     {
-                        ((SteamVR_Action_Boolean)action).onChange += OnChange;
+                        booleanAction.onChange += OnChange;
                     }
                 }
 

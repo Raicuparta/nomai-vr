@@ -13,7 +13,7 @@ namespace NomaiVR
         public Vector3 localOffset;
         public bool isInside;
 
-        private void Update()
+        internal void Update()
         {
             if (!other.gameObject.activeSelf)
             {

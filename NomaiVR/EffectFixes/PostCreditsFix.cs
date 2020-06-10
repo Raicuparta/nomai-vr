@@ -2,14 +2,14 @@
 
 namespace NomaiVR
 {
-    public class PostCreditsFix : NomaiVRModule<PostCreditsFix.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class PostCreditsFix : NomaiVRModule<PostCreditsFix.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => new[] { OWScene.PostCreditsScene };
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
                 var camera = Instantiate(AssetLoader.PostCreditsPrefab);
                 camera.transform.GetChild(0).parent = null;

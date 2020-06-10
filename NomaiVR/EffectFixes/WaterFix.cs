@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class WaterFix : NomaiVRModule<WaterFix.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class WaterFix : NomaiVRModule<WaterFix.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
                 // Disable underwater distortion.
                 FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);

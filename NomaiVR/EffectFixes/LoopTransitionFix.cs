@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class LoopTransitionFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, LoopTransitionFix.Patch>
+    internal class LoopTransitionFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, LoopTransitionFix.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -23,13 +23,7 @@ namespace NomaiVR
                 NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
             }
 
-            private static void PostUpdateMemoryLink(
-                GameObject ____reverseStreams,
-                Transform ____screenTransform,
-                ref Vector3 ____origScreenScale,
-                ref float ____reverseScreenEndDist,
-                ref float ____reverseScreenStartDist
-            )
+            private static void PostUpdateMemoryLink()
             {
                 if (_focus != null)
                 {

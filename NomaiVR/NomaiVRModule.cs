@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public abstract class NomaiVRModule<Behaviour, Patch>
+    internal abstract class NomaiVRModule<Behaviour, Patch>
         where Patch : NomaiVRPatch, new()
         where Behaviour : MonoBehaviour
     {
@@ -70,7 +70,7 @@ namespace NomaiVR
         }
     }
 
-    public static class NomaiVRModule
+    internal static class NomaiVRModule
     {
         public class EmptyPatch : NomaiVRPatch
         {

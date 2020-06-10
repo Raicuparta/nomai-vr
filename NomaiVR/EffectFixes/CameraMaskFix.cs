@@ -2,7 +2,7 @@
 
 namespace NomaiVR
 {
-    public class CameraMaskFix : NomaiVRModule<CameraMaskFix.Behaviour, CameraMaskFix.Behaviour.Patch>
+    internal class CameraMaskFix : NomaiVRModule<CameraMaskFix.Behaviour, CameraMaskFix.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -15,7 +15,7 @@ namespace NomaiVR
             private static Behaviour _instance;
             private bool _isPaused;
 
-            private void Start()
+            internal void Start()
             {
                 _instance = this;
 
@@ -27,7 +27,7 @@ namespace NomaiVR
                 }
             }
 
-            private void Update()
+            internal void Update()
             {
                 _camera.postProcessingSettings.chromaticAberrationEnabled = false;
                 _camera.postProcessingSettings.vignetteEnabled = false;
@@ -50,7 +50,7 @@ namespace NomaiVR
                 Invoke(nameof(CloseEyes), 3);
             }
 
-            private void CloseEyes()
+            static void CloseEyes()
             {
                 cullingMask = Camera.main.cullingMask;
                 _farClipPlane = Camera.main.farClipPlane;

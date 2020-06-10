@@ -9,7 +9,7 @@ namespace NomaiVR
         private bool _shouldRender;
         private Vector3 _scale;
 
-        private void Start()
+        internal void Start()
         {
             _scale = transform.localScale;
             SetShow(false);
@@ -21,7 +21,7 @@ namespace NomaiVR
             transform.localScale = show ? _scale : Vector3.zero;
         }
 
-        private void Update()
+        internal void Update()
         {
             var shouldRender = getShouldRender.Invoke();
             if (!_shouldRender && shouldRender)

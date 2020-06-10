@@ -5,7 +5,7 @@ using Valve.VR;
 
 namespace NomaiVR
 {
-    public class ControllerInput : NomaiVRModule<ControllerInput.Behaviour, ControllerInput.Behaviour.Patch>
+    internal class ControllerInput : NomaiVRModule<ControllerInput.Behaviour, ControllerInput.Behaviour.Patch>
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
@@ -24,12 +24,12 @@ namespace NomaiVR
             private bool _justHeld;
             private ScreenPrompt _repairPrompt;
 
-            private void Awake()
+            internal void Awake()
             {
                 OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
             }
 
-            private void Start()
+            internal void Start()
             {
                 _instance = this;
                 _buttons = new Dictionary<XboxButton, float>();
@@ -157,7 +157,7 @@ namespace NomaiVR
                 _singleAxes[axis.GetInputAxisName(0)] = value;
             }
 
-            private SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection)
+            static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection)
             {
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
@@ -165,12 +165,12 @@ namespace NomaiVR
                 };
             }
 
-            private SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
+            static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
             {
                 return CreateSingleAxisHandler(singleAxis, 1);
             }
 
-            private SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)
+            static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)
             {
                 return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
                 {
@@ -178,7 +178,7 @@ namespace NomaiVR
                 };
             }
 
-            private SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY)
+            static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY)
             {
                 return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) =>
                 {
@@ -190,7 +190,7 @@ namespace NomaiVR
                 };
             }
 
-            private void Update()
+            internal void Update()
             {
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {

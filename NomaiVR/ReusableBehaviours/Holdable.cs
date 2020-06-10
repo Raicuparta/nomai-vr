@@ -7,7 +7,7 @@ namespace NomaiVR
     {
         public Transform hand = HandsController.Behaviour.RightHand;
 
-        private void Start()
+        internal void Start()
         {
             var objectParent = new GameObject().transform;
             objectParent.parent = hand;

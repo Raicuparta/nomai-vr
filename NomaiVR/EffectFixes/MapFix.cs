@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class MapFix : NomaiVRModule<MapFix.Behaviour, NomaiVRModule.EmptyPatch>
+    internal class MapFix : NomaiVRModule<MapFix.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => SolarSystemScene;
 
         public class Behaviour : MonoBehaviour
         {
-            private void Start()
+            internal void Start()
             {
                 var mapCameraTransform = Locator.GetRootTransform().Find("MapCamera");
 

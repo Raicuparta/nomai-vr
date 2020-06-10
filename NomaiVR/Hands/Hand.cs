@@ -10,7 +10,7 @@ namespace NomaiVR
         public SteamVR_Action_Pose pose;
         public bool isLeft;
 
-        private void Start()
+        internal void Start()
         {
             var hand = Instantiate(handPrefab).transform;
             var glove = Instantiate(glovePrefab).transform;

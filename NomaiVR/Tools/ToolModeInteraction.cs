@@ -6,7 +6,7 @@ namespace NomaiVR
 {
     internal class ToolModeInteraction : MonoBehaviour
     {
-        private void Start()
+        internal void Start()
         {
             var proximityDetector = gameObject.AddComponent<ProximityDetector>();
             proximityDetector.onEnter = OnDetectorEnter;

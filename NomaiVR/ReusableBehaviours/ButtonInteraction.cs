@@ -12,7 +12,7 @@ namespace NomaiVR
         public Func<bool> skipPressCallback;
         private BoxCollider _collider;
 
-        private void Start()
+        internal void Start()
         {
             _collider = gameObject.AddComponent<BoxCollider>();
             _collider.isTrigger = true;
@@ -40,7 +40,7 @@ namespace NomaiVR
             receiver.ResetInteraction();
         }
 
-        private void OnDisable()
+        internal void OnDisable()
         {
             if (_collider != null)
             {
@@ -48,7 +48,7 @@ namespace NomaiVR
             }
         }
 
-        private void OnEnable()
+        internal void OnEnable()
         {
             if (_collider != null)
             {

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace NomaiVR
 {
-    public class LaserPointer : NomaiVRModule<LaserPointer.Behaviour, LaserPointer.Behaviour.Patch>
+    internal class LaserPointer : NomaiVRModule<LaserPointer.Behaviour, LaserPointer.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => AllScenes;
@@ -23,7 +23,7 @@ namespace NomaiVR
             private Transform _prevRayHit;
             private DialogueBoxVer2 _dialogueBox;
 
-            private void Start()
+            internal void Start()
             {
                 SetUpLaserObject();
                 SetUpLineRenderer();
@@ -43,7 +43,7 @@ namespace NomaiVR
                 }
             }
 
-            private void SetUpLaserObject()
+            static void SetUpLaserObject()
             {
                 Laser = new GameObject("Laser").transform;
                 Laser.gameObject.layer = LayerMask.NameToLayer("UI");
@@ -108,7 +108,7 @@ namespace NomaiVR
                 }
             }
 
-            private bool IsSelectNewlyPressed()
+            static bool IsSelectNewlyPressed()
             {
                 return OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.select2);
             }
@@ -139,20 +139,20 @@ namespace NomaiVR
                 }
             }
 
-            private void HandleOptionsSelectorClick(OptionsSelectorElement optionsSelector)
+            static void HandleOptionsSelectorClick(OptionsSelectorElement optionsSelector)
             {
                 optionsSelector.OnArrowSelectableOnRightClick();
                 optionsSelector.OnArrowSelectableOnDownClick();
             }
 
-            private void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
+            static void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
             {
                 var selection = twoButtonToggle.GetValue();
                 twoButtonToggle.SetValue("_selection", !selection);
                 twoButtonToggle.Invoke("UpdateToggleColors");
             }
 
-            private void HandleSliderClick(Slider slider)
+            static void HandleSliderClick(Slider slider)
             {
                 if (slider.value < slider.maxValue)
                 {
@@ -164,12 +164,12 @@ namespace NomaiVR
                 }
             }
 
-            private void HandleButtonWithHotkeyClick(Button button)
+            static void HandleButtonWithHotkeyClick(Button button)
             {
                 button.onClick.Invoke();
             }
 
-            private void HandleSelectableClick(Selectable selectable)
+            static void HandleSelectableClick(Selectable selectable)
             {
                 var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
                 if (optionsSelector != null)
@@ -200,7 +200,7 @@ namespace NomaiVR
                 }
             }
 
-            private void HandleTabClick(TabButton tab)
+            static void HandleTabClick(TabButton tab)
             {
                 tab.OnSelect(null);
             }
@@ -296,14 +296,14 @@ namespace NomaiVR
                 }
             }
 
-            private void Update()
+            internal void Update()
             {
                 UpdateLineVisibility();
                 UpdateLineAppearance();
                 UpdateUiRayCast();
             }
 
-            private void DisableReticule()
+            static void DisableReticule()
             {
                 var rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
                 foreach (var rootObject in rootObjects)

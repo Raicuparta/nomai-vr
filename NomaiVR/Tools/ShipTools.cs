@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class ShipTools : NomaiVRModule<ShipTools.Behaviour, ShipTools.Behaviour.Patch>
+    internal class ShipTools : NomaiVRModule<ShipTools.Behaviour, ShipTools.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => SolarSystemScene;
@@ -21,14 +21,14 @@ namespace NomaiVR
             private static ShipCockpitController _cockpitController;
             private static bool _isLandingCamEnabled;
 
-            private void Awake()
+            internal void Awake()
             {
                 _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
                 _cockpitController = FindObjectOfType<ShipCockpitController>();
                 _mapGridRenderer = FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
             }
 
-            private void Update()
+            internal void Update()
             {
                 var isInShip = _cockpitController.IsPlayerAtFlightConsole();
 
@@ -78,7 +78,7 @@ namespace NomaiVR
                 }
             }
 
-            private bool IsFocused(ButtonInteraction interaction)
+            static bool IsFocused(ButtonInteraction interaction)
             {
                 return interaction && interaction.receiver && interaction.receiver.IsFocused();
             }

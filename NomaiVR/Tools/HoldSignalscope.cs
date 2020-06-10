@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    public class HoldSignalscope : NomaiVRModule<HoldSignalscope.Behaviour, HoldSignalscope.Behaviour.Patch>
+    internal class HoldSignalscope : NomaiVRModule<HoldSignalscope.Behaviour, HoldSignalscope.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -16,7 +16,7 @@ namespace NomaiVR
             private static Camera _lensCamera;
             private static Transform _lens;
 
-            private void Start()
+            internal void Start()
             {
                 if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
                 {
@@ -73,7 +73,7 @@ namespace NomaiVR
                 SetupScopeLens();
             }
 
-            private void SetupSignalscopeUI(Transform parent)
+            static void SetupSignalscopeUI(Transform parent)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 parent.parent = _signalscope.transform;
@@ -87,7 +87,7 @@ namespace NomaiVR
                 _lens.gameObject.SetActive(false);
             }
 
-            private void SetupScopeLens()
+            static void SetupScopeLens()
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
@@ -123,7 +123,7 @@ namespace NomaiVR
                 _lensCamera.gameObject.SetActive(true);
             }
 
-            private void Update()
+            internal void Update()
             {
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {

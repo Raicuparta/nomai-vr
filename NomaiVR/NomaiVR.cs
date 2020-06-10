@@ -11,7 +11,7 @@ namespace NomaiVR
         public static ModSaveFile Save;
         public static ModConfig Config;
 
-        private void Start()
+        internal void Start()
         {
             Helper.Console.WriteLine("Start NomaiVR");
             Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
