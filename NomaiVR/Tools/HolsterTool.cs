@@ -16,13 +16,13 @@ namespace NomaiVR
         public Action onEquip;
         public Action onUnequip;
 
-        public ProximityDetector detector { get; private set; }
+        public ProximityDetector Detector { get; private set; }
 
         private void Start()
         {
-            detector = gameObject.AddComponent<ProximityDetector>();
-            detector.other = HandsController.Behaviour.RightHand;
-            detector.minDistance = 0.2f;
+            Detector = gameObject.AddComponent<ProximityDetector>();
+            Detector.other = HandsController.Behaviour.RightHand;
+            Detector.minDistance = 0.2f;
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
 
@@ -71,7 +71,7 @@ namespace NomaiVR
                 }
                 return;
             }
-            if (ControllerInput.Behaviour.IsGripping && !IsEquipped() && detector.isInside && _visible)
+            if (ControllerInput.Behaviour.IsGripping && !IsEquipped() && Detector.isInside && _visible)
             {
                 Equip();
             }

@@ -7,8 +7,8 @@ namespace NomaiVR
 {
     public class ControllerInput : NomaiVRModule<ControllerInput.Behaviour, ControllerInput.Behaviour.Patch>
     {
-        protected override bool isPersistent => true;
-        protected override OWScene[] scenes => TitleScene;
+        protected override bool IsPersistent => true;
+        protected override OWScene[] Scenes => TitleScene;
 
         public class Behaviour : MonoBehaviour
         {
@@ -168,14 +168,6 @@ namespace NomaiVR
             private SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
             {
                 return CreateSingleAxisHandler(singleAxis, 1);
-            }
-
-            private SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(SingleAxis singleAxis, int axisDirection)
-            {
-                return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
-                {
-                    _singleAxes[singleAxis.GetInputAxisName(0)] = axisDirection * (newState ? 1 : 0);
-                };
             }
 
             private SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)

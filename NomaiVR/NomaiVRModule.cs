@@ -12,8 +12,8 @@ namespace NomaiVR
         protected static OWScene[] SolarSystemScene = new[] { OWScene.SolarSystem };
         protected static OWScene[] AllScenes = new OWScene[] { };
 
-        protected abstract bool isPersistent { get; }
-        protected abstract OWScene[] scenes { get; }
+        protected abstract bool IsPersistent { get; }
+        protected abstract OWScene[] Scenes { get; }
 
         public NomaiVRModule()
         {
@@ -37,7 +37,7 @@ namespace NomaiVR
 
         private bool IsSceneRelevant(OWScene scene)
         {
-            return scenes.Length == 0 || scenes.Contains(scene);
+            return Scenes.Length == 0 || Scenes.Contains(scene);
         }
 
         private void SetupBehaviour()
@@ -51,7 +51,7 @@ namespace NomaiVR
             var gameObject = new GameObject();
             gameObject.AddComponent<Behaviour>();
 
-            if (isPersistent)
+            if (IsPersistent)
             {
                 gameObject.AddComponent<PersistObject>();
             }

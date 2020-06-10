@@ -7,14 +7,14 @@ namespace NomaiVR
 {
     public class InputPrompts : NomaiVRModule<InputPrompts.Behaviour, InputPrompts.Behaviour.Patch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {
             private static readonly List<ScreenPrompt> _toolUnequipPrompts = new List<ScreenPrompt>(2);
 
-            private static PromptManager _manager => Locator.GetPromptManager();
+            private static PromptManager Manager => Locator.GetPromptManager();
 
             private void LateUpdate()
             {
@@ -132,7 +132,7 @@ namespace NomaiVR
 
                 private static void RemoveSatellitePrompts(ScreenPrompt ____rearviewPrompt)
                 {
-                    _manager.RemoveScreenPrompt(____rearviewPrompt);
+                    Manager.RemoveScreenPrompt(____rearviewPrompt);
                 }
 
                 private static void RemoveJoystickPrompts(ref bool ____lookPromptAdded)
@@ -145,8 +145,8 @@ namespace NomaiVR
                     ScreenPrompt ____mallowPrompt
                 )
                 {
-                    _manager.RemoveScreenPrompt(____tiltPrompt);
-                    _manager.RemoveScreenPrompt(____mallowPrompt);
+                    Manager.RemoveScreenPrompt(____tiltPrompt);
+                    Manager.RemoveScreenPrompt(____mallowPrompt);
                 }
 
                 private static void RemoveToolModePrompts(
@@ -160,15 +160,15 @@ namespace NomaiVR
                     ScreenPrompt ____centerSignalscopePrompt
                 )
                 {
-                    _manager.RemoveScreenPrompt(____freeLookPrompt);
-                    _manager.RemoveScreenPrompt(____probePrompt);
-                    _manager.RemoveScreenPrompt(____signalscopePrompt);
-                    _manager.RemoveScreenPrompt(____flashlightPrompt);
-                    _manager.RemoveScreenPrompt(____flashlightPrompt);
-                    _manager.RemoveScreenPrompt(____centerFlashlightPrompt);
-                    _manager.RemoveScreenPrompt(____centerTranslatePrompt);
-                    _manager.RemoveScreenPrompt(____centerProbePrompt);
-                    _manager.RemoveScreenPrompt(____centerSignalscopePrompt);
+                    Manager.RemoveScreenPrompt(____freeLookPrompt);
+                    Manager.RemoveScreenPrompt(____probePrompt);
+                    Manager.RemoveScreenPrompt(____signalscopePrompt);
+                    Manager.RemoveScreenPrompt(____flashlightPrompt);
+                    Manager.RemoveScreenPrompt(____flashlightPrompt);
+                    Manager.RemoveScreenPrompt(____centerFlashlightPrompt);
+                    Manager.RemoveScreenPrompt(____centerTranslatePrompt);
+                    Manager.RemoveScreenPrompt(____centerProbePrompt);
+                    Manager.RemoveScreenPrompt(____centerSignalscopePrompt);
                 }
 
                 private static void ChangeProbePrompts(
@@ -205,11 +205,11 @@ namespace NomaiVR
                 )
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
-                    _manager.RemoveScreenPrompt(____photoModePrompt);
-                    _manager.RemoveScreenPrompt(____reverseCamPrompt);
-                    _manager.RemoveScreenPrompt(____rotatePrompt);
-                    _manager.RemoveScreenPrompt(____rotateCenterPrompt);
-                    _manager.RemoveScreenPrompt(____launchModePrompt);
+                    Manager.RemoveScreenPrompt(____photoModePrompt);
+                    Manager.RemoveScreenPrompt(____reverseCamPrompt);
+                    Manager.RemoveScreenPrompt(____rotatePrompt);
+                    Manager.RemoveScreenPrompt(____rotateCenterPrompt);
+                    Manager.RemoveScreenPrompt(____launchModePrompt);
                 }
 
                 private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
@@ -224,8 +224,8 @@ namespace NomaiVR
                 )
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
-                    _manager.RemoveScreenPrompt(____changeFrequencyPrompt);
-                    _manager.RemoveScreenPrompt(____zoomLevelPrompt);
+                    Manager.RemoveScreenPrompt(____changeFrequencyPrompt);
+                    Manager.RemoveScreenPrompt(____zoomLevelPrompt);
                 }
 
                 private static void RemoveShipPrompts(
@@ -234,9 +234,9 @@ namespace NomaiVR
                     ScreenPrompt ____liftoffCamera
                 )
                 {
-                    _manager.RemoveScreenPrompt(____freeLookPrompt);
-                    _manager.RemoveScreenPrompt(____landingModePrompt);
-                    _manager.RemoveScreenPrompt(____liftoffCamera);
+                    Manager.RemoveScreenPrompt(____freeLookPrompt);
+                    Manager.RemoveScreenPrompt(____landingModePrompt);
+                    Manager.RemoveScreenPrompt(____liftoffCamera);
                 }
 
                 private static void RemoveTranslatorPrompts(
@@ -245,9 +245,9 @@ namespace NomaiVR
                     ScreenPrompt ____pagePrompt
                 )
                 {
-                    _manager.RemoveScreenPrompt(____unequipPrompt);
-                    _manager.RemoveScreenPrompt(____scrollPrompt);
-                    _manager.RemoveScreenPrompt(____pagePrompt);
+                    Manager.RemoveScreenPrompt(____unequipPrompt);
+                    Manager.RemoveScreenPrompt(____scrollPrompt);
+                    Manager.RemoveScreenPrompt(____pagePrompt);
                 }
 
                 private static void ChangeTranslatorPrompts(ref ScreenPrompt ____translatePrompt)

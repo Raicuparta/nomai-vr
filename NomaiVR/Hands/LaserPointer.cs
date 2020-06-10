@@ -8,8 +8,8 @@ namespace NomaiVR
 {
     public class LaserPointer : NomaiVRModule<LaserPointer.Behaviour, LaserPointer.Behaviour.Patch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => AllScenes;
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {

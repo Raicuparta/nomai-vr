@@ -5,8 +5,8 @@ namespace NomaiVR
 {
     public class HoldMallowStick : NomaiVRModule<HoldMallowStick.Behaviour, HoldMallowStick.Behaviour.Patch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => PlayableScenes;
 
         public class Behaviour : MonoBehaviour
         {

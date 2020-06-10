@@ -4,8 +4,8 @@ namespace NomaiVR
 {
     public class PostCreditsFix : NomaiVRModule<PostCreditsFix.Behaviour, NomaiVRModule.EmptyPatch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => new[] { OWScene.PostCreditsScene };
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => new[] { OWScene.PostCreditsScene };
 
         public class Behaviour : MonoBehaviour
         {

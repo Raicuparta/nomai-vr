@@ -6,8 +6,8 @@ namespace NomaiVR
 {
     public class Menus : NomaiVRModule<Menus.Behaviour, Menus.Behaviour.Patch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => AllScenes;
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {

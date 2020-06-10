@@ -4,8 +4,8 @@ namespace NomaiVR
 {
     public class ProjectionStoneCameraFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, ProjectionStoneCameraFix.Patch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => PlayableScenes;
 
         public class Patch : NomaiVRPatch
         {

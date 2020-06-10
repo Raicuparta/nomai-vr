@@ -5,8 +5,8 @@ namespace NomaiVR
 {
     public class ShipTools : NomaiVRModule<ShipTools.Behaviour, ShipTools.Behaviour.Patch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => SolarSystemScene;
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => SolarSystemScene;
 
         public class Behaviour : MonoBehaviour
         {

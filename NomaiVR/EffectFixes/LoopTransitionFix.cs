@@ -5,8 +5,8 @@ namespace NomaiVR
 {
     public class LoopTransitionFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, LoopTransitionFix.Patch>
     {
-        protected override bool isPersistent => false;
-        protected override OWScene[] scenes => PlayableScenes;
+        protected override bool IsPersistent => false;
+        protected override OWScene[] Scenes => PlayableScenes;
 
         public class Patch : NomaiVRPatch
         {

@@ -6,8 +6,8 @@ namespace NomaiVR
 {
     public class ForceSettings : NomaiVRModule<ForceSettings.Behaviour, ForceSettings.Patch>
     {
-        protected override bool isPersistent => true;
-        protected override OWScene[] scenes => TitleScene;
+        protected override bool IsPersistent => true;
+        protected override OWScene[] Scenes => TitleScene;
 
         public class Behaviour : MonoBehaviour
         {
