@@ -100,23 +100,23 @@ namespace NomaiVR
                 foreach (var canvas in canvases)
                 {
                     // Filter out backdrop, to disable the background canvas during conversations.
-                    var isBackdrop = canvas.name == "PauseBackdropCanvas";
+                    if (canvas.name == "PauseBackdropCanvas")
+                    {
+                        continue;
+                    }
 
-                    // We want to patch all other ScreenSpaceOverlay canvases;
                     var isScreenSpaceOverlay = canvas.renderMode == RenderMode.ScreenSpaceOverlay;
-
-                    // We also need to re-patch canvases that have already been patched;
                     var isPatched = patchedCanvases.Contains(canvas);
 
-                    if ((isScreenSpaceOverlay || isPatched) && !isBackdrop)
+                    if (isScreenSpaceOverlay)
                     {
-                        if (!isPatched)
-                        {
-                            canvas.renderMode = RenderMode.WorldSpace;
-                            AdjustScaler(canvas);
-                            patchedCanvases.Add(canvas);
-                        }
+                        canvas.renderMode = RenderMode.WorldSpace;
+                        AdjustScaler(canvas);
+                        patchedCanvases.Add(canvas);
+                    }
 
+                    if (isScreenSpaceOverlay || isPatched)
+                    {
                         AddFollowTarget(canvas);
                     }
                 }
