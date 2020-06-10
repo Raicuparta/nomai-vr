@@ -73,6 +73,15 @@ namespace NomaiVR
                 splashImage.sprite = AssetLoader.SplashSprite;
             }
 
+            private void AddFollowTarget(Canvas canvas)
+            {
+                var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
+                followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
+                var z = SceneHelper.IsInGame() ? 1.5f : 2f;
+                var y = SceneHelper.IsInGame() ? 0.75f : 1f;
+                followTarget.localPosition = new Vector3(0, y, z);
+            }
+
             private void ScreenCanvasesToWorld()
             {
                 var canvases = FindObjectsOfType<Canvas>();
@@ -98,11 +107,9 @@ namespace NomaiVR
                         }
                         canvas.renderMode = RenderMode.WorldSpace;
                         canvas.transform.localScale = Vector3.one * 0.001f;
-                        var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                        followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
-                        var z = SceneHelper.IsInGame() ? 1.5f : 2f;
-                        var y = SceneHelper.IsInGame() ? 0.75f : 1f;
-                        followTarget.localPosition = new Vector3(0, y, z);
+
+                        AddFollowTarget(canvas);
+
                         if (!isPatched)
                         {
                             patchedCanvases.Add(canvas);
