@@ -22,9 +22,12 @@ namespace NomaiVR
             {
                 var canvas = new GameObject().AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
-                canvas.transform.SetParent(Camera.main.transform, false);
-                canvas.transform.localPosition += Vector3.forward * 4;
+                var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 canvas.transform.localScale = Vector3.one * 0.002f;
+                followTarget.target = Locator.GetPlayerCamera().transform;
+                followTarget.localPosition = Vector3.forward * 4;
+                followTarget.rotationSmoothTime = 0.5f;
+                followTarget.positionSmoothTime = 0.5f;
 
                 _text = new GameObject().AddComponent<Text>();
                 _text.color = Color.white;
