@@ -108,6 +108,7 @@
     <Compile Include="Helpers\SceneHelper.cs" />
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Helpers\ToolHelper.cs" />
+    <Compile Include="Input\GesturesTutorial.cs" />
     <Compile Include="ModConfig\ModConfig.cs" />
     <Compile Include="Saves\ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
