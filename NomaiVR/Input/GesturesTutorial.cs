@@ -54,7 +54,7 @@ namespace NomaiVR
             private void UpdateProbePrompt()
             {
                 var isShowingProbeText = IsShowing(TutorialText.Probe);
-                if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe))
+                if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe) || PlayerState.IsInsideShip())
                 {
                     if (isShowingProbeText)
                     {
