@@ -381,17 +381,17 @@ namespace NomaiVR
                 private static void PreUpdateIsDroppable()
                 {
                     var camera = Locator.GetPlayerCamera();
-                    _cameraRotation = camera.transform.rotation;
-                    _cameraPosition = camera.transform.position;
-                    camera.transform.position = Laser.position;
-                    camera.transform.forward = Laser.forward;
+                    //_cameraRotation = camera.transform.rotation;
+                    //_cameraPosition = camera.transform.position;
+                    //camera.transform.position = Laser.position;
+                    //camera.transform.forward = Laser.forward;
                 }
 
                 private static void PostUpdateIsDroppable()
                 {
                     var camera = Locator.GetPlayerCamera();
-                    camera.transform.position = _cameraPosition;
-                    camera.transform.rotation = _cameraRotation;
+                    //camera.transform.position = _cameraPosition;
+                    //camera.transform.rotation = _cameraRotation;
                 }
             }
 
