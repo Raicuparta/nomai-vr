@@ -53,6 +53,7 @@ namespace NomaiVR
 
             private void UpdateProbePrompt()
             {
+                // TODO look into probe prompt trigger in other scene.
                 var isShowingProbeText = IsShowing(TutorialText.Probe);
                 if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe) || PlayerState.IsInsideShip())
                 {
@@ -76,7 +77,37 @@ namespace NomaiVR
                 }
                 if (promptReceiver && !isShowingProbeText)
                 {
-                    SetText("Grab probe launcher from tool belt");
+                    SetText(TutorialText.Probe);
+                }
+            }
+
+            private static void UpdateSignalscopePrompt(ScreenPrompt main, ScreenPrompt center, bool isPlayingHideAndSeek)
+            {
+                var isShowingText = IsShowing(TutorialText.Signalscope);
+                var isMainVisibleHideAndSeek = main.IsVisible() && isPlayingHideAndSeek;
+                var shouldShowText = center.IsVisible() || isMainVisibleHideAndSeek;
+                if (!isShowingText && shouldShowText)
+                {
+                    SetText(TutorialText.Signalscope);
+                }
+                if (isShowingText && !shouldShowText)
+                {
+                    SetText(TutorialText.None);
+                }
+            }
+
+            private static void UpdateFlashlightPrompt(ScreenPrompt main, ScreenPrompt center)
+            {
+                var isShowingText = IsShowing(TutorialText.Flashlight);
+                var isMainVisbileDark = main.IsVisible() && PlayerState.InDarkZone();
+                var shouldShowText = center.IsVisible() || isMainVisbileDark;
+                if (!isShowingText && shouldShowText)
+                {
+                    SetText(TutorialText.Flashlight);
+                }
+                if (isShowingText && !shouldShowText)
+                {
+                    SetText(TutorialText.None);
                 }
             }
 
@@ -92,19 +123,16 @@ namespace NomaiVR
                     NomaiVR.Post<ToolModeUI>("Update", typeof(Patch), nameof(PostToolModeUiUpdate));
                 }
 
-                private static void PostToolModeUiUpdate(ScreenPrompt ____centerFlashlightPrompt, ScreenPrompt ____flashlightPrompt)
+                private static void PostToolModeUiUpdate(
+                    ScreenPrompt ____flashlightPrompt,
+                    ScreenPrompt ____centerFlashlightPrompt,
+                    ScreenPrompt ____signalscopePrompt,
+                    ScreenPrompt ____centerSignalscopePrompt,
+                    bool ____playingHideAndSeek
+                )
                 {
-                    var isShowingFlashlightText = IsShowing(TutorialText.Flashlight);
-                    var isMainPromptVisbileInDark = ____flashlightPrompt.IsVisible() && PlayerState.InDarkZone();
-                    var shouldShowTutorial = ____centerFlashlightPrompt.IsVisible() || isMainPromptVisbileInDark;
-                    if (!isShowingFlashlightText && shouldShowTutorial)
-                    {
-                        SetText(TutorialText.Flashlight);
-                    }
-                    if (isShowingFlashlightText && !shouldShowTutorial)
-                    {
-                        SetText(TutorialText.None);
-                    }
+                    UpdateFlashlightPrompt(____flashlightPrompt, ____centerFlashlightPrompt);
+                    UpdateSignalscopePrompt(____signalscopePrompt, ____centerSignalscopePrompt, ____playingHideAndSeek);
                 }
             }
         }
@@ -112,8 +140,10 @@ namespace NomaiVR
         private struct TutorialText
         {
             public static string None = "";
-            public static string Probe = "Grab probe launcher from tool belt";
-            public static string Flashlight = "Touch right side of head to toggle flashlight";
+            public static string Probe = "Use right hand to grab probe launcher from tool belt (middle)";
+            public static string Signalscope = "Use right hand to grab signalscope from tool belt (right side)";
+            public static string Translator = "Use left hand to grab signalscope from tool belt (left side)";
+            public static string Flashlight = "Touch right side of head with right hand to toggle flashlight";
         }
     }
 }
