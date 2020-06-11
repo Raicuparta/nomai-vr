@@ -183,10 +183,10 @@ namespace NomaiVR
         private struct TutorialText
         {
             public static string None = "";
-            public static string Probe = "Use right hand to grab probe launcher from tool belt (middle)";
-            public static string Signalscope = "Use right hand to grab signalscope from tool belt (right side)";
-            public static string Translator = "Use left hand to grab translator from tool belt (left side)";
-            public static string Flashlight = "Touch right side of head with right hand to toggle flashlight";
+            public static string Probe = "Grab Probe Launcher from tool belt with right hand. (Middle slot.)";
+            public static string Signalscope = "Grab Signalscope from tool belt with right hand. (Right slot.)";
+            public static string Translator = "Grab Translator from tool belt with right hand. (Left slot.)";
+            public static string Flashlight = "Touch right side of head with right hand to toggle Flashlight.";
         }
     }
 }
