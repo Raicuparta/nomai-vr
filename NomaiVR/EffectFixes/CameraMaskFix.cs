@@ -50,7 +50,7 @@ namespace NomaiVR
                 Invoke(nameof(CloseEyes), 3);
             }
 
-            static void CloseEyes()
+            private static void CloseEyes()
             {
                 cullingMask = Camera.main.cullingMask;
                 _farClipPlane = Camera.main.farClipPlane;

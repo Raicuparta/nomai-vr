@@ -14,7 +14,7 @@ namespace NomaiVR
                 FixDarkBrambleLights();
             }
 
-            static void FixDarkBrambleLights()
+            private static void FixDarkBrambleLights()
             {
                 var fogLightCanvas = GameObject.Find("FogLightCanvas").GetComponent<Canvas>();
                 fogLightCanvas.renderMode = RenderMode.ScreenSpaceCamera;

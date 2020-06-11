@@ -1,12 +1,9 @@
-﻿using OWML.ModHelper.Events;
-using System;
-using System.Security.Policy;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace NomaiVR
 {
-    internal class GesturesTutorial : NomaiVRModule<GesturesTutorial.Behaviour, GesturesTutorial.Behaviour.Patch>
+    internal class GesturePrompts : NomaiVRModule<GesturePrompts.Behaviour, GesturePrompts.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -58,12 +55,12 @@ namespace NomaiVR
 
             private void OnEnterProbePromptTrigger()
             {
-                SetText(TutorialText.Probe);
+                SetText(GestureText.Probe);
             }
 
             private void OnExitProbePromptTrigger()
             {
-                SetText(TutorialText.None);
+                SetText(GestureText.None);
             }
 
             private static bool IsShowing(string text)
@@ -78,30 +75,30 @@ namespace NomaiVR
                     return;
                 }
 
-                var isShowingTranslatorText = IsShowing(TutorialText.Translator);
+                var isShowingTranslatorText = IsShowing(GestureText.Translator);
                 var nomaiText = hit.collider.GetComponent<NomaiText>();
                 if (!nomaiText && isShowingTranslatorText)
                 {
-                    SetText(TutorialText.None);
+                    SetText(GestureText.None);
                 }
                 if (nomaiText && !isShowingTranslatorText)
                 {
-                    SetText(TutorialText.Translator);
+                    SetText(GestureText.Translator);
                 }
             }
 
             private void UpdateProbePrompt(RaycastHit hit)
             {
                 // TODO look into probe prompt trigger in other scene.
-                var isShowingProbeText = IsShowing(TutorialText.Probe);
+                var isShowingProbeText = IsShowing(GestureText.Probe);
                 var promptReceiver = hit.collider.GetComponent<ProbePromptReceiver>();
                 if (!promptReceiver && isShowingProbeText)
                 {
-                    SetText(TutorialText.None);
+                    SetText(GestureText.None);
                 }
                 if (promptReceiver && !isShowingProbeText)
                 {
-                    SetText(TutorialText.Probe);
+                    SetText(GestureText.Probe);
                 }
             }
 
@@ -109,7 +106,7 @@ namespace NomaiVR
             {
                 if (ToolHelper.IsUsingAnyTool() || PlayerState.IsInsideShip())
                 {
-                    SetText(TutorialText.None);
+                    SetText(GestureText.None);
                     return;
                 }
 
@@ -126,22 +123,22 @@ namespace NomaiVR
 
             private static void UpdateSignalscopePrompt(ScreenPrompt main, ScreenPrompt center, bool isPlayingHideAndSeek)
             {
-                var isShowingText = IsShowing(TutorialText.Signalscope);
+                var isShowingText = IsShowing(GestureText.Signalscope);
                 var isMainVisibleHideAndSeek = main.IsVisible() && isPlayingHideAndSeek;
                 var shouldShowText = center.IsVisible() || isMainVisibleHideAndSeek;
                 if (!isShowingText && shouldShowText)
                 {
-                    SetText(TutorialText.Signalscope);
+                    SetText(GestureText.Signalscope);
                 }
                 if (isShowingText && !shouldShowText)
                 {
-                    SetText(TutorialText.None);
+                    SetText(GestureText.None);
                 }
             }
 
             private static void UpdateFlashlightPrompt(ScreenPrompt main, ScreenPrompt center)
             {
-                var isShowingText = IsShowing(TutorialText.Flashlight);
+                var isShowingText = IsShowing(GestureText.Flashlight);
                 if (PlayerState.IsFlashlightOn() && !isShowingText)
                 {
                     return;
@@ -152,11 +149,11 @@ namespace NomaiVR
                 var shouldShowText = (center.IsVisible() || isMainVisbileDark) && !hasUsedFlashlight;
                 if (!isShowingText && shouldShowText)
                 {
-                    SetText(TutorialText.Flashlight);
+                    SetText(GestureText.Flashlight);
                 }
                 if (isShowingText && !shouldShowText)
                 {
-                    SetText(TutorialText.None);
+                    SetText(GestureText.None);
                     if (PlayerState.IsFlashlightOn())
                     {
                         NomaiVR.Save.AddTutorialStep(tutorialStep);
@@ -166,14 +163,14 @@ namespace NomaiVR
 
             private static void UpdateTranslatorPrompt(ScreenPrompt prompt)
             {
-                var isShowingText = IsShowing(TutorialText.Translator);
+                var isShowingText = IsShowing(GestureText.Translator);
                 if (!isShowingText && prompt.IsVisible())
                 {
-                    SetText(TutorialText.Translator);
+                    SetText(GestureText.Translator);
                 }
                 if (isShowingText && !prompt.IsVisible())
                 {
-                    SetText(TutorialText.None);
+                    SetText(GestureText.None);
                 }
             }
 
@@ -213,7 +210,7 @@ namespace NomaiVR
             }
         }
 
-        private static class TutorialText
+        private static class GestureText
         {
             public static string None = "";
             public static string Probe = GetToolBeltPrompt("Probe Launcher", "Middle");

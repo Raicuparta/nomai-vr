@@ -29,7 +29,7 @@ namespace NomaiVR
                 CreateRecenterMenuEntry();
             }
 
-            static void AdjustPlayerHeadPosition()
+            private static void AdjustPlayerHeadPosition()
             {
                 var playerhead = PlayerHelper.PlayerHead;
                 playerhead.localPosition = new Vector3(playerhead.localPosition.x, playerhead.localPosition.y, 0);

@@ -73,7 +73,7 @@ namespace NomaiVR
                 SetupScopeLens();
             }
 
-            static void SetupSignalscopeUI(Transform parent)
+            private static void SetupSignalscopeUI(Transform parent)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 parent.parent = _signalscope.transform;
@@ -87,7 +87,7 @@ namespace NomaiVR
                 _lens.gameObject.SetActive(false);
             }
 
-            static void SetupScopeLens()
+            private static void SetupScopeLens()
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;

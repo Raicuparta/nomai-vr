@@ -91,7 +91,7 @@ namespace NomaiVR
                 LeftHand = left.transform;
             }
 
-            static void HideBody()
+            private static void HideBody()
             {
                 var bodyModels = Locator.GetPlayerBody().transform.Find("Traveller_HEA_Player_v2");
 
