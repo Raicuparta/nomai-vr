@@ -11,6 +11,7 @@ namespace NomaiVR
         public bool showHelmet = true;
         public int overrideRefreshRate = 0;
         public float vibrationStrength = 1;
+        public bool enableGesturePrompts = true;
 
         public ModConfig()
         {

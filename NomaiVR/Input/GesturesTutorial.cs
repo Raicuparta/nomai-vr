@@ -32,6 +32,7 @@ namespace NomaiVR
                 followTarget.localPosition = Vector3.forward * 4;
                 followTarget.rotationSmoothTime = 0.5f;
                 followTarget.positionSmoothTime = 0.5f;
+                canvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => NomaiVR.Config.enableGesturePrompts;
 
                 _text = new GameObject().AddComponent<Text>();
                 _text.color = Color.white;
@@ -168,6 +169,10 @@ namespace NomaiVR
 
             internal void LateUpdate()
             {
+                if (!NomaiVR.Config.enableGesturePrompts)
+                {
+                    return;
+                }
                 UpdateRaycast();
             }
 
@@ -187,6 +192,10 @@ namespace NomaiVR
                     bool ____playingHideAndSeek
                 )
                 {
+                    if (!NomaiVR.Config.enableGesturePrompts)
+                    {
+                        return;
+                    }
                     UpdateFlashlightPrompt(____flashlightPrompt, ____centerFlashlightPrompt);
                     UpdateSignalscopePrompt(____signalscopePrompt, ____centerSignalscopePrompt, ____playingHideAndSeek);
                     UpdateTranslatorPrompt(____centerTranslatePrompt);
