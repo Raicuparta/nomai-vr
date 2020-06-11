@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,7 +34,7 @@ namespace NomaiVR
                 _text.color = Color.white;
                 _text.transform.SetParent(canvas.transform, false);
                 _text.fontSize = 50;
-                _text.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+                _text.font = FindObjectOfType<DialogueBoxVer2>().GetComponentInChildren<Text>().font;
                 _text.horizontalOverflow = HorizontalWrapMode.Overflow;
                 _text.alignment = TextAnchor.MiddleCenter;
 
