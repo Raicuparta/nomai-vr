@@ -1,5 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using System;
+using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,6 +36,7 @@ namespace NomaiVR
                 _text.transform.SetParent(canvas.transform, false);
                 _text.fontSize = 50;
                 _text.font = FindObjectOfType<DialogueBoxVer2>().GetComponentInChildren<Text>().font;
+                _text.verticalOverflow = VerticalWrapMode.Overflow;
                 _text.horizontalOverflow = HorizontalWrapMode.Overflow;
                 _text.alignment = TextAnchor.MiddleCenter;
 
@@ -180,13 +182,18 @@ namespace NomaiVR
             }
         }
 
-        private struct TutorialText
+        private static class TutorialText
         {
             public static string None = "";
-            public static string Probe = "Grab Probe Launcher from tool belt with right hand. (Middle slot.)";
-            public static string Signalscope = "Grab Signalscope from tool belt with right hand. (Right slot.)";
-            public static string Translator = "Grab Translator from tool belt with right hand. (Left slot.)";
+            public static string Probe = GetToolBeltPrompt("Probe Launcher", "Middle");
+            public static string Signalscope = GetToolBeltPrompt("Signalscope", "Right");
+            public static string Translator = GetToolBeltPrompt("Translator", "Left");
             public static string Flashlight = "Touch right side of head with right hand to toggle Flashlight.";
+
+            public static string GetToolBeltPrompt(string toolName, string slot)
+            {
+                return $"Grab <color=orange>{toolName}</color> from tool belt with right hand.\n({slot} slot.)";
+            }
         }
     }
 }
