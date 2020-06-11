@@ -43,6 +43,11 @@ namespace NomaiVR
                 _text.text = text;
             }
 
+            private bool isShowingProbePrompt()
+            {
+                return _text.text == TutorialText.Probe;
+            }
+
             internal void LateUpdate()
             {
                 var camera = Camera.main.transform;
@@ -52,15 +57,16 @@ namespace NomaiVR
                     return;
                 }
 
-                var interactReceiver = raycastHit.collider.GetComponent<InteractReceiver>();
-                if (!interactReceiver)
+                var promptReceiver = raycastHit.collider.GetComponent<ProbePromptReceiver>();
+                if (!promptReceiver && isShowingProbePrompt())
                 {
                     SetText("");
                     return;
                 }
-                NomaiVR.Log("Hit an interact receiver");
-
-                SetText("Grab probe launcher from tool belt");
+                if (!isShowingProbePrompt())
+                {
+                    SetText("Grab probe launcher from tool belt");
+                }
             }
 
             public class Patch : NomaiVRPatch
@@ -75,16 +81,22 @@ namespace NomaiVR
                 {
 
                     NomaiVR.Log("Enter Probe Prompt Trigger");
-                    SetText("Grab probe launcher from tool belt");
+                    SetText(TutorialText.Probe);
                 }
 
                 private static void PreLoseFocus()
                 {
 
                     NomaiVR.Log("Exit Probe Prompt Trigger");
-                    SetText("");
+                    SetText(TutorialText.None);
                 }
             }
+        }
+
+        private struct TutorialText
+        {
+            public static string None = "";
+            public static string Probe = "Grab probe launcher from tool belt";
         }
     }
 }
