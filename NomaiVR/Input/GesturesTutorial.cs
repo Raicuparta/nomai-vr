@@ -51,7 +51,7 @@ namespace NomaiVR
                 return _text.text == text;
             }
 
-            internal void LateUpdate()
+            private void UpdateProbePrompt()
             {
                 var camera = Camera.main.transform;
                 var hit = Physics.Raycast(camera.position, camera.forward, out var raycastHit, 75f, OWLayerMask.blockableInteractMask);
@@ -70,6 +70,11 @@ namespace NomaiVR
                 {
                     SetText("Grab probe launcher from tool belt");
                 }
+            }
+
+            internal void LateUpdate()
+            {
+                UpdateProbePrompt();
             }
 
             public class Patch : NomaiVRPatch
