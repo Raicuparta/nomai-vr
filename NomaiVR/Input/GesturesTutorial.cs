@@ -219,7 +219,7 @@ namespace NomaiVR
             public static string Probe = GetToolBeltPrompt("Probe Launcher", "Middle");
             public static string Signalscope = GetToolBeltPrompt("Signalscope", "Right");
             public static string Translator = GetToolBeltPrompt("Translator", "Left");
-            public static string Flashlight = "Touch right side of head with right hand to toggle Flashlight.";
+            public static string Flashlight = "Touch right side of head with right hand to toggle <color=orange>Flashlight</color>.";
 
             public static string GetToolBeltPrompt(string toolName, string slot)
             {
