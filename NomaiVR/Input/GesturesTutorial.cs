@@ -84,15 +84,16 @@ namespace NomaiVR
                     NomaiVR.Post<ToolModeUI>("Update", typeof(Patch), nameof(PostToolModeUiUpdate));
                 }
 
-                private static void PostToolModeUiUpdate(ScreenPrompt ____centerFlashlightPrompt)
+                private static void PostToolModeUiUpdate(ScreenPrompt ____centerFlashlightPrompt, ScreenPrompt ____flashlightPrompt)
                 {
                     var isShowingFlashlightText = IsShowing(TutorialText.Flashlight);
-                    var isPromptVisible = ____centerFlashlightPrompt.IsVisible();
-                    if (!isShowingFlashlightText && isPromptVisible)
+                    var isMainPromptVisbileInDark = ____flashlightPrompt.IsVisible() && PlayerState.InDarkZone();
+                    var shouldShowTutorial = ____centerFlashlightPrompt.IsVisible() || isMainPromptVisbileInDark;
+                    if (!isShowingFlashlightText && shouldShowTutorial)
                     {
                         SetText(TutorialText.Flashlight);
                     }
-                    if (isShowingFlashlightText && !isPromptVisible)
+                    if (isShowingFlashlightText && !shouldShowTutorial)
                     {
                         SetText(TutorialText.None);
                     }
