@@ -57,6 +57,11 @@ namespace NomaiVR
 
             private void UpdateTranslatorPrompt(RaycastHit hit)
             {
+                if (PlayerData.GetPersistentCondition("HAS_USED_TRANSLATOR"))
+                {
+                    return;
+                }
+
                 var isShowingTranslatorText = IsShowing(TutorialText.Translator);
                 var nomaiText = hit.collider.GetComponent<NomaiText>();
                 if (!nomaiText && isShowingTranslatorText)
