@@ -43,9 +43,9 @@ namespace NomaiVR
                 _text.text = text;
             }
 
-            private bool isShowingProbePrompt()
+            private static bool IsShowing(string text)
             {
-                return _text.text == TutorialText.Probe;
+                return _text.text == text;
             }
 
             internal void LateUpdate()
@@ -58,12 +58,12 @@ namespace NomaiVR
                 }
 
                 var promptReceiver = raycastHit.collider.GetComponent<ProbePromptReceiver>();
-                if (!promptReceiver && isShowingProbePrompt())
+                var isShowingProbeText = IsShowing(TutorialText.Probe);
+                if (!promptReceiver && isShowingProbeText)
                 {
                     SetText("");
-                    return;
                 }
-                if (!isShowingProbePrompt())
+                if (promptReceiver && !isShowingProbeText)
                 {
                     SetText("Grab probe launcher from tool belt");
                 }
@@ -73,22 +73,21 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    //NomaiVR.Pre<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PreGainFocus));
-                    //NomaiVR.Pre<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PreLoseFocus));
+                    NomaiVR.Post<ToolModeUI>("Update", typeof(Patch), nameof(PostToolModeUiUpdate));
                 }
 
-                private static void PreGainFocus()
+                private static void PostToolModeUiUpdate(ScreenPrompt ____centerFlashlightPrompt)
                 {
-
-                    NomaiVR.Log("Enter Probe Prompt Trigger");
-                    SetText(TutorialText.Probe);
-                }
-
-                private static void PreLoseFocus()
-                {
-
-                    NomaiVR.Log("Exit Probe Prompt Trigger");
-                    SetText(TutorialText.None);
+                    var isShowingFlashlightText = IsShowing(TutorialText.Flashlight);
+                    var isPromptVisible = ____centerFlashlightPrompt.IsVisible();
+                    if (!isShowingFlashlightText && isPromptVisible)
+                    {
+                        SetText(TutorialText.Flashlight);
+                    }
+                    if (isShowingFlashlightText && !isPromptVisible)
+                    {
+                        SetText(TutorialText.None);
+                    }
                 }
             }
         }
@@ -97,6 +96,7 @@ namespace NomaiVR
         {
             public static string None = "";
             public static string Probe = "Grab probe launcher from tool belt";
+            public static string Flashlight = "Touch right side of head to toggle flashlight";
         }
     }
 }
