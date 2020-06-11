@@ -53,6 +53,15 @@ namespace NomaiVR
 
             private void UpdateProbePrompt()
             {
+                var isShowingProbeText = IsShowing(TutorialText.Probe);
+                if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe))
+                {
+                    if (isShowingProbeText)
+                    {
+                        SetText("");
+                    }
+                    return;
+                }
                 var camera = Camera.main.transform;
                 var hit = Physics.Raycast(camera.position, camera.forward, out var raycastHit, 75f, OWLayerMask.blockableInteractMask);
                 if (!hit)
@@ -61,7 +70,6 @@ namespace NomaiVR
                 }
 
                 var promptReceiver = raycastHit.collider.GetComponent<ProbePromptReceiver>();
-                var isShowingProbeText = IsShowing(TutorialText.Probe);
                 if (!promptReceiver && isShowingProbeText)
                 {
                     SetText("");
