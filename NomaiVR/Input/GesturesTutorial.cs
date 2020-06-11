@@ -55,11 +55,12 @@ namespace NomaiVR
             {
                 // TODO look into probe prompt trigger in other scene.
                 var isShowingProbeText = IsShowing(TutorialText.Probe);
-                if (Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Probe) || PlayerState.IsInsideShip())
+                var isShowingTranslatorText = IsShowing(TutorialText.Translator);
+                if (ToolHelper.IsUsingAnyTool() || PlayerState.IsInsideShip())
                 {
-                    if (isShowingProbeText)
+                    if (isShowingProbeText || isShowingTranslatorText)
                     {
-                        SetText("");
+                        SetText(TutorialText.None);
                     }
                     return;
                 }
@@ -73,11 +74,21 @@ namespace NomaiVR
                 var promptReceiver = raycastHit.collider.GetComponent<ProbePromptReceiver>();
                 if (!promptReceiver && isShowingProbeText)
                 {
-                    SetText("");
+                    SetText(TutorialText.None);
                 }
                 if (promptReceiver && !isShowingProbeText)
                 {
                     SetText(TutorialText.Probe);
+                }
+
+                var nomaiText = raycastHit.collider.GetComponent<NomaiText>();
+                if (!nomaiText && isShowingTranslatorText)
+                {
+                    SetText(TutorialText.None);
+                }
+                if (nomaiText && !isShowingTranslatorText)
+                {
+                    SetText(TutorialText.Translator);
                 }
             }
 
@@ -111,6 +122,19 @@ namespace NomaiVR
                 }
             }
 
+            private static void UpdateTranslatorPrompt(ScreenPrompt prompt)
+            {
+                var isShowingText = IsShowing(TutorialText.Translator);
+                if (!isShowingText && prompt.IsVisible())
+                {
+                    SetText(TutorialText.Translator);
+                }
+                if (isShowingText && !prompt.IsVisible())
+                {
+                    SetText(TutorialText.None);
+                }
+            }
+
             internal void LateUpdate()
             {
                 UpdateProbePrompt();
@@ -128,11 +152,13 @@ namespace NomaiVR
                     ScreenPrompt ____centerFlashlightPrompt,
                     ScreenPrompt ____signalscopePrompt,
                     ScreenPrompt ____centerSignalscopePrompt,
+                    ScreenPrompt ____centerTranslatePrompt,
                     bool ____playingHideAndSeek
                 )
                 {
                     UpdateFlashlightPrompt(____flashlightPrompt, ____centerFlashlightPrompt);
                     UpdateSignalscopePrompt(____signalscopePrompt, ____centerSignalscopePrompt, ____playingHideAndSeek);
+                    UpdateTranslatorPrompt(____centerTranslatePrompt);
                 }
             }
         }
@@ -142,7 +168,7 @@ namespace NomaiVR
             public static string None = "";
             public static string Probe = "Use right hand to grab probe launcher from tool belt (middle)";
             public static string Signalscope = "Use right hand to grab signalscope from tool belt (right side)";
-            public static string Translator = "Use left hand to grab signalscope from tool belt (left side)";
+            public static string Translator = "Use left hand to grab translator from tool belt (left side)";
             public static string Flashlight = "Touch right side of head with right hand to toggle flashlight";
         }
     }
