@@ -43,6 +43,10 @@ namespace NomaiVR
 
             private static void SetText(string text)
             {
+                if (_text.text == text)
+                {
+                    return;
+                }
                 _text.text = text;
             }
 
@@ -51,37 +55,10 @@ namespace NomaiVR
                 return _text.text == text;
             }
 
-            private void UpdateProbePrompt()
+            private void UpdateTranslatorPrompt(RaycastHit hit)
             {
-                // TODO look into probe prompt trigger in other scene.
-                var isShowingProbeText = IsShowing(TutorialText.Probe);
                 var isShowingTranslatorText = IsShowing(TutorialText.Translator);
-                if (ToolHelper.IsUsingAnyTool() || PlayerState.IsInsideShip())
-                {
-                    if (isShowingProbeText || isShowingTranslatorText)
-                    {
-                        SetText(TutorialText.None);
-                    }
-                    return;
-                }
-                var camera = Camera.main.transform;
-                var hit = Physics.Raycast(camera.position, camera.forward, out var raycastHit, 75f, OWLayerMask.blockableInteractMask);
-                if (!hit)
-                {
-                    return;
-                }
-
-                var promptReceiver = raycastHit.collider.GetComponent<ProbePromptReceiver>();
-                if (!promptReceiver && isShowingProbeText)
-                {
-                    SetText(TutorialText.None);
-                }
-                if (promptReceiver && !isShowingProbeText)
-                {
-                    SetText(TutorialText.Probe);
-                }
-
-                var nomaiText = raycastHit.collider.GetComponent<NomaiText>();
+                var nomaiText = hit.collider.GetComponent<NomaiText>();
                 if (!nomaiText && isShowingTranslatorText)
                 {
                     SetText(TutorialText.None);
@@ -90,6 +67,40 @@ namespace NomaiVR
                 {
                     SetText(TutorialText.Translator);
                 }
+            }
+
+            private void UpdateProbePrompt(RaycastHit hit)
+            {
+                // TODO look into probe prompt trigger in other scene.
+                var isShowingProbeText = IsShowing(TutorialText.Probe);
+                var promptReceiver = hit.collider.GetComponent<ProbePromptReceiver>();
+                if (!promptReceiver && isShowingProbeText)
+                {
+                    SetText(TutorialText.None);
+                }
+                if (promptReceiver && !isShowingProbeText)
+                {
+                    SetText(TutorialText.Probe);
+                }
+            }
+
+            private void UpdateRaycast()
+            {
+                if (ToolHelper.IsUsingAnyTool() || PlayerState.IsInsideShip())
+                {
+                    SetText(TutorialText.None);
+                    return;
+                }
+
+                var camera = Camera.main.transform;
+                var isHit = Physics.Raycast(camera.position, camera.forward, out var hit, 5f, OWLayerMask.blockableInteractMask);
+                if (!isHit)
+                {
+                    return;
+                }
+
+                UpdateProbePrompt(hit);
+                UpdateTranslatorPrompt(hit);
             }
 
             private static void UpdateSignalscopePrompt(ScreenPrompt main, ScreenPrompt center, bool isPlayingHideAndSeek)
@@ -137,7 +148,7 @@ namespace NomaiVR
 
             internal void LateUpdate()
             {
-                UpdateProbePrompt();
+                UpdateRaycast();
             }
 
             public class Patch : NomaiVRPatch
