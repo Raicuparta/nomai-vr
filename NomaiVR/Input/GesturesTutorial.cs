@@ -142,8 +142,14 @@ namespace NomaiVR
             private static void UpdateFlashlightPrompt(ScreenPrompt main, ScreenPrompt center)
             {
                 var isShowingText = IsShowing(TutorialText.Flashlight);
+                if (PlayerState.IsFlashlightOn() && !isShowingText)
+                {
+                    return;
+                }
+                var tutorialStep = "flashlight";
+                var hasUsedFlashlight = NomaiVR.Save.tutorialSteps.Contains(tutorialStep);
                 var isMainVisbileDark = main.IsVisible() && PlayerState.InDarkZone();
-                var shouldShowText = center.IsVisible() || isMainVisbileDark;
+                var shouldShowText = (center.IsVisible() || isMainVisbileDark) && !hasUsedFlashlight;
                 if (!isShowingText && shouldShowText)
                 {
                     SetText(TutorialText.Flashlight);
@@ -151,6 +157,11 @@ namespace NomaiVR
                 if (isShowingText && !shouldShowText)
                 {
                     SetText(TutorialText.None);
+                    if (PlayerState.IsFlashlightOn())
+                    {
+                        NomaiVR.Log("save flashlight");
+                        NomaiVR.Save.AddTutorialStep(tutorialStep);
+                    }
                 }
             }
 
