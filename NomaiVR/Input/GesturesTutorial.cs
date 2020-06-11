@@ -159,7 +159,6 @@ namespace NomaiVR
                     SetText(TutorialText.None);
                     if (PlayerState.IsFlashlightOn())
                     {
-                        NomaiVR.Log("save flashlight");
                         NomaiVR.Save.AddTutorialStep(tutorialStep);
                     }
                 }
