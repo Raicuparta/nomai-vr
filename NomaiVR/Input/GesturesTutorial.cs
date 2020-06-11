@@ -18,6 +18,8 @@ namespace NomaiVR
             internal void Start()
             {
                 SetUpText();
+                GlobalMessenger.AddListener("EnterProbePromptTrigger", OnEnterProbePromptTrigger);
+                GlobalMessenger.AddListener("ExitProbePromptTrigger", OnExitProbePromptTrigger);
             }
 
             private void SetUpText()
@@ -51,6 +53,16 @@ namespace NomaiVR
                     return;
                 }
                 _text.text = text;
+            }
+
+            private void OnEnterProbePromptTrigger()
+            {
+                SetText(TutorialText.Probe);
+            }
+
+            private void OnExitProbePromptTrigger()
+            {
+                SetText(TutorialText.None);
             }
 
             private static bool IsShowing(string text)
