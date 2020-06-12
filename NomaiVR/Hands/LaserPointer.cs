@@ -43,7 +43,7 @@ namespace NomaiVR
                 }
             }
 
-            static void SetUpLaserObject()
+            private static void SetUpLaserObject()
             {
                 Laser = new GameObject("Laser").transform;
                 Laser.gameObject.layer = LayerMask.NameToLayer("UI");
@@ -108,7 +108,7 @@ namespace NomaiVR
                 }
             }
 
-            static bool IsSelectNewlyPressed()
+            private static bool IsSelectNewlyPressed()
             {
                 return OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.select2);
             }
@@ -139,20 +139,20 @@ namespace NomaiVR
                 }
             }
 
-            static void HandleOptionsSelectorClick(OptionsSelectorElement optionsSelector)
+            private static void HandleOptionsSelectorClick(OptionsSelectorElement optionsSelector)
             {
                 optionsSelector.OnArrowSelectableOnRightClick();
                 optionsSelector.OnArrowSelectableOnDownClick();
             }
 
-            static void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
+            private static void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
             {
                 var selection = twoButtonToggle.GetValue();
                 twoButtonToggle.SetValue("_selection", !selection);
                 twoButtonToggle.Invoke("UpdateToggleColors");
             }
 
-            static void HandleSliderClick(Slider slider)
+            private static void HandleSliderClick(Slider slider)
             {
                 if (slider.value < slider.maxValue)
                 {
@@ -164,12 +164,12 @@ namespace NomaiVR
                 }
             }
 
-            static void HandleButtonWithHotkeyClick(Button button)
+            private static void HandleButtonWithHotkeyClick(Button button)
             {
                 button.onClick.Invoke();
             }
 
-            static void HandleSelectableClick(Selectable selectable)
+            private static void HandleSelectableClick(Selectable selectable)
             {
                 var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
                 if (optionsSelector != null)
@@ -200,7 +200,7 @@ namespace NomaiVR
                 }
             }
 
-            static void HandleTabClick(TabButton tab)
+            private static void HandleTabClick(TabButton tab)
             {
                 tab.OnSelect(null);
             }
@@ -303,7 +303,7 @@ namespace NomaiVR
                 UpdateUiRayCast();
             }
 
-            static void DisableReticule()
+            private static void DisableReticule()
             {
                 var rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
                 foreach (var rootObject in rootObjects)

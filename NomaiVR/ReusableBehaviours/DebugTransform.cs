@@ -9,7 +9,7 @@ namespace NomaiVR
         public float angleDelta = 10f;
         public Vector3 scaleDelta = Vector3.one * 0.02f;
 
-        static float Round(float value)
+        private static float Round(float value)
         {
             return Mathf.Round(value * 1000f) / 1000f;
         }

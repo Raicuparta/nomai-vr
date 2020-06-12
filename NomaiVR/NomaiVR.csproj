@@ -122,6 +122,7 @@
     <Compile Include="Player\FeetMarker.cs" />
     <Compile Include="ReusableBehaviours\FollowTarget.cs" />
     <Compile Include="ForceSettings.cs" />
+    <Compile Include="UI\GesturePrompts.cs" />
     <Compile Include="UI\InputPrompts.cs" />
     <Compile Include="ReusableBehaviours\ButtonInteraction.cs" />
     <Compile Include="Tools\FlashlightGesture.cs" />

@@ -74,7 +74,7 @@ namespace NomaiVR
                     NomaiVR.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patch), nameof(IsPromptAllowed));
                 }
 
-#pragma warning disable IDE0060 // Unusued parameter is needed for return value passthrough.
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
                 private static bool IsPromptAllowed(bool __result)
                 {
                     return false;

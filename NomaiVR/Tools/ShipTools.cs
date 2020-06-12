@@ -78,7 +78,7 @@ namespace NomaiVR
                 }
             }
 
-            static bool IsFocused(ButtonInteraction interaction)
+            private static bool IsFocused(ButtonInteraction interaction)
             {
                 return interaction && interaction.receiver && interaction.receiver.IsFocused();
             }

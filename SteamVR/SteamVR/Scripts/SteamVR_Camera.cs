@@ -26,7 +26,9 @@ namespace Valve.VR
         public Transform offset { get { return _head; } } // legacy
         public Transform origin { get { return _head.parent; } }
 
+#pragma warning disable CS0109 // Member does not hide an inherited member; new keyword is not required
         public new Camera camera { get; private set; }
+#pragma warning restore CS0109 // Member does not hide an inherited member; new keyword is not required
 
         [SerializeField]
         private Transform _ears;

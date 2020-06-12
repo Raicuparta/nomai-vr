@@ -157,7 +157,7 @@ namespace NomaiVR
                 _singleAxes[axis.GetInputAxisName(0)] = value;
             }
 
-            static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection)
+            private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection)
             {
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
@@ -165,12 +165,12 @@ namespace NomaiVR
                 };
             }
 
-            static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
+            private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
             {
                 return CreateSingleAxisHandler(singleAxis, 1);
             }
 
-            static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)
+            private static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)
             {
                 return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
                 {
@@ -178,7 +178,7 @@ namespace NomaiVR
                 };
             }
 
-            static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY)
+            private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY)
             {
                 return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) =>
                 {
