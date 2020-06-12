@@ -24,12 +24,29 @@ namespace NomaiVR
                 var canvas = new GameObject().AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                canvas.transform.localScale = Vector3.one * 0.002f;
+                canvas.transform.localScale = Vector3.one * 0.0015f;
                 followTarget.target = Locator.GetPlayerCamera().transform;
                 followTarget.localPosition = Vector3.forward * 4;
                 followTarget.rotationSmoothTime = 0.5f;
                 followTarget.positionSmoothTime = 0.5f;
-                canvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => NomaiVR.Config.enableGesturePrompts;
+                canvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRender;
+
+                var backgroundScale = new Vector3(13f, 2f, 1);
+
+                var background = new GameObject().AddComponent<Image>();
+                background.transform.SetParent(canvas.transform, false);
+                background.transform.localScale = backgroundScale;
+                background.transform.localPosition = Vector3.forward;
+                background.color = Color.black;
+
+                var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                quad.transform.SetParent(canvas.transform, false);
+                quad.transform.localScale = backgroundScale * 100;
+                quad.transform.localPosition = Vector3.forward * 10;
+                Destroy(quad.GetComponent<Collider>());
+                var material = quad.GetComponent<MeshRenderer>().material;
+                quad.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRender;
+                material.color = Color.black;
 
                 _text = new GameObject().AddComponent<Text>();
                 _text.color = Color.white;
@@ -42,6 +59,16 @@ namespace NomaiVR
 
                 _text.material = new Material(_text.material);
                 MaterialHelper.MakeMaterialDrawOnTop(_text.material);
+
+                MaterialHelper.MakeGraphicChildrenDrawOnTop(canvas.gameObject);
+
+
+                LayerHelper.ChangeLayerRecursive(canvas.gameObject, LayerMask.NameToLayer("UI"));
+            }
+
+            private bool ShouldRender()
+            {
+                return NomaiVR.Config.enableGesturePrompts && _text.text != GestureText.None;
             }
 
             private static void SetText(string text)
@@ -145,9 +172,11 @@ namespace NomaiVR
                 var tutorialStep = "flashlight";
                 var hasUsedFlashlight = NomaiVR.Save.tutorialSteps.Contains(tutorialStep);
                 var isMainVisbileDark = main.IsVisible() && PlayerState.InDarkZone();
+                NomaiVR.Log("main.IsVisible()", main.IsVisible(), "PlayerState.InDarkZone()", PlayerState.InDarkZone());
                 var shouldShowText = (center.IsVisible() || isMainVisbileDark) && !hasUsedFlashlight;
                 if (!isShowingText && shouldShowText)
                 {
+                    NomaiVR.Log("Flashlight text");
                     SetText(GestureText.Flashlight);
                 }
                 if (isShowingText && !shouldShowText)
