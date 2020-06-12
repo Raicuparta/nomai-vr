@@ -57,7 +57,6 @@ namespace NomaiVR
                 quad.transform.localScale = size * 100;
                 Destroy(quad.GetComponent<Collider>());
                 var material = quad.GetComponent<MeshRenderer>().material;
-                quad.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRender;
                 material.color = Color.black;
             }
 
