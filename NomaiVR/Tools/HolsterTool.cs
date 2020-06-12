@@ -101,7 +101,7 @@ namespace NomaiVR
             if (_visible)
             {
                 var player = Locator.GetPlayerTransform();
-                transform.position = Camera.main.transform.position + player.TransformVector(position);
+                transform.position = Locator.GetPlayerCamera().transform.position + player.TransformVector(position);
                 transform.rotation = player.rotation;
                 transform.Rotate(angle);
             }

@@ -109,7 +109,7 @@ namespace NomaiVR
                     return;
                 }
 
-                var camera = Camera.main.transform;
+                var camera = Locator.GetPlayerCamera().transform;
                 var isHit = Physics.Raycast(camera.position, camera.forward, out var hit, 5f, OWLayerMask.blockableInteractMask);
                 if (!isHit)
                 {
