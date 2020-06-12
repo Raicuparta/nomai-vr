@@ -89,7 +89,6 @@ namespace NomaiVR
 
             private void UpdateProbePrompt(RaycastHit hit)
             {
-                // TODO look into probe prompt trigger in other scene.
                 var isShowingProbeText = IsShowing(GestureText.Probe);
                 var promptReceiver = hit.collider.GetComponent<ProbePromptReceiver>();
                 if (!promptReceiver && isShowingProbeText)
