@@ -179,11 +179,9 @@ namespace NomaiVR
                 var tutorialStep = "flashlight";
                 var hasUsedFlashlight = NomaiVR.Save.tutorialSteps.Contains(tutorialStep);
                 var isMainVisbileDark = main.IsVisible() && PlayerState.InDarkZone();
-                NomaiVR.Log("main.IsVisible()", main.IsVisible(), "PlayerState.InDarkZone()", PlayerState.InDarkZone());
                 var shouldShowText = (center.IsVisible() || isMainVisbileDark) && !hasUsedFlashlight;
                 if (!isShowingText && shouldShowText)
                 {
-                    NomaiVR.Log("Flashlight text");
                     SetText(GestureText.Flashlight);
                 }
                 if (isShowingText && !shouldShowText)
