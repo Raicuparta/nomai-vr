@@ -1,5 +1,6 @@
 ﻿using Harmony;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +52,7 @@ namespace NomaiVR
                     NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patch), nameof(RemoveJoystickPrompts));
                     NomaiVR.Post<RoastingStickController>("LateInitialize", typeof(Patch), nameof(RemoveRoastingStickPrompts));
                     NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patch), nameof(RemoveToolModePrompts));
+                    NomaiVR.Post<ScreenPrompt>("SetVisibility", typeof(Patch), nameof(PostScreenPromptVisibility));
 
                     NomaiVR.Pre<LockOnReticule>("Init", typeof(Patch), nameof(InitLockOnReticule));
 
@@ -65,6 +67,14 @@ namespace NomaiVR
                     var initMethod = typeof(InputTranslator).GetMethod("GetButtonTexture", new[] { typeof(XboxButton) });
                     var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
                     harmony.Patch(initMethod, null, harmonyMethod);
+                }
+
+                private static void PostScreenPromptVisibility(bool isVisible)
+                {
+                    if (isVisible)
+                    {
+                        MaterialHelper.MakeGraphicChildrenDrawOnTop(Locator.GetPromptManager().gameObject);
+                    }
                 }
 
                 private static Texture2D PostInitTranslator(Texture2D __result, XboxButton button)
