@@ -71,6 +71,8 @@ namespace NomaiVR
                     var width = rectTransform.rect.width;
                     collider.size = new Vector3(width, height, thickness);
                     collider.center = new Vector3(0, -height * 0.5f, thickness * 0.5f);
+
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(__instance.gameObject);
                 }
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)
@@ -80,12 +82,7 @@ namespace NomaiVR
 
                 private static void PostStartConversation()
                 {
-                    var graphics = _canvasTransform.gameObject.GetComponentsInChildren<Graphic>();
-                    foreach (var graphic in graphics)
-                    {
-                        graphic.material = new Material(graphic.material);
-                        MaterialHelper.MakeMaterialDrawOnTop(graphic.material);
-                    }
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(_canvasTransform.gameObject);
                 }
 
                 private static void PreEndConversation()
