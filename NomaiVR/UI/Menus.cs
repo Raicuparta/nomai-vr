@@ -74,10 +74,23 @@ namespace NomaiVR
             private static void AddFollowTarget(Canvas canvas)
             {
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                followTarget.target = SceneHelper.IsInGame() ? Locator.GetPlayerTransform() : Camera.main.transform.parent;
-                var z = SceneHelper.IsInGame() ? 1.5f : 2f;
-                var y = SceneHelper.IsInGame() ? 0.75f : 1f;
-                followTarget.localPosition = new Vector3(0, y, z);
+                if (SceneHelper.IsInGame())
+                {
+                    followTarget.target = Locator.GetPlayerTransform();
+                    followTarget.localPosition = new Vector3(0, 0.75f, 1.5f);
+                }
+                else if (SceneHelper.IsInTitle())
+                {
+                    followTarget.target = Camera.main.transform.parent;
+                    followTarget.localPosition = new Vector3(0, 1f, 2f);
+                }
+                else
+                {
+                    followTarget.target = Camera.main.transform;
+                    followTarget.localPosition = new Vector3(0, 0, 2f);
+                    followTarget.positionSmoothTime = 0.5f;
+                    followTarget.rotationSmoothTime = 0.5f;
+                }
             }
 
             private static void AdjustScaler(Canvas canvas)
@@ -106,7 +119,7 @@ namespace NomaiVR
 
             private static void ScreenCanvasesToWorld()
             {
-                var canvases = FindObjectsOfType<Canvas>();
+                var canvases = Resources.FindObjectsOfTypeAll<Canvas>();
                 foreach (var canvas in canvases)
                 {
                     // Filter out backdrop, to disable the background canvas during conversations.
