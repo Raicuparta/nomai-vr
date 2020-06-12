@@ -11,37 +11,70 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static Text _text;
+            private Canvas _canvas;
 
             internal void Start()
             {
-                SetUpText();
+                SetUpCanvas();
+
                 GlobalMessenger.AddListener("EnterProbePromptTrigger", OnEnterProbePromptTrigger);
                 GlobalMessenger.AddListener("ExitProbePromptTrigger", OnExitProbePromptTrigger);
             }
 
-            private void SetUpText()
+            private void SetUpCanvas()
             {
-                var canvas = new GameObject().AddComponent<Canvas>();
-                canvas.renderMode = RenderMode.WorldSpace;
-                var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
-                canvas.transform.localScale = Vector3.one * 0.002f;
+                _canvas = new GameObject().AddComponent<Canvas>();
+                _canvas.renderMode = RenderMode.WorldSpace;
+                var followTarget = _canvas.gameObject.AddComponent<FollowTarget>();
+                _canvas.transform.localScale = Vector3.one * 0.0015f;
                 followTarget.target = Locator.GetPlayerCamera().transform;
                 followTarget.localPosition = Vector3.forward * 4;
                 followTarget.rotationSmoothTime = 0.5f;
                 followTarget.positionSmoothTime = 0.5f;
-                canvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => NomaiVR.Config.enableGesturePrompts;
+                _canvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRender;
 
+                SetUpBackground();
+                SetUpText();
+
+                MaterialHelper.MakeGraphicChildrenDrawOnTop(_canvas.gameObject);
+                LayerHelper.ChangeLayerRecursive(_canvas.gameObject, LayerMask.NameToLayer("UI"));
+            }
+
+            private void SetUpBackground()
+            {
+                var size = new Vector3(13f, 2f, 1);
+
+                // Background that draws on top of everything;
+                var background = new GameObject().AddComponent<Image>();
+                background.transform.SetParent(_canvas.transform, false);
+                background.transform.localScale = size;
+                background.transform.localPosition = Vector3.forward;
+                background.color = Color.black;
+
+                // Quad to block distortions on text;
+                var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                quad.transform.SetParent(_canvas.transform, false);
+                quad.transform.localScale = size * 100;
+                Destroy(quad.GetComponent<Collider>());
+                var material = quad.GetComponent<MeshRenderer>().material;
+                material.color = Color.black;
+            }
+
+            private void SetUpText()
+            {
                 _text = new GameObject().AddComponent<Text>();
                 _text.color = Color.white;
-                _text.transform.SetParent(canvas.transform, false);
+                _text.transform.SetParent(_canvas.transform, false);
                 _text.fontSize = 50;
                 _text.font = FindObjectOfType<DialogueBoxVer2>().GetComponentInChildren<Text>().font;
                 _text.verticalOverflow = VerticalWrapMode.Overflow;
                 _text.horizontalOverflow = HorizontalWrapMode.Overflow;
                 _text.alignment = TextAnchor.MiddleCenter;
+            }
 
-                _text.material = new Material(_text.material);
-                MaterialHelper.MakeMaterialDrawOnTop(_text.material);
+            private bool ShouldRender()
+            {
+                return NomaiVR.Config.enableGesturePrompts && _text.text != GestureText.None;
             }
 
             private static void SetText(string text)
