@@ -1,3 +1,7 @@
+## Not working on Steam version yet!
+
+Currently only Epic version is supported. An update to support the Steam version will arrive in a few days.
+
 # NomaiVR - Outer Wilds VR Mod
 
 <img src="logo.png" width=300/>
