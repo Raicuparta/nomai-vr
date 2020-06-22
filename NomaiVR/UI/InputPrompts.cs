@@ -64,7 +64,7 @@ namespace NomaiVR
 
                     // Load new icons.
                     var harmony = HarmonyInstance.Create("nomaivr");
-                    var initMethod = typeof(InputTranslator).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
+                    var initMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
                     var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
                     harmony.Patch(initMethod, null, harmonyMethod);
                 }
