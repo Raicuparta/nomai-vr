@@ -13,7 +13,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static Behaviour _instance;
-            private static Dictionary<XboxButton, float> _buttons;
+            private static Dictionary<JoystickButton, float> _buttons;
             private static Dictionary<string, float> _singleAxes;
             private static Dictionary<DoubleAxis, Vector2> _doubleAxes;
             private static PlayerResources _playerResources;
@@ -32,18 +32,18 @@ namespace NomaiVR
             internal void Start()
             {
                 _instance = this;
-                _buttons = new Dictionary<XboxButton, float>();
+                _buttons = new Dictionary<JoystickButton, float>();
                 _singleAxes = new Dictionary<string, float>();
                 _doubleAxes = new Dictionary<DoubleAxis, Vector2>();
 
-                SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(XboxButton.A);
+                SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.default_Back.onChange += OnBackChange;
                 SteamVR_Actions.default_Interact.onChange += OnPrimaryActionChange;
-                SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(XboxButton.LeftBumper);
+                SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
                 SteamVR_Actions.default_Grip.onChange += OnGripChange;
 
-                SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(XboxButton.Start);
-                SteamVR_Actions.default_Map.onChange += CreateButtonHandler(XboxButton.Select);
+                SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
+                SteamVR_Actions.default_Map.onChange += CreateButtonHandler(JoystickButton.Select);
 
                 SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
                 SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
@@ -54,7 +54,8 @@ namespace NomaiVR
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
-                OWInput.EnableListenForAllJoysticks(true);
+                // TODO Look into this missing method.
+                // OWInput.EnableListenForAllJoysticks(true);
             }
 
             private void OnWakeUp()
@@ -66,7 +67,7 @@ namespace NomaiVR
             {
                 if (!IsGripping)
                 {
-                    _buttons[XboxButton.B] = newState ? 1 : 0;
+                    _buttons[JoystickButton.FaceRight] = newState ? 1 : 0;
                 }
             }
 
@@ -81,7 +82,7 @@ namespace NomaiVR
 
                 if (!SceneHelper.IsInGame())
                 {
-                    _buttons[XboxButton.X] = value;
+                    _buttons[JoystickButton.FaceLeft] = value;
                     return;
                 }
 
@@ -107,19 +108,19 @@ namespace NomaiVR
                             _primaryLastTime = -1;
                             if (!_justHeld)
                             {
-                                SimulateInput(XboxButton.X);
+                                SimulateInput(JoystickButton.FaceLeft);
                             }
                             _justHeld = false;
                         }
                     }
                     else
                     {
-                        _buttons[XboxButton.X] = value;
+                        _buttons[JoystickButton.FaceLeft] = value;
                     }
                 }
                 else if (!isInShip || isUsingProbeLauncher || isUsingFixedProbeTool)
                 {
-                    _buttons[XboxButton.RightBumper] = value;
+                    _buttons[JoystickButton.RightBumper] = value;
                 }
                 else if (isUsingSignalscope)
                 {
@@ -130,24 +131,24 @@ namespace NomaiVR
                 {
                     if (!newState)
                     {
-                        _buttons[XboxButton.X] = value;
+                        _buttons[JoystickButton.FaceLeft] = value;
                     }
                 }
             }
 
-            private static IEnumerator<WaitForSecondsRealtime> ResetInput(XboxButton button)
+            private static IEnumerator<WaitForSecondsRealtime> ResetInput(JoystickButton button)
             {
                 yield return new WaitForSecondsRealtime(0.1f);
                 SimulateInput(button, 0);
             }
 
-            public static void SimulateInput(XboxButton button)
+            public static void SimulateInput(JoystickButton button)
             {
                 _buttons[button] = 1;
                 _instance.StartCoroutine(ResetInput(button));
             }
 
-            public static void SimulateInput(XboxButton button, float value)
+            public static void SimulateInput(JoystickButton button, float value)
             {
                 _buttons[button] = value;
             }
@@ -170,7 +171,7 @@ namespace NomaiVR
                 return CreateSingleAxisHandler(singleAxis, 1);
             }
 
-            private static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(XboxButton button)
+            private static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(JoystickButton button)
             {
                 return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
                 {
@@ -194,7 +195,7 @@ namespace NomaiVR
             {
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {
-                    SimulateInput(XboxButton.Y);
+                    SimulateInput(JoystickButton.FaceUp);
                     _primaryLastTime = -1;
                     _justHeld = true;
                 }
@@ -277,8 +278,8 @@ namespace NomaiVR
 
                 private static bool SingleAxisUpdate(
                     SingleAxisCommand __instance,
-                    XboxButton ____xboxButtonPositive,
-                    XboxButton ____xboxButtonNegative,
+                    JoystickButton ____JoystickButtonPositive,
+                    JoystickButton ____JoystickButtonNegative,
                     ref float ____value,
                     ref bool ____newlyPressedThisFrame,
                     ref float ____lastValue,
@@ -287,7 +288,7 @@ namespace NomaiVR
                     ref float ____realtimeSinceLastUpdate
                 )
                 {
-                    if (____xboxButtonPositive == XboxButton.None && ____xboxButtonNegative == XboxButton.None)
+                    if (____JoystickButtonPositive == JoystickButton.None && ____JoystickButtonNegative == JoystickButton.None)
                     {
                         return true;
                     }
@@ -297,14 +298,14 @@ namespace NomaiVR
                     ____value = 0f;
 
 
-                    if (_buttons.ContainsKey(____xboxButtonPositive))
+                    if (_buttons.ContainsKey(____JoystickButtonPositive))
                     {
-                        ____value += _buttons[____xboxButtonPositive];
+                        ____value += _buttons[____JoystickButtonPositive];
                     }
 
-                    if (_buttons.ContainsKey(____xboxButtonNegative))
+                    if (_buttons.ContainsKey(____JoystickButtonNegative))
                     {
-                        ____value -= _buttons[____xboxButtonNegative];
+                        ____value -= _buttons[____JoystickButtonNegative];
                     }
 
                     ____lastPressedDuration = ____pressedDuration;
@@ -320,15 +321,20 @@ namespace NomaiVR
                     return false;
                 }
 
+                private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)
+                {
+                    command.SetValue("_gamepadBinding", new InputBinding(button));
+                }
+
                 private static void PostEnableListanForAllJoysticks()
                 {
-                    InputLibrary.landingCamera.ChangeBinding(XboxButton.DPadDown, KeyCode.None);
-                    InputLibrary.signalscope.ChangeBinding(XboxButton.DPadRight, KeyCode.None);
-                    InputLibrary.tabL.ChangeBinding(XboxButton.None, KeyCode.None);
-                    InputLibrary.tabR.ChangeBinding(XboxButton.None, KeyCode.None);
-                    InputLibrary.setDefaults.ChangeBinding(XboxButton.None, KeyCode.None);
-                    InputLibrary.confirm.ChangeBinding(XboxButton.None, KeyCode.None);
-                    InputLibrary.confirm2.ChangeBinding(XboxButton.None, KeyCode.None);
+                    SetCommandButton(InputLibrary.landingCamera, JoystickButton.DPadDown);
+                    SetCommandButton(InputLibrary.signalscope, JoystickButton.DPadRight);
+                    SetCommandButton(InputLibrary.tabL, JoystickButton.None);
+                    SetCommandButton(InputLibrary.tabR, JoystickButton.None);
+                    SetCommandButton(InputLibrary.setDefaults, JoystickButton.None);
+                    SetCommandButton(InputLibrary.confirm, JoystickButton.None);
+                    SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
                 }
             }
         }

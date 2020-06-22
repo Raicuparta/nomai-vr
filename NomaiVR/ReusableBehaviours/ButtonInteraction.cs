@@ -6,7 +6,7 @@ namespace NomaiVR
 {
     internal class ButtonInteraction : MonoBehaviour
     {
-        public XboxButton button;
+        public JoystickButton button;
         public UITextType text;
         public InteractReceiver receiver;
         public Func<bool> skipPressCallback;

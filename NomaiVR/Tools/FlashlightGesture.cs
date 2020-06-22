@@ -28,12 +28,12 @@ namespace NomaiVR
 
             private void FlashlightPress()
             {
-                ControllerInput.Behaviour.SimulateInput(XboxButton.RightStickClick, 1);
+                ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 1);
             }
 
             private void FlashlightRelease()
             {
-                ControllerInput.Behaviour.SimulateInput(XboxButton.RightStickClick, 0);
+                ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 0);
             }
         }
     }
