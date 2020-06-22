@@ -205,9 +205,10 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<SingleAxisCommand>("Update", typeof(Patch), nameof(SingleAxisUpdate));
+                    NomaiVR.Pre<SingleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(SingleAxisUpdate));
                     NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patch), nameof(OWInputUpdate));
-                    NomaiVR.Pre<OWInput>("EnableListenForAllJoysticks", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
+                    // TODO check if this was needed.
+                    //NomaiVR.Pre<OWInput>("EnableListenForAllJoysticks", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
                     NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
                     NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patch), nameof(GetAxis));
                     NomaiVR.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
@@ -278,8 +279,7 @@ namespace NomaiVR
 
                 private static bool SingleAxisUpdate(
                     SingleAxisCommand __instance,
-                    JoystickButton ____JoystickButtonPositive,
-                    JoystickButton ____JoystickButtonNegative,
+                    InputBinding ____gamepadBinding,
                     ref float ____value,
                     ref bool ____newlyPressedThisFrame,
                     ref float ____lastValue,
@@ -288,7 +288,9 @@ namespace NomaiVR
                     ref float ____realtimeSinceLastUpdate
                 )
                 {
-                    if (____JoystickButtonPositive == JoystickButton.None && ____JoystickButtonNegative == JoystickButton.None)
+                    var positive = ____gamepadBinding.gamepadButtonPos;
+                    var negative = ____gamepadBinding.gamepadButtonNeg;
+                    if (positive == JoystickButton.None && negative == JoystickButton.None)
                     {
                         return true;
                     }
@@ -298,14 +300,14 @@ namespace NomaiVR
                     ____value = 0f;
 
 
-                    if (_buttons.ContainsKey(____JoystickButtonPositive))
+                    if (_buttons.ContainsKey(positive))
                     {
-                        ____value += _buttons[____JoystickButtonPositive];
+                        ____value += _buttons[positive];
                     }
 
-                    if (_buttons.ContainsKey(____JoystickButtonNegative))
+                    if (_buttons.ContainsKey(negative))
                     {
-                        ____value -= _buttons[____JoystickButtonNegative];
+                        ____value -= _buttons[negative];
                     }
 
                     ____lastPressedDuration = ____pressedDuration;
