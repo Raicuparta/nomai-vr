@@ -150,9 +150,9 @@ namespace NomaiVR
                 _buttons[button] = value;
             }
 
-            public static void SimulateInput(SingleAxis axis, float value)
+            public static void SimulateInput(AxisIdentifier axis, float value)
             {
-                _singleAxes[axis.GetInputAxisName(0)] = value;
+                _singleAxes[InputTranslator.GetAxisName(axis)] = value;
             }
 
             private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(AxisIdentifier axis, int axisDirection = 1)

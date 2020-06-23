@@ -60,14 +60,14 @@ namespace NomaiVR
                 }
                 if (OWInput.IsNewlyHeld(InputLibrary.interact))
                 {
-                    ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, 1);
+                    ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, 1);
                     _wasHoldingInteract = true;
                 }
                 if (OWInput.IsNewlyReleased(InputLibrary.interact))
                 {
                     if (_wasHoldingInteract)
                     {
-                        ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, 0);
+                        ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, 0);
                         _wasHoldingInteract = false;
                     }
                     else if (_pressedInteract && !IsFocused(_probe) && !IsFocused(_signalscope) && !IsFocused(_landingCam))
