@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using PadEZ;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -51,8 +52,9 @@ namespace NomaiVR
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
-                // TODO Look into this missing method.
-                // OWInput.EnableListenForAllJoysticks(true);
+                FindObjectOfType<PadManager_OW>().Invoke("SetUp");
+
+                ReplaceInputs();
             }
 
             private void OnWakeUp()
@@ -195,15 +197,29 @@ namespace NomaiVR
                 }
             }
 
+            private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)
+            {
+                command.SetValue("_gamepadBinding", new InputBinding(button));
+            }
+
+            private static void ReplaceInputs()
+            {
+                SetCommandButton(InputLibrary.landingCamera, JoystickButton.DPadDown);
+                SetCommandButton(InputLibrary.signalscope, JoystickButton.DPadRight);
+                SetCommandButton(InputLibrary.tabL, JoystickButton.None);
+                SetCommandButton(InputLibrary.tabR, JoystickButton.None);
+                SetCommandButton(InputLibrary.setDefaults, JoystickButton.None);
+                SetCommandButton(InputLibrary.confirm, JoystickButton.None);
+                SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
+            }
+
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
                     NomaiVR.Pre<SingleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(SingleAxisUpdate));
                     NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patch), nameof(OWInputUpdate));
-                    // TODO check if this was needed.
-                    //NomaiVR.Pre<OWInput>("EnableListenForAllJoysticks", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
-                    NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
+                    NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListenForAllJoysticks));
                     NomaiVR.Post<PadEZ.PadManager_OW>("GetAxis", typeof(Patch), nameof(GetAxis));
                     NomaiVR.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
 
@@ -317,20 +333,9 @@ namespace NomaiVR
                     return false;
                 }
 
-                private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)
+                private static void PostEnableListenForAllJoysticks()
                 {
-                    command.SetValue("_gamepadBinding", new InputBinding(button));
-                }
-
-                private static void PostEnableListanForAllJoysticks()
-                {
-                    SetCommandButton(InputLibrary.landingCamera, JoystickButton.DPadDown);
-                    SetCommandButton(InputLibrary.signalscope, JoystickButton.DPadRight);
-                    SetCommandButton(InputLibrary.tabL, JoystickButton.None);
-                    SetCommandButton(InputLibrary.tabR, JoystickButton.None);
-                    SetCommandButton(InputLibrary.setDefaults, JoystickButton.None);
-                    SetCommandButton(InputLibrary.confirm, JoystickButton.None);
-                    SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
+                    ReplaceInputs();
                 }
             }
         }
