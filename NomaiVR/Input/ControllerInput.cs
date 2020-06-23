@@ -15,7 +15,6 @@ namespace NomaiVR
             private static Behaviour _instance;
             private static Dictionary<JoystickButton, float> _buttons;
             private static Dictionary<string, float> _singleAxes;
-            private static Dictionary<DoubleAxis, Vector2> _doubleAxes;
             private static PlayerResources _playerResources;
             public static bool IsGripping { get; private set; }
 
@@ -34,7 +33,6 @@ namespace NomaiVR
                 _instance = this;
                 _buttons = new Dictionary<JoystickButton, float>();
                 _singleAxes = new Dictionary<string, float>();
-                _doubleAxes = new Dictionary<DoubleAxis, Vector2>();
 
                 SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.default_Back.onChange += OnBackChange;
@@ -45,12 +43,11 @@ namespace NomaiVR
                 SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
                 SteamVR_Actions.default_Map.onChange += CreateButtonHandler(JoystickButton.Select);
 
-                SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(XboxAxis.leftTrigger);
-                SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
-                SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(XboxAxis.rightTrigger);
+                SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_LTRIGGER);
+                SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_RTRIGGER);
 
-                SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(XboxAxis.leftStick, XboxAxis.leftStickX, XboxAxis.leftStickY);
-                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(XboxAxis.rightStick, XboxAxis.rightStickX, XboxAxis.rightStickY);
+                SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
+                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
@@ -158,17 +155,13 @@ namespace NomaiVR
                 _singleAxes[axis.GetInputAxisName(0)] = value;
             }
 
-            private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis, int axisDirection)
+            private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(AxisIdentifier axis, int axisDirection = 1)
             {
+                var axisName = InputTranslator.GetAxisName(axis);
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
-                    _singleAxes[singleAxis.GetInputAxisName(0)] = axisDirection * Mathf.Round(newAxis * 10) / 10;
+                    _singleAxes[axisName] = axisDirection * Mathf.Round(newAxis * 10) / 10;
                 };
-            }
-
-            private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(SingleAxis singleAxis)
-            {
-                return CreateSingleAxisHandler(singleAxis, 1);
             }
 
             private static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(JoystickButton button)
@@ -179,15 +172,16 @@ namespace NomaiVR
                 };
             }
 
-            private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(DoubleAxis doubleAxis, SingleAxis singleX, SingleAxis singleY)
+            private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(AxisIdentifier axisX, AxisIdentifier axisY)
             {
+                var axisNameX = InputTranslator.GetAxisName(axisX);
+                var axisNameY = InputTranslator.GetAxisName(axisY);
                 return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) =>
                 {
                     var x = Mathf.Round(axis.x * 100) / 100;
                     var y = Mathf.Round(axis.y * 100) / 100;
-                    _doubleAxes[doubleAxis] = new Vector2(x, y);
-                    _singleAxes[singleX.GetInputAxisName(0)] = x;
-                    _singleAxes[singleY.GetInputAxisName(0)] = y;
+                    _singleAxes[axisNameX] = x;
+                    _singleAxes[axisNameY] = y;
                 };
             }
 
@@ -210,7 +204,7 @@ namespace NomaiVR
                     // TODO check if this was needed.
                     //NomaiVR.Pre<OWInput>("EnableListenForAllJoysticks", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
                     NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListanForAllJoysticks));
-                    NomaiVR.Post<PadEZ.PadManager>("GetAxis", typeof(Patch), nameof(GetAxis));
+                    NomaiVR.Post<PadEZ.PadManager_OW>("GetAxis", typeof(Patch), nameof(GetAxis));
                     NomaiVR.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
 
                     var rumbleMethod = typeof(RumbleManager).GetAnyMethod("Update");
