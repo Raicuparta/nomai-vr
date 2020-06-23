@@ -1,5 +1,4 @@
 ﻿using OWML.ModHelper.Events;
-using PadEZ;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -52,9 +51,12 @@ namespace NomaiVR
 
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
-                FindObjectOfType<PadManager_OW>().Invoke("SetUp");
+                FindObjectOfType<PadEZ.PadManager_OW>().Invoke("SetUp");
 
                 ReplaceInputs();
+
+                PlayerData.SetRebindingSettings(new InputRebindableData(), 0);
+                PlayerData.OnSetFirstControllerAfterStartup(0, InputUtil.GamePadPresetConfig.XBOX, InputUtil.ButtonPromptPresetConfig.XBOX);
             }
 
             private void OnWakeUp()
@@ -176,10 +178,10 @@ namespace NomaiVR
 
             private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(AxisIdentifier axisX, AxisIdentifier axisY)
             {
-                var axisNameX = InputTranslator.GetAxisName(axisX);
-                var axisNameY = InputTranslator.GetAxisName(axisY);
                 return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) =>
                 {
+                    var axisNameX = InputTranslator.GetAxisName(axisX);
+                    var axisNameY = InputTranslator.GetAxisName(axisY);
                     var x = Mathf.Round(axis.x * 100) / 100;
                     var y = Mathf.Round(axis.y * 100) / 100;
                     _singleAxes[axisNameX] = x;
@@ -222,9 +224,52 @@ namespace NomaiVR
                     NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListenForAllJoysticks));
                     NomaiVR.Post<PadEZ.PadManager_OW>("GetAxis", typeof(Patch), nameof(GetAxis));
                     NomaiVR.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
+                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKey", typeof(Patch), nameof(ResetPadManagerKeyboard));
+                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKeyDown", typeof(Patch), nameof(ResetPadManagerKeyboard));
+                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKeyUp", typeof(Patch), nameof(ResetPadManagerKeyboard));
+                    NomaiVR.Post<OWInput>("IsGamepadEnabled", typeof(Patch), nameof(PostIsGamepadEnabled));
+                    NomaiVR.Post<PadEZ.PadManager_OW>("IsGamepadActive", typeof(Patch), nameof(PostIsGamepadEnabled));
+
+                    NomaiVR.Pre<DoubleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(PreUpdateDoubleAxisCommand));
 
                     var rumbleMethod = typeof(RumbleManager).GetAnyMethod("Update");
                     NomaiVR.Helper.HarmonyHelper.AddPrefix(rumbleMethod, typeof(Patch), nameof(PreUpdateRumble));
+                }
+
+                private static bool PreUpdateDoubleAxisCommand(
+                    InputBinding ____gamepadHorzBinding,
+                    InputBinding ____gamepadVertBinding,
+                    ref Vector2 ____value,
+                    ref Vector2 ____cameraLookValue
+                )
+                {
+                    var axisX = InputTranslator.GetAxisName(____gamepadHorzBinding.axisID);
+                    var axisY = InputTranslator.GetAxisName(____gamepadVertBinding.axisID);
+                    if (_singleAxes.ContainsKey(axisX))
+                    {
+                        ____value.x = _singleAxes[axisX];
+                        ____cameraLookValue.x = _singleAxes[axisX];
+                    }
+                    if (_singleAxes.ContainsKey(axisY))
+                    {
+                        ____value.y = _singleAxes[axisY];
+                        ____cameraLookValue.y = _singleAxes[axisY];
+                    }
+                    if (____value.sqrMagnitude > 1f)
+                    {
+                        ____value.Normalize();
+                    }
+                    return false;
+                }
+
+                private static bool PostIsGamepadEnabled(bool __result)
+                {
+                    return true;
+                }
+
+                private static void ResetPadManagerKeyboard(ref bool ____gotKeyboardInputThisFrame)
+                {
+                    ____gotKeyboardInputThisFrame = false;
                 }
 
                 private static bool PreUpdateRumble(object[] ___m_theList, bool ___m_isEnabled)
