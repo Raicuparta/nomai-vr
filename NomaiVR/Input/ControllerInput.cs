@@ -35,29 +35,24 @@ namespace NomaiVR
                 _buttons = new Dictionary<JoystickButton, float>();
                 _singleAxes = new Dictionary<string, float>();
 
+                SetUpSteamVRActionHandlers();
+                ReplaceInputs();
+                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+            }
+
+            private void SetUpSteamVRActionHandlers()
+            {
                 SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.default_Back.onChange += OnBackChange;
                 SteamVR_Actions.default_Interact.onChange += OnPrimaryActionChange;
                 SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
                 SteamVR_Actions.default_Grip.onChange += OnGripChange;
-
                 SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
                 SteamVR_Actions.default_Map.onChange += CreateButtonHandler(JoystickButton.Select);
-
                 SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_LTRIGGER);
                 SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_RTRIGGER);
-
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
                 SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
-
-                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
-
-                FindObjectOfType<PadEZ.PadManager_OW>().Invoke("SetUp");
-
-                ReplaceInputs();
-
-                PlayerData.SetRebindingSettings(new InputRebindableData(), 0);
-                PlayerData.OnSetFirstControllerAfterStartup(0, InputUtil.GamePadPresetConfig.XBOX, InputUtil.ButtonPromptPresetConfig.XBOX);
             }
 
             private void OnWakeUp()
