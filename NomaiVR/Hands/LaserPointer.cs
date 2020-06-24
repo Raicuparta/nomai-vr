@@ -110,7 +110,7 @@ namespace NomaiVR
 
             private static bool IsSelectNewlyPressed()
             {
-                return OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.menuConfirm);
+                return OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.interact);
             }
 
             private void HandleSelectableRayHit(Selectable selectable)
