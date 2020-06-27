@@ -35,7 +35,7 @@ namespace NomaiVR
 
                 if (isScrollable && hasMoreToScroll)
                 {
-                    ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, -1);
+                    ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, -1);
                     return;
                 }
 
@@ -45,13 +45,13 @@ namespace NomaiVR
                 }
             }
 
-            ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadX, 1);
+            ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADX, 1);
         }
 
         private void OnDetectorExit()
         {
-            ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadX, 0);
-            ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, 0);
+            ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADX, 0);
+            ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, 0);
         }
     }
 }

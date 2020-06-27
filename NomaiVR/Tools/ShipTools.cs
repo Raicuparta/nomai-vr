@@ -60,19 +60,19 @@ namespace NomaiVR
                 }
                 if (OWInput.IsNewlyHeld(InputLibrary.interact))
                 {
-                    ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, 1);
+                    ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, 1);
                     _wasHoldingInteract = true;
                 }
                 if (OWInput.IsNewlyReleased(InputLibrary.interact))
                 {
                     if (_wasHoldingInteract)
                     {
-                        ControllerInput.Behaviour.SimulateInput(XboxAxis.dPadY, 0);
+                        ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, 0);
                         _wasHoldingInteract = false;
                     }
                     else if (_pressedInteract && !IsFocused(_probe) && !IsFocused(_signalscope) && !IsFocused(_landingCam))
                     {
-                        ControllerInput.Behaviour.SimulateInput(XboxButton.LeftStickClick);
+                        ControllerInput.Behaviour.SimulateInput(JoystickButton.LeftStickClick);
                     }
                     _pressedInteract = false;
                 }
@@ -169,17 +169,17 @@ namespace NomaiVR
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
 
                     _probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot/ProbeScreen").gameObject.AddComponent<ButtonInteraction>();
-                    _probe.button = XboxButton.RightBumper;
+                    _probe.button = JoystickButton.RightBumper;
                     _probe.text = UITextType.ScoutModePrompt;
 
                     _signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot/SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
-                    _signalscope.button = XboxButton.DPadRight;
+                    _signalscope.button = JoystickButton.DPadRight;
                     _signalscope.text = UITextType.SignalscopePrompt;
 
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
                     _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
-                    _landingCam.button = XboxButton.DPadDown;
+                    _landingCam.button = JoystickButton.DPadDown;
                     _landingCam.skipPressCallback = () =>
                     {
                         if (_isLandingCamEnabled)
