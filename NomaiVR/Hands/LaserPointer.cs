@@ -1,7 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using System;
 using System.Collections.Generic;
-using System.Net.Security;
 using UnityEngine;
 using UnityEngine.UI;
 

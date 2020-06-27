@@ -1,6 +1,5 @@
 ﻿using OWML.ModHelper.Events;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Valve.VR;
 
@@ -259,6 +258,7 @@ namespace NomaiVR
                     return false;
                 }
 
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
                 private static bool PostIsGamepadEnabled(bool __result)
                 {
                     return true;
