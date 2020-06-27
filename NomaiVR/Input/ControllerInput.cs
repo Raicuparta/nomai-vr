@@ -332,8 +332,6 @@ namespace NomaiVR
                 private static bool SingleAxisUpdate(
                     SingleAxisCommand __instance,
                     InputBinding ____gamepadBinding,
-                    List<object> ____axisPosNames,
-                    List<object> ____axisNegNames,
                     ref float ____value,
                     ref bool ____newlyPressedThisFrame,
                     ref float ____lastValue,
@@ -344,10 +342,6 @@ namespace NomaiVR
                 {
                     var positive = ____gamepadBinding.gamepadButtonPos;
                     var negative = ____gamepadBinding.gamepadButtonNeg;
-                    //if (positive == JoystickButton.None && negative == JoystickButton.None)
-                    //{
-                    //    return true;
-                    //}
 
                     ____newlyPressedThisFrame = false;
                     ____lastValue = ____value;
@@ -364,40 +358,10 @@ namespace NomaiVR
                         ____value -= _buttons[negative];
                     }
 
-                    foreach (var axisData in ____axisPosNames)
-                    {
-                        var axisName = axisData.GetValue<string>("axisName");
-                        var direction = axisData.GetValue<int>("direction");
-                        if (axisName != null && _singleAxes.ContainsKey(axisName))
-                        {
-                            NomaiVR.Log("Hello dumbass", axisName);
-                            ____value += _singleAxes[axisName] * direction;
-                        }
-                        if (____value != 0)
-                        {
-                            break;
-                        }
-                    }
-
-                    foreach (var axisData in ____axisNegNames)
-                    {
-                        var axisName = axisData.GetValue<string>("axisName");
-                        var direction = axisData.GetValue<int>("direction");
-                        if (axisName != null && _singleAxes.ContainsKey(axisName))
-                        {
-                            NomaiVR.Log("Hello dumbass Neg", axisName);
-                            ____value += _singleAxes[axisName] * direction * -1f;
-                        }
-                        if (____value != 0)
-                        {
-                            break;
-                        }
-                    }
-
                     var axis = InputTranslator.GetAxisName(____gamepadBinding.axisID);
                     if (_singleAxes.ContainsKey(axis))
                     {
-                        ____value += _singleAxes[axis];
+                        ____value += _singleAxes[axis] * ____gamepadBinding.axisDirection;
                     }
 
                     ____lastPressedDuration = ____pressedDuration;
