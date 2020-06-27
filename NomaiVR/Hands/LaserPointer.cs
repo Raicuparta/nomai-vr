@@ -1,6 +1,7 @@
 ﻿using OWML.ModHelper.Events;
 using System;
 using System.Collections.Generic;
+using System.Net.Security;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -110,7 +111,7 @@ namespace NomaiVR
 
             private static bool IsSelectNewlyPressed()
             {
-                return OWInput.IsNewlyPressed(InputLibrary.select) || OWInput.IsNewlyPressed(InputLibrary.interact);
+                return OWInput.IsNewlyPressed(InputLibrary.menuConfirm) || OWInput.IsNewlyPressed(InputLibrary.interact);
             }
 
             private void HandleSelectableRayHit(Selectable selectable)

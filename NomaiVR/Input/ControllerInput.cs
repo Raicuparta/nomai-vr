@@ -209,6 +209,7 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.setDefaults, JoystickButton.None);
                 SetCommandButton(InputLibrary.confirm, JoystickButton.None);
                 SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
+                SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
             }
 
             public class Patch : NomaiVRPatch
