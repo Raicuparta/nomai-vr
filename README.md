@@ -12,7 +12,6 @@
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
   - [Manual installation](#manual-installation)
-  - [If you have Oculus](#if-you-have-oculus)
 - [Performance](#performance)
   - [Framerate](#framerate)
 - [Compatibility with other mods](#compatibility-with-other-mods)
@@ -69,12 +68,6 @@ There are some extra in-game tutorials for teaching you VR inputs, but some stuf
 - [Download the latest NomaiVR release](https://github.com/Raicuparta/NomaiVR/releases/latest);
 - Extract the `NomaiVR` directory to the `OWML/Mods` directory;
 - Run `OWML.Launcher.exe` to start the game.
-
-### If you have Oculus
-
-- Find OWML's directory (either inside the mod manager's directory, or wherever extracted OWML to);
-- Create a shortcut to `OWML.Launcher.exe` and add the params `-vrmode openvr` ([like in this image](https://i.imgur.com/5uv88Nk.png))
-- Use the shortcut you just created to launch the game;
 
 ## Performance
 
