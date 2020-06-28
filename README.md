@@ -1,7 +1,3 @@
-## Only Epic Store 1.0.6 version supported!
-
-Versions 1.0.7+ are not supported yet. This includes all versions currently available on Steam. Please wait a few days for an update.
-
 # NomaiVR - Outer Wilds VR Mod
 
 <img src="logo.png" width=300/>
