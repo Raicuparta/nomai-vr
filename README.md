@@ -1,6 +1,6 @@
 # NomaiVR - Outer Wilds VR Mod
 
-<img src="logo.png" width=300/>
+![NomaiVR](banner.png)
 
 [![NomaiVR Gameplay](https://i.imgur.com/utsUMNv.gif)](https://www.youtube.com/watch?v=BblIMEPq54M)
 
