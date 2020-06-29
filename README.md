@@ -38,7 +38,7 @@ Expect nausea, low performance, flashing images, crashes, blue screens, house fi
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
-- Steam and SteamVR installed and running prior to opening the game;
+- Steam and SteamVR installed (make sure SteamVR isn't running prior to running the game);
 - Strong VR legs (both due to the nature of the game, and due to the glitchiness of this VR implementation).
 
 ## VR Controller Inputs
