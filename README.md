@@ -58,7 +58,7 @@ There are some extra in-game tutorials for teaching you VR inputs, but some stuf
 
 ### Easy installation (recommended)
 
-- [Install the Outer Wilds Mod Manager](https://github.com/Raicuparta/ow-mod-manager#how-do-i-use-this);
+- [Download and install the Outer Wilds Mod Manager](https://outerwildsmods.com/);
 - Install NomaiVR from the mod list displayed in the application;
 - If you can't get the mod manager to work, follow the instructions for manual installation.
 
@@ -93,7 +93,7 @@ Look at through [currently open issues](https://github.com/Raicuparta/NomaiVR/is
 
 ## Development Setup
 
-- [Download the Outer Wilds Mod Manager](https://github.com/Raicuparta/ow-mod-manager) and install it anywhere you like;
+- [Download the Outer Wilds Mod Manager](https://outerwildsmods.com/) and install it anywhere you like;
 - Install OWML using the Mod Manager;
 - Clone NomaiVR's source;
 - Open the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
