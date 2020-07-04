@@ -98,9 +98,8 @@ namespace NomaiVR
                                 continue;
                             }
                             var action = ControllerInput.Behaviour.buttonActions[button];
-                            prompt += "[";
-                            prompt += action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand, EVRInputStringBits.VRInputString_InputSource });
-                            prompt += "]";
+                            var mappingText = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand, EVRInputStringBits.VRInputString_InputSource });
+                            prompt = string.Concat("<color=orange>", mappingText, "</color> ", prompt);
                         }
                     }
                 }
