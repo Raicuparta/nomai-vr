@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace NomaiVR
 {
@@ -41,7 +42,9 @@ namespace NomaiVR
             HoldIcon = LoadAsset<Texture2D>(inputIconsBundle, "hold.png");
             InteractIcon = LoadAsset<Texture2D>(inputIconsBundle, "interact.png");
             JumpIcon = LoadAsset<Texture2D>(inputIconsBundle, "jump.png");
-            BackIcon = LoadAsset<Texture2D>(inputIconsBundle, "back.png");
+            BackIcon = new Texture2D(1, 1);
+            BackIcon.SetPixel(0, 0, Color.black);
+            BackIcon.Apply();
 
             var lookArrowBundle = LoadBundle("look-arrow");
             LookArrowPrefab = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");

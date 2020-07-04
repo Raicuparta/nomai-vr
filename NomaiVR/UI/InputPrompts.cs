@@ -128,23 +128,7 @@ namespace NomaiVR
 
                 private static Texture2D PostInitTranslator(Texture2D __result, JoystickButton button)
                 {
-                    if (button == JoystickButton.FaceLeft)
-                    {
-                        return AssetLoader.InteractIcon;
-                    }
-                    if (button == JoystickButton.FaceUp)
-                    {
-                        return AssetLoader.HoldIcon;
-                    }
-                    if (button == JoystickButton.FaceRight)
-                    {
-                        return AssetLoader.BackIcon;
-                    }
-                    if (button == JoystickButton.FaceDown)
-                    {
-                        return AssetLoader.JumpIcon;
-                    }
-                    return __result;
+                    return AssetLoader.BackIcon;
                 }
 
                 private static bool InitLockOnReticule(
