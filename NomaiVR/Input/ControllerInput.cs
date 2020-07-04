@@ -18,7 +18,6 @@ namespace NomaiVR
 
         private static string GetActionText(ISteamVR_Action_In_Source action, string color = TextHelper.ORANGE, bool isLongPress = false)
         {
-            var isInitialized = SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess;
             var mappingText = "!! ERROR: ACTION TYPE NOT FOUND !!";
             if (action.GetType() == typeof(SteamVR_Action_Boolean))
             {
@@ -71,25 +70,29 @@ namespace NomaiVR
 
             public void DoTheThings()
             {
-                buttonActions = new Dictionary<JoystickButton, string>();
-                buttonActions[JoystickButton.FaceDown] = GetActionText(SteamVR_Actions.default_Jump, TextHelper.GREEN);
-                buttonActions[JoystickButton.FaceRight] = GetActionText(SteamVR_Actions.default_Back, TextHelper.RED);
-                buttonActions[JoystickButton.FaceLeft] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
-                buttonActions[JoystickButton.RightBumper] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
-                buttonActions[JoystickButton.FaceUp] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.YELLOW, true);
-                buttonActions[JoystickButton.LeftBumper] = GetActionText(SteamVR_Actions.default_RoolMode);
-                buttonActions[JoystickButton.Start] = GetActionText(SteamVR_Actions.default_Menu);
-                buttonActions[JoystickButton.Select] = GetActionText(SteamVR_Actions.default_Map);
+                buttonActions = new Dictionary<JoystickButton, string>
+                {
+                    [JoystickButton.FaceDown] = GetActionText(SteamVR_Actions.default_Jump, TextHelper.GREEN),
+                    [JoystickButton.FaceRight] = GetActionText(SteamVR_Actions.default_Back, TextHelper.RED),
+                    [JoystickButton.FaceLeft] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE),
+                    [JoystickButton.RightBumper] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE),
+                    [JoystickButton.FaceUp] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.YELLOW, true),
+                    [JoystickButton.LeftBumper] = GetActionText(SteamVR_Actions.default_RoolMode),
+                    [JoystickButton.Start] = GetActionText(SteamVR_Actions.default_Menu),
+                    [JoystickButton.Select] = GetActionText(SteamVR_Actions.default_Map)
+                };
 
-                axisActions = new Dictionary<AxisIdentifier, string>();
-                axisActions[AxisIdentifier.CTRLR_LTRIGGER] = GetActionText(SteamVR_Actions.default_ThrustDown, TextHelper.ORANGE);
-                axisActions[AxisIdentifier.CTRLR_RTRIGGER] = GetActionText(SteamVR_Actions.default_ThrustUp, TextHelper.ORANGE);
-                axisActions[AxisIdentifier.CTRLR_LSTICK] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE);
-                axisActions[AxisIdentifier.CTRLR_LSTICKX] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE);
-                axisActions[AxisIdentifier.CTRLR_LSTICKY] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE);
-                axisActions[AxisIdentifier.CTRLR_RSTICK] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE);
-                axisActions[AxisIdentifier.CTRLR_RSTICKX] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE);
-                axisActions[AxisIdentifier.CTRLR_RSTICKY] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE);
+                axisActions = new Dictionary<AxisIdentifier, string>
+                {
+                    [AxisIdentifier.CTRLR_LTRIGGER] = GetActionText(SteamVR_Actions.default_ThrustDown, TextHelper.ORANGE),
+                    [AxisIdentifier.CTRLR_RTRIGGER] = GetActionText(SteamVR_Actions.default_ThrustUp, TextHelper.ORANGE),
+                    [AxisIdentifier.CTRLR_LSTICK] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE),
+                    [AxisIdentifier.CTRLR_LSTICKX] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE),
+                    [AxisIdentifier.CTRLR_LSTICKY] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE),
+                    [AxisIdentifier.CTRLR_RSTICK] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE),
+                    [AxisIdentifier.CTRLR_RSTICKX] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE),
+                    [AxisIdentifier.CTRLR_RSTICKY] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE)
+                };
             }
 
             private void SetUpSteamVRActionHandlers()
