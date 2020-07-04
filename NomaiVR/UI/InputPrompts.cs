@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Valve.VR;
+using System.Linq;
 
 namespace NomaiVR
 {
@@ -68,8 +69,14 @@ namespace NomaiVR
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
 
                     // Load new icons.
-                    var initMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    NomaiVR.Helper.HarmonyHelper.AddPostfix(initMethod, typeof(Patch), nameof(PostInitTranslator));
+                    var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
+                    NomaiVR.Helper.HarmonyHelper.AddPostfix(getButtonTextureMethod, typeof(Patch), nameof(ReturnEmptyTexture));
+
+                    var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
+                    foreach (var method in getAxisTextureMethods)
+                    {
+                        NomaiVR.Helper.HarmonyHelper.AddPostfix(method, typeof(Patch), nameof(ReturnEmptyTexture));
+                    }
                 }
 
                 private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
@@ -126,7 +133,7 @@ namespace NomaiVR
                     }
                 }
 
-                private static Texture2D PostInitTranslator(Texture2D __result, JoystickButton button)
+                private static Texture2D ReturnEmptyTexture(Texture2D _result)
                 {
                     return AssetLoader.BackIcon;
                 }
