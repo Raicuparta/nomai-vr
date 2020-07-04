@@ -35,7 +35,7 @@ namespace NomaiVR
             {
                 mappingText = $"Long Press {mappingText}";
             }
-            return TextHelper.TextWithColor($"[{mappingText}]", color);
+            return TextHelper.TextWithColor(mappingText, color);
         }
 
         public class Behaviour : MonoBehaviour
@@ -93,6 +93,14 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_RSTICKX] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE),
                     [AxisIdentifier.CTRLR_RSTICKY] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE)
                 };
+
+                foreach (KeyValuePair<JoystickButton, string> entry in buttonActions)
+                {
+                    if (axisActions.ContainsValue(entry.Value))
+                    {
+                        buttonActions[entry.Key] = $"Click {entry.Value}";
+                    }
+                }
             }
 
             private void SetUpSteamVRActionHandlers()
