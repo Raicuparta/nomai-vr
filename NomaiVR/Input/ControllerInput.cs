@@ -77,46 +77,6 @@ namespace NomaiVR
                 SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_RTRIGGER);
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
                 SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
-
-                SteamVR_Actions.default_Interact.onChange += Default_Jump_onChange;
-                SteamVR_Actions.default_Jump.onChange += Default_Jump_onChange;
-                SteamVR_Actions.default_Grip.onChange += Default_RoolMode_onChange;
-                SteamVR_Actions.default_ThrustUp.onChange += Default_ThrustDown_onChange;
-                SteamVR_Actions.default_Move.onChange += Default_Move_onChange;
-                SteamVR_Actions.default_Map.onChange += Default_Map_onChange;
-            }
-
-            private void Default_Map_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
-            {
-                NomaiVR.Log("action", fromAction.GetLocalizedOrigin(fromSource));
-            }
-
-            private void Default_Move_onChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta)
-            {
-                if (delta.magnitude > 0.05f)
-                {
-                    NomaiVR.Log("action", fromAction.GetLocalizedOrigin(fromSource));
-
-                }
-            }
-
-            private void Default_ThrustDown_onChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
-            {
-                if (newDelta > 0.05f)
-                {
-                    NomaiVR.Log("action", fromAction.GetLocalizedOrigin(fromSource));
-
-                }
-            }
-
-            private void Default_RoolMode_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
-            {
-                NomaiVR.Log("action", fromAction.GetLocalizedOrigin(fromSource));
-            }
-
-            private void Default_Jump_onChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
-            {
-                NomaiVR.Log("action", fromAction.GetLocalizedOrigin(fromSource));
             }
 
             private void OnWakeUp()
