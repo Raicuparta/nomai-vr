@@ -9,11 +9,12 @@ namespace NomaiVR
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
-        public static Dictionary<JoystickButton, SteamVR_Action_Boolean> buttonActions;
+        public static Dictionary<JoystickButton, ISteamVR_Action_In_Source> buttonActions;
+        public static Dictionary<AxisIdentifier, ISteamVR_Action_In_Source> axisActions;
 
         public ControllerInput() : base()
         {
-            buttonActions = new Dictionary<JoystickButton, SteamVR_Action_Boolean>();
+            buttonActions = new Dictionary<JoystickButton, ISteamVR_Action_In_Source>();
             buttonActions[JoystickButton.FaceDown] = SteamVR_Actions.default_Jump;
             buttonActions[JoystickButton.FaceRight] = SteamVR_Actions.default_Back;
             buttonActions[JoystickButton.FaceLeft] = SteamVR_Actions.default_Interact;
@@ -22,6 +23,16 @@ namespace NomaiVR
             buttonActions[JoystickButton.LeftBumper] = SteamVR_Actions.default_RoolMode;
             buttonActions[JoystickButton.Start] = SteamVR_Actions.default_Menu;
             buttonActions[JoystickButton.Select] = SteamVR_Actions.default_Map;
+
+            axisActions = new Dictionary<AxisIdentifier, ISteamVR_Action_In_Source>();
+            axisActions[AxisIdentifier.CTRLR_LTRIGGER] = SteamVR_Actions.default_ThrustDown;
+            axisActions[AxisIdentifier.CTRLR_RTRIGGER] = SteamVR_Actions.default_ThrustUp;
+            axisActions[AxisIdentifier.CTRLR_LSTICK] = SteamVR_Actions.default_Move;
+            axisActions[AxisIdentifier.CTRLR_LSTICKX] = SteamVR_Actions.default_Move;
+            axisActions[AxisIdentifier.CTRLR_LSTICKY] = SteamVR_Actions.default_Move;
+            axisActions[AxisIdentifier.CTRLR_RSTICK] = SteamVR_Actions.default_Look;
+            axisActions[AxisIdentifier.CTRLR_RSTICKX] = SteamVR_Actions.default_Look;
+            axisActions[AxisIdentifier.CTRLR_RSTICKY] = SteamVR_Actions.default_Look;
         }
 
         public class Behaviour : MonoBehaviour
