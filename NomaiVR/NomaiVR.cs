@@ -55,7 +55,7 @@ namespace NomaiVR
         private void InitSteamVR()
         {
             SteamVR.Initialize();
-            OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
+            OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
         }
 
         public override void Configure(IModConfig config)
