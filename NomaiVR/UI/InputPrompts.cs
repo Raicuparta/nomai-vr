@@ -40,24 +40,24 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patch), nameof(RemoveProbePrompts));
+                    //NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patch), nameof(RemoveProbePrompts));
                     NomaiVR.Post<ProbePromptController>("Awake", typeof(Patch), nameof(ChangeProbePrompts));
 
-                    NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patch), nameof(RemoveShipPrompts));
+                    //NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patch), nameof(RemoveShipPrompts));
                     NomaiVR.Post<ShipPromptController>("Awake", typeof(Patch), nameof(ChangeShipPrompts));
 
-                    NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patch), nameof(RemoveTranslatorPrompts));
+                    //NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patch), nameof(RemoveTranslatorPrompts));
                     NomaiVR.Post<NomaiTranslatorProp>("Awake", typeof(Patch), nameof(ChangeTranslatorPrompts));
 
-                    NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patch), nameof(RemoveSignalscopePrompts));
+                    //NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patch), nameof(RemoveSignalscopePrompts));
                     NomaiVR.Post<SignalscopePromptController>("Awake", typeof(Patch), nameof(ChangeSignalscopePrompts));
 
-                    NomaiVR.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patch), nameof(RemoveSatellitePrompts));
+                    //NomaiVR.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patch), nameof(RemoveSatellitePrompts));
                     NomaiVR.Post<SatelliteSnapshotController>("Awake", typeof(Patch), nameof(ChangeSatellitePrompts));
 
-                    NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patch), nameof(RemoveJoystickPrompts));
-                    NomaiVR.Post<RoastingStickController>("LateInitialize", typeof(Patch), nameof(RemoveRoastingStickPrompts));
-                    NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patch), nameof(RemoveToolModePrompts));
+                    //NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patch), nameof(RemoveJoystickPrompts));
+                    //NomaiVR.Post<RoastingStickController>("LateInitialize", typeof(Patch), nameof(RemoveRoastingStickPrompts));
+                    //NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patch), nameof(RemoveToolModePrompts));
                     NomaiVR.Post<ScreenPrompt>("SetVisibility", typeof(Patch), nameof(PostScreenPromptVisibility));
 
                     NomaiVR.Pre<LockOnReticule>("Init", typeof(Patch), nameof(InitLockOnReticule));
@@ -122,6 +122,16 @@ namespace NomaiVR
                                     var action = ControllerInput.axisActions[axis];
                                     text = string.Concat("<color=orange>", GetActionText(action), "</color> ", text);
                                 }
+                            }
+                        }
+                        else if (command.GetType() == typeof(DoubleAxisCommand))
+                        {
+                            var doubleAxisCommand = (DoubleAxisCommand)command;
+                            var axis = doubleAxisCommand.GetGamepadAxis();
+                            if (ControllerInput.axisActions.ContainsKey(axis))
+                            {
+                                var action = ControllerInput.axisActions[axis];
+                                text = string.Concat("<color=orange>", GetActionText(action), "</color> ", text);
                             }
                         }
                     }
