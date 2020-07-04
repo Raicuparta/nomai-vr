@@ -68,10 +68,8 @@ namespace NomaiVR
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
 
                     // Load new icons.
-                    var harmony = HarmonyInstance.Create("nomaivr");
                     var initMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
-                    harmony.Patch(initMethod, null, harmonyMethod);
+                    NomaiVR.Helper.HarmonyHelper.AddPostfix(initMethod, typeof(Patch), nameof(PostInitTranslator));
                 }
 
                 private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
