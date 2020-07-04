@@ -93,11 +93,11 @@ namespace NomaiVR
                                 continue;
                             }
                             var button = binding.gamepadButtonPos;
-                            if (!ControllerInput.Behaviour.buttonActions.ContainsKey(button))
+                            if (!ControllerInput.buttonActions.ContainsKey(button))
                             {
                                 continue;
                             }
-                            var action = ControllerInput.Behaviour.buttonActions[button];
+                            var action = ControllerInput.buttonActions[button];
                             var mappingText = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand, EVRInputStringBits.VRInputString_InputSource });
                             prompt = string.Concat("<color=orange>", mappingText, "</color> ", prompt);
                         }

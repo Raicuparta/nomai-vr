@@ -9,12 +9,25 @@ namespace NomaiVR
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
+        public static Dictionary<JoystickButton, SteamVR_Action_Boolean> buttonActions;
+
+        public ControllerInput() : base()
+        {
+            buttonActions = new Dictionary<JoystickButton, SteamVR_Action_Boolean>();
+            buttonActions[JoystickButton.FaceDown] = SteamVR_Actions.default_Jump;
+            buttonActions[JoystickButton.FaceRight] = SteamVR_Actions.default_Back;
+            buttonActions[JoystickButton.FaceLeft] = SteamVR_Actions.default_Interact;
+            buttonActions[JoystickButton.RightBumper] = SteamVR_Actions.default_Interact;
+            buttonActions[JoystickButton.FaceUp] = SteamVR_Actions.default_Interact;
+            buttonActions[JoystickButton.LeftBumper] = SteamVR_Actions.default_RoolMode;
+            buttonActions[JoystickButton.Start] = SteamVR_Actions.default_Menu;
+            buttonActions[JoystickButton.Select] = SteamVR_Actions.default_Map;
+        }
 
         public class Behaviour : MonoBehaviour
         {
             private static Behaviour _instance;
             private static Dictionary<JoystickButton, float> _buttons;
-            public static Dictionary<JoystickButton, SteamVR_Action_Boolean> buttonActions;
             private static Dictionary<string, float> _singleAxes;
             private static PlayerResources _playerResources;
             public static bool IsGripping { get; private set; }
@@ -256,11 +269,6 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    buttonActions = new Dictionary<JoystickButton, SteamVR_Action_Boolean>();
-                    buttonActions[JoystickButton.FaceDown] = SteamVR_Actions.default_Jump;
-                    buttonActions[JoystickButton.FaceRight] = SteamVR_Actions.default_Back;
-                    buttonActions[JoystickButton.FaceLeft] = SteamVR_Actions.default_Interact;
-
                     NomaiVR.Pre<SingleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(SingleAxisUpdate));
                     NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patch), nameof(OWInputUpdate));
                     NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListenForAllJoysticks));
