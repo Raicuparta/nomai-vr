@@ -72,7 +72,7 @@ namespace NomaiVR
                 buttonActions[JoystickButton.FaceRight] = GetActionText(SteamVR_Actions.default_Back, TextHelper.RED);
                 buttonActions[JoystickButton.FaceLeft] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
                 buttonActions[JoystickButton.RightBumper] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
-                buttonActions[JoystickButton.FaceUp] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
+                buttonActions[JoystickButton.FaceUp] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.YELLOW);
                 buttonActions[JoystickButton.LeftBumper] = GetActionText(SteamVR_Actions.default_RoolMode);
                 buttonActions[JoystickButton.Start] = GetActionText(SteamVR_Actions.default_Menu);
                 buttonActions[JoystickButton.Select] = GetActionText(SteamVR_Actions.default_Map);

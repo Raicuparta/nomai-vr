@@ -89,14 +89,12 @@ namespace NomaiVR
                                 var button = gamepadBinding.gamepadButtonPos;
                                 if (ControllerInput.buttonActions.ContainsKey(button))
                                 {
-                                    var actionText = ControllerInput.buttonActions[button];
-                                    text = string.Concat(actionText, text);
+                                    text = $"{ControllerInput.buttonActions[button]} {text}";
                                 }
                                 var axis = gamepadBinding.axisID;
                                 if (ControllerInput.axisActions.ContainsKey(axis))
                                 {
-                                    var actionText = ControllerInput.axisActions[axis];
-                                    text = string.Concat(actionText, text);
+                                    text = $"{ControllerInput.axisActions[axis]} {text}";
                                 }
                             }
                         }
@@ -106,8 +104,7 @@ namespace NomaiVR
                             var axis = doubleAxisCommand.GetGamepadAxis();
                             if (ControllerInput.axisActions.ContainsKey(axis))
                             {
-                                var actionText = ControllerInput.axisActions[axis];
-                                text = string.Concat(actionText, text);
+                                text = $"{ControllerInput.axisActions[axis]} {text}";
                             }
                         }
                     }
