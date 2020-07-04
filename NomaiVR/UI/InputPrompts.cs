@@ -15,10 +15,6 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static readonly List<ScreenPrompt> _toolUnequipPrompts = new List<ScreenPrompt>(2);
-            private static readonly EVRInputStringBits[] VRInputStringBits = {
-                EVRInputStringBits.VRInputString_Hand,
-                EVRInputStringBits.VRInputString_InputSource
-            };
 
             private static PromptManager Manager => Locator.GetPromptManager();
 
@@ -78,26 +74,6 @@ namespace NomaiVR
                     harmony.Patch(initMethod, null, harmonyMethod);
                 }
 
-                private static string GetActionText(ISteamVR_Action_In_Source action)
-                {
-                    if (action.GetType() == typeof(SteamVR_Action_Boolean))
-                    {
-                        var mappingText = ((SteamVR_Action_Boolean)action).GetLocalizedOriginPart(SteamVR_Input_Sources.Any, VRInputStringBits);
-                        return string.Concat("<color=orange>", mappingText, "</color> ");
-                    }
-                    if (action.GetType() == typeof(SteamVR_Action_Single))
-                    {
-                        var mappingText = ((SteamVR_Action_Single)action).GetLocalizedOriginPart(SteamVR_Input_Sources.Any, VRInputStringBits);
-                        return string.Concat("<color=orange>", mappingText, "</color> ");
-                    }
-                    if (action.GetType() == typeof(SteamVR_Action_Vector2))
-                    {
-                        var mappingText = ((SteamVR_Action_Vector2)action).GetLocalizedOriginPart(SteamVR_Input_Sources.Any, VRInputStringBits);
-                        return string.Concat("<color=orange>", mappingText, "</color> ");
-                    }
-                    return "< ERROR: ACTION TYPE NOT FOUND >";
-                }
-
                 private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
                 {
                     for (var i = 0; i < ____commandList.Count; i++)
@@ -113,14 +89,14 @@ namespace NomaiVR
                                 var button = gamepadBinding.gamepadButtonPos;
                                 if (ControllerInput.buttonActions.ContainsKey(button))
                                 {
-                                    var action = ControllerInput.buttonActions[button];
-                                    text = string.Concat("<color=orange>", GetActionText(action), "</color> ", text);
+                                    var actionText = ControllerInput.buttonActions[button];
+                                    text = string.Concat(actionText, text);
                                 }
                                 var axis = gamepadBinding.axisID;
                                 if (ControllerInput.axisActions.ContainsKey(axis))
                                 {
-                                    var action = ControllerInput.axisActions[axis];
-                                    text = string.Concat("<color=orange>", GetActionText(action), "</color> ", text);
+                                    var actionText = ControllerInput.axisActions[axis];
+                                    text = string.Concat(actionText, text);
                                 }
                             }
                         }
@@ -130,8 +106,8 @@ namespace NomaiVR
                             var axis = doubleAxisCommand.GetGamepadAxis();
                             if (ControllerInput.axisActions.ContainsKey(axis))
                             {
-                                var action = ControllerInput.axisActions[axis];
-                                text = string.Concat("<color=orange>", GetActionText(action), "</color> ", text);
+                                var actionText = ControllerInput.axisActions[axis];
+                                text = string.Concat(actionText, text);
                             }
                         }
                     }

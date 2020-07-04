@@ -109,6 +109,7 @@
     <Compile Include="Helpers\MaterialHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="Helpers\SceneHelper.cs" />
+    <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Helpers\ToolHelper.cs" />
     <Compile Include="ModConfig\ModConfig.cs" />

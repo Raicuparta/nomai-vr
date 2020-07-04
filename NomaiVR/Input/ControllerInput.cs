@@ -9,30 +9,30 @@ namespace NomaiVR
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
-        public static Dictionary<JoystickButton, ISteamVR_Action_In_Source> buttonActions;
-        public static Dictionary<AxisIdentifier, ISteamVR_Action_In_Source> axisActions;
+        public static Dictionary<JoystickButton, string> buttonActions;
+        public static Dictionary<AxisIdentifier, string> axisActions;
+        private static readonly EVRInputStringBits[] VRInputStringBits = {
+            EVRInputStringBits.VRInputString_Hand,
+            EVRInputStringBits.VRInputString_InputSource
+        };
 
-        public ControllerInput() : base()
+        private static string GetActionText(ISteamVR_Action_In_Source action, string color = TextHelper.ORANGE)
         {
-            buttonActions = new Dictionary<JoystickButton, ISteamVR_Action_In_Source>();
-            buttonActions[JoystickButton.FaceDown] = SteamVR_Actions.default_Jump;
-            buttonActions[JoystickButton.FaceRight] = SteamVR_Actions.default_Back;
-            buttonActions[JoystickButton.FaceLeft] = SteamVR_Actions.default_Interact;
-            buttonActions[JoystickButton.RightBumper] = SteamVR_Actions.default_Interact;
-            buttonActions[JoystickButton.FaceUp] = SteamVR_Actions.default_Interact;
-            buttonActions[JoystickButton.LeftBumper] = SteamVR_Actions.default_RoolMode;
-            buttonActions[JoystickButton.Start] = SteamVR_Actions.default_Menu;
-            buttonActions[JoystickButton.Select] = SteamVR_Actions.default_Map;
-
-            axisActions = new Dictionary<AxisIdentifier, ISteamVR_Action_In_Source>();
-            axisActions[AxisIdentifier.CTRLR_LTRIGGER] = SteamVR_Actions.default_ThrustDown;
-            axisActions[AxisIdentifier.CTRLR_RTRIGGER] = SteamVR_Actions.default_ThrustUp;
-            axisActions[AxisIdentifier.CTRLR_LSTICK] = SteamVR_Actions.default_Move;
-            axisActions[AxisIdentifier.CTRLR_LSTICKX] = SteamVR_Actions.default_Move;
-            axisActions[AxisIdentifier.CTRLR_LSTICKY] = SteamVR_Actions.default_Move;
-            axisActions[AxisIdentifier.CTRLR_RSTICK] = SteamVR_Actions.default_Look;
-            axisActions[AxisIdentifier.CTRLR_RSTICKX] = SteamVR_Actions.default_Look;
-            axisActions[AxisIdentifier.CTRLR_RSTICKY] = SteamVR_Actions.default_Look;
+            var isInitialized = SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess;
+            var mappingText = "!! ERROR: ACTION TYPE NOT FOUND !!";
+            if (action.GetType() == typeof(SteamVR_Action_Boolean))
+            {
+                mappingText = ((SteamVR_Action_Boolean)action).GetLocalizedOriginPart(SteamVR_Input_Sources.Any, VRInputStringBits);
+            }
+            if (action.GetType() == typeof(SteamVR_Action_Single))
+            {
+                mappingText = ((SteamVR_Action_Single)action).GetLocalizedOriginPart(SteamVR_Input_Sources.Any, VRInputStringBits);
+            }
+            if (action.GetType() == typeof(SteamVR_Action_Vector2))
+            {
+                mappingText = ((SteamVR_Action_Vector2)action).GetLocalizedOriginPart(SteamVR_Input_Sources.Any, VRInputStringBits);
+            }
+            return TextHelper.TextWithColor(mappingText, color);
         }
 
         public class Behaviour : MonoBehaviour
@@ -61,7 +61,31 @@ namespace NomaiVR
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
+                Invoke(nameof(DoTheThings), 1);
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+            }
+
+            public void DoTheThings()
+            {
+                buttonActions = new Dictionary<JoystickButton, string>();
+                buttonActions[JoystickButton.FaceDown] = GetActionText(SteamVR_Actions.default_Jump, TextHelper.GREEN);
+                buttonActions[JoystickButton.FaceRight] = GetActionText(SteamVR_Actions.default_Back, TextHelper.RED);
+                buttonActions[JoystickButton.FaceLeft] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
+                buttonActions[JoystickButton.RightBumper] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
+                buttonActions[JoystickButton.FaceUp] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
+                buttonActions[JoystickButton.LeftBumper] = GetActionText(SteamVR_Actions.default_RoolMode);
+                buttonActions[JoystickButton.Start] = GetActionText(SteamVR_Actions.default_Menu);
+                buttonActions[JoystickButton.Select] = GetActionText(SteamVR_Actions.default_Map);
+
+                axisActions = new Dictionary<AxisIdentifier, string>();
+                axisActions[AxisIdentifier.CTRLR_LTRIGGER] = GetActionText(SteamVR_Actions.default_ThrustDown, TextHelper.ORANGE);
+                axisActions[AxisIdentifier.CTRLR_RTRIGGER] = GetActionText(SteamVR_Actions.default_ThrustUp, TextHelper.ORANGE);
+                axisActions[AxisIdentifier.CTRLR_LSTICK] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE);
+                axisActions[AxisIdentifier.CTRLR_LSTICKX] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE);
+                axisActions[AxisIdentifier.CTRLR_LSTICKY] = GetActionText(SteamVR_Actions.default_Move, TextHelper.ORANGE);
+                axisActions[AxisIdentifier.CTRLR_RSTICK] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE);
+                axisActions[AxisIdentifier.CTRLR_RSTICKX] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE);
+                axisActions[AxisIdentifier.CTRLR_RSTICKY] = GetActionText(SteamVR_Actions.default_Look, TextHelper.ORANGE);
             }
 
             private void SetUpSteamVRActionHandlers()
