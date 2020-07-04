@@ -12,10 +12,5 @@
         {
             return $"<color={color}>{text}</color>";
         }
-
-        public static string RedText(string text) => TextWithColor(text, RED);
-        public static string GreenText(string text) => TextWithColor(text, GREEN);
-        public static string BlueText(string text) => TextWithColor(text, BLUE);
-        public static string OrangeText(string text) => TextWithColor(text, ORANGE);
     }
 }
