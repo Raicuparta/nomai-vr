@@ -1,7 +1,9 @@
 ﻿using Harmony;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -55,6 +57,9 @@ namespace NomaiVR
 
                     NomaiVR.Pre<LockOnReticule>("Init", typeof(Patch), nameof(InitLockOnReticule));
 
+                    NomaiVR.Pre<ScreenPrompt>("Init", typeof(Patch), nameof(PrePromptInit));
+                    NomaiVR.Pre<ScreenPrompt>("SetText", typeof(Patch), nameof(PrePromptSetText));
+
                     // Prevent probe launcher from moving the prompts around.
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshot");
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshotRemoved");
@@ -66,6 +71,38 @@ namespace NomaiVR
                     var initMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
                     var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
                     harmony.Patch(initMethod, null, harmonyMethod);
+                }
+
+                private static void PrePromptSetText(ref string text)
+                {
+                    text = "Nyeeeloo";
+                }
+
+                private static void PrePromptInit(ref string prompt, List<InputCommand> ____commandList)
+                {
+                    for (var i = 0; i < ____commandList.Count; i++)
+                    {
+                        var command = ____commandList[i];
+
+                        if (command.GetType() == typeof(SingleAxisCommand))
+                        {
+                            var singleAxisCommand = (SingleAxisCommand)command;
+                            var binding = singleAxisCommand.GetGamepadBinding();
+                            if (binding == null)
+                            {
+                                continue;
+                            }
+                            var button = binding.gamepadButtonPos;
+                            if (!ControllerInput.Behaviour.buttonActions.ContainsKey(button))
+                            {
+                                continue;
+                            }
+                            var action = ControllerInput.Behaviour.buttonActions[button];
+                            prompt += "[";
+                            prompt += action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand, EVRInputStringBits.VRInputString_InputSource });
+                            prompt += "]";
+                        }
+                    }
                 }
 
                 private static void PostScreenPromptVisibility(bool isVisible)
