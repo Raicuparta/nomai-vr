@@ -78,11 +78,6 @@ namespace NomaiVR
                     harmony.Patch(initMethod, null, harmonyMethod);
                 }
 
-                private static void PrePromptSetText(ref string text)
-                {
-                    text = "Nyeeeloo";
-                }
-
                 private static string GetActionText(ISteamVR_Action_In_Source action)
                 {
                     if (action.GetType() == typeof(SteamVR_Action_Boolean))
@@ -103,7 +98,7 @@ namespace NomaiVR
                     return "< ERROR: ACTION TYPE NOT FOUND >";
                 }
 
-                private static void PrePromptInit(ref string prompt, List<InputCommand> ____commandList)
+                private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
                 {
                     for (var i = 0; i < ____commandList.Count; i++)
                     {
@@ -119,17 +114,27 @@ namespace NomaiVR
                                 if (ControllerInput.buttonActions.ContainsKey(button))
                                 {
                                     var action = ControllerInput.buttonActions[button];
-                                    prompt = string.Concat("<color=orange>", GetActionText(action), "</color> ", prompt);
+                                    text = string.Concat("<color=orange>", GetActionText(action), "</color> ", text);
                                 }
                                 var axis = gamepadBinding.axisID;
                                 if (ControllerInput.axisActions.ContainsKey(axis))
                                 {
                                     var action = ControllerInput.axisActions[axis];
-                                    prompt = string.Concat("<color=orange>", GetActionText(action), "</color> ", prompt);
+                                    text = string.Concat("<color=orange>", GetActionText(action), "</color> ", text);
                                 }
                             }
                         }
                     }
+                }
+
+                private static void PrePromptSetText(ref string text, List<InputCommand> ____commandList)
+                {
+                    AddVRMappingToPrompt(ref text, ____commandList);
+                }
+
+                private static void PrePromptInit(ref string prompt, List<InputCommand> ____commandList)
+                {
+                    AddVRMappingToPrompt(ref prompt, ____commandList);
                 }
 
                 private static void PostScreenPromptVisibility(bool isVisible)
