@@ -16,7 +16,7 @@ namespace NomaiVR
             EVRInputStringBits.VRInputString_InputSource
         };
 
-        private static string GetActionText(ISteamVR_Action_In_Source action, string color = TextHelper.ORANGE)
+        private static string GetActionText(ISteamVR_Action_In_Source action, string color = TextHelper.ORANGE, bool isLongPress = false)
         {
             var isInitialized = SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess;
             var mappingText = "!! ERROR: ACTION TYPE NOT FOUND !!";
@@ -32,7 +32,11 @@ namespace NomaiVR
             {
                 mappingText = ((SteamVR_Action_Vector2)action).GetLocalizedOriginPart(SteamVR_Input_Sources.Any, VRInputStringBits);
             }
-            return TextHelper.TextWithColor(mappingText, color);
+            if (isLongPress)
+            {
+                mappingText = $"Long Press {mappingText}";
+            }
+            return TextHelper.TextWithColor($"[{mappingText}]", color);
         }
 
         public class Behaviour : MonoBehaviour
@@ -72,7 +76,7 @@ namespace NomaiVR
                 buttonActions[JoystickButton.FaceRight] = GetActionText(SteamVR_Actions.default_Back, TextHelper.RED);
                 buttonActions[JoystickButton.FaceLeft] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
                 buttonActions[JoystickButton.RightBumper] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.BLUE);
-                buttonActions[JoystickButton.FaceUp] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.YELLOW);
+                buttonActions[JoystickButton.FaceUp] = GetActionText(SteamVR_Actions.default_Interact, TextHelper.YELLOW, true);
                 buttonActions[JoystickButton.LeftBumper] = GetActionText(SteamVR_Actions.default_RoolMode);
                 buttonActions[JoystickButton.Start] = GetActionText(SteamVR_Actions.default_Menu);
                 buttonActions[JoystickButton.Select] = GetActionText(SteamVR_Actions.default_Map);

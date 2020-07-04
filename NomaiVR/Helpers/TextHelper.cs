@@ -2,10 +2,10 @@
 {
     public static class TextHelper
     {
-        public const string RED = "#e7595a";
-        public const string GREEN = "#ade373";
-        public const string BLUE = "#63aaf7";
-        public const string YELLOW = "#e3cf73";
+        public const string RED = "#ff8484";
+        public const string GREEN = "#c2ff81";
+        public const string BLUE = "#8ed3ff";
+        public const string YELLOW = "#fffd69";
         public const string ORANGE = "orange";
 
         public static string TextWithColor(string text, string color)
