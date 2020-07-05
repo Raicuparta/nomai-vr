@@ -1,209 +1,211 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CE7F4F71-F74E-4BA2-9AE1-930905B4B883}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NomaiVR</RootNamespace>
-    <AssemblyName>NomaiVR</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\Program Files\Epic Games\OuterWilds\OuterWilds_Data\Managed\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio-Unity, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\NAudio-Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="OWML, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.dll</HintPath>
-    </Reference>
-    <Reference Include="OWML.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="OWML.ModHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="OWML.ModHelper.Assets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Assets.dll</HintPath>
-    </Reference>
-    <Reference Include="OWML.ModHelper.Events, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Events.dll</HintPath>
-    </Reference>
-    <Reference Include="OWML.ModHelper.Interaction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Interaction.dll</HintPath>
-    </Reference>
-    <Reference Include="OWML.ModHelper.Menus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Menus.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.SpatialTracking, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\AssetLoader.cs" />
-    <Compile Include="EffectFixes\FogFix.cs" />
-    <Compile Include="EffectFixes\LoopTransitionFix.cs" />
-    <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
-    <Compile Include="EffectFixes\CameraMaskFix.cs" />
-    <Compile Include="EffectFixes\WaterFix.cs" />
-    <Compile Include="Helpers\InputHelper.cs" />
-    <Compile Include="Helpers\LayerHelper.cs" />
-    <Compile Include="Helpers\MaterialHelper.cs" />
-    <Compile Include="Helpers\PlayerHelper.cs" />
-    <Compile Include="Helpers\SceneHelper.cs" />
-    <Compile Include="Helpers\TextHelper.cs" />
-    <Compile Include="Helpers\TimerHelper.cs" />
-    <Compile Include="Helpers\ToolHelper.cs" />
-    <Compile Include="Input\VRActionInput.cs" />
-    <Compile Include="ModConfig\ModConfig.cs" />
-    <Compile Include="Saves\ModSaveFile.cs" />
-    <Compile Include="Hands\Hand.cs" />
-    <Compile Include="NomaiVRModule.cs" />
-    <Compile Include="NomaiVRPatch.cs" />
-    <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
-    <Compile Include="ReusableBehaviours\DebugTransform.cs" />
-    <Compile Include="ReusableBehaviours\Holdable.cs" />
-    <Compile Include="ReusableBehaviours\PersistObject.cs" />
-    <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
-    <Compile Include="UI\Dialogue.cs" />
-    <Compile Include="Player\FeetMarker.cs" />
-    <Compile Include="ReusableBehaviours\FollowTarget.cs" />
-    <Compile Include="ForceSettings.cs" />
-    <Compile Include="UI\GesturePrompts.cs" />
-    <Compile Include="UI\InputPrompts.cs" />
-    <Compile Include="ReusableBehaviours\ButtonInteraction.cs" />
-    <Compile Include="Tools\FlashlightGesture.cs" />
-    <Compile Include="Tools\HoldItem.cs" />
-    <Compile Include="UI\HelmetHUD.cs" />
-    <Compile Include="Tools\HoldMallowStick.cs" />
-    <Compile Include="Tools\HoldProbeLauncher.cs" />
-    <Compile Include="UI\HoldPrompts.cs" />
-    <Compile Include="Tools\HoldSignalscope.cs" />
-    <Compile Include="Tools\HoldTranslator.cs" />
-    <Compile Include="Hands\LaserPointer.cs" />
-    <Compile Include="Tools\ShipTools.cs" />
-    <Compile Include="Tools\ToolModeInteraction.cs" />
-    <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
-    <Compile Include="UI\LookArrow.cs" />
-    <Compile Include="UI\Menus.cs" />
-    <Compile Include="Hands\HandsController.cs" />
-    <Compile Include="Player\PlayerBodyPosition.cs" />
-    <Compile Include="Input\ControllerInput.cs" />
-    <Compile Include="Tools\HolsterTool.cs" />
-    <Compile Include="Helpers\QuaternionHelper.cs" />
-    <Compile Include="EffectFixes\MapFix.cs" />
-    <Compile Include="NomaiVR.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EffectFixes\PostCreditsFix.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\AssetFiles\cinema-camera" />
-    <None Include="Assets\AssetFiles\cinema-camera.manifest" />
-    <None Include="Assets\AssetFiles\feetposition" />
-    <None Include="Assets\AssetFiles\feetposition.manifest" />
-    <None Include="Assets\AssetFiles\hands" />
-    <None Include="Assets\AssetFiles\hands.manifest" />
-    <None Include="Assets\AssetFiles\helmet" />
-    <None Include="Assets\AssetFiles\helmet.manifest" />
-    <None Include="Assets\AssetFiles\look-arrow" />
-    <None Include="Assets\AssetFiles\look-arrow.manifest" />
-    <None Include="Assets\AssetFiles\scope-lens" />
-    <None Include="Assets\AssetFiles\scope-lens.manifest" />
-    <None Include="Input\Bindings\actions.json" />
-    <None Include="Input\Bindings\index_knuckles.json" />
-    <None Include="Input\Bindings\oculus_touch.json" />
-    <None Include="Input\Bindings\wmr-controller.json" />
-    <None Include="Input\Bindings\vive_wands.json" />
-    <None Include="ModConfig\default-config.json" />
-    <None Include="Saves\save.json" />
-    <None Include="manifest.json" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SteamVR\SteamVR.csproj">
-      <Project>{da60553a-09e1-4c55-8826-953ecb0612a2}</Project>
-      <Name>SteamVR</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>del "$(GameDir)\Mods\$(ModDir)\config.json"
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{CE7F4F71-F74E-4BA2-9AE1-930905B4B883}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>NomaiVR</RootNamespace>
+        <AssemblyName>NomaiVR</AssemblyName>
+        <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <Deterministic>true</Deterministic>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="0Harmony">
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio-Unity, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\NAudio-Unity.dll</HintPath>
+        </Reference>
+        <Reference Include="OWML, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.dll</HintPath>
+        </Reference>
+        <Reference Include="OWML.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.Common.dll</HintPath>
+        </Reference>
+        <Reference Include="OWML.ModHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.dll</HintPath>
+        </Reference>
+        <Reference Include="OWML.ModHelper.Assets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Assets.dll</HintPath>
+        </Reference>
+        <Reference Include="OWML.ModHelper.Events, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Events.dll</HintPath>
+        </Reference>
+        <Reference Include="OWML.ModHelper.Interaction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Interaction.dll</HintPath>
+        </Reference>
+        <Reference Include="OWML.ModHelper.Menus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\OWML.0.3.55\lib\net35\OWML.ModHelper.Menus.dll</HintPath>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+        <Reference Include="UnityEngine">
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SpatialTracking, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.SpatialTracking.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Assets\AssetLoader.cs" />
+        <Compile Include="EffectFixes\FogFix.cs" />
+        <Compile Include="EffectFixes\LoopTransitionFix.cs" />
+        <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
+        <Compile Include="EffectFixes\CameraMaskFix.cs" />
+        <Compile Include="EffectFixes\WaterFix.cs" />
+        <Compile Include="Helpers\InputHelper.cs" />
+        <Compile Include="Helpers\LayerHelper.cs" />
+        <Compile Include="Helpers\MaterialHelper.cs" />
+        <Compile Include="Helpers\PlayerHelper.cs" />
+        <Compile Include="Helpers\SceneHelper.cs" />
+        <Compile Include="Helpers\TextHelper.cs" />
+        <Compile Include="Helpers\TimerHelper.cs" />
+        <Compile Include="Helpers\ToolHelper.cs" />
+        <Compile Include="Input\VRActionInput.cs" />
+        <Compile Include="ModConfig\ModConfig.cs" />
+        <Compile Include="Saves\ModSaveFile.cs" />
+        <Compile Include="Hands\Hand.cs" />
+        <Compile Include="NomaiVRModule.cs" />
+        <Compile Include="NomaiVRPatch.cs" />
+        <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
+        <Compile Include="ReusableBehaviours\DebugTransform.cs" />
+        <Compile Include="ReusableBehaviours\Holdable.cs" />
+        <Compile Include="ReusableBehaviours\PersistObject.cs" />
+        <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
+        <Compile Include="UI\Dialogue.cs" />
+        <Compile Include="Player\FeetMarker.cs" />
+        <Compile Include="ReusableBehaviours\FollowTarget.cs" />
+        <Compile Include="ForceSettings.cs" />
+        <Compile Include="UI\GesturePrompts.cs" />
+        <Compile Include="UI\InputPrompts.cs" />
+        <Compile Include="ReusableBehaviours\ButtonInteraction.cs" />
+        <Compile Include="Tools\FlashlightGesture.cs" />
+        <Compile Include="Tools\HoldItem.cs" />
+        <Compile Include="UI\HelmetHUD.cs" />
+        <Compile Include="Tools\HoldMallowStick.cs" />
+        <Compile Include="Tools\HoldProbeLauncher.cs" />
+        <Compile Include="UI\HoldPrompts.cs" />
+        <Compile Include="Tools\HoldSignalscope.cs" />
+        <Compile Include="Tools\HoldTranslator.cs" />
+        <Compile Include="Hands\LaserPointer.cs" />
+        <Compile Include="Tools\ShipTools.cs" />
+        <Compile Include="Tools\ToolModeInteraction.cs" />
+        <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
+        <Compile Include="UI\LookArrow.cs" />
+        <Compile Include="UI\Menus.cs" />
+        <Compile Include="Hands\HandsController.cs" />
+        <Compile Include="Player\PlayerBodyPosition.cs" />
+        <Compile Include="Input\ControllerInput.cs" />
+        <Compile Include="Tools\HolsterTool.cs" />
+        <Compile Include="Helpers\QuaternionHelper.cs" />
+        <Compile Include="EffectFixes\MapFix.cs" />
+        <Compile Include="NomaiVR.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="EffectFixes\PostCreditsFix.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Assets\AssetFiles\cinema-camera" />
+        <None Include="Assets\AssetFiles\cinema-camera.manifest" />
+        <None Include="Assets\AssetFiles\feetposition" />
+        <None Include="Assets\AssetFiles\feetposition.manifest" />
+        <None Include="Assets\AssetFiles\hands" />
+        <None Include="Assets\AssetFiles\hands.manifest" />
+        <None Include="Assets\AssetFiles\helmet" />
+        <None Include="Assets\AssetFiles\helmet.manifest" />
+        <None Include="Assets\AssetFiles\look-arrow" />
+        <None Include="Assets\AssetFiles\look-arrow.manifest" />
+        <None Include="Assets\AssetFiles\scope-lens" />
+        <None Include="Assets\AssetFiles\scope-lens.manifest" />
+        <None Include="Input\Bindings\actions.json" />
+        <None Include="Input\Bindings\index_knuckles.json" />
+        <None Include="Input\Bindings\oculus_touch.json" />
+        <None Include="Input\Bindings\wmr-controller.json" />
+        <None Include="Input\Bindings\vive_wands.json" />
+        <None Include="ModConfig\default-config.json" />
+        <None Include="Saves\save.json" />
+        <None Include="manifest.json" />
+        <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SteamVR\SteamVR.csproj">
+            <Project>{da60553a-09e1-4c55-8826-953ecb0612a2}</Project>
+            <Name>SteamVR</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <PropertyGroup>
+        <PostBuildEvent>
+            del "$(GameDir)\Mods\$(ModDir)\config.json"
 
-md "$(OwmlDir)\Mods\$(ModDir)"
-md "$(OwmlDir)\Mods\$(ModDir)\bindings"
-md "$(OwmlDir)\Mods\$(ModDir)\assets"
+            md "$(OwmlDir)\Mods\$(ModDir)"
+            md "$(OwmlDir)\Mods\$(ModDir)\bindings"
+            md "$(OwmlDir)\Mods\$(ModDir)\assets"
 
-copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(ModDir)"
+            copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(ModDir)"
 
-copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\Mods\$(ModDir)\bindings"
+            copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\Mods\$(ModDir)\bindings"
 
-copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(ModDir)\assets"
+            copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(ModDir)\assets"
 
-copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\Mods\$(ModDir)"
-copy /y "$(ProjectDir)\Saves\save.json" "$(OwmlDir)\Mods\$(ModDir)"
-copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\Mods\$(ModDir)"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
+            copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\Mods\$(ModDir)"
+            copy /y "$(ProjectDir)\Saves\save.json" "$(OwmlDir)\Mods\$(ModDir)"
+            copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\Mods\$(ModDir)"
+        </PostBuildEvent>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PreBuildEvent>
+        </PreBuildEvent>
+    </PropertyGroup>
 </Project>
