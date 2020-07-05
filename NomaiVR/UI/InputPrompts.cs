@@ -85,6 +85,7 @@ namespace NomaiVR
                     {
                         return;
                     }
+                    List<string> actionTexts = new List<string>();
                     for (var i = 0; i < ____commandList.Count; i++)
                     {
                         var command = ____commandList[i];
@@ -98,12 +99,12 @@ namespace NomaiVR
                                 var button = gamepadBinding.gamepadButtonPos;
                                 if (ControllerInput.buttonActions.ContainsKey(button))
                                 {
-                                    text = $"{ControllerInput.buttonActions[button].GetText()} {text}";
+                                    actionTexts.Add(ControllerInput.buttonActions[button].GetText());
                                 }
                                 var axis = gamepadBinding.axisID;
                                 if (ControllerInput.axisActions.ContainsKey(axis))
                                 {
-                                    text = $"{ControllerInput.axisActions[axis].GetText()} {text}";
+                                    actionTexts.Add(ControllerInput.axisActions[axis].GetText());
                                 }
                             }
                         }
@@ -113,10 +114,13 @@ namespace NomaiVR
                             var axis = doubleAxisCommand.GetGamepadAxis();
                             if (ControllerInput.axisActions.ContainsKey(axis))
                             {
-                                text = $"{ControllerInput.axisActions[axis].GetText()} {text}";
+                                actionTexts.Add(ControllerInput.axisActions[axis].GetText());
                             }
                         }
                     }
+
+                    var actionText = string.Join(" + ", actionTexts.ToArray());
+                    text = $"{actionText} {text}";
                 }
 
                 private static void PrePromptSetText(ref string text, List<InputCommand> ____commandList)
