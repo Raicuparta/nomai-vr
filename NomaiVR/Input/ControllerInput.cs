@@ -20,7 +20,7 @@ namespace NomaiVR
 
         public class VRActionInput
         {
-            public readonly string Hand;
+            public string Hand;
             public readonly string Source;
             public readonly string Color;
             public readonly List<string> Prefixes = new List<string>();
@@ -76,12 +76,29 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
-            private bool HasAxisWithSameName(VRActionInput buttonActionInput)
+            private bool HasAxisWithSameName(VRActionInput button)
             {
                 foreach (KeyValuePair<AxisIdentifier, VRActionInput> axisEntry in axisActions)
                 {
                     var axis = axisEntry.Value;
-                    if (buttonActionInput.Hand == axis.Hand && buttonActionInput.Source == axis.Source)
+                    if (button.Hand == axis.Hand && button.Source == axis.Source)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            private bool HasOppositeHandButtonWithSameName(VRActionInput button)
+            {
+                foreach (KeyValuePair<JoystickButton, VRActionInput> buttonEntry in buttonActions)
+                {
+                    var otherButton = buttonEntry.Value;
+                    if (otherButton == button)
+                    {
+                        continue;
+                    }
+                    if (otherButton.Hand != button.Hand && otherButton.Source == button.Source)
                     {
                         return true;
                     }
@@ -122,6 +139,11 @@ namespace NomaiVR
                     if (HasAxisWithSameName(button))
                     {
                         button.Prefixes.Add("Click");
+                    }
+                    // TODO needs to check for buttons that we havent mapped too.
+                    if (!HasOppositeHandButtonWithSameName(button))
+                    {
+                        button.Hand = "";
                     }
                 }
             }
