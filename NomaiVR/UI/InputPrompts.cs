@@ -1,10 +1,6 @@
-﻿using Harmony;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Valve.VR;
-using System.Linq;
 
 namespace NomaiVR
 {
@@ -71,6 +67,7 @@ namespace NomaiVR
                     NomaiVR.Empty<ScreenPromptElement>("BuildInCommandImage");
                 }
 
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
                 private static List<string> PostBuildTwoCommandPromptElement(List<string> _result, string promptText)
                 {
                     var newText = promptText.Replace("<CMD1>", "").Replace("<CMD2>", "");
@@ -83,7 +80,7 @@ namespace NomaiVR
                     {
                         return;
                     }
-                    List<string> actionTexts = new List<string>();
+                    var actionTexts = new List<string>();
                     for (var i = 0; i < ____commandList.Count; i++)
                     {
                         var command = ____commandList[i];

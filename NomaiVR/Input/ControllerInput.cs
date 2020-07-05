@@ -1,9 +1,7 @@
 ﻿using OWML.ModHelper.Events;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using Valve.VR;
-using System.Linq;
 
 namespace NomaiVR
 {
@@ -75,7 +73,7 @@ namespace NomaiVR
 
             private bool HasAxisWithSameName(VRActionInput button)
             {
-                foreach (KeyValuePair<AxisIdentifier, VRActionInput> axisEntry in axisActions)
+                foreach (var axisEntry in axisActions)
                 {
                     var axis = axisEntry.Value;
                     if (button.Hand == axis.Hand && button.Source == axis.Source)
@@ -101,14 +99,14 @@ namespace NomaiVR
 
             private bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
             {
-                foreach (KeyValuePair<JoystickButton, VRActionInput> buttonEntry in buttonActions)
+                foreach (var buttonEntry in buttonActions)
                 {
                     if (IsOppositeHandWithSameName(actionInput, buttonEntry.Value))
                     {
                         return true;
                     }
                 }
-                foreach (KeyValuePair<AxisIdentifier, VRActionInput> axisEntry in axisActions)
+                foreach (var axisEntry in axisActions)
                 {
                     if (IsOppositeHandWithSameName(actionInput, axisEntry.Value))
                     {
@@ -157,7 +155,7 @@ namespace NomaiVR
                     new VRActionInput(actionSet.Grip)
                 };
 
-                foreach (KeyValuePair<JoystickButton, VRActionInput> buttonEntry in buttonActions)
+                foreach (var buttonEntry in buttonActions)
                 {
                     var button = buttonEntry.Value;
                     if (HasAxisWithSameName(button))
