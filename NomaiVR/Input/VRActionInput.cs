@@ -26,8 +26,10 @@ namespace NomaiVR
 
         public string GetText()
         {
-            var prefix = TextHelper.TextWithColor(string.Join(" ", Prefixes.ToArray()), TextHelper.ORANGE);
-            return $"{prefix} {TextHelper.TextWithColor($"{Hand} {Source}", Color)}";
+            var prefix = Prefixes.Count > 0 ? $"{TextHelper.TextWithColor(string.Join(" ", Prefixes.ToArray()), TextHelper.ORANGE)} " : "";
+            var hand = string.IsNullOrEmpty(Hand) ? "" : $"{Hand} ";
+            var result = $"{prefix}{TextHelper.TextWithColor($"{hand}{Source}", Color)}";
+            return string.IsNullOrEmpty(result) ? "" : $"[{result}]";
         }
 
         public bool IsOppositeHandWithSameName(VRActionInput other)

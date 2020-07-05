@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,12 +59,27 @@ namespace NomaiVR
                     NomaiVR.Pre<ScreenPrompt>("SetText", typeof(Patch), nameof(PrePromptSetText));
                     NomaiVR.Post<ScreenPromptElement>("BuildTwoCommandScreenPrompt", typeof(Patch), nameof(PostBuildTwoCommandPromptElement));
 
+                    // Replace Icons with empty version
+                    var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
+                    NomaiVR.Helper.HarmonyHelper.AddPostfix(getButtonTextureMethod, typeof(Patch), nameof(ReturnEmptyTexture));
+                    var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
+                    foreach (var method in getAxisTextureMethods)
+                    {
+                        NomaiVR.Helper.HarmonyHelper.AddPostfix(method, typeof(Patch), nameof(ReturnEmptyTexture));
+                    }
+
                     // Prevent probe launcher from moving the prompts around.
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshot");
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshotRemoved");
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherEquipped");
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
                     NomaiVR.Empty<ScreenPromptElement>("BuildInCommandImage");
+                }
+
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
+                private static Texture2D ReturnEmptyTexture(Texture2D _result)
+                {
+                    return AssetLoader.EmptyTexture;
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]

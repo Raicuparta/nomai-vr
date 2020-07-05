@@ -56,7 +56,7 @@ namespace NomaiVR
 
                 private static void PreSetButtonPromptImage(Image ____buttonPromptImage)
                 {
-                    var texture = AssetLoader.InteractIcon;
+                    var texture = AssetLoader.EmptyTexture;
                     ____buttonPromptImage.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), texture.width);
                 }
 

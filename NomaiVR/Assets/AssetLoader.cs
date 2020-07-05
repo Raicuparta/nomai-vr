@@ -13,9 +13,14 @@ namespace NomaiVR
         public static GameObject HelmetPrefab;
         public static GameObject LookArrowPrefab;
         public static Sprite SplashSprite;
+        public static Texture2D EmptyTexture;
 
         public AssetLoader()
         {
+            EmptyTexture = new Texture2D(1, 1);
+            EmptyTexture.SetPixel(0, 0, Color.clear);
+            EmptyTexture.Apply();
+
             var postCreditsBundle = LoadBundle("cinema-camera");
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
             PostCreditsRenderTexture = LoadAsset<RenderTexture>(postCreditsBundle, "screen.renderTexture");
