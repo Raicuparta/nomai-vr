@@ -14,10 +14,6 @@ namespace NomaiVR
         public static GameObject HelmetPrefab;
         public static GameObject LookArrowPrefab;
         public static Sprite SplashSprite;
-        public static Texture2D HoldIcon;
-        public static Texture2D InteractIcon;
-        public static Texture2D JumpIcon;
-        public static Texture2D BackIcon;
 
         public AssetLoader()
         {
@@ -37,14 +33,6 @@ namespace NomaiVR
 
             var helmetBundle = LoadBundle("helmet");
             HelmetPrefab = LoadAsset<GameObject>(helmetBundle, "helmet.prefab");
-
-            var inputIconsBundle = LoadBundle("input-icons");
-            HoldIcon = LoadAsset<Texture2D>(inputIconsBundle, "hold.png");
-            InteractIcon = LoadAsset<Texture2D>(inputIconsBundle, "interact.png");
-            JumpIcon = LoadAsset<Texture2D>(inputIconsBundle, "jump.png");
-            BackIcon = new Texture2D(1, 1);
-            BackIcon.SetPixel(0, 0, Color.black);
-            BackIcon.Apply();
 
             var lookArrowBundle = LoadBundle("look-arrow");
             LookArrowPrefab = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");

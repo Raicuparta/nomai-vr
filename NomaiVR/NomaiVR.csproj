@@ -163,8 +163,6 @@
     <None Include="Assets\AssetFiles\hands.manifest" />
     <None Include="Assets\AssetFiles\helmet" />
     <None Include="Assets\AssetFiles\helmet.manifest" />
-    <None Include="Assets\AssetFiles\input-icons" />
-    <None Include="Assets\AssetFiles\input-icons.manifest" />
     <None Include="Assets\AssetFiles\look-arrow" />
     <None Include="Assets\AssetFiles\look-arrow.manifest" />
     <None Include="Assets\AssetFiles\scope-lens" />
