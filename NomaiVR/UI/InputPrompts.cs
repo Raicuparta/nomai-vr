@@ -61,22 +61,20 @@ namespace NomaiVR
 
                     NomaiVR.Pre<ScreenPrompt>("Init", typeof(Patch), nameof(PrePromptInit));
                     NomaiVR.Pre<ScreenPrompt>("SetText", typeof(Patch), nameof(PrePromptSetText));
+                    NomaiVR.Post<ScreenPromptElement>("BuildTwoCommandScreenPrompt", typeof(Patch), nameof(PostBuildTwoCommandPromptElement));
 
                     // Prevent probe launcher from moving the prompts around.
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshot");
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshotRemoved");
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherEquipped");
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
+                    NomaiVR.Empty<ScreenPromptElement>("BuildInCommandImage");
+                }
 
-                    // Load new icons.
-                    var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    NomaiVR.Helper.HarmonyHelper.AddPostfix(getButtonTextureMethod, typeof(Patch), nameof(ReturnEmptyTexture));
-
-                    var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
-                    foreach (var method in getAxisTextureMethods)
-                    {
-                        NomaiVR.Helper.HarmonyHelper.AddPostfix(method, typeof(Patch), nameof(ReturnEmptyTexture));
-                    }
+                private static List<string> PostBuildTwoCommandPromptElement(List<string> _result, string promptText)
+                {
+                    var newText = promptText.Replace("<CMD1>", "").Replace("<CMD2>", "");
+                    return new List<string> { newText };
                 }
 
                 private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
@@ -119,8 +117,10 @@ namespace NomaiVR
                         }
                     }
 
+                    actionTexts.Reverse();
+                    var cleanOriginalText = text.Replace("+", "");
                     var actionText = string.Join(" + ", actionTexts.ToArray());
-                    text = $"{actionText} {text}";
+                    text = $"{actionText} {cleanOriginalText}";
                 }
 
                 private static void PrePromptSetText(ref string text, List<InputCommand> ____commandList)
@@ -139,11 +139,6 @@ namespace NomaiVR
                     {
                         MaterialHelper.MakeGraphicChildrenDrawOnTop(Locator.GetPromptManager().gameObject);
                     }
-                }
-
-                private static Texture2D ReturnEmptyTexture(Texture2D _result)
-                {
-                    return AssetLoader.BackIcon;
                 }
 
                 private static bool InitLockOnReticule(
