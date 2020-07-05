@@ -140,11 +140,6 @@ namespace NomaiVR
                     {
                         button.Prefixes.Add("Click");
                     }
-                    // TODO needs to check for buttons that we havent mapped too.
-                    if (!HasOppositeHandButtonWithSameName(button))
-                    {
-                        button.Hand = "";
-                    }
                 }
             }
 
