@@ -56,38 +56,25 @@ namespace NomaiVR
                 return false;
             }
 
-            private bool IsOppositeHandWithSameName(VRActionInput actionInputA, VRActionInput actionInputB)
-            {
-                if (actionInputA == actionInputB)
-                {
-                    return false;
-                }
-                if (actionInputA.Hand != actionInputB.Hand && actionInputA.Source == actionInputB.Source)
-                {
-                    return true;
-                }
-                return false;
-            }
-
             private bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
             {
                 foreach (var buttonEntry in buttonActions)
                 {
-                    if (IsOppositeHandWithSameName(actionInput, buttonEntry.Value))
+                    if (actionInput.IsOppositeHandWithSameName(buttonEntry.Value))
                     {
                         return true;
                     }
                 }
                 foreach (var axisEntry in axisActions)
                 {
-                    if (IsOppositeHandWithSameName(actionInput, axisEntry.Value))
+                    if (actionInput.IsOppositeHandWithSameName(axisEntry.Value))
                     {
                         return true;
                     }
                 }
                 foreach (var otherAction in otherActions)
                 {
-                    if (IsOppositeHandWithSameName(actionInput, otherAction))
+                    if (actionInput.IsOppositeHandWithSameName(otherAction))
                     {
                         return true;
                     }
