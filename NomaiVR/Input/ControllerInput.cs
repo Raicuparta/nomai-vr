@@ -85,16 +85,31 @@ namespace NomaiVR
                 return false;
             }
 
-            private bool HasOppositeHandButtonWithSameName(VRActionInput button)
+            private bool IsOppositeHandWithSameName(VRActionInput actionInputA, VRActionInput actionInputB)
+            {
+                if (actionInputA == actionInputB)
+                {
+                    return false;
+                }
+                if (actionInputA.Hand != actionInputB.Hand && actionInputA.Source == actionInputB.Source)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            private bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
             {
                 foreach (KeyValuePair<JoystickButton, VRActionInput> buttonEntry in buttonActions)
                 {
-                    var otherButton = buttonEntry.Value;
-                    if (otherButton == button)
+                    if (IsOppositeHandWithSameName(actionInput, buttonEntry.Value))
                     {
-                        continue;
+                        return true;
                     }
-                    if (otherButton.Hand != button.Hand && otherButton.Source == button.Source)
+                }
+                foreach (KeyValuePair<AxisIdentifier, VRActionInput> axisEntry in axisActions)
+                {
+                    if (IsOppositeHandWithSameName(actionInput, axisEntry.Value))
                     {
                         return true;
                     }
@@ -135,6 +150,11 @@ namespace NomaiVR
                     if (HasAxisWithSameName(button))
                     {
                         button.Prefixes.Add("Click");
+                    }
+
+                    if (!HasOppositeHandButtonWithSameName(button))
+                    {
+                        button.Hand = "";
                     }
                 }
             }
