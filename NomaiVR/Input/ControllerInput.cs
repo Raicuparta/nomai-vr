@@ -13,6 +13,7 @@ namespace NomaiVR
         protected override OWScene[] Scenes => TitleScene;
         public static Dictionary<JoystickButton, VRActionInput> buttonActions;
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
+        public static VRActionInput[] otherActions;
 
         public class VRActionInput
         {
@@ -114,6 +115,13 @@ namespace NomaiVR
                         return true;
                     }
                 }
+                foreach (var otherAction in otherActions)
+                {
+                    if (IsOppositeHandWithSameName(actionInput, otherAction))
+                    {
+                        return true;
+                    }
+                }
                 return false;
             }
 
@@ -142,6 +150,11 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(actionSet.Look),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(actionSet.Look),
                     [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look)
+                };
+
+                otherActions = new VRActionInput[]
+                {
+                    new VRActionInput(actionSet.Grip)
                 };
 
                 foreach (KeyValuePair<JoystickButton, VRActionInput> buttonEntry in buttonActions)
