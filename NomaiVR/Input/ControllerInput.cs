@@ -37,8 +37,8 @@ namespace NomaiVR
 
             public string GetText()
             {
-                var prefix = string.Join(" ", Prefixes.ToArray());
-                return TextHelper.TextWithColor($"{prefix} {Hand} {Source}", Color);
+                var prefix = TextHelper.TextWithColor(string.Join(" ", Prefixes.ToArray()), TextHelper.ORANGE);
+                return $"{prefix} {TextHelper.TextWithColor($"{Hand} {Source}", Color)}";
             }
         }
 
