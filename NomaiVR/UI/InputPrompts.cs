@@ -15,7 +15,6 @@ namespace NomaiVR
 
             private static PromptManager Manager => Locator.GetPromptManager();
 
-
             internal void LateUpdate()
             {
                 var isInShip = ToolHelper.Swapper.GetToolGroup() == ToolGroup.Ship;
