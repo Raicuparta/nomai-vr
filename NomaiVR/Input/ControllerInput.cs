@@ -13,34 +13,6 @@ namespace NomaiVR
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
         public static VRActionInput[] otherActions;
 
-        public class VRActionInput
-        {
-            public string Hand;
-            public readonly string Source;
-            public readonly string Color;
-            public readonly List<string> Prefixes = new List<string>();
-
-            public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false)
-            {
-                Hand = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
-                Source = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
-                Color = color;
-
-                if (isLongPress)
-                {
-                    Prefixes.Add("Long Press");
-                }
-            }
-
-            public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
-
-            public string GetText()
-            {
-                var prefix = TextHelper.TextWithColor(string.Join(" ", Prefixes.ToArray()), TextHelper.ORANGE);
-                return $"{prefix} {TextHelper.TextWithColor($"{Hand} {Source}", Color)}";
-            }
-        }
-
         public class Behaviour : MonoBehaviour
         {
             private static Behaviour _instance;
@@ -67,7 +39,7 @@ namespace NomaiVR
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
-                Invoke(nameof(DoTheThings), 1);
+                Invoke(nameof(SetUpActionInputs), 1);
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
@@ -123,7 +95,7 @@ namespace NomaiVR
                 return false;
             }
 
-            public void DoTheThings()
+            public void SetUpActionInputs()
             {
                 var actionSet = SteamVR_Actions._default;
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
