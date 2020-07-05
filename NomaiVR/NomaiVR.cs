@@ -46,7 +46,6 @@ namespace NomaiVR
             new HelmetHUD();
             new InputPrompts();
             new GesturePrompts();
-            //new VRTutorial();
             new PostCreditsFix();
             new LookArrow();
             new Menus();

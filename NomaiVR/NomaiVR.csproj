@@ -150,7 +150,6 @@
     <Compile Include="Tools\HolsterTool.cs" />
     <Compile Include="Helpers\QuaternionHelper.cs" />
     <Compile Include="EffectFixes\MapFix.cs" />
-    <Compile Include="Input\VRTutorial.cs" />
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EffectFixes\PostCreditsFix.cs" />
