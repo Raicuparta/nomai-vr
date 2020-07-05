@@ -81,6 +81,10 @@ namespace NomaiVR
 
                 private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
                 {
+                    if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
+                    {
+                        return;
+                    }
                     for (var i = 0; i < ____commandList.Count; i++)
                     {
                         var command = ____commandList[i];
