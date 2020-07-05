@@ -13,10 +13,6 @@ namespace NomaiVR
         protected override OWScene[] Scenes => TitleScene;
         public static Dictionary<JoystickButton, VRActionInput> buttonActions;
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
-        private static readonly EVRInputStringBits[] VRInputStringBits = {
-            EVRInputStringBits.VRInputString_Hand,
-            EVRInputStringBits.VRInputString_InputSource
-        };
 
         public class VRActionInput
         {
