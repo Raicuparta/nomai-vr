@@ -13,13 +13,14 @@ namespace NomaiVR
         public static GameObject HelmetPrefab;
         public static GameObject LookArrowPrefab;
         public static Sprite SplashSprite;
-        public static Texture2D HoldIcon;
-        public static Texture2D InteractIcon;
-        public static Texture2D JumpIcon;
-        public static Texture2D BackIcon;
+        public static Texture2D EmptyTexture;
 
         public AssetLoader()
         {
+            EmptyTexture = new Texture2D(1, 1);
+            EmptyTexture.SetPixel(0, 0, Color.clear);
+            EmptyTexture.Apply();
+
             var postCreditsBundle = LoadBundle("cinema-camera");
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
             PostCreditsRenderTexture = LoadAsset<RenderTexture>(postCreditsBundle, "screen.renderTexture");
@@ -36,12 +37,6 @@ namespace NomaiVR
 
             var helmetBundle = LoadBundle("helmet");
             HelmetPrefab = LoadAsset<GameObject>(helmetBundle, "helmet.prefab");
-
-            var inputIconsBundle = LoadBundle("input-icons");
-            HoldIcon = LoadAsset<Texture2D>(inputIconsBundle, "hold.png");
-            InteractIcon = LoadAsset<Texture2D>(inputIconsBundle, "interact.png");
-            JumpIcon = LoadAsset<Texture2D>(inputIconsBundle, "jump.png");
-            BackIcon = LoadAsset<Texture2D>(inputIconsBundle, "back.png");
 
             var lookArrowBundle = LoadBundle("look-arrow");
             LookArrowPrefab = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");

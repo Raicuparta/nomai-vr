@@ -9,6 +9,9 @@ namespace NomaiVR
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
+        public static Dictionary<JoystickButton, VRActionInput> buttonActions;
+        public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
+        public static VRActionInput[] otherActions;
 
         public class Behaviour : MonoBehaviour
         {
@@ -36,7 +39,94 @@ namespace NomaiVR
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
+                Invoke(nameof(SetUpActionInputs), 1);
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+            }
+
+            private bool HasAxisWithSameName(VRActionInput button)
+            {
+                foreach (var axisEntry in axisActions)
+                {
+                    var axis = axisEntry.Value;
+                    if (button.Hand == axis.Hand && button.Source == axis.Source)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            private bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
+            {
+                foreach (var buttonEntry in buttonActions)
+                {
+                    if (actionInput.IsOppositeHandWithSameName(buttonEntry.Value))
+                    {
+                        return true;
+                    }
+                }
+                foreach (var axisEntry in axisActions)
+                {
+                    if (actionInput.IsOppositeHandWithSameName(axisEntry.Value))
+                    {
+                        return true;
+                    }
+                }
+                foreach (var otherAction in otherActions)
+                {
+                    if (actionInput.IsOppositeHandWithSameName(otherAction))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public void SetUpActionInputs()
+            {
+                var actionSet = SteamVR_Actions._default;
+                buttonActions = new Dictionary<JoystickButton, VRActionInput>
+                {
+                    [JoystickButton.FaceDown] = new VRActionInput(actionSet.Jump, TextHelper.GREEN),
+                    [JoystickButton.FaceRight] = new VRActionInput(actionSet.Back, TextHelper.RED),
+                    [JoystickButton.FaceLeft] = new VRActionInput(actionSet.Interact, TextHelper.BLUE),
+                    [JoystickButton.RightBumper] = new VRActionInput(actionSet.Interact, TextHelper.BLUE),
+                    [JoystickButton.FaceUp] = new VRActionInput(actionSet.Interact, TextHelper.BLUE, true),
+                    [JoystickButton.LeftBumper] = new VRActionInput(actionSet.RollMode),
+                    [JoystickButton.Start] = new VRActionInput(actionSet.Menu),
+                    [JoystickButton.Select] = new VRActionInput(actionSet.Map)
+                };
+
+                axisActions = new Dictionary<AxisIdentifier, VRActionInput>
+                {
+                    [AxisIdentifier.CTRLR_LTRIGGER] = new VRActionInput(actionSet.ThrustDown),
+                    [AxisIdentifier.CTRLR_RTRIGGER] = new VRActionInput(actionSet.ThrustUp),
+                    [AxisIdentifier.CTRLR_LSTICK] = new VRActionInput(actionSet.Move),
+                    [AxisIdentifier.CTRLR_LSTICKX] = new VRActionInput(actionSet.Move),
+                    [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(actionSet.Move),
+                    [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(actionSet.Look),
+                    [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(actionSet.Look),
+                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look)
+                };
+
+                otherActions = new VRActionInput[]
+                {
+                    new VRActionInput(actionSet.Grip)
+                };
+
+                foreach (var buttonEntry in buttonActions)
+                {
+                    var button = buttonEntry.Value;
+                    if (HasAxisWithSameName(button))
+                    {
+                        button.Prefixes.Add("Click");
+                    }
+
+                    if (!HasOppositeHandButtonWithSameName(button))
+                    {
+                        button.Hand = "";
+                    }
+                }
             }
 
             private void SetUpSteamVRActionHandlers()

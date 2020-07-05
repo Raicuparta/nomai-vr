@@ -1,5 +1,5 @@
-﻿using Harmony;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,17 +55,94 @@ namespace NomaiVR
 
                     NomaiVR.Pre<LockOnReticule>("Init", typeof(Patch), nameof(InitLockOnReticule));
 
+                    NomaiVR.Pre<ScreenPrompt>("Init", typeof(Patch), nameof(PrePromptInit));
+                    NomaiVR.Pre<ScreenPrompt>("SetText", typeof(Patch), nameof(PrePromptSetText));
+                    NomaiVR.Post<ScreenPromptElement>("BuildTwoCommandScreenPrompt", typeof(Patch), nameof(PostBuildTwoCommandPromptElement));
+
+                    // Replace Icons with empty version
+                    var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
+                    NomaiVR.Helper.HarmonyHelper.AddPostfix(getButtonTextureMethod, typeof(Patch), nameof(ReturnEmptyTexture));
+                    var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
+                    foreach (var method in getAxisTextureMethods)
+                    {
+                        NomaiVR.Helper.HarmonyHelper.AddPostfix(method, typeof(Patch), nameof(ReturnEmptyTexture));
+                    }
+
                     // Prevent probe launcher from moving the prompts around.
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshot");
                     NomaiVR.Empty<PromptManager>("OnProbeSnapshotRemoved");
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherEquipped");
                     NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
+                    NomaiVR.Empty<ScreenPromptElement>("BuildInCommandImage");
+                }
 
-                    // Load new icons.
-                    var harmony = HarmonyInstance.Create("nomaivr");
-                    var initMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    var harmonyMethod = new HarmonyMethod(typeof(Patch), nameof(PostInitTranslator));
-                    harmony.Patch(initMethod, null, harmonyMethod);
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
+                private static Texture2D ReturnEmptyTexture(Texture2D _result)
+                {
+                    return AssetLoader.EmptyTexture;
+                }
+
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
+                private static List<string> PostBuildTwoCommandPromptElement(List<string> _result, string promptText)
+                {
+                    var newText = promptText.Replace("<CMD1>", "").Replace("<CMD2>", "");
+                    return new List<string> { newText };
+                }
+
+                private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
+                {
+                    if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
+                    {
+                        return;
+                    }
+                    var actionTexts = new List<string>();
+                    for (var i = 0; i < ____commandList.Count; i++)
+                    {
+                        var command = ____commandList[i];
+
+                        if (command.GetType() == typeof(SingleAxisCommand))
+                        {
+                            var singleAxisCommand = (SingleAxisCommand)command;
+                            var gamepadBinding = singleAxisCommand.GetGamepadBinding();
+                            if (gamepadBinding != null)
+                            {
+                                var button = gamepadBinding.gamepadButtonPos;
+                                if (ControllerInput.buttonActions.ContainsKey(button))
+                                {
+                                    actionTexts.Add(ControllerInput.buttonActions[button].GetText());
+                                }
+                                var axis = gamepadBinding.axisID;
+                                if (ControllerInput.axisActions.ContainsKey(axis))
+                                {
+                                    actionTexts.Add(ControllerInput.axisActions[axis].GetText());
+                                }
+                            }
+                        }
+                        else if (command.GetType() == typeof(DoubleAxisCommand))
+                        {
+                            var doubleAxisCommand = (DoubleAxisCommand)command;
+                            var axis = doubleAxisCommand.GetGamepadAxis();
+                            if (ControllerInput.axisActions.ContainsKey(axis))
+                            {
+                                actionTexts.Add(ControllerInput.axisActions[axis].GetText());
+                            }
+                        }
+                    }
+
+                    actionTexts.Reverse();
+                    var cleanOriginalText = text.Replace("+", "");
+                    var actionText = string.Join(" + ", actionTexts.ToArray());
+                    text = $"{actionText} {cleanOriginalText}";
+                }
+
+                private static void PrePromptSetText(ref string text, List<InputCommand> ____commandList)
+                {
+                    AddVRMappingToPrompt(ref text, ____commandList);
+                }
+
+                private static void PrePromptInit(ref string prompt, List<InputCommand> ____commandList)
+                {
+                    AddVRMappingToPrompt(ref prompt, ____commandList);
                 }
 
                 private static void PostScreenPromptVisibility(bool isVisible)
@@ -74,27 +151,6 @@ namespace NomaiVR
                     {
                         MaterialHelper.MakeGraphicChildrenDrawOnTop(Locator.GetPromptManager().gameObject);
                     }
-                }
-
-                private static Texture2D PostInitTranslator(Texture2D __result, JoystickButton button)
-                {
-                    if (button == JoystickButton.FaceLeft)
-                    {
-                        return AssetLoader.InteractIcon;
-                    }
-                    if (button == JoystickButton.FaceUp)
-                    {
-                        return AssetLoader.HoldIcon;
-                    }
-                    if (button == JoystickButton.FaceRight)
-                    {
-                        return AssetLoader.BackIcon;
-                    }
-                    if (button == JoystickButton.FaceDown)
-                    {
-                        return AssetLoader.JumpIcon;
-                    }
-                    return __result;
                 }
 
                 private static bool InitLockOnReticule(
@@ -173,7 +229,6 @@ namespace NomaiVR
                     Manager.RemoveScreenPrompt(____probePrompt);
                     Manager.RemoveScreenPrompt(____signalscopePrompt);
                     Manager.RemoveScreenPrompt(____flashlightPrompt);
-                    Manager.RemoveScreenPrompt(____flashlightPrompt);
                     Manager.RemoveScreenPrompt(____centerFlashlightPrompt);
                     Manager.RemoveScreenPrompt(____centerTranslatePrompt);
                     Manager.RemoveScreenPrompt(____centerProbePrompt);
@@ -207,7 +262,6 @@ namespace NomaiVR
                 private static void RemoveProbePrompts(
                     ScreenPrompt ____unequipPrompt,
                     ScreenPrompt ____photoModePrompt,
-                    ScreenPrompt ____reverseCamPrompt,
                     ScreenPrompt ____rotatePrompt,
                     ScreenPrompt ____rotateCenterPrompt,
                     ScreenPrompt ____launchModePrompt
@@ -215,7 +269,6 @@ namespace NomaiVR
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
                     Manager.RemoveScreenPrompt(____photoModePrompt);
-                    Manager.RemoveScreenPrompt(____reverseCamPrompt);
                     Manager.RemoveScreenPrompt(____rotatePrompt);
                     Manager.RemoveScreenPrompt(____rotateCenterPrompt);
                     Manager.RemoveScreenPrompt(____launchModePrompt);
