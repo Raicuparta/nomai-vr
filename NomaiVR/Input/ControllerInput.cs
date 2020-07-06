@@ -94,7 +94,9 @@ namespace NomaiVR
                     [JoystickButton.FaceUp] = new VRActionInput(actionSet.Interact, TextHelper.BLUE, true),
                     [JoystickButton.LeftBumper] = new VRActionInput(actionSet.RollMode),
                     [JoystickButton.Start] = new VRActionInput(actionSet.Menu),
-                    [JoystickButton.Select] = new VRActionInput(actionSet.Map)
+                    [JoystickButton.Select] = new VRActionInput(actionSet.Map),
+                    [JoystickButton.LeftTrigger] = new VRActionInput(actionSet.ThrustDown),
+                    [JoystickButton.RightTrigger] = new VRActionInput(actionSet.ThrustUp)
                 };
 
                 axisActions = new Dictionary<AxisIdentifier, VRActionInput>
@@ -140,6 +142,8 @@ namespace NomaiVR
                 SteamVR_Actions.default_Map.onChange += CreateButtonHandler(JoystickButton.Select);
                 SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_LTRIGGER);
                 SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_RTRIGGER);
+                SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(JoystickButton.LeftTrigger);
+                SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(JoystickButton.RightTrigger);
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
                 SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
             }
@@ -253,6 +257,14 @@ namespace NomaiVR
                 };
             }
 
+            private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(JoystickButton button)
+            {
+                return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
+                {
+                    _buttons[button] = newAxis;
+                };
+            }
+
             private static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(JoystickButton button)
             {
                 return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
@@ -284,9 +296,19 @@ namespace NomaiVR
                 }
             }
 
+            private static void SetGamepadBinding(SingleAxisCommand command, InputBinding binding)
+            {
+                command.SetValue("_gamepadBinding", binding);
+            }
+
             private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)
             {
-                command.SetValue("_gamepadBinding", new InputBinding(button));
+                SetGamepadBinding(command, new InputBinding(button));
+            }
+
+            private static void SetCommandButton(SingleAxisCommand command, JoystickButton buttonPositive, JoystickButton buttonNegative)
+            {
+                SetGamepadBinding(command, new InputBinding(buttonPositive, buttonNegative));
             }
 
             private static void ReplaceInputs()
@@ -299,6 +321,7 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.confirm, JoystickButton.None);
                 SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
                 SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
+                SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
             }
 
             public class Patch : NomaiVRPatch
