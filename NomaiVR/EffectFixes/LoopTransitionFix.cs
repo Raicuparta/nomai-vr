@@ -21,6 +21,15 @@ namespace NomaiVR
 
                 // Prevent flashing on energy death.
                 NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
+
+                // Fix loop picture scale.
+                NomaiVR.Post<Flashback>("Start", typeof(Patch), nameof(PostFlashbackRecorderAwake));
+            }
+
+            private static void PostFlashbackRecorderAwake(Transform ____screenTransform, ref Vector3 ____origScreenScale)
+            {
+                var scale = ____screenTransform.localScale;
+                ____origScreenScale = ____screenTransform.localScale = new Vector3(scale.x * 0.75f, scale.y * 1.5f, scale.z);
             }
 
             private static void PostUpdateMemoryLink()
