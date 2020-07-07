@@ -88,7 +88,10 @@ namespace NomaiVR
 
             private void OnEnterProbePromptTrigger()
             {
-                SetText(GestureText.Probe);
+                if (PlayerState.IsWearingSuit())
+                {
+                    SetText(GestureText.Probe);
+                }
             }
 
             private void OnExitProbePromptTrigger()
@@ -128,7 +131,7 @@ namespace NomaiVR
                 {
                     SetText(GestureText.None);
                 }
-                if (promptReceiver && !isShowingProbeText)
+                if (PlayerState.IsWearingSuit() && promptReceiver && !isShowingProbeText)
                 {
                     SetText(GestureText.Probe);
                 }
