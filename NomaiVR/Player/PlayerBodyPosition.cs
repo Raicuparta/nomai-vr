@@ -13,6 +13,7 @@ namespace NomaiVR
             private Transform _cameraParent;
             private static Transform _playArea;
             private Transform _camera;
+            private static Animator _playerAnimator;
 
             internal void Start()
             {
@@ -27,6 +28,7 @@ namespace NomaiVR
                 AdjustPlayerHeadPosition();
                 SetupCamera();
                 CreateRecenterMenuEntry();
+                _playerAnimator = FindObjectOfType<PlayerAnimController>().GetValue<Animator>("_animator");
             }
 
             private static void AdjustPlayerHeadPosition()
@@ -93,33 +95,51 @@ namespace NomaiVR
                     NomaiVR.Post<PlayerCharacterController>("UpdateTurning", typeof(Patch), nameof(Patch.PatchTurning));
                 }
 
-                private static void PatchTurning(PlayerCharacterController __instance)
+                private static void PatchTurning(OWCamera ____playerCam, Transform ____transform)
                 {
-                    if (OWInput.GetInputMode() != InputMode.Character)
+                    var runSpeedX = _playerAnimator.GetFloat("RunSpeedX");
+                    var runSpeedY = _playerAnimator.GetFloat("RunSpeedY");
+                    var isStopped = runSpeedX + runSpeedY == 0;
+                    var isControllerOriented = !isStopped && NomaiVR.Config.controllerOrientedMovement;
+
+                    if ((OWInput.GetInputMode() != InputMode.Character))
                     {
                         return;
                     }
 
-                    var playerCam = __instance.GetValue<OWCamera>("_playerCam");
-                    var transform = __instance.GetValue<Transform>("_transform");
+                    var rotationSource = isControllerOriented ? LaserPointer.Behaviour.LeftHandLaser : ____playerCam.transform;
 
-                    var fromTo = Quaternion.FromToRotation(transform.forward, Vector3.ProjectOnPlane(playerCam.transform.forward, transform.up));
+                    var fromTo = Quaternion.FromToRotation(____transform.forward, Vector3.ProjectOnPlane(rotationSource.transform.forward, ____transform.up));
 
-                    var magnitudeUp = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.up).magnitude;
-                    var magnitudeForward = 1 - Vector3.ProjectOnPlane(playerCam.transform.up, transform.right).magnitude;
-                    var magnitude = magnitudeUp + magnitudeForward;
-
-                    if (magnitude < 0.3f)
+                    var magnitude = 0f;
+                    if (!isControllerOriented)
                     {
-                        return;
+                        var magnitudeUp = 1 - Vector3.ProjectOnPlane(rotationSource.transform.up, ____transform.up).magnitude;
+                        var magnitudeForward = 1 - Vector3.ProjectOnPlane(rotationSource.transform.up, ____transform.right).magnitude;
+                        magnitude = magnitudeUp + magnitudeForward;
+
+                        if (magnitude < 0.3f)
+                        {
+                            return;
+                        }
                     }
 
-                    var targetRotation = fromTo * transform.rotation;
+                    var targetRotation = fromTo * ____transform.rotation;
                     var inverseRotation = Quaternion.Inverse(fromTo) * _playArea.rotation;
 
-                    var maxDegreesDelta = magnitude * 3f;
-                    _playArea.rotation = Quaternion.RotateTowards(_playArea.rotation, inverseRotation, maxDegreesDelta);
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxDegreesDelta);
+                    if (isControllerOriented)
+                    {
+                        _playArea.rotation = inverseRotation;
+                        ____transform.rotation = targetRotation;
+                    }
+                    else
+                    {
+                        var maxDegreesDelta = magnitude * 3f;
+                        _playArea.rotation = Quaternion.RotateTowards(_playArea.rotation, inverseRotation, maxDegreesDelta);
+                        ____transform.rotation = Quaternion.RotateTowards(____transform.rotation, targetRotation, maxDegreesDelta);
+                    }
+
+
                 }
             }
 
