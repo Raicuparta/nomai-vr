@@ -43,6 +43,24 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
+            internal void OnEnable()
+            {
+                SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Listen(OnInputFocus);
+            }
+
+            internal void OnDisable()
+            {
+                SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Remove(OnInputFocus);
+            }
+
+            private void OnInputFocus(VREvent_t arg)
+            {
+                if (!OWTime.IsPaused())
+                {
+                    SimulateInput(JoystickButton.Start);
+                }
+            }
+
             private bool HasAxisWithSameName(VRActionInput button)
             {
                 foreach (var axisEntry in axisActions)
