@@ -12,6 +12,7 @@ namespace NomaiVR
         public int overrideRefreshRate = 0;
         public float vibrationStrength = 1;
         public bool enableGesturePrompts = true;
+        public bool controllerOrientedMovement = false;
 
         public ModConfig()
         {

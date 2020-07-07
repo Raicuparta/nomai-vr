@@ -14,6 +14,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             public static Transform Laser;
+            public static Transform LeftHandLaser;
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
@@ -26,6 +27,7 @@ namespace NomaiVR
             internal void Start()
             {
                 SetUpLaserObject();
+                SetUpLeftHandLaser();
                 SetUpLineRenderer();
                 UpdateLineAppearance();
                 DisableReticule();
@@ -47,10 +49,17 @@ namespace NomaiVR
             {
                 Laser = new GameObject("Laser").transform;
                 Laser.gameObject.layer = LayerMask.NameToLayer("UI");
-                Laser.gameObject.AddComponent<FollowTarget>();
                 Laser.transform.parent = HandsController.Behaviour.RightHand;
                 Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
                 Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+            }
+
+            private static void SetUpLeftHandLaser()
+            {
+                LeftHandLaser = new GameObject("LeftHandLaser").transform;
+                LeftHandLaser.transform.parent = HandsController.Behaviour.LeftHand;
+                LeftHandLaser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
+                LeftHandLaser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
             }
 
             private void SetUpLineRenderer()

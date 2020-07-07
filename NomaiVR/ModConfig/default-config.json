@@ -8,6 +8,7 @@
     "preventCursorLock": true,
     "showHelmet": true,
     "vibrationStrength": 1,
-    "enableGesturePrompts": true
+    "enableGesturePrompts": true,
+    "controllerOrientedMovement": false
   }
 }

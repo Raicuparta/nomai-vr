@@ -69,6 +69,7 @@ namespace NomaiVR
                 showHelmet = config.GetSettingsValue<bool>("showHelmet"),
                 vibrationStrength = config.GetSettingsValue<float>("vibrationStrength"),
                 enableGesturePrompts = config.GetSettingsValue<bool>("enableGesturePrompts"),
+                controllerOrientedMovement = config.GetSettingsValue<bool>("controllerOrientedMovement"),
             };
         }
 
