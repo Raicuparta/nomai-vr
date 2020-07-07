@@ -89,13 +89,25 @@ namespace NomaiVR
                     return new List<string> { newText };
                 }
 
+                private static void AddTextIfNotExisting(string text, HashSet<string> actionTexts, VRActionInput actionInput)
+                {
+                    var actionInputText = actionInput.GetText();
+                    if (!text.Contains(actionInputText))
+                    {
+                        actionTexts.Add(actionInputText);
+                    }
+                }
+
                 private static void AddVRMappingToPrompt(ref string text, List<InputCommand> commandList)
                 {
                     if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
                     {
                         return;
                     }
+
                     var actionTexts = new HashSet<string>();
+
+
                     for (var i = 0; i < commandList.Count; i++)
                     {
                         var command = commandList[i];
@@ -109,12 +121,12 @@ namespace NomaiVR
                                 var button = gamepadBinding.gamepadButtonPos;
                                 if (ControllerInput.buttonActions.ContainsKey(button))
                                 {
-                                    actionTexts.Add(ControllerInput.buttonActions[button].GetText());
+                                    AddTextIfNotExisting(text, actionTexts, ControllerInput.buttonActions[button]);
                                 }
                                 var axis = gamepadBinding.axisID;
                                 if (ControllerInput.axisActions.ContainsKey(axis))
                                 {
-                                    actionTexts.Add(ControllerInput.axisActions[axis].GetText());
+                                    AddTextIfNotExisting(text, actionTexts, ControllerInput.axisActions[axis]);
                                 }
                             }
                         }
@@ -124,7 +136,7 @@ namespace NomaiVR
                             var axis = doubleAxisCommand.GetGamepadAxis();
                             if (ControllerInput.axisActions.ContainsKey(axis))
                             {
-                                actionTexts.Add(ControllerInput.axisActions[axis].GetText());
+                                AddTextIfNotExisting(text, actionTexts, ControllerInput.axisActions[axis]);
                             }
                         }
                     }
