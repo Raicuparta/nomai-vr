@@ -48,6 +48,7 @@ namespace NomaiVR
             new GesturePrompts();
             new PostCreditsFix();
             new LookArrow();
+            new DisableDeathAnimation();
             new Menus();
         }
 
