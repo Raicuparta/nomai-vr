@@ -40,7 +40,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/menu"
+                     "output" : "/actions/default/in/map"
                   }
                },
                "mode" : "button",
