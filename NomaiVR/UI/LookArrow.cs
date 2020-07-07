@@ -32,10 +32,21 @@ namespace NomaiVR
 
             }
 
+            private void ShowArrow()
+            {
+                _wrapper.gameObject.SetActive(true);
+            }
+
+            private void HideArrow()
+            {
+                _wrapper.gameObject.SetActive(false);
+            }
+
             internal void Update()
             {
                 if (Target == null)
                 {
+                    HideArrow();
                     return;
                 }
                 var screenPoint = Locator.GetPlayerCamera().mainCamera.WorldToViewportPoint(Target.position);
@@ -43,10 +54,10 @@ namespace NomaiVR
 
                 if (onScreen)
                 {
-                    _wrapper.gameObject.SetActive(false);
+                    HideArrow();
                     return;
                 }
-                _wrapper.gameObject.SetActive(true);
+                ShowArrow();
 
                 var camera = Locator.GetPlayerCamera().transform;
                 var targetDirection = (Target.position - camera.position).normalized;
