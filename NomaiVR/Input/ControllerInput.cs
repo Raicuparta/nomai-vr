@@ -356,11 +356,21 @@ namespace NomaiVR
                     NomaiVR.Post<PadEZ.PadManager_OW>("GetKeyUp", typeof(Patch), nameof(ResetPadManagerKeyboard));
                     NomaiVR.Post<OWInput>("IsGamepadEnabled", typeof(Patch), nameof(PostIsGamepadEnabled));
                     NomaiVR.Post<PadEZ.PadManager_OW>("IsGamepadActive", typeof(Patch), nameof(PostIsGamepadEnabled));
-
                     NomaiVR.Pre<DoubleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(PreUpdateDoubleAxisCommand));
+                    NomaiVR.Pre<SubmitActionMenu>("Submit", typeof(Patch), nameof(PreSubmitActionMenu));
 
                     var rumbleMethod = typeof(RumbleManager).GetAnyMethod("Update");
                     NomaiVR.Helper.HarmonyHelper.AddPrefix(rumbleMethod, typeof(Patch), nameof(PreUpdateRumble));
+                }
+
+                private static bool PreSubmitActionMenu(SubmitActionMenu __instance)
+                {
+                    if (__instance.gameObject.name == "UIElement-RemapControls")
+                    {
+                        SteamVR_Input.OpenBindingUI(SteamVR_Actions._default);
+                        return false;
+                    }
+                    else return true;
                 }
 
                 private static bool PreUpdateDoubleAxisCommand(
