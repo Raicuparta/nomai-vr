@@ -89,16 +89,16 @@ namespace NomaiVR
                     return new List<string> { newText };
                 }
 
-                private static void AddVRMappingToPrompt(ref string text, List<InputCommand> ____commandList)
+                private static void AddVRMappingToPrompt(ref string text, List<InputCommand> commandList)
                 {
                     if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
                     {
                         return;
                     }
-                    var actionTexts = new List<string>();
-                    for (var i = 0; i < ____commandList.Count; i++)
+                    var actionTexts = new HashSet<string>();
+                    for (var i = 0; i < commandList.Count; i++)
                     {
-                        var command = ____commandList[i];
+                        var command = commandList[i];
 
                         if (command.GetType() == typeof(SingleAxisCommand))
                         {

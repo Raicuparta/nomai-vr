@@ -126,7 +126,7 @@ namespace NomaiVR
 
                     if (!HasOppositeHandButtonWithSameName(button))
                     {
-                        button.Hand = "";
+                        button.HideHand = true;
                     }
                 }
             }
