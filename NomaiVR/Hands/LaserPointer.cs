@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -23,6 +24,7 @@ namespace NomaiVR
             private bool _isReady;
             private Transform _prevRayHit;
             private DialogueBoxVer2 _dialogueBox;
+            private PauseMenuManager _pauseMenuManager;
 
             internal void Start()
             {
@@ -37,6 +39,7 @@ namespace NomaiVR
                 {
                     SetUpFirstPersonManipulator();
                     SetUpDialogueOptions();
+                    _pauseMenuManager = FindObjectOfType<PauseMenuManager>();
                 }
 
                 if (SceneHelper.IsInTitle())
@@ -119,7 +122,7 @@ namespace NomaiVR
 
             private static bool IsSelectNewlyPressed()
             {
-                return OWInput.IsNewlyPressed(InputLibrary.menuConfirm) || OWInput.IsNewlyPressed(InputLibrary.interact);
+                return OWInput.IsNewlyPressed(InputLibrary.menuConfirm);
             }
 
             private void HandleSelectableRayHit(Selectable selectable)
@@ -173,11 +176,6 @@ namespace NomaiVR
                 }
             }
 
-            private static void HandleButtonWithHotkeyClick(Button button)
-            {
-                button.onClick.Invoke();
-            }
-
             private static void HandleSelectableClick(Selectable selectable)
             {
                 var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
@@ -198,13 +196,6 @@ namespace NomaiVR
                 if (slider != null)
                 {
                     HandleSliderClick(slider);
-                    return;
-                }
-
-                var button = selectable.GetComponent<Button>();
-                if (button != null)
-                {
-                    HandleButtonWithHotkeyClick(button);
                     return;
                 }
             }
@@ -277,6 +268,19 @@ namespace NomaiVR
 
             }
 
+            private static void DisableReticule()
+            {
+                var rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+                foreach (var rootObject in rootObjects)
+                {
+                    if (rootObject.name == "Reticule")
+                    {
+                        rootObject.SetActive(false);
+                        return;
+                    }
+                }
+            }
+
             private void UpdateLineAppearance()
             {
                 if (InputHelper.IsUIInteractionMode(true))
@@ -305,24 +309,34 @@ namespace NomaiVR
                 }
             }
 
+            private bool IsPaused()
+            {
+                return _pauseMenuManager != null && _pauseMenuManager.IsOpen();
+            }
+
+            private void UpdateAlternativeButtons()
+            {
+                var hasPressedConfirm = OWInput.IsNewlyPressed(InputLibrary.menuConfirm);
+                var hasPressedThrustUp = OWInput.IsNewlyPressed(InputLibrary.thrustUp);
+                var hasPressedInteract = OWInput.IsNewlyPressed(InputLibrary.interact);
+                var isTitleScreen = LoadManager.GetCurrentScene() == OWScene.TitleScreen;
+
+                if (PlayerState.InConversation() && (hasPressedConfirm || hasPressedThrustUp))
+                {
+                    ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceLeft);
+                }
+                if ((IsPaused() || isTitleScreen) && (hasPressedInteract || hasPressedThrustUp))
+                {
+                    ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceDown);
+                }
+            }
+
             internal void Update()
             {
                 UpdateLineVisibility();
                 UpdateLineAppearance();
                 UpdateUiRayCast();
-            }
-
-            private static void DisableReticule()
-            {
-                var rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-                foreach (var rootObject in rootObjects)
-                {
-                    if (rootObject.name == "Reticule")
-                    {
-                        rootObject.SetActive(false);
-                        return;
-                    }
-                }
+                UpdateAlternativeButtons();
             }
 
             public class Patch : NomaiVRPatch
