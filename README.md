@@ -112,9 +112,11 @@ If for some reason none of this is working, you might have to set everything man
 
 ## Special Thanks
 
-- Logan Van Hoef, for assisting us with the game's code;
-- Everyone over at the Outer Wilds Discord server for all the support;
-- Mobius Digital for making a neat game.
+- **[amazingalek](https://github.com/amazingalek)**, for making OWML and teaching me how to mod the game to begin with;
+- **[TAImatem](https://github.com/TAImatem)** and **[misternebula](https://github.com/misternebula)**, for improving the VR patch and for helpful discussions about the game's code;
+- **Logan Van Hoef**, for assisting us with the game's code;
+- Everyone over at the **Outer Wilds Discord** server for all the support;
+- **Mobius Digital** for making a neat game.
 
 ## Help / Discuss development / Tell me about your day
 
