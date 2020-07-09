@@ -6,53 +6,22 @@
 
 <!-- TOC -->
 
-- [YOU WILL HAVE A BAD TIME](#you-will-have-a-bad-time)
-- [Requirements](#requirements)
-- [VR Controller Inputs](#vr-controller-inputs)
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
   - [Manual installation](#manual-installation)
+- [Requirements](#requirements)
+- [Comfort](#comfort)
+- [VR Controller Inputs](#vr-controller-inputs)
 - [Performance](#performance)
   - [Framerate](#framerate)
 - [Compatibility with other mods](#compatibility-with-other-mods)
+- [Reporting bugs / making requests](#reporting-bugs--making-requests)
 - [Contributing](#contributing)
 - [Development Setup](#development-setup)
+- [Special Thanks](#special-thanks)
 - [Help / Discuss development / Tell me about your day](#help--discuss-development--tell-me-about-your-day)
 
 <!-- /TOC -->
-
-## YOU WILL HAVE A BAD TIME
-
-The game should be playable from start to finish in VR, but it's not gonna be super comfortable:
-
-- A good portion of the game is spent spinning around in zero-g, which can be very disorienting;
-- It's not uncommon to get motion sickness playing this game in pancake mode, let alone in VR;
-- No comfort features like teleport and snap turning were implemented;
-- The game was not optimized for VR so you might notice some stuttering;
-- It's all dirty hacks on top of even dirtier hacks.
-
-Expect nausea, low performance, flashing images, crashes, blue screens, house fires, etc. Have a look at the [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) to have an idea of some of the stuff that needs fixing.
-
-## Requirements
-
-- A VR Headset;
-- VR controllers (not playable with a regular game controller);
-- A VR-Ready PC;
-- Steam and SteamVR installed (make sure SteamVR isn't running prior to running the game);
-- Strong VR legs (both due to the nature of the game, and due to the glitchiness of this VR implementation).
-
-## VR Controller Inputs
-
-There are some extra in-game tutorials for teaching you VR inputs, but some stuff doesn't have any tutorials yet.
-
-- You can't change the control bindings in-game (they will always reset);
-- Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
-- You can interact with most stuff by aiming with the right-hand laser and pressing the interact button;
-- Right hand grip can be used to grab tools from the tool belt;
-- Change tool modes by holding a tool on your right hand and touching it with your left hand;
-- While piloting the ship, you can aim at and interact with stuff inside the ship (interact with the screens to equip that tool);
-- Turn on the flashlight by touching the side of your head with your right hand;
-- Experiment with the controls. When in doubt, aim laser and press interact.
 
 ## Installation
 
@@ -65,31 +34,61 @@ There are some extra in-game tutorials for teaching you VR inputs, but some stuf
 ### Manual installation
 
 - [Install OWML](https://github.com/amazingalek/owml#installation);
-- [Download the latest NomaiVR release](https://github.com/Raicuparta/NomaiVR/releases/latest);
-- Extract the `NomaiVR` directory to the `OWML/Mods` directory;
+- [Download the latest NomaiVR release (Raicuparta.NomaiVR.zip)](https://github.com/Raicuparta/NomaiVR/releases/latest);
+- Extract the `Raicuparta.NomaiVR` directory to the `OWML/Mods` directory;
 - Run `OWML.Launcher.exe` to start the game.
+
+## Requirements
+
+- A VR Headset;
+- VR controllers (not playable with a regular game controller);
+- A VR-Ready PC;
+- Steam and SteamVR installed (make sure SteamVR isn't running prior to running the game);
+- Strong VR legs (both due to the nature of the game, and due to the glitchiness of this VR implementation).
+
+## Comfort
+
+Only recommended for people who aren't usually prone to VR sickness:
+
+- A good portion of the game is spent spinning around in zero-g, which can be very disorienting;
+- No comfort features like teleport and snap turning were implemented;
+- Performance tends to not be that great, which can cause nausea;
+
+## VR Controller Inputs
+
+There are some extra in-game tutorials for teaching you VR inputs, but some stuff doesn't have any tutorials yet.
+
+- Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
+- You can interact with most stuff by aiming with the right-hand laser and pressing the interact button;
+- Change tool modes by holding a tool on your right hand and touching it with your left hand;
+- While piloting the ship, you can aim at and interact with stuff inside the ship (interact with the screens to equip that tool);
+- Experiment with the controls. When in doubt, aim laser and press interact.
 
 ## Performance
 
-This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance. Shadows and ambient occlusion usually have a big impact.
+This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance.
+
+Besides lowering the graphics in-game, try lowering the rendering rendering resolution in SteamVR's settings. Lowering resolution in-game has no effect.
 
 ### Framerate
 
-Outer Wilds was originally locked to 60 FPS. To work around this, NomaiVR forces the game's physics refresh rate to match your VR headset's refresh rate. This can have a high impact in performance. Try lowering your refresh rate through SteamVR's settings (if your headset supports this) to get a more stable framerate.
+Outer Wilds was originally locked to 60 FPS. To work around this, NomaiVR forces the game's physics refresh rate to match your VR headset's refresh rate. This can have a high impact on performance. Try lowering your refresh rate through SteamVR's settings (if your headset supports this) to get a more stable framerate.
 
-If your headset doesn't support this, you can override the refresh rate the NomaiVR's settings file (`OWML/Mods/NomaiVR/config.json`). Change `overrideRefreshRate` to whatever framerate you desire. Setting it to zero makes it follow your VR headset's refresh rate.
+If your headset doesn't support multiple refresh rates, you can override the game's physics refresh rate by editing NomaiVR's settings file (`OWML/Mods/NomaiVR/config.json`). Change `overrideRefreshRate` to whatever framerate you desire. Setting it to zero makes it follow your VR headset's refresh rate.
 
 ## Compatibility with other mods
 
 NomaiVR affects code in pretty much the whole game, and drastically changes things in ways that are sure to break other mods. If you are having issues, make sure you disable any other mods you might have installed.
 
+## Reporting bugs / making requests
+
+See if your problem was already reported by [searching for it in the issues list](https://github.com/Raicuparta/nomai-vr/issues?q=is%3Aissue). If you find that someone else already reported the same issue, feel free to add to it by commenting (even if the issue is already closed). Otherwise, [create a new issue](https://github.com/Raicuparta/nomai-vr/issues/new/choose) (GitHub account required).
+
 ## Contributing
 
-Look at through [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) and see if there's something you'd like to help with. There's a few ways you can help:
+Look through the [currently open issues](https://github.com/Raicuparta/NomaiVR/issues) and see if there's something you'd like to help with. If you find something you'd like to do, leave a comment on the issue. Fork the repo and make the changes you want. When you're done, open a PR from your fork to this one.
 
-- Test the game, find bugs, report them as a new issue;
-- Open issue with feature requests;
-- Contribute to the code base (fork the repo and open a PR).
+If you need help, leave a comment on the issue, or ask via [Discord](https://discord.gg/Sftcc9Z).
 
 ## Development Setup
 
