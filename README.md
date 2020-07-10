@@ -27,7 +27,7 @@
 
 ### Easy installation (recommended)
 
-- [Download and install the Outer Wilds Mod Manager](https://outerwildsmods.com/);
+- Get the Mod Manager from the [Outer Wilds Mods](https://outerwildsmods.com/) website;
 - Install NomaiVR from the mod list displayed in the application;
 - If you can't get the mod manager to work, follow the instructions for manual installation.
 
