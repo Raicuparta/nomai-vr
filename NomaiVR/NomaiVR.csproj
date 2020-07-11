@@ -127,7 +127,7 @@
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
     <Compile Include="ReusableBehaviours\Holdable.cs" />
     <Compile Include="ReusableBehaviours\PersistObject.cs" />
-    <Compile Include="ReusableBehaviours\SmoothFoolowParentRotation.cs" />
+    <Compile Include="ReusableBehaviours\SmoothFollowParentRotation.cs" />
     <Compile Include="UI\Dialogue.cs" />
     <Compile Include="Player\FeetMarker.cs" />
     <Compile Include="ReusableBehaviours\FollowTarget.cs" />

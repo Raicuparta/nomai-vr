@@ -2,7 +2,7 @@
 
 namespace NomaiVR
 {
-    public class SmoothFoolowParentRotation : MonoBehaviour
+    public class SmoothFollowParentRotation : MonoBehaviour
     {
         [SerializeField] private readonly float step = 10f;
 
