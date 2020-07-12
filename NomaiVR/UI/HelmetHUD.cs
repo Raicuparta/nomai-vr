@@ -51,7 +51,19 @@ namespace NomaiVR
 
                 // Adjust projected HUD.
                 var surface = GameObject.Find("HUD_CurvedSurface").transform;
-                surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
+
+                // re-use variables because getShouldRender is called every frame via Update
+                // variables are not strictly necessary, but otherwise the expression would be quite long and hard to read
+                bool isWearingHelmet;
+                bool hideBecauseOfDialogue;
+                surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () =>
+                {
+                    isWearingHelmet = Locator.GetPlayerSuit().IsWearingHelmet();
+                    hideBecauseOfDialogue = Dialogue.IsActive && NomaiVR.Config.disableHudInConversations;
+
+                    return isWearingHelmet && !hideBecauseOfDialogue;
+                };
+
                 surface.transform.localScale = Vector3.one * 3.28f;
                 surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();

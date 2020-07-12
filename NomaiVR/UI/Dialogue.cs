@@ -9,6 +9,11 @@ namespace NomaiVR
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
+        /// <summary>
+        /// Player is currently in a conversation
+        /// </summary>
+        public static bool IsActive { get; private set; }
+
         public class Behaviour : MonoBehaviour
         {
             private static Transform _canvasTransform;
@@ -50,6 +55,7 @@ namespace NomaiVR
                     NomaiVR.Pre<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PreStartConversation));
                     NomaiVR.Post<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PostStartConversation));
                     NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PreEndConversation));
+                    NomaiVR.Post<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PostEndConversation));
                     NomaiVR.Post<DialogueOptionUI>("Awake", typeof(Patch), nameof(PostDialogueOptionAwake));
                     NomaiVR.Post<DialogueOptionUI>("SetSelected", typeof(Patch), nameof(PreSetButtonPromptImage));
                 }
@@ -78,6 +84,8 @@ namespace NomaiVR
                 private static void PreStartConversation(CharacterDialogueTree __instance)
                 {
                     _attentionPoint = __instance.GetValue<Transform>("_attentionPoint");
+
+                    IsActive = true;
                 }
 
                 private static void PostStartConversation()
@@ -88,6 +96,11 @@ namespace NomaiVR
                 private static void PreEndConversation()
                 {
                     _attentionPoint = null;
+                }
+
+                private static void PostEndConversation()
+                {
+                    IsActive = false;
                 }
             }
         }
