@@ -68,7 +68,7 @@ namespace NomaiVR
                 overrideRefreshRate = config.GetSettingsValue<int>("overrideRefreshRate"),
                 preventCursorLock = config.GetSettingsValue<bool>("preventCursorLock"),
                 showHelmet = config.GetSettingsValue<bool>("showHelmet"),
-                disableHudInConversations = config.GetSettingsValue<bool>("disableHudInConversations"),
+                hideHudInConversations = config.GetSettingsValue<bool>("hideHudInConversations"),
                 vibrationStrength = config.GetSettingsValue<float>("vibrationStrength"),
                 enableGesturePrompts = config.GetSettingsValue<bool>("enableGesturePrompts"),
                 controllerOrientedMovement = config.GetSettingsValue<bool>("controllerOrientedMovement"),

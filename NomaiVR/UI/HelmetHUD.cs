@@ -55,13 +55,13 @@ namespace NomaiVR
                 // re-use variables because getShouldRender is called every frame via Update
                 // variables are not strictly necessary, but otherwise the expression would be quite long and hard to read
                 bool isWearingHelmet;
-                bool hideBecauseOfDialogue;
+                bool hideBecauseOfConversation;
                 surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () =>
                 {
                     isWearingHelmet = Locator.GetPlayerSuit().IsWearingHelmet();
-                    hideBecauseOfDialogue = PlayerState.InConversation() && NomaiVR.Config.disableHudInConversations;
+                    hideBecauseOfConversation = PlayerState.InConversation() && NomaiVR.Config.hideHudInConversations;
 
-                    return isWearingHelmet && !hideBecauseOfDialogue;
+                    return isWearingHelmet && !hideBecauseOfConversation;
                 };
 
                 surface.transform.localScale = Vector3.one * 3.28f;
