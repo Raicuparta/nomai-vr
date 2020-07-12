@@ -59,7 +59,7 @@ namespace NomaiVR
                 surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () =>
                 {
                     isWearingHelmet = Locator.GetPlayerSuit().IsWearingHelmet();
-                    hideBecauseOfDialogue = Dialogue.IsActive && NomaiVR.Config.disableHudInConversations;
+                    hideBecauseOfDialogue = PlayerState.InConversation() && NomaiVR.Config.disableHudInConversations;
 
                     return isWearingHelmet && !hideBecauseOfDialogue;
                 };
