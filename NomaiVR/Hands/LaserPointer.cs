@@ -176,6 +176,11 @@ namespace NomaiVR
                 }
             }
 
+            private static void HandleButtonBlick(Button button)
+            {
+                button.onClick.Invoke();
+            }
+
             private static void HandleSelectableClick(Selectable selectable)
             {
                 var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
@@ -196,6 +201,13 @@ namespace NomaiVR
                 if (slider != null)
                 {
                     HandleSliderClick(slider);
+                    return;
+                }
+
+                var button = selectable.GetComponent<Button>();
+                if (button != null)
+                {
+                    HandleButtonBlick(button);
                     return;
                 }
             }
