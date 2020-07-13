@@ -7,6 +7,7 @@
     "overrideRefreshRate": 0,
     "preventCursorLock": true,
     "showHelmet": true,
+    "hideHudInConversations": false,
     "vibrationStrength": 1,
     "enableGesturePrompts": true,
     "controllerOrientedMovement": false

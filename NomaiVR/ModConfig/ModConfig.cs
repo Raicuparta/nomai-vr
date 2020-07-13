@@ -9,6 +9,7 @@ namespace NomaiVR
         public bool debugMode = true;
         public bool preventCursorLock = true;
         public bool showHelmet = true;
+        public bool hideHudInConversations = false;
         public int overrideRefreshRate = 0;
         public float vibrationStrength = 1;
         public bool enableGesturePrompts = true;

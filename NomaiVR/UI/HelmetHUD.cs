@@ -34,7 +34,7 @@ namespace NomaiVR
                 _helmet = animator.transform;
                 _helmet.localPosition = Vector3.forward * -0.07f;
                 _helmet.localScale = Vector3.one * 0.5f;
-                _helmet.gameObject.AddComponent<SmoothFoolowParentRotation>();
+                _helmet.gameObject.AddComponent<SmoothFollowParentRotation>();
 
                 Camera.main.nearClipPlane = 0.01f;
 
@@ -51,7 +51,19 @@ namespace NomaiVR
 
                 // Adjust projected HUD.
                 var surface = GameObject.Find("HUD_CurvedSurface").transform;
-                surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
+
+                // re-use variables because getShouldRender is called every frame via Update
+                // variables are not strictly necessary, but otherwise the expression would be quite long and hard to read
+                bool isWearingHelmet;
+                bool hideBecauseOfConversation;
+                surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () =>
+                {
+                    isWearingHelmet = Locator.GetPlayerSuit().IsWearingHelmet();
+                    hideBecauseOfConversation = PlayerState.InConversation() && NomaiVR.Config.hideHudInConversations;
+
+                    return isWearingHelmet && !hideBecauseOfConversation;
+                };
+
                 surface.transform.localScale = Vector3.one * 3.28f;
                 surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
