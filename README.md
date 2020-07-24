@@ -40,7 +40,7 @@
 
 ## Requirements
 
-- The latest version of the game installed (Epic or Steam);
+- The latest version of the game (1.0.7) installed (both Epic and Steam are supported);
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
