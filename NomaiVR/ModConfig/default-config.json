@@ -18,32 +18,44 @@
     "showHelmet": {
       "type": "toggle",
       "value": false,
-      "title": "Show helmet"
+      "title": "Helmet around head",
+      "yes": "Visible",
+      "no": "Hidden"
     },
     "hideHudInConversations": {
       "type": "toggle",
       "value": false,
-      "title": "Hide HUD during conversations"
+      "title": "HUD during conversations",
+      "yes": "Hidden",
+      "no": "Visible"
     },
     "controllerOrientedMovement": {
       "type": "toggle",
       "value": false,
-      "title": "Use controller oriented movement"
+      "title": "Movement orientation",
+      "yes": "Left controller",
+      "no": "Head"
     },
     "enableGesturePrompts": {
       "type": "toggle",
       "value": true,
-      "title": "Show gesture tutorials"
+      "title": "VR gesture tutorials",
+      "yes": "Enabled",
+      "no": "Disabled"
     },
     "preventCursorLock": {
       "type": "toggle",
       "value": true,
-      "title": "Prevent cursor lock"
+      "title": "Lock mouse cursor to window",
+      "yes": "Unlocked",
+      "no": "Locked"
     },
     "debugMode": {
       "type": "toggle",
       "value": true,
-      "title": "Enable debug mode (more logs)"
+      "title": "Debug mode (more logs)",
+      "yes": "Enabled",
+      "no": "Disabled"
     }
   }
 }
