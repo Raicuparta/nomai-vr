@@ -21,7 +21,7 @@ namespace NomaiVR
 
             if (preventCursorLock)
             {
-                NomaiVR.Empty<CursorManager>("Update");
+                PatchHelper.Empty<CursorManager>("Update");
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }

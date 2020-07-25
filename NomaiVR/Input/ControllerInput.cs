@@ -346,21 +346,20 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<SingleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(SingleAxisUpdate));
-                    NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patch), nameof(OWInputUpdate));
-                    NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListenForAllJoysticks));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetAxis", typeof(Patch), nameof(GetAxis));
-                    NomaiVR.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKey", typeof(Patch), nameof(ResetPadManagerKeyboard));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKeyDown", typeof(Patch), nameof(ResetPadManagerKeyboard));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKeyUp", typeof(Patch), nameof(ResetPadManagerKeyboard));
-                    NomaiVR.Post<OWInput>("IsGamepadEnabled", typeof(Patch), nameof(PostIsGamepadEnabled));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("IsGamepadActive", typeof(Patch), nameof(PostIsGamepadEnabled));
-                    NomaiVR.Pre<DoubleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(PreUpdateDoubleAxisCommand));
-                    NomaiVR.Pre<SubmitActionMenu>("Submit", typeof(Patch), nameof(PreSubmitActionMenu));
+                    PatchHelper.Pre<SingleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(SingleAxisUpdate));
+                    PatchHelper.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patch), nameof(OWInputUpdate));
+                    PatchHelper.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListenForAllJoysticks));
+                    PatchHelper.Post<PadEZ.PadManager_OW>("GetAxis", typeof(Patch), nameof(GetAxis));
+                    PatchHelper.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
+                    PatchHelper.Post<PadEZ.PadManager_OW>("GetKey", typeof(Patch), nameof(ResetPadManagerKeyboard));
+                    PatchHelper.Post<PadEZ.PadManager_OW>("GetKeyDown", typeof(Patch), nameof(ResetPadManagerKeyboard));
+                    PatchHelper.Post<PadEZ.PadManager_OW>("GetKeyUp", typeof(Patch), nameof(ResetPadManagerKeyboard));
+                    PatchHelper.Post<OWInput>("IsGamepadEnabled", typeof(Patch), nameof(PostIsGamepadEnabled));
+                    PatchHelper.Post<PadEZ.PadManager_OW>("IsGamepadActive", typeof(Patch), nameof(PostIsGamepadEnabled));
+                    PatchHelper.Pre<DoubleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(PreUpdateDoubleAxisCommand));
+                    PatchHelper.Pre<SubmitActionMenu>("Submit", typeof(Patch), nameof(PreSubmitActionMenu));
 
-                    var rumbleMethod = typeof(RumbleManager).GetAnyMethod("Update");
-                    NomaiVR.Helper.HarmonyHelper.AddPrefix(rumbleMethod, typeof(Patch), nameof(PreUpdateRumble));
+                    PatchHelper.Pre(typeof(RumbleManager).GetAnyMethod("Update"), typeof(Patch), nameof(PreUpdateRumble));
                 }
 
                 private static bool PreSubmitActionMenu(SubmitActionMenu __instance)

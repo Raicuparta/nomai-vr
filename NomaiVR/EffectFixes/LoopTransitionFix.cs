@@ -14,16 +14,16 @@ namespace NomaiVR
 
             public override void ApplyPatches()
             {
-                NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PatchTriggerFlashback));
-                NomaiVR.Pre<Flashback>("Update", typeof(Patch), nameof(FlashbackUpdate));
-                NomaiVR.Pre<Flashback>("UpdateMemoryUplink", typeof(Patch), nameof(PostUpdateMemoryLink));
-                NomaiVR.Post<Flashback>("OnTriggerMemoryUplink", typeof(Patch), nameof(PostTriggerMemoryUplink));
+                PatchHelper.Pre<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PatchTriggerFlashback));
+                PatchHelper.Pre<Flashback>("Update", typeof(Patch), nameof(FlashbackUpdate));
+                PatchHelper.Pre<Flashback>("UpdateMemoryUplink", typeof(Patch), nameof(PostUpdateMemoryLink));
+                PatchHelper.Post<Flashback>("OnTriggerMemoryUplink", typeof(Patch), nameof(PostTriggerMemoryUplink));
 
                 // Prevent flashing on energy death.
-                NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
+                PatchHelper.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
 
                 // Fix loop picture scale.
-                NomaiVR.Post<Flashback>("Start", typeof(Patch), nameof(PostFlashbackRecorderAwake));
+                PatchHelper.Post<Flashback>("Start", typeof(Patch), nameof(PostFlashbackRecorderAwake));
             }
 
             private static void PostFlashbackRecorderAwake(Transform ____screenTransform, ref Vector3 ____origScreenScale)

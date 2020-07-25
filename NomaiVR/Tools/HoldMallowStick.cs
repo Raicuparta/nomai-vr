@@ -84,7 +84,7 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     // Stop stick rotation animation.
-                    NomaiVR.Empty<RoastingStickController>("UpdateRotation");
+                    PatchHelper.Empty<RoastingStickController>("UpdateRotation");
                 }
             }
         }

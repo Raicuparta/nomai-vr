@@ -93,12 +93,12 @@ namespace NomaiVR
                 var lockOnMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "LockOn");
                 foreach (var method in lockOnMethods)
                 {
-                    NomaiVR.Helper.HarmonyHelper.AddPrefix(method, typeof(Patch), nameof(PreLockOn));
+                    PatchHelper.Pre(method, typeof(Patch), nameof(PreLockOn));
                 }
                 var breakLockMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "BreakLock");
                 foreach (var method in breakLockMethods)
                 {
-                    NomaiVR.Helper.HarmonyHelper.AddPrefix(method, typeof(Patch), nameof(PreBreakLock));
+                    PatchHelper.Pre(method, typeof(Patch), nameof(PreBreakLock));
                 }
             }
 

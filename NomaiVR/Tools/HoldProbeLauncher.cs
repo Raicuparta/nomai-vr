@@ -122,15 +122,15 @@ namespace NomaiVR
 
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patch), nameof(Patch.SuitUp));
-                    NomaiVR.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patch), nameof(Patch.RemoveSuit));
-                    NomaiVR.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patch), nameof(Patch.PostHideHUD));
+                    PatchHelper.Pre<PlayerSpacesuit>("SuitUp", typeof(Patch), nameof(Patch.SuitUp));
+                    PatchHelper.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patch), nameof(Patch.RemoveSuit));
+                    PatchHelper.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patch), nameof(Patch.PostHideHUD));
 
                     // Prevent probe prompt zones from equipping / unequipping the probe launcher.
-                    NomaiVR.Pre<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PreLoseFocus));
-                    NomaiVR.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PostLoseFocus));
-                    NomaiVR.Pre<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PreGainFocus));
-                    NomaiVR.Post<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PostGainFocus));
+                    PatchHelper.Pre<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PreLoseFocus));
+                    PatchHelper.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PostLoseFocus));
+                    PatchHelper.Pre<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PreGainFocus));
+                    PatchHelper.Post<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PostGainFocus));
                 }
 
                 private static void PreLoseFocus()

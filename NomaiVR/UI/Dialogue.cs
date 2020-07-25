@@ -47,11 +47,11 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PreStartConversation));
-                    NomaiVR.Post<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PostStartConversation));
-                    NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PreEndConversation));
-                    NomaiVR.Post<DialogueOptionUI>("Awake", typeof(Patch), nameof(PostDialogueOptionAwake));
-                    NomaiVR.Post<DialogueOptionUI>("SetSelected", typeof(Patch), nameof(PreSetButtonPromptImage));
+                    PatchHelper.Pre<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PreStartConversation));
+                    PatchHelper.Post<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PostStartConversation));
+                    PatchHelper.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PreEndConversation));
+                    PatchHelper.Post<DialogueOptionUI>("Awake", typeof(Patch), nameof(PostDialogueOptionAwake));
+                    PatchHelper.Post<DialogueOptionUI>("SetSelected", typeof(Patch), nameof(PreSetButtonPromptImage));
                 }
 
                 private static void PreSetButtonPromptImage(Image ____buttonPromptImage)

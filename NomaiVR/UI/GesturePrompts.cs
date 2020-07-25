@@ -222,7 +222,7 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ToolModeUI>("Update", typeof(Patch), nameof(PostToolModeUiUpdate));
+                    PatchHelper.Post<ToolModeUI>("Update", typeof(Patch), nameof(PostToolModeUiUpdate));
                 }
 
                 private static void PostToolModeUiUpdate(
