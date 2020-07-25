@@ -52,15 +52,19 @@ namespace NomaiVR
             new Menus();
         }
 
-        private void InitSteamVR()
-        {
-            SteamVR.Initialize();
-            OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
-        }
-
         public override void Configure(IModConfig config)
         {
             Helper = ModHelper;
+
+            if (config.GetSettingsValue<bool>("skipGameVersionCheck"))
+            {
+                Log("Warning: skipping game version check");
+            }
+            else
+            {
+                VersionCheck.CheckGameVersion();
+            }
+
             Config = new ModConfig
             {
                 debugMode = config.GetSettingsValue<bool>("debugMode"),
@@ -83,6 +87,14 @@ namespace NomaiVR
             }
         }
 
+        public static void LogError(string message)
+        {
+            if (Helper != null)
+            {
+                Helper.Console.WriteLine($"Error: {message}");
+            }
+        }
+
         public static void Pre<T>(string methodName, Type patchType, string patchMethodName)
         {
             Helper.HarmonyHelper.AddPrefix<T>(methodName, patchType, patchMethodName);
@@ -96,6 +108,12 @@ namespace NomaiVR
         public static void Empty<T>(string methodName)
         {
             Helper.HarmonyHelper.EmptyMethod<T>(methodName);
+        }
+
+        private void InitSteamVR()
+        {
+            SteamVR.Initialize();
+            OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
         }
     }
 }

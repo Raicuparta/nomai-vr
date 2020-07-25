@@ -10,6 +10,7 @@
     "hideHudInConversations": false,
     "vibrationStrength": 1,
     "enableGesturePrompts": true,
+    "skipGameVersionCheck": false,
     "controllerOrientedMovement": false
   }
 }
