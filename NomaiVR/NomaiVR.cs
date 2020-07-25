@@ -61,18 +61,7 @@ namespace NomaiVR
         public override void Configure(IModConfig config)
         {
             Helper = ModHelper;
-            Config = new ModConfig
-            {
-                debugMode = config.GetSettingsValue<bool>("debugMode"),
-                showMirrorView = config.GetSettingsValue<bool>("showMirrorView"),
-                overrideRefreshRate = config.GetSettingsValue<int>("overrideRefreshRate"),
-                preventCursorLock = config.GetSettingsValue<bool>("preventCursorLock"),
-                showHelmet = config.GetSettingsValue<bool>("showHelmet"),
-                hideHudInConversations = config.GetSettingsValue<bool>("hideHudInConversations"),
-                vibrationStrength = config.GetSettingsValue<float>("vibrationStrength"),
-                enableGesturePrompts = config.GetSettingsValue<bool>("enableGesturePrompts"),
-                controllerOrientedMovement = config.GetSettingsValue<bool>("controllerOrientedMovement"),
-            };
+            Config = new ModConfig(config);
         }
 
         public static void Log(params object[] strings)

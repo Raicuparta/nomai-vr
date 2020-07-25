@@ -2,14 +2,48 @@
   "requireVR": true,
   "enabled": true,
   "settings": {
-    "showMirrorView": true,
-    "debugMode": true,
-    "overrideRefreshRate": 0,
-    "preventCursorLock": true,
-    "showHelmet": true,
-    "hideHudInConversations": false,
-    "vibrationStrength": 1,
-    "enableGesturePrompts": true,
-    "controllerOrientedMovement": false
+    "overrideRefreshRate": {
+      "type": "selector",
+      "value": 0,
+      "options": [0, 30, 60, 70, 72, 80, 90, 120, 144],
+      "title": "Phyics refresh rate (zero = sync with HMD)"
+	},
+    "vibrationStrength": {
+      "type": "slider",
+      "value": 1,
+      "min": 0.1,
+      "max": 5,
+      "title": "Vibration Intensity"
+	},
+    "showHelmet": {
+      "type": "toggle",
+      "value": false,
+      "title": "Show helmet"
+    },
+    "hideHudInConversations": {
+      "type": "toggle",
+      "value": false,
+      "title": "Hide HUD during conversations"
+    },
+    "controllerOrientedMovement": {
+      "type": "toggle",
+      "value": false,
+      "title": "Use controller oriented movement"
+    },
+    "enableGesturePrompts": {
+      "type": "toggle",
+      "value": true,
+      "title": "Show gesture tutorials"
+    },
+    "preventCursorLock": {
+      "type": "toggle",
+      "value": true,
+      "title": "Prevent cursor lock"
+    },
+    "debugMode": {
+      "type": "toggle",
+      "value": true,
+      "title": "Enable debug mode (more logs)"
+    }
   }
 }
