@@ -368,7 +368,10 @@ namespace NomaiVR
                         SteamVR_Input.OpenBindingUI(SteamVR_Actions._default);
                         return false;
                     }
-                    else return true;
+                    else
+                    {
+                        return true;
+                    }
                 }
 
                 private static bool PreUpdateDoubleAxisCommand(

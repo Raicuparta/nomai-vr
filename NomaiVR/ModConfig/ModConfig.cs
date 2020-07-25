@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.XR;
+﻿using OWML.Common;
+using UnityEngine;
 
 namespace NomaiVR
 {
     public class ModConfig
     {
-        public bool showMirrorView = true;
         public bool debugMode = true;
         public bool preventCursorLock = true;
         public bool showHelmet = true;
@@ -15,9 +14,16 @@ namespace NomaiVR
         public bool enableGesturePrompts = true;
         public bool controllerOrientedMovement = false;
 
-        public ModConfig()
+        public ModConfig(IModConfig config)
         {
-            XRSettings.showDeviceView = showMirrorView;
+            overrideRefreshRate = config.GetSettingsValue<int>("overrideRefreshRate");
+            vibrationStrength = config.GetSettingsValue<float>("vibrationStrength");
+            showHelmet = config.GetSettingsValue<bool>("showHelmet");
+            hideHudInConversations = config.GetSettingsValue<bool>("hideHudInConversations");
+            controllerOrientedMovement = config.GetSettingsValue<bool>("controllerOrientedMovement");
+            enableGesturePrompts = config.GetSettingsValue<bool>("enableGesturePrompts");
+            preventCursorLock = config.GetSettingsValue<bool>("preventCursorLock");
+            debugMode = config.GetSettingsValue<bool>("debugMode");
 
             if (preventCursorLock)
             {
