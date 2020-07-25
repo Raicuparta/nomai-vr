@@ -11,7 +11,7 @@ namespace NomaiVR
         {
             public override void ApplyPatches()
             {
-                Pre<PlayerCharacterController>("OnPlayerDeath", nameof(PrePlayerDeath));
+                Prefix<PlayerCharacterController>("OnPlayerDeath", nameof(PrePlayerDeath));
             }
 
             private static bool PrePlayerDeath(DeathType deathType)

@@ -33,39 +33,39 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Post<ProbePromptController>("LateInitialize", nameof(RemoveProbePrompts));
-                    Post<ProbePromptController>("Awake", nameof(ChangeProbePrompts));
+                    Postfix<ProbePromptController>("LateInitialize", nameof(RemoveProbePrompts));
+                    Postfix<ProbePromptController>("Awake", nameof(ChangeProbePrompts));
 
-                    Post<ShipPromptController>("LateInitialize", nameof(RemoveShipPrompts));
-                    Post<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
+                    Postfix<ShipPromptController>("LateInitialize", nameof(RemoveShipPrompts));
+                    Postfix<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
 
-                    Post<NomaiTranslatorProp>("LateInitialize", nameof(RemoveTranslatorPrompts));
-                    Post<NomaiTranslatorProp>("Awake", nameof(ChangeTranslatorPrompts));
+                    Postfix<NomaiTranslatorProp>("LateInitialize", nameof(RemoveTranslatorPrompts));
+                    Postfix<NomaiTranslatorProp>("Awake", nameof(ChangeTranslatorPrompts));
 
-                    Post<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
-                    Post<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
+                    Postfix<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
+                    Postfix<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
 
-                    Post<SatelliteSnapshotController>("OnPressInteract", nameof(RemoveSatellitePrompts));
-                    Post<SatelliteSnapshotController>("Awake", nameof(ChangeSatellitePrompts));
+                    Postfix<SatelliteSnapshotController>("OnPressInteract", nameof(RemoveSatellitePrompts));
+                    Postfix<SatelliteSnapshotController>("Awake", nameof(ChangeSatellitePrompts));
 
-                    Post<PlayerSpawner>("Awake", nameof(RemoveJoystickPrompts));
-                    Post<RoastingStickController>("LateInitialize", nameof(RemoveRoastingStickPrompts));
-                    Post<ToolModeUI>("LateInitialize", nameof(RemoveToolModePrompts));
-                    Post<ScreenPrompt>("SetVisibility", nameof(PostScreenPromptVisibility));
+                    Postfix<PlayerSpawner>("Awake", nameof(RemoveJoystickPrompts));
+                    Postfix<RoastingStickController>("LateInitialize", nameof(RemoveRoastingStickPrompts));
+                    Postfix<ToolModeUI>("LateInitialize", nameof(RemoveToolModePrompts));
+                    Postfix<ScreenPrompt>("SetVisibility", nameof(PostScreenPromptVisibility));
 
-                    Pre<LockOnReticule>("Init", nameof(InitLockOnReticule));
+                    Prefix<LockOnReticule>("Init", nameof(InitLockOnReticule));
 
-                    Pre<ScreenPrompt>("Init", nameof(PrePromptInit));
-                    Pre<ScreenPrompt>("SetText", nameof(PrePromptSetText));
-                    Post<ScreenPromptElement>("BuildTwoCommandScreenPrompt", nameof(PostBuildTwoCommandPromptElement));
+                    Prefix<ScreenPrompt>("Init", nameof(PrePromptInit));
+                    Prefix<ScreenPrompt>("SetText", nameof(PrePromptSetText));
+                    Postfix<ScreenPromptElement>("BuildTwoCommandScreenPrompt", nameof(PostBuildTwoCommandPromptElement));
 
                     // Replace Icons with empty version
                     var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    Post(getButtonTextureMethod, nameof(ReturnEmptyTexture));
+                    Postfix(getButtonTextureMethod, nameof(ReturnEmptyTexture));
                     var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
                     foreach (var method in getAxisTextureMethods)
                     {
-                        Post(method, nameof(ReturnEmptyTexture));
+                        Postfix(method, nameof(ReturnEmptyTexture));
                     }
 
                     // Prevent probe launcher from moving the prompts around.

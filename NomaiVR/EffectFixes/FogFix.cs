@@ -26,9 +26,9 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Pre<PlanetaryFogController>("ResetFogSettings", nameof(Patch.PatchResetFog));
-                    Pre<PlanetaryFogController>("UpdateFogSettings", nameof(Patch.PatchUpdateFog));
-                    Pre<FogOverrideVolume>("OverrideFogSettings", nameof(Patch.PatchOverrideFog));
+                    Prefix<PlanetaryFogController>("ResetFogSettings", nameof(Patch.PatchResetFog));
+                    Prefix<PlanetaryFogController>("UpdateFogSettings", nameof(Patch.PatchUpdateFog));
+                    Prefix<FogOverrideVolume>("OverrideFogSettings", nameof(Patch.PatchOverrideFog));
                 }
 
                 private static bool PatchResetFog()

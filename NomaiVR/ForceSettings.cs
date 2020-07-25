@@ -51,7 +51,7 @@ namespace NomaiVR
         {
             public override void ApplyPatches()
             {
-                Post<GraphicSettings>("ApplyAllGraphicSettings", nameof(PreApplySettings));
+                Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PreApplySettings));
                 Empty<InputRebindableLibrary>("SetKeyBindings");
                 Empty<GraphicSettings>("SetSliderValFOV");
             }

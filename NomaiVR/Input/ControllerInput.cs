@@ -346,19 +346,19 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Pre<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
-                    Pre<OWInput>("UpdateActiveInputDevice", nameof(OWInputUpdate));
-                    Pre<OWInput>("Awake", nameof(PostEnableListenForAllJoysticks));
-                    Post<PadEZ.PadManager_OW>("GetAxis", nameof(GetAxis));
-                    Post<PlayerResources>("Awake", nameof(PlayerResourcesAwake));
-                    Post<PadEZ.PadManager_OW>("GetKey", nameof(ResetPadManagerKeyboard));
-                    Post<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
-                    Post<PadEZ.PadManager_OW>("GetKeyUp", nameof(ResetPadManagerKeyboard));
-                    Post<OWInput>("IsGamepadEnabled", nameof(PostIsGamepadEnabled));
-                    Post<PadEZ.PadManager_OW>("IsGamepadActive", nameof(PostIsGamepadEnabled));
-                    Pre<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
-                    Pre<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
-                    Pre(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
+                    Prefix<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
+                    Prefix<OWInput>("UpdateActiveInputDevice", nameof(OWInputUpdate));
+                    Prefix<OWInput>("Awake", nameof(PostEnableListenForAllJoysticks));
+                    Postfix<PadEZ.PadManager_OW>("GetAxis", nameof(GetAxis));
+                    Postfix<PlayerResources>("Awake", nameof(PlayerResourcesAwake));
+                    Postfix<PadEZ.PadManager_OW>("GetKey", nameof(ResetPadManagerKeyboard));
+                    Postfix<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
+                    Postfix<PadEZ.PadManager_OW>("GetKeyUp", nameof(ResetPadManagerKeyboard));
+                    Postfix<OWInput>("IsGamepadEnabled", nameof(PostIsGamepadEnabled));
+                    Postfix<PadEZ.PadManager_OW>("IsGamepadActive", nameof(PostIsGamepadEnabled));
+                    Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
+                    Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
+                    Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
                 }
 
                 private static bool PreSubmitActionMenu(SubmitActionMenu __instance)

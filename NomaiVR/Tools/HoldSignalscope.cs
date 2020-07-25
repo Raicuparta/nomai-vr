@@ -135,8 +135,8 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Pre<OWInput>("ChangeInputMode", nameof(ChangeInputMode));
-                    Post<QuantumInstrument>("Update", nameof(PostQuantumInstrumentUpdate));
+                    Prefix<OWInput>("ChangeInputMode", nameof(ChangeInputMode));
+                    Postfix<QuantumInstrument>("Update", nameof(PostQuantumInstrumentUpdate));
                     Empty<Signalscope>("EnterSignalscopeZoom");
                     Empty<Signalscope>("ExitSignalscopeZoom");
                 }

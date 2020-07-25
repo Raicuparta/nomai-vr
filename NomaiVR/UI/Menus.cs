@@ -156,10 +156,10 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Post<ProfileMenuManager>("PopulateProfiles", nameof(PostPopulateProfiles));
-                    Post<CanvasMarkerManager>("Start", nameof(PostMarkerManagerStart));
-                    Post<TitleScreenAnimation>("FadeInMusic", nameof(PostTitleScreenFadeInMusic));
-                    Post<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
+                    Postfix<ProfileMenuManager>("PopulateProfiles", nameof(PostPopulateProfiles));
+                    Postfix<CanvasMarkerManager>("Start", nameof(PostMarkerManagerStart));
+                    Postfix<TitleScreenAnimation>("FadeInMusic", nameof(PostTitleScreenFadeInMusic));
+                    Postfix<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
                 }
 
                 private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)

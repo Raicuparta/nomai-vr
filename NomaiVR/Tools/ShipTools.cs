@@ -95,21 +95,21 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Post<ShipBody>("Start", nameof(ShipStart));
-                    Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PreFindFrame));
-                    Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PostFindFrame));
-                    Pre<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PreFindFrame));
-                    Post<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PostFindFrame));
+                    Postfix<ShipBody>("Start", nameof(ShipStart));
+                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PreFindFrame));
+                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PostFindFrame));
+                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PreFindFrame));
+                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PostFindFrame));
                     Empty<PlayerCameraController>("OnEnterLandingView");
                     Empty<PlayerCameraController>("OnExitLandingView");
                     Empty<PlayerCameraController>("OnEnterShipComputer");
                     Empty<PlayerCameraController>("OnExitShipComputer");
 
-                    Pre<ShipCockpitController>("EnterLandingView", nameof(PreEnterLandingView));
-                    Pre<ShipCockpitController>("ExitLandingView", nameof(PreExitLandingView));
-                    Post<ShipCockpitController>("ExitFlightConsole", nameof(PostExitFlightConsole));
-                    Pre<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
-                    Post<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
+                    Prefix<ShipCockpitController>("EnterLandingView", nameof(PreEnterLandingView));
+                    Prefix<ShipCockpitController>("ExitLandingView", nameof(PreExitLandingView));
+                    Postfix<ShipCockpitController>("ExitFlightConsole", nameof(PostExitFlightConsole));
+                    Prefix<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
+                    Postfix<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
                 }
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
