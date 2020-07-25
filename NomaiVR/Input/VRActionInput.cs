@@ -5,7 +5,6 @@ namespace NomaiVR
 {
     public class VRActionInput
     {
-        public bool HideHand = false;
         public readonly string Hand;
         public readonly string Source;
         public readonly string Color;
@@ -28,22 +27,8 @@ namespace NomaiVR
         public string GetText()
         {
             var prefix = Prefixes.Count > 0 ? $"{TextHelper.TextWithColor(string.Join(" ", Prefixes.ToArray()), TextHelper.ORANGE)} " : "";
-            var hand = HideHand ? "" : $"{Hand} ";
-            var result = $"{prefix}{TextHelper.TextWithColor($"{hand}{Source}", Color)}";
+            var result = $"{prefix}{TextHelper.TextWithColor($"{Hand} {Source}", Color)}";
             return string.IsNullOrEmpty(result) ? "" : $"[{result}]";
-        }
-
-        public bool IsOppositeHandWithSameName(VRActionInput other)
-        {
-            if (other == this)
-            {
-                return false;
-            }
-            if (Hand != other.Hand && Source == other.Source)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

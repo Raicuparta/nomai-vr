@@ -74,32 +74,6 @@ namespace NomaiVR
                 return false;
             }
 
-            private bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
-            {
-                foreach (var buttonEntry in buttonActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(buttonEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var axisEntry in axisActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(axisEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var otherAction in otherActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(otherAction))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
             public void SetUpActionInputs()
             {
                 var actionSet = SteamVR_Actions._default;
@@ -140,11 +114,6 @@ namespace NomaiVR
                     if (HasAxisWithSameName(button))
                     {
                         button.Prefixes.Add("Click");
-                    }
-
-                    if (!HasOppositeHandButtonWithSameName(button))
-                    {
-                        button.HideHand = true;
                     }
                 }
             }
