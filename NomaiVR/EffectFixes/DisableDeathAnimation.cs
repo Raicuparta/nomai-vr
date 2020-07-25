@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace NomaiVR
+﻿namespace NomaiVR
 {
     internal class DisableDeathAnimation : NomaiVRModule<NomaiVRModule.EmptyBehaviour, DisableDeathAnimation.Patch>
     {
