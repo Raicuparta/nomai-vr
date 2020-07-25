@@ -112,7 +112,6 @@
     <Compile Include="Helpers\InputHelper.cs" />
     <Compile Include="Helpers\LayerHelper.cs" />
     <Compile Include="Helpers\MaterialHelper.cs" />
-    <Compile Include="Helpers\PatchHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="Helpers\SceneHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />

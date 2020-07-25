@@ -92,7 +92,7 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    PatchHelper.Post<PlayerCharacterController>("UpdateTurning", typeof(Patch), nameof(Patch.PatchTurning));
+                    Post<PlayerCharacterController>("UpdateTurning", nameof(Patch.PatchTurning));
                 }
 
                 private static void PatchTurning(OWCamera ____playerCam, Transform ____transform)

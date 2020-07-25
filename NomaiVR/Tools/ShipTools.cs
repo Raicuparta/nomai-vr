@@ -95,21 +95,21 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    PatchHelper.Post<ShipBody>("Start", typeof(Patch), nameof(ShipStart));
-                    PatchHelper.Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patch), nameof(PreFindFrame));
-                    PatchHelper.Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patch), nameof(PostFindFrame));
-                    PatchHelper.Pre<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patch), nameof(PreFindFrame));
-                    PatchHelper.Post<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patch), nameof(PostFindFrame));
-                    PatchHelper.Empty<PlayerCameraController>("OnEnterLandingView");
-                    PatchHelper.Empty<PlayerCameraController>("OnExitLandingView");
-                    PatchHelper.Empty<PlayerCameraController>("OnEnterShipComputer");
-                    PatchHelper.Empty<PlayerCameraController>("OnExitShipComputer");
+                    Post<ShipBody>("Start", nameof(ShipStart));
+                    Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PreFindFrame));
+                    Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PostFindFrame));
+                    Pre<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PreFindFrame));
+                    Post<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PostFindFrame));
+                    Empty<PlayerCameraController>("OnEnterLandingView");
+                    Empty<PlayerCameraController>("OnExitLandingView");
+                    Empty<PlayerCameraController>("OnEnterShipComputer");
+                    Empty<PlayerCameraController>("OnExitShipComputer");
 
-                    PatchHelper.Pre<ShipCockpitController>("EnterLandingView", typeof(Patch), nameof(PreEnterLandingView));
-                    PatchHelper.Pre<ShipCockpitController>("ExitLandingView", typeof(Patch), nameof(PreExitLandingView));
-                    PatchHelper.Post<ShipCockpitController>("ExitFlightConsole", typeof(Patch), nameof(PostExitFlightConsole));
-                    PatchHelper.Pre<ShipCockpitUI>("Update", typeof(Patch), nameof(PreCockpitUIUpdate));
-                    PatchHelper.Post<ShipCockpitUI>("Update", typeof(Patch), nameof(PostCockpitUIUpdate));
+                    Pre<ShipCockpitController>("EnterLandingView", nameof(PreEnterLandingView));
+                    Pre<ShipCockpitController>("ExitLandingView", nameof(PreExitLandingView));
+                    Post<ShipCockpitController>("ExitFlightConsole", nameof(PostExitFlightConsole));
+                    Pre<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
+                    Post<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
                 }
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)

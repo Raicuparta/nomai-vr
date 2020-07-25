@@ -135,10 +135,10 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    PatchHelper.Pre<OWInput>("ChangeInputMode", typeof(Patch), nameof(ChangeInputMode));
-                    PatchHelper.Post<QuantumInstrument>("Update", typeof(Patch), nameof(PostQuantumInstrumentUpdate));
-                    PatchHelper.Empty<Signalscope>("EnterSignalscopeZoom");
-                    PatchHelper.Empty<Signalscope>("ExitSignalscopeZoom");
+                    Pre<OWInput>("ChangeInputMode", nameof(ChangeInputMode));
+                    Post<QuantumInstrument>("Update", nameof(PostQuantumInstrumentUpdate));
+                    Empty<Signalscope>("EnterSignalscopeZoom");
+                    Empty<Signalscope>("ExitSignalscopeZoom");
                 }
 
                 private static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)

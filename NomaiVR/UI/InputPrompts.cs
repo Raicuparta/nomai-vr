@@ -33,47 +33,47 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    PatchHelper.Post<ProbePromptController>("LateInitialize", typeof(Patch), nameof(RemoveProbePrompts));
-                    PatchHelper.Post<ProbePromptController>("Awake", typeof(Patch), nameof(ChangeProbePrompts));
+                    Post<ProbePromptController>("LateInitialize", nameof(RemoveProbePrompts));
+                    Post<ProbePromptController>("Awake", nameof(ChangeProbePrompts));
 
-                    PatchHelper.Post<ShipPromptController>("LateInitialize", typeof(Patch), nameof(RemoveShipPrompts));
-                    PatchHelper.Post<ShipPromptController>("Awake", typeof(Patch), nameof(ChangeShipPrompts));
+                    Post<ShipPromptController>("LateInitialize", nameof(RemoveShipPrompts));
+                    Post<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
 
-                    PatchHelper.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patch), nameof(RemoveTranslatorPrompts));
-                    PatchHelper.Post<NomaiTranslatorProp>("Awake", typeof(Patch), nameof(ChangeTranslatorPrompts));
+                    Post<NomaiTranslatorProp>("LateInitialize", nameof(RemoveTranslatorPrompts));
+                    Post<NomaiTranslatorProp>("Awake", nameof(ChangeTranslatorPrompts));
 
-                    PatchHelper.Post<SignalscopePromptController>("LateInitialize", typeof(Patch), nameof(RemoveSignalscopePrompts));
-                    PatchHelper.Post<SignalscopePromptController>("Awake", typeof(Patch), nameof(ChangeSignalscopePrompts));
+                    Post<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
+                    Post<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
 
-                    PatchHelper.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patch), nameof(RemoveSatellitePrompts));
-                    PatchHelper.Post<SatelliteSnapshotController>("Awake", typeof(Patch), nameof(ChangeSatellitePrompts));
+                    Post<SatelliteSnapshotController>("OnPressInteract", nameof(RemoveSatellitePrompts));
+                    Post<SatelliteSnapshotController>("Awake", nameof(ChangeSatellitePrompts));
 
-                    PatchHelper.Post<PlayerSpawner>("Awake", typeof(Patch), nameof(RemoveJoystickPrompts));
-                    PatchHelper.Post<RoastingStickController>("LateInitialize", typeof(Patch), nameof(RemoveRoastingStickPrompts));
-                    PatchHelper.Post<ToolModeUI>("LateInitialize", typeof(Patch), nameof(RemoveToolModePrompts));
-                    PatchHelper.Post<ScreenPrompt>("SetVisibility", typeof(Patch), nameof(PostScreenPromptVisibility));
+                    Post<PlayerSpawner>("Awake", nameof(RemoveJoystickPrompts));
+                    Post<RoastingStickController>("LateInitialize", nameof(RemoveRoastingStickPrompts));
+                    Post<ToolModeUI>("LateInitialize", nameof(RemoveToolModePrompts));
+                    Post<ScreenPrompt>("SetVisibility", nameof(PostScreenPromptVisibility));
 
-                    PatchHelper.Pre<LockOnReticule>("Init", typeof(Patch), nameof(InitLockOnReticule));
+                    Pre<LockOnReticule>("Init", nameof(InitLockOnReticule));
 
-                    PatchHelper.Pre<ScreenPrompt>("Init", typeof(Patch), nameof(PrePromptInit));
-                    PatchHelper.Pre<ScreenPrompt>("SetText", typeof(Patch), nameof(PrePromptSetText));
-                    PatchHelper.Post<ScreenPromptElement>("BuildTwoCommandScreenPrompt", typeof(Patch), nameof(PostBuildTwoCommandPromptElement));
+                    Pre<ScreenPrompt>("Init", nameof(PrePromptInit));
+                    Pre<ScreenPrompt>("SetText", nameof(PrePromptSetText));
+                    Post<ScreenPromptElement>("BuildTwoCommandScreenPrompt", nameof(PostBuildTwoCommandPromptElement));
 
                     // Replace Icons with empty version
                     var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    PatchHelper.Post(getButtonTextureMethod, typeof(Patch), nameof(ReturnEmptyTexture));
+                    Post(getButtonTextureMethod, nameof(ReturnEmptyTexture));
                     var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
                     foreach (var method in getAxisTextureMethods)
                     {
-                        PatchHelper.Post(method, typeof(Patch), nameof(ReturnEmptyTexture));
+                        Post(method, nameof(ReturnEmptyTexture));
                     }
 
                     // Prevent probe launcher from moving the prompts around.
-                    PatchHelper.Empty<PromptManager>("OnProbeSnapshot");
-                    PatchHelper.Empty<PromptManager>("OnProbeSnapshotRemoved");
-                    PatchHelper.Empty<PromptManager>("OnProbeLauncherEquipped");
-                    PatchHelper.Empty<PromptManager>("OnProbeLauncherUnequipped");
-                    PatchHelper.Empty<ScreenPromptElement>("BuildInCommandImage");
+                    Empty<PromptManager>("OnProbeSnapshot");
+                    Empty<PromptManager>("OnProbeSnapshotRemoved");
+                    Empty<PromptManager>("OnProbeLauncherEquipped");
+                    Empty<PromptManager>("OnProbeLauncherUnequipped");
+                    Empty<ScreenPromptElement>("BuildInCommandImage");
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]

@@ -69,9 +69,9 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    PatchHelper.Post<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", typeof(Patch), nameof(IsPromptAllowed));
-                    PatchHelper.Post<ToolModeSwapper>("GetAutoEquipTranslator", typeof(Patch), nameof(IsPromptAllowed));
-                    PatchHelper.Post<ToolModeSwapper>("IsNomaiTextInFocus", typeof(Patch), nameof(IsPromptAllowed));
+                    Post<ToolModeSwapper>("IsTranslatorEquipPromptAllowed", nameof(IsPromptAllowed));
+                    Post<ToolModeSwapper>("GetAutoEquipTranslator", nameof(IsPromptAllowed));
+                    Post<ToolModeSwapper>("IsNomaiTextInFocus", nameof(IsPromptAllowed));
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
