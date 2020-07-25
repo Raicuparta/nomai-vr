@@ -16,14 +16,14 @@ namespace NomaiVR
 
         public ModConfig(IModConfig config)
         {
-            overrideRefreshRate = config.GetSettingsValue<int>("overrideRefreshRate");
-            vibrationStrength = config.GetSettingsValue<float>("vibrationStrength");
-            showHelmet = config.GetSettingsValue<bool>("showHelmet");
-            hideHudInConversations = config.GetSettingsValue<bool>("hideHudInConversations");
-            controllerOrientedMovement = config.GetSettingsValue<bool>("controllerOrientedMovement");
-            enableGesturePrompts = config.GetSettingsValue<bool>("enableGesturePrompts");
-            preventCursorLock = config.GetSettingsValue<bool>("preventCursorLock");
-            debugMode = config.GetSettingsValue<bool>("debugMode");
+            overrideRefreshRate = config.GetSettingsValue<int>("refreshRateOverride");
+            vibrationStrength = config.GetSettingsValue<float>("vibrationIntensity");
+            showHelmet = config.GetSettingsValue<bool>("helmetVisibility");
+            hideHudInConversations = config.GetSettingsValue<bool>("hideHudDuringDialogue");
+            controllerOrientedMovement = config.GetSettingsValue<bool>("movementControllerOriented");
+            enableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
+            preventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
+            debugMode = config.GetSettingsValue<bool>("debug");
 
             if (preventCursorLock)
             {
