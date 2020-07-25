@@ -69,14 +69,14 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<Campfire>("StartFastForwarding", typeof(Patch), nameof(PostStartFastForwarding));
+                    Postfix<Campfire>("StartFastForwarding", nameof(PostStartFastForwarding));
 
                     var openEyesMethod =
                         typeof(PlayerCameraEffectController)
                         .GetMethod("OpenEyes", new[] { typeof(float), typeof(AnimationCurve) });
-                    NomaiVR.Helper.HarmonyHelper.AddPostfix(openEyesMethod, typeof(Patch), nameof(PostOpenEyes));
+                    Postfix(openEyesMethod, nameof(PostOpenEyes));
 
-                    NomaiVR.Post<PlayerCameraEffectController>("CloseEyes", typeof(Patch), nameof(PostCloseEyes));
+                    Postfix<PlayerCameraEffectController>("CloseEyes", nameof(PostCloseEyes));
                 }
 
                 private static void PostStartFastForwarding()

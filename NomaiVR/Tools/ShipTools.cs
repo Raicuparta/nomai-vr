@@ -95,21 +95,21 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ShipBody>("Start", typeof(Patch), nameof(ShipStart));
-                    NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patch), nameof(PreFindFrame));
-                    NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", typeof(Patch), nameof(PostFindFrame));
-                    NomaiVR.Pre<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patch), nameof(PreFindFrame));
-                    NomaiVR.Post<ReferenceFrameTracker>("FindReferenceFrameInMapView", typeof(Patch), nameof(PostFindFrame));
-                    NomaiVR.Empty<PlayerCameraController>("OnEnterLandingView");
-                    NomaiVR.Empty<PlayerCameraController>("OnExitLandingView");
-                    NomaiVR.Empty<PlayerCameraController>("OnEnterShipComputer");
-                    NomaiVR.Empty<PlayerCameraController>("OnExitShipComputer");
+                    Postfix<ShipBody>("Start", nameof(ShipStart));
+                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PreFindFrame));
+                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PostFindFrame));
+                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PreFindFrame));
+                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PostFindFrame));
+                    Empty<PlayerCameraController>("OnEnterLandingView");
+                    Empty<PlayerCameraController>("OnExitLandingView");
+                    Empty<PlayerCameraController>("OnEnterShipComputer");
+                    Empty<PlayerCameraController>("OnExitShipComputer");
 
-                    NomaiVR.Pre<ShipCockpitController>("EnterLandingView", typeof(Patch), nameof(PreEnterLandingView));
-                    NomaiVR.Pre<ShipCockpitController>("ExitLandingView", typeof(Patch), nameof(PreExitLandingView));
-                    NomaiVR.Post<ShipCockpitController>("ExitFlightConsole", typeof(Patch), nameof(PostExitFlightConsole));
-                    NomaiVR.Pre<ShipCockpitUI>("Update", typeof(Patch), nameof(PreCockpitUIUpdate));
-                    NomaiVR.Post<ShipCockpitUI>("Update", typeof(Patch), nameof(PostCockpitUIUpdate));
+                    Prefix<ShipCockpitController>("EnterLandingView", nameof(PreEnterLandingView));
+                    Prefix<ShipCockpitController>("ExitLandingView", nameof(PreExitLandingView));
+                    Postfix<ShipCockpitController>("ExitFlightConsole", nameof(PostExitFlightConsole));
+                    Prefix<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
+                    Postfix<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
                 }
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)

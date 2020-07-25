@@ -33,47 +33,47 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ProbePromptController>("LateInitialize", typeof(Patch), nameof(RemoveProbePrompts));
-                    NomaiVR.Post<ProbePromptController>("Awake", typeof(Patch), nameof(ChangeProbePrompts));
+                    Postfix<ProbePromptController>("LateInitialize", nameof(RemoveProbePrompts));
+                    Postfix<ProbePromptController>("Awake", nameof(ChangeProbePrompts));
 
-                    NomaiVR.Post<ShipPromptController>("LateInitialize", typeof(Patch), nameof(RemoveShipPrompts));
-                    NomaiVR.Post<ShipPromptController>("Awake", typeof(Patch), nameof(ChangeShipPrompts));
+                    Postfix<ShipPromptController>("LateInitialize", nameof(RemoveShipPrompts));
+                    Postfix<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
 
-                    NomaiVR.Post<NomaiTranslatorProp>("LateInitialize", typeof(Patch), nameof(RemoveTranslatorPrompts));
-                    NomaiVR.Post<NomaiTranslatorProp>("Awake", typeof(Patch), nameof(ChangeTranslatorPrompts));
+                    Postfix<NomaiTranslatorProp>("LateInitialize", nameof(RemoveTranslatorPrompts));
+                    Postfix<NomaiTranslatorProp>("Awake", nameof(ChangeTranslatorPrompts));
 
-                    NomaiVR.Post<SignalscopePromptController>("LateInitialize", typeof(Patch), nameof(RemoveSignalscopePrompts));
-                    NomaiVR.Post<SignalscopePromptController>("Awake", typeof(Patch), nameof(ChangeSignalscopePrompts));
+                    Postfix<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
+                    Postfix<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
 
-                    NomaiVR.Post<SatelliteSnapshotController>("OnPressInteract", typeof(Patch), nameof(RemoveSatellitePrompts));
-                    NomaiVR.Post<SatelliteSnapshotController>("Awake", typeof(Patch), nameof(ChangeSatellitePrompts));
+                    Postfix<SatelliteSnapshotController>("OnPressInteract", nameof(RemoveSatellitePrompts));
+                    Postfix<SatelliteSnapshotController>("Awake", nameof(ChangeSatellitePrompts));
 
-                    NomaiVR.Post<PlayerSpawner>("Awake", typeof(Patch), nameof(RemoveJoystickPrompts));
-                    NomaiVR.Post<RoastingStickController>("LateInitialize", typeof(Patch), nameof(RemoveRoastingStickPrompts));
-                    NomaiVR.Post<ToolModeUI>("LateInitialize", typeof(Patch), nameof(RemoveToolModePrompts));
-                    NomaiVR.Post<ScreenPrompt>("SetVisibility", typeof(Patch), nameof(PostScreenPromptVisibility));
+                    Postfix<PlayerSpawner>("Awake", nameof(RemoveJoystickPrompts));
+                    Postfix<RoastingStickController>("LateInitialize", nameof(RemoveRoastingStickPrompts));
+                    Postfix<ToolModeUI>("LateInitialize", nameof(RemoveToolModePrompts));
+                    Postfix<ScreenPrompt>("SetVisibility", nameof(PostScreenPromptVisibility));
 
-                    NomaiVR.Pre<LockOnReticule>("Init", typeof(Patch), nameof(InitLockOnReticule));
+                    Prefix<LockOnReticule>("Init", nameof(InitLockOnReticule));
 
-                    NomaiVR.Pre<ScreenPrompt>("Init", typeof(Patch), nameof(PrePromptInit));
-                    NomaiVR.Pre<ScreenPrompt>("SetText", typeof(Patch), nameof(PrePromptSetText));
-                    NomaiVR.Post<ScreenPromptElement>("BuildTwoCommandScreenPrompt", typeof(Patch), nameof(PostBuildTwoCommandPromptElement));
+                    Prefix<ScreenPrompt>("Init", nameof(PrePromptInit));
+                    Prefix<ScreenPrompt>("SetText", nameof(PrePromptSetText));
+                    Postfix<ScreenPromptElement>("BuildTwoCommandScreenPrompt", nameof(PostBuildTwoCommandPromptElement));
 
                     // Replace Icons with empty version
                     var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    NomaiVR.Helper.HarmonyHelper.AddPostfix(getButtonTextureMethod, typeof(Patch), nameof(ReturnEmptyTexture));
+                    Postfix(getButtonTextureMethod, nameof(ReturnEmptyTexture));
                     var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
                     foreach (var method in getAxisTextureMethods)
                     {
-                        NomaiVR.Helper.HarmonyHelper.AddPostfix(method, typeof(Patch), nameof(ReturnEmptyTexture));
+                        Postfix(method, nameof(ReturnEmptyTexture));
                     }
 
                     // Prevent probe launcher from moving the prompts around.
-                    NomaiVR.Empty<PromptManager>("OnProbeSnapshot");
-                    NomaiVR.Empty<PromptManager>("OnProbeSnapshotRemoved");
-                    NomaiVR.Empty<PromptManager>("OnProbeLauncherEquipped");
-                    NomaiVR.Empty<PromptManager>("OnProbeLauncherUnequipped");
-                    NomaiVR.Empty<ScreenPromptElement>("BuildInCommandImage");
+                    Empty<PromptManager>("OnProbeSnapshot");
+                    Empty<PromptManager>("OnProbeSnapshotRemoved");
+                    Empty<PromptManager>("OnProbeLauncherEquipped");
+                    Empty<PromptManager>("OnProbeLauncherUnequipped");
+                    Empty<ScreenPromptElement>("BuildInCommandImage");
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]

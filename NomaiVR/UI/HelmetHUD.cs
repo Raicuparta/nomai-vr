@@ -85,8 +85,8 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ThrustAndAttitudeIndicator>("LateUpdate", typeof(Patch), nameof(PatchLateUpdate));
-                    NomaiVR.Post<HUDCamera>("Awake", typeof(Patch), nameof(PostHUDCameraAwake));
+                    Postfix<ThrustAndAttitudeIndicator>("LateUpdate", nameof(PatchLateUpdate));
+                    Postfix<HUDCamera>("Awake", nameof(PostHUDCameraAwake));
                 }
 
                 private static void PostHUDCameraAwake(Camera ____camera)

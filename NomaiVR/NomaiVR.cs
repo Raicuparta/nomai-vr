@@ -82,20 +82,5 @@ namespace NomaiVR
                 Helper.Console.WriteLine(strings);
             }
         }
-
-        public static void Pre<T>(string methodName, Type patchType, string patchMethodName)
-        {
-            Helper.HarmonyHelper.AddPrefix<T>(methodName, patchType, patchMethodName);
-        }
-
-        public static void Post<T>(string methodName, Type patchType, string patchMethodName)
-        {
-            Helper.HarmonyHelper.AddPostfix<T>(methodName, patchType, patchMethodName);
-        }
-
-        public static void Empty<T>(string methodName)
-        {
-            Helper.HarmonyHelper.EmptyMethod<T>(methodName);
-        }
     }
 }

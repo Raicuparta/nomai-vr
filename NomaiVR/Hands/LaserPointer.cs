@@ -355,12 +355,12 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<InteractZone>("UpdateInteractVolume", typeof(Patch), nameof(Patch.PatchUpdateInteractVolume));
-                    NomaiVR.Pre<InteractZone>("OnEntry", typeof(Patch), nameof(Patch.InteractZoneEntry));
-                    NomaiVR.Pre<InteractZone>("OnExit", typeof(Patch), nameof(Patch.InteractZoneExit));
-                    NomaiVR.Pre<ToolModeSwapper>("Update", typeof(Patch), nameof(Patch.ToolModeUpdate));
-                    NomaiVR.Pre<ItemTool>("UpdateIsDroppable", typeof(Patch), nameof(Patch.PreUpdateIsDroppable));
-                    NomaiVR.Post<ItemTool>("UpdateIsDroppable", typeof(Patch), nameof(Patch.PostUpdateIsDroppable));
+                    Prefix<InteractZone>("UpdateInteractVolume", nameof(Patch.PatchUpdateInteractVolume));
+                    Prefix<InteractZone>("OnEntry", nameof(Patch.InteractZoneEntry));
+                    Prefix<InteractZone>("OnExit", nameof(Patch.InteractZoneExit));
+                    Prefix<ToolModeSwapper>("Update", nameof(Patch.ToolModeUpdate));
+                    Prefix<ItemTool>("UpdateIsDroppable", nameof(Patch.PreUpdateIsDroppable));
+                    Postfix<ItemTool>("UpdateIsDroppable", nameof(Patch.PostUpdateIsDroppable));
                 }
 
                 private static bool PatchUpdateInteractVolume(
