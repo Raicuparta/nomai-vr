@@ -136,18 +136,6 @@ namespace NomaiVR
                     DeselectAllTabs();
                     tab.OnPointerEnter(null);
                 }
-
-                if (IsSelectNewlyPressed())
-                {
-                    if (tab == null)
-                    {
-                        HandleSelectableClick(selectable);
-                    }
-                    else
-                    {
-                        HandleTabClick(tab);
-                    }
-                }
             }
 
             private static void HandleOptionsSelectorClick(OptionsSelectorElement optionsSelector)
@@ -216,6 +204,29 @@ namespace NomaiVR
                 tab.OnSelect(null);
             }
 
+            private void HandleTransformClick(Transform clickTransform)
+            {
+                if (clickTransform == null)
+                {
+                    return;
+                }
+                var selectable = clickTransform.GetComponent<Selectable>();
+                if (selectable == null)
+                {
+                    return;
+                }
+                var tab = selectable.transform.GetComponent<TabButton>();
+                if (tab == null)
+                {
+                    HandleSelectableClick(selectable);
+                }
+                else
+                {
+                    HandleTabClick(tab);
+                }
+                return;
+            }
+
             private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
             {
                 if (_dialogueBox.GetValue<bool>("_revealingOptions"))
@@ -237,6 +248,27 @@ namespace NomaiVR
                 }
             }
 
+            private bool HandleTransformHit(Transform hitTransform)
+            {
+                if (hitTransform == null)
+                {
+                    return false;
+                }
+                var selectable = hitTransform.GetComponent<Selectable>();
+                if (selectable != null)
+                {
+                    HandleSelectableRayHit(selectable);
+                    return true;
+                }
+                var dialogueOption = hitTransform.GetComponent<DialogueOptionUI>();
+                if (dialogueOption != null)
+                {
+                    HandleDialogueOptionHit(dialogueOption);
+                    return true;
+                }
+                return false;
+            }
+
             private void UpdateUiRayCast()
             {
                 if (!_isReady || !InputHelper.IsUIInteractionMode(true) || LoadManager.IsBusy())
@@ -253,22 +285,13 @@ namespace NomaiVR
                     }
                     _prevRayHit = hit.transform;
 
-                    var selectable = hit.transform.GetComponent<Selectable>();
-                    if (selectable != null)
+                    if (HandleTransformHit(hit.transform))
                     {
-                        HandleSelectableRayHit(selectable);
-                        return;
-                    }
-                    var dialogueOption = hit.transform.GetComponent<DialogueOptionUI>();
-                    if (dialogueOption != null)
-                    {
-                        HandleDialogueOptionHit(dialogueOption);
                         return;
                     }
                 }
                 else
                 {
-                    _prevRayHit = null;
                     DeselectAllTabs();
                 }
             }
@@ -348,6 +371,11 @@ namespace NomaiVR
                 UpdateLineAppearance();
                 UpdateUiRayCast();
                 UpdateAlternativeButtons();
+
+                if (IsSelectNewlyPressed())
+                {
+                    HandleTransformClick(_prevRayHit);
+                }
             }
 
             public class Patch : NomaiVRPatch

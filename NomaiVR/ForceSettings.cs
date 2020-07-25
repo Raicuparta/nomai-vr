@@ -58,7 +58,6 @@ namespace NomaiVR
 
             private static void PreApplySettings()
             {
-                NomaiVR.Log("pre apply settings");
                 Behaviour.SetResolution();
                 Behaviour.SetFov();
             }
