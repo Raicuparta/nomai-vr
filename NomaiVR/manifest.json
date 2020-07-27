@@ -4,5 +4,6 @@
   "name": "NomaiVR",
   "uniqueName": "Raicuparta.NomaiVR",
   "version": "0.47",
-  "owmlVersion": "0.4.1"
+  "owmlVersion": "0.4.1",
+  "requireVR": true
 }
