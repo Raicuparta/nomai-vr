@@ -16,20 +16,18 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            public static bool IsGripping { get; private set; }
+
             private static Behaviour _instance;
             private static Dictionary<JoystickButton, float> _buttons;
             private static Dictionary<string, float> _singleAxes;
             private static PlayerResources _playerResources;
-            public static bool IsGripping { get; private set; }
+            private bool _isVRInputReady = false;
 
             private float _primaryLastTime = -1;
             private const float holdDuration = 0.3f;
             private bool _justHeld;
             private ScreenPrompt _repairPrompt;
-
-            internal void Awake()
-            {
-            }
 
             internal void Start()
             {
@@ -37,16 +35,7 @@ namespace NomaiVR
                 _buttons = new Dictionary<JoystickButton, float>();
                 _singleAxes = new Dictionary<string, float>();
 
-                SteamVR_Input.Initialize();
-                SteamVR_Input.InitializeFile();
-
-                //NomaiVR.Log("isStartupFrame", SteamVR_Input.isStartupFrame);
-                NomaiVR.Log("initi8alized", SteamVR_Input.initialized);
-                NomaiVR.Log("GetActionsFilePath", SteamVR_Input.GetActionsFilePath());
-                //SetUpActionInputs();
-                //Invoke(nameof(SetUpActionInputs), 1);
                 SetUpSteamVRActionHandlers();
-
                 ReplaceInputs();
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
@@ -59,6 +48,12 @@ namespace NomaiVR
             internal void OnDisable()
             {
                 SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Remove(OnInputFocus);
+            }
+
+            internal void Update()
+            {
+                UpdateActionInputsInit();
+                UpdateInputHold();
             }
 
             private void OnInputFocus(VREvent_t arg)
@@ -312,18 +307,17 @@ namespace NomaiVR
                 };
             }
 
-            bool postStartupFrame = false;
-
-            internal void Update()
+            private void UpdateActionInputsInit()
             {
-
-                NomaiVR.Log("isStartupFrame", SteamVR_Input.isStartupFrame);
-
-                if (!postStartupFrame && !SteamVR_Input.isStartupFrame)
+                if (!_isVRInputReady && !SteamVR_Input.isStartupFrame)
                 {
-                    postStartupFrame = true;
+                    _isVRInputReady = true;
                     SetUpActionInputs();
                 }
+            }
+
+            private void UpdateInputHold()
+            {
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {
                     SimulateInput(JoystickButton.FaceUp);
