@@ -1,5 +1,6 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
+using System.Collections;
 using Valve.VR;
 
 namespace NomaiVR
@@ -9,18 +10,15 @@ namespace NomaiVR
         public static IModHelper Helper;
         public static ModSaveFile Save;
         public static ModConfig Config;
+        public static NomaiVR Instance;
 
         internal void Start()
         {
+            Instance = this;
             Helper.Console.WriteLine("Start NomaiVR");
             Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
 
-            SteamVR_Settings.instance.actionsFilePath = NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json";
-            //SteamVR_Settings.instance.steamVRInputPath
-            //OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
-            SteamVR.Initialize();
-            SteamVR_Input.Initialize();
-            SteamVR_Input.InitializeFile();
+            InitializeSteamVR();
 
             new AssetLoader();
 
@@ -62,12 +60,18 @@ namespace NomaiVR
             Config = new ModConfig(config);
         }
 
-        public static void Log(params object[] strings)
+        public static void Log(string message, MessageType messageType = MessageType.Message)
         {
             if (Helper != null && (Config == null || Config.debugMode))
             {
-                Helper.Console.WriteLine(strings);
+                Helper.Console.WriteLine(message, messageType);
             }
+        }
+
+        private void InitializeSteamVR()
+        {
+            SteamVR_Settings.instance.actionsFilePath = Helper.Manifest.ModFolderPath + @"\bindings\actions.json";
+            SteamVR.Initialize();
         }
     }
 }

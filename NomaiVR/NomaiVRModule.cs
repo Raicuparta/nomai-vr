@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using OWML.Common;
+using System.Linq;
 using UnityEngine;
 
 namespace NomaiVR
@@ -47,7 +48,7 @@ namespace NomaiVR
                 return;
             }
 
-            NomaiVR.Log("Creating NomaiVR behaviour for", GetType().Name);
+            NomaiVR.Log($"Creating NomaiVR behaviour for ${GetType().Name}", MessageType.Info);
             var gameObject = new GameObject();
             gameObject.AddComponent<Behaviour>();
 
@@ -64,7 +65,7 @@ namespace NomaiVR
                 return;
             }
 
-            NomaiVR.Log("Applying NomaiVR patches for", GetType().Name);
+            NomaiVR.Log($"Applying NomaiVR patches for ${GetType().Name}", MessageType.Info);
             var patch = new Patch();
             patch.ApplyPatches();
         }
