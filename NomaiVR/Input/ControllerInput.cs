@@ -457,13 +457,13 @@ namespace NomaiVR
                         a.y *= 1.42857146f;
 
                         var haptic = SteamVR_Actions.default_Haptic;
-                        var frequency = 0.1f;
+                        var secondsFromNow = 0.1f;
                         var amplitudeY = a.y * NomaiVR.Config.vibrationStrength;
                         var amplitudeX = a.x * NomaiVR.Config.vibrationStrength;
-                        haptic.Execute(0, frequency, 10, amplitudeY, SteamVR_Input_Sources.RightHand);
-                        haptic.Execute(0, frequency, 50, amplitudeX, SteamVR_Input_Sources.RightHand);
-                        haptic.Execute(0, frequency, 10, amplitudeY, SteamVR_Input_Sources.LeftHand);
-                        haptic.Execute(0, frequency, 50, amplitudeX, SteamVR_Input_Sources.LeftHand);
+                        haptic.Execute(0, secondsFromNow, 10, amplitudeY, SteamVR_Input_Sources.RightHand);
+                        haptic.Execute(0, secondsFromNow, 50, amplitudeX, SteamVR_Input_Sources.RightHand);
+                        haptic.Execute(0, secondsFromNow, 10, amplitudeY, SteamVR_Input_Sources.LeftHand);
+                        haptic.Execute(0, secondsFromNow, 50, amplitudeX, SteamVR_Input_Sources.LeftHand);
                     }
 
                     return false;
