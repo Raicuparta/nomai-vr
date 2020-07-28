@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -37,9 +38,9 @@ namespace NomaiVR
                 _buttons = new Dictionary<JoystickButton, float>();
                 _singleAxes = new Dictionary<string, float>();
 
+                LoadSteamVRBindings();
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
-                Invoke(nameof(SetUpActionInputs), 1);
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
@@ -51,6 +52,15 @@ namespace NomaiVR
             internal void OnDisable()
             {
                 SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Remove(OnInputFocus);
+            }
+
+            private IEnumerator LoadSteamVRBindings()
+            {
+                while (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
+                    yield return null;
+
+                OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
+                SetUpActionInputs();
             }
 
             private void OnInputFocus(VREvent_t arg)

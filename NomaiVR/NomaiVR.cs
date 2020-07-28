@@ -15,7 +15,7 @@ namespace NomaiVR
             Helper.Console.WriteLine("Start NomaiVR");
             Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
 
-            InitSteamVR();
+            SteamVR.Initialize();
 
             new AssetLoader();
 
@@ -49,12 +49,6 @@ namespace NomaiVR
             new LookArrow();
             new DisableDeathAnimation();
             new Menus();
-        }
-
-        private void InitSteamVR()
-        {
-            SteamVR.Initialize();
-            OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
         }
 
         public override void Configure(IModConfig config)
