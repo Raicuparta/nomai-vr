@@ -29,7 +29,6 @@ namespace NomaiVR
 
             internal void Awake()
             {
-                OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
             }
 
             internal void Start()
@@ -38,8 +37,16 @@ namespace NomaiVR
                 _buttons = new Dictionary<JoystickButton, float>();
                 _singleAxes = new Dictionary<string, float>();
 
-                LoadSteamVRBindings();
+                SteamVR_Input.Initialize();
+                SteamVR_Input.InitializeFile();
+
+                //NomaiVR.Log("isStartupFrame", SteamVR_Input.isStartupFrame);
+                NomaiVR.Log("initi8alized", SteamVR_Input.initialized);
+                NomaiVR.Log("GetActionsFilePath", SteamVR_Input.GetActionsFilePath());
+                //SetUpActionInputs();
+                //Invoke(nameof(SetUpActionInputs), 1);
                 SetUpSteamVRActionHandlers();
+
                 ReplaceInputs();
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
@@ -52,15 +59,6 @@ namespace NomaiVR
             internal void OnDisable()
             {
                 SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Remove(OnInputFocus);
-            }
-
-            private IEnumerator LoadSteamVRBindings()
-            {
-                while (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
-                    yield return null;
-
-                OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
-                SetUpActionInputs();
             }
 
             private void OnInputFocus(VREvent_t arg)
@@ -314,8 +312,18 @@ namespace NomaiVR
                 };
             }
 
+            bool postStartupFrame = false;
+
             internal void Update()
             {
+
+                NomaiVR.Log("isStartupFrame", SteamVR_Input.isStartupFrame);
+
+                if (!postStartupFrame && !SteamVR_Input.isStartupFrame)
+                {
+                    postStartupFrame = true;
+                    SetUpActionInputs();
+                }
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {
                     SimulateInput(JoystickButton.FaceUp);

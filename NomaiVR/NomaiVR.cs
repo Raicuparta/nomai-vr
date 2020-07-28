@@ -15,7 +15,12 @@ namespace NomaiVR
             Helper.Console.WriteLine("Start NomaiVR");
             Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
 
+            SteamVR_Settings.instance.actionsFilePath = NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json";
+            //SteamVR_Settings.instance.steamVRInputPath
+            //OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
             SteamVR.Initialize();
+            SteamVR_Input.Initialize();
+            SteamVR_Input.InitializeFile();
 
             new AssetLoader();
 
