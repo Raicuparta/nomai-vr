@@ -16,6 +16,7 @@ namespace NomaiVR
 
             private static Transform _target;
             private static bool _pauseNextFrame;
+            private InputMode? _prevInputMode;
 
             internal void Start()
             {
@@ -39,13 +40,37 @@ namespace NomaiVR
                 UpdateArrow();
             }
 
+            private void DisableInput()
+            {
+                if (_prevInputMode != null)
+                {
+                    return;
+                }
+                _prevInputMode = OWInput.GetInputMode();
+                OWInput.ChangeInputMode(InputMode.None);
+                NomaiVR.Log("Disabling input from", _prevInputMode, "to", InputMode.None);
+            }
+
+            private void ResetInput()
+            {
+                if (_prevInputMode == null)
+                {
+                    return;
+                }
+                OWInput.ChangeInputMode((InputMode)_prevInputMode);
+                NomaiVR.Log("Resetting input to", _prevInputMode);
+                _prevInputMode = null;
+            }
+
             private void ShowArrow()
             {
+                DisableInput();
                 _wrapper.gameObject.SetActive(true);
             }
 
             private void HideArrow()
             {
+                ResetInput();
                 _wrapper.gameObject.SetActive(false);
             }
 
@@ -132,7 +157,7 @@ namespace NomaiVR
                 {
                     if (targetTransform.GetComponent<ModelShipController>() == null)
                     {
-                        Behaviour._target = targetTransform;
+                        _target = targetTransform;
                     }
 
                     return false;
@@ -140,7 +165,7 @@ namespace NomaiVR
 
                 public static bool PreBreakLock()
                 {
-                    Behaviour._target = null;
+                    _target = null;
                     return false;
                 }
             }
