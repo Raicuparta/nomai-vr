@@ -40,6 +40,7 @@ namespace NomaiVR
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
+                SetUpActionInputs();
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
@@ -100,13 +101,8 @@ namespace NomaiVR
                 return false;
             }
 
-            public static void SetUpActionInputs()
+            private static void SetUpActionInputs()
             {
-                if (_isActionInputsInitialized)
-                {
-                    return;
-                }
-
                 var actionSet = SteamVR_Actions._default;
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
                 {
@@ -138,6 +134,27 @@ namespace NomaiVR
                 {
                     new VRActionInput(actionSet.Grip)
                 };
+            }
+
+            public static void InitializeActionInputs()
+            {
+                if (_isActionInputsInitialized)
+                {
+                    return;
+                }
+
+                foreach (var axisEntry in axisActions)
+                {
+                    axisEntry.Value.Initialize();
+                }
+                foreach (var buttonEntry in buttonActions)
+                {
+                    buttonEntry.Value.Initialize();
+                }
+                foreach (var otherAction in otherActions)
+                {
+                    otherAction.Initialize();
+                }
 
                 foreach (var buttonEntry in buttonActions)
                 {

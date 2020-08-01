@@ -91,7 +91,6 @@ namespace NomaiVR
 
                 private static void AddTextIfNotExisting(string text, HashSet<string> actionTexts, VRActionInput actionInput)
                 {
-                    ControllerInput.Behaviour.SetUpActionInputs();
                     var actionInputText = actionInput.GetText();
                     if (!text.Contains(actionInputText))
                     {

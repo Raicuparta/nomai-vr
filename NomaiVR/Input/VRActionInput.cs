@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Valve.VR;
 
 namespace NomaiVR
@@ -6,16 +7,17 @@ namespace NomaiVR
     public class VRActionInput
     {
         public bool HideHand = false;
-        public readonly string Hand;
-        public readonly string Source;
+        // TODO readonly
+        public string Hand;
+        public string Source;
         public readonly string Color;
-        public readonly List<string> Prefixes = new List<string>();
+        public readonly HashSet<string> Prefixes = new HashSet<string>();
+        private ISteamVR_Action_In _action;
 
         public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false)
         {
-            Hand = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
-            Source = action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
             Color = color;
+            _action = action;
 
             if (isLongPress)
             {
@@ -23,10 +25,17 @@ namespace NomaiVR
             }
         }
 
+        public void Initialize()
+        {
+            Hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
+            Source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
+        }
+
         public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
 
         public string GetText()
         {
+            ControllerInput.Behaviour.InitializeActionInputs();
             var prefix = Prefixes.Count > 0 ? $"{TextHelper.TextWithColor(string.Join(" ", Prefixes.ToArray()), TextHelper.ORANGE)} " : "";
             var hand = HideHand ? "" : $"{Hand} ";
             var result = $"{prefix}{TextHelper.TextWithColor($"{hand}{Source}", Color)}";
