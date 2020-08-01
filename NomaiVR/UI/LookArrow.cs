@@ -117,17 +117,16 @@ namespace NomaiVR
                     {
                         Prefix(method, nameof(PreBreakLock));
                     }
-                    Prefix(typeof(OWTime).GetMethod("Pause"), nameof(PrePause));
+                    Postfix(typeof(OWTime).GetMethod("Pause"), nameof(PostPause));
                 }
 
-                public static bool PrePause(OWTime.PauseType pauseType)
+                public static void PostPause(OWTime.PauseType pauseType)
                 {
                     if (pauseType == OWTime.PauseType.Reading)
                     {
+                        Time.timeScale = 1;
                         _pauseNextFrame = true;
-                        return false;
                     }
-                    return true;
                 }
 
                 public static bool PreLockOn(Transform targetTransform)
