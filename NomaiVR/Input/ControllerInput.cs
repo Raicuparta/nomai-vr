@@ -132,6 +132,10 @@ namespace NomaiVR
                 }
 
                 _isActionInputsInitialized = true;
+
+                // Only need to pause the game until prompts are set up.
+                // After that, forcing pauses can break stuff, so better disable it here.
+                SteamVR_Settings.instance.pauseGameWhenDashboardVisible = false;
             }
 
             private void SetUpSteamVRActionHandlers()
