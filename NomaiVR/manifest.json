@@ -3,7 +3,8 @@
   "author": "Raicuparta",
   "name": "NomaiVR",
   "uniqueName": "Raicuparta.NomaiVR",
-  "version": "0.48",
+  "description": "Enables VR mode, with full motion control support.",
+  "version": "0.49.0",
   "owmlVersion": "0.6.1",
   "requireVR": true
 }
