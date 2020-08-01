@@ -41,11 +41,13 @@ namespace NomaiVR
 
             private void ShowArrow()
             {
+                ControllerInput.IsInputEnabled = false;
                 _wrapper.gameObject.SetActive(true);
             }
 
             private void HideArrow()
             {
+                ControllerInput.IsInputEnabled = true;
                 _wrapper.gameObject.SetActive(false);
             }
 
@@ -132,7 +134,7 @@ namespace NomaiVR
                 {
                     if (targetTransform.GetComponent<ModelShipController>() == null)
                     {
-                        Behaviour._target = targetTransform;
+                        _target = targetTransform;
                     }
 
                     return false;
@@ -140,7 +142,7 @@ namespace NomaiVR
 
                 public static bool PreBreakLock()
                 {
-                    Behaviour._target = null;
+                    _target = null;
                     return false;
                 }
             }
