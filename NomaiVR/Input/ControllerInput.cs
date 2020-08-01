@@ -12,6 +12,7 @@ namespace NomaiVR
         public static Dictionary<JoystickButton, VRActionInput> buttonActions;
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
         public static VRActionInput[] otherActions;
+        private static bool _isActionInputsInitialized;
 
         public class Behaviour : MonoBehaviour
         {
@@ -39,7 +40,7 @@ namespace NomaiVR
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
-                Invoke(nameof(SetUpActionInputs), 1);
+                SetUpActionInputs();
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
@@ -61,46 +62,7 @@ namespace NomaiVR
                 }
             }
 
-            private bool HasAxisWithSameName(VRActionInput button)
-            {
-                foreach (var axisEntry in axisActions)
-                {
-                    var axis = axisEntry.Value;
-                    if (button.Hand == axis.Hand && button.Source == axis.Source)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            private bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
-            {
-                foreach (var buttonEntry in buttonActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(buttonEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var axisEntry in axisActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(axisEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var otherAction in otherActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(otherAction))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public void SetUpActionInputs()
+            private static void SetUpActionInputs()
             {
                 var actionSet = SteamVR_Actions._default;
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
@@ -133,20 +95,42 @@ namespace NomaiVR
                 {
                     new VRActionInput(actionSet.Grip)
                 };
+            }
+
+            public static void InitializeActionInputs()
+            {
+                if (_isActionInputsInitialized)
+                {
+                    return;
+                }
+
+                foreach (var axisEntry in axisActions)
+                {
+                    axisEntry.Value.Initialize();
+                }
+                foreach (var buttonEntry in buttonActions)
+                {
+                    buttonEntry.Value.Initialize();
+                }
+                foreach (var otherAction in otherActions)
+                {
+                    otherAction.Initialize();
+                }
 
                 foreach (var buttonEntry in buttonActions)
                 {
                     var button = buttonEntry.Value;
-                    if (HasAxisWithSameName(button))
+                    if (button.HasAxisWithSameName())
                     {
-                        button.Prefixes.Add("Click");
+                        button.SetAsClickable();
                     }
-
-                    if (!HasOppositeHandButtonWithSameName(button))
+                    if (!button.HasOppositeHandButtonWithSameName())
                     {
                         button.HideHand = true;
                     }
                 }
+
+                _isActionInputsInitialized = true;
             }
 
             private void SetUpSteamVRActionHandlers()
