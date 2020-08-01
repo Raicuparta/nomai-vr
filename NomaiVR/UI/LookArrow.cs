@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    internal class LookArrow : NomaiVRModule<LookArrow.Behaviour, LookArrow.Patch>
+    internal class LookArrow : NomaiVRModule<LookArrow.Behaviour, LookArrow.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -13,7 +13,9 @@ namespace NomaiVR
             private Transform _rightArrow;
             private Transform _leftArrow;
             private Transform _wrapper;
-            public static Transform Target;
+
+            private static Transform _target;
+            private static bool _pauseNextFrame;
 
             internal void Start()
             {
@@ -29,7 +31,12 @@ namespace NomaiVR
                 _leftArrow = canvas.transform.Find("look-left");
                 _leftArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
                 _leftArrow.gameObject.SetActive(false);
+            }
 
+            internal void Update()
+            {
+                UpdatePause();
+                UpdateArrow();
             }
 
             private void ShowArrow()
@@ -42,14 +49,23 @@ namespace NomaiVR
                 _wrapper.gameObject.SetActive(false);
             }
 
-            internal void Update()
+            private void UpdatePause()
             {
-                if (Target == null)
+                if (_pauseNextFrame)
+                {
+                    Time.timeScale = 0;
+                    _pauseNextFrame = false;
+                }
+            }
+
+            private void UpdateArrow()
+            {
+                if (_target == null)
                 {
                     HideArrow();
                     return;
                 }
-                var screenPoint = Locator.GetPlayerCamera().mainCamera.WorldToViewportPoint(Target.position);
+                var screenPoint = Locator.GetPlayerCamera().mainCamera.WorldToViewportPoint(_target.position);
                 var onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
 
                 if (onScreen)
@@ -60,7 +76,7 @@ namespace NomaiVR
                 ShowArrow();
 
                 var camera = Locator.GetPlayerCamera().transform;
-                var targetDirection = (Target.position - camera.position).normalized;
+                var targetDirection = (_target.position - camera.position).normalized;
                 var perpendicular = Vector3.Cross(camera.forward, targetDirection);
                 var player = Locator.GetPlayerTransform();
                 var dir = Vector3.Dot(perpendicular, player.up);
@@ -84,38 +100,49 @@ namespace NomaiVR
                     _wrapper.LookAt(2 * _wrapper.position - playerHead.position, playerHead.up);
                 }
             }
-        }
 
-        public class Patch : NomaiVRPatch
-        {
-            public override void ApplyPatches()
+            public class Patch : NomaiVRPatch
             {
-                var lockOnMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "LockOn");
-                foreach (var method in lockOnMethods)
+                public override void ApplyPatches()
                 {
-                    Prefix(method, nameof(PreLockOn));
-                }
-                var breakLockMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "BreakLock");
-                foreach (var method in breakLockMethods)
-                {
-                    Prefix(method, nameof(PreBreakLock));
-                }
-            }
-
-            public static bool PreLockOn(Transform targetTransform)
-            {
-                if (targetTransform.GetComponent<ModelShipController>() == null)
-                {
-                    Behaviour.Target = targetTransform;
+                    var lockOnMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "LockOn");
+                    foreach (var method in lockOnMethods)
+                    {
+                        Prefix(method, nameof(PreLockOn));
+                    }
+                    var breakLockMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "BreakLock");
+                    foreach (var method in breakLockMethods)
+                    {
+                        Prefix(method, nameof(PreBreakLock));
+                    }
+                    Prefix(typeof(OWTime).GetMethod("Pause"), nameof(PrePause));
                 }
 
-                return false;
-            }
+                public static bool PrePause(OWTime.PauseType pauseType)
+                {
+                    if (pauseType == OWTime.PauseType.Reading)
+                    {
+                        _pauseNextFrame = true;
+                        return false;
+                    }
+                    return true;
+                }
 
-            public static bool PreBreakLock()
-            {
-                Behaviour.Target = null;
-                return false;
+                public static bool PreLockOn(Transform targetTransform)
+                {
+                    if (targetTransform.GetComponent<ModelShipController>() == null)
+                    {
+                        Behaviour._target = targetTransform;
+                    }
+
+                    return false;
+                }
+
+                public static bool PreBreakLock()
+                {
+                    Behaviour._target = null;
+                    return false;
+                }
             }
         }
     }
