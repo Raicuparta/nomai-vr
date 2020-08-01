@@ -4,7 +4,7 @@ using Valve.VR;
 
 namespace NomaiVR
 {
-    internal class ForceSettings : NomaiVRModule<ForceSettings.Behaviour, ForceSettings.Patch>
+    internal class ForceSettings : NomaiVRModule<ForceSettings.Behaviour, ForceSettings.Behaviour.Patch>
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
@@ -18,6 +18,32 @@ namespace NomaiVR
                 SetFov();
             }
 
+            private static void SetResolution()
+            {
+                var displayResHeight = 720;
+                var displayResWidth = 1280;
+                var fullScreen = false;
+
+                PlayerPrefs.SetInt("Screenmanager Resolution Width", displayResWidth);
+                PlayerPrefs.SetInt("Screenmanager Resolution Height", displayResHeight);
+                Screen.SetResolution(displayResWidth, displayResHeight, fullScreen);
+            }
+
+            private static void SetFov()
+            {
+                PlayerData.GetGraphicSettings().fieldOfView = Camera.main.fieldOfView;
+                GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
+            }
+
+            private static void UpdateActiveController()
+            {
+                if (OWInput.GetActivePadNumber() != 0)
+                {
+                    NomaiVR.Log("Wrong gamepad selected. Resetting to 0");
+                    OWInput.SetActiveGamePad(0);
+                }
+            }
+
             private static void SetRefreshRate()
             {
                 var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
@@ -29,37 +55,25 @@ namespace NomaiVR
                 Time.fixedDeltaTime = fixedTimeStep;
             }
 
-            public static void SetResolution()
+            internal void Update()
             {
-                var displayResHeight = 720;
-                var displayResWidth = 1280;
-                var fullScreen = false;
-
-                PlayerPrefs.SetInt("Screenmanager Resolution Width", displayResWidth);
-                PlayerPrefs.SetInt("Screenmanager Resolution Height", displayResHeight);
-                Screen.SetResolution(displayResWidth, displayResHeight, fullScreen);
+                UpdateActiveController();
             }
 
-            public static void SetFov()
+            public class Patch : NomaiVRPatch
             {
-                PlayerData.GetGraphicSettings().fieldOfView = Camera.main.fieldOfView;
-                GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
-            }
-        }
+                public override void ApplyPatches()
+                {
+                    Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PostApplySettings));
+                    Empty<InputRebindableLibrary>("SetKeyBindings");
+                    Empty<GraphicSettings>("SetSliderValFOV");
+                }
 
-        public class Patch : NomaiVRPatch
-        {
-            public override void ApplyPatches()
-            {
-                Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PreApplySettings));
-                Empty<InputRebindableLibrary>("SetKeyBindings");
-                Empty<GraphicSettings>("SetSliderValFOV");
-            }
-
-            private static void PreApplySettings()
-            {
-                Behaviour.SetResolution();
-                Behaviour.SetFov();
+                private static void PostApplySettings()
+                {
+                    SetResolution();
+                    SetFov();
+                }
             }
         }
     }
