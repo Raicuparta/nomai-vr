@@ -119,6 +119,7 @@
     <Compile Include="Helpers\ToolHelper.cs" />
     <Compile Include="Input\VRActionInput.cs" />
     <Compile Include="ModConfig\ModConfig.cs" />
+    <Compile Include="ReusableBehaviours\DebugFollowTarget.cs" />
     <Compile Include="Saves\ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
     <Compile Include="NomaiVRModule.cs" />
