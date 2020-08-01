@@ -15,6 +15,8 @@ namespace NomaiVR
         protected abstract bool IsPersistent { get; }
         protected abstract OWScene[] Scenes { get; }
 
+        private bool _isPersistentBehaviourSetUp;
+
         public NomaiVRModule()
         {
             if (IsSceneRelevant(LoadManager.GetCurrentScene()))
@@ -42,7 +44,7 @@ namespace NomaiVR
 
         private void SetupBehaviour()
         {
-            if (typeof(Behaviour) == typeof(NomaiVRModule.EmptyBehaviour))
+            if (_isPersistentBehaviourSetUp || typeof(Behaviour) == typeof(NomaiVRModule.EmptyBehaviour))
             {
                 return;
             }
@@ -54,6 +56,7 @@ namespace NomaiVR
             if (IsPersistent)
             {
                 gameObject.AddComponent<PersistObject>();
+                _isPersistentBehaviourSetUp = true;
             }
         }
 
