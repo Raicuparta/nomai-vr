@@ -40,37 +40,15 @@ namespace NomaiVR
                 UpdateArrow();
             }
 
-            private void DisableInput()
-            {
-                if (_prevInputMode != null)
-                {
-                    return;
-                }
-                _prevInputMode = OWInput.GetInputMode();
-                OWInput.ChangeInputMode(InputMode.None);
-                NomaiVR.Log("Disabling input from", _prevInputMode, "to", InputMode.None);
-            }
-
-            private void ResetInput()
-            {
-                if (_prevInputMode == null)
-                {
-                    return;
-                }
-                OWInput.ChangeInputMode((InputMode)_prevInputMode);
-                NomaiVR.Log("Resetting input to", _prevInputMode);
-                _prevInputMode = null;
-            }
-
             private void ShowArrow()
             {
-                DisableInput();
+                ControllerInput.IsInputEnabled = false;
                 _wrapper.gameObject.SetActive(true);
             }
 
             private void HideArrow()
             {
-                ResetInput();
+                ControllerInput.IsInputEnabled = true;
                 _wrapper.gameObject.SetActive(false);
             }
 

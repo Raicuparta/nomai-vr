@@ -13,6 +13,7 @@ namespace NomaiVR
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
         public static VRActionInput[] otherActions;
         private static bool _isActionInputsInitialized;
+        public static bool IsInputEnabled = true;
 
         public class Behaviour : MonoBehaviour
         {
@@ -365,6 +366,11 @@ namespace NomaiVR
                     ref Vector2 ____cameraLookValue
                 )
                 {
+                    if (!IsInputEnabled)
+                    {
+                        return false;
+                    }
+
                     var axisX = InputTranslator.GetAxisName(____gamepadHorzBinding.axisID);
                     var axisY = InputTranslator.GetAxisName(____gamepadVertBinding.axisID);
                     if (_singleAxes.ContainsKey(axisX))
@@ -466,6 +472,11 @@ namespace NomaiVR
                     ref float ____realtimeSinceLastUpdate
                 )
                 {
+                    if (!IsInputEnabled)
+                    {
+                        return false;
+                    }
+
                     var positive = ____gamepadBinding.gamepadButtonPos;
                     var negative = ____gamepadBinding.gamepadButtonNeg;
 
