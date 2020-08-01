@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using Valve.VR;
 
 namespace NomaiVR
@@ -7,28 +8,28 @@ namespace NomaiVR
     public class VRActionInput
     {
         public bool HideHand = false;
-        // TODO readonly
-        public string Hand;
-        public string Source;
-        public readonly string Color;
-        public readonly HashSet<string> Prefixes = new HashSet<string>();
+
+        private string _hand;
+        private string _source;
+        private readonly string _color;
+        private readonly HashSet<string> _prefixes = new HashSet<string>();
         private ISteamVR_Action_In _action;
 
         public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false)
         {
-            Color = color;
+            _color = color;
             _action = action;
 
             if (isLongPress)
             {
-                Prefixes.Add("Long Press");
+                _prefixes.Add("Long Press");
             }
         }
 
         public void Initialize()
         {
-            Hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
-            Source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
+            _hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
+            _source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
         }
 
         public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
@@ -36,9 +37,9 @@ namespace NomaiVR
         public string GetText()
         {
             ControllerInput.Behaviour.InitializeActionInputs();
-            var prefix = Prefixes.Count > 0 ? $"{TextHelper.TextWithColor(string.Join(" ", Prefixes.ToArray()), TextHelper.ORANGE)} " : "";
-            var hand = HideHand ? "" : $"{Hand} ";
-            var result = $"{prefix}{TextHelper.TextWithColor($"{hand}{Source}", Color)}";
+            var prefix = _prefixes.Count > 0 ? $"{TextHelper.TextWithColor(string.Join(" ", _prefixes.ToArray()), TextHelper.ORANGE)} " : "";
+            var hand = HideHand ? "" : $"{_hand} ";
+            var result = $"{prefix}{TextHelper.TextWithColor($"{hand}{_source}", _color)}";
             return string.IsNullOrEmpty(result) ? "" : $"[{result}]";
         }
 
@@ -48,11 +49,55 @@ namespace NomaiVR
             {
                 return false;
             }
-            if (Hand != other.Hand && Source == other.Source)
+            if (_hand != other._hand && _source == other._source)
             {
                 return true;
             }
             return false;
+        }
+
+        public bool HasAxisWithSameName()
+        {
+            foreach (var axisEntry in ControllerInput.axisActions)
+            {
+                var axis = axisEntry.Value;
+                if (_hand == axis._hand && _source == axis._source)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool HasOppositeHandButtonWithSameName()
+        {
+            foreach (var buttonEntry in ControllerInput.buttonActions)
+            {
+                if (IsOppositeHandWithSameName(buttonEntry.Value))
+                {
+                    return true;
+                }
+            }
+            foreach (var axisEntry in ControllerInput.axisActions)
+            {
+                if (IsOppositeHandWithSameName(axisEntry.Value))
+                {
+                    return true;
+                }
+            }
+            foreach (var otherAction in ControllerInput.otherActions)
+            {
+                if (IsOppositeHandWithSameName(otherAction))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void SetAsClickable()
+        {
+            _prefixes.Add("Click");
         }
     }
 }

@@ -62,45 +62,6 @@ namespace NomaiVR
                 }
             }
 
-            private static bool HasAxisWithSameName(VRActionInput button)
-            {
-                foreach (var axisEntry in axisActions)
-                {
-                    var axis = axisEntry.Value;
-                    if (button.Hand == axis.Hand && button.Source == axis.Source)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            private static bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
-            {
-                foreach (var buttonEntry in buttonActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(buttonEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var axisEntry in axisActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(axisEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var otherAction in otherActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(otherAction))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
             private static void SetUpActionInputs()
             {
                 var actionSet = SteamVR_Actions._default;
@@ -159,12 +120,11 @@ namespace NomaiVR
                 foreach (var buttonEntry in buttonActions)
                 {
                     var button = buttonEntry.Value;
-                    if (HasAxisWithSameName(button))
+                    if (button.HasAxisWithSameName())
                     {
-                        button.Prefixes.Add("Click");
+                        button.SetAsClickable();
                     }
-
-                    if (!HasOppositeHandButtonWithSameName(button))
+                    if (!button.HasOppositeHandButtonWithSameName())
                     {
                         button.HideHand = true;
                     }
