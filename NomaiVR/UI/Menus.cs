@@ -83,7 +83,6 @@ namespace NomaiVR
                 {
                     followTarget.target = Camera.main.transform.parent;
                     followTarget.localPosition = new Vector3(-0.2f, 1.3f, 2f);
-                    followTarget.gameObject.AddComponent<DebugFollowTarget>();
                 }
                 else
                 {
