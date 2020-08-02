@@ -34,7 +34,7 @@ namespace NomaiVR
                 _helmet = animator.transform;
                 _helmet.localPosition = Vector3.forward * -0.07f;
                 _helmet.localScale = Vector3.one * 0.5f;
-                _helmet.gameObject.AddComponent<SmoothCamereRotation>();
+                _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
 
                 Camera.main.nearClipPlane = 0.01f;
 
