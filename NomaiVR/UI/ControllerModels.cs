@@ -27,7 +27,7 @@ namespace NomaiVR
 
             private void UpdateVisibility()
             {
-                if (OWTime.IsPaused(OWTime.PauseType.Menu) || SceneHelper.IsInTitle())
+                if (OWTime.IsPaused(OWTime.PauseType.Menu) || OWTime.IsPaused(OWTime.PauseType.Sleeping) || SceneHelper.IsInTitle())
                 {
                     Show();
                 }

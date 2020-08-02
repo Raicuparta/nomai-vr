@@ -54,7 +54,7 @@ namespace NomaiVR
             {
                 cullingMask = Camera.main.cullingMask;
                 _farClipPlane = Camera.main.farClipPlane;
-                Camera.main.cullingMask = 1 << LayerMask.NameToLayer("VisibleToPlayer");
+                Camera.main.cullingMask = LayerMask.GetMask("VisibleToPlayer", "UI");
                 Camera.main.farClipPlane = 5;
                 Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
             }
