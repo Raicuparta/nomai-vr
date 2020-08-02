@@ -128,6 +128,7 @@
     <Compile Include="ReusableBehaviours\DebugTransform.cs" />
     <Compile Include="ReusableBehaviours\Holdable.cs" />
     <Compile Include="ReusableBehaviours\PersistObject.cs" />
+    <Compile Include="ReusableBehaviours\SmoothCamereRotation.cs" />
     <Compile Include="ReusableBehaviours\SmoothFollowParentRotation.cs" />
     <Compile Include="UI\ControllerModels.cs" />
     <Compile Include="UI\Dialogue.cs" />
