@@ -338,7 +338,6 @@ namespace NomaiVR
                     Prefix<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
                     Prefix<OWInput>("UpdateActiveInputDevice", nameof(OWInputUpdate));
                     Prefix<OWInput>("Awake", nameof(PostEnableListenForAllJoysticks));
-                    Postfix<PadEZ.PadManager_OW>("GetAxis", nameof(GetAxis));
                     Postfix<PlayerResources>("Awake", nameof(PlayerResourcesAwake));
                     Postfix<PadEZ.PadManager_OW>("GetKey", nameof(ResetPadManagerKeyboard));
                     Postfix<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
@@ -456,15 +455,6 @@ namespace NomaiVR
                     _playerResources = GameObject.FindObjectOfType<PlayerResources>();
                 }
 
-                private static float GetAxis(float __result, string axisName)
-                {
-                    if (_singleAxes.ContainsKey(axisName))
-                    {
-                        return _singleAxes[axisName];
-                    }
-                    return __result;
-                }
-
                 private static bool SingleAxisUpdate(
                     SingleAxisCommand __instance,
                     InputBinding ____gamepadBinding,
@@ -502,7 +492,10 @@ namespace NomaiVR
                     var axis = InputTranslator.GetAxisName(____gamepadBinding.axisID);
                     if (_singleAxes.ContainsKey(axis))
                     {
-                        ____value += _singleAxes[axis] * ____gamepadBinding.axisDirection;
+                        var deadZone = 0.2f;
+                        var axisValue = _singleAxes[axis] * ____gamepadBinding.axisDirection;
+                        var value = Mathf.Abs(axisValue);
+                        ____value += Mathf.Sign(axisValue) * Mathf.InverseLerp(deadZone, 1f - deadZone, value);
                     }
 
                     ____lastPressedDuration = ____pressedDuration;
