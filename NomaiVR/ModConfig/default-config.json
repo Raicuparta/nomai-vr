@@ -17,7 +17,7 @@
 	},
     "helmetVisibility": {
       "type": "toggle",
-      "value": false,
+      "value": true,
       "title": "Helmet around head",
       "yes": "Visible",
       "no": "Hidden"
