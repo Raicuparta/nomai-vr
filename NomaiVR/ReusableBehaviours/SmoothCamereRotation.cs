@@ -2,10 +2,10 @@
 
 namespace NomaiVR
 {
-    public class SmoothFollowParentRotation : MonoBehaviour
+    public class SmoothCamereRotation : MonoBehaviour
     {
         private Quaternion _lastFrameRotation;
-        private float _speed = 15f;
+        private float _speed = 1f;
 
         internal void Start()
         {
@@ -15,9 +15,9 @@ namespace NomaiVR
         internal void LateUpdate()
         {
             var targetRotation = Camera.main.transform.rotation;
-            var difference = Quaternion.Angle(_lastFrameRotation, targetRotation);
+            var difference = Mathf.Abs(Quaternion.Angle(_lastFrameRotation, targetRotation));
 
-            var step = _speed * Time.unscaledDeltaTime * difference;
+            var step = _speed * Time.unscaledDeltaTime * difference * difference;
             transform.rotation = Quaternion.RotateTowards(_lastFrameRotation, targetRotation, step);
             _lastFrameRotation = transform.rotation;
         }
