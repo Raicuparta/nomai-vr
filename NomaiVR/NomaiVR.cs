@@ -44,6 +44,7 @@ namespace NomaiVR
             new FeetMarker();
             new HelmetHUD();
             new InputPrompts();
+            new ControllerModel();
             new GesturePrompts();
             new PostCreditsFix();
             new LookArrow();
