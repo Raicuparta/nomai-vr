@@ -67,10 +67,7 @@ namespace NomaiVR
                     HideArrow();
                     return;
                 }
-                var screenPoint = Locator.GetPlayerCamera().mainCamera.WorldToViewportPoint(_target.position);
-                var onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
-
-                if (onScreen)
+                if (CameraHelper.IsOnScreen(_target.position))
                 {
                     HideArrow();
                     return;
