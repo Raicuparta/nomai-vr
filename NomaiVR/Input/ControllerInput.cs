@@ -17,14 +17,17 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static Behaviour _instance;
-            private static Dictionary<JoystickButton, float> _buttons;
-            private static Dictionary<string, float> _singleAxes;
-            private static PlayerResources _playerResources;
             public static bool IsGripping { get; private set; }
 
-            private float _primaryLastTime = -1;
+            private const float deadZone = 0.25f;
             private const float holdDuration = 0.3f;
+
+            private static Behaviour _instance;
+            private static Dictionary<JoystickButton, float> _buttons;
+            private static Dictionary<string, float> _axes;
+            private static PlayerResources _playerResources;
+
+            private float _primaryLastTime = -1;
             private bool _justHeld;
             private ScreenPrompt _repairPrompt;
 
@@ -37,7 +40,7 @@ namespace NomaiVR
             {
                 _instance = this;
                 _buttons = new Dictionary<JoystickButton, float>();
-                _singleAxes = new Dictionary<string, float>();
+                _axes = new Dictionary<string, float>();
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
@@ -221,7 +224,7 @@ namespace NomaiVR
                 }
                 else if (isUsingSignalscope)
                 {
-                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
+                    _axes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
                 }
 
                 if (isInShip)
@@ -252,7 +255,7 @@ namespace NomaiVR
 
             public static void SimulateInput(AxisIdentifier axis, float value)
             {
-                _singleAxes[InputTranslator.GetAxisName(axis)] = value;
+                _axes[InputTranslator.GetAxisName(axis)] = value;
             }
 
             private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(AxisIdentifier axis, int axisDirection = 1)
@@ -260,7 +263,7 @@ namespace NomaiVR
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
                     var axisName = InputTranslator.GetAxisName(axis);
-                    _singleAxes[axisName] = axisDirection * Mathf.Round(newAxis * 10) / 10;
+                    _axes[axisName] = axisDirection * Mathf.Round(newAxis * 10) / 10;
                 };
             }
 
@@ -288,8 +291,8 @@ namespace NomaiVR
                     var axisNameY = InputTranslator.GetAxisName(axisY);
                     var x = Mathf.Round(axis.x * 100) / 100;
                     var y = Mathf.Round(axis.y * 100) / 100;
-                    _singleAxes[axisNameX] = x;
-                    _singleAxes[axisNameY] = y;
+                    _axes[axisNameX] = x;
+                    _axes[axisNameY] = y;
                 };
             }
 
@@ -362,6 +365,12 @@ namespace NomaiVR
                     }
                 }
 
+                private static float DeadzonedValue(float axisValue)
+                {
+                    var absValue = Mathf.Abs(axisValue);
+                    return Mathf.Sign(axisValue) * Mathf.InverseLerp(deadZone, 1f - deadZone, absValue);
+                }
+
                 private static bool PreUpdateDoubleAxisCommand(
                     InputBinding ____gamepadHorzBinding,
                     InputBinding ____gamepadVertBinding,
@@ -376,16 +385,22 @@ namespace NomaiVR
 
                     var axisX = InputTranslator.GetAxisName(____gamepadHorzBinding.axisID);
                     var axisY = InputTranslator.GetAxisName(____gamepadVertBinding.axisID);
-                    if (_singleAxes.ContainsKey(axisX))
+                    float x = 0;
+                    float y = 0;
+                    if (_axes.ContainsKey(axisX))
                     {
-                        ____value.x = _singleAxes[axisX];
-                        ____cameraLookValue.x = _singleAxes[axisX];
+                        x = DeadzonedValue(_axes[axisX]);
                     }
-                    if (_singleAxes.ContainsKey(axisY))
+                    if (_axes.ContainsKey(axisY))
                     {
-                        ____value.y = _singleAxes[axisY];
-                        ____cameraLookValue.y = _singleAxes[axisY];
+                        y = DeadzonedValue(_axes[axisY]);
                     }
+
+                    ____value.x = x;
+                    ____cameraLookValue.x = x;
+                    ____value.y = y;
+                    ____cameraLookValue.y = y;
+
                     if (____value.sqrMagnitude > 1f)
                     {
                         ____value.Normalize();
@@ -490,12 +505,9 @@ namespace NomaiVR
                     }
 
                     var axis = InputTranslator.GetAxisName(____gamepadBinding.axisID);
-                    if (_singleAxes.ContainsKey(axis))
+                    if (_axes.ContainsKey(axis))
                     {
-                        var deadZone = 0.2f;
-                        var axisValue = _singleAxes[axis] * ____gamepadBinding.axisDirection;
-                        var value = Mathf.Abs(axisValue);
-                        ____value += Mathf.Sign(axisValue) * Mathf.InverseLerp(deadZone, 1f - deadZone, value);
+                        ____value += DeadzonedValue(_axes[axis] * ____gamepadBinding.axisDirection);
                     }
 
                     ____lastPressedDuration = ____pressedDuration;
