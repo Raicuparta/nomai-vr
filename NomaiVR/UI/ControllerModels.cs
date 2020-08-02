@@ -1,32 +1,43 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR
 {
-    internal class ControllerModels : NomaiVRModule<ControllerModels.Behaviour, ControllerModels.Behaviour.Patch>
+    internal class ControllerModels : NomaiVRModule<ControllerModels.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            private static List<ScreenPromptList> _worldPromptLists;
             private SteamVR_RenderModel _leftRenderModel;
             private SteamVR_RenderModel _rightRenderModel;
+            private bool _isVisible;
 
             internal void Start()
             {
-                SetUpModels();
-                ShowModels();
+                SetUp();
+                Show();
             }
 
             internal void Update()
             {
-                UpdateControllerModelVisibility();
+                UpdateVisibility();
             }
 
-            private void SetUpModels()
+            private void UpdateVisibility()
+            {
+                if (OWTime.IsPaused(OWTime.PauseType.Menu) || SceneHelper.IsInTitle())
+                {
+                    Show();
+                }
+                else
+                {
+                    Hide();
+                }
+            }
+
+            private void SetUp()
             {
                 _leftRenderModel = CreateModel(HandsController.Behaviour.LeftHand, SteamVR_Input_Sources.LeftHand, 1);
                 _rightRenderModel = CreateModel(HandsController.Behaviour.RightHand, SteamVR_Input_Sources.RightHand, 2);
@@ -35,6 +46,7 @@ namespace NomaiVR
             private SteamVR_RenderModel CreateModel(Transform parent, SteamVR_Input_Sources source, int index)
             {
                 var model = new GameObject("SteamVR_RenderModel").AddComponent<SteamVR_RenderModel>();
+                model.gameObject.layer = LayerMask.NameToLayer("UI");
                 model.transform.parent = parent;
                 model.transform.localPosition = Vector3.zero;
                 model.transform.localRotation = Quaternion.identity;
@@ -45,49 +57,26 @@ namespace NomaiVR
                 return model;
             }
 
-            private void ShowModels()
+            private void Show()
             {
+                if (_isVisible)
+                {
+                    return;
+                }
+                _isVisible = true;
                 _leftRenderModel.gameObject.SetActive(true);
                 _rightRenderModel.gameObject.SetActive(true);
             }
 
-            private void HideModel()
+            private void Hide()
             {
-                _leftRenderModel.gameObject.SetActive(false);
-                _rightRenderModel.gameObject.SetActive(false);
-            }
-
-            private void UpdateControllerModelVisibility()
-            {
-                var isTitleScene = LoadManager.GetCurrentScene() == OWScene.TitleScreen;
-                if (isTitleScene || _worldPromptLists == null)
+                if (!_isVisible)
                 {
-                    ShowModels();
                     return;
                 }
-                foreach (var promptList in _worldPromptLists)
-                {
-                    if (promptList.IsDisplayingAnyPrompt())
-                    {
-                        NomaiVR.Log("show them models");
-                        ShowModels();
-                        return;
-                    }
-                }
-                HideModel();
-            }
-
-            public class Patch : NomaiVRPatch
-            {
-                public override void ApplyPatches()
-                {
-                    Postfix<PromptManager>("Awake", nameof(PostPromptManagerAwake));
-                }
-
-                private static void PostPromptManagerAwake(List<ScreenPromptList> ____worldPromptLists)
-                {
-                    _worldPromptLists = ____worldPromptLists;
-                }
+                _isVisible = false;
+                _leftRenderModel.gameObject.SetActive(false);
+                _rightRenderModel.gameObject.SetActive(false);
             }
         }
     }
