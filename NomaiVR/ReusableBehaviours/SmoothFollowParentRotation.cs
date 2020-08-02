@@ -4,35 +4,22 @@ namespace NomaiVR
 {
     public class SmoothFollowParentRotation : MonoBehaviour
     {
-        [SerializeField] private readonly float step = 10f;
-
-        private Quaternion startLocalRot, lastFrameRot, lastDesiredRot, fromRot;
-
-        private float percent;
+        private Quaternion _lastFrameRotation;
+        private float _speed = 15f;
 
         internal void Start()
         {
-            startLocalRot = transform.localRotation;
-            lastFrameRot = transform.rotation;
+            _lastFrameRotation = transform.rotation;
         }
 
-        internal void Update()
+        internal void LateUpdate()
         {
-            var newDesiredRot = transform.parent.rotation * startLocalRot;
+            var targetRotation = Camera.main.transform.rotation;
+            var difference = Quaternion.Angle(_lastFrameRotation, targetRotation);
 
-            if (lastDesiredRot != newDesiredRot)
-            {
-                percent = 0;
-                lastDesiredRot = newDesiredRot;
-                fromRot = lastFrameRot;
-            }
-
-            if (percent <= 1)
-            {
-                percent += step * Time.unscaledDeltaTime;
-                lastFrameRot = Quaternion.Lerp(fromRot, newDesiredRot, percent);
-                transform.rotation = lastFrameRot;
-            }
+            var step = _speed * Time.unscaledDeltaTime * difference;
+            transform.rotation = Quaternion.RotateTowards(_lastFrameRotation, targetRotation, step);
+            _lastFrameRotation = transform.rotation;
         }
     }
 }
