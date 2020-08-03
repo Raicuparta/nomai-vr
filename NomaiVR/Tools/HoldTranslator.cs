@@ -55,7 +55,7 @@ namespace NomaiVR
                 translatorHolster.SetActive(true);
                 var holster = translatorHolster.AddComponent<HolsterTool>();
                 holster.hand = HandsController.Behaviour.RightHand;
-                holster.position = new Vector3(-0.3f, -0.55f, 0);
+                holster.position = new Vector3(-0.3f, 0, 0);
                 holster.mode = ToolMode.Translator;
                 holster.scale = 0.15f;
                 holster.angle = new Vector3(0, 90, 90);

@@ -14,6 +14,7 @@ namespace NomaiVR
         private MeshRenderer[] _renderers;
         private bool _visible = true;
         public Action onUnequip;
+        private const float _minHandDistance = 0.3f;
 
         public ProximityDetector Detector { get; private set; }
 
@@ -82,7 +83,10 @@ namespace NomaiVR
         private void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
-            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode;
+            var hand = HandsController.Behaviour.RightHand;
+
+            var isHandClose = !NomaiVR.Config.autoHideToolbelt || (hand.position - transform.position).sqrMagnitude < _minHandDistance;
+            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && isHandClose;
 
             if (!_visible && shouldBeVisible)
             {
@@ -101,6 +105,7 @@ namespace NomaiVR
             if (_visible)
             {
                 var player = Locator.GetPlayerTransform();
+                position.y = NomaiVR.Config.toolbeltHeight;
                 transform.position = Locator.GetPlayerCamera().transform.position + player.TransformVector(position);
                 transform.rotation = player.rotation;
                 transform.Rotate(angle);

@@ -13,6 +13,8 @@ namespace NomaiVR
         public float vibrationStrength = 1;
         public bool enableGesturePrompts = true;
         public bool controllerOrientedMovement = false;
+        public bool autoHideToolbelt = false;
+        public float toolbeltHeight = 0f;
 
         public ModConfig(IModConfig config)
         {
@@ -24,6 +26,11 @@ namespace NomaiVR
             enableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
             preventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
             debugMode = config.GetSettingsValue<bool>("debug");
+            autoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
+
+            // OWML doesn't support negative slider values so I subtract it here.
+            toolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
+            NomaiVR.Log("toolbeltHeight is", toolbeltHeight);
 
             if (preventCursorLock)
             {

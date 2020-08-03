@@ -15,6 +15,20 @@
       "max": 3,
       "title": "Vibration Intensity"
 	},
+    "toolbeltHeight": {
+      "type": "slider",
+      "value": 0.45,
+      "min": 0.2,
+      "max": 0.8,
+      "title": "Toolbelt Height"
+	},
+    "autoHideToolbelt": {
+      "type": "toggle",
+      "value": false,
+      "title": "Hide toolbelt if hand is far",
+      "yes": "Yes",
+      "no": "No"
+	},
     "helmetVisibility": {
       "type": "toggle",
       "value": true,
