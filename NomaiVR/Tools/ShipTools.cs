@@ -179,19 +179,17 @@ namespace NomaiVR
                     var probeCamDisplay = probeScreenPivot.Find("ProbeCamDisplay");
                     var probeScreenText = new GameObject().AddComponent<Text>();
                     probeScreenText.transform.SetParent(probeCamDisplay.transform, false);
-                    probeScreenText.transform.localScale = Vector3.one * 0.004f;
+                    probeScreenText.transform.localScale = Vector3.one * 0.0035f;
                     probeScreenText.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                    probeScreenText.text = "<color=orange>PROBE LAUNCHER</color>\n\n<color=grey>interact with screen\nto activate</color>";
+                    probeScreenText.text = "PROBE LAUNCHER\n\n<color=grey>interact with screen\nto activate</color>";
                     probeScreenText.alignment = TextAnchor.MiddleCenter;
                     probeScreenText.fontSize = 8;
                     probeScreenText.font = font;
 
-                    //NomaiVR.Log("font", Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular_Dynamic.ttf"));
-
                     var signalScreenPivot = cockpitUI.Find("SignalScreen/SignalScreenPivot");
                     _signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
                     _signalscope.button = JoystickButton.DPadRight;
-                    _signalscope.text = UITextType.SignalscopePrompt;
+                    _signalscope.text = UITextType.UISignalscope;
 
                     var sigScopeDisplay = signalScreenPivot.Find("SigScopeDisplay");
                     var scopeTextCanvas = new GameObject().AddComponent<Canvas>();
@@ -201,12 +199,11 @@ namespace NomaiVR
                     scopeTextCanvas.transform.localScale = sigScopeDisplay.transform.localScale;
                     var scopeScreenText = new GameObject().AddComponent<Text>();
                     scopeScreenText.transform.SetParent(scopeTextCanvas.transform, false);
-                    scopeScreenText.transform.localScale = Vector3.one * 0.6f;
-                    scopeScreenText.text = "<color=orange>SIGNALSCOPE</color>\n\n<color=grey>interact with screen to activate</color>";
+                    scopeScreenText.transform.localScale = Vector3.one * 0.5f;
+                    scopeScreenText.text = "SIGNALSCOPE\n\n<color=grey>interact with screen\nto activate</color>";
                     scopeScreenText.alignment = TextAnchor.MiddleCenter;
                     scopeScreenText.fontSize = 8;
                     scopeScreenText.font = font;
-                    //scopeScreenText.rectTransform.sizeDelta = new Vector2(300, 100);
 
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
@@ -222,6 +219,19 @@ namespace NomaiVR
                         return false;
                     };
                     _landingCam.text = UITextType.ShipLandingPrompt;
+
+                    var landingTextCanvas = new GameObject().AddComponent<Canvas>();
+                    landingTextCanvas.transform.SetParent(_landingCam.transform.parent, false);
+                    landingTextCanvas.transform.localPosition = new Vector3(-0.017f, 3.731f, 5.219f);
+                    landingTextCanvas.transform.localRotation = Quaternion.Euler(53.28f, 0, 0);
+                    landingTextCanvas.transform.localScale = Vector3.one * 0.007f;
+                    var landingText = new GameObject().AddComponent<Text>();
+                    landingText.transform.SetParent(landingTextCanvas.transform, false);
+                    landingText.transform.localScale = Vector3.one * 0.6f;
+                    landingText.text = "LANDING CAMERA\n\n<color=grey>interact with screen\nto activate</color>";
+                    landingText.alignment = TextAnchor.MiddleCenter;
+                    landingText.fontSize = 8;
+                    landingText.font = font;
 
                     SetEnabled(false);
                 }
