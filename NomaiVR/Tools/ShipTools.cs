@@ -1,5 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NomaiVR
 {
@@ -168,13 +169,44 @@ namespace NomaiVR
                 {
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
 
-                    _probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot/ProbeScreen").gameObject.AddComponent<ButtonInteraction>();
+                    var probeScreenPivot = cockpitUI.Find("ProbeScreen/ProbeScreenPivot");
+                    _probe = probeScreenPivot.Find("ProbeScreen").gameObject.AddComponent<ButtonInteraction>();
                     _probe.button = JoystickButton.RightBumper;
                     _probe.text = UITextType.ScoutModePrompt;
 
-                    _signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot/SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
+                    var font = Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular");
+
+                    var probeCamDisplay = probeScreenPivot.Find("ProbeCamDisplay");
+                    var probeScreenText = new GameObject().AddComponent<Text>();
+                    probeScreenText.transform.SetParent(probeCamDisplay.transform, false);
+                    probeScreenText.transform.localScale = Vector3.one * 0.004f;
+                    probeScreenText.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    probeScreenText.text = "<color=orange>PROBE LAUNCHER</color>\n\n<color=grey>interact with screen\nto activate</color>";
+                    probeScreenText.alignment = TextAnchor.MiddleCenter;
+                    probeScreenText.fontSize = 8;
+                    probeScreenText.font = font;
+
+                    //NomaiVR.Log("font", Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular_Dynamic.ttf"));
+
+                    var signalScreenPivot = cockpitUI.Find("SignalScreen/SignalScreenPivot");
+                    _signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
                     _signalscope.button = JoystickButton.DPadRight;
                     _signalscope.text = UITextType.SignalscopePrompt;
+
+                    var sigScopeDisplay = signalScreenPivot.Find("SigScopeDisplay");
+                    var scopeTextCanvas = new GameObject().AddComponent<Canvas>();
+                    scopeTextCanvas.transform.SetParent(sigScopeDisplay.transform.parent, false);
+                    scopeTextCanvas.transform.localPosition = sigScopeDisplay.transform.localPosition;
+                    scopeTextCanvas.transform.localRotation = sigScopeDisplay.transform.localRotation;
+                    scopeTextCanvas.transform.localScale = sigScopeDisplay.transform.localScale;
+                    var scopeScreenText = new GameObject().AddComponent<Text>();
+                    scopeScreenText.transform.SetParent(scopeTextCanvas.transform, false);
+                    scopeScreenText.transform.localScale = Vector3.one * 0.6f;
+                    scopeScreenText.text = "<color=orange>SIGNALSCOPE</color>\n\n<color=grey>interact with screen to activate</color>";
+                    scopeScreenText.alignment = TextAnchor.MiddleCenter;
+                    scopeScreenText.fontSize = 8;
+                    scopeScreenText.font = font;
+                    //scopeScreenText.rectTransform.sizeDelta = new Vector2(300, 100);
 
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
