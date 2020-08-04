@@ -36,6 +36,13 @@
       "yes": "Visible",
       "no": "Hidden"
     },
+    "hudScale": {
+      "type": "slider",
+      "value": 1,
+      "min": 0.2,
+      "max": 1.8,
+      "title": "Helmet HUD scale"
+	},
     "hideHudDuringDialogue": {
       "type": "toggle",
       "value": false,

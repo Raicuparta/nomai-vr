@@ -63,7 +63,6 @@ namespace NomaiVR
 
                     return isWearingHelmet && !hideBecauseOfConversation;
                 };
-
                 surface.transform.localScale = Vector3.one * 3.28f;
                 surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
@@ -79,6 +78,14 @@ namespace NomaiVR
                 // Fix lock on UI on suit mode.
                 var lockOnCanvas = playerHUD.transform.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
                 lockOnCanvas.planeDistance = 10;
+            }
+
+            internal void Update()
+            {
+                if (_helmet != null)
+                {
+                    _helmet.transform.localScale = new Vector3(NomaiVR.Config.hudScale, NomaiVR.Config.hudScale, 1f) * 0.5f;
+                }
             }
 
             public class Patch : NomaiVRPatch

@@ -5,7 +5,7 @@ namespace NomaiVR
     public class SmoothFollowCameraRotation : MonoBehaviour
     {
         private Quaternion _lastFrameRotation;
-        private float _speed = 1f;
+        private float _speed = 0.5f;
 
         internal void Start()
         {
