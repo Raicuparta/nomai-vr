@@ -165,6 +165,11 @@ namespace NomaiVR
                     __instance.Invoke("ExitLandingView");
                 }
 
+                private static bool ShouldRenderScreenText()
+                {
+                    return Locator.GetToolModeSwapper().IsInToolMode(ToolMode.None);
+                }
+
                 private static void ShipStart(ShipBody __instance)
                 {
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
@@ -178,6 +183,7 @@ namespace NomaiVR
 
                     var probeCamDisplay = probeScreenPivot.Find("ProbeCamDisplay");
                     var probeScreenText = new GameObject().AddComponent<Text>();
+                    probeScreenText.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderScreenText;
                     probeScreenText.transform.SetParent(probeCamDisplay.transform, false);
                     probeScreenText.transform.localScale = Vector3.one * 0.0035f;
                     probeScreenText.transform.localRotation = Quaternion.Euler(0, 0, 90);
@@ -193,6 +199,7 @@ namespace NomaiVR
 
                     var sigScopeDisplay = signalScreenPivot.Find("SigScopeDisplay");
                     var scopeTextCanvas = new GameObject().AddComponent<Canvas>();
+                    scopeTextCanvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderScreenText;
                     scopeTextCanvas.transform.SetParent(sigScopeDisplay.transform.parent, false);
                     scopeTextCanvas.transform.localPosition = sigScopeDisplay.transform.localPosition;
                     scopeTextCanvas.transform.localRotation = sigScopeDisplay.transform.localRotation;
@@ -222,6 +229,7 @@ namespace NomaiVR
 
                     var landingTextCanvas = new GameObject().AddComponent<Canvas>();
                     landingTextCanvas.transform.SetParent(_landingCam.transform.parent, false);
+                    landingTextCanvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => ShouldRenderScreenText() && !_isLandingCamEnabled;
                     landingTextCanvas.transform.localPosition = new Vector3(-0.017f, 3.731f, 5.219f);
                     landingTextCanvas.transform.localRotation = Quaternion.Euler(53.28f, 0, 0);
                     landingTextCanvas.transform.localScale = Vector3.one * 0.007f;
