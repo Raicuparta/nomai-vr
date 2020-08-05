@@ -54,8 +54,8 @@ namespace NomaiVR
 
         private void InitSteamVR()
         {
-            SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
             SteamVR.Initialize();
+            SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
             OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
         }
 
