@@ -187,7 +187,8 @@ namespace NomaiVR
                     probeScreenText.transform.SetParent(probeCamDisplay.transform, false);
                     probeScreenText.transform.localScale = Vector3.one * 0.0035f;
                     probeScreenText.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                    probeScreenText.text = "PROBE LAUNCHER\n\n<color=grey>interact with screen\nto activate</color>";
+                    probeScreenText.text = "<color=grey>PROBE LAUNCHER</color>\n\ninteract with screen\nto activate";
+                    probeScreenText.color = new Color(1, 1, 1, 0.1f);
                     probeScreenText.alignment = TextAnchor.MiddleCenter;
                     probeScreenText.fontSize = 8;
                     probeScreenText.font = font;
@@ -207,7 +208,8 @@ namespace NomaiVR
                     var scopeScreenText = new GameObject().AddComponent<Text>();
                     scopeScreenText.transform.SetParent(scopeTextCanvas.transform, false);
                     scopeScreenText.transform.localScale = Vector3.one * 0.5f;
-                    scopeScreenText.text = "SIGNALSCOPE\n\n<color=grey>interact with screen\nto activate</color>";
+                    scopeScreenText.text = "<color=grey>SIGNALSCOPE</color>\n\ninteract with screen to activate";
+                    scopeScreenText.color = new Color(1, 1, 1, 0.1f);
                     scopeScreenText.alignment = TextAnchor.MiddleCenter;
                     scopeScreenText.fontSize = 8;
                     scopeScreenText.font = font;
@@ -236,7 +238,8 @@ namespace NomaiVR
                     var landingText = new GameObject().AddComponent<Text>();
                     landingText.transform.SetParent(landingTextCanvas.transform, false);
                     landingText.transform.localScale = Vector3.one * 0.6f;
-                    landingText.text = "LANDING CAMERA\n\n<color=grey>interact with screen\nto activate</color>";
+                    landingText.text = "<color=grey>LANDING CAMERA</color>\n\ninteract with screen\nto activate";
+                    landingText.color = new Color(1, 1, 1, 0.1f);
                     landingText.alignment = TextAnchor.MiddleCenter;
                     landingText.fontSize = 8;
                     landingText.font = font;
