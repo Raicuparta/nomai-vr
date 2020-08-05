@@ -32,7 +32,6 @@ namespace NomaiVR
 
             // OWML doesn't support negative slider values so I subtract it here.
             toolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
-            NomaiVR.Log("toolbeltHeight is", toolbeltHeight);
 
             if (preventCursorLock)
             {
