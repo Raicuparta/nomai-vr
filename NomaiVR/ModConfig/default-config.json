@@ -1,5 +1,4 @@
 {
-  "requireVR": true,
   "enabled": true,
   "settings": {
     "refreshRateOverride": {
