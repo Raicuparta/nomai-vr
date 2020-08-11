@@ -30,6 +30,15 @@ namespace NomaiVR
         {
             _hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
             _source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
+
+            if (string.IsNullOrEmpty(_hand))
+            {
+                WritePartNameNotFoundError("hand", _action);
+            }
+            if (string.IsNullOrEmpty(_source))
+            {
+                WritePartNameNotFoundError("input", _action);
+            }
         }
 
         public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
@@ -98,6 +107,15 @@ namespace NomaiVR
         public void SetAsClickable()
         {
             _prefixes.Add("Click");
+        }
+
+        private void WritePartNameNotFoundError(string part, ISteamVR_Action_In action)
+        {
+            Logs.WriteError(
+                $"Could not find {part} name for binding {_action.GetShortName()}." +
+                $"\nThis probably means the game started with at least one of the VR controllers disconnected." +
+                $"\nMake sure both VR controllers are connected before starting the game."
+            );
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -13,6 +14,22 @@ namespace NomaiVR
         public FatalErrorChecker()
         {
             CheckGameVersion();
+            CheckControllerState();
+        }
+
+        private void CheckControllerState()
+        {
+            SteamVR.instance.hmd.IsTrackedDeviceConnected(0);
+            SteamVR.instance.hmd.IsTrackedDeviceConnected(1);
+
+            if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(0))
+            {
+                Logs.WriteFatal("Trackerd 0 failed");
+            }
+            if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(1))
+            {
+                Logs.WriteFatal("Trackerd 1 failed");
+            }
         }
 
         private void CheckGameVersion()
