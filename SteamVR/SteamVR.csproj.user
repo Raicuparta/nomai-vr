@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
     <GameDir>C:\Program Files\Epic Games\OuterWilds</GameDir>
-    <OwmlDir>C:\Users\ricar\Repos\ow-mod-manager\out\OuterWildsModManager-win32-x64\OWML</OwmlDir>
+    <OwmlDir>C:\Users\ricar\AppData\Local\Programs\ow-mod-manager\OWML</OwmlDir>
     <ModDir>Raicuparta.NomaiVR</ModDir>
   </PropertyGroup>
 </Project>

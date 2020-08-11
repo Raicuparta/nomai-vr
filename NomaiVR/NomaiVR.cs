@@ -14,10 +14,12 @@ namespace NomaiVR
         {
             Helper.Console.WriteLine("Start NomaiVR");
             Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
+            new FatalErrorChecker();
 
             InitSteamVR();
 
             new AssetLoader();
+
 
             // Load all modules.
             // I'm sorry to say that order does matter here.
@@ -54,23 +56,22 @@ namespace NomaiVR
 
         private void InitSteamVR()
         {
-            SteamVR.Initialize();
-            SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
-            OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
+            try
+            {
+                SteamVR.Initialize();
+                SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
+                OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
+            }
+            catch
+            {
+                FatalErrorChecker.ThrowSteamVRError();
+            }
         }
 
         public override void Configure(IModConfig config)
         {
             Helper = ModHelper;
             Config = new ModConfig(config);
-        }
-
-        public static void Log(params object[] strings)
-        {
-            if (Helper != null && (Config == null || Config.debugMode))
-            {
-                Helper.Console.WriteLine(strings);
-            }
         }
     }
 }

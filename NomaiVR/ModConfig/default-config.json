@@ -76,6 +76,13 @@
       "title": "Debug mode (more logs)",
       "yes": "Enabled",
       "no": "Disabled"
+    },
+    "bypassFatalErrors": {
+      "type": "toggle",
+      "value": false,
+      "title": "Bypass fatal errors",
+      "yes": "Enabled",
+      "no": "Disabled"
     }
   }
 }
