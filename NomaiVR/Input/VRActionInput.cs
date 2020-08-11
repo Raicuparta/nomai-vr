@@ -33,11 +33,8 @@ namespace NomaiVR
 
             if (string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
             {
-                Logs.WriteFatal(
-                    $"Could not find name for binding {_action.GetShortName()}." +
-                    "\nThis probably means the game started with at least one of the VR controllers disconnected." +
-                    "\nMake sure both VR controllers are connected before starting the game."
-                );
+                Logs.WriteError($"Could not find name for binding {_action.GetShortName()}.");
+                FatalErrorChecker.ThrowSteamVRError();
             }
         }
 

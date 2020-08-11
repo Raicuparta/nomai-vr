@@ -1,68 +1,105 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR
 {
-    public class FatalErrorChecker
+    internal class FatalErrorChecker : NomaiVRModule<FatalErrorChecker.Behaviour, NomaiVRModule.EmptyPatch>
     {
+        protected override bool IsPersistent => true;
+        protected override OWScene[] Scenes => TitleScene;
+
         const string SupportedVersion = "1.0.7";
 
-        public FatalErrorChecker()
+        public static void ThrowSteamVRError()
         {
-            CheckGameVersion();
-            CheckControllerState();
+            Logs.WriteFatal(
+                "Failed to initialize SteamVR. This could be for a few different reasons. Try these before starting the game again:" +
+                "\n\n- Close SteamVR (let the game open SteamVR automatically);" +
+                "\n\n- Make sure your headset and both of your VR controllers are connected and working;" +
+                "\n\n- If you have the game on Steam:" +
+                "\n--- Right-click Outer Wilds on your Steam library" +
+                "\n--- Select \"Properties...\"" +
+                "\n--- Disable \"Use Desktop Game Theatre.\"" +
+                "\n\n If all else fails, try a version of the game from a different store (Steam / Epic)." +
+                "\n Most people have better luck with Epic, but some people can only get it to work with the Steam version."
+            );
         }
 
-        private void CheckControllerState()
+        public class Behaviour : MonoBehaviour
         {
-            SteamVR.instance.hmd.IsTrackedDeviceConnected(0);
-            SteamVR.instance.hmd.IsTrackedDeviceConnected(1);
+            private bool _isSteamVRInitialized;
 
-            if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(0))
+            internal void Start()
             {
-                Logs.WriteFatal("Trackerd 0 failed");
+                CheckGameVersion();
+                CheckControllerState();
             }
-            if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(1))
-            {
-                Logs.WriteFatal("Trackerd 1 failed");
-            }
-        }
 
-        private void CheckGameVersion()
-        {
-            if (!IsGameVersionSupported())
+            internal void Update()
             {
-                Logs.WriteFatal(
-                    $"Fatal error: this version of NomaiVR only supports Outer Wilds {SupportedVersion}.\n" +
-                    $"Currently installed version of Outer Wilds is {Application.version}.\n" +
-                    "Make sure you are using the latest version of NomaiVR"
-                );
-            }
-        }
-
-        private bool IsGameVersionSupported()
-        {
-            string[] gameVersionParts = SplitVersion(Application.version);
-            string[] supportedVersionParts = SplitVersion(SupportedVersion);
-
-            for (int i = 0; i < supportedVersionParts.Length; i++)
-            {
-                if (gameVersionParts[i] != supportedVersionParts[i])
+                if (_isSteamVRInitialized || SteamVR.initializing)
                 {
-                    return false;
+                    return;
+                }
+                if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
+                {
+                    ThrowSteamVRError();
+                    _isSteamVRInitialized = true;
+                }
+                else if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess)
+                {
+                    _isSteamVRInitialized = true;
                 }
             }
 
-            return true;
-        }
+            private void CheckControllerState()
+            {
+                SteamVR.instance.hmd.IsTrackedDeviceConnected(0);
+                SteamVR.instance.hmd.IsTrackedDeviceConnected(1);
 
-        private string[] SplitVersion(string version)
-        {
-            return version.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(0))
+                {
+                    Logs.WriteFatal("Trackerd 0 failed");
+                }
+                if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(1))
+                {
+                    Logs.WriteFatal("Trackerd 1 failed");
+                }
+            }
+
+            private void CheckGameVersion()
+            {
+                if (!IsGameVersionSupported())
+                {
+                    Logs.WriteFatal(
+                        $"Fatal error: this version of NomaiVR only supports Outer Wilds {SupportedVersion}.\n" +
+                        $"Currently installed version of Outer Wilds is {Application.version}.\n" +
+                        "Make sure you are using the latest version of NomaiVR"
+                    );
+                }
+            }
+
+            private bool IsGameVersionSupported()
+            {
+                string[] gameVersionParts = SplitVersion(Application.version);
+                string[] supportedVersionParts = SplitVersion(SupportedVersion);
+
+                for (int i = 0; i < supportedVersionParts.Length; i++)
+                {
+                    if (gameVersionParts[i] != supportedVersionParts[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            private string[] SplitVersion(string version)
+            {
+                return version.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            }
         }
     }
 }

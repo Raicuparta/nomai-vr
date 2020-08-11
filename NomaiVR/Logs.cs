@@ -6,7 +6,7 @@ namespace NomaiVR
     {
         private const string fatalMessageSufix =
             "\n\nIf you want to ignore this error and start the game anyway, edit NomaiVR/config.json, find \"bypassFatalErrors\", and set \"value\" to true. " +
-            "But be aware that this will only let you play the game in a more broken state.";
+            "But be aware that this will likely face a lot of problems.";
 
         public static void Write(string message, MessageType messageType = MessageType.Message, bool debugOnly = true)
         {
