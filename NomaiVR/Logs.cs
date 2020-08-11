@@ -4,6 +4,10 @@ namespace NomaiVR
 {
     public static class Logs
     {
+        private const string fatalMessageSufix =
+            "\n\nIf you want to ignore this error and start the game anyway, edit NomaiVR/config.json, find \"bypassFatalErrors\", and set \"value\" to true. " +
+            "But be aware that this will only let you play the game in a more broken state.";
+
         public static void Write(string message, MessageType messageType = MessageType.Message, bool debugOnly = true)
         {
             var isDebugMode = !debugOnly || (NomaiVR.Config == null || NomaiVR.Config.debugMode);
@@ -35,7 +39,7 @@ namespace NomaiVR
 
         public static void WriteFatal(string message)
         {
-            Write(message, MessageType.Fatal, false);
+            Write(message + fatalMessageSufix, MessageType.Fatal, false);
         }
     }
 }
