@@ -8,28 +8,32 @@ namespace NomaiVR
 {
     public class FatalErrorChecker
     {
-        const string SupportedVersion = "1.0.5";
+        const string SupportedVersion = "1.0.7";
 
         public FatalErrorChecker()
         {
             CheckGameVersion();
         }
 
-        public static void CheckGameVersion()
+        private void CheckGameVersion()
         {
             if (!IsGameVersionSupported())
             {
                 Logs.WriteFatal(
-                    $"Fatal error: this version of NomaiVR only supports Outer Wilds {SupportedVersion}. " +
-                    $"Make sure you are using the latest version of NomaiVR. " +
-                    $"Currently installed version of Outer Wilds is {Application.version}. " +
-                    $"You can force the game to start anyway by setting skipGameVersionCheck to true in NomaiVR/config.json."
+                    $"Fatal error: this version of NomaiVR only supports Outer Wilds {SupportedVersion}.\n" +
+                    $"Currently installed version of Outer Wilds is {Application.version}.\n" +
+                    "Make sure you are using the latest version of NomaiVR"
                 );
             }
         }
 
-        private static bool IsGameVersionSupported()
+        private bool IsGameVersionSupported()
         {
+            if (NomaiVR.Config.bypassFatalErrors)
+            {
+                return true;
+            }
+
             string[] gameVersionParts = SplitVersion(Application.version);
             string[] supportedVersionParts = SplitVersion(SupportedVersion);
 
@@ -44,7 +48,7 @@ namespace NomaiVR
             return true;
         }
 
-        private static string[] SplitVersion(string version)
+        private string[] SplitVersion(string version)
         {
             return version.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
         }
