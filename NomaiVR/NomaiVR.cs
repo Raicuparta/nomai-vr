@@ -14,10 +14,12 @@ namespace NomaiVR
         {
             Helper.Console.WriteLine("Start NomaiVR");
             Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
+            new FatalErrorChecker();
 
             InitSteamVR();
 
             new AssetLoader();
+
 
             // Load all modules.
             // I'm sorry to say that order does matter here.
