@@ -46,11 +46,6 @@ namespace NomaiVR
 
         private bool IsGameVersionSupported()
         {
-            if (NomaiVR.Config.bypassFatalErrors)
-            {
-                return true;
-            }
-
             string[] gameVersionParts = SplitVersion(Application.version);
             string[] supportedVersionParts = SplitVersion(SupportedVersion);
 

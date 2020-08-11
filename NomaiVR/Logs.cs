@@ -39,7 +39,14 @@ namespace NomaiVR
 
         public static void WriteFatal(string message)
         {
-            Write(message + fatalMessageSufix, MessageType.Fatal, false);
+            if (NomaiVR.Config.bypassFatalErrors)
+            {
+                WriteError(message);
+            }
+            else
+            {
+                Write(message + fatalMessageSufix, MessageType.Fatal, false);
+            }
         }
     }
 }
