@@ -64,13 +64,5 @@ namespace NomaiVR
             Helper = ModHelper;
             Config = new ModConfig(config);
         }
-
-        public static void Log(params object[] strings)
-        {
-            if (Helper != null && (Config == null || Config.debugMode))
-            {
-                Helper.Console.WriteLine(strings);
-            }
-        }
     }
 }

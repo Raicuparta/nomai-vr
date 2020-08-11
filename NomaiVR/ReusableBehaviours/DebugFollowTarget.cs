@@ -101,9 +101,9 @@ namespace NomaiVR
                 transform.localScale = scale;
                 var angles = transform.localEulerAngles;
 
-                NomaiVR.Log("Position: new Vector3(" + Round(position.x) + "f, " + Round(position.y) + "f, " + Round(position.z) + "f)");
-                NomaiVR.Log("Rotation: Quaternion.Euler(" + Round(angles.x) + "f, " + Round(angles.y) + "f, " + Round(angles.z) + "f)");
-                NomaiVR.Log("Scale: " + scale);
+                Logs.Write("Position: new Vector3(" + Round(position.x) + "f, " + Round(position.y) + "f, " + Round(position.z) + "f)");
+                Logs.Write("Rotation: Quaternion.Euler(" + Round(angles.x) + "f, " + Round(angles.y) + "f, " + Round(angles.z) + "f)");
+                Logs.Write("Scale: " + scale);
             }
         }
 

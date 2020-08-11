@@ -39,7 +39,7 @@ namespace NomaiVR
             {
                 if (OWInput.GetActivePadNumber() != 0)
                 {
-                    NomaiVR.Log("Wrong gamepad selected. Resetting to 0");
+                    Logs.WriteWraning("Wrong gamepad selected. Resetting to 0");
                     OWInput.SetActiveGamePad(0);
                 }
             }
