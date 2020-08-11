@@ -216,9 +216,8 @@
             copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(ModDir)\assets"
 
             copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\Mods\$(ModDir)"
-            copy /y "$(ProjectDir)\Saves\save.json" "$(OwmlDir)\Mods\$(ModDir)"
             copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\Mods\$(ModDir)"
-        </PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
