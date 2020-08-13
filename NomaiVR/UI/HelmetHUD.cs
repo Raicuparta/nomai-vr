@@ -11,10 +11,13 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static Transform _thrusterHUD;
-            private static Transform _helmet;
+            private Transform _helmet;
+            private static Behaviour _instance;
 
             internal void Awake()
             {
+                _instance = this;
+
                 FixCameraClipping();
                 var helmetAnimator = SetUpHelmetAnimator();
                 var helmet = SetUpHelmet(helmetAnimator);
@@ -24,14 +27,18 @@ namespace NomaiVR
                 var playerHud = GetPlayerHud(helmet);
                 FixLockOnUI(playerHud);
                 HideHudDuringDialogue(playerHud);
+                SetHelmetScale(NomaiVR.Config);
+                NomaiVR.Config.OnConfigChange += SetHelmetScale;
             }
 
-            internal void Update()
+            public static void SetHelmetScale(ModConfig config)
             {
-                if (_helmet != null)
+                var helmet = _instance?._helmet;
+                if (!helmet)
                 {
-                    _helmet.transform.localScale = new Vector3(NomaiVR.Config.hudScale, NomaiVR.Config.hudScale, 1f) * 0.5f;
+                    return;
                 }
+                helmet.localScale = new Vector3(config.hudScale, config.hudScale, 1f) * 0.5f;
             }
 
             private void FixCameraClipping()
@@ -130,20 +137,18 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ThrustAndAttitudeIndicator>("LateUpdate", nameof(PatchLateUpdate));
-                    Postfix<HUDCamera>("Awake", nameof(PostHUDCameraAwake));
+                    Postfix<ThrustAndAttitudeIndicator>("LateUpdate", nameof(FixThrusterHudRotation));
+                    Postfix<HUDCamera>("Awake", nameof(FixHudDistortion));
                 }
 
-                private static void PostHUDCameraAwake(Camera ____camera)
+                private static void FixHudDistortion(Camera ____camera)
                 {
-                    // Prevent distortion of helmet HUD.
                     ____camera.fieldOfView = 60;
                 }
 
-                private static void PatchLateUpdate()
+                private static void FixThrusterHudRotation()
                 {
-                    // Fix thruster HUD rotation.
-                    var rotation = _helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
+                    var rotation = _instance._helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
                     _thrusterHUD.transform.rotation = rotation;
                 }
             }

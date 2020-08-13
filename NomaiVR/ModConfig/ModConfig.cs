@@ -1,21 +1,24 @@
 ﻿using OWML.Common;
+using System;
 using UnityEngine;
 
 namespace NomaiVR
 {
     public class ModConfig
     {
-        public bool debugMode = true;
-        public bool preventCursorLock = true;
-        public bool showHelmet = true;
-        public int overrideRefreshRate = 0;
-        public float vibrationStrength = 1;
-        public bool enableGesturePrompts = true;
-        public bool controllerOrientedMovement = false;
-        public bool autoHideToolbelt = false;
-        public bool bypassFatalErrors = false;
-        public float toolbeltHeight = 1f;
-        public float hudScale = 1f;
+        public event Action<ModConfig> OnConfigChange;
+
+        public readonly bool debugMode = true;
+        public readonly bool preventCursorLock = true;
+        public readonly bool showHelmet = true;
+        public readonly int overrideRefreshRate = 0;
+        public readonly float vibrationStrength = 1;
+        public readonly bool enableGesturePrompts = true;
+        public readonly bool controllerOrientedMovement = false;
+        public readonly bool autoHideToolbelt = false;
+        public readonly bool bypassFatalErrors = false;
+        public readonly float toolbeltHeight = 1f;
+        public readonly float hudScale = 1f;
 
         public ModConfig(IModConfig config)
         {
@@ -39,6 +42,8 @@ namespace NomaiVR
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
+
+            OnConfigChange(this);
         }
     }
 }
