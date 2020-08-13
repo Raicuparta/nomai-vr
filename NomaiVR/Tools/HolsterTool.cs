@@ -85,7 +85,7 @@ namespace NomaiVR
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
             var hand = HandsController.Behaviour.RightHand;
 
-            var isHandClose = !NomaiVR.Config.autoHideToolbelt || (hand.position - transform.position).sqrMagnitude < _minHandDistance;
+            var isHandClose = !ModSettings.AutoHideToolbelt || (hand.position - transform.position).sqrMagnitude < _minHandDistance;
             var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && isHandClose;
 
             if (!_visible && shouldBeVisible)
@@ -105,7 +105,7 @@ namespace NomaiVR
             if (_visible)
             {
                 var player = Locator.GetPlayerTransform();
-                position.y = NomaiVR.Config.toolbeltHeight;
+                position.y = ModSettings.ToolbeltHeight;
                 transform.position = Locator.GetPlayerCamera().transform.position + player.TransformVector(position);
                 transform.rotation = player.rotation;
                 transform.Rotate(angle);

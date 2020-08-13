@@ -27,18 +27,18 @@ namespace NomaiVR
                 var playerHud = GetPlayerHud(helmet);
                 FixLockOnUI(playerHud);
                 HideHudDuringDialogue(playerHud);
-                SetHelmetScale(NomaiVR.Config);
-                ModConfig.OnConfigChange += SetHelmetScale;
+                SetHelmetScale();
+                ModSettings.OnConfigChange += SetHelmetScale;
             }
 
-            public static void SetHelmetScale(ModConfig config)
+            public static void SetHelmetScale()
             {
                 var helmet = _instance?._helmet;
                 if (!helmet)
                 {
                     return;
                 }
-                helmet.localScale = new Vector3(config.hudScale, config.hudScale, 1f) * 0.5f;
+                helmet.localScale = new Vector3(ModSettings.HudScale, ModSettings.HudScale, 1f) * 0.5f;
             }
 
             private void FixCameraClipping()
@@ -81,7 +81,7 @@ namespace NomaiVR
             {
                 var helmetModelParent = helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
                 helmetModelParent.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
-                    NomaiVR.Config.showHelmet;
+                    ModSettings.ShowHelmet;
 
                 var helmetModel = Instantiate(AssetLoader.HelmetPrefab, helmetModelParent);
                 LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");

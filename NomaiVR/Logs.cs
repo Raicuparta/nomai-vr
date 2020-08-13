@@ -10,7 +10,7 @@ namespace NomaiVR
 
         public static void Write(string message, MessageType messageType = MessageType.Message, bool debugOnly = true)
         {
-            var isDebugMode = !debugOnly || (NomaiVR.Config == null || NomaiVR.Config.debugMode);
+            var isDebugMode = !debugOnly || ModSettings.DebugMode;
             if (NomaiVR.Helper != null && isDebugMode)
             {
                 NomaiVR.Helper.Console.WriteLine(message, messageType);
@@ -39,7 +39,7 @@ namespace NomaiVR
 
         public static void WriteFatal(string message)
         {
-            if (NomaiVR.Config.bypassFatalErrors)
+            if (ModSettings.BypassFatalErrors)
             {
                 WriteError(message);
             }

@@ -75,7 +75,7 @@ namespace NomaiVR
                 {
                     MoveCameraToPlayerHead();
                 }
-                if (NomaiVR.Config.debugMode)
+                if (ModSettings.DebugMode)
                 {
                     if (Input.GetKeyDown(KeyCode.KeypadPlus))
                     {
@@ -100,7 +100,7 @@ namespace NomaiVR
                     var runSpeedX = _playerAnimator.GetFloat("RunSpeedX");
                     var runSpeedY = _playerAnimator.GetFloat("RunSpeedY");
                     var isStopped = runSpeedX + runSpeedY == 0;
-                    var isControllerOriented = !isStopped && NomaiVR.Config.controllerOrientedMovement;
+                    var isControllerOriented = !isStopped && ModSettings.ControllerOrientedMovement;
 
                     if ((OWInput.GetInputMode() != InputMode.Character))
                     {

@@ -8,7 +8,6 @@ namespace NomaiVR
     {
         public static IModHelper Helper;
         public static ModSaveFile Save;
-        public static ModConfig Config;
 
         internal void Start()
         {
@@ -71,7 +70,7 @@ namespace NomaiVR
         public override void Configure(IModConfig config)
         {
             Helper = ModHelper;
-            Config = new ModConfig(config);
+            ModSettings.SetConfig(config);
         }
     }
 }

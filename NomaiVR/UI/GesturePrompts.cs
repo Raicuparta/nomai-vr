@@ -74,7 +74,7 @@ namespace NomaiVR
 
             private bool ShouldRender()
             {
-                return NomaiVR.Config.enableGesturePrompts && _text.text != GestureText.None;
+                return ModSettings.EnableGesturePrompts && _text.text != GestureText.None;
             }
 
             private static void SetText(string text)
@@ -229,7 +229,7 @@ namespace NomaiVR
 
             internal void LateUpdate()
             {
-                if (!NomaiVR.Config.enableGesturePrompts)
+                if (!ModSettings.EnableGesturePrompts)
                 {
                     return;
                 }
@@ -253,7 +253,7 @@ namespace NomaiVR
                     bool ____playingHideAndSeek
                 )
                 {
-                    if (!NomaiVR.Config.enableGesturePrompts)
+                    if (!ModSettings.EnableGesturePrompts)
                     {
                         return;
                     }
