@@ -164,6 +164,17 @@ namespace NomaiVR
                 return canvas.name == "KeyboardRebindingCanvas(Clone)";
             }
 
+            private void SetUpDeathTextCangvas(Canvas canvas)
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = _flashbackCamera;
+                canvas.planeDistance = 15f;
+                var scaler = canvas.GetComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+                scaler.scaleFactor = 0.2f;
+                scaler.referencePixelsPerUnit = 100;
+            }
+
             private void ScreenCanvasesToWorld()
             {
                 var canvases = Resources.FindObjectsOfTypeAll<Canvas>();
@@ -176,9 +187,7 @@ namespace NomaiVR
 
                     if (IsDeathTextCanvas(canvas))
                     {
-                        canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                        canvas.worldCamera = _flashbackCamera;
-                        canvas.planeDistance = 15f;
+                        SetUpDeathTextCangvas(canvas);
                         continue;
                     }
 
