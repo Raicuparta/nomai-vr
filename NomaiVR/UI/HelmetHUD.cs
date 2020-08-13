@@ -17,33 +17,12 @@ namespace NomaiVR
             {
                 Camera.main.nearClipPlane = 0.01f;
 
-                var helmetAnimator = FindObjectOfType<HUDHelmetAnimator>();
-                helmetAnimator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
-
-                _helmet = helmetAnimator.transform;
-                _helmet.localPosition = Vector3.forward * -0.07f;
-                _helmet.localScale = Vector3.one * 0.5f;
-                _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
-
-                CreateForwardIndicator(_helmet);
-                ReplaceHelmetModel(_helmet);
+                var helmetAnimator = SetUpHelmetAnimator();
+                var helmet = SetUpHelmet(helmetAnimator);
+                CreateForwardIndicator(helmet);
+                ReplaceHelmetModel(helmet);
                 AdjustHudRenderer(helmetAnimator);
-
-                var playerHud = GameObject.Find("PlayerHUD").transform;
-
-                // Fix lock on UI on suit mode.
-                var lockOnCanvas = playerHud.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
-                lockOnCanvas.planeDistance = 10;
-
-                var uiCanvas = playerHud.Find("HelmetOnUI/UICanvas");
-                foreach (Transform child in uiCanvas)
-                {
-                    if (child.name == "Notifications")
-                    {
-                        continue;
-                    }
-                    child.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderHudParts;
-                }
+                FixPlayerHud(helmet);
             }
 
             internal void Update()
@@ -52,6 +31,22 @@ namespace NomaiVR
                 {
                     _helmet.transform.localScale = new Vector3(NomaiVR.Config.hudScale, NomaiVR.Config.hudScale, 1f) * 0.5f;
                 }
+            }
+
+            private HUDHelmetAnimator SetUpHelmetAnimator()
+            {
+                var helmetAnimator = FindObjectOfType<HUDHelmetAnimator>();
+                helmetAnimator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
+                return helmetAnimator;
+            }
+
+            private Transform SetUpHelmet(HUDHelmetAnimator helmetAnimator)
+            {
+                _helmet = helmetAnimator.transform;
+                _helmet.localPosition = Vector3.forward * -0.07f;
+                _helmet.localScale = Vector3.one * 0.5f;
+                _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
+                return _helmet;
             }
 
             private void CreateForwardIndicator(Transform helmet)
@@ -96,9 +91,35 @@ namespace NomaiVR
                 MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
             }
 
+            private void FixLockOnUI(Transform playerHud)
+            {
+                var lockOnCanvas = playerHud.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
+                lockOnCanvas.planeDistance = 10;
+            }
+
             private bool ShouldRenderHudParts()
             {
                 return Locator.GetPlayerSuit().IsWearingHelmet() && !PlayerState.InConversation();
+            }
+
+            private void HideHudDuringDialogue(Transform playerHud)
+            {
+                var uiCanvas = playerHud.Find("HelmetOnUI/UICanvas");
+                foreach (Transform child in uiCanvas)
+                {
+                    if (child.name == "Notifications")
+                    {
+                        continue;
+                    }
+                    child.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderHudParts;
+                }
+            }
+
+            private void FixPlayerHud(Transform helmet)
+            {
+                var playerHud = helmet.Find("PlayerHUD").transform;
+                FixLockOnUI(playerHud);
+                HideHudDuringDialogue(playerHud);
             }
 
             public class Patch : NomaiVRPatch
