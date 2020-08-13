@@ -27,11 +27,11 @@ namespace NomaiVR
                 forwardIndicator.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
                 forwardIndicator.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
 
-                var animator = FindObjectOfType<HUDHelmetAnimator>();
-                animator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
+                var helmetAnimator = FindObjectOfType<HUDHelmetAnimator>();
+                helmetAnimator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
 
                 // Move helmet forward to make it a bit more visible.
-                _helmet = animator.transform;
+                _helmet = helmetAnimator.transform;
                 _helmet.localPosition = Vector3.forward * -0.07f;
                 _helmet.localScale = Vector3.one * 0.5f;
                 _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
@@ -50,14 +50,14 @@ namespace NomaiVR
                 helmetModel.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
 
                 // Adjust projected HUD.
-                var surface = GameObject.Find("HUD_CurvedSurface").transform;
-                surface.transform.localScale = Vector3.one * 3.28f;
-                surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
+                var curvedSurface = helmetAnimator.GetValue<MeshRenderer>("_hudRenderer").transform;
+                curvedSurface.localScale = Vector3.one * 3.28f;
+                curvedSurface.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
                 notifications.anchoredPosition = new Vector2(-200, -100);
 
                 // Default HUD shader looks funky in stereo, so we need to replace it with something more standard.
-                var surfaceRenderer = surface.gameObject.GetComponent<MeshRenderer>();
+                var surfaceRenderer = curvedSurface.GetComponent<MeshRenderer>();
                 surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
                 MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
 
