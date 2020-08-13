@@ -15,14 +15,15 @@ namespace NomaiVR
 
             internal void Awake()
             {
-                Camera.main.nearClipPlane = 0.01f;
-
+                FixCameraClipping();
                 var helmetAnimator = SetUpHelmetAnimator();
                 var helmet = SetUpHelmet(helmetAnimator);
                 CreateForwardIndicator(helmet);
                 ReplaceHelmetModel(helmet);
                 AdjustHudRenderer(helmetAnimator);
-                FixPlayerHud(helmet);
+                var playerHud = GetPlayerHud(helmet);
+                FixLockOnUI(playerHud);
+                HideHudDuringDialogue(playerHud);
             }
 
             internal void Update()
@@ -31,6 +32,11 @@ namespace NomaiVR
                 {
                     _helmet.transform.localScale = new Vector3(NomaiVR.Config.hudScale, NomaiVR.Config.hudScale, 1f) * 0.5f;
                 }
+            }
+
+            private void FixCameraClipping()
+            {
+                Camera.main.nearClipPlane = 0.01f;
             }
 
             private HUDHelmetAnimator SetUpHelmetAnimator()
@@ -102,6 +108,11 @@ namespace NomaiVR
                 return Locator.GetPlayerSuit().IsWearingHelmet() && !PlayerState.InConversation();
             }
 
+            private Transform GetPlayerHud(Transform helmet)
+            {
+                return helmet.Find("PlayerHUD");
+            }
+
             private void HideHudDuringDialogue(Transform playerHud)
             {
                 var uiCanvas = playerHud.Find("HelmetOnUI/UICanvas");
@@ -113,13 +124,6 @@ namespace NomaiVR
                     }
                     child.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderHudParts;
                 }
-            }
-
-            private void FixPlayerHud(Transform helmet)
-            {
-                var playerHud = helmet.Find("PlayerHUD").transform;
-                FixLockOnUI(playerHud);
-                HideHudDuringDialogue(playerHud);
             }
 
             public class Patch : NomaiVRPatch
