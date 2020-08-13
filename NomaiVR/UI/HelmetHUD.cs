@@ -51,18 +51,6 @@ namespace NomaiVR
 
                 // Adjust projected HUD.
                 var surface = GameObject.Find("HUD_CurvedSurface").transform;
-
-                // re-use variables because getShouldRender is called every frame via Update
-                // variables are not strictly necessary, but otherwise the expression would be quite long and hard to read
-                bool isWearingHelmet;
-                bool hideBecauseOfConversation;
-                surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () =>
-                {
-                    isWearingHelmet = Locator.GetPlayerSuit().IsWearingHelmet();
-                    hideBecauseOfConversation = PlayerState.InConversation() && NomaiVR.Config.hideHudInConversations;
-
-                    return isWearingHelmet && !hideBecauseOfConversation;
-                };
                 surface.transform.localScale = Vector3.one * 3.28f;
                 surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
@@ -73,11 +61,21 @@ namespace NomaiVR
                 surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
                 MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
 
-                var playerHUD = GameObject.Find("PlayerHUD");
+                var playerHud = GameObject.Find("PlayerHUD").transform;
 
                 // Fix lock on UI on suit mode.
-                var lockOnCanvas = playerHUD.transform.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
+                var lockOnCanvas = playerHud.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
                 lockOnCanvas.planeDistance = 10;
+
+                var uiCanvas = playerHud.Find("HelmetOnUI/UICanvas");
+                foreach (Transform child in uiCanvas)
+                {
+                    if (child.name == "Notifications")
+                    {
+                        continue;
+                    }
+                    child.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderHudParts;
+                }
             }
 
             internal void Update()
@@ -86,6 +84,11 @@ namespace NomaiVR
                 {
                     _helmet.transform.localScale = new Vector3(NomaiVR.Config.hudScale, NomaiVR.Config.hudScale, 1f) * 0.5f;
                 }
+            }
+
+            private bool ShouldRenderHudParts()
+            {
+                return Locator.GetPlayerSuit().IsWearingHelmet() && !PlayerState.InConversation();
             }
 
             public class Patch : NomaiVRPatch
