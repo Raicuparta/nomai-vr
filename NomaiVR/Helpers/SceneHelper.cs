@@ -11,5 +11,9 @@
         {
             return LoadManager.GetCurrentScene() == OWScene.TitleScreen;
         }
+        public static bool IsInSolarSystem()
+        {
+            return LoadManager.GetCurrentScene() == OWScene.SolarSystem;
+        }
     }
 }

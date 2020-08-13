@@ -13,7 +13,7 @@ namespace NomaiVR
         internal void Start()
         {
             Helper.Console.WriteLine("Start NomaiVR");
-            Save = ModHelper.Storage.Load<ModSaveFile>(ModSaveFile.FileName);
+            Save = ModSaveFile.LoadSaveFile();
             new FatalErrorChecker();
 
             InitSteamVR();
