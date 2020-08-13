@@ -13,6 +13,7 @@ namespace NomaiVR
         {
             private static bool _shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
+            private static Transform _flashbackCameraParent;
 
             internal void Start()
             {
@@ -137,6 +138,15 @@ namespace NomaiVR
 
                     if (canvas.name == "Canvas_Text")
                     {
+                        if (!_flashbackCameraParent)
+                        {
+                            _flashbackCameraParent = new GameObject().transform;
+                        }
+                        if (canvas.transform.parent.parent == null)
+                        {
+                            canvas.transform.parent.SetParent(_flashbackCameraParent);
+                        }
+                        _flashbackCameraParent.position = canvas.transform.parent.localPosition * -1;
                         canvas.renderMode = RenderMode.ScreenSpaceCamera;
                         canvas.worldCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
                         canvas.planeDistance = 0.68f;
