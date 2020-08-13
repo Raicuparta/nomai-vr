@@ -135,6 +135,14 @@ namespace NomaiVR
                         continue;
                     }
 
+                    if (canvas.name == "Canvas_Text")
+                    {
+                        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                        canvas.worldCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
+                        canvas.planeDistance = 0.68f;
+                        continue;
+                    }
+
                     var isScreenSpaceOverlay = canvas.renderMode == RenderMode.ScreenSpaceOverlay;
                     var isPatched = patchedCanvases.Contains(canvas);
 
