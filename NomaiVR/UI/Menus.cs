@@ -164,7 +164,7 @@ namespace NomaiVR
                 return canvas.name == "KeyboardRebindingCanvas(Clone)";
             }
 
-            private void SetUpDeathTextCangvas(Canvas canvas)
+            private void SetUpDeathTextCanvas(Canvas canvas)
             {
                 canvas.renderMode = RenderMode.ScreenSpaceCamera;
                 canvas.worldCamera = _flashbackCamera;
@@ -187,7 +187,7 @@ namespace NomaiVR
 
                     if (IsDeathTextCanvas(canvas))
                     {
-                        SetUpDeathTextCangvas(canvas);
+                        SetUpDeathTextCanvas(canvas);
                         continue;
                     }
 
