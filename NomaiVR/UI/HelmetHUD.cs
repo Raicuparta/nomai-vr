@@ -15,28 +15,17 @@ namespace NomaiVR
 
             internal void Awake()
             {
-                _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
-
-                // Add a stronger line pointing forward in the thruster HUD
-                var forwardIndicator = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
-                forwardIndicator.parent = _thrusterHUD.Find("ThrusterArrows/Positive_Z");
-                forwardIndicator.localPosition = Vector3.forward * 0.75f;
-                forwardIndicator.localRotation = Quaternion.identity;
-                forwardIndicator.localScale = new Vector3(0.05f, 0.05f, 1.5f);
-                forwardIndicator.gameObject.layer = LayerMask.NameToLayer("HeadsUpDisplay");
-                forwardIndicator.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
-                forwardIndicator.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+                Camera.main.nearClipPlane = 0.01f;
 
                 var helmetAnimator = FindObjectOfType<HUDHelmetAnimator>();
                 helmetAnimator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
 
-                // Move helmet forward to make it a bit more visible.
                 _helmet = helmetAnimator.transform;
                 _helmet.localPosition = Vector3.forward * -0.07f;
                 _helmet.localScale = Vector3.one * 0.5f;
                 _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
 
-                Camera.main.nearClipPlane = 0.01f;
+                CreateForwardIndicator(_helmet);
 
                 // Replace helmet model to prevent looking outside the edge.
                 var helmetModelParent = _helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
@@ -84,6 +73,21 @@ namespace NomaiVR
                 {
                     _helmet.transform.localScale = new Vector3(NomaiVR.Config.hudScale, NomaiVR.Config.hudScale, 1f) * 0.5f;
                 }
+            }
+
+            private void CreateForwardIndicator(Transform helmet)
+            {
+                _thrusterHUD = helmet.GetComponentInChildren<ThrustAndAttitudeIndicator>().transform;
+
+                // Add a stronger line pointing forward in the thruster HUD
+                var forwardIndicator = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
+                forwardIndicator.parent = _thrusterHUD.Find("ThrusterArrows/Positive_Z");
+                forwardIndicator.localPosition = Vector3.forward * 0.75f;
+                forwardIndicator.localRotation = Quaternion.identity;
+                forwardIndicator.localScale = new Vector3(0.05f, 0.05f, 1.5f);
+                forwardIndicator.gameObject.layer = LayerMask.NameToLayer("HeadsUpDisplay");
+                forwardIndicator.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
+                forwardIndicator.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
             }
 
             private bool ShouldRenderHudParts()
