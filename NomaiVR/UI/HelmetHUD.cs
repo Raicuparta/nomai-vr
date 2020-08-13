@@ -26,29 +26,8 @@ namespace NomaiVR
                 _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
 
                 CreateForwardIndicator(_helmet);
-
-                // Replace helmet model to prevent looking outside the edge.
-                var helmetModelParent = _helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
-                helmetModelParent.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
-                    NomaiVR.Config.showHelmet;
-
-                var helmetModel = Instantiate(AssetLoader.HelmetPrefab, helmetModelParent);
-                LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
-                Destroy(helmetModelParent.Find("Helmet").gameObject);
-                Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
-                helmetModel.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
-
-                // Adjust projected HUD.
-                var curvedSurface = helmetAnimator.GetValue<MeshRenderer>("_hudRenderer").transform;
-                curvedSurface.localScale = Vector3.one * 3.28f;
-                curvedSurface.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
-                var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
-                notifications.anchoredPosition = new Vector2(-200, -100);
-
-                // Default HUD shader looks funky in stereo, so we need to replace it with something more standard.
-                var surfaceRenderer = curvedSurface.GetComponent<MeshRenderer>();
-                surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
-                MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
+                ReplaceHelmetModel(_helmet);
+                AdjustHudRenderer(helmetAnimator);
 
                 var playerHud = GameObject.Find("PlayerHUD").transform;
 
@@ -88,6 +67,33 @@ namespace NomaiVR
                 forwardIndicator.gameObject.layer = LayerMask.NameToLayer("HeadsUpDisplay");
                 forwardIndicator.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
                 forwardIndicator.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+            }
+
+            private void ReplaceHelmetModel(Transform helmet)
+            {
+                var helmetModelParent = helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
+                helmetModelParent.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                    NomaiVR.Config.showHelmet;
+
+                var helmetModel = Instantiate(AssetLoader.HelmetPrefab, helmetModelParent);
+                LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
+                Destroy(helmetModelParent.Find("Helmet").gameObject);
+                Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
+                helmetModel.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
+            }
+
+            private void AdjustHudRenderer(HUDHelmetAnimator helmetAnimator)
+            {
+                var hudRenderer = helmetAnimator.GetValue<MeshRenderer>("_hudRenderer").transform;
+                hudRenderer.localScale = Vector3.one * 3.28f;
+                hudRenderer.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
+                var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
+                notifications.anchoredPosition = new Vector2(-200, -100);
+
+                // HUD shader looks funky in stereo, so it needs to be replaced.
+                var surfaceRenderer = hudRenderer.GetComponent<MeshRenderer>();
+                surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
+                MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
             }
 
             private bool ShouldRenderHudParts()
