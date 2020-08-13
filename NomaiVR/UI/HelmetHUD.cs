@@ -28,7 +28,7 @@ namespace NomaiVR
                 FixLockOnUI(playerHud);
                 HideHudDuringDialogue(playerHud);
                 SetHelmetScale(NomaiVR.Config);
-                NomaiVR.Config.OnConfigChange += SetHelmetScale;
+                ModConfig.OnConfigChange += SetHelmetScale;
             }
 
             public static void SetHelmetScale(ModConfig config)

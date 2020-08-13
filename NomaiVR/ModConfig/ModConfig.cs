@@ -6,7 +6,7 @@ namespace NomaiVR
 {
     public class ModConfig
     {
-        public event Action<ModConfig> OnConfigChange;
+        public static event Action<ModConfig> OnConfigChange;
 
         public readonly bool debugMode = true;
         public readonly bool preventCursorLock = true;
@@ -43,7 +43,7 @@ namespace NomaiVR
                 Cursor.visible = true;
             }
 
-            OnConfigChange(this);
+            OnConfigChange?.Invoke(this);
         }
     }
 }
