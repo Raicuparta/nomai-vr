@@ -2,7 +2,7 @@
 
 namespace NomaiVR
 {
-    static class CameraHelper
+    internal static class CameraHelper
     {
         public static bool IsOnScreen(Vector3 position)
         {

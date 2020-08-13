@@ -9,7 +9,7 @@ namespace NomaiVR
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
 
-        const string SupportedVersion = "1.0.7";
+        private const string SupportedVersion = "1.0.7";
 
         public static void ThrowSteamVRError()
         {
@@ -82,10 +82,10 @@ namespace NomaiVR
 
             private bool IsGameVersionSupported()
             {
-                string[] gameVersionParts = SplitVersion(Application.version);
-                string[] supportedVersionParts = SplitVersion(SupportedVersion);
+                var gameVersionParts = SplitVersion(Application.version);
+                var supportedVersionParts = SplitVersion(SupportedVersion);
 
-                for (int i = 0; i < supportedVersionParts.Length; i++)
+                for (var i = 0; i < supportedVersionParts.Length; i++)
                 {
                     if (gameVersionParts[i] != supportedVersionParts[i])
                     {
