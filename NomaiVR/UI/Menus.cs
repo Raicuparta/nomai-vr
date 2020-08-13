@@ -13,23 +13,46 @@ namespace NomaiVR
         {
             private static bool _shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
-            private static Transform _flashbackCameraParent;
+            private Camera _flashbackCamera;
+            private Transform _flashbackCameraParent;
 
             internal void Start()
             {
-                var scene = LoadManager.GetCurrentScene();
+                if (SceneHelper.IsInGame())
+                {
+                    SetUpFlashbackCameraParent();
+                }
 
-                if (scene == OWScene.SolarSystem)
+                if (SceneHelper.IsInSolarSystem())
                 {
                     FixSleepTimerCanvas();
                 }
-                else if (scene == OWScene.TitleScreen)
+
+                if (SceneHelper.IsInTitle())
                 {
                     FixTitleMenuCanvases();
                     FixStarLogos();
-
                 }
+
                 ScreenCanvasesToWorld();
+            }
+
+            private void SetUpFlashbackCameraParent()
+            {
+                _flashbackCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
+                if (!_flashbackCameraParent)
+                {
+                    _flashbackCameraParent = new GameObject().transform;
+                }
+                if (_flashbackCamera.transform.parent == null)
+                {
+                    _flashbackCamera.transform.SetParent(_flashbackCameraParent);
+                }
+                // FlashbackCamera objects starts really far from Vector3.zero.
+                // Far enough to cause floating point imprecision glitches.
+                // Usually the game would move the camera to Vector3.zero, but camera movement isn't possible in VR.
+                // So we need to apply the inverse position to make it move to Vector3.zero.
+                _flashbackCameraParent.position = _flashbackCamera.transform.localPosition * -1;
             }
 
             private static void FixStarLogo(string objectName)
@@ -72,7 +95,7 @@ namespace NomaiVR
                 splashImage.sprite = AssetLoader.SplashSprite;
             }
 
-            private static void AddFollowTarget(Canvas canvas)
+            private void AddFollowTarget(Canvas canvas)
             {
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
@@ -125,31 +148,37 @@ namespace NomaiVR
                 }
             }
 
-            private static void ScreenCanvasesToWorld()
+            private bool IsDeathTextCanvas(Canvas canvas)
+            {
+                return canvas.name == "Canvas_Text";
+            }
+
+            private bool IsPauseBackdopCanvas(Canvas canvas)
+            {
+                return canvas.name == "PauseBackdropCanvas";
+            }
+
+            private bool IsOwmlModConfigMenuCanvas(Canvas canvas)
+            {
+                // Hack! If OWML ever changes this name, this check needs to be fixed.
+                return canvas.name == "KeyboardRebindingCanvas(Clone)";
+            }
+
+            private void ScreenCanvasesToWorld()
             {
                 var canvases = Resources.FindObjectsOfTypeAll<Canvas>();
                 foreach (var canvas in canvases)
                 {
-                    // Filter out backdrop, to disable the background canvas during conversations.
-                    if (canvas.name == "PauseBackdropCanvas")
+                    if (IsPauseBackdopCanvas(canvas))
                     {
                         continue;
                     }
 
-                    if (canvas.name == "Canvas_Text")
+                    if (IsDeathTextCanvas(canvas))
                     {
-                        if (!_flashbackCameraParent)
-                        {
-                            _flashbackCameraParent = new GameObject().transform;
-                        }
-                        if (canvas.transform.parent.parent == null)
-                        {
-                            canvas.transform.parent.SetParent(_flashbackCameraParent);
-                        }
-                        _flashbackCameraParent.position = canvas.transform.parent.localPosition * -1;
                         canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                        canvas.worldCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
-                        canvas.planeDistance = 0.68f;
+                        canvas.worldCamera = _flashbackCamera;
+                        canvas.planeDistance = 15f;
                         continue;
                     }
 
@@ -168,9 +197,7 @@ namespace NomaiVR
                         AddFollowTarget(canvas);
                     }
 
-                    // Hack! This is the name of the mod config menu.
-                    // If OWML ever changes this name, this check needs to be fixed.
-                    if (isPatched && canvas.name == "KeyboardRebindingCanvas(Clone)")
+                    if (isPatched && IsOwmlModConfigMenuCanvas(canvas))
                     {
                         AdjustModConfigButtons(canvas);
                     }
