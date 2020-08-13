@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using Valve.VR;
 
 namespace NomaiVR
@@ -13,7 +12,7 @@ namespace NomaiVR
         private string _source;
         private readonly string _color;
         private readonly HashSet<string> _prefixes = new HashSet<string>();
-        private ISteamVR_Action_In _action;
+        private readonly ISteamVR_Action_In _action;
 
         public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false)
         {

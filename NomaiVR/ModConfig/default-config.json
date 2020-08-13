@@ -42,13 +42,6 @@
       "max": 1.8,
       "title": "Helmet HUD scale"
 	},
-    "hideHudDuringDialogue": {
-      "type": "toggle",
-      "value": false,
-      "title": "HUD during conversations",
-      "yes": "Hidden",
-      "no": "Visible"
-    },
     "movementControllerOriented": {
       "type": "toggle",
       "value": false,

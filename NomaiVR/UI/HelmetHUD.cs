@@ -11,11 +11,60 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static Transform _thrusterHUD;
-            private static Transform _helmet;
+            private Transform _helmet;
+            private static Behaviour _instance;
 
             internal void Awake()
             {
-                _thrusterHUD = GameObject.Find("HUD_Thrusters").transform;
+                _instance = this;
+
+                FixCameraClipping();
+                var helmetAnimator = SetUpHelmetAnimator();
+                var helmet = SetUpHelmet(helmetAnimator);
+                CreateForwardIndicator(helmet);
+                ReplaceHelmetModel(helmet);
+                AdjustHudRenderer(helmetAnimator);
+                var playerHud = GetPlayerHud(helmet);
+                FixLockOnUI(playerHud);
+                HideHudDuringDialogue(playerHud);
+                SetHelmetScale();
+                ModSettings.OnConfigChange += SetHelmetScale;
+            }
+
+            public static void SetHelmetScale()
+            {
+                var helmet = _instance?._helmet;
+                if (!helmet)
+                {
+                    return;
+                }
+                helmet.localScale = new Vector3(ModSettings.HudScale, ModSettings.HudScale, 1f) * 0.5f;
+            }
+
+            private void FixCameraClipping()
+            {
+                Camera.main.nearClipPlane = 0.01f;
+            }
+
+            private HUDHelmetAnimator SetUpHelmetAnimator()
+            {
+                var helmetAnimator = FindObjectOfType<HUDHelmetAnimator>();
+                helmetAnimator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
+                return helmetAnimator;
+            }
+
+            private Transform SetUpHelmet(HUDHelmetAnimator helmetAnimator)
+            {
+                _helmet = helmetAnimator.transform;
+                _helmet.localPosition = Vector3.forward * -0.07f;
+                _helmet.localScale = Vector3.one * 0.5f;
+                _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
+                return _helmet;
+            }
+
+            private void CreateForwardIndicator(Transform helmet)
+            {
+                _thrusterHUD = helmet.GetComponentInChildren<ThrustAndAttitudeIndicator>().transform;
 
                 // Add a stronger line pointing forward in the thruster HUD
                 var forwardIndicator = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
@@ -26,65 +75,61 @@ namespace NomaiVR
                 forwardIndicator.gameObject.layer = LayerMask.NameToLayer("HeadsUpDisplay");
                 forwardIndicator.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Color");
                 forwardIndicator.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+            }
 
-                var animator = FindObjectOfType<HUDHelmetAnimator>();
-                animator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
-
-                // Move helmet forward to make it a bit more visible.
-                _helmet = animator.transform;
-                _helmet.localPosition = Vector3.forward * -0.07f;
-                _helmet.localScale = Vector3.one * 0.5f;
-                _helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
-
-                Camera.main.nearClipPlane = 0.01f;
-
-                // Replace helmet model to prevent looking outside the edge.
-                var helmetModelParent = _helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
+            private void ReplaceHelmetModel(Transform helmet)
+            {
+                var helmetModelParent = helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
                 helmetModelParent.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
-                    NomaiVR.Config.showHelmet;
+                    ModSettings.ShowHelmet;
 
                 var helmetModel = Instantiate(AssetLoader.HelmetPrefab, helmetModelParent);
                 LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
                 Destroy(helmetModelParent.Find("Helmet").gameObject);
                 Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
                 helmetModel.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
+            }
 
-                // Adjust projected HUD.
-                var surface = GameObject.Find("HUD_CurvedSurface").transform;
-
-                // re-use variables because getShouldRender is called every frame via Update
-                // variables are not strictly necessary, but otherwise the expression would be quite long and hard to read
-                bool isWearingHelmet;
-                bool hideBecauseOfConversation;
-                surface.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += () =>
-                {
-                    isWearingHelmet = Locator.GetPlayerSuit().IsWearingHelmet();
-                    hideBecauseOfConversation = PlayerState.InConversation() && NomaiVR.Config.hideHudInConversations;
-
-                    return isWearingHelmet && !hideBecauseOfConversation;
-                };
-                surface.transform.localScale = Vector3.one * 3.28f;
-                surface.transform.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
+            private void AdjustHudRenderer(HUDHelmetAnimator helmetAnimator)
+            {
+                var hudRenderer = helmetAnimator.GetValue<MeshRenderer>("_hudRenderer").transform;
+                hudRenderer.localScale = Vector3.one * 3.28f;
+                hudRenderer.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
                 notifications.anchoredPosition = new Vector2(-200, -100);
 
-                // Default HUD shader looks funky in stereo, so we need to replace it with something more standard.
-                var surfaceRenderer = surface.gameObject.GetComponent<MeshRenderer>();
+                // HUD shader looks funky in stereo, so it needs to be replaced.
+                var surfaceRenderer = hudRenderer.GetComponent<MeshRenderer>();
                 surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
                 MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
+            }
 
-                var playerHUD = GameObject.Find("PlayerHUD");
-
-                // Fix lock on UI on suit mode.
-                var lockOnCanvas = playerHUD.transform.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
+            private void FixLockOnUI(Transform playerHud)
+            {
+                var lockOnCanvas = playerHud.Find("HelmetOffUI/HelmetOffLockOn").GetComponent<Canvas>();
                 lockOnCanvas.planeDistance = 10;
             }
 
-            internal void Update()
+            private bool ShouldRenderHudParts()
             {
-                if (_helmet != null)
+                return Locator.GetPlayerSuit().IsWearingHelmet() && !PlayerState.InConversation();
+            }
+
+            private Transform GetPlayerHud(Transform helmet)
+            {
+                return helmet.Find("PlayerHUD");
+            }
+
+            private void HideHudDuringDialogue(Transform playerHud)
+            {
+                var uiCanvas = playerHud.Find("HelmetOnUI/UICanvas");
+                foreach (Transform child in uiCanvas)
                 {
-                    _helmet.transform.localScale = new Vector3(NomaiVR.Config.hudScale, NomaiVR.Config.hudScale, 1f) * 0.5f;
+                    if (child.name == "Notifications")
+                    {
+                        continue;
+                    }
+                    child.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderHudParts;
                 }
             }
 
@@ -92,20 +137,18 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ThrustAndAttitudeIndicator>("LateUpdate", nameof(PatchLateUpdate));
-                    Postfix<HUDCamera>("Awake", nameof(PostHUDCameraAwake));
+                    Postfix<ThrustAndAttitudeIndicator>("LateUpdate", nameof(FixThrusterHudRotation));
+                    Postfix<HUDCamera>("Awake", nameof(FixHudDistortion));
                 }
 
-                private static void PostHUDCameraAwake(Camera ____camera)
+                private static void FixHudDistortion(Camera ____camera)
                 {
-                    // Prevent distortion of helmet HUD.
                     ____camera.fieldOfView = 60;
                 }
 
-                private static void PatchLateUpdate()
+                private static void FixThrusterHudRotation()
                 {
-                    // Fix thruster HUD rotation.
-                    var rotation = _helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
+                    var rotation = _instance._helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
                     _thrusterHUD.transform.rotation = rotation;
                 }
             }
