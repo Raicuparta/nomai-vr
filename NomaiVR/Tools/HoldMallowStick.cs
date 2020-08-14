@@ -85,6 +85,26 @@ namespace NomaiVR
                 {
                     // Stop stick rotation animation.
                     Empty<RoastingStickController>("UpdateRotation");
+                    //Empty<Campfire>("CheckStickIntersection");
+                    Postfix<Campfire>("CheckStickIntersection", nameof(PostCheckStickIntersection));
+                    Postfix<Campfire>("GetRockHeight", nameof(PostGetRockHeight));
+                    Postfix<RoastingStickController>("CalculateMaxStickExtension", nameof(PostCalculateMaxStickExtension));
+                }
+
+                private static bool PostCheckStickIntersection(bool __result)
+                {
+                    return false;
+                }
+
+                private static float PostGetRockHeight(float __result)
+                {
+                    return -10000000f;
+                }
+
+                private static float PostCalculateMaxStickExtension(float __result, float ____stickMaxZ)
+                {
+                    Logs.WriteInfo($"____stickMaxZ {____stickMaxZ}");
+                    return ____stickMaxZ;
                 }
             }
         }
