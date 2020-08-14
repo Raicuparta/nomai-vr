@@ -93,7 +93,6 @@ namespace NomaiVR
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Result required for return passthrough")]
                 private static float PostCalculateMaxStickExtension(float __result, float ____stickMaxZ)
                 {
-                    Logs.WriteInfo($"____stickMaxZ {____stickMaxZ}");
                     return ____stickMaxZ;
                 }
             }
