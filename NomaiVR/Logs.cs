@@ -27,7 +27,7 @@ namespace NomaiVR
             Write(message, MessageType.Success);
         }
 
-        public static void WriteWraning(string message)
+        public static void WriteWarning(string message)
         {
             Write(message, MessageType.Warning);
         }
