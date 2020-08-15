@@ -336,6 +336,7 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.probeForward, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.translate, JoystickButton.FaceLeft);
+                SetCommandButton(InputLibrary.autopilot, JoystickButton.FaceUp);
             }
 
             public class Patch : NomaiVRPatch
