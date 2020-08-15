@@ -188,11 +188,6 @@ namespace NomaiVR
                     return;
                 }
 
-                var toolSwapper = ToolHelper.Swapper;
-                var isInShip = toolSwapper.GetToolGroup() == ToolGroup.Ship;
-                var isUsingSignalscope = toolSwapper.IsInToolMode(ToolMode.SignalScope);
-                var isUsingTranslator = toolSwapper.IsInToolMode(ToolMode.Translator);
-                var isUsingProbeLauncher = toolSwapper.IsInToolMode(ToolMode.Probe);
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
                 if (!isUsingFixedProbeTool)
@@ -211,14 +206,7 @@ namespace NomaiVR
                             _primaryLastTime = -1;
                             if (!_justHeld)
                             {
-                                if (isUsingSignalscope || isUsingTranslator)
-                                {
-                                    SimulateInput(AxisIdentifier.CTRLR_DPADX);
-                                }
-                                else
-                                {
-                                    SimulateInput(JoystickButton.FaceLeft);
-                                }
+                                SimulateInput(JoystickButton.FaceLeft);
                             }
                             _justHeld = false;
                         }
@@ -347,7 +335,6 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.probeForward, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.translate, JoystickButton.FaceUp);
-                //SetCommandButton(InputLibrary.toolOptionRight, JoystickButton.FaceLeft);
             }
 
             public class Patch : NomaiVRPatch
