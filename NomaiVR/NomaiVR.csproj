@@ -157,7 +157,6 @@
     <Compile Include="Tools\HoldTranslator.cs" />
     <Compile Include="Hands\LaserPointer.cs" />
     <Compile Include="Tools\ShipTools.cs" />
-    <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
     <Compile Include="UI\LookArrow.cs" />
     <Compile Include="UI\Menus.cs" />

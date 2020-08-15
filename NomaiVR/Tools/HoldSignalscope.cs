@@ -61,8 +61,6 @@ namespace NomaiVR
                 _reticule.localPosition = Vector3.forward * 0.5f;
                 _reticule.localRotation = Quaternion.identity;
 
-                _signalscope.gameObject.AddComponent<ToolModeInteraction>();
-
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
                 SetupSignalscopeUI(helmetOff);
                 helmetOff.localPosition += Vector3.up * 0.63f;

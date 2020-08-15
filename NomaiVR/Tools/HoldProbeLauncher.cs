@@ -99,8 +99,6 @@ namespace NomaiVR
                 bracketImage.localRotation = Quaternion.identity;
                 bracketImage.localScale *= 0.5f;
 
-                probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
-
                 GlobalMessenger.AddListener("SuitUp", OnSuitUp);
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
             }
