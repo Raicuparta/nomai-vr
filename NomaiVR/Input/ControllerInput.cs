@@ -192,7 +192,7 @@ namespace NomaiVR
                 var isUsingProbeLauncher = toolSwapper.IsInToolMode(ToolMode.Probe);
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
-                if (!isUsingFixedProbeTool && !ToolHelper.IsUsingAnyTool())
+                if (!isUsingFixedProbeTool && !isUsingProbeLauncher)
                 {
                     var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
                     var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
@@ -208,7 +208,14 @@ namespace NomaiVR
                             _primaryLastTime = -1;
                             if (!_justHeld)
                             {
-                                SimulateInput(JoystickButton.FaceLeft);
+                                if (isUsingSignalscope)
+                                {
+                                    SimulateInput(AxisIdentifier.CTRLR_DPADX, 1);
+                                }
+                                else
+                                {
+                                    SimulateInput(JoystickButton.FaceLeft);
+                                }
                             }
                             _justHeld = false;
                         }
@@ -300,6 +307,7 @@ namespace NomaiVR
             {
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {
+                    Logs.WriteSuccess("Simulating input FaceUp");
                     SimulateInput(JoystickButton.FaceUp);
                     _primaryLastTime = -1;
                     _justHeld = true;
@@ -332,6 +340,7 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
                 SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
+                SetCommandButton(InputLibrary.scopeView, JoystickButton.FaceUp);
             }
 
             public class Patch : NomaiVRPatch
