@@ -6,6 +6,7 @@ namespace NomaiVR
 {
     internal class ButtonInteraction : MonoBehaviour
     {
+        public ToolMode mode;
         public JoystickButton button;
         public UITextType text;
         public InteractReceiver receiver;
@@ -30,13 +31,23 @@ namespace NomaiVR
             var skip = skipPressCallback != null && skipPressCallback.Invoke();
             if (!skip)
             {
-                ControllerInput.Behaviour.SimulateInput(button, 1);
+                if (mode != ToolMode.None)
+                {
+                    VRToolSwapper.Equip(mode);
+                }
+                if (button != JoystickButton.None)
+                {
+                    ControllerInput.Behaviour.SimulateInput(button, 1);
+                }
             }
         }
 
         private void OnRelease()
         {
-            ControllerInput.Behaviour.SimulateInput(button, 0);
+            if (button != JoystickButton.None)
+            {
+                ControllerInput.Behaviour.SimulateInput(button, 0);
+            }
             receiver.ResetInteraction();
         }
 

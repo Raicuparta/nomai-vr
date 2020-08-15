@@ -33,7 +33,7 @@ namespace NomaiVR
 
         private void Equip()
         {
-            HolsterToolSwapper.Equip(mode);
+            VRToolSwapper.Equip(mode);
 
             if (mode == ToolMode.Translator)
             {
@@ -44,7 +44,7 @@ namespace NomaiVR
         private void Unequip()
         {
             onUnequip?.Invoke();
-            HolsterToolSwapper.Unequip();
+            VRToolSwapper.Unequip();
         }
 
         private void SetVisible(bool visible)

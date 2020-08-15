@@ -32,7 +32,7 @@ namespace NomaiVR
             new CameraMaskFix();
             new MapFix();
             new PlayerBodyPosition();
-            new HolsterToolSwapper();
+            new VRToolSwapper();
             new HandsController();
             new ShipTools();
             new FlashlightGesture();

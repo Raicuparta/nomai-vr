@@ -176,7 +176,7 @@ namespace NomaiVR
 
                     var probeScreenPivot = cockpitUI.Find("ProbeScreen/ProbeScreenPivot");
                     _probe = probeScreenPivot.Find("ProbeScreen").gameObject.AddComponent<ButtonInteraction>();
-                    _probe.button = JoystickButton.RightBumper;
+                    _probe.mode = ToolMode.Probe;
                     _probe.text = UITextType.ScoutModePrompt;
 
                     var font = Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular");
@@ -195,7 +195,7 @@ namespace NomaiVR
 
                     var signalScreenPivot = cockpitUI.Find("SignalScreen/SignalScreenPivot");
                     _signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
-                    _signalscope.button = JoystickButton.DPadRight;
+                    _signalscope.mode = ToolMode.SignalScope;
                     _signalscope.text = UITextType.UISignalscope;
 
                     var sigScopeDisplay = signalScreenPivot.Find("SigScopeDisplay");

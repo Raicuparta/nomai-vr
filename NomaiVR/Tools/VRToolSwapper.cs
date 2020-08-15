@@ -2,7 +2,7 @@
 
 namespace NomaiVR
 {
-    internal class HolsterToolSwapper : NomaiVRModule<NomaiVRModule.EmptyBehaviour, HolsterToolSwapper.Patch>
+    internal class VRToolSwapper : NomaiVRModule<NomaiVRModule.EmptyBehaviour, VRToolSwapper.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
@@ -23,6 +23,15 @@ namespace NomaiVR
             Equip(ToolMode.None);
         }
 
+        public static bool IsAllowedToEquip(ToolMode mode)
+        {
+            if (OWInput.IsInputMode(InputMode.ShipCockpit) && mode == ToolMode.None)
+            {
+                return true;
+            }
+            return _toolsAllowedToEquip.ContainsKey(mode) && _toolsAllowedToEquip[mode];
+        }
+
         public class Patch : NomaiVRPatch
         {
             public override void ApplyPatches()
@@ -32,7 +41,7 @@ namespace NomaiVR
 
             private static bool PreEquipTool(ToolMode mode)
             {
-                return _toolsAllowedToEquip.ContainsKey(mode) && _toolsAllowedToEquip[mode];
+                return IsAllowedToEquip(mode);
             }
         }
     }
