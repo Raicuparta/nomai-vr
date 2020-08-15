@@ -131,14 +131,6 @@ namespace NomaiVR
                     Postfix<ProbePromptReceiver>("LoseFocus", nameof(PostLoseFocus));
                     Prefix<ProbePromptReceiver>("GainFocus", nameof(PreGainFocus));
                     Postfix<ProbePromptReceiver>("GainFocus", nameof(PostGainFocus));
-
-                    Prefix<ToolModeSwapper>("EquipToolMode", nameof(PreEquipTool));
-                }
-
-                private static bool PreEquipTool(ToolMode mode)
-                {
-                    Logs.WriteSuccess($"IsToolAllowedToEquip {HolsterTool.IsToolAllowedToEquip(mode)}");
-                    return HolsterTool.IsToolAllowedToEquip(mode);
                 }
 
                 private static void PreLoseFocus()
