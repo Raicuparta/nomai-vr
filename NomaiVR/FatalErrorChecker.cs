@@ -55,16 +55,9 @@ namespace NomaiVR
 
             private void CheckControllerState()
             {
-                SteamVR.instance.hmd.IsTrackedDeviceConnected(0);
-                SteamVR.instance.hmd.IsTrackedDeviceConnected(1);
-
-                if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(0))
+                if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(0) || !SteamVR.instance.hmd.IsTrackedDeviceConnected(1))
                 {
-                    Logs.WriteFatal("Trackerd 0 failed");
-                }
-                if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(1))
-                {
-                    Logs.WriteFatal("Trackerd 1 failed");
+                    ThrowSteamVRError();
                 }
             }
 

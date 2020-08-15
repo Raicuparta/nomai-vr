@@ -30,12 +30,11 @@ namespace NomaiVR
             _hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
             _source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
 
-            // TODO: need to find a better way to detect this
-            //if (string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
-            //{
-            //    Logs.WriteError($"Could not find name for binding {_action.GetShortName()}.");
-            //    FatalErrorChecker.ThrowSteamVRError();
-            //}
+            if (string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
+            {
+                Logs.WriteError($"Could not find name for binding {_action.GetShortName()}.");
+                FatalErrorChecker.ThrowSteamVRError();
+            }
         }
 
         public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
