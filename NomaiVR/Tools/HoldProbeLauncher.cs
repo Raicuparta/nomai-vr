@@ -122,15 +122,23 @@ namespace NomaiVR
 
                 public override void ApplyPatches()
                 {
-                    Prefix<PlayerSpacesuit>("SuitUp", nameof(Patch.SuitUp));
-                    Prefix<PlayerSpacesuit>("RemoveSuit", nameof(Patch.RemoveSuit));
-                    Postfix<ProbeLauncherUI>("HideProbeHUD", nameof(Patch.PostHideHUD));
+                    Prefix<PlayerSpacesuit>("SuitUp", nameof(SuitUp));
+                    Prefix<PlayerSpacesuit>("RemoveSuit", nameof(RemoveSuit));
+                    Postfix<ProbeLauncherUI>("HideProbeHUD", nameof(PostHideHUD));
 
                     // Prevent probe prompt zones from equipping / unequipping the probe launcher.
-                    Prefix<ProbePromptReceiver>("LoseFocus", nameof(Patch.PreLoseFocus));
-                    Postfix<ProbePromptReceiver>("LoseFocus", nameof(Patch.PostLoseFocus));
-                    Prefix<ProbePromptReceiver>("GainFocus", nameof(Patch.PreGainFocus));
-                    Postfix<ProbePromptReceiver>("GainFocus", nameof(Patch.PostGainFocus));
+                    Prefix<ProbePromptReceiver>("LoseFocus", nameof(PreLoseFocus));
+                    Postfix<ProbePromptReceiver>("LoseFocus", nameof(PostLoseFocus));
+                    Prefix<ProbePromptReceiver>("GainFocus", nameof(PreGainFocus));
+                    Postfix<ProbePromptReceiver>("GainFocus", nameof(PostGainFocus));
+
+                    Prefix<ToolModeSwapper>("EquipToolMode", nameof(PreEquipTool));
+                }
+
+                private static bool PreEquipTool(ToolMode mode)
+                {
+                    Logs.WriteSuccess($"IsToolAllowedToEquip {HolsterTool.IsToolAllowedToEquip(mode)}");
+                    return HolsterTool.IsToolAllowedToEquip(mode);
                 }
 
                 private static void PreLoseFocus()

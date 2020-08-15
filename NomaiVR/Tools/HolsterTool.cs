@@ -1,5 +1,6 @@
 ﻿using OWML.ModHelper.Events;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NomaiVR
@@ -16,6 +17,8 @@ namespace NomaiVR
         public Action onUnequip;
         private const float _minHandDistance = 0.3f;
 
+        private static Dictionary<ToolMode, bool> _toolsAllowedToEquip;
+
         public ProximityDetector Detector { get; private set; }
 
         internal void Start()
@@ -25,14 +28,24 @@ namespace NomaiVR
             Detector.minDistance = 0.2f;
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
+            _toolsAllowedToEquip = new Dictionary<ToolMode, bool>();
+            _toolsAllowedToEquip[ToolMode.None] = true;
+            _toolsAllowedToEquip[ToolMode.Item] = true;
 
             GlobalMessenger.AddListener("SuitUp", Unequip);
             GlobalMessenger.AddListener("RemoveSuit", Unequip);
         }
 
+        public static bool IsToolAllowedToEquip(ToolMode toolMode)
+        {
+            return _toolsAllowedToEquip.ContainsKey(toolMode) && _toolsAllowedToEquip[toolMode];
+        }
+
         private void Equip()
         {
+            _toolsAllowedToEquip[mode] = true;
             ToolHelper.Swapper.EquipToolMode(mode);
+            _toolsAllowedToEquip[mode] = false;
 
             if (mode == ToolMode.Translator)
             {

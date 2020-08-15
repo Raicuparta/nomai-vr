@@ -194,10 +194,10 @@ namespace NomaiVR
 
                 if (!isUsingFixedProbeTool)
                 {
-                    var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
+                    var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
                     var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
 
-                    if (isRepairPromptVisible && !isInShip && !canRepairSuit)
+                    if (!isRepairPromptVisible && !isInShip && !canRepairSuit)
                     {
                         if (newState)
                         {
@@ -209,14 +209,6 @@ namespace NomaiVR
                             if (!_justHeld)
                             {
                                 SimulateInput(JoystickButton.FaceLeft);
-                                //if (isUsingSignalscope)
-                                //{
-                                //    SimulateInput(AxisIdentifier.CTRLR_DPADX);
-                                //}
-                                //else
-                                //{
-                                //    SimulateInput(JoystickButton.FaceLeft);
-                                //}
                             }
                             _justHeld = false;
                         }
