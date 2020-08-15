@@ -146,7 +146,7 @@ namespace NomaiVR
             {
                 SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.default_Back.onChange += OnBackChange;
-                SteamVR_Actions.default_Interact.onChange += OnPrimaryActionChange;
+                SteamVR_Actions.default_Interact.onChange += OnInteractChange;
                 SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
                 SteamVR_Actions.default_Grip.onChange += OnGripChange;
                 SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
@@ -178,7 +178,7 @@ namespace NomaiVR
                 IsGripping = newState;
             }
 
-            private void OnPrimaryActionChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+            private void OnInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 var value = newState ? 1 : 0;
 
@@ -194,8 +194,9 @@ namespace NomaiVR
                 {
                     var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
                     var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
+                    var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
 
-                    if (!isRepairPromptVisible && !canRepairSuit)
+                    if (!isRepairPromptVisible && !canRepairSuit && !isUsingTranslator)
                     {
                         if (newState)
                         {
@@ -334,7 +335,7 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.scopeView, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.probeForward, JoystickButton.FaceLeft);
-                SetCommandButton(InputLibrary.translate, JoystickButton.FaceUp);
+                SetCommandButton(InputLibrary.translate, JoystickButton.FaceLeft);
             }
 
             public class Patch : NomaiVRPatch

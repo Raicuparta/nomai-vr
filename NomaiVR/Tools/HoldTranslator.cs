@@ -29,7 +29,6 @@ namespace NomaiVR
                 translatorModel.localRotation = Quaternion.identity;
 
                 translator.GetComponent<NomaiTranslator>().SetValue("_raycastTransform", translatorModel);
-                translator.GetComponent<NomaiTranslatorProp>().SetValue("_totalTranslateTime", 0);
 
                 // This child seems to be only for some kind of shader effect.
                 // Disabling it since it looks glitchy and doesn't seem necessary.

@@ -34,11 +34,6 @@ namespace NomaiVR
         private void Equip()
         {
             VRToolSwapper.Equip(mode);
-
-            if (mode == ToolMode.Translator)
-            {
-                GameObject.FindObjectOfType<NomaiTranslatorProp>().SetValue("_currentTextID", 1);
-            }
         }
 
         private void Unequip()
