@@ -271,19 +271,9 @@ namespace NomaiVR
                     ____abortAutopilotPrompt = new ScreenPrompt(InputLibrary.interact, ____abortAutopilotPrompt.GetText());
                 }
 
-                private static void RemoveProbePrompts(
-                    ScreenPrompt ____unequipPrompt,
-                    ScreenPrompt ____photoModePrompt,
-                    ScreenPrompt ____rotatePrompt,
-                    ScreenPrompt ____rotateCenterPrompt,
-                    ScreenPrompt ____launchModePrompt
-                )
+                private static void RemoveProbePrompts(ScreenPrompt ____unequipPrompt)
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
-                    Manager.RemoveScreenPrompt(____photoModePrompt);
-                    Manager.RemoveScreenPrompt(____rotatePrompt);
-                    Manager.RemoveScreenPrompt(____rotateCenterPrompt);
-                    Manager.RemoveScreenPrompt(____launchModePrompt);
                 }
 
                 private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
@@ -293,12 +283,10 @@ namespace NomaiVR
 
                 private static void RemoveSignalscopePrompts(
                     ScreenPrompt ____unequipPrompt,
-                    ScreenPrompt ____changeFrequencyPrompt,
                     ScreenPrompt ____zoomLevelPrompt
                 )
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
-                    Manager.RemoveScreenPrompt(____changeFrequencyPrompt);
                     Manager.RemoveScreenPrompt(____zoomLevelPrompt);
                 }
 
@@ -313,15 +301,9 @@ namespace NomaiVR
                     Manager.RemoveScreenPrompt(____liftoffCamera);
                 }
 
-                private static void RemoveTranslatorPrompts(
-                    ScreenPrompt ____unequipPrompt,
-                    ScreenPrompt ____scrollPrompt,
-                    ScreenPrompt ____pagePrompt
-                )
+                private static void RemoveTranslatorPrompts(ScreenPrompt ____unequipPrompt)
                 {
                     Manager.RemoveScreenPrompt(____unequipPrompt);
-                    Manager.RemoveScreenPrompt(____scrollPrompt);
-                    Manager.RemoveScreenPrompt(____pagePrompt);
                 }
 
                 private static void ChangeTranslatorPrompts(ref ScreenPrompt ____translatePrompt)

@@ -93,7 +93,9 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(actionSet.Move),
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(actionSet.Look),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(actionSet.Look),
-                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look)
+                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look),
+                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(actionSet.Look),
+                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(actionSet.Look)
                 };
 
                 otherActions = new VRActionInput[]
