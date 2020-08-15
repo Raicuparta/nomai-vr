@@ -15,6 +15,14 @@ namespace NomaiVR
             proximityDetector.exitThreshold = 0.1f;
         }
 
+        internal void Update()
+        {
+            if (OWInput.IsNewlyReleased(InputLibrary.interact))
+            {
+                OnDetectorEnter();
+            }
+        }
+
         private void OnDetectorEnter()
         {
             if (ToolHelper.Swapper.IsInToolMode(ToolMode.Translator))
