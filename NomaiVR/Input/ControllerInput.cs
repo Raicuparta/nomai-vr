@@ -189,6 +189,7 @@ namespace NomaiVR
                 var toolSwapper = ToolHelper.Swapper;
                 var isInShip = toolSwapper.GetToolGroup() == ToolGroup.Ship;
                 var isUsingSignalscope = toolSwapper.IsInToolMode(ToolMode.SignalScope);
+                var isUsingTranslator = toolSwapper.IsInToolMode(ToolMode.Translator);
                 var isUsingProbeLauncher = toolSwapper.IsInToolMode(ToolMode.Probe);
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
 
@@ -197,7 +198,7 @@ namespace NomaiVR
                     var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
                     var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
 
-                    if (!isRepairPromptVisible && !isInShip && !canRepairSuit)
+                    if (!isRepairPromptVisible && !canRepairSuit)
                     {
                         if (newState)
                         {
@@ -208,24 +209,19 @@ namespace NomaiVR
                             _primaryLastTime = -1;
                             if (!_justHeld)
                             {
-                                SimulateInput(JoystickButton.FaceLeft);
+                                if (isUsingSignalscope || isUsingTranslator)
+                                {
+                                    SimulateInput(AxisIdentifier.CTRLR_DPADX);
+                                }
+                                else
+                                {
+                                    SimulateInput(JoystickButton.FaceLeft);
+                                }
                             }
                             _justHeld = false;
                         }
                     }
                     else
-                    {
-                        _buttons[JoystickButton.FaceLeft] = value;
-                    }
-                }
-                else if (isUsingSignalscope)
-                {
-                    _axes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                }
-
-                if (isInShip)
-                {
-                    if (!newState)
                     {
                         _buttons[JoystickButton.FaceLeft] = value;
                     }
@@ -343,7 +339,7 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.scopeView, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.probeForward, JoystickButton.FaceLeft);
-                SetCommandButton(InputLibrary.translate, JoystickButton.FaceLeft);
+                SetCommandButton(InputLibrary.translate, JoystickButton.FaceUp);
                 //SetCommandButton(InputLibrary.toolOptionRight, JoystickButton.FaceLeft);
             }
 
