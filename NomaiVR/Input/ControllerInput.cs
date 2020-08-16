@@ -189,34 +189,29 @@ namespace NomaiVR
                     return;
                 }
 
-                var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
+                var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
+                var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
+                var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
 
-                if (!isUsingFixedProbeTool)
+                if (!isRepairPromptVisible && !canRepairSuit && !isUsingTranslator)
                 {
-                    var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
-                    var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
-                    var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
-
-                    if (!isRepairPromptVisible && !canRepairSuit && !isUsingTranslator)
+                    if (newState)
                     {
-                        if (newState)
-                        {
-                            _primaryLastTime = fromAction.changedTime;
-                        }
-                        else
-                        {
-                            _primaryLastTime = -1;
-                            if (!_justHeld)
-                            {
-                                SimulateInput(JoystickButton.FaceLeft);
-                            }
-                            _justHeld = false;
-                        }
+                        _primaryLastTime = fromAction.changedTime;
                     }
                     else
                     {
-                        _buttons[JoystickButton.FaceLeft] = value;
+                        _primaryLastTime = -1;
+                        if (!_justHeld)
+                        {
+                            SimulateInput(JoystickButton.FaceLeft);
+                        }
+                        _justHeld = false;
                     }
+                }
+                else
+                {
+                    _buttons[JoystickButton.FaceLeft] = value;
                 }
             }
 
