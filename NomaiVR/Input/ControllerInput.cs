@@ -221,22 +221,10 @@ namespace NomaiVR
                 SimulateInput(button, 0);
             }
 
-            private static IEnumerator<WaitForSecondsRealtime> ResetInput(AxisIdentifier axis)
-            {
-                yield return new WaitForSecondsRealtime(0.1f);
-                SimulateInput(axis, 0);
-            }
-
             public static void SimulateInput(JoystickButton button)
             {
                 _buttons[button] = 1;
                 _instance.StartCoroutine(ResetInput(button));
-            }
-
-            public static void SimulateInput(AxisIdentifier axis)
-            {
-                _axes[InputTranslator.GetAxisName(axis)] = 1;
-                _instance.StartCoroutine(ResetInput(axis));
             }
 
             public static void SimulateInput(JoystickButton button, float value)
