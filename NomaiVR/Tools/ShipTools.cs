@@ -16,7 +16,6 @@ namespace NomaiVR
             private static ShipMonitorInteraction _probe;
             private static ShipMonitorInteraction _signalscope;
             private static ShipMonitorInteraction _landingCam;
-            private static bool _canInteractWithTools;
             private static ShipCockpitController _cockpitController;
             private static bool _isLandingCamEnabled;
 
@@ -29,17 +28,6 @@ namespace NomaiVR
 
             internal void Update()
             {
-                var isInShip = _cockpitController.IsPlayerAtFlightConsole();
-
-                if (isInShip && !_canInteractWithTools)
-                {
-                    SetEnabled(true);
-                }
-                else if (!isInShip && _canInteractWithTools)
-                {
-                    SetEnabled(false);
-                }
-
                 if (_referenceFrameTracker.isActiveAndEnabled && ToolHelper.IsUsingAnyTool())
                 {
                     _referenceFrameTracker.enabled = false;
@@ -48,14 +36,6 @@ namespace NomaiVR
                 {
                     _referenceFrameTracker.enabled = true;
                 }
-            }
-
-            private static void SetEnabled(bool enabled)
-            {
-                _canInteractWithTools = enabled;
-                _probe.enabled = enabled;
-                _signalscope.enabled = enabled;
-                _landingCam.enabled = enabled;
             }
 
             public class Patch : NomaiVRPatch
@@ -211,8 +191,6 @@ namespace NomaiVR
                     landingText.alignment = TextAnchor.MiddleCenter;
                     landingText.fontSize = 8;
                     landingText.font = font;
-
-                    SetEnabled(false);
                 }
 
                 private static Vector3 _cameraPosition;
@@ -244,14 +222,9 @@ namespace NomaiVR
                     }
                 }
 
-                private static bool IsFocused(ShipMonitorInteraction interaction)
-                {
-                    return interaction && interaction.receiver && interaction.receiver.IsFocused();
-                }
-
                 private static bool IsAnyInteractionFocused()
                 {
-                    return IsFocused(_probe) || IsFocused(_signalscope) || IsFocused(_landingCam);
+                    return _probe.IsFocused() || _signalscope.IsFocused() || _landingCam.IsFocused();
                 }
 
                 private static bool PreUntargetFrame()
