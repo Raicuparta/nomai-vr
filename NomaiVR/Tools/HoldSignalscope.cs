@@ -123,10 +123,6 @@ namespace NomaiVR
 
             internal void Update()
             {
-                if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All))
-                {
-                    Logs.WriteSuccess("Pressed Scope View");
-                }
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);

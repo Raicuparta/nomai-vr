@@ -1,4 +1,6 @@
 ﻿using OWML.ModHelper.Events;
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -77,6 +79,8 @@ namespace NomaiVR
                     Postfix<ShipCockpitController>("ExitFlightConsole", nameof(PostExitFlightConsole));
                     Prefix<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
                     Postfix<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
+
+                    Prefix(typeof(ReferenceFrameTracker).GetMethod("UntargetReferenceFrame", new[] { typeof(bool) }), nameof(PreUntargetFrame));
                 }
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
@@ -242,18 +246,42 @@ namespace NomaiVR
                     }
                 }
 
-                private static void PostFindFrame(
+                private static bool IsFocused(ButtonInteraction interaction)
+                {
+                    return interaction && interaction.receiver && interaction.receiver.IsFocused();
+                }
+
+                private static bool IsAnyInteractionFocused()
+                {
+                    return IsFocused(_probe) || IsFocused(_signalscope) || IsFocused(_landingCam);
+                }
+
+                private static bool PreUntargetFrame()
+                {
+                    return !IsAnyInteractionFocused();
+                }
+
+                private static ReferenceFrame PostFindFrame(
+                    ReferenceFrame __result,
                     OWCamera ____activeCam,
+                    ReferenceFrame ____currentReferenceFrame,
                     bool ____isLandingView
                 )
                 {
                     if (____isLandingView)
                     {
-                        return;
+                        return __result;
                     }
 
                     ____activeCam.transform.position = _cameraPosition;
                     ____activeCam.transform.rotation = _cameraRotation;
+
+                    if (IsAnyInteractionFocused())
+                    {
+                        return ____currentReferenceFrame;
+                    }
+
+                    return __result;
                 }
             }
         }
