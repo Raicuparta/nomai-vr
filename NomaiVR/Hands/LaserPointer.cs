@@ -332,7 +332,7 @@ namespace NomaiVR
 
             private void UpdateLineVisibility()
             {
-                var isUsingTool = SceneHelper.IsInGame() && ToolHelper.IsUsingAnyTool();
+                var isUsingTool = SceneHelper.IsInGame() && ToolHelper.IsUsingAnyTool(ToolGroup.Suit);
                 if (_lineRenderer.enabled && isUsingTool)
                 {
                     _lineRenderer.enabled = false;
