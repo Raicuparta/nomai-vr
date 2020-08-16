@@ -16,6 +16,7 @@ namespace NomaiVR
                 SetResolution();
                 SetRefreshRate();
                 SetFov();
+                ResetInputsToDefault();
             }
 
             private static void SetResolution()
@@ -33,6 +34,11 @@ namespace NomaiVR
             {
                 PlayerData.GetGraphicSettings().fieldOfView = Camera.main.fieldOfView;
                 GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
+            }
+
+            private static void ResetInputsToDefault()
+            {
+                FindObjectOfType<KeyRebinderManager>().Invoke("OnApplyDefaultsSubmit");
             }
 
             private static void UpdateActiveController()

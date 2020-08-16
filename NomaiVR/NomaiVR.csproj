@@ -129,6 +129,7 @@
     <Compile Include="Logs.cs" />
     <Compile Include="ModConfig\ModSettings.cs" />
     <Compile Include="ReusableBehaviours\DebugFollowTarget.cs" />
+    <Compile Include="ReusableBehaviours\ShipMonitorInteraction.cs" />
     <Compile Include="Saves\ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />
     <Compile Include="NomaiVRModule.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="ReusableBehaviours\Holdable.cs" />
     <Compile Include="ReusableBehaviours\PersistObject.cs" />
     <Compile Include="ReusableBehaviours\SmoothFollowCameraRotation.cs" />
+    <Compile Include="Tools\VRToolSwapper.cs" />
     <Compile Include="UI\ControllerModels.cs" />
     <Compile Include="UI\Dialogue.cs" />
     <Compile Include="Player\FeetMarker.cs" />
@@ -145,7 +147,6 @@
     <Compile Include="ForceSettings.cs" />
     <Compile Include="UI\GesturePrompts.cs" />
     <Compile Include="UI\InputPrompts.cs" />
-    <Compile Include="ReusableBehaviours\ButtonInteraction.cs" />
     <Compile Include="Tools\FlashlightGesture.cs" />
     <Compile Include="Tools\HoldItem.cs" />
     <Compile Include="UI\HelmetHUD.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="Tools\HoldTranslator.cs" />
     <Compile Include="Hands\LaserPointer.cs" />
     <Compile Include="Tools\ShipTools.cs" />
-    <Compile Include="Tools\ToolModeInteraction.cs" />
     <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
     <Compile Include="UI\LookArrow.cs" />
     <Compile Include="UI\Menus.cs" />

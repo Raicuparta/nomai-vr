@@ -61,8 +61,6 @@ namespace NomaiVR
                 holster.angle = new Vector3(0, 90, 90);
 
                 translatorGroup.Find("TranslatorBeams").localScale = Vector3.one / 0.3f;
-
-                translator.gameObject.AddComponent<ToolModeInteraction>();
             }
 
             public class Patch : NomaiVRPatch

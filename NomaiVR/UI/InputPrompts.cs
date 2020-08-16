@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace NomaiVR
 {
@@ -40,20 +39,14 @@ namespace NomaiVR
                     Postfix<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
 
                     Postfix<NomaiTranslatorProp>("LateInitialize", nameof(RemoveTranslatorPrompts));
-                    Postfix<NomaiTranslatorProp>("Awake", nameof(ChangeTranslatorPrompts));
 
                     Postfix<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
                     Postfix<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
-
-                    Postfix<SatelliteSnapshotController>("OnPressInteract", nameof(RemoveSatellitePrompts));
-                    Postfix<SatelliteSnapshotController>("Awake", nameof(ChangeSatellitePrompts));
 
                     Postfix<PlayerSpawner>("Awake", nameof(RemoveJoystickPrompts));
                     Postfix<RoastingStickController>("LateInitialize", nameof(RemoveRoastingStickPrompts));
                     Postfix<ToolModeUI>("LateInitialize", nameof(RemoveToolModePrompts));
                     Postfix<ScreenPrompt>("SetVisibility", nameof(PostScreenPromptVisibility));
-
-                    Prefix<LockOnReticule>("Init", nameof(InitLockOnReticule));
 
                     Prefix<ScreenPrompt>("Init", nameof(PrePromptInit));
                     Prefix<ScreenPrompt>("SetText", nameof(PrePromptSetText));
@@ -91,10 +84,13 @@ namespace NomaiVR
 
                 private static void AddTextIfNotExisting(string text, HashSet<string> actionTexts, VRActionInput actionInput)
                 {
-                    var actionInputText = actionInput.GetText();
-                    if (!text.Contains(actionInputText))
+                    var actionInputTexts = actionInput.GetText();
+                    foreach (var inputText in actionInputTexts)
                     {
-                        actionTexts.Add(actionInputText);
+                        if (!text.Contains(inputText))
+                        {
+                            actionTexts.Add(inputText);
+                        }
                     }
                 }
 
@@ -165,53 +161,6 @@ namespace NomaiVR
                     }
                 }
 
-                private static bool InitLockOnReticule(
-                    ref ScreenPrompt ____lockOnPrompt,
-                    ref bool ____initialized,
-                    ref bool ____showFullLockOnPrompt,
-                    ref string ____lockOnPromptText,
-                    ref string ____lockOnPromptTextShortened,
-                    ScreenPromptList ____promptListBlock,
-                    ref JetpackPromptController ____jetpackPromptController,
-                    ref ScreenPrompt ____matchVelocityPrompt,
-                    Text ____readout
-                )
-                {
-                    if (!____initialized)
-                    {
-                        ____jetpackPromptController = Locator.GetPlayerTransform().GetComponent<JetpackPromptController>();
-                        ____lockOnPromptText = "<CMD>" + UITextLibrary.GetString(UITextType.PressPrompt) + "   " + UITextLibrary.GetString(UITextType.LockOnPrompt);
-                        ____lockOnPromptTextShortened = "<CMD>";
-                        ____showFullLockOnPrompt = !PlayerData.GetPersistentCondition("HAS_PLAYER_LOCKED_ON");
-                        if (____showFullLockOnPrompt)
-                        {
-                            ____lockOnPrompt = new ScreenPrompt(InputLibrary.interact, ____lockOnPromptText, 0, false, false);
-                        }
-                        else
-                        {
-                            ____lockOnPrompt = new ScreenPrompt(InputLibrary.interact, ____lockOnPromptTextShortened, 0, false, false);
-                        }
-                        ____matchVelocityPrompt = new ScreenPrompt(InputLibrary.matchVelocity, "<CMD>" + UITextLibrary.GetString(UITextType.HoldPrompt) + "   " + UITextLibrary.GetString(UITextType.MatchVelocityPrompt), 0, false, false);
-                        ____readout.gameObject.SetActive(false);
-                        ____promptListBlock.Init();
-                        Locator.GetPromptManager().AddScreenPrompt(____lockOnPrompt, ____promptListBlock, TextAnchor.MiddleLeft, 20, false);
-                        Locator.GetPromptManager().AddScreenPrompt(____matchVelocityPrompt, ____promptListBlock, TextAnchor.MiddleLeft, 20, false);
-                        ____initialized = true;
-                    }
-
-                    return false;
-                }
-
-                private static void ChangeSatellitePrompts(ref ScreenPrompt ____forwardPrompt)
-                {
-                    ____forwardPrompt = new ScreenPrompt(InputLibrary.interact, ____forwardPrompt.GetText(), 0, false, false);
-                }
-
-                private static void RemoveSatellitePrompts(ScreenPrompt ____rearviewPrompt)
-                {
-                    Manager.RemoveScreenPrompt(____rearviewPrompt);
-                }
-
                 private static void RemoveJoystickPrompts(ref bool ____lookPromptAdded)
                 {
                     ____lookPromptAdded = true;
@@ -247,44 +196,21 @@ namespace NomaiVR
                     Manager.RemoveScreenPrompt(____centerSignalscopePrompt);
                 }
 
-                private static void ChangeProbePrompts(
-                    ref ScreenPrompt ____launchPrompt,
-                    ref ScreenPrompt ____retrievePrompt,
-                    ref ScreenPrompt ____takeSnapshotPrompt,
-                    ref ScreenPrompt ____forwardCamPrompt
-                )
-                {
-                    ____launchPrompt = new ScreenPrompt(InputLibrary.interact, ____launchPrompt.GetText());
-                    ____forwardCamPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
-                    ____retrievePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
-                    ____takeSnapshotPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
-                }
-
-                private static void ChangeShipPrompts(
-                    ref ScreenPrompt ____exitLandingCamPrompt,
-                    ref ScreenPrompt ____autopilotPrompt,
-                    ref ScreenPrompt ____abortAutopilotPrompt
-                )
+                private static void ChangeShipPrompts(ref ScreenPrompt ____exitLandingCamPrompt)
                 {
                     ____exitLandingCamPrompt = new ScreenPrompt(InputLibrary.cancel, ____exitLandingCamPrompt.GetText());
-                    ____autopilotPrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, ____autopilotPrompt.GetText());
-                    ____abortAutopilotPrompt = new ScreenPrompt(InputLibrary.interact, ____abortAutopilotPrompt.GetText());
                 }
 
-                private static void RemoveProbePrompts(
-                    ScreenPrompt ____unequipPrompt,
-                    ScreenPrompt ____photoModePrompt,
-                    ScreenPrompt ____rotatePrompt,
-                    ScreenPrompt ____rotateCenterPrompt,
-                    ScreenPrompt ____launchModePrompt
-                )
+                private static void RemoveProbePrompts(ScreenPrompt ____unequipPrompt)
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
-                    Manager.RemoveScreenPrompt(____photoModePrompt);
-                    Manager.RemoveScreenPrompt(____rotatePrompt);
-                    Manager.RemoveScreenPrompt(____rotateCenterPrompt);
-                    Manager.RemoveScreenPrompt(____launchModePrompt);
                 }
+
+                private static void ChangeProbePrompts(ref ScreenPrompt ____retrievePrompt)
+                {
+                    ____retrievePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
+                }
+
 
                 private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
                 {
@@ -293,12 +219,10 @@ namespace NomaiVR
 
                 private static void RemoveSignalscopePrompts(
                     ScreenPrompt ____unequipPrompt,
-                    ScreenPrompt ____changeFrequencyPrompt,
                     ScreenPrompt ____zoomLevelPrompt
                 )
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
-                    Manager.RemoveScreenPrompt(____changeFrequencyPrompt);
                     Manager.RemoveScreenPrompt(____zoomLevelPrompt);
                 }
 
@@ -313,20 +237,9 @@ namespace NomaiVR
                     Manager.RemoveScreenPrompt(____liftoffCamera);
                 }
 
-                private static void RemoveTranslatorPrompts(
-                    ScreenPrompt ____unequipPrompt,
-                    ScreenPrompt ____scrollPrompt,
-                    ScreenPrompt ____pagePrompt
-                )
+                private static void RemoveTranslatorPrompts(ScreenPrompt ____unequipPrompt)
                 {
                     Manager.RemoveScreenPrompt(____unequipPrompt);
-                    Manager.RemoveScreenPrompt(____scrollPrompt);
-                    Manager.RemoveScreenPrompt(____pagePrompt);
-                }
-
-                private static void ChangeTranslatorPrompts(ref ScreenPrompt ____translatePrompt)
-                {
-                    ____translatePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.TranslatorUsePrompt) + "   <CMD>");
                 }
             }
         }

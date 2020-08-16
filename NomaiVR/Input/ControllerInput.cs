@@ -1,4 +1,5 @@
 ﻿using OWML.ModHelper.Events;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -83,6 +84,8 @@ namespace NomaiVR
                     [JoystickButton.RightTrigger] = new VRActionInput(actionSet.ThrustUp)
                 };
 
+                var gripActionInput = new VRActionInput(actionSet.Grip);
+
                 axisActions = new Dictionary<AxisIdentifier, VRActionInput>
                 {
                     [AxisIdentifier.CTRLR_LTRIGGER] = new VRActionInput(actionSet.ThrustDown),
@@ -92,13 +95,12 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(actionSet.Move),
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(actionSet.Look),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(actionSet.Look),
-                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look)
+                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look),
+                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(actionSet.Look, gripActionInput),
+                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(actionSet.Look, gripActionInput)
                 };
 
-                otherActions = new VRActionInput[]
-                {
-                    new VRActionInput(actionSet.Grip)
-                };
+                otherActions = new VRActionInput[] { gripActionInput };
             }
 
             public static void InitializeActionInputs()
@@ -145,7 +147,7 @@ namespace NomaiVR
             {
                 SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.default_Back.onChange += OnBackChange;
-                SteamVR_Actions.default_Interact.onChange += OnPrimaryActionChange;
+                SteamVR_Actions.default_Interact.onChange += OnInteractChange;
                 SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
                 SteamVR_Actions.default_Grip.onChange += OnGripChange;
                 SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
@@ -155,7 +157,8 @@ namespace NomaiVR
                 SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(JoystickButton.LeftTrigger);
                 SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(JoystickButton.RightTrigger);
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
-                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
+                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY, () => IsGripping);
+                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY, () => !IsGripping);
             }
 
             private void OnWakeUp()
@@ -176,7 +179,7 @@ namespace NomaiVR
                 IsGripping = newState;
             }
 
-            private void OnPrimaryActionChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+            private void OnInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 var value = newState ? 1 : 0;
 
@@ -186,53 +189,29 @@ namespace NomaiVR
                     return;
                 }
 
-                var toolSwapper = ToolHelper.Swapper;
-                var isInShip = toolSwapper.GetToolGroup() == ToolGroup.Ship;
-                var isUsingSignalscope = toolSwapper.IsInToolMode(ToolMode.SignalScope);
-                var isUsingProbeLauncher = toolSwapper.IsInToolMode(ToolMode.Probe);
-                var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
+                var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
+                var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
+                var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
 
-                if (!isUsingFixedProbeTool && !ToolHelper.IsUsingAnyTool())
+                if (!isRepairPromptVisible && !canRepairSuit && !isUsingTranslator)
                 {
-                    var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
-                    var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
-
-                    if (isRepairPromptVisible && !isInShip && !canRepairSuit)
+                    if (newState)
                     {
-                        if (newState)
-                        {
-                            _primaryLastTime = fromAction.changedTime;
-                        }
-                        else
-                        {
-                            _primaryLastTime = -1;
-                            if (!_justHeld)
-                            {
-                                SimulateInput(JoystickButton.FaceLeft);
-                            }
-                            _justHeld = false;
-                        }
+                        _primaryLastTime = fromAction.changedTime;
                     }
                     else
                     {
-                        _buttons[JoystickButton.FaceLeft] = value;
+                        _primaryLastTime = -1;
+                        if (!_justHeld)
+                        {
+                            SimulateInput(JoystickButton.FaceLeft);
+                        }
+                        _justHeld = false;
                     }
                 }
-                else if (!isInShip || isUsingProbeLauncher || isUsingFixedProbeTool)
+                else
                 {
-                    _buttons[JoystickButton.RightBumper] = value;
-                }
-                else if (isUsingSignalscope)
-                {
-                    _axes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                }
-
-                if (isInShip)
-                {
-                    if (!newState)
-                    {
-                        _buttons[JoystickButton.FaceLeft] = value;
-                    }
+                    _buttons[JoystickButton.FaceLeft] = value;
                 }
             }
 
@@ -283,10 +262,15 @@ namespace NomaiVR
                 };
             }
 
-            private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(AxisIdentifier axisX, AxisIdentifier axisY)
+            private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(AxisIdentifier axisX, AxisIdentifier axisY, Func<bool> predicate = null)
             {
                 return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) =>
                 {
+                    if (predicate != null && !predicate())
+                    {
+                        return;
+                    }
+
                     var axisNameX = InputTranslator.GetAxisName(axisX);
                     var axisNameY = InputTranslator.GetAxisName(axisY);
                     var x = Mathf.Round(axis.x * 100) / 100;
@@ -332,6 +316,12 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
                 SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
+                SetCommandButton(InputLibrary.scopeView, JoystickButton.FaceUp);
+                SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.FaceUp);
+                SetCommandButton(InputLibrary.probeForward, JoystickButton.FaceLeft);
+                SetCommandButton(InputLibrary.translate, JoystickButton.FaceLeft);
+                SetCommandButton(InputLibrary.autopilot, JoystickButton.FaceUp);
+                SetCommandButton(InputLibrary.lockOn, JoystickButton.FaceLeft);
             }
 
             public class Patch : NomaiVRPatch

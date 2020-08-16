@@ -1,5 +1,4 @@
-﻿using OWML.ModHelper.Events;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace NomaiVR
@@ -32,18 +31,13 @@ namespace NomaiVR
 
         private void Equip()
         {
-            ToolHelper.Swapper.EquipToolMode(mode);
-
-            if (mode == ToolMode.Translator)
-            {
-                GameObject.FindObjectOfType<NomaiTranslatorProp>().SetValue("_currentTextID", 1);
-            }
+            VRToolSwapper.Equip(mode);
         }
 
         private void Unequip()
         {
             onUnequip?.Invoke();
-            ToolHelper.Swapper.UnequipTool();
+            VRToolSwapper.Unequip();
         }
 
         private void SetVisible(bool visible)
