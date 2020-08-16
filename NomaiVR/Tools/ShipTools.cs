@@ -11,8 +11,6 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private bool _wasHoldingInteract;
-            private bool _pressedInteract;
             private ReferenceFrameTracker _referenceFrameTracker;
             private static Transform _mapGridRenderer;
             private static ButtonInteraction _probe;
@@ -50,38 +48,6 @@ namespace NomaiVR
                 {
                     _referenceFrameTracker.enabled = true;
                 }
-
-                if (_referenceFrameTracker.GetReferenceFrame() == null && _referenceFrameTracker.GetPossibleReferenceFrame() == null)
-                {
-                    return;
-                }
-                if (OWInput.IsNewlyPressed(InputLibrary.interact))
-                {
-                    _pressedInteract = true;
-                }
-                if (OWInput.IsNewlyHeld(InputLibrary.interact))
-                {
-                    ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, 1);
-                    _wasHoldingInteract = true;
-                }
-                if (OWInput.IsNewlyReleased(InputLibrary.interact))
-                {
-                    if (_wasHoldingInteract)
-                    {
-                        ControllerInput.Behaviour.SimulateInput(AxisIdentifier.CTRLR_DPADY, 0);
-                        _wasHoldingInteract = false;
-                    }
-                    else if (_pressedInteract && !IsFocused(_probe) && !IsFocused(_signalscope) && !IsFocused(_landingCam))
-                    {
-                        ControllerInput.Behaviour.SimulateInput(JoystickButton.LeftStickClick);
-                    }
-                    _pressedInteract = false;
-                }
-            }
-
-            private static bool IsFocused(ButtonInteraction interaction)
-            {
-                return interaction && interaction.receiver && interaction.receiver.IsFocused();
             }
 
             private static void SetEnabled(bool enabled)
