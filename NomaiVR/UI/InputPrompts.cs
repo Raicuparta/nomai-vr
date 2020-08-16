@@ -263,15 +263,9 @@ namespace NomaiVR
                     ____takeSnapshotPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
                 }
 
-                private static void ChangeShipPrompts(
-                    ref ScreenPrompt ____exitLandingCamPrompt,
-                    ref ScreenPrompt ____autopilotPrompt,
-                    ref ScreenPrompt ____abortAutopilotPrompt
-                )
+                private static void ChangeShipPrompts(ref ScreenPrompt ____exitLandingCamPrompt)
                 {
                     ____exitLandingCamPrompt = new ScreenPrompt(InputLibrary.cancel, ____exitLandingCamPrompt.GetText());
-                    ____autopilotPrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, ____autopilotPrompt.GetText());
-                    ____abortAutopilotPrompt = new ScreenPrompt(InputLibrary.interact, ____abortAutopilotPrompt.GetText());
                 }
 
                 private static void RemoveProbePrompts(ScreenPrompt ____unequipPrompt)
