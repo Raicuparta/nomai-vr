@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Harmony;
+using System.Collections.Generic;
 using System.Linq;
 using Valve.VR;
 
@@ -13,17 +14,23 @@ namespace NomaiVR
         private readonly string _color;
         private readonly HashSet<string> _prefixes = new HashSet<string>();
         private readonly ISteamVR_Action_In _action;
+        private readonly VRActionInput _holdActionInput;
 
-        public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false)
+        public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false, VRActionInput holdActionInput = null)
         {
             _color = color;
             _action = action;
+            _holdActionInput = holdActionInput;
 
             if (isLongPress)
             {
                 _prefixes.Add("Long Press");
             }
         }
+
+        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
+
+        public VRActionInput(ISteamVR_Action_In action, VRActionInput holdActionInput) : this(action, TextHelper.ORANGE, false, holdActionInput) { }
 
         public void Initialize()
         {
@@ -37,28 +44,17 @@ namespace NomaiVR
             }
         }
 
-        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
-
-        public string GetText()
+        public string[] GetText()
         {
             ControllerInput.Behaviour.InitializeActionInputs();
-            var prefix = _prefixes.Count > 0 ? $"{TextHelper.TextWithColor(string.Join(" ", _prefixes.ToArray()), TextHelper.ORANGE)} " : "";
-            var hand = HideHand ? "" : $"{_hand} ";
-            var result = $"{prefix}{TextHelper.TextWithColor($"{hand}{_source}", _color)}";
-            return string.IsNullOrEmpty(result) ? "" : $"[{result}]";
-        }
-
-        public bool IsOppositeHandWithSameName(VRActionInput other)
-        {
-            if (other == this)
+            var prefix = GetPrefixText();
+            var result = $"{prefix}{GetColoredLocalizedText()}";
+            if (string.IsNullOrEmpty(result))
             {
-                return false;
+                return new string[] { };
             }
-            if (_hand != other._hand && _source == other._source)
-            {
-                return true;
-            }
-            return false;
+            var holdInputText = GetHoldActionText();
+            return holdInputText.Add(WrapWithBrackets(result)).ToArray();
         }
 
         public bool HasAxisWithSameName()
@@ -103,6 +99,56 @@ namespace NomaiVR
         public void SetAsClickable()
         {
             _prefixes.Add("Click");
+        }
+
+        private string GetColoredLocalizedText()
+        {
+            return TextHelper.TextWithColor($"{GetHandText()}{_source}", _color);
+        }
+
+        private string GetHandText()
+        {
+            if (HideHand)
+            {
+                return "";
+            }
+            return $"{_hand} ";
+        }
+
+        private string GetPrefixText()
+        {
+            if (_prefixes.Count == 0)
+            {
+                return "";
+            }
+            return $"{TextHelper.TextWithColor(string.Join(" ", _prefixes.ToArray()), TextHelper.ORANGE)} ";
+        }
+
+        private string WrapWithBrackets(string text)
+        {
+            return $"[{text}]";
+        }
+
+        private bool IsOppositeHandWithSameName(VRActionInput other)
+        {
+            if (other == this)
+            {
+                return false;
+            }
+            if (_hand != other._hand && _source == other._source)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private string[] GetHoldActionText()
+        {
+            if (_holdActionInput == null)
+            {
+                return new string[] { };
+            }
+            return _holdActionInput.GetText();
         }
     }
 }

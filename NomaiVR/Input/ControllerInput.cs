@@ -84,6 +84,8 @@ namespace NomaiVR
                     [JoystickButton.RightTrigger] = new VRActionInput(actionSet.ThrustUp)
                 };
 
+                var gripActionInput = new VRActionInput(actionSet.Grip);
+
                 axisActions = new Dictionary<AxisIdentifier, VRActionInput>
                 {
                     [AxisIdentifier.CTRLR_LTRIGGER] = new VRActionInput(actionSet.ThrustDown),
@@ -94,14 +96,11 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(actionSet.Look),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(actionSet.Look),
                     [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look),
-                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(actionSet.Look),
-                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(actionSet.Look)
+                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(actionSet.Look, gripActionInput),
+                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(actionSet.Look, gripActionInput)
                 };
 
-                otherActions = new VRActionInput[]
-                {
-                    new VRActionInput(actionSet.Grip)
-                };
+                otherActions = new VRActionInput[] { gripActionInput };
             }
 
             public static void InitializeActionInputs()

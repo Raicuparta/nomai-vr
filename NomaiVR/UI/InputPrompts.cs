@@ -91,10 +91,13 @@ namespace NomaiVR
 
                 private static void AddTextIfNotExisting(string text, HashSet<string> actionTexts, VRActionInput actionInput)
                 {
-                    var actionInputText = actionInput.GetText();
-                    if (!text.Contains(actionInputText))
+                    var actionInputTexts = actionInput.GetText();
+                    foreach (var inputText in actionInputTexts)
                     {
-                        actionTexts.Add(actionInputText);
+                        if (!text.Contains(inputText))
+                        {
+                            actionTexts.Add(inputText);
+                        }
                     }
                 }
 
