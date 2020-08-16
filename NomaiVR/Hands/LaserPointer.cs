@@ -397,8 +397,7 @@ namespace NomaiVR
                 )
                 {
                     var num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
-                    var swapper = ToolHelper.Swapper;
-                    var allowInteraction = swapper.IsInToolMode(ToolMode.None) || swapper.IsInToolMode(ToolMode.Item);
+                    var allowInteraction = ToolHelper.IsUsingNoTools();
                     ____focused = allowInteraction && num <= ____viewingWindow;
                     var Base = __instance as SingleInteractionVolume;
 
