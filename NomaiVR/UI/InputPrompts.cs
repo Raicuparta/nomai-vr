@@ -39,7 +39,6 @@ namespace NomaiVR
                     Postfix<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
 
                     Postfix<NomaiTranslatorProp>("LateInitialize", nameof(RemoveTranslatorPrompts));
-                    Postfix<NomaiTranslatorProp>("Awake", nameof(ChangeTranslatorPrompts));
 
                     Postfix<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
                     Postfix<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
@@ -241,11 +240,6 @@ namespace NomaiVR
                 private static void RemoveTranslatorPrompts(ScreenPrompt ____unequipPrompt)
                 {
                     Manager.RemoveScreenPrompt(____unequipPrompt);
-                }
-
-                private static void ChangeTranslatorPrompts(ref ScreenPrompt ____translatePrompt)
-                {
-                    ____translatePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.TranslatorUsePrompt) + "   <CMD>");
                 }
             }
         }
