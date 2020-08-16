@@ -13,9 +13,9 @@ namespace NomaiVR
         {
             private ReferenceFrameTracker _referenceFrameTracker;
             private static Transform _mapGridRenderer;
-            private static ButtonInteraction _probe;
-            private static ButtonInteraction _signalscope;
-            private static ButtonInteraction _landingCam;
+            private static ShipMonitorInteraction _probe;
+            private static ShipMonitorInteraction _signalscope;
+            private static ShipMonitorInteraction _landingCam;
             private static bool _canInteractWithTools;
             private static ShipCockpitController _cockpitController;
             private static bool _isLandingCamEnabled;
@@ -143,7 +143,7 @@ namespace NomaiVR
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
 
                     var probeScreenPivot = cockpitUI.Find("ProbeScreen/ProbeScreenPivot");
-                    _probe = probeScreenPivot.Find("ProbeScreen").gameObject.AddComponent<ButtonInteraction>();
+                    _probe = probeScreenPivot.Find("ProbeScreen").gameObject.AddComponent<ShipMonitorInteraction>();
                     _probe.mode = ToolMode.Probe;
                     _probe.text = UITextType.ScoutModePrompt;
 
@@ -162,7 +162,7 @@ namespace NomaiVR
                     probeScreenText.font = font;
 
                     var signalScreenPivot = cockpitUI.Find("SignalScreen/SignalScreenPivot");
-                    _signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ButtonInteraction>();
+                    _signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ShipMonitorInteraction>();
                     _signalscope.mode = ToolMode.SignalScope;
                     _signalscope.text = UITextType.UISignalscope;
 
@@ -184,7 +184,7 @@ namespace NomaiVR
 
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
-                    _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ButtonInteraction>();
+                    _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipMonitorInteraction>();
                     _landingCam.button = JoystickButton.DPadDown;
                     _landingCam.skipPressCallback = () =>
                     {
@@ -244,7 +244,7 @@ namespace NomaiVR
                     }
                 }
 
-                private static bool IsFocused(ButtonInteraction interaction)
+                private static bool IsFocused(ShipMonitorInteraction interaction)
                 {
                     return interaction && interaction.receiver && interaction.receiver.IsFocused();
                 }

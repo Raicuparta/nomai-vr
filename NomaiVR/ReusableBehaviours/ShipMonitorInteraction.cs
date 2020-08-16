@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NomaiVR
 {
-    internal class ButtonInteraction : MonoBehaviour
+    internal class ShipMonitorInteraction : MonoBehaviour
     {
         public ToolMode mode;
         public JoystickButton button;
