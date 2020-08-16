@@ -44,9 +44,6 @@ namespace NomaiVR
                     Postfix<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
                     Postfix<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
 
-                    Postfix<SatelliteSnapshotController>("OnPressInteract", nameof(RemoveSatellitePrompts));
-                    Postfix<SatelliteSnapshotController>("Awake", nameof(ChangeSatellitePrompts));
-
                     Postfix<PlayerSpawner>("Awake", nameof(RemoveJoystickPrompts));
                     Postfix<RoastingStickController>("LateInitialize", nameof(RemoveRoastingStickPrompts));
                     Postfix<ToolModeUI>("LateInitialize", nameof(RemoveToolModePrompts));
@@ -163,16 +160,6 @@ namespace NomaiVR
                     {
                         MaterialHelper.MakeGraphicChildrenDrawOnTop(Locator.GetPromptManager().gameObject);
                     }
-                }
-
-                private static void ChangeSatellitePrompts(ref ScreenPrompt ____forwardPrompt)
-                {
-                    ____forwardPrompt = new ScreenPrompt(InputLibrary.interact, ____forwardPrompt.GetText(), 0, false, false);
-                }
-
-                private static void RemoveSatellitePrompts(ScreenPrompt ____rearviewPrompt)
-                {
-                    Manager.RemoveScreenPrompt(____rearviewPrompt);
                 }
 
                 private static void RemoveJoystickPrompts(ref bool ____lookPromptAdded)
