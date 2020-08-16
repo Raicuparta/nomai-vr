@@ -34,7 +34,6 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     Postfix<ProbePromptController>("LateInitialize", nameof(RemoveProbePrompts));
-                    Postfix<ProbePromptController>("Awake", nameof(ChangeProbePrompts));
 
                     Postfix<ShipPromptController>("LateInitialize", nameof(RemoveShipPrompts));
                     Postfix<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
@@ -248,19 +247,6 @@ namespace NomaiVR
                     Manager.RemoveScreenPrompt(____centerTranslatePrompt);
                     Manager.RemoveScreenPrompt(____centerProbePrompt);
                     Manager.RemoveScreenPrompt(____centerSignalscopePrompt);
-                }
-
-                private static void ChangeProbePrompts(
-                    ref ScreenPrompt ____launchPrompt,
-                    ref ScreenPrompt ____retrievePrompt,
-                    ref ScreenPrompt ____takeSnapshotPrompt,
-                    ref ScreenPrompt ____forwardCamPrompt
-                )
-                {
-                    ____launchPrompt = new ScreenPrompt(InputLibrary.interact, ____launchPrompt.GetText());
-                    ____forwardCamPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
-                    ____retrievePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
-                    ____takeSnapshotPrompt = new ScreenPrompt(InputLibrary.interact, ____takeSnapshotPrompt.GetText());
                 }
 
                 private static void ChangeShipPrompts(ref ScreenPrompt ____exitLandingCamPrompt)
