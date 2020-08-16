@@ -33,6 +33,7 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     Postfix<ProbePromptController>("LateInitialize", nameof(RemoveProbePrompts));
+                    Postfix<ProbePromptController>("Awake", nameof(ChangeProbePrompts));
 
                     Postfix<ShipPromptController>("LateInitialize", nameof(RemoveShipPrompts));
                     Postfix<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
@@ -205,6 +206,12 @@ namespace NomaiVR
                 {
                     _toolUnequipPrompts.Add(____unequipPrompt);
                 }
+
+                private static void ChangeProbePrompts(ref ScreenPrompt ____retrievePrompt)
+                {
+                    ____retrievePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
+                }
+
 
                 private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
                 {
