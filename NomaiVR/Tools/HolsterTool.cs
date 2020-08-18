@@ -96,14 +96,11 @@ namespace NomaiVR
         {
             UpdateGrab();
             UpdateVisibility();
-            if (_visible)
-            {
-                var player = Locator.GetPlayerTransform();
-                position.y = ModSettings.ToolbeltHeight;
-                transform.position = Locator.GetPlayerCamera().transform.position + player.TransformVector(position);
-                transform.rotation = player.rotation;
-                transform.Rotate(angle);
-            }
+            var player = Locator.GetPlayerTransform();
+            position.y = ModSettings.ToolbeltHeight;
+            transform.position = Locator.GetPlayerCamera().transform.position + player.TransformVector(position);
+            transform.rotation = player.rotation;
+            transform.Rotate(angle);
         }
     }
 }
