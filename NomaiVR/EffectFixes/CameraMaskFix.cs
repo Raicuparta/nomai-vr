@@ -20,6 +20,9 @@ namespace NomaiVR
                 _instance = this;
 
                 _camera = Locator.GetPlayerCamera();
+                _camera.postProcessingSettings.chromaticAberrationEnabled = false;
+                _camera.postProcessingSettings.vignetteEnabled = false;
+                _camera.postProcessingSettings.bloom.intensity = 0.15f;
 
                 if (LoadManager.GetPreviousScene() == OWScene.TitleScreen && LoadManager.GetCurrentScene() == OWScene.SolarSystem)
                 {
@@ -29,9 +32,6 @@ namespace NomaiVR
 
             internal void Update()
             {
-                _camera.postProcessingSettings.chromaticAberrationEnabled = false;
-                _camera.postProcessingSettings.vignetteEnabled = false;
-
                 if (InputHelper.IsUIInteractionMode() && !_isPaused)
                 {
                     _isPaused = true;
