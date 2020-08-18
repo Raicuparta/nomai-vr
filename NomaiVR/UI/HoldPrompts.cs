@@ -10,6 +10,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private Transform _holdTransform;
+            private bool _isToolMode;
 
             internal void Start()
             {
@@ -23,9 +24,12 @@ namespace NomaiVR
                 canvas.transform.localPosition = Vector3.zero;
                 canvas.transform.localRotation = Quaternion.identity;
 
-                var holdCanvas = canvas.gameObject.AddComponent<Holdable>();
-                holdCanvas.transform.localPosition = new Vector3(-0.09f, -0.11f, 0.13f);
-                _holdTransform = holdCanvas.transform;
+                _holdTransform = new GameObject().transform;
+                _holdTransform.SetParent(HandsController.Behaviour.RightHand, false);
+                _holdTransform.gameObject.AddComponent<DebugTransform>();
+
+                canvas.transform.SetParent(_holdTransform, false);
+                SetPositionToHand();
 
                 foreach (Transform child in canvas.transform)
                 {
@@ -35,10 +39,42 @@ namespace NomaiVR
 
             internal void Update()
             {
-                if (Camera.main)
+                UpdateRotation();
+                UpdatePosition();
+            }
+
+            private void UpdateRotation()
+            {
+                if (!Camera.main)
                 {
-                    _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, PlayerHelper.PlayerHead.up);
+                    return;
                 }
+                _holdTransform.LookAt(2 * _holdTransform.position - Camera.main.transform.position, PlayerHelper.PlayerHead.up);
+            }
+
+            private void UpdatePosition()
+            {
+                var isUsingTool = ToolHelper.IsUsingAnyTool(ToolGroup.Suit);
+                if (!_isToolMode && isUsingTool)
+                {
+                    SetPositionToTool();
+                }
+                else if (_isToolMode && !isUsingTool)
+                {
+                    SetPositionToHand();
+                }
+            }
+
+            private void SetPositionToHand()
+            {
+                _holdTransform.localPosition = new Vector3(-0.09f, -0.11f, 0.13f);
+                _isToolMode = false;
+            }
+
+            private void SetPositionToTool()
+            {
+                _holdTransform.localPosition = new Vector3(-0.17f, 0.07f, -0.11f);
+                _isToolMode = true;
             }
         }
     }
