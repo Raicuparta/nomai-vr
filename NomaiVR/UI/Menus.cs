@@ -15,9 +15,11 @@ namespace NomaiVR
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
             private Camera _flashbackCamera;
             private Transform _flashbackCameraParent;
+            private GameObject _canvasParent;
 
             internal void Start()
             {
+                SetUpCanvasParent();
                 if (SceneHelper.IsInGame())
                 {
                     SetUpFlashbackCameraParent();
@@ -35,6 +37,30 @@ namespace NomaiVR
                 }
 
                 ScreenCanvasesToWorld();
+            }
+
+            internal void Update()
+            {
+                if (_canvasParent.activeSelf && !IsMenuInteractionAllowed())
+                {
+                    _canvasParent.SetActive(false);
+                    return;
+                }
+                if (!_canvasParent.activeSelf && IsMenuInteractionAllowed())
+                {
+                    _canvasParent.SetActive(true);
+                    return;
+                }
+            }
+
+            private bool IsMenuInteractionAllowed()
+            {
+                return OWTime.IsPaused() || SceneHelper.IsInTitle();
+            }
+
+            private void SetUpCanvasParent()
+            {
+                _canvasParent = new GameObject();
             }
 
             private void SetUpFlashbackCameraParent()
@@ -97,6 +123,7 @@ namespace NomaiVR
 
             private void AddFollowTarget(Canvas canvas)
             {
+                canvas.transform.parent = _canvasParent.transform;
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
                 {
