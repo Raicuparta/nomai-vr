@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,11 +14,14 @@ namespace NomaiVR
         {
             private static bool _shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
+            private static readonly string[] _ignoredCanvases = { "LoadManagerFadeCanvas", "PauseBackdropCanvas" };
             private Camera _flashbackCamera;
             private Transform _flashbackCameraParent;
+            private GameObject _canvasParent;
 
             internal void Start()
             {
+                SetUpCanvasParent();
                 if (SceneHelper.IsInGame())
                 {
                     SetUpFlashbackCameraParent();
@@ -35,6 +39,30 @@ namespace NomaiVR
                 }
 
                 ScreenCanvasesToWorld();
+            }
+
+            internal void Update()
+            {
+                if (_canvasParent.activeSelf && !IsMenuInteractionAllowed())
+                {
+                    _canvasParent.SetActive(false);
+                    return;
+                }
+                if (!_canvasParent.activeSelf && IsMenuInteractionAllowed())
+                {
+                    _canvasParent.SetActive(true);
+                    return;
+                }
+            }
+
+            private bool IsMenuInteractionAllowed()
+            {
+                return OWTime.IsPaused() || !SceneHelper.IsInGame() || PlayerState.IsSleepingAtCampfire();
+            }
+
+            private void SetUpCanvasParent()
+            {
+                _canvasParent = new GameObject();
             }
 
             private void SetUpFlashbackCameraParent()
@@ -97,6 +125,8 @@ namespace NomaiVR
 
             private void AddFollowTarget(Canvas canvas)
             {
+                Logs.WriteInfo($"Adding FollowTarget to canvas ${canvas.name}");
+                canvas.transform.parent = _canvasParent.transform;
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
                 {
@@ -153,9 +183,9 @@ namespace NomaiVR
                 return canvas.name == "Canvas_Text";
             }
 
-            private bool IsPauseBackdopCanvas(Canvas canvas)
+            private bool IsIgnoredCanvas(Canvas canvas)
             {
-                return canvas.name == "PauseBackdropCanvas";
+                return _ignoredCanvases.Contains(canvas.name);
             }
 
             private bool IsOwmlModConfigMenuCanvas(Canvas canvas)
@@ -180,7 +210,7 @@ namespace NomaiVR
                 var canvases = Resources.FindObjectsOfTypeAll<Canvas>();
                 foreach (var canvas in canvases)
                 {
-                    if (IsPauseBackdopCanvas(canvas))
+                    if (IsIgnoredCanvas(canvas))
                     {
                         continue;
                     }
