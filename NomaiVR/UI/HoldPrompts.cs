@@ -10,7 +10,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private Transform _holdTransform;
-            private bool _isToolMode;
+            private bool _isTranslatorPosition;
 
             internal void Start()
             {
@@ -55,11 +55,11 @@ namespace NomaiVR
             private void UpdatePosition()
             {
                 var isUsingTool = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
-                if (!_isToolMode && isUsingTool)
+                if (!_isTranslatorPosition && isUsingTool)
                 {
-                    SetPositionToTool();
+                    SetPositionToTranslator();
                 }
-                else if (_isToolMode && !isUsingTool)
+                else if (_isTranslatorPosition && !isUsingTool)
                 {
                     SetPositionToHand();
                 }
@@ -68,13 +68,13 @@ namespace NomaiVR
             private void SetPositionToHand()
             {
                 _holdTransform.localPosition = new Vector3(-0.09f, -0.11f, 0.13f);
-                _isToolMode = false;
+                _isTranslatorPosition = false;
             }
 
-            private void SetPositionToTool()
+            private void SetPositionToTranslator()
             {
                 _holdTransform.localPosition = new Vector3(-0.17f, 0.07f, -0.11f);
-                _isToolMode = true;
+                _isTranslatorPosition = true;
             }
         }
     }
