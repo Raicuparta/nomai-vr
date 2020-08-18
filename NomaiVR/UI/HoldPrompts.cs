@@ -54,7 +54,7 @@ namespace NomaiVR
 
             private void UpdatePosition()
             {
-                var isUsingTool = ToolHelper.IsUsingAnyTool(ToolGroup.Suit);
+                var isUsingTool = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
                 if (!_isToolMode && isUsingTool)
                 {
                     SetPositionToTool();
