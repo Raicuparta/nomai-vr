@@ -388,6 +388,17 @@ namespace NomaiVR
                     Prefix<ToolModeSwapper>("Update", nameof(Patch.ToolModeUpdate));
                     Prefix<ItemTool>("UpdateIsDroppable", nameof(Patch.PreUpdateIsDroppable));
                     Postfix<ItemTool>("UpdateIsDroppable", nameof(Patch.PostUpdateIsDroppable));
+                    Prefix<SingleInteractionVolume>("UpdateInput", nameof(Patch.PreUpdateInteractionInput));
+                    Prefix<MultipleInteractionVolume>("UpdateInput", nameof(Patch.PreUpdateInteractionInput));
+                }
+
+                private static bool PreUpdateInteractionInput()
+                {
+                    if (ToolHelper.IsUsingAnyTool(ToolGroup.Suit))
+                    {
+                        return false;
+                    }
+                    return true;
                 }
 
                 private static bool PatchUpdateInteractVolume(
