@@ -97,19 +97,21 @@ namespace NomaiVR
 
             private void AddFollowTarget(Canvas canvas)
             {
-                var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
                 {
-                    followTarget.target = Locator.GetPlayerTransform();
-                    followTarget.localPosition = new Vector3(0, 0.75f, 1.5f);
+                    canvas.transform.parent = Locator.GetPlayerTransform();
+                    canvas.transform.localPosition = new Vector3(0, 0.75f, 1.5f);
+                    canvas.transform.localRotation = Quaternion.identity;
                 }
                 else if (SceneHelper.IsInTitle())
                 {
+                    var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                     followTarget.target = Camera.main.transform.parent;
                     followTarget.localPosition = new Vector3(-0.2f, 1.3f, 2f);
                 }
                 else
                 {
+                    var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                     followTarget.target = Camera.main.transform;
                     followTarget.localPosition = new Vector3(0, 0, 2f);
                     followTarget.positionSmoothTime = 0.5f;
