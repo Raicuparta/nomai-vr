@@ -112,7 +112,7 @@ namespace NomaiVR
 
             private bool ShouldRenderHudParts()
             {
-                return ToolHelper.IsUsingNoTools() && Locator.GetPlayerSuit().IsWearingHelmet() && !PlayerState.InConversation();
+                return !ToolHelper.Swapper.IsInToolMode(ToolMode.Translator) && Locator.GetPlayerSuit().IsWearingHelmet() && !PlayerState.InConversation();
             }
 
             private Transform GetPlayerHud(Transform helmet)
