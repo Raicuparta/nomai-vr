@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace NomaiVR
         {
             private static bool _shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
+            private static readonly string[] _ignoredCanvases = { "LoadManagerFadeCanvas", "PauseBackdropCanvas" };
             private Camera _flashbackCamera;
             private Transform _flashbackCameraParent;
             private GameObject _canvasParent;
@@ -55,7 +57,7 @@ namespace NomaiVR
 
             private bool IsMenuInteractionAllowed()
             {
-                return OWTime.IsPaused() || SceneHelper.IsInTitle();
+                return OWTime.IsPaused() || !SceneHelper.IsInGame() || PlayerState.IsSleepingAtCampfire();
             }
 
             private void SetUpCanvasParent()
@@ -123,6 +125,7 @@ namespace NomaiVR
 
             private void AddFollowTarget(Canvas canvas)
             {
+                Logs.WriteInfo($"Adding FollowTarget to canvas ${canvas.name}");
                 canvas.transform.parent = _canvasParent.transform;
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
@@ -180,9 +183,9 @@ namespace NomaiVR
                 return canvas.name == "Canvas_Text";
             }
 
-            private bool IsPauseBackdopCanvas(Canvas canvas)
+            private bool IsIgnoredCanvas(Canvas canvas)
             {
-                return canvas.name == "PauseBackdropCanvas";
+                return _ignoredCanvases.Contains(canvas.name);
             }
 
             private bool IsOwmlModConfigMenuCanvas(Canvas canvas)
@@ -207,7 +210,7 @@ namespace NomaiVR
                 var canvases = Resources.FindObjectsOfTypeAll<Canvas>();
                 foreach (var canvas in canvases)
                 {
-                    if (IsPauseBackdopCanvas(canvas))
+                    if (IsIgnoredCanvas(canvas))
                     {
                         continue;
                     }
