@@ -316,7 +316,7 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
                 SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
-                SetCommandButton(InputLibrary.scopeView, JoystickButton.FaceUp);
+                SetCommandButton(InputLibrary.scopeView, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.probeForward, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.translate, JoystickButton.FaceLeft);
