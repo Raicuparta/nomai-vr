@@ -208,7 +208,7 @@ namespace NomaiVR
 
                 private static void ChangeProbePrompts(ref ScreenPrompt ____retrievePrompt)
                 {
-                    ____retrievePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
+                    ____retrievePrompt = new ScreenPrompt(InputLibrary.probeRetrieve, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
                 }
 
 
