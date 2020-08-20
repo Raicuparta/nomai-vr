@@ -125,7 +125,6 @@ namespace NomaiVR
 
             private void AddFollowTarget(Canvas canvas)
             {
-                Logs.WriteInfo($"Adding FollowTarget to canvas ${canvas.name}");
                 canvas.transform.parent = _canvasParent.transform;
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
