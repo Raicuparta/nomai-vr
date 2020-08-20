@@ -208,13 +208,13 @@ namespace NomaiVR
 
                 private static void ChangeProbePrompts(ref ScreenPrompt ____retrievePrompt)
                 {
-                    ____retrievePrompt = new ScreenPrompt(InputLibrary.swapShipLogMode, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
+                    ____retrievePrompt = new ScreenPrompt(InputLibrary.probeRetrieve, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
                 }
 
 
                 private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
                 {
-                    ____zoomModePrompt = new ScreenPrompt(InputLibrary.interact, UITextLibrary.GetString(UITextType.SignalscopeZoomInPrompt) + "   <CMD>");
+                    ____zoomModePrompt = new ScreenPrompt(InputLibrary.scopeView, UITextLibrary.GetString(UITextType.SignalscopeZoomInPrompt) + "   <CMD>");
                 }
 
                 private static void RemoveSignalscopePrompts(
