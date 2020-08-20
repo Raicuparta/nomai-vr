@@ -15,13 +15,13 @@ namespace NomaiVR
             private static bool _shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
             private static readonly string[] _ignoredCanvases = { "LoadManagerFadeCanvas", "PauseBackdropCanvas" };
+            private readonly List<GameObject> _canvasObjectsToHide = new List<GameObject>();
             private Camera _flashbackCamera;
             private Transform _flashbackCameraParent;
-            private GameObject _canvasParent;
+            private bool _isCanvasObjectsActive;
 
             internal void Start()
             {
-                SetUpCanvasParent();
                 if (SceneHelper.IsInGame())
                 {
                     SetUpFlashbackCameraParent();
@@ -43,26 +43,32 @@ namespace NomaiVR
 
             internal void Update()
             {
-                if (_canvasParent.activeSelf && !IsMenuInteractionAllowed())
+                UpdateCanvasObjectsActive();
+            }
+
+            private void UpdateCanvasObjectsActive()
+            {
+                if (_isCanvasObjectsActive && !IsMenuInteractionAllowed())
                 {
-                    _canvasParent.SetActive(false);
+                    SetCanvasObjectsActive(false);
                     return;
                 }
-                if (!_canvasParent.activeSelf && IsMenuInteractionAllowed())
+                if (!_isCanvasObjectsActive && IsMenuInteractionAllowed())
                 {
-                    _canvasParent.SetActive(true);
+                    SetCanvasObjectsActive(true);
                     return;
                 }
+            }
+
+            private void SetCanvasObjectsActive(bool active)
+            {
+                _canvasObjectsToHide.ForEach(canvasObject => canvasObject.SetActive(active));
+                _isCanvasObjectsActive = active;
             }
 
             private bool IsMenuInteractionAllowed()
             {
                 return OWTime.IsPaused() || !SceneHelper.IsInGame() || PlayerState.IsSleepingAtCampfire();
-            }
-
-            private void SetUpCanvasParent()
-            {
-                _canvasParent = new GameObject();
             }
 
             private void SetUpFlashbackCameraParent()
@@ -125,7 +131,7 @@ namespace NomaiVR
 
             private void AddFollowTarget(Canvas canvas)
             {
-                canvas.transform.parent = _canvasParent.transform;
+                _canvasObjectsToHide.Add(canvas.gameObject);
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
                 {
