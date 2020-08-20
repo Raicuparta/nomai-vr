@@ -51,14 +51,22 @@ namespace NomaiVR
                     Empty<PlayerCameraController>("OnExitLandingView");
                     Empty<PlayerCameraController>("OnEnterShipComputer");
                     Empty<PlayerCameraController>("OnExitShipComputer");
-
                     Prefix<ShipCockpitController>("EnterLandingView", nameof(PreEnterLandingView));
                     Prefix<ShipCockpitController>("ExitLandingView", nameof(PreExitLandingView));
                     Postfix<ShipCockpitController>("ExitFlightConsole", nameof(PostExitFlightConsole));
                     Prefix<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
                     Postfix<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
-
                     Prefix(typeof(ReferenceFrameTracker).GetMethod("UntargetReferenceFrame", new[] { typeof(bool) }), nameof(PreUntargetFrame));
+                    Prefix<ProbeLauncher>("RetrieveProbe", nameof(PreRetrieveProbe));
+                }
+
+                private static bool PreRetrieveProbe()
+                {
+                    if (Locator.GetReferenceFrame(true) != null && OWInput.IsInputMode(InputMode.ShipCockpit))
+                    {
+                        return false;
+                    }
+                    return true;
                 }
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
