@@ -76,6 +76,7 @@ namespace NomaiVR
                     [JoystickButton.FaceRight] = new VRActionInput(actionSet.Back, TextHelper.RED),
                     [JoystickButton.FaceLeft] = new VRActionInput(actionSet.Interact, TextHelper.BLUE),
                     [JoystickButton.RightBumper] = new VRActionInput(actionSet.Interact, TextHelper.BLUE),
+                    [JoystickButton.LeftStickClick] = new VRActionInput(actionSet.Interact, TextHelper.BLUE, true),
                     [JoystickButton.FaceUp] = new VRActionInput(actionSet.Interact, TextHelper.BLUE, true),
                     [JoystickButton.LeftBumper] = new VRActionInput(actionSet.RollMode),
                     [JoystickButton.Start] = new VRActionInput(actionSet.Menu),
@@ -189,6 +190,8 @@ namespace NomaiVR
                     return;
                 }
 
+                var button = IsGripping ? JoystickButton.RightBumper : JoystickButton.FaceLeft;
+
                 var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
                 var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
                 var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
@@ -204,14 +207,14 @@ namespace NomaiVR
                         _primaryLastTime = -1;
                         if (!_justHeld)
                         {
-                            SimulateInput(JoystickButton.FaceLeft);
+                            SimulateInput(button);
                         }
                         _justHeld = false;
                     }
                 }
                 else
                 {
-                    _buttons[JoystickButton.FaceLeft] = value;
+                    _buttons[button] = value;
                 }
             }
 
@@ -284,7 +287,8 @@ namespace NomaiVR
             {
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {
-                    SimulateInput(JoystickButton.FaceUp);
+                    var button = IsGripping ? JoystickButton.LeftStickClick : JoystickButton.FaceUp;
+                    SimulateInput(button);
                     _primaryLastTime = -1;
                     _justHeld = true;
                 }
@@ -316,10 +320,10 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
                 SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
-                SetCommandButton(InputLibrary.scopeView, JoystickButton.FaceLeft);
-                SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.FaceUp);
-                SetCommandButton(InputLibrary.probeForward, JoystickButton.FaceLeft);
-                SetCommandButton(InputLibrary.translate, JoystickButton.FaceLeft);
+                SetCommandButton(InputLibrary.scopeView, JoystickButton.RightBumper);
+                SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.LeftStickClick);
+                SetCommandButton(InputLibrary.probeForward, JoystickButton.RightBumper);
+                SetCommandButton(InputLibrary.translate, JoystickButton.RightBumper);
                 SetCommandButton(InputLibrary.autopilot, JoystickButton.FaceUp);
                 SetCommandButton(InputLibrary.lockOn, JoystickButton.FaceLeft);
             }
