@@ -80,14 +80,11 @@ namespace NomaiVR
             private void ReplaceHelmetModel(Transform helmet)
             {
                 var helmetModelParent = helmet.Find("HelmetRoot/HelmetMesh/HUD_Helmet_v2");
-                helmetModelParent.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
-                    ModSettings.ShowHelmet;
-
                 var helmetModel = Instantiate(AssetLoader.HelmetPrefab, helmetModelParent);
                 LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
                 Destroy(helmetModelParent.Find("Helmet").gameObject);
                 Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
-                helmetModel.AddComponent<ConditionalRenderer>().getShouldRender += () => Locator.GetPlayerSuit().IsWearingHelmet();
+                helmetModel.AddComponent<ConditionalRenderer>().getShouldRender += () => ModSettings.ShowHelmet && Locator.GetPlayerSuit().IsWearingHelmet();
             }
 
             private void AdjustHudRenderer(HUDHelmetAnimator helmetAnimator)
@@ -95,6 +92,7 @@ namespace NomaiVR
                 var hudRenderer = helmetAnimator.GetValue<MeshRenderer>("_hudRenderer").transform;
                 hudRenderer.localScale = Vector3.one * 3.28f;
                 hudRenderer.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
+                hudRenderer.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => Locator.GetPlayerSuit().IsWearingHelmet();
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
                 notifications.anchoredPosition = new Vector2(-200, -100);
 
@@ -112,7 +110,7 @@ namespace NomaiVR
 
             private bool ShouldRenderHudParts()
             {
-                return !ToolHelper.Swapper.IsInToolMode(ToolMode.Translator) && Locator.GetPlayerSuit().IsWearingHelmet() && !PlayerState.InConversation();
+                return !ToolHelper.Swapper.IsInToolMode(ToolMode.Translator) && !PlayerState.InConversation();
             }
 
             private Transform GetPlayerHud(Transform helmet)
