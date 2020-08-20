@@ -105,11 +105,11 @@ namespace NomaiVR
             private static void FixTitleMenuCanvases()
             {
                 var titleMenu = GameObject.Find("TitleMenu").transform;
+                var titleCanvas = titleMenu.Find("TitleCanvas");
 
                 // Hide the main menu while other menus are open,
                 // to prevent selecting with laser.
-                var titleCanvas = titleMenu.Find("TitleCanvas");
-                titleMenu.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                titleCanvas.Find("TitleLayoutGroup").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
                     MenuStackManager.SharedInstance.GetMenuCount() == 0;
 
                 // Cant't get the footer to look good, so I'm hiding it.
