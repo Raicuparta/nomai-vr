@@ -62,21 +62,20 @@ namespace NomaiVR
                 _reticule.localRotation = Quaternion.identity;
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff);
-                helmetOff.localPosition += Vector3.up * 0.63f;
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.45f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
-                SetupSignalscopeUI(helmetOn);
+                SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.2f, 0));
                 LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
                 SetupScopeLens();
             }
 
-            private static void SetupSignalscopeUI(Transform parent)
+            private static void SetupSignalscopeUI(Transform parent, Vector3 position)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 parent.parent = _signalscope.transform;
                 parent.localScale = Vector3.one * 0.0005f;
-                parent.localPosition = new Vector3(-0.05f, -0.2f, 0);
+                parent.localPosition = position;
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
             }
 
