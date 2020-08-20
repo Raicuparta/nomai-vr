@@ -105,12 +105,18 @@ namespace NomaiVR
 
             private void OnSuitUp()
             {
-                _probeLauncherHolster.SetActive(true);
+                if (_probeLauncherHolster)
+                {
+                    _probeLauncherHolster.SetActive(true);
+                }
             }
 
             private void OnRemoveSuit()
             {
-                _probeLauncherHolster.SetActive(false);
+                if (_probeLauncherHolster)
+                {
+                    _probeLauncherHolster.SetActive(false);
+                }
             }
 
             public class Patch : NomaiVRPatch
