@@ -15,5 +15,9 @@
         {
             return LoadManager.GetCurrentScene() == OWScene.SolarSystem;
         }
+        public static bool IsPreviousScene(OWScene scene)
+        {
+            return LoadManager.GetPreviousScene() == scene;
+        }
     }
 }
