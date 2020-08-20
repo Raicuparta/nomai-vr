@@ -26,7 +26,6 @@ namespace NomaiVR
 
                 _holdTransform = new GameObject().transform;
                 _holdTransform.SetParent(HandsController.Behaviour.RightHand, false);
-                _holdTransform.gameObject.AddComponent<DebugTransform>();
 
                 canvas.transform.SetParent(_holdTransform, false);
                 SetPositionToHand();

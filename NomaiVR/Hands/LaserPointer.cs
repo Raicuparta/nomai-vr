@@ -47,6 +47,19 @@ namespace NomaiVR
                 }
             }
 
+            internal void Update()
+            {
+                UpdateLineVisibility();
+                UpdateLineAppearance();
+                UpdateUiRayCast();
+                UpdateAlternativeButtons();
+
+                if (IsSelectNewlyPressed())
+                {
+                    HandleTransformClick(_prevRayHit);
+                }
+            }
+
             private static void SetUpLaserObject()
             {
                 Laser = new GameObject("Laser").transform;
@@ -365,43 +378,19 @@ namespace NomaiVR
                 }
             }
 
-            internal void Update()
-            {
-                UpdateLineVisibility();
-                UpdateLineAppearance();
-                UpdateUiRayCast();
-                UpdateAlternativeButtons();
-
-                if (IsSelectNewlyPressed())
-                {
-                    HandleTransformClick(_prevRayHit);
-                }
-            }
-
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<InteractZone>("UpdateInteractVolume", nameof(Patch.PatchUpdateInteractVolume));
-                    Prefix<InteractZone>("OnEntry", nameof(Patch.InteractZoneEntry));
-                    Prefix<InteractZone>("OnExit", nameof(Patch.InteractZoneExit));
-                    Prefix<ToolModeSwapper>("Update", nameof(Patch.ToolModeUpdate));
-                    Prefix<ItemTool>("UpdateIsDroppable", nameof(Patch.PreUpdateIsDroppable));
-                    Postfix<ItemTool>("UpdateIsDroppable", nameof(Patch.PostUpdateIsDroppable));
-                    Prefix<SingleInteractionVolume>("UpdateInput", nameof(Patch.PreUpdateInteractionInput));
-                    Prefix<MultipleInteractionVolume>("UpdateInput", nameof(Patch.PreUpdateInteractionInput));
+                    Prefix<InteractZone>("UpdateInteractVolume", nameof(PreUpdateInteractVolume));
+                    Prefix<InteractZone>("OnEntry", nameof(PreInteractZoneEntry));
+                    Prefix<InteractZone>("OnExit", nameof(PreInteractZoneExit));
+                    Prefix<ToolModeSwapper>("Update", nameof(PreToolModeUpdate));
+                    Prefix<ItemTool>("UpdateIsDroppable", nameof(PreUpdateIsDroppable));
+                    Postfix<ItemTool>("UpdateIsDroppable", nameof(PostUpdateIsDroppable));
                 }
 
-                private static bool PreUpdateInteractionInput()
-                {
-                    if (ToolHelper.IsUsingAnyTool(ToolGroup.Suit))
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-
-                private static bool PatchUpdateInteractVolume(
+                private static bool PreUpdateInteractVolume(
                     InteractZone __instance,
                     float ____viewingWindow,
                     ref bool ____focused
@@ -421,7 +410,7 @@ namespace NomaiVR
                     return false;
                 }
 
-                private static bool InteractZoneEntry(GameObject hitObj, InteractZone __instance)
+                private static bool PreInteractZoneEntry(GameObject hitObj, InteractZone __instance)
                 {
                     if (hitObj.CompareTag("PlayerDetector"))
                     {
@@ -430,7 +419,7 @@ namespace NomaiVR
                     return false;
                 }
 
-                private static bool InteractZoneExit(GameObject hitObj, InteractZone __instance)
+                private static bool PreInteractZoneExit(GameObject hitObj, InteractZone __instance)
                 {
                     if (hitObj.CompareTag("PlayerDetector"))
                     {
@@ -439,7 +428,7 @@ namespace NomaiVR
                     return false;
                 }
 
-                private static void ToolModeUpdate(ref FirstPersonManipulator ____firstPersonManipulator)
+                private static void PreToolModeUpdate(ref FirstPersonManipulator ____firstPersonManipulator)
                 {
                     if (____firstPersonManipulator != _manipulator)
                     {
