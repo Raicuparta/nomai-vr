@@ -28,7 +28,7 @@ namespace NomaiVR
             }
         }
 
-        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false) : this(action, TextHelper.ORANGE, isLongPress) { }
+        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false, VRActionInput holdActionInput = null) : this(action, TextHelper.ORANGE, isLongPress, holdActionInput) { }
 
         public VRActionInput(ISteamVR_Action_In action, VRActionInput holdActionInput) : this(action, TextHelper.ORANGE, false, holdActionInput) { }
 
