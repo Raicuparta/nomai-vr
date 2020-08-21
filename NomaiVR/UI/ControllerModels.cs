@@ -17,7 +17,6 @@ namespace NomaiVR
             internal void Start()
             {
                 SetUp();
-                Show();
             }
 
             internal void Update()
