@@ -31,7 +31,6 @@ namespace NomaiVR
                 SetUpLeftHandLaser();
                 SetUpLineRenderer();
                 UpdateLineAppearance();
-                DisableReticule();
                 CreateButtonColliders();
 
                 if (SceneHelper.IsInGame())
@@ -313,19 +312,6 @@ namespace NomaiVR
             {
                 _lineRenderer.SetPosition(1, Vector3.forward * length);
 
-            }
-
-            private static void DisableReticule()
-            {
-                var rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-                foreach (var rootObject in rootObjects)
-                {
-                    if (rootObject.name == "Reticule")
-                    {
-                        rootObject.SetActive(false);
-                        return;
-                    }
-                }
             }
 
             private void UpdateLineAppearance()
