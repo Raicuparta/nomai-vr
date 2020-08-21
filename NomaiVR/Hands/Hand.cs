@@ -10,15 +10,14 @@ namespace NomaiVR
         public SteamVR_Action_Pose pose;
         public bool isLeft;
 
-        Transform hand;
-
         internal void Start()
         {
-            hand = Instantiate(handPrefab).transform;
+            var hand = Instantiate(handPrefab).transform;
             var glove = Instantiate(glovePrefab).transform;
             hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
             hand.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Skin");
             glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
+            glove.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Clothes");
 
             SetUpHandModel(hand);
             SetUpHandModel(glove);
