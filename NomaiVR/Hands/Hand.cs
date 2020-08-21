@@ -10,27 +10,18 @@ namespace NomaiVR
         public SteamVR_Action_Pose pose;
         public bool isLeft;
 
+        Transform hand;
+
         internal void Start()
         {
-            var hand = Instantiate(handPrefab).transform;
+            hand = Instantiate(handPrefab).transform;
             var glove = Instantiate(glovePrefab).transform;
             hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
+            hand.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Skin");
             glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
 
-            void setupHandModel(Transform model)
-            {
-                model.parent = transform;
-                model.localPosition = transform.localPosition;
-                model.localRotation = transform.localRotation;
-                model.localScale = Vector3.one * 6;
-                if (isLeft)
-                {
-                    model.localScale = new Vector3(-model.localScale.x, model.localScale.y, model.localScale.z);
-                }
-            }
-
-            setupHandModel(hand);
-            setupHandModel(glove);
+            SetUpHandModel(hand);
+            SetUpHandModel(glove);
 
             gameObject.SetActive(false);
             var poseDriver = transform.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
@@ -38,7 +29,17 @@ namespace NomaiVR
             gameObject.SetActive(true);
         }
 
-
+        void SetUpHandModel(Transform model)
+        {
+            model.parent = transform;
+            model.localPosition = transform.localPosition;
+            model.localRotation = transform.localRotation;
+            model.localScale = Vector3.one * 6;
+            if (isLeft)
+            {
+                model.localScale = new Vector3(-model.localScale.x, model.localScale.y, model.localScale.z);
+            }
+        }
 
         private bool ShouldRenderGloves()
         {
