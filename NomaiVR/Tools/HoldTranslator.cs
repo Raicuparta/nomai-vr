@@ -66,12 +66,11 @@ namespace NomaiVR
 
                 translatorGroup.Find("TranslatorBeams").localScale = Vector3.one / 0.3f;
 
-                SetUpLaser(translatorModel);
+                SetUpLaser(translator);
             }
 
             private Transform SetUpLaser(Transform translator)
             {
-                Logs.Write("Setting up laser");
                 var lineObject = new GameObject("Translator Line");
                 _lineRenderer = lineObject.AddComponent<LineRenderer>();
                 _lineRenderer.useWorldSpace = false;
@@ -85,6 +84,8 @@ namespace NomaiVR
                 lineObject.transform.SetParent(translator, false);
                 lineObject.transform.localPosition = new Vector3(0.74f, 0.37f, 0f);
                 lineObject.transform.localRotation = Quaternion.Euler(0f, 353f, 0f);
+
+                lineObject.AddComponent<ConditionalRenderer>().getShouldRender = () => ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
 
                 return lineObject.transform;
 
