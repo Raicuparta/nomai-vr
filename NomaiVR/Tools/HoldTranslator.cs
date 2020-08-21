@@ -78,7 +78,7 @@ namespace NomaiVR
                 _lineRenderer.startWidth = 0.005f;
                 _lineRenderer.endWidth = 0.001f;
                 _lineRenderer.endColor = Color.clear;
-                _lineRenderer.startColor = new Color(1, 1, 1, 0.3f); ;
+                _lineRenderer.startColor = new Color(0.4f, 0.5f, 0.8f, 0.3f); ;
                 _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
 
                 lineObject.transform.SetParent(translator, false);
