@@ -137,6 +137,7 @@ namespace NomaiVR
                 {
                     Postfix<ThrustAndAttitudeIndicator>("LateUpdate", nameof(FixThrusterHudRotation));
                     Postfix<HUDCamera>("Awake", nameof(FixHudDistortion));
+                    Postfix<HUDCamera>("OnGraphicSettingsUpdated", nameof(FixHudDistortion));
                 }
 
                 private static void FixHudDistortion(Camera ____camera)
