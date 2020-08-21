@@ -27,11 +27,12 @@ namespace NomaiVR
 
             private void UpdateVisibility()
             {
-                if (OWTime.IsPaused(OWTime.PauseType.Menu) || OWTime.IsPaused(OWTime.PauseType.Sleeping) || SceneHelper.IsInTitle())
+                var shouldShow = !SteamVR_Input.isStartupFrame && IsPaused();
+                if (!_isVisible && shouldShow)
                 {
                     Show();
                 }
-                else
+                else if (_isVisible && !shouldShow)
                 {
                     Hide();
                 }
@@ -39,11 +40,18 @@ namespace NomaiVR
 
             private void SetUp()
             {
-                _leftRenderModel = CreateModel(HandsController.Behaviour.LeftHand, SteamVR_Input_Sources.LeftHand, 1);
-                _rightRenderModel = CreateModel(HandsController.Behaviour.RightHand, SteamVR_Input_Sources.RightHand, 2);
+                _leftRenderModel = CreateModel(HandsController.Behaviour.LeftHand, SteamVR_Input_Sources.LeftHand, SteamVR_Actions.default_LeftHand);
+                _rightRenderModel = CreateModel(HandsController.Behaviour.RightHand, SteamVR_Input_Sources.RightHand, SteamVR_Actions.default_RightHand);
             }
 
-            private SteamVR_RenderModel CreateModel(Transform parent, SteamVR_Input_Sources source, int index)
+            private bool IsPaused()
+            {
+                return OWTime.IsPaused(OWTime.PauseType.Menu)
+                    || OWTime.IsPaused(OWTime.PauseType.Sleeping)
+                    || SceneHelper.IsInTitle();
+            }
+
+            private SteamVR_RenderModel CreateModel(Transform parent, SteamVR_Input_Sources source, SteamVR_Action_Pose pose)
             {
                 var model = new GameObject("SteamVR_RenderModel").AddComponent<SteamVR_RenderModel>();
                 model.gameObject.layer = LayerMask.NameToLayer("UI");
@@ -52,17 +60,13 @@ namespace NomaiVR
                 model.transform.localRotation = Quaternion.identity;
                 model.transform.localScale = Vector3.one;
                 model.SetInputSource(source);
-                model.SetDeviceIndex(index);
+                model.SetDeviceIndex((int)pose.GetDeviceIndex(source));
 
                 return model;
             }
 
             private void Show()
             {
-                if (_isVisible)
-                {
-                    return;
-                }
                 _isVisible = true;
                 _leftRenderModel.gameObject.SetActive(true);
                 _rightRenderModel.gameObject.SetActive(true);
@@ -70,10 +74,6 @@ namespace NomaiVR
 
             private void Hide()
             {
-                if (!_isVisible)
-                {
-                    return;
-                }
                 _isVisible = false;
                 _leftRenderModel.gameObject.SetActive(false);
                 _rightRenderModel.gameObject.SetActive(false);
