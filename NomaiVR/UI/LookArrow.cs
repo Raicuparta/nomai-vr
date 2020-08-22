@@ -128,11 +128,10 @@ namespace NomaiVR
 
                 public static bool PreLockOn(Transform targetTransform)
                 {
-                    if (targetTransform.GetComponent<ModelShipController>() == null)
+                    if (targetTransform.GetComponent<ModelShipController>() == null && targetTransform.name != "NomaiHeadStatue")
                     {
                         _target = targetTransform;
                     }
-
                     return false;
                 }
 
