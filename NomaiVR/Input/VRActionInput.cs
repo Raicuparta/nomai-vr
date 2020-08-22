@@ -40,8 +40,6 @@ namespace NomaiVR
             if (string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
             {
                 Logs.WriteError($"Could not find name for binding {_action.GetShortName()}.");
-                // TODO Some buttons might be missing but that doesn't always mean it's wrong (VIVE)
-                //FatalErrorChecker.ThrowSteamVRError();
             }
         }
 

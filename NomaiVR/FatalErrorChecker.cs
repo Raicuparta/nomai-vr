@@ -33,7 +33,7 @@ namespace NomaiVR
             internal void Start()
             {
                 CheckGameVersion();
-                CheckControllerState();
+                Invoke(nameof(CheckControllerState), 1);
             }
 
             internal void Update()
@@ -55,7 +55,8 @@ namespace NomaiVR
 
             private void CheckControllerState()
             {
-                if (!SteamVR.instance.hmd.IsTrackedDeviceConnected(0) || !SteamVR.instance.hmd.IsTrackedDeviceConnected(1))
+                var actionSet = SteamVR_Actions._default;
+                if (!actionSet.RightHand.deviceIsConnected || !actionSet.LeftHand.deviceIsConnected)
                 {
                     ThrowSteamVRError();
                 }
