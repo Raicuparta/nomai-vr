@@ -15,7 +15,7 @@ namespace NomaiVR
         {
             Logs.WriteFatal(
                 "Failed to initialize SteamVR. This could be for a few different reasons. Try these before starting the game again:" +
-                "\n\n- Close SteamVR (let the game open SteamVR automatically);" +
+                "\n\n- For some people, it only works if SteamVR is already running before starting the game. For others, only when SteamVR is closed (SteamVR will open automatically). Try both and stick with what works for you;" +
                 "\n\n- Make sure your headset and both of your VR controllers are connected and working;" +
                 "\n\n- If you have the game on Steam:" +
                 "\n--- Right-click Outer Wilds on your Steam library" +
