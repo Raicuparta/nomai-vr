@@ -44,7 +44,8 @@
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
-- Steam and SteamVR installed (make sure SteamVR isn't running prior to running the game);
+- Steam and SteamVR installed (even if you have the Epic version);
+- For some people, it only works if SteamVR is already running before starting the game. For others, only when SteamVR is closed (SteamVR will open automatically). Try both and stick with what works for you;
 - Strong VR legs (both due to the nature of the game, and due to the glitchiness of this VR implementation).
 
 ## Comfort
@@ -61,15 +62,15 @@ There are some extra in-game tutorials for teaching you VR inputs, but some stuf
 
 - Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
 - You can interact with most stuff by aiming with the right-hand laser and pressing the interact button;
-- Change tool modes by holding a tool on your right hand and touching it with your left hand;
-- While piloting the ship, you can aim at and interact with stuff inside the ship (interact with the screens to equip that tool);
+- Always pay attention to the input prompts on your right hand;
+- Make sure you don't have the input prompts disabled in the game options when trying VR for the first time; 
 - Experiment with the controls. When in doubt, aim laser and press interact.
 
 ## Performance
 
 This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance.
 
-Besides lowering the graphics in-game, try lowering the rendering rendering resolution in SteamVR's settings. Lowering resolution in-game has no effect.
+Besides lowering the graphics in-game (shadows, antialiasing and ambient occlusion are the heaviest hitters), try lowering the rendering rendering resolution in SteamVR's settings (SteamVR defaults to 150%, try something like 100% instead). Changing resolution and V-sync in-game has no effect.
 
 ### Framerate
 
