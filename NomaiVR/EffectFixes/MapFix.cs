@@ -10,6 +10,8 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            private MapController _mapController;
+
             internal void Start()
             {
                 var mapCameraTransform = Locator.GetRootTransform().Find("MapCamera");
@@ -46,15 +48,25 @@ namespace NomaiVR
                 Destroy(originalOWCamera);
                 Destroy(originalCamera);
 
-                var mapController = mapCameraTransform.GetComponent<MapController>();
+                _mapController = mapCameraTransform.GetComponent<MapController>();
 
                 newCamera.gameObject.SetActive(true);
-                mapController.SetValue("_mapCamera", owCamera);
+                _mapController.SetValue("_mapCamera", owCamera);
 
                 var markerManager = mapCameraTransform.Find("MarkerManager").GetComponent<Canvas>();
                 var lockOnCanvas = mapCameraTransform.Find("MapLockOnCanvas").GetComponent<Canvas>();
 
                 markerManager.worldCamera = lockOnCanvas.worldCamera = camera;
+
+                GlobalMessenger.AddListener("GamePaused", new Callback(OnGamePaused));
+            }
+
+            private void OnGamePaused()
+            {
+                if (PlayerState.InMapView())
+                {
+                    _mapController.Invoke("ExitMapView");
+                }
             }
         }
     }
