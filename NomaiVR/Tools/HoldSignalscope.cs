@@ -122,6 +122,29 @@ namespace NomaiVR
 
             internal void Update()
             {
+                UpdateSignalscopeReticuleVisibility();
+                UpdateSignalscipeZoom();
+            }
+
+            private void UpdateSignalscopeReticuleVisibility()
+            {
+                if (_reticule == null)
+                {
+                    return;
+                }
+
+                if (_reticule.gameObject.activeSelf && OWTime.IsPaused())
+                {
+                    _reticule.gameObject.SetActive(false);
+                }
+                else if (!_reticule.gameObject.activeSelf && !OWTime.IsPaused())
+                {
+                    _reticule.gameObject.SetActive(true);
+                }
+            }
+
+            private void UpdateSignalscipeZoom()
+            {
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
