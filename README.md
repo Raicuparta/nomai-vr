@@ -58,25 +58,24 @@ Only recommended for people who aren't usually prone to VR sickness:
 
 ## VR Controller Inputs
 
-There are some extra in-game tutorials for teaching you VR inputs, but some stuff doesn't have any tutorials yet.
+The mod tries its best to teach you how to play the game in VR, but it's not always easy with all the hacky stuff going on:
 
 - Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
 - You can interact with most stuff by aiming with the right-hand laser and pressing the interact button;
 - Always pay attention to the input prompts on your right hand;
-- Make sure you don't have the input prompts disabled in the game options when trying VR for the first time; 
-- Experiment with the controls. When in doubt, aim laser and press interact.
+- Make sure you don't have the input prompts disabled in the game options when trying VR for the first time;
 
 ## Performance
 
 This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance.
 
-Besides lowering the graphics in-game (shadows, antialiasing and ambient occlusion are the heaviest hitters), try lowering the rendering rendering resolution in SteamVR's settings (SteamVR defaults to 150%, try something like 100% instead). Changing resolution and V-sync in-game has no effect.
+Besides lowering the graphics in-game (shadows, antialiasing and ambient occlusion are the heaviest hitters), try lowering the rendering resolution in SteamVR's settings.SteamVR defaults to 150%, try something like 100% instead. Changing resolution and V-sync in-game has no effect.
 
 ### Framerate
 
 Outer Wilds was originally locked to 60 FPS. To work around this, NomaiVR forces the game's physics refresh rate to match your VR headset's refresh rate. This can have a high impact on performance. Try lowering your refresh rate through SteamVR's settings (if your headset supports this) to get a more stable framerate.
 
-If your headset doesn't support multiple refresh rates, you can override the game's physics refresh rate by editing NomaiVR's settings file (`OWML/Mods/NomaiVR/config.json`). Change `overrideRefreshRate` to whatever framerate you desire. Setting it to zero makes it follow your VR headset's refresh rate.
+If your headset doesn't support multiple refresh rates, you can override the game's physics refresh rate in NomaiVR's options (pause the game, select Mods > NomaiVR and change Physics Refresh Rate). This will cause a disconnect between the framerate of the VR camera rotation and the framerate of the game's physics, so it's not very pleasant. Setting it to zero makes it follow your VR headset's refresh rate.
 
 ## Compatibility with other mods
 
