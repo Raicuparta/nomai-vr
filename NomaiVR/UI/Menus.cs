@@ -68,7 +68,7 @@ namespace NomaiVR
 
             private bool IsMenuInteractionAllowed()
             {
-                return OWTime.IsPaused() || !SceneHelper.IsInGame() || PlayerState.IsSleepingAtCampfire();
+                return OWTime.IsPaused(OWTime.PauseType.Menu) || !SceneHelper.IsInGame() || PlayerState.IsSleepingAtCampfire();
             }
 
             private void SetUpFlashbackCameraParent()
