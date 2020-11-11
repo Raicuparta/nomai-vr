@@ -1,8 +1,8 @@
 # NomaiVR - Outer Wilds VR Mod
 
-![NomaiVR](banner.png)
+<a href="https://paypal.me/raicuparta/"><img src="paypal-button.svg" height="40"></a> 
 
-[![NomaiVR Gameplay](https://i.imgur.com/utsUMNv.gif)](https://www.youtube.com/watch?v=BblIMEPq54M)
+![NomaiVR](banner.png)
 
 <!-- TOC -->
 
