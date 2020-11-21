@@ -2,7 +2,7 @@
 
 ![NomaiVR](banner/banner.png)
 
-[![NomaiVR Gameplay](https://i.imgur.com/utsUMNv.gif)](https://www.youtube.com/watch?v=BblIMEPq54M)
+[![Donate with PayPal](paypal-button.png)](https://paypal.me/raicuparta/5usd)
 
 <!-- TOC -->
 
@@ -64,6 +64,7 @@ The mod tries its best to teach you how to play the game in VR, but it's not alw
 - You can interact with most stuff by aiming with the right-hand laser and pressing the interact button;
 - Always pay attention to the input prompts on your right hand;
 - Make sure you don't have the input prompts disabled in the game options when trying VR for the first time;
+- Holding the right hand grip changes the "interact" button's function, so make sure you're not accidentally trigerring the grip while trying to interact with objects (especially if you use the Index Knuckles controllers).
 
 ## Performance
 
