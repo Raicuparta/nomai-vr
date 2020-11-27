@@ -1,4 +1,4 @@
-# NomaiVR - Outer Wilds VR Mod
+# NomaiVR - Outer Wilds VR
 
 ![NomaiVR](banner/banner.png)
 
