@@ -7,6 +7,8 @@ namespace NomaiVR
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
+        private static bool _isBuccklingUp = false;
+
         private static readonly Dictionary<ToolMode, bool> _toolsAllowedToEquip = new Dictionary<ToolMode, bool>() {
             { ToolMode.Item, true }
         };
@@ -25,8 +27,9 @@ namespace NomaiVR
 
         public static bool IsAllowedToEquip(ToolMode mode)
         {
-            if (OWInput.IsInputMode(InputMode.ShipCockpit) && mode == ToolMode.None)
+            if (_isBuccklingUp || (OWInput.IsInputMode(InputMode.ShipCockpit) && mode == ToolMode.None))
             {
+                _isBuccklingUp = false;
                 return true;
             }
             return _toolsAllowedToEquip.ContainsKey(mode) && _toolsAllowedToEquip[mode];
@@ -37,6 +40,12 @@ namespace NomaiVR
             public override void ApplyPatches()
             {
                 Prefix<ToolModeSwapper>("EquipToolMode", nameof(PreEquipTool));
+                Prefix<ShipCockpitController>("OnPressInteract", nameof(PreShipCockpitController));
+            }
+
+            private static void PreShipCockpitController()
+            {
+                _isBuccklingUp = true;
             }
 
             private static bool PreEquipTool(ToolMode mode)
