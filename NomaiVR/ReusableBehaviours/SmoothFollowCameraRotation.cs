@@ -14,6 +14,11 @@ namespace NomaiVR
 
         internal void LateUpdate()
         {
+            if (!Camera.main)
+            {
+                return;
+            }
+
             var targetRotation = Camera.main.transform.rotation;
             var difference = Mathf.Abs(Quaternion.Angle(_lastFrameRotation, targetRotation));
 
