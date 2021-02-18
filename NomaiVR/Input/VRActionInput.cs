@@ -1,5 +1,4 @@
-﻿using Harmony;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Valve.VR;
 
@@ -53,7 +52,8 @@ namespace NomaiVR
                 return new string[] { };
             }
             var holdInputText = GetHoldActionText();
-            return holdInputText.Add(WrapWithBrackets(result)).ToArray();
+            holdInputText.Add(WrapWithBrackets(result));
+            return holdInputText.ToArray();
         }
 
         public bool HasAxisWithSameName()
@@ -141,13 +141,13 @@ namespace NomaiVR
             return false;
         }
 
-        private string[] GetHoldActionText()
+        private List<string>GetHoldActionText()
         {
             if (_holdActionInput == null)
             {
-                return new string[] { };
+                return new List<string>();
             }
-            return _holdActionInput.GetText();
+            return _holdActionInput.GetText().ToList();
         }
     }
 }
