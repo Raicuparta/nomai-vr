@@ -25,10 +25,11 @@ namespace NomaiVR
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
             PostCreditsRenderTexture = LoadAsset<RenderTexture>(postCreditsBundle, "screen.renderTexture");
 
-            var handsBundle = LoadBundle("hands");
+            
+            //var handsBundle = LoadBundle("hands");
             var skeletalHandsBundle = LoadBundle("skeletal-hands");
             HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_hand_alien_left_noscript.prefab");
-            GlovePrefab = LoadAsset<GameObject>(handsBundle, "rightgloveprefab.prefab");
+            GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_hand_alien_left_noscript.prefab");
 
             var feetPositionBundle = LoadBundle("feetposition");
             FeetPositionPrefab = LoadAsset<GameObject>(feetPositionBundle, "feetposition.prefab");

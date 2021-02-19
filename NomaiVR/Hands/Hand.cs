@@ -79,7 +79,7 @@ namespace NomaiVR
             if(isLeft)
                 skeletonDriver.mirroring = SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
 
-            skeletonDriver.skeletonAction = SteamVR_Input.GetAction<SteamVR_Action_Skeleton>("Skeleton" + skeletonDriver.inputSource.ToString());
+            //skeletonDriver.skeletonAction = SteamVR_Input.GetAction<SteamVR_Action_Skeleton>("Skeleton" + skeletonDriver.inputSource.ToString());
             skeletonDriver.fallbackCurlAction = fallbackCurl;
             skeletonDriver.enabled = true;
 
