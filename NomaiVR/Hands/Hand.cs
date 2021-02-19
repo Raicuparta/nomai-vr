@@ -9,7 +9,9 @@ namespace NomaiVR
         public GameObject handPrefab;
         public GameObject glovePrefab;
         public SteamVR_Action_Pose pose;
-        public SteamVR_Action_Single fallbackCurl;
+        public SteamVR_Skeleton_Pose fallbackPoint;
+        public SteamVR_Skeleton_Pose fallbackRelax;
+        public SteamVR_Skeleton_Pose fallbackFist;
         public bool isLeft;
 
         internal void Start()
@@ -81,12 +83,13 @@ namespace NomaiVR
             skeletonDriver.skeletonRoot = transform.Find("SourceSkeleton/Root");
             skeletonDriver.updatePose = false;
             skeletonDriver.skeletonBlend = 1;
+            skeletonDriver.fallbackPoser = gameObject.AddComponent<SteamVR_Skeleton_Poser>();
 
             if(isLeft)
                 skeletonDriver.mirroring = SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
 
             skeletonDriver.skeletonAction = isLeft ? SteamVR_Actions.default_SkeletonLeftHand : SteamVR_Actions.default_SkeletonRightHand;
-            skeletonDriver.fallbackCurlAction = fallbackCurl;
+            skeletonDriver.fallbackCurlAction = SteamVR_Actions.default_Squeeze;
             skeletonDriver.enabled = true;
 
             var skeletonRetargeter = transform.gameObject.AddComponent<CustomSkeletonHelper>();
@@ -118,6 +121,41 @@ namespace NomaiVR
                     transform.Find(BoneToTarget("finger_ring_r_aux", true)) //aux
                 ),
             };
+
+
+            var skeletonPoser = skeletonDriver.fallbackPoser;
+            skeletonPoser.skeletonMainPose = fallbackRelax;
+            skeletonPoser.skeletonAdditionalPoses.Add(fallbackPoint);
+            skeletonPoser.skeletonAdditionalPoses.Add(fallbackFist);
+
+            //Point Fallback
+            skeletonPoser.blendingBehaviours.Add(new SteamVR_Skeleton_Poser.PoseBlendingBehaviour()
+            {
+                action_bool = SteamVR_Actions.default_Grip,
+                enabled = true,
+                influence = 1,
+                name = "point",
+                pose = 1,
+                value = 0,
+                type = SteamVR_Skeleton_Poser.PoseBlendingBehaviour.BlenderTypes.BooleanAction,
+                previewEnabled = true,
+                smoothingSpeed = 16
+            });
+
+            //Fist Fallback
+            skeletonPoser.blendingBehaviours.Add(new SteamVR_Skeleton_Poser.PoseBlendingBehaviour()
+            {
+                action_bool = SteamVR_Actions.default_GrabPinch,
+                enabled = true,
+                influence = 1,
+                name = "fist",
+                pose = 2,
+                value = 0,
+                type = SteamVR_Skeleton_Poser.PoseBlendingBehaviour.BlenderTypes.BooleanAction,
+                previewEnabled = true,
+                smoothingSpeed = 16
+            });
+
         }
 
         private void SetUpVrPose()

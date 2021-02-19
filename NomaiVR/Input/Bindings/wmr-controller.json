@@ -66,6 +66,19 @@
         },
         {
           "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.95",
+            "click_deactivate_threshold": "0.9"
+          },
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
             "pull": {
               "output": "/actions/default/in/ThrustDown"
             }
@@ -90,6 +103,19 @@
           },
           "mode": "button",
           "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.95",
+            "click_deactivate_threshold": "0.9"
+          },
+          "path": "/user/hand/right/input/trigger"
         },
         {
           "inputs": {
@@ -129,6 +155,24 @@
           },
           "mode": "button",
           "path": "/user/hand/left/input/trackpad"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/trigger"
         }
       ]
     }

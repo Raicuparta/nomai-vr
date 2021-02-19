@@ -78,6 +78,9 @@ namespace NomaiVR
                 right.transform.localRotation = Quaternion.Euler(313f, 10f, 295f);
                 right.handPrefab = AssetLoader.HandPrefab;
                 right.glovePrefab = AssetLoader.GlovePrefab;
+                right.fallbackFist = AssetLoader.FallbackFistPose;
+                right.fallbackPoint = AssetLoader.FallbackPointPose;
+                right.fallbackRelax = AssetLoader.FallbackRelaxedPose;
                 RightHand = right.transform;
 
                 var left = new GameObject().AddComponent<Hand>();
@@ -88,6 +91,9 @@ namespace NomaiVR
                 left.isLeft = true;
                 left.handPrefab = AssetLoader.HandPrefab;
                 left.glovePrefab = AssetLoader.GlovePrefab;
+                left.fallbackFist = AssetLoader.FallbackFistPose;
+                left.fallbackPoint = AssetLoader.FallbackPointPose;
+                left.fallbackRelax = AssetLoader.FallbackRelaxedPose;
                 LeftHand = left.transform;
             }
 

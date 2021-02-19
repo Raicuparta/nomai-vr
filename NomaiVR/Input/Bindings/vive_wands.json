@@ -50,6 +50,20 @@
         {
           "inputs": {
             "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.75",
+            "click_deactivate_threshold": "0.7",
+            "force_input": "value"
+          },
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
               "output": "/actions/default/in/map"
             }
           },
@@ -130,6 +144,37 @@
           },
           "mode": "toggle_button",
           "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.75",
+            "click_deactivate_threshold": "0.7"
+          },
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/trigger"
         }
       ]
     }

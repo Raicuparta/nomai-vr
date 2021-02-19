@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -8,6 +9,9 @@ namespace NomaiVR
         public static RenderTexture PostCreditsRenderTexture;
         public static GameObject HandPrefab;
         public static GameObject GlovePrefab;
+        public static SteamVR_Skeleton_Pose FallbackRelaxedPose;
+        public static SteamVR_Skeleton_Pose FallbackPointPose;
+        public static SteamVR_Skeleton_Pose FallbackFistPose;
         public static GameObject FeetPositionPrefab;
         public static GameObject ScopeLensPrefab;
         public static GameObject HelmetPrefab;
@@ -28,8 +32,11 @@ namespace NomaiVR
             
             //var handsBundle = LoadBundle("hands");
             var skeletalHandsBundle = LoadBundle("skeletal-hands");
-            HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_hand_alien_left_noscript.prefab");
-            GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_hand_alien_left_noscript.prefab");
+            FallbackRelaxedPose = LoadAsset<SteamVR_Skeleton_Pose>(skeletalHandsBundle, "Assets/Poses/fallback_relaxed.asset");
+            FallbackPointPose = LoadAsset<SteamVR_Skeleton_Pose>(skeletalHandsBundle, "Assets/Poses/fallback_point.asset");
+            FallbackFistPose = LoadAsset<SteamVR_Skeleton_Pose>(skeletalHandsBundle, "Assets/Poses/fallback_fist.asset");
+            HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_alien_hand.prefab");
+            GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_alien_hand.prefab");
 
             var feetPositionBundle = LoadBundle("feetposition");
             FeetPositionPrefab = LoadAsset<GameObject>(feetPositionBundle, "feetposition.prefab");

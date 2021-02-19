@@ -114,5 +114,21 @@ namespace Valve.VR {
                 return SteamVR_Actions.default_SkeletonRightHand;
             }
         }
+
+        public virtual SteamVR_Action_Single Squeeze
+        {
+            get
+            {
+                return SteamVR_Actions.default_Squeeze;
+            }
+        }
+
+        public virtual SteamVR_Action_Boolean GrabPinch
+        {
+            get
+            {
+                return SteamVR_Actions.default_GrabPinch;
+            }
+        }
     }
 }

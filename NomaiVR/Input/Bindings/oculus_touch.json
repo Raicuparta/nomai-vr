@@ -55,6 +55,20 @@
           }
         },
         {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.8",
+            "click_deactivate_threshold": "0.7",
+            "force_input": "value"
+          },
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
           "path": "/user/hand/left/input/x",
           "mode": "button",
           "inputs": {
@@ -100,6 +114,19 @@
           }
         },
         {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.8",
+            "click_deactivate_threshold": "0.7"
+          },
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
           "path": "/user/hand/right/input/a",
           "mode": "button",
           "inputs": {
@@ -116,6 +143,24 @@
               "output": "/actions/default/in/Interact"
             }
           }
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/grip"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/grip"
         }
       ],
       "skeleton": [

@@ -185,6 +185,50 @@
             "value_release_threshold": "1"
           },
           "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "grab": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "grab",
+          "parameters": {
+            "force_hold_threshold": "0.02",
+            "force_release_threshold": "0.01"
+          },
+          "path": "/user/hand/left/input/pinch"
+        },
+        {
+          "inputs": {
+            "grab": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "grab",
+          "parameters": {
+            "force_hold_threshold": "0.02",
+            "force_release_threshold": "0.01"
+          },
+          "path": "/user/hand/right/input/pinch"
+        },
+        {
+          "inputs": {
+            "force": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "force_sensor",
+          "path": "/user/hand/left/input/grip"
+        },
+        {
+          "inputs": {
+            "force": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "force_sensor",
+          "path": "/user/hand/right/input/grip"
         }
       ]
     }
