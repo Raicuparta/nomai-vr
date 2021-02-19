@@ -1,0 +1,50 @@
+ManifestFileVersion: 0
+CRC: 2835817846
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e3b4175e9ae18fc5f8e9d1581342dc95
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f2310c9db59182e0c87fddf3429bdf9c
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 319
+  Script: {instanceID: 0}
+Assets:
+- Assets/Assets/Models/vr_glove_graspPoses.controller
+- Assets/Assets/Models/vr_hand_grabposes.fbx
+- Assets/Assets/Models/vr_floppyHand.fbx
+- Assets/Assets/vr_hand_alien_left_noscript.prefab
+- Assets/Assets/Models/vr_glove_model.fbx
+- Assets/Assets/Models/handFingers.mask
+- Assets/Assets/Models/vr_glove_left_model_slim.fbx
+- Assets/Assets/Models/vr_glove_right_model_slim.fbx
+- Assets/Assets/Models/vr_alien_hand.fbx
+Dependencies: []
