@@ -22,19 +22,25 @@ namespace NomaiVR
         private void SetUpHandModel()
         {
             var handObject = Instantiate(handPrefab);
+            handObject.SetActive(false);
             var hand = handObject.transform;
             hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
             hand.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Skin");
             SetUpModel(hand);
             SetUpSkeletons(handObject, hand);
+            handObject.SetActive(true);
         }
 
         private void SetUpGloveModel()
         {
-            var glove = Instantiate(glovePrefab).transform;
+            var gloveObject = Instantiate(glovePrefab);
+            gloveObject.SetActive(false);
+            var glove = gloveObject.transform;
             glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
             glove.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Clothes");
             SetUpModel(glove);
+            SetUpSkeletons(gloveObject, glove);
+            gloveObject.SetActive(true);
         }
 
         private void SetUpModel(Transform model)
@@ -79,7 +85,7 @@ namespace NomaiVR
             if(isLeft)
                 skeletonDriver.mirroring = SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
 
-            //skeletonDriver.skeletonAction = SteamVR_Input.GetAction<SteamVR_Action_Skeleton>("Skeleton" + skeletonDriver.inputSource.ToString());
+            skeletonDriver.skeletonAction = isLeft ? SteamVR_Actions.default_SkeletonLeftHand : SteamVR_Actions.default_SkeletonRightHand;
             skeletonDriver.fallbackCurlAction = fallbackCurl;
             skeletonDriver.enabled = true;
 
