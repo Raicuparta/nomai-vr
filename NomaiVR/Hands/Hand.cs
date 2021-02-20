@@ -57,7 +57,7 @@ namespace NomaiVR
             }
         }
 
-        private static string BoneToTarget(string bone, bool isSource) => isSource ? $"SourceSkeleton/Root/{bone}" : $"vr_alien_hand/Root/{bone}";
+        private static string BoneToTarget(string bone, bool isSource) => isSource ? $"SourceSkeleton/Root/{bone}" : $"righthand/Root/{bone}";
         
         private static string FingerBoneName(string fingerName, int depth)
         {

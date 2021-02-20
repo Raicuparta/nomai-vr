@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3558747703
+CRC: 424872757
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5e9bf68582e82dbc1edf1e641c1a8f5f
+    Hash: 73d24bb2b4b45ead74cad783f4c9d43f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7425e6abbc9db70bed55ff50db9fea86
+    Hash: f2310c9db59182e0c87fddf3429bdf9c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -33,25 +33,30 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 95
   Script: {instanceID: 0}
-- Class: 114
-  Script: {fileID: 11500000, guid: e90911e410742a1498a167540c7865bf, type: 3}
-- Class: 115
-  Script: {instanceID: 0}
 - Class: 137
   Script: {instanceID: 0}
 - Class: 319
   Script: {instanceID: 0}
 Assets:
 - Assets/Assets/Models/vr_glove_graspPoses.controller
-- Assets/Assets/Poses/fallback_fist.asset
-- Assets/Assets/Models/vr_hand_grabposes.fbx
-- Assets/Assets/Models/vr_floppyHand.fbx
+- Assets/Assets/skeletal_glove.prefab
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_d.png
+- Assets/Assets/Materials/glove.mat
+- Assets/Assets/Texture2D/hands-ao.png
+- Assets/Assets/Models/righthand.fbx
+- Assets/SteamVR/InteractionSystem/Samples/vr_hand_grabposes.fbx
+- Assets/SteamVR/InteractionSystem/Samples/vr_floppyHand.fbx
 - Assets/Assets/vr_alien_hand.prefab
 - Assets/Assets/Models/vr_glove_model.fbx
-- Assets/Assets/Poses/fallback_point.asset
 - Assets/Assets/Models/handFingers.mask
-- Assets/Assets/Poses/fallback_relaxed.asset
-- Assets/Assets/Models/vr_glove_left_model_slim.fbx
-- Assets/Assets/Models/vr_glove_right_model_slim.fbx
-- Assets/Assets/Models/vr_alien_hand.fbx
+- Assets/SteamVR/InteractionSystem/Samples/vr_glove_left_model_slim.fbx
+- Assets/Assets/Materials/hands.mat
+- Assets/Assets/Texture2D/hands-d.png
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_n.png
+- Assets/Assets/skeletal_hand.prefab
+- Assets/Assets/Texture2D/hands-n.png
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_s.png
+- Assets/SteamVR/InteractionSystem/Samples/vr_glove_right_model_slim.fbx
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_ao.png
+- Assets/SteamVR/InteractionSystem/Samples/vr_alien_hand.fbx
 Dependencies: []

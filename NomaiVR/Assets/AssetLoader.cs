@@ -33,8 +33,8 @@ namespace NomaiVR
 
             //var handsBundle = LoadBundle("hands");
             var skeletalHandsBundle = LoadBundle("skeletal-hands");
-            HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_alien_hand.prefab");
-            GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_alien_hand.prefab");
+            HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_hand.prefab");
+            GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_glove.prefab");
 
             var feetPositionBundle = LoadBundle("feetposition");
             FeetPositionPrefab = LoadAsset<GameObject>(feetPositionBundle, "feetposition.prefab");
@@ -60,10 +60,8 @@ namespace NomaiVR
         private T LoadModAssetFromJson<T>(string modAssetPath)
         {
             string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
-            Logs.WriteInfo($"Loading mod asset: {fullPath}");
             if (!File.Exists(fullPath))
                 return default(T);
-            Logs.WriteInfo($"Loaded!");
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
         }
 
