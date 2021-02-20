@@ -109,6 +109,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
+    <Reference Include="Valve.Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SteamVR\lib\Valve.Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AssetLoader.cs" />
@@ -188,6 +192,9 @@
     <None Include="Assets\AssetFiles\scope-lens.manifest" />
     <None Include="Assets\AssetFiles\skeletal-hands" />
     <None Include="Assets\AssetFiles\skeletal-hands.manifest" />
+    <None Include="Hands\Poses\fallback_fist.json" />
+    <None Include="Hands\Poses\fallback_point.json" />
+    <None Include="Hands\Poses\fallback_relaxed.json" />
     <None Include="Input\Bindings\actions.json" />
     <None Include="Input\Bindings\index_knuckles.json" />
     <None Include="Input\Bindings\oculus_touch.json" />
@@ -213,10 +220,13 @@
             md "$(OwmlDir)\Mods\$(ModDir)"
             md "$(OwmlDir)\Mods\$(ModDir)\bindings"
             md "$(OwmlDir)\Mods\$(ModDir)\assets"
+            md "$(OwmlDir)\Mods\$(ModDir)\poses"
 
             copy /y "$(TargetPath)" "$(OwmlDir)\Mods\$(ModDir)"
 
             copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\Mods\$(ModDir)\bindings"
+
+            copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\Mods\$(ModDir)\poses"
 
             copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\Mods\$(ModDir)\assets"
 

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
+using Valve.Newtonsoft.Json;
 using Valve.VR;
 
 namespace NomaiVR
@@ -29,12 +31,8 @@ namespace NomaiVR
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
             PostCreditsRenderTexture = LoadAsset<RenderTexture>(postCreditsBundle, "screen.renderTexture");
 
-            
             //var handsBundle = LoadBundle("hands");
             var skeletalHandsBundle = LoadBundle("skeletal-hands");
-            FallbackRelaxedPose = LoadAsset<SteamVR_Skeleton_Pose>(skeletalHandsBundle, "Assets/Poses/fallback_relaxed.asset");
-            FallbackPointPose = LoadAsset<SteamVR_Skeleton_Pose>(skeletalHandsBundle, "Assets/Poses/fallback_point.asset");
-            FallbackFistPose = LoadAsset<SteamVR_Skeleton_Pose>(skeletalHandsBundle, "Assets/Poses/fallback_fist.asset");
             HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_alien_hand.prefab");
             GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/vr_alien_hand.prefab");
 
@@ -52,6 +50,21 @@ namespace NomaiVR
 
             var splashBundle = LoadBundle("splash-screen");
             SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");
+
+
+            FallbackRelaxedPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_relaxed.json");
+            FallbackPointPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_point.json");
+            FallbackFistPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_fist.json");
+        }
+
+        private T LoadModAssetFromJson<T>(string modAssetPath)
+        {
+            string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
+            Logs.WriteInfo($"Loading mod asset: {fullPath}");
+            if (!File.Exists(fullPath))
+                return default(T);
+            Logs.WriteInfo($"Loaded!");
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
         }
 
         private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object
