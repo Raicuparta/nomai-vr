@@ -50,14 +50,10 @@ namespace NomaiVR
             model.parent = transform;
             model.localPosition = transform.localPosition;
             model.localRotation = transform.localRotation;
-            model.localScale = Vector3.one * 6;
-            if (isLeft)
-            {
-                model.localScale = new Vector3(-model.localScale.x, model.localScale.y, model.localScale.z);
-            }
+            //model.localScale = Vector3.one * 6;
         }
 
-        private static string BoneToTarget(string bone, bool isSource) => isSource ? $"SourceSkeleton/Root/{bone}" : $"righthand/Root/{bone}";
+        private static string BoneToTarget(string bone, bool isSource) => isSource ? $"SourceSkeleton/Root/{bone}" : $"skeletal_hand/Root/{bone}";
         
         private static string FingerBoneName(string fingerName, int depth)
         {
@@ -86,7 +82,14 @@ namespace NomaiVR
             skeletonDriver.fallbackPoser = gameObject.AddComponent<SteamVR_Skeleton_Poser>();
 
             if(isLeft)
+            {
+                //Flip X axis of skeleton and mesh
+                for (int i = 0; i < transform.childCount; i++)
+                    transform.GetChild(i).localScale = new Vector3(-1, 1, 1);
+
+                //Enable SteamVR skeleton mirroring
                 skeletonDriver.mirroring = SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
+            }
 
             skeletonDriver.skeletonAction = isLeft ? SteamVR_Actions.default_SkeletonLeftHand : SteamVR_Actions.default_SkeletonRightHand;
             skeletonDriver.fallbackCurlAction = SteamVR_Actions.default_Squeeze;
