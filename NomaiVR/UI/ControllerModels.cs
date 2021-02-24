@@ -5,6 +5,8 @@ namespace NomaiVR
 {
     internal class ControllerModels : NomaiVRModule<ControllerModels.Behaviour, NomaiVRModule.EmptyPatch>
     {
+        public const string CONTROLLER_VISIBILITY_CHANGED = "SteamVR_ControllerShowStateChanged";
+
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => AllScenes;
 
@@ -67,6 +69,7 @@ namespace NomaiVR
             private void Show()
             {
                 _isVisible = true;
+                GlobalMessenger<bool>.FireEvent(CONTROLLER_VISIBILITY_CHANGED, true);
                 _leftRenderModel.gameObject.SetActive(true);
                 _rightRenderModel.gameObject.SetActive(true);
             }
@@ -74,6 +77,7 @@ namespace NomaiVR
             private void Hide()
             {
                 _isVisible = false;
+                GlobalMessenger<bool>.FireEvent(CONTROLLER_VISIBILITY_CHANGED, false);
                 _leftRenderModel.gameObject.SetActive(false);
                 _rightRenderModel.gameObject.SetActive(false);
             }

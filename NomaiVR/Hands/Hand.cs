@@ -14,11 +14,15 @@ namespace NomaiVR
         public SteamVR_Skeleton_Pose fallbackFist;
         public bool isLeft;
 
+        private SteamVR_Behaviour_Skeleton _handSkeleton;
+        private SteamVR_Behaviour_Skeleton _gloveSkeleton;
+
         internal void Start()
         {
             SetUpHandModel();
             SetUpGloveModel();
             SetUpVrPose();
+            SetUpPoseEvents();
         }
 
         private void SetUpHandModel()
@@ -29,7 +33,7 @@ namespace NomaiVR
             hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
             hand.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Skin");
             SetUpModel(hand);
-            SetUpSkeletons(handObject, hand);
+            _handSkeleton = SetUpSkeleton(handObject, hand);
             handObject.SetActive(true);
         }
 
@@ -41,15 +45,15 @@ namespace NomaiVR
             glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
             glove.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Clothes");
             SetUpModel(glove);
-            SetUpSkeletons(gloveObject, glove);
+            _gloveSkeleton = SetUpSkeleton(gloveObject, glove);
             gloveObject.SetActive(true);
         }
 
         private void SetUpModel(Transform model)
         {
             model.parent = transform;
-            model.localPosition = transform.localPosition;
-            model.localRotation = transform.localRotation;
+            model.localPosition = Vector3.zero;
+            model.localRotation = Quaternion.identity;
             //model.localScale = Vector3.one * 6;
         }
 
@@ -71,7 +75,7 @@ namespace NomaiVR
             return name;
         }
 
-        private void SetUpSkeletons(GameObject gameObject, Transform transform)
+        private SteamVR_Behaviour_Skeleton SetUpSkeleton(GameObject gameObject, Transform transform)
         {
             var skeletonDriver = gameObject.AddComponent<SteamVR_Behaviour_Skeleton>();
             skeletonDriver.inputSource = SteamVR_Input_Sources.LeftHand;
@@ -159,6 +163,7 @@ namespace NomaiVR
                 smoothingSpeed = 16
             });
 
+            return skeletonDriver;
         }
 
         private void SetUpVrPose()
@@ -169,6 +174,23 @@ namespace NomaiVR
             poseDriver.poseAction = pose;
 
             gameObject.SetActive(true);
+        }
+
+        private void SetUpPoseEvents()
+        {
+            GlobalMessenger<bool>.AddListener(ControllerModels.CONTROLLER_VISIBILITY_CHANGED, OnControllerModelsVisibilityChanged);
+        }
+
+        internal void OnDestroy()
+        {
+            GlobalMessenger<bool>.RemoveListener(ControllerModels.CONTROLLER_VISIBILITY_CHANGED, OnControllerModelsVisibilityChanged);
+        }
+
+        private void OnControllerModelsVisibilityChanged(bool isShown)
+        {
+            EVRSkeletalMotionRange newMotionRange = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
+            _handSkeleton.rangeOfMotion = newMotionRange;
+            _gloveSkeleton.rangeOfMotion = newMotionRange;
         }
 
         private bool ShouldRenderGloves()

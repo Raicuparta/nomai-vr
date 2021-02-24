@@ -74,8 +74,8 @@ namespace NomaiVR
                 var right = new GameObject().AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
                 right.transform.parent = _wrapper;
-                right.transform.localPosition = new Vector3(0.03f, 0.05f, -0.2f);
-                right.transform.localRotation = Quaternion.Euler(313f, 10f, 295f);
+                right.transform.localPosition = Vector3.zero;//new Vector3(0.03f, 0.05f, -0.2f);
+                right.transform.localRotation = Quaternion.identity; //Quaternion.Euler(313f, 10f, 295f);
                 right.handPrefab = AssetLoader.HandPrefab;
                 right.glovePrefab = AssetLoader.GlovePrefab;
                 right.fallbackFist = AssetLoader.FallbackFistPose;
@@ -86,8 +86,8 @@ namespace NomaiVR
                 var left = new GameObject().AddComponent<Hand>();
                 left.pose = SteamVR_Actions.default_LeftHand;
                 left.transform.parent = _wrapper;
-                left.transform.localPosition = new Vector3(-0.03f, 0.05f, -0.2f);
-                left.transform.localRotation = Quaternion.Euler(313f, 350f, 65f);
+                left.transform.localPosition = Vector3.zero;//new Vector3(-0.03f, 0.05f, -0.2f);
+                left.transform.localRotation = Quaternion.identity; //Quaternion.Euler(313f, 350f, 65f);
                 left.isLeft = true;
                 left.handPrefab = AssetLoader.HandPrefab;
                 left.glovePrefab = AssetLoader.GlovePrefab;
