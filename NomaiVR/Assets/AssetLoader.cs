@@ -10,7 +10,6 @@ namespace NomaiVR
         public static GameObject PostCreditsPrefab;
         public static RenderTexture PostCreditsRenderTexture;
         public static GameObject HandPrefab;
-        public static GameObject GlovePrefab;
         public static SteamVR_Skeleton_Pose FallbackRelaxedPose;
         public static SteamVR_Skeleton_Pose FallbackPointPose;
         public static SteamVR_Skeleton_Pose FallbackFistPose;
@@ -34,7 +33,7 @@ namespace NomaiVR
             //var handsBundle = LoadBundle("hands");
             var skeletalHandsBundle = LoadBundle("skeletal-hands");
             HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_hand.prefab");
-            GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_glove.prefab");
+            //GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_glove.prefab");
 
             var feetPositionBundle = LoadBundle("feetposition");
             FeetPositionPrefab = LoadAsset<GameObject>(feetPositionBundle, "feetposition.prefab");

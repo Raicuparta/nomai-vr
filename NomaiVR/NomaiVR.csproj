@@ -135,6 +135,7 @@
     <Compile Include="Input\VRActionInput.cs" />
     <Compile Include="Logs.cs" />
     <Compile Include="ModConfig\ModSettings.cs" />
+    <Compile Include="ReusableBehaviours\ConditionalDisableRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugFollowTarget.cs" />
     <Compile Include="ReusableBehaviours\ShipMonitorInteraction.cs" />
     <Compile Include="Saves\ModSaveFile.cs" />

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2243762591
+CRC: 1010647624
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 52046de429d248fdf0b639ee96ed76ce
+    Hash: e0e30f2982b63911dc033f47113357aa
   TypeTreeHash:
     serializedVersion: 2
     Hash: edc909dc5c9d35916e5b07bf8f183bb0
@@ -35,7 +35,6 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Assets/Models/vr_glove_graspPoses.controller
-- Assets/Assets/skeletal_glove.prefab
 - Assets/Assets/Materials/band.mat
 - Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_d.png
 - Assets/Assets/Materials/glove.mat

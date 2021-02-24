@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using Valve.VR;
 using Valve.VR.Helpers;
 
@@ -7,46 +8,40 @@ namespace NomaiVR
     public class Hand : MonoBehaviour
     {
         public GameObject handPrefab;
-        public GameObject glovePrefab;
         public SteamVR_Action_Pose pose;
         public SteamVR_Skeleton_Pose fallbackPoint;
         public SteamVR_Skeleton_Pose fallbackRelax;
         public SteamVR_Skeleton_Pose fallbackFist;
         public bool isLeft;
 
-        private SteamVR_Behaviour_Skeleton _handSkeleton;
-        private SteamVR_Behaviour_Skeleton _gloveSkeleton;
+        private Renderer _handRenderer;
+        private Renderer _gloveRenderer;
+        private SteamVR_Behaviour_Skeleton _skeleton;
 
         internal void Start()
         {
-            SetUpHandModel();
-            SetUpGloveModel();
+            SetUpModel();
             SetUpVrPose();
             SetUpPoseEvents();
         }
 
-        private void SetUpHandModel()
+        private void SetUpModel()
         {
             var handObject = Instantiate(handPrefab);
             handObject.SetActive(false);
             var hand = handObject.transform;
-            hand.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
-            hand.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Skin");
-            SetUpModel(hand);
-            _handSkeleton = SetUpSkeleton(handObject, hand);
-            handObject.SetActive(true);
-        }
+            var renderers = handObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+            _handRenderer = renderers.Where(r => r.transform.name.Contains("Hand")).FirstOrDefault();
+            _gloveRenderer = renderers.Where(r => r.transform.name.Contains("Glove")).FirstOrDefault();
+            _handRenderer.material.shader = Shader.Find("Outer Wilds/Character/Skin");
+            _gloveRenderer.material.shader = Shader.Find("Outer Wilds/Character/Clothes");
 
-        private void SetUpGloveModel()
-        {
-            var gloveObject = Instantiate(glovePrefab);
-            gloveObject.SetActive(false);
-            var glove = gloveObject.transform;
-            glove.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
-            glove.GetComponentInChildren<Renderer>().material.shader = Shader.Find("Outer Wilds/Character/Clothes");
-            SetUpModel(glove);
-            _gloveSkeleton = SetUpSkeleton(gloveObject, glove);
-            gloveObject.SetActive(true);
+            _handRenderer.gameObject.AddComponent<ConditionalDisableRenderer>().getShouldRender += ShouldRenderHands;
+            _gloveRenderer.gameObject.AddComponent<ConditionalDisableRenderer>().getShouldRender += ShouldRenderGloves;
+
+            SetUpModel(hand);
+            _skeleton = SetUpSkeleton(handObject, hand);
+            handObject.SetActive(true);
         }
 
         private void SetUpModel(Transform model)
@@ -54,7 +49,7 @@ namespace NomaiVR
             model.parent = transform;
             model.localPosition = Vector3.zero;
             model.localRotation = Quaternion.identity;
-            //model.localScale = Vector3.one * 6;
+            model.localScale = Vector3.one;
         }
 
         private static string BoneToTarget(string bone, bool isSource) => isSource ? $"SourceSkeleton/Root/{bone}" : $"skeletal_hand/Root/{bone}";
@@ -75,40 +70,40 @@ namespace NomaiVR
             return name;
         }
 
-        private SteamVR_Behaviour_Skeleton SetUpSkeleton(GameObject gameObject, Transform transform)
+        private SteamVR_Behaviour_Skeleton SetUpSkeleton(GameObject prefabObject, Transform prefabTransform)
         {
-            var skeletonDriver = gameObject.AddComponent<SteamVR_Behaviour_Skeleton>();
+            var skeletonDriver = prefabObject.AddComponent<SteamVR_Behaviour_Skeleton>();
             skeletonDriver.inputSource = SteamVR_Input_Sources.LeftHand;
             skeletonDriver.rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
-            skeletonDriver.skeletonRoot = transform.Find("SourceSkeleton/Root");
+            skeletonDriver.skeletonRoot = prefabTransform.Find("SourceSkeleton/Root");
             skeletonDriver.updatePose = false;
             skeletonDriver.skeletonBlend = 1;
-            skeletonDriver.fallbackPoser = gameObject.AddComponent<SteamVR_Skeleton_Poser>();
+            skeletonDriver.fallbackPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
 
             if(isLeft)
             {
                 //Flip X axis of skeleton and mesh
-                for (int i = 0; i < transform.childCount; i++)
-                    transform.GetChild(i).localScale = new Vector3(-1, 1, 1);
+                for (int i = 0; i < prefabTransform.childCount; i++)
+                    prefabTransform.GetChild(i).localScale = new Vector3(-1, 1, 1);
 
                 //Enable SteamVR skeleton mirroring
                 skeletonDriver.mirroring = SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
             }
-
             skeletonDriver.skeletonAction = isLeft ? SteamVR_Actions.default_SkeletonLeftHand : SteamVR_Actions.default_SkeletonRightHand;
+
             skeletonDriver.fallbackCurlAction = SteamVR_Actions.default_Squeeze;
             skeletonDriver.enabled = true;
 
-            var skeletonRetargeter = transform.gameObject.AddComponent<CustomSkeletonHelper>();
-            var sourceWristTransform = transform.Find(BoneToTarget("wrist_r", true));
-            var targetWristTransform = transform.Find(BoneToTarget("wrist_r", false));
+            var skeletonRetargeter = prefabObject.AddComponent<CustomSkeletonHelper>();
+            var sourceWristTransform = prefabTransform.Find(BoneToTarget("wrist_r", true));
+            var targetWristTransform = prefabTransform.Find(BoneToTarget("wrist_r", false));
             skeletonRetargeter.wrist = new CustomSkeletonHelper.Retargetable(sourceWristTransform, targetWristTransform);
             skeletonRetargeter.thumbs = new CustomSkeletonHelper.Thumb[1] {
                 new CustomSkeletonHelper.Thumb(
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(ThumbBoneName("thumb", 0)), targetWristTransform.Find(ThumbBoneName("thumb", 0))), //Metacarpal
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(ThumbBoneName("thumb", 1)), targetWristTransform.Find(ThumbBoneName("thumb", 1))), //Middle
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(ThumbBoneName("thumb", 2)), targetWristTransform.Find(ThumbBoneName("thumb", 2))), //Distal
-                    transform.Find(BoneToTarget("finger_thumb_r_aux", true)) //aux
+                    prefabTransform.Find(BoneToTarget("finger_thumb_r_aux", true)) //aux
                 )
             };
             skeletonRetargeter.fingers = new CustomSkeletonHelper.Finger[2]
@@ -118,14 +113,14 @@ namespace NomaiVR
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(FingerBoneName("index", 1)), targetWristTransform.Find(FingerBoneName("index", 1))), //Proximal
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(FingerBoneName("index", 2)), targetWristTransform.Find(FingerBoneName("index", 2))), //Middle
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(FingerBoneName("index", 3)), targetWristTransform.Find(FingerBoneName("index", 3))), //Distal
-                    transform.Find(BoneToTarget("finger_index_r_aux", true)) //aux
+                    prefabTransform.Find(BoneToTarget("finger_index_r_aux", true)) //aux
                 ),
                 new CustomSkeletonHelper.Finger(
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(FingerBoneName("ring", 0)), targetWristTransform.Find(FingerBoneName("ring", 0))), //Metacarpal
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(FingerBoneName("ring", 1)), targetWristTransform.Find(FingerBoneName("ring", 1))), //Proximal
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(FingerBoneName("ring", 2)), targetWristTransform.Find(FingerBoneName("ring", 2))), //Middle
                     new CustomSkeletonHelper.Retargetable(sourceWristTransform.Find(FingerBoneName("ring", 3)), targetWristTransform.Find(FingerBoneName("ring", 3))), //Distal
-                    transform.Find(BoneToTarget("finger_ring_r_aux", true)) //aux
+                    prefabTransform.Find(BoneToTarget("finger_ring_r_aux", true)) //aux
                 ),
             };
 
@@ -189,8 +184,7 @@ namespace NomaiVR
         private void OnControllerModelsVisibilityChanged(bool isShown)
         {
             EVRSkeletalMotionRange newMotionRange = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
-            _handSkeleton.rangeOfMotion = newMotionRange;
-            _gloveSkeleton.rangeOfMotion = newMotionRange;
+            _skeleton.rangeOfMotion = newMotionRange;
         }
 
         private bool ShouldRenderGloves()
