@@ -77,10 +77,10 @@ namespace NomaiVR
             skeletonDriver.rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
             skeletonDriver.skeletonRoot = prefabTransform.Find("SourceSkeleton/Root");
             skeletonDriver.updatePose = false;
-            skeletonDriver.skeletonBlend = 1;
+            skeletonDriver.skeletonBlend = 0.5f;
             skeletonDriver.fallbackPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
 
-            if(isLeft)
+            if (isLeft)
             {
                 //Flip X axis of skeleton and mesh
                 for (int i = 0; i < prefabTransform.childCount; i++)
