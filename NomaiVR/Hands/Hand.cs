@@ -216,7 +216,7 @@ namespace NomaiVR
         private void OnControllerModelsVisibilityChanged(bool isShown)
         {
             EVRSkeletalMotionRange newMotionRange = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
-            _skeleton.rangeOfMotion = newMotionRange;
+            _skeleton.SetRangeOfMotion(newMotionRange);
         }
 
         private bool ShouldRenderGloves()
