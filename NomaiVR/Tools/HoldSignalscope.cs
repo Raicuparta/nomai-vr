@@ -26,15 +26,15 @@ namespace NomaiVR
                 _signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
 
                 var holdSignalscope = _signalscope.gameObject.AddComponent<Holdable>();
-                holdSignalscope.transform.localPosition = new Vector3(0.013f, 0.1f, 0.123f);
-                holdSignalscope.transform.localRotation = Quaternion.Euler(32.8f, 0, 0);
+                holdSignalscope.transform.localPosition = new Vector3(0.0074f, 0.0808f, 0.1343f);
+                holdSignalscope.transform.localRotation = Quaternion.identity;
 
                 var signalScopeModel = _signalscope.transform.GetChild(0);
                 // Tools have a special shader that draws them on top of everything
                 // and screws with perspective. Changing to Standard shader so they look
                 // like a normal 3D object.
                 signalScopeModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
-                signalScopeModel.localPosition = Vector3.up * -0.1f;
+                signalScopeModel.localPosition = Vector3.zero;
                 signalScopeModel.localRotation = Quaternion.identity;
 
                 // This child seems to be only for some kind of shader effect.

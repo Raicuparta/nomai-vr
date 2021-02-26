@@ -190,6 +190,11 @@ namespace NomaiVR
                 smoothingSpeed = 16
             });
 
+            //Setup Limit Poser (not working :/)
+            var defaultPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
+            defaultPoser.skeletonMainPose = AssetLoader.FallbackFistPose;
+            skeletonDriver.BlendToPoser(defaultPoser);
+
             return skeletonDriver;
         }
 
