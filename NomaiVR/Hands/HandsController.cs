@@ -12,7 +12,9 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             public static Transform RightHand;
+            public static Hand RightHandBehaviour;
             public static Transform LeftHand;
+            public static Hand LeftHandBehaviour;
             private Transform _wrapper;
 
             internal void Start()
@@ -81,6 +83,7 @@ namespace NomaiVR
                 right.fallbackPoint = AssetLoader.FallbackPointPose;
                 right.fallbackRelax = AssetLoader.FallbackRelaxedPose;
                 RightHand = right.transform;
+                RightHandBehaviour = right;
 
                 var left = new GameObject().AddComponent<Hand>();
                 left.pose = SteamVR_Actions.default_LeftHand;
@@ -93,6 +96,7 @@ namespace NomaiVR
                 left.fallbackPoint = AssetLoader.FallbackPointPose;
                 left.fallbackRelax = AssetLoader.FallbackRelaxedPose;
                 LeftHand = left.transform;
+                LeftHandBehaviour = left;
             }
 
             private static void HideBody()

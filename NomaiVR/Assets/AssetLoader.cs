@@ -13,6 +13,7 @@ namespace NomaiVR
         public static SteamVR_Skeleton_Pose FallbackRelaxedPose;
         public static SteamVR_Skeleton_Pose FallbackPointPose;
         public static SteamVR_Skeleton_Pose FallbackFistPose;
+        public static SteamVR_Skeleton_Pose ReachForPose;
         public static GameObject FeetPositionPrefab;
         public static GameObject ScopeLensPrefab;
         public static GameObject HelmetPrefab;
@@ -54,6 +55,7 @@ namespace NomaiVR
             FallbackRelaxedPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_relaxed.json");
             FallbackPointPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_point.json");
             FallbackFistPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_fist.json");
+            ReachForPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/reachFor.json");
         }
 
         private T LoadModAssetFromJson<T>(string modAssetPath)

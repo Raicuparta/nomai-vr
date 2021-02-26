@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4203315620
+CRC: 4197615850
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 10deff2b3dedea37c7f31e51c84b12b8
+    Hash: adf1564af4b6cd30a40a068978324571
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 63ab918dedb4cd3abe6257e7cf9a8634
+    Hash: f2310c9db59182e0c87fddf3429bdf9c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -15,7 +15,11 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
 - Class: 28
+  Script: {instanceID: 0}
+- Class: 33
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
@@ -29,12 +33,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 95
   Script: {instanceID: 0}
-- Class: 114
-  Script: {fileID: 11500000, guid: e90911e410742a1498a167540c7865bf, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 5f3b969b7e8f68048a19b79ae4df5681, type: 3}
-- Class: 115
-  Script: {instanceID: 0}
 - Class: 137
   Script: {instanceID: 0}
 - Class: 319
@@ -44,6 +42,7 @@ Assets:
 - Assets/Assets/Materials/band.mat
 - Assets/Assets/Materials/glove.mat
 - Assets/Assets/Texture2D/hands-ao.png
+- Assets/vr_hand_grabposes.fbx
 - Assets/Assets/vr_alien_hand.prefab
 - Assets/Assets/Models/vr_glove_model.fbx
 - Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_ao.png

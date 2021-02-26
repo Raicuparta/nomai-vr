@@ -14,6 +14,8 @@ namespace NomaiVR
         public SteamVR_Skeleton_Pose fallbackFist;
         public bool isLeft;
 
+        public Transform Palm { get; private set; }
+
         private Renderer _handRenderer;
         private Renderer _gloveRenderer;
         private SteamVR_Behaviour_Skeleton _skeleton;
@@ -30,18 +32,30 @@ namespace NomaiVR
             var handObject = Instantiate(handPrefab);
             handObject.SetActive(false);
             var hand = handObject.transform;
+
             var renderers = handObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
             _handRenderer = renderers.Where(r => r.transform.name.Contains("Hand")).FirstOrDefault();
             _gloveRenderer = renderers.Where(r => r.transform.name.Contains("Glove")).FirstOrDefault();
-            _handRenderer.material.shader = Shader.Find("Outer Wilds/Character/Skin");
-            _gloveRenderer.material.shader = Shader.Find("Outer Wilds/Character/Clothes");
-
+            
+            SetUpShaders(_handRenderer, "Outer Wilds/Character/Skin");
+            SetUpShaders(_gloveRenderer, "Outer Wilds/Character/Clothes");
+            
             _handRenderer.gameObject.AddComponent<ConditionalDisableRenderer>().getShouldRender += ShouldRenderHands;
             _gloveRenderer.gameObject.AddComponent<ConditionalDisableRenderer>().getShouldRender += ShouldRenderGloves;
 
             SetUpModel(hand);
             _skeleton = SetUpSkeleton(handObject, hand);
+
+            Palm = handObject.transform.Find("skeletal_hand/Root/wrist_r/HoldPoint");
+
             handObject.SetActive(true);
+        }
+
+        private void SetUpShaders(Renderer renderer, string shader)
+        {
+            Shader toAssign = Shader.Find(shader);
+            foreach (var material in renderer.materials)
+                material.shader = toAssign;
         }
 
         private void SetUpModel(Transform model)
@@ -50,6 +64,24 @@ namespace NomaiVR
             model.localPosition = Vector3.zero;
             model.localRotation = Quaternion.identity;
             model.localScale = Vector3.one;
+        }
+
+        internal void NotifyReachable(bool canReach)
+        {
+            if (canReach)
+                _skeleton.BlendToAnimation();
+            else
+                _skeleton.BlendToSkeleton();
+        }
+
+        internal void NotifyAttachedTo(SteamVR_Skeleton_Poser poser)
+        {
+            _skeleton.BlendToPoser(poser);
+        }
+
+        internal void NotifyDetachedFrom(SteamVR_Skeleton_Poser poser)
+        {
+            _skeleton.BlendToSkeleton();
         }
 
         private static string BoneToTarget(string bone, bool isSource) => isSource ? $"SourceSkeleton/Root/{bone}" : $"skeletal_hand/Root/{bone}";
@@ -73,7 +105,7 @@ namespace NomaiVR
         private SteamVR_Behaviour_Skeleton SetUpSkeleton(GameObject prefabObject, Transform prefabTransform)
         {
             var skeletonDriver = prefabObject.AddComponent<SteamVR_Behaviour_Skeleton>();
-            skeletonDriver.inputSource = SteamVR_Input_Sources.LeftHand;
+            skeletonDriver.inputSource = isLeft ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
             skeletonDriver.rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
             skeletonDriver.skeletonRoot = prefabTransform.Find("SourceSkeleton/Root");
             skeletonDriver.updatePose = false;
@@ -82,7 +114,7 @@ namespace NomaiVR
 
             if (isLeft)
             {
-                //Flip X axis of skeleton and mesh
+                //Flip X axis of skeleton and skinned meshes
                 for (int i = 0; i < prefabTransform.childCount; i++)
                     prefabTransform.GetChild(i).localScale = new Vector3(-1, 1, 1);
 
