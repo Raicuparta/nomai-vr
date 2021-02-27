@@ -88,7 +88,7 @@ namespace NomaiVR
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
-                _lens.localPosition = Vector3.forward * 0.14f;
+                _lens.localPosition = new Vector3(0.14f, 0.1f);
                 _lens.localRotation = Quaternion.identity;
                 _lens.localScale = Vector3.one * 2f;
                 _lens.gameObject.SetActive(false);
