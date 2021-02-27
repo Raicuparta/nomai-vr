@@ -51,9 +51,7 @@ namespace NomaiVR
             {
                 return new string[] { };
             }
-            var holdInputText = GetHoldActionText();
-            holdInputText.Add(WrapWithBrackets(result));
-            return holdInputText.ToArray();
+            return GetHoldActionText().Concat(new[] { WrapWithBrackets(result) }).ToArray();
         }
 
         public bool HasAxisWithSameName()
@@ -141,13 +139,13 @@ namespace NomaiVR
             return false;
         }
 
-        private List<string>GetHoldActionText()
+        private string[] GetHoldActionText()
         {
             if (_holdActionInput == null)
             {
-                return new List<string>();
+                return new string[0];
             }
-            return _holdActionInput.GetText().ToList();
+            return _holdActionInput.GetText();
         }
     }
 }
