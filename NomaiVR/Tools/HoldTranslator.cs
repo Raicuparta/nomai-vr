@@ -34,7 +34,7 @@ namespace NomaiVR
             {
                 var holdTranslator = translator.gameObject.AddComponent<Holdable>();
                 holdTranslator.transform.localPosition = new Vector3(-0.2f, 0.107f, 0.02f);
-                holdTranslator.transform.localRotation = Quaternion.Euler(32.8f, 0f, 0f);
+                holdTranslator.transform.localRotation = Quaternion.identity;
             }
 
             private Transform SetUpTranslatorGroup(Transform translator)

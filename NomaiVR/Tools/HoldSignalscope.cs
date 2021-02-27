@@ -58,7 +58,7 @@ namespace NomaiVR
                 _reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 _reticule.parent = _signalscope.transform;
                 _reticule.localScale = Vector3.one * 0.0005f;
-                _reticule.localPosition = Vector3.forward * 0.5f;
+                _reticule.localPosition = new Vector3(0, 0.1f, 0.5f);
                 _reticule.localRotation = Quaternion.identity;
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
@@ -88,7 +88,7 @@ namespace NomaiVR
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
-                _lens.localPosition = new Vector3(0.14f, 0.1f);
+                _lens.localPosition = new Vector3(0, 0.1f, 0.14f);
                 _lens.localRotation = Quaternion.identity;
                 _lens.localScale = Vector3.one * 2f;
                 _lens.gameObject.SetActive(false);

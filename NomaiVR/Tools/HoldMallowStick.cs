@@ -67,7 +67,7 @@ namespace NomaiVR
 
                 var holdMallow = mallowClone.gameObject.AddComponent<Holdable>();
                 holdMallow.transform.localPosition = new Vector3(0.02f, -0.03f, -0.08f);
-                holdMallow.transform.localRotation = Quaternion.Euler(80f, 100f, 110f);
+                holdMallow.transform.localRotation = Quaternion.Euler(47.2f, 100f, 110f);
                 holdMallow.hand = HandsController.Behaviour.LeftHandBehaviour;
 
                 // Replace right hand mallow on proximity with left hand mallow.

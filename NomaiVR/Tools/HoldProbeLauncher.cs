@@ -21,7 +21,7 @@ namespace NomaiVR
 
                 var holdProbeLauncher = probeLauncher.gameObject.AddComponent<Holdable>();
                 holdProbeLauncher.transform.localPosition = new Vector3(0f, 0.21f, 0.05f);
-                holdProbeLauncher.transform.localRotation = Quaternion.Euler(45, 0, 0);
+                holdProbeLauncher.transform.localRotation = Quaternion.identity;
 
                 _probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
                 _probeLauncherModel.gameObject.layer = 0;
