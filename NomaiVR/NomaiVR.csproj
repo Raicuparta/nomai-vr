@@ -197,6 +197,7 @@
     <None Include="Hands\Poses\fallback_fist.json" />
     <None Include="Hands\Poses\fallback_point.json" />
     <None Include="Hands\Poses\fallback_relaxed.json" />
+    <None Include="Hands\Poses\reachFor.json" />
     <None Include="Input\Bindings\actions.json" />
     <None Include="Input\Bindings\index_knuckles.json" />
     <None Include="Input\Bindings\oculus_touch.json" />

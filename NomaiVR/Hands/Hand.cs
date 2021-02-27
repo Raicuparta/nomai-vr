@@ -19,6 +19,7 @@ namespace NomaiVR
         private Renderer _handRenderer;
         private Renderer _gloveRenderer;
         private SteamVR_Behaviour_Skeleton _skeleton;
+        private SteamVR_Skeleton_Poser _reachPoser;
 
         internal void Start()
         {
@@ -64,24 +65,6 @@ namespace NomaiVR
             model.localPosition = Vector3.zero;
             model.localRotation = Quaternion.identity;
             model.localScale = Vector3.one;
-        }
-
-        internal void NotifyReachable(bool canReach)
-        {
-            if (canReach)
-                _skeleton.BlendToAnimation();
-            else
-                _skeleton.BlendToSkeleton();
-        }
-
-        internal void NotifyAttachedTo(SteamVR_Skeleton_Poser poser)
-        {
-            _skeleton.BlendToPoser(poser);
-        }
-
-        internal void NotifyDetachedFrom(SteamVR_Skeleton_Poser poser)
-        {
-            _skeleton.BlendToSkeleton();
         }
 
         private static string BoneToTarget(string bone, bool isSource) => isSource ? $"SourceSkeleton/Root/{bone}" : $"skeletal_hand/Root/{bone}";
@@ -190,12 +173,35 @@ namespace NomaiVR
                 smoothingSpeed = 16
             });
 
-            //Setup Limit Poser (not working :/)
-            var defaultPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
-            defaultPoser.skeletonMainPose = AssetLoader.FallbackFistPose;
-            skeletonDriver.BlendToPoser(defaultPoser);
+            //Setup Limit/Reach Poser
+            _reachPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
+            _reachPoser.skeletonMainPose = AssetLoader.ReachForPose;
 
             return skeletonDriver;
+        }
+
+        internal void ResetSkeletonBlend()
+        {
+            _skeleton.BlendToSkeleton();
+            _skeleton.BlendTo(0.5f, 0.1f);
+        }
+
+        internal void NotifyReachable(bool canReach)
+        {
+            if (canReach)
+                _skeleton.BlendToPoser(_reachPoser);
+            else
+                ResetSkeletonBlend();
+        }
+
+        internal void NotifyAttachedTo(SteamVR_Skeleton_Poser poser)
+        {
+            _skeleton.BlendToPoser(poser);
+        }
+
+        internal void NotifyDetachedFrom(SteamVR_Skeleton_Poser poser)
+        {
+            ResetSkeletonBlend();
         }
 
         private void SetUpVrPose()
@@ -222,6 +228,7 @@ namespace NomaiVR
         {
             EVRSkeletalMotionRange newMotionRange = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
             _skeleton.SetRangeOfMotion(newMotionRange);
+            ResetSkeletonBlend();
         }
 
         private bool ShouldRenderGloves()
