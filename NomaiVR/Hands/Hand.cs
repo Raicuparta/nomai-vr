@@ -20,12 +20,12 @@ namespace NomaiVR
         private Renderer _gloveRenderer;
         private SteamVR_Behaviour_Skeleton _skeleton;
         private SteamVR_Skeleton_Poser _reachPoser;
+        private EVRSkeletalMotionRange _rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
 
         internal void Start()
         {
             SetUpModel();
             SetUpVrPose();
-            SetUpPoseEvents();
         }
 
         private void SetUpModel()
@@ -89,9 +89,10 @@ namespace NomaiVR
         {
             var skeletonDriver = prefabObject.AddComponent<SteamVR_Behaviour_Skeleton>();
             skeletonDriver.inputSource = isLeft ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
-            skeletonDriver.rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
+            skeletonDriver.rangeOfMotion = _rangeOfMotion;
             skeletonDriver.skeletonRoot = prefabTransform.Find("SourceSkeleton/Root");
             skeletonDriver.updatePose = false;
+            skeletonDriver.onlySetRotations = true;
             skeletonDriver.skeletonBlend = 0.5f;
             skeletonDriver.fallbackPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
 
@@ -214,20 +215,10 @@ namespace NomaiVR
             gameObject.SetActive(true);
         }
 
-        private void SetUpPoseEvents()
+        public void SetLimitRangeOfMotion(bool isShown)
         {
-            GlobalMessenger<bool>.AddListener(ControllerModels.CONTROLLER_VISIBILITY_CHANGED, OnControllerModelsVisibilityChanged);
-        }
-
-        internal void OnDestroy()
-        {
-            GlobalMessenger<bool>.RemoveListener(ControllerModels.CONTROLLER_VISIBILITY_CHANGED, OnControllerModelsVisibilityChanged);
-        }
-
-        private void OnControllerModelsVisibilityChanged(bool isShown)
-        {
-            EVRSkeletalMotionRange newMotionRange = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
-            _skeleton.SetRangeOfMotion(newMotionRange);
+            _rangeOfMotion = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
+            _skeleton?.SetRangeOfMotion(_rangeOfMotion); // Back to main menu we have a nullreference here
             ResetSkeletonBlend();
         }
 
