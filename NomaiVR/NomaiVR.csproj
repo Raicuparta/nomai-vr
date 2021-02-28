@@ -129,12 +129,15 @@
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Helpers\ToolHelper.cs" />
+    <Compile Include="Hands\NomaiVR_Hand_Skeleton.cs" />
     <Compile Include="Input\VRActionInput.cs" />
     <Compile Include="Logs.cs" />
     <Compile Include="ModConfig\ModSettings.cs" />
     <Compile Include="ReusableBehaviours\ConditionalDisableRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugFollowTarget.cs" />
+    <Compile Include="ReusableBehaviours\ChildThresholdObserver.cs" />
     <Compile Include="ReusableBehaviours\EnableObserver.cs" />
+    <Compile Include="ReusableBehaviours\IActiveObserver.cs" />
     <Compile Include="ReusableBehaviours\ShipMonitorInteraction.cs" />
     <Compile Include="Saves\ModSaveFile.cs" />
     <Compile Include="Hands\Hand.cs" />

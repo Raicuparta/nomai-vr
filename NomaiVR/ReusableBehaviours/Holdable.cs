@@ -38,7 +38,8 @@ namespace NomaiVR
             transform.gameObject.SetActive(true);
 
             //Listen for events to start poses
-            var enableObserver = transform.gameObject.AddComponent<EnableObserver>();
+            IActiveObserver enableObserver = transform.childCount > 0 ? transform.GetComponentInChildren<Renderer>(true).gameObject.AddComponent<EnableObserver>()
+                                                                        : transform.gameObject.AddComponent<ChildThresholdObserver>() as IActiveObserver;
 
             //Both this holdable and the observer should be destroyed at the end of a cycle so no leaks here
             enableObserver.OnActivate += () => hand.NotifyAttachedTo(_poser);

@@ -18,7 +18,7 @@ namespace NomaiVR
 
         private Renderer _handRenderer;
         private Renderer _gloveRenderer;
-        private SteamVR_Behaviour_Skeleton _skeleton;
+        private NomaiVR_Hand_Skeleton _skeleton;
         private SteamVR_Skeleton_Poser _reachPoser;
         private EVRSkeletalMotionRange _rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
 
@@ -85,9 +85,9 @@ namespace NomaiVR
             return name;
         }
 
-        private SteamVR_Behaviour_Skeleton SetUpSkeleton(GameObject prefabObject, Transform prefabTransform)
+        private NomaiVR_Hand_Skeleton SetUpSkeleton(GameObject prefabObject, Transform prefabTransform)
         {
-            var skeletonDriver = prefabObject.AddComponent<SteamVR_Behaviour_Skeleton>();
+            var skeletonDriver = prefabObject.AddComponent<NomaiVR_Hand_Skeleton>();
             skeletonDriver.inputSource = isLeft ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
             skeletonDriver.rangeOfMotion = _rangeOfMotion;
             skeletonDriver.skeletonRoot = prefabTransform.Find("SourceSkeleton/Root");
@@ -183,8 +183,13 @@ namespace NomaiVR
 
         internal void ResetSkeletonBlend()
         {
+            if (_skeleton == null)
+                return;
+
             _skeleton.BlendToSkeleton();
+            _skeleton.ResetTemporaryRangeOfMotion();
             _skeleton.BlendTo(0.5f, 0.1f);
+            _skeleton.ClearSnapshot();
         }
 
         internal void NotifyReachable(bool canReach)
