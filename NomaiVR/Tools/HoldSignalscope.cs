@@ -56,18 +56,24 @@ namespace NomaiVR
 
                 // Attatch Signalscope UI to the Signalscope.
                 _reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                _reticule.parent = _signalscope.transform;
-                _reticule.localScale = Vector3.one * 0.0005f;
-                _reticule.localPosition = new Vector3(0, 0.2f, 0.5f);
-                _reticule.localRotation = Quaternion.identity;
+                SetupReticule(_reticule);
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.35f, 0));
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.85f, 0));
+                helmetOff.gameObject.AddComponent<DebugTransform>();
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
                 SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.1f, 0));
                 LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
                 SetupScopeLens();
+            }
+
+            private static void SetupReticule(Transform reticule)
+            {
+                reticule.parent = _signalscope.transform;
+                reticule.localScale = Vector3.one * 0.0003f;
+                reticule.localPosition = new Vector3(0, 0.15f, 0.14f);
+                reticule.localRotation = Quaternion.identity;
             }
 
             private static void SetupSignalscopeUI(Transform parent, Vector3 position)
@@ -188,12 +194,7 @@ namespace NomaiVR
                         _reticule.localRotation = Quaternion.identity;
                     }
                     else
-                    {
-                        _reticule.parent = _signalscope.transform;
-                        _reticule.localScale = Vector3.one * 0.0003f;
-                        _reticule.localPosition = Vector3.forward * 0.14f;
-                        _reticule.localRotation = Quaternion.identity;
-                    }
+                        SetupReticule(_reticule);
                 }
             }
         }
