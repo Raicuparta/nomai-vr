@@ -20,7 +20,7 @@ namespace NomaiVR
         {
             base.UpdateSkeletonTransforms();
 
-            if(_snapshotCleanRequested)
+            if(_snapshotCleanRequested && skeletonBlend > 0)
             {
                 blendSnapshot = null;
                 _snapshotCleanRequested = false;

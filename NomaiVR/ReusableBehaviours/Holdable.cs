@@ -38,12 +38,18 @@ namespace NomaiVR
             transform.gameObject.SetActive(true);
 
             //Listen for events to start poses
-            IActiveObserver enableObserver = transform.childCount > 0 ? transform.GetComponentInChildren<Renderer>(true).gameObject.AddComponent<EnableObserver>()
+            Transform solveToolsTransform = transform.Find("Props_HEA_Signalscope") ??
+                                            transform.Find("Props_HEA_ProbeLauncher") ??
+                                            transform.Find("TranslatorGroup/Props_HEA_Translator"); //Tried to find the first renderer bu the probelauncher has multiple of them, doing it this way for now...
+            IActiveObserver enableObserver = transform.childCount > 0 ? (solveToolsTransform != null ? solveToolsTransform.gameObject.AddComponent<EnableObserver>() : null)
                                                                         : transform.gameObject.AddComponent<ChildThresholdObserver>() as IActiveObserver;
 
-            //Both this holdable and the observer should be destroyed at the end of a cycle so no leaks here
-            enableObserver.OnActivate += () => hand.NotifyAttachedTo(_poser);
-            enableObserver.OnDeactivate += () => hand.NotifyDetachedFrom(_poser);
+            // Both this holdable and the observer should be destroyed at the end of a cycle so no leaks here
+            if(enableObserver != null)
+            {
+                enableObserver.OnActivate += () => hand.NotifyAttachedTo(_poser);
+                enableObserver.OnDeactivate += () => hand.NotifyDetachedFrom(_poser);
+            }
         }
     }
 }

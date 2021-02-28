@@ -22,6 +22,10 @@ namespace NomaiVR
             Detector = gameObject.AddComponent<ProximityDetector>();
             Detector.other = HandsController.Behaviour.RightHand;
             Detector.minDistance = 0.2f;
+
+            Detector.onEnter += () => { HandsController.Behaviour.RightHandBehaviour.NotifyReachable(true); };
+            Detector.onExit += () => { HandsController.Behaviour.RightHandBehaviour.NotifyReachable(false); };
+
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
 

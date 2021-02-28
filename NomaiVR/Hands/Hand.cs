@@ -18,9 +18,18 @@ namespace NomaiVR
 
         private Renderer _handRenderer;
         private Renderer _gloveRenderer;
+        private EHandState _handState = EHandState.Free;
+        private EHandState _lastHandState = EHandState.Free;
         private NomaiVR_Hand_Skeleton _skeleton;
         private SteamVR_Skeleton_Poser _reachPoser;
         private EVRSkeletalMotionRange _rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
+
+        internal enum EHandState
+        {
+            Free,
+            Reaching,
+            Holding
+        }
 
         internal void Start()
         {
@@ -190,24 +199,50 @@ namespace NomaiVR
             _skeleton.ResetTemporaryRangeOfMotion();
             _skeleton.BlendTo(0.5f, 0.1f);
             _skeleton.ClearSnapshot();
+
+            _lastHandState = _handState;
+            _handState = EHandState.Free;
+        }
+
+        internal void BlendToReach()
+        {
+            _skeleton.BlendToPoser(_reachPoser);
+            _lastHandState = _handState;
+            _handState = EHandState.Reaching;
+        }
+
+        internal void BlendToPoser(SteamVR_Skeleton_Poser poser)
+        {
+            _lastHandState = _handState;
+            _handState = EHandState.Holding;
+            _skeleton.BlendToPoser(poser);
         }
 
         internal void NotifyReachable(bool canReach)
         {
+            if (_handState == EHandState.Holding)
+            {
+                _lastHandState = canReach ? EHandState.Reaching : EHandState.Free;
+                return;
+            }
+
             if (canReach)
-                _skeleton.BlendToPoser(_reachPoser);
+                BlendToReach();
             else
                 ResetSkeletonBlend();
         }
 
         internal void NotifyAttachedTo(SteamVR_Skeleton_Poser poser)
         {
-            _skeleton.BlendToPoser(poser);
+            BlendToPoser(poser);
         }
 
         internal void NotifyDetachedFrom(SteamVR_Skeleton_Poser poser)
         {
-            ResetSkeletonBlend();
+            if(_lastHandState != EHandState.Reaching)
+                ResetSkeletonBlend();
+            else
+                BlendToReach();
         }
 
         private void SetUpVrPose()
