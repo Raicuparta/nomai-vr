@@ -60,7 +60,6 @@ namespace NomaiVR
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
                 SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.85f, 0));
-                helmetOff.gameObject.AddComponent<DebugTransform>();
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
                 SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.1f, 0));
