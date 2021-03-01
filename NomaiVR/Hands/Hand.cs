@@ -37,7 +37,7 @@ namespace NomaiVR
             _handRenderer = renderers.Where(r => r.transform.name.Contains("Hand")).FirstOrDefault();
             _gloveRenderer = renderers.Where(r => r.transform.name.Contains("Glove")).FirstOrDefault();
             
-            SetUpShaders(_handRenderer, "Outer Wilds/Character/Skin");
+            SetUpShaders(_handRenderer, "Outer Wilds/Character/Clothes", "Outer Wilds/Character/Skin");
             SetUpShaders(_gloveRenderer, "Outer Wilds/Character/Clothes");
             
             _handRenderer.gameObject.AddComponent<ConditionalDisableRenderer>().getShouldRender += ShouldRenderHands;
@@ -51,11 +51,14 @@ namespace NomaiVR
             handObject.SetActive(true);
         }
 
-        private void SetUpShaders(Renderer renderer, string shader)
+        private void SetUpShaders(Renderer renderer, params string[] shader)
         {
-            Shader toAssign = Shader.Find(shader);
-            foreach (var material in renderer.materials)
-                material.shader = toAssign;
+            if (shader.Length == 0)
+                return;
+
+            Shader[] toAssign = shader.Select(x => Shader.Find(x)).ToArray();
+            for (int i = 0; i < renderer.materials.Length; i++)
+                renderer.materials[i].shader = toAssign[Mathf.Clamp(i, 0, toAssign.Length)];
         }
 
         private void SetUpModel(Transform model)
