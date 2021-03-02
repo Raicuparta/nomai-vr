@@ -118,6 +118,10 @@ namespace NomaiVR
                 _lensCamera.clearFlags = CameraClearFlags.Color;
                 _lensCamera.backgroundColor = Color.black;
                 _lensCamera.gameObject.SetActive(true);
+
+                // The camera on this prefab would istantiate an AudioListener enabled by default
+                // which would break 3DAudio and tie it to the hands.
+                _lensCamera.gameObject.GetComponent<AudioListener>().enabled = false;
             }
 
             internal void Update()
