@@ -117,6 +117,7 @@ namespace NomaiVR
                 _lensCamera.depth = 0f;
                 _lensCamera.clearFlags = CameraClearFlags.Color;
                 _lensCamera.backgroundColor = Color.black;
+                _lensCamera.enabled = false;
                 _lensCamera.gameObject.SetActive(true);
 
                 // The camera on this prefab would istantiate an AudioListener enabled by default
@@ -152,6 +153,7 @@ namespace NomaiVR
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
+                    _lensCamera.enabled = _lens.gameObject.activeSelf;
                 }
             }
 
