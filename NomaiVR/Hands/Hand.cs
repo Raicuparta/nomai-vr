@@ -46,8 +46,8 @@ namespace NomaiVR
             var renderers = handObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
             _handRenderer = renderers.Where(r => r.transform.name.Contains("Hand")).FirstOrDefault();
             _gloveRenderer = renderers.Where(r => r.transform.name.Contains("Glove")).FirstOrDefault();
-            
-            SetUpShaders(_handRenderer, "Outer Wilds/Character/Clothes", "Outer Wilds/Character/Skin");
+
+            SetUpShaders(_handRenderer, "Outer Wilds/Character/Skin", "Outer Wilds/Character/Skin");
             SetUpShaders(_gloveRenderer, "Outer Wilds/Character/Clothes");
             
             _handRenderer.gameObject.AddComponent<ConditionalDisableRenderer>().getShouldRender += ShouldRenderHands;
