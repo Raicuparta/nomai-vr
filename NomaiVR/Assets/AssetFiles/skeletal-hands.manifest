@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3488826877
+CRC: 230193008
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5f4f7b6d71fa9b79d6d09ec3688873bd
+    Hash: 59242fed4435df39b3e50e0f58c0ee74
   TypeTreeHash:
     serializedVersion: 2
     Hash: f2310c9db59182e0c87fddf3429bdf9c
@@ -50,6 +50,7 @@ Assets:
 - Assets/Assets/Models/handFingers.mask
 - Assets/Assets/Texture2D/Structure_HEA_VillageCloth_d.png
 - Assets/Assets/Materials/hands.mat
+- Assets/Assets/skeletal_glove.prefab
 - Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_d.png
 - Assets/Assets/Texture2D/hands-d.png
 - Assets/Assets/Texture2D/Structure_HEA_VillageCloth_s.png
