@@ -16,6 +16,8 @@ namespace NomaiVR
             private static Camera _lensCamera;
             private static Transform _lens;
 
+            private OWCamera _owLensCamera;
+
             internal void Start()
             {
                 if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
@@ -81,10 +83,11 @@ namespace NomaiVR
 
             private void OnUnequip()
             {
+                _owLensCamera.SetEnabled(false);
                 _lens.gameObject.SetActive(false);
             }
 
-            private static void SetupScopeLens()
+            private void SetupScopeLens()
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
@@ -104,12 +107,12 @@ namespace NomaiVR
                 followTarget.rotationSmoothTime = 0.1f;
                 followTarget.positionSmoothTime = 0.1f;
 
-                var owCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
-                owCamera.useFarCamera = true;
-                owCamera.renderSkybox = true;
-                owCamera.useViewmodels = true;
-                owCamera.farCameraDistance = 50000;
-                owCamera.viewmodelFOV = 70;
+                _owLensCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
+                _owLensCamera.useFarCamera = true;
+                _owLensCamera.renderSkybox = true;
+                _owLensCamera.useViewmodels = true;
+                _owLensCamera.farCameraDistance = 50000;
+                _owLensCamera.viewmodelFOV = 70;
                 var fogEffect = _lensCamera.gameObject.AddComponent<PlanetaryFogImageEffect>();
                 fogEffect.fogShader = Locator.GetPlayerCamera().GetComponent<PlanetaryFogImageEffect>().fogShader;
                 _lensCamera.farClipPlane = 2000f;
@@ -117,11 +120,11 @@ namespace NomaiVR
                 _lensCamera.depth = 0f;
                 _lensCamera.clearFlags = CameraClearFlags.Color;
                 _lensCamera.backgroundColor = Color.black;
-                _lensCamera.enabled = false;
                 _lensCamera.gameObject.SetActive(true);
 
                 // The camera on this prefab would istantiate an AudioListener enabled by default
                 // which would break 3DAudio and tie it to the hands.
+                _owLensCamera.SetEnabled(false);
                 _lensCamera.gameObject.GetComponent<AudioListener>().enabled = false;
             }
 
@@ -153,7 +156,7 @@ namespace NomaiVR
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
-                    _lensCamera.enabled = _lens.gameObject.activeSelf;
+                    _owLensCamera.SetEnabled(_lens.gameObject.activeSelf);
                 }
             }
 
