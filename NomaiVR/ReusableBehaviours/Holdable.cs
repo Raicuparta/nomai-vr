@@ -7,7 +7,7 @@ namespace NomaiVR
     public class Holdable : MonoBehaviour
     {
         public Hand hand = HandsController.Behaviour.RightHandBehaviour;
-        public SteamVR_Skeleton_Pose holdPose = AssetLoader.FallbackFistPose;
+        public SteamVR_Skeleton_Pose holdPose = AssetLoader.GrabbingHandlePose;
         private SteamVR_Skeleton_Poser _poser;
 
         internal void Start()
