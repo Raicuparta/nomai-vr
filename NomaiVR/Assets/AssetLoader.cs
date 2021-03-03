@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using UnityEngine;
-using Valve.Newtonsoft.Json;
 using Valve.VR;
 
 namespace NomaiVR
@@ -63,7 +62,16 @@ namespace NomaiVR
             string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
             if (!File.Exists(fullPath))
                 return default(T);
-            return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
+
+            if(typeof(ScriptableObject).IsAssignableFrom(typeof(T)))
+            {
+                //ScriptableObjects should be instantiated through ScriptableObject.CreateInstance
+                object scriptableObject = ScriptableObject.CreateInstance(typeof(T));
+                JsonUtility.FromJsonOverwrite(File.ReadAllText(fullPath), scriptableObject);
+                return (T)scriptableObject;
+            }
+
+            return JsonUtility.FromJson<T>(File.ReadAllText(fullPath));
         }
 
         private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object
