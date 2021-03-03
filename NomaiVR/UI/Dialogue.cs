@@ -11,23 +11,21 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static GameObject _uiGameObject;
             private static Transform _canvasTransform;
             private static Transform _attentionPoint = null;
             private const float _dialogeRenderSize = 0.0015f;
 
             internal void Start()
             {
-                _uiGameObject = GameObject.FindWithTag("DialogueGui");
-                _canvasTransform = _uiGameObject.transform;//GameObject.Find("DialogueCanvas").transform;
+                _canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
                 _canvasTransform.localScale *= _dialogeRenderSize;
 
                 // Prevent dialogue box from flying off after a while.
-                _canvasTransform.parent = Locator.GetPlayerTransform();
-                //_canvasTransform.parent.gameObject.AddComponent<FollowTarget>().target = Locator.GetPlayerTransform();
+                _canvasTransform.parent = new GameObject().transform;
+                _canvasTransform.parent.gameObject.AddComponent<FollowTarget>().target = Locator.GetPlayerTransform();
 
-                var canvas = _uiGameObject.GetComponent<Canvas>();
+                var canvas = _canvasTransform.gameObject.GetComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
             }
 
@@ -84,7 +82,7 @@ namespace NomaiVR
 
                 private static void PostStartConversation()
                 {
-                    MaterialHelper.MakeGraphicChildrenDrawOnTop(_uiGameObject);
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(_canvasTransform.gameObject);
                 }
 
                 private static void PreEndConversation()
