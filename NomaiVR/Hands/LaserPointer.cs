@@ -218,7 +218,7 @@ namespace NomaiVR
 
             private void HandleTransformClick(Transform clickTransform)
             {
-                if (clickTransform == null)
+                if (clickTransform == null || !clickTransform.gameObject.activeInHierarchy)
                 {
                     return;
                 }
@@ -441,7 +441,6 @@ namespace NomaiVR
                     camera.transform.rotation = _cameraRotation;
                 }
             }
-
         }
     }
 }
