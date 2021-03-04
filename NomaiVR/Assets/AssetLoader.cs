@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 using Valve.VR;
+using Valve.Newtonsoft.Json;
 
 namespace NomaiVR
 {
@@ -65,11 +66,11 @@ namespace NomaiVR
             {
                 //ScriptableObjects should be instantiated through ScriptableObject.CreateInstance
                 object scriptableObject = ScriptableObject.CreateInstance(typeof(T));
-                JsonUtility.FromJsonOverwrite(File.ReadAllText(fullPath), scriptableObject);
+                JsonConvert.PopulateObject(File.ReadAllText(fullPath), scriptableObject);
                 return (T)scriptableObject;
             }
 
-            return JsonUtility.FromJson<T>(File.ReadAllText(fullPath));
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
         }
 
         private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object
