@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
-using Valve.Newtonsoft.Json;
 using Valve.VR;
+using Valve.Newtonsoft.Json;
 
 namespace NomaiVR
 {
@@ -32,10 +32,8 @@ namespace NomaiVR
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
             PostCreditsRenderTexture = LoadAsset<RenderTexture>(postCreditsBundle, "screen.renderTexture");
 
-            //var handsBundle = LoadBundle("hands");
             var skeletalHandsBundle = LoadBundle("skeletal-hands");
             HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_hand.prefab");
-            //GlovePrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_glove.prefab");
 
             var feetPositionBundle = LoadBundle("feetposition");
             FeetPositionPrefab = LoadAsset<GameObject>(feetPositionBundle, "feetposition.prefab");
@@ -65,6 +63,15 @@ namespace NomaiVR
             string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
             if (!File.Exists(fullPath))
                 return default(T);
+
+            if(typeof(ScriptableObject).IsAssignableFrom(typeof(T)))
+            {
+                //ScriptableObjects should be instantiated through ScriptableObject.CreateInstance
+                object scriptableObject = ScriptableObject.CreateInstance(typeof(T));
+                JsonConvert.PopulateObject(File.ReadAllText(fullPath), scriptableObject);
+                return (T)scriptableObject;
+            }
+
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
         }
 

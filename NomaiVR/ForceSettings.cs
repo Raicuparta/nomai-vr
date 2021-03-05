@@ -1,4 +1,5 @@
-﻿using OWML.Utils;
+﻿using OWML.ModHelper.Input;
+using OWML.Utils;
 using UnityEngine;
 using Valve.VR;
 
@@ -73,6 +74,7 @@ namespace NomaiVR
                     Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PostApplySettings));
                     Empty<InputRebindableLibrary>("SetKeyBindings");
                     Empty<GraphicSettings>("SetSliderValFOV");
+                    Empty<ModCommandListener>("Update");
                 }
 
                 private static void PostApplySettings()

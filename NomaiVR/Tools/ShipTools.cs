@@ -57,16 +57,6 @@ namespace NomaiVR
                     Prefix<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
                     Postfix<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
                     Prefix(typeof(ReferenceFrameTracker).GetMethod("UntargetReferenceFrame", new[] { typeof(bool) }), nameof(PreUntargetFrame));
-                    Prefix<ProbeLauncher>("RetrieveProbe", nameof(PreRetrieveProbe));
-                }
-
-                private static bool PreRetrieveProbe()
-                {
-                    if (Locator.GetReferenceFrame(true) != null && OWInput.IsInputMode(InputMode.ShipCockpit))
-                    {
-                        return false;
-                    }
-                    return true;
                 }
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
