@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NomaiVR.ReusableBehaviours;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -184,6 +185,11 @@ namespace NomaiVR
                     followTarget.positionSmoothTime = 0.5f;
                     followTarget.rotationSmoothTime = 0.5f;
                 }
+
+                canvas.gameObject.AddComponent<DestroyObserver>().OnObjectDestroyed += () =>
+                {
+                    _canvasObjectsToHide.Remove(canvas.gameObject);
+                };
             }
 
             private static void AdjustScaler(Canvas canvas)
