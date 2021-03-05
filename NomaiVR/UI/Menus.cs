@@ -1,5 +1,4 @@
-﻿using NomaiVR.ReusableBehaviours;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -186,7 +185,7 @@ namespace NomaiVR
                     followTarget.rotationSmoothTime = 0.5f;
                 }
 
-                canvas.gameObject.AddComponent<DestroyObserver>().OnObjectDestroyed += () =>
+                canvas.gameObject.AddComponent<DestroyObserver>().OnDestroyed += () =>
                 {
                     _canvasObjectsToHide.Remove(canvas.gameObject);
                 };
