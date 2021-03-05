@@ -184,6 +184,11 @@ namespace NomaiVR
                     followTarget.positionSmoothTime = 0.5f;
                     followTarget.rotationSmoothTime = 0.5f;
                 }
+
+                canvas.gameObject.AddComponent<DestroyObserver>().OnDestroyed += () =>
+                {
+                    _canvasObjectsToHide.Remove(canvas.gameObject);
+                };
             }
 
             private static void AdjustScaler(Canvas canvas)
