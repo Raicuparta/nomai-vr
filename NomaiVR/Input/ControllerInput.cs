@@ -344,6 +344,7 @@ namespace NomaiVR
                     Postfix<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
                     Postfix<PadEZ.PadManager_OW>("GetKeyUp", nameof(ResetPadManagerKeyboard));
                     Postfix<OWInput>("IsGamepadEnabled", nameof(PostIsGamepadEnabled));
+                    Prefix<OWInput>("GetAnyJoystickButtonPressed", nameof(PrefixGetAnyJoystickButtonPressed));
                     Postfix<PadEZ.PadManager_OW>("IsGamepadActive", nameof(PostIsGamepadEnabled));
                     Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
                     Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
@@ -410,6 +411,13 @@ namespace NomaiVR
                 private static bool PostIsGamepadEnabled(bool __result)
                 {
                     return true;
+                }
+
+                private static bool PrefixGetAnyJoystickButtonPressed()
+                {
+                    //This method is only used in the intro screen and can sometimes give unexpected
+                    //phantom keys during startup sequence
+                    return false;
                 }
 
                 private static void ResetPadManagerKeyboard(ref bool ____gotKeyboardInputThisFrame)

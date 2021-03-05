@@ -19,6 +19,7 @@ namespace NomaiVR
             private Camera _flashbackCamera;
             private Transform _flashbackCameraParent;
             private bool _isCanvasObjectsActive;
+            private bool _fadeInLogo = false;
 
             internal void Start()
             {
@@ -36,6 +37,8 @@ namespace NomaiVR
                 {
                     FixTitleMenuCanvases();
                     FixStarLogos();
+                    FixOuterWildsLogo();
+                    StopCameraRotation();
                 }
 
                 ScreenCanvasesToWorld();
@@ -87,6 +90,37 @@ namespace NomaiVR
                 // Usually the game would move the camera to Vector3.zero, but camera movement isn't possible in VR.
                 // So we need to apply the inverse position to make it move to Vector3.zero.
                 _flashbackCameraParent.position = _flashbackCamera.transform.localPosition * -1;
+            }
+
+            private static void StopCameraRotation()
+            {
+                var rotateTransformComponent = GameObject.Find("Scene/Background").GetComponent<RotateTransform>();
+                Destroy(rotateTransformComponent);
+            }
+
+            private void FixOuterWildsLogo()
+            {
+                Transform logoParentTranform = GameObject.Find("TitleCanvasHack/TitleLayoutGroup").transform;
+                Transform canvasHack = logoParentTranform.parent;
+                Destroy(canvasHack.GetComponent<CanvasScaler>()); //Remove Canvas Scaler
+                canvasHack.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+                logoParentTranform.localPosition = Vector3.left * 400;
+                _fadeInLogo = false;
+
+                LayerHelper.ChangeLayerRecursive(logoParentTranform.gameObject, "VisibleToPlayer");
+
+                //Logo Fade-In Animation
+                var logoFader = logoParentTranform.gameObject.AddComponent<TitleMenuLogoFader>();
+                var logoAnimator = logoParentTranform.GetComponentInChildren<Animator>();
+                logoFader.BeginFade(1, 3, () => _fadeInLogo, Mathf.Sqrt, true);
+
+                FindObjectOfType<TitleAnimationController>().OnTitleLogoAnimationComplete += () =>
+                {
+                    canvasHack.localScale = Vector3.one * 0.126f;
+                    canvasHack.position = new Vector3(17.344f, 136.154f, 10.499f);
+                    canvasHack.rotation = Quaternion.Euler(342.012f, 116.613f, 325.473f);
+                    _fadeInLogo = true;
+                };
             }
 
             private static void FixStarLogo(string objectName)
