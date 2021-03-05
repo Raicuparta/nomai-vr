@@ -344,11 +344,14 @@ namespace NomaiVR
                     Postfix<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
                     Postfix<PadEZ.PadManager_OW>("GetKeyUp", nameof(ResetPadManagerKeyboard));
                     Postfix<OWInput>("IsGamepadEnabled", nameof(PostIsGamepadEnabled));
-                    Prefix<OWInput>("GetAnyJoystickButtonPressed", nameof(PrefixGetAnyJoystickButtonPressed));
                     Postfix<PadEZ.PadManager_OW>("IsGamepadActive", nameof(PostIsGamepadEnabled));
                     Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
                     Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
                     Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
+
+                    //This method is only used in the intro screen and can break the intro sequence
+                    //It is checking for keys the game and the mod doesn't use, the intro sequence is still skippable without it
+                    Prefix<OWInput>("GetAnyJoystickButtonPressed", nameof(PrefixGetAnyJoystickButtonPressed));
                 }
 
                 private static bool PreSubmitActionMenu(SubmitActionMenu __instance)
@@ -413,10 +416,9 @@ namespace NomaiVR
                     return true;
                 }
 
-                private static bool PrefixGetAnyJoystickButtonPressed()
+                private static bool PrefixGetAnyJoystickButtonPressed(ref bool __result)
                 {
-                    //This method is only used in the intro screen and can sometimes give unexpected
-                    //phantom keys during startup sequence
+                    __result = false;
                     return false;
                 }
 

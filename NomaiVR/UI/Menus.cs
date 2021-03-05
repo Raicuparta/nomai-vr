@@ -112,7 +112,7 @@ namespace NomaiVR
                 //Logo Fade-In Animation
                 var logoFader = logoParentTranform.gameObject.AddComponent<TitleMenuLogoFader>();
                 var logoAnimator = logoParentTranform.GetComponentInChildren<Animator>();
-                logoFader.BeginFade(1, 3, () => _fadeInLogo, Mathf.Sqrt, true);
+                logoFader.BeginFade(1, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true);
 
                 FindObjectOfType<TitleAnimationController>().OnTitleLogoAnimationComplete += () =>
                 {
