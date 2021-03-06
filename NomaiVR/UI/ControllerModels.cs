@@ -5,6 +5,7 @@ namespace NomaiVR
 {
     internal class ControllerModels : NomaiVRModule<ControllerModels.Behaviour, NomaiVRModule.EmptyPatch>
     {
+
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => AllScenes;
 
@@ -67,14 +68,18 @@ namespace NomaiVR
             private void Show()
             {
                 _isVisible = true;
+                HandsController.Behaviour.LeftHandBehaviour.SetLimitRangeOfMotion(true);
                 _leftRenderModel.gameObject.SetActive(true);
+                HandsController.Behaviour.RightHandBehaviour.SetLimitRangeOfMotion(true);
                 _rightRenderModel.gameObject.SetActive(true);
             }
 
             private void Hide()
             {
                 _isVisible = false;
+                HandsController.Behaviour.LeftHandBehaviour.SetLimitRangeOfMotion(false);
                 _leftRenderModel.gameObject.SetActive(false);
+                HandsController.Behaviour.RightHandBehaviour.SetLimitRangeOfMotion(false);
                 _rightRenderModel.gameObject.SetActive(false);
             }
         }

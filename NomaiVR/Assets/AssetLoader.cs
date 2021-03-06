@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
+using Valve.VR;
+using Valve.Newtonsoft.Json;
 
 namespace NomaiVR
 {
@@ -7,7 +10,10 @@ namespace NomaiVR
         public static GameObject PostCreditsPrefab;
         public static RenderTexture PostCreditsRenderTexture;
         public static GameObject HandPrefab;
-        public static GameObject GlovePrefab;
+        public static SteamVR_Skeleton_Pose FallbackRelaxedPose;
+        public static SteamVR_Skeleton_Pose FallbackPointPose;
+        public static SteamVR_Skeleton_Pose FallbackFistPose;
+        public static SteamVR_Skeleton_Pose ReachForPose;
         public static GameObject FeetPositionPrefab;
         public static GameObject ScopeLensPrefab;
         public static GameObject HelmetPrefab;
@@ -25,9 +31,8 @@ namespace NomaiVR
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
             PostCreditsRenderTexture = LoadAsset<RenderTexture>(postCreditsBundle, "screen.renderTexture");
 
-            var handsBundle = LoadBundle("hands");
-            HandPrefab = LoadAsset<GameObject>(handsBundle, "righthandprefab.prefab");
-            GlovePrefab = LoadAsset<GameObject>(handsBundle, "rightgloveprefab.prefab");
+            var skeletalHandsBundle = LoadBundle("skeletal-hands");
+            HandPrefab = LoadAsset<GameObject>(skeletalHandsBundle, "Assets/skeletal_hand.prefab");
 
             var feetPositionBundle = LoadBundle("feetposition");
             FeetPositionPrefab = LoadAsset<GameObject>(feetPositionBundle, "feetposition.prefab");
@@ -43,6 +48,29 @@ namespace NomaiVR
 
             var splashBundle = LoadBundle("splash-screen");
             SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");
+
+
+            FallbackRelaxedPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_relaxed.json");
+            FallbackPointPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_point.json");
+            FallbackFistPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_fist.json");
+            ReachForPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/reachFor.json");
+        }
+
+        private T LoadModAssetFromJson<T>(string modAssetPath)
+        {
+            string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
+            if (!File.Exists(fullPath))
+                return default(T);
+
+            if(typeof(ScriptableObject).IsAssignableFrom(typeof(T)))
+            {
+                //ScriptableObjects should be instantiated through ScriptableObject.CreateInstance
+                object scriptableObject = ScriptableObject.CreateInstance(typeof(T));
+                JsonConvert.PopulateObject(File.ReadAllText(fullPath), scriptableObject);
+                return (T)scriptableObject;
+            }
+
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
         }
 
         private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object

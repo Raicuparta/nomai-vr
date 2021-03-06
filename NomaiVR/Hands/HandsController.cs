@@ -12,7 +12,9 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             public static Transform RightHand;
+            public static Hand RightHandBehaviour;
             public static Transform LeftHand;
+            public static Hand LeftHandBehaviour;
             private Transform _wrapper;
 
             internal void Start()
@@ -74,21 +76,27 @@ namespace NomaiVR
                 var right = new GameObject().AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
                 right.transform.parent = _wrapper;
-                right.transform.localPosition = new Vector3(0.03f, 0.05f, -0.2f);
-                right.transform.localRotation = Quaternion.Euler(313f, 10f, 295f);
+                right.transform.localPosition = Vector3.zero;
+                right.transform.localRotation = Quaternion.identity;
                 right.handPrefab = AssetLoader.HandPrefab;
-                right.glovePrefab = AssetLoader.GlovePrefab;
+                right.fallbackFist = AssetLoader.FallbackFistPose;
+                right.fallbackPoint = AssetLoader.FallbackPointPose;
+                right.fallbackRelax = AssetLoader.FallbackRelaxedPose;
                 RightHand = right.transform;
+                RightHandBehaviour = right;
 
                 var left = new GameObject().AddComponent<Hand>();
                 left.pose = SteamVR_Actions.default_LeftHand;
                 left.transform.parent = _wrapper;
-                left.transform.localPosition = new Vector3(-0.03f, 0.05f, -0.2f);
-                left.transform.localRotation = Quaternion.Euler(313f, 350f, 65f);
+                left.transform.localPosition = Vector3.zero;
+                left.transform.localRotation = Quaternion.identity;
                 left.isLeft = true;
                 left.handPrefab = AssetLoader.HandPrefab;
-                left.glovePrefab = AssetLoader.GlovePrefab;
+                left.fallbackFist = AssetLoader.FallbackFistPose;
+                left.fallbackPoint = AssetLoader.FallbackPointPose;
+                left.fallbackRelax = AssetLoader.FallbackRelaxedPose;
                 LeftHand = left.transform;
+                LeftHandBehaviour = left;
             }
 
             private static void HideBody()

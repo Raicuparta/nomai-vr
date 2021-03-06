@@ -1,5 +1,5 @@
-﻿using OWML.ModHelper.Events;
-using OWML.ModHelper.Input;
+﻿using OWML.ModHelper.Input;
+using OWML.Utils;
 using UnityEngine;
 using Valve.VR;
 

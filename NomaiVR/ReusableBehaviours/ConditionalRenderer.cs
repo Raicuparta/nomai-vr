@@ -15,7 +15,7 @@ namespace NomaiVR
             SetShow(false);
         }
 
-        private void SetShow(bool show)
+        protected virtual void SetShow(bool show)
         {
             _shouldRender = show;
             transform.localScale = show ? _scale : Vector3.zero;

@@ -66,13 +66,13 @@ namespace NomaiVR
 
             private void SetPositionToHand()
             {
-                _holdTransform.localPosition = new Vector3(-0.09f, -0.11f, 0.13f);
+                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(-0.09f, -0.11f, 0.13f);
                 _isTranslatorPosition = false;
             }
 
             private void SetPositionToTranslator()
             {
-                _holdTransform.localPosition = new Vector3(-0.17f, 0.07f, -0.11f);
+                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(-0.17f, 0.07f, -0.11f);
                 _isTranslatorPosition = true;
             }
         }

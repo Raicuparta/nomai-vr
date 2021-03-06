@@ -1,0 +1,61 @@
+ManifestFileVersion: 0
+CRC: 1339877751
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cd4f8ef890eacae094feba361b029855
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f2310c9db59182e0c87fddf3429bdf9c
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 319
+  Script: {instanceID: 0}
+Assets:
+- Assets/Assets/Models/vr_glove_graspPoses.controller
+- Assets/Assets/Materials/band.mat
+- Assets/Assets/Materials/glove.mat
+- Assets/Assets/Texture2D/hands-ao.png
+- Assets/vr_hand_grabposes.fbx
+- Assets/Assets/vr_alien_hand.prefab
+- Assets/Assets/Models/vr_glove_model.fbx
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_ao.png
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_s.png
+- Assets/Assets/Models/handFingers.mask
+- Assets/Assets/Texture2D/Structure_HEA_VillageCloth_d.png
+- Assets/Assets/Materials/hands.mat
+- Assets/Assets/skeletal_glove.prefab
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_d.png
+- Assets/Assets/Texture2D/hands-d.png
+- Assets/Assets/Models/skeletal_hand.fbx
+- Assets/Assets/Models/skeletal_glove.fbx
+- Assets/Assets/Texture2D/Traveller_HEA_PlayerSuit_n.png
+- Assets/Assets/skeletal_hand.prefab
+- Assets/Assets/Texture2D/hands-n.png
+Dependencies: []
