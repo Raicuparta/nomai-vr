@@ -111,7 +111,7 @@
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\SteamVR\lib\Valve.Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +151,7 @@
     <Compile Include="ReusableBehaviours\Holdable.cs" />
     <Compile Include="ReusableBehaviours\PersistObject.cs" />
     <Compile Include="ReusableBehaviours\SmoothFollowCameraRotation.cs" />
+    <Compile Include="ReusableBehaviours\DestroyObserver.cs" />
     <Compile Include="Tools\VRToolSwapper.cs" />
     <Compile Include="UI\ControllerModels.cs" />
     <Compile Include="UI\Dialogue.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="NomaiVR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EffectFixes\PostCreditsFix.cs" />
+    <Compile Include="UI\TitleMenuLogoFader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AssetFiles\cinema-camera" />

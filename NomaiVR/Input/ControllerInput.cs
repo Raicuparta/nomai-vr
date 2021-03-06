@@ -348,6 +348,10 @@ namespace NomaiVR
                     Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
                     Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
                     Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
+
+                    //This method is only used in the intro screen and can break the intro sequence
+                    //It is checking for keys the game and the mod doesn't use, the intro sequence is still skippable without it
+                    Prefix<OWInput>("GetAnyJoystickButtonPressed", nameof(PrefixGetAnyJoystickButtonPressed));
                 }
 
                 private static bool PreSubmitActionMenu(SubmitActionMenu __instance)
@@ -410,6 +414,12 @@ namespace NomaiVR
                 private static bool PostIsGamepadEnabled(bool __result)
                 {
                     return true;
+                }
+
+                private static bool PrefixGetAnyJoystickButtonPressed(ref bool __result)
+                {
+                    __result = false;
+                    return false;
                 }
 
                 private static void ResetPadManagerKeyboard(ref bool ____gotKeyboardInputThisFrame)
