@@ -93,6 +93,7 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PatchTurning));
+                    Prefix<OWCamera>("set_fieldOfView", nameof(Patch.PatchOWCameraFOV));
                 }
 
                 private static void PatchTurning(OWCamera ____playerCam, Transform ____transform)
@@ -140,6 +141,15 @@ namespace NomaiVR
                     }
 
 
+                }
+
+                private static bool PatchOWCameraFOV(OWCamera __instance)
+                {
+                    //Prevents changing the fov of VR cameras
+                    //This prevents log spams in projection pools
+                    if (__instance.mainCamera.stereoEnabled)
+                        return false;
+                    return true;
                 }
             }
 

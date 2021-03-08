@@ -9,6 +9,7 @@ namespace NomaiVR
         public static event Action OnConfigChange;
 
         public static bool DebugMode { get; private set; } = true;
+        public static bool DisableGameLogging { get; private set; } = true;
         public static bool PreventCursorLock { get; private set; }
         public static bool ShowHelmet { get; private set; }
         public static int OverrideRefreshRate { get; private set; }
@@ -29,6 +30,7 @@ namespace NomaiVR
             EnableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
             PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
             DebugMode = config.GetSettingsValue<bool>("debug");
+            DisableGameLogging = config.GetSettingsValue<bool>("disableGameLogging");
             AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
             HudScale = config.GetSettingsValue<float>("hudScale");
             BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");

@@ -1,5 +1,6 @@
 ﻿using OWML.ModHelper.Input;
 using OWML.Utils;
+using System;
 using UnityEngine;
 using Valve.VR;
 
@@ -14,10 +15,22 @@ namespace NomaiVR
         {
             internal void Awake()
             {
+                UpdateGameLogging();
+                ModSettings.OnConfigChange += UpdateGameLogging;
                 SetResolution();
                 SetRefreshRate();
                 SetFov();
                 ResetInputsToDefault();
+            }
+
+            internal void OnDestroy()
+            {
+                ModSettings.OnConfigChange -= UpdateGameLogging;
+            }
+
+            private static void UpdateGameLogging()
+            {
+                Debug.unityLogger.logEnabled = !ModSettings.DisableGameLogging;
             }
 
             private static void SetResolution()
@@ -39,7 +52,14 @@ namespace NomaiVR
 
             private static void ResetInputsToDefault()
             {
-                FindObjectOfType<KeyRebinderManager>().Invoke("OnApplyDefaultsSubmit");
+                try
+                {
+                    FindObjectOfType<KeyRebinderManager>().Invoke("OnApplyDefaultsSubmit");
+                }
+                catch
+                {
+                    Logs.WriteWarning("Failed to reset inputs to default");
+                }
             }
 
             private static void UpdateActiveController()

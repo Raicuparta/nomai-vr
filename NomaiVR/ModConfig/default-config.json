@@ -6,28 +6,28 @@
       "value": 0,
       "options": [0, 30, 60, 70, 72, 80, 90, 120, 144],
       "title": "Physics refresh rate (zero = sync with HMD)"
-	},
+    },
     "vibrationIntensity": {
       "type": "slider",
       "value": 1,
       "min": 0,
       "max": 3,
       "title": "Vibration Intensity"
-	},
+    },
     "toolbeltHeight": {
       "type": "slider",
       "value": 0.45,
       "min": 0.2,
       "max": 0.8,
       "title": "Toolbelt Height"
-	},
+    },
     "autoHideToolbelt": {
       "type": "toggle",
       "value": false,
       "title": "Hide toolbelt if hand is far",
       "yes": "Yes",
       "no": "No"
-	},
+    },
     "helmetVisibility": {
       "type": "toggle",
       "value": true,
@@ -41,7 +41,7 @@
       "min": 0.2,
       "max": 1.8,
       "title": "Helmet HUD scale"
-	},
+    },
     "movementControllerOriented": {
       "type": "toggle",
       "value": false,
@@ -67,6 +67,13 @@
       "type": "toggle",
       "value": true,
       "title": "Debug mode (more logs)",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
+    "disableGameLogging": {
+      "type": "toggle",
+      "value": true,
+      "title": "Disable in-game logging",
       "yes": "Enabled",
       "no": "Disabled"
     },
