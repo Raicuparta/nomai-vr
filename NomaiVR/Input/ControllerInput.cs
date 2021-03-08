@@ -2,6 +2,7 @@
 using OWML.Utils;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using Valve.VR;
 
@@ -352,11 +353,21 @@ namespace NomaiVR
                     Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
                     Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
                     Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
-                    Postfix(typeof(RumbleManager).GetAnyMethod("InitializeOnAwake"), nameof(PostInitializeOnAwake));
+                    SetupRumbleWrappers();
 
                     //This method is only used in the intro screen and can break the intro sequence
                     //It is checking for keys the game and the mod doesn't use, the intro sequence is still skippable without it
                     Prefix<OWInput>("GetAnyJoystickButtonPressed", nameof(PrefixGetAnyJoystickButtonPressed));
+                }
+
+                private static void SetupRumbleWrappers()
+                {
+                    RumbleManager manager = (RumbleManager)typeof(RumbleManager).GetField("s_theManager", BindingFlags.NonPublic | BindingFlags.Static ).GetValue(null);
+                    object[] m_theList = manager.GetValue<object[]>("m_theList");
+                    _cachedDelegateRumbles = new Rumble[m_theList.Length];
+                    //Initialize our caches
+                    for (int i = 0; i < m_theList.Length; i++)
+                        _cachedDelegateRumbles[i] = new Rumble(m_theList[i]);
                 }
 
                 private static bool PreSubmitActionMenu(SubmitActionMenu __instance)
@@ -430,15 +441,6 @@ namespace NomaiVR
                 private static void ResetPadManagerKeyboard(ref bool ____gotKeyboardInputThisFrame)
                 {
                     ____gotKeyboardInputThisFrame = false;
-                }
-
-
-                private static void PostInitializeOnAwake(object[] ___m_theList)
-                {
-                    _cachedDelegateRumbles = new Rumble[___m_theList.Length];
-                    //Initialize our caches
-                    for (int i = 0; i < ___m_theList.Length; i++)
-                        _cachedDelegateRumbles[i] = new Rumble(___m_theList[i]);
                 }
 
                 private static bool PreUpdateRumble(object[] ___m_theList, bool ___m_isEnabled)
