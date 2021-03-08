@@ -1,4 +1,5 @@
-﻿using OWML.Utils;
+﻿using NomaiVR.Delegates.Input;
+using OWML.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -334,6 +335,9 @@ namespace NomaiVR
 
             public class Patch : NomaiVRPatch
             {
+                //Cache methods to avoid using reflection constantly in an update script
+                private static Rumble[] _cachedDelegateRumbles;
+
                 public override void ApplyPatches()
                 {
                     Prefix<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
@@ -348,6 +352,7 @@ namespace NomaiVR
                     Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
                     Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
                     Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
+                    Postfix(typeof(RumbleManager).GetAnyMethod("InitializeOnAwake"), nameof(PostInitializeOnAwake));
 
                     //This method is only used in the intro screen and can break the intro sequence
                     //It is checking for keys the game and the mod doesn't use, the intro sequence is still skippable without it
@@ -427,6 +432,15 @@ namespace NomaiVR
                     ____gotKeyboardInputThisFrame = false;
                 }
 
+
+                private static void PostInitializeOnAwake(object[] ___m_theList)
+                {
+                    _cachedDelegateRumbles = new Rumble[___m_theList.Length];
+                    //Initialize our caches
+                    for (int i = 0; i < ___m_theList.Length; i++)
+                        _cachedDelegateRumbles[i] = new Rumble(___m_theList[i]);
+                }
+
                 private static bool PreUpdateRumble(object[] ___m_theList, bool ___m_isEnabled)
                 {
                     if (OWTime.IsPaused())
@@ -440,22 +454,13 @@ namespace NomaiVR
                         var deltaTime = Time.deltaTime;
                         for (var i = 0; i < ___m_theList.Length; i++)
                         {
-                            var rumble = ___m_theList[i];
-                            var isAlive = (bool)rumble.GetType().GetMethod("IsAlive").Invoke(rumble, new object[] { });
+                            Rumble rumble = _cachedDelegateRumbles[i]; //Maybe also check instance with jagged array?
+                            if (rumble.IsAlive())
+                                rumble.Update(deltaTime);
 
-                            if (isAlive)
-                            {
-                                rumble.Invoke("Update", deltaTime);
-                            }
-
-                            var isAliveAgain = (bool)rumble.GetType().GetMethod("IsAlive").Invoke(rumble, new object[] { });
-
-                            if (isAliveAgain)
-                            {
-
-                                var power = (Vector2)rumble.GetType().GetMethod("GetPower").Invoke(rumble, new object[] { });
-                                a += power;
-                            }
+                            //Is alive again
+                            if (rumble.IsAlive())
+                                a += rumble.GetPower();
                         }
                         a.x *= 1.42857146f;
                         a.y *= 1.42857146f;

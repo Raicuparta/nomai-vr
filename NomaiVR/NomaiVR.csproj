@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AssetLoader.cs" />
+    <Compile Include="Delegates\Input\Rumble.cs" />
     <Compile Include="EffectFixes\DisableDeathAnimation.cs" />
     <Compile Include="EffectFixes\FogFix.cs" />
     <Compile Include="EffectFixes\LoopTransitionFix.cs" />
