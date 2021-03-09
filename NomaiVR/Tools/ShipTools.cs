@@ -1,6 +1,14 @@
-﻿using OWML.Utils;
+﻿using Harmony;
+using OWML.Utils;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using UnityEngine;
 using UnityEngine.UI;
+using static NomaiVR.Delegates.DelegateUtils;
 
 namespace NomaiVR
 {
@@ -59,14 +67,15 @@ namespace NomaiVR
                     Prefix(typeof(ReferenceFrameTracker).GetMethod("UntargetReferenceFrame", new[] { typeof(bool) }), nameof(PreUntargetFrame));
                 }
 
+                static RefGetter<ShipCockpitController, bool> __refget__usingLandingCam = CreateRefGetter<ShipCockpitController, bool>("_usingLandingCam");
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    ____shipSystemsCtrlr.SetValue("_usingLandingCam", _isLandingCamEnabled);
+                    __refget__usingLandingCam(____shipSystemsCtrlr) = _isLandingCamEnabled;
                 }
 
                 private static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    ____shipSystemsCtrlr.SetValue("_usingLandingCam", false);
+                    __refget__usingLandingCam(____shipSystemsCtrlr) = false;
                 }
 
                 private static bool PreEnterLandingView(

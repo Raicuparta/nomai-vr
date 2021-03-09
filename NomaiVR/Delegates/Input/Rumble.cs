@@ -10,14 +10,14 @@ namespace NomaiVR.Delegates.Input
     public class Rumble
     {
         private const BindingFlags Flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
-        private static Type _rumbleType = typeof(RumbleManager).GetNestedType("Rumble", Flags);
-        private static MethodInfo _rumbleUpdate = _rumbleType?.GetMethod("Update", Flags);
-        private static MethodInfo _rumbleGetPower = _rumbleType?.GetMethod("GetPower", Flags);
-        private static MethodInfo _rumbleIsAlive = _rumbleType?.GetMethod("IsAlive", Flags);
+        private readonly static Type _rumbleType = typeof(RumbleManager).GetNestedType("Rumble", Flags);
+        private readonly static MethodInfo _rumbleUpdate = _rumbleType?.GetMethod("Update", Flags);
+        private readonly static MethodInfo _rumbleGetPower = _rumbleType?.GetMethod("GetPower", Flags);
+        private readonly static MethodInfo _rumbleIsAlive = _rumbleType?.GetMethod("IsAlive", Flags);
 
-        public Action<float> Update;
-        public Func<Vector2> GetPower;
-        public Func<bool> IsAlive;
+        public readonly Action<float> Update;
+        public readonly Func<Vector2> GetPower;
+        public readonly Func<bool> IsAlive;
 
         public Rumble(object boundObject)
         {
