@@ -92,11 +92,20 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PatchTurning));
+                    //Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PatchTurning));
+                    Postfix<PlayerCharacterController>("FixedUpdate", nameof(Patch.PatchTurning));
                 }
 
                 private static void PatchTurning(OWCamera ____playerCam, Transform ____transform)
                 {
+                    var jetpackThrusterController = ____transform.GetComponent<JetpackThrusterController>();
+                    var rotationalInput = jetpackThrusterController.GetValue<Vector3>("_rotationalInput");
+
+                    if (rotationalInput.sqrMagnitude != 0)
+                    {
+                        return;
+                    }
+
                     var runSpeedX = _playerAnimator.GetFloat("RunSpeedX");
                     var runSpeedY = _playerAnimator.GetFloat("RunSpeedY");
                     var isStopped = runSpeedX + runSpeedY == 0;
