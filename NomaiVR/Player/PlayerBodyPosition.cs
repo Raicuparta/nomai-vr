@@ -17,6 +17,7 @@ namespace NomaiVR
             private static Animator _playerAnimator;
             private static OWRigidbody _playerBody;
             private static PlayerCharacterController _playerController;
+            private static Autopilot _autopilot;
 
             internal void Start()
             {
@@ -31,9 +32,12 @@ namespace NomaiVR
                 AdjustPlayerHeadPosition();
                 SetupCamera();
                 CreateRecenterMenuEntry();
-                _playerAnimator = FindObjectOfType<PlayerAnimController>().GetValue<Animator>("_animator");
                 _playerBody = Locator.GetPlayerBody();
+                _playerAnimator = _playerBody.GetComponentInChildren<PlayerAnimController>().GetValue<Animator>("_animator");
                 _playerController = _playerBody.GetComponent<PlayerCharacterController>();
+                _autopilot = _playerBody.GetComponent<Autopilot>();
+                Logs.WriteInfo("_autopilot " + (_autopilot != null));
+                Logs.WriteInfo("_playerAnimator " + (_playerAnimator != null));
             }
 
             private static void AdjustPlayerHeadPosition()
@@ -103,7 +107,7 @@ namespace NomaiVR
 
                 private static void PostThrusterUpdate(Vector3 ____rotationalInput)
                 {
-                    if (!PlayerState.InZeroG() || ____rotationalInput.sqrMagnitude != 0)
+                    if (!PlayerState.InZeroG() || ____rotationalInput.sqrMagnitude != 0 || _autopilot.IsMatchingVelocity())
                     {
                         return;
                     }
