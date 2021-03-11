@@ -16,6 +16,7 @@ namespace NomaiVR
             private static OWCamera _playerCamera;
             private static Animator _playerAnimator;
             private static OWRigidbody _playerBody;
+            private static PlayerCharacterController _playerController;
 
             internal void Start()
             {
@@ -32,6 +33,7 @@ namespace NomaiVR
                 CreateRecenterMenuEntry();
                 _playerAnimator = FindObjectOfType<PlayerAnimController>().GetValue<Animator>("_animator");
                 _playerBody = Locator.GetPlayerBody();
+                _playerController = _playerBody.GetComponent<PlayerCharacterController>();
             }
 
             private static void AdjustPlayerHeadPosition()
@@ -121,7 +123,7 @@ namespace NomaiVR
                     var runSpeedX = _playerAnimator.GetFloat("RunSpeedX");
                     var runSpeedY = _playerAnimator.GetFloat("RunSpeedY");
                     var isStopped = runSpeedX + runSpeedY == 0;
-                    var isControllerOriented = !isStopped && ModSettings.ControllerOrientedMovement;
+                    var isControllerOriented = (!_playerController.IsGrounded() || !isStopped) && ModSettings.ControllerOrientedMovement;
 
                     if ((OWInput.GetInputMode() != InputMode.Character))
                     {
