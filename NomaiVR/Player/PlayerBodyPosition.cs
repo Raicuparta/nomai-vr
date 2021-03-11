@@ -1,4 +1,5 @@
 ﻿using OWML.Utils;
+using System;
 using UnityEngine;
 
 namespace NomaiVR
@@ -12,8 +13,9 @@ namespace NomaiVR
         {
             private Transform _cameraParent;
             private static Transform _playArea;
-            private Transform _camera;
+            private static OWCamera _playerCamera;
             private static Animator _playerAnimator;
+            private static OWRigidbody _playerBody;
 
             internal void Start()
             {
@@ -29,6 +31,7 @@ namespace NomaiVR
                 SetupCamera();
                 CreateRecenterMenuEntry();
                 _playerAnimator = FindObjectOfType<PlayerAnimController>().GetValue<Animator>("_animator");
+                _playerBody = Locator.GetPlayerBody();
             }
 
             private static void AdjustPlayerHeadPosition()
@@ -40,7 +43,7 @@ namespace NomaiVR
             private void SetupCamera()
             {
                 // Make an empty parent object for moving the camera around.
-                _camera = Camera.main.transform;
+                _playerCamera = Locator.GetPlayerCamera();
                 _cameraParent = new GameObject().transform;
                 _playArea = new GameObject().transform;
                 _playArea.parent = Locator.GetPlayerTransform();
@@ -48,16 +51,16 @@ namespace NomaiVR
                 _playArea.rotation = PlayerHelper.PlayerHead.rotation;
                 _cameraParent.parent = _playArea;
                 _cameraParent.localRotation = Quaternion.identity;
-                _camera.parent = _cameraParent;
+                _playerCamera.transform.parent = _cameraParent;
 
-                var movement = PlayerHelper.PlayerHead.position - _camera.position;
+                var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
 
             }
 
             private void MoveCameraToPlayerHead()
             {
-                var movement = PlayerHelper.PlayerHead.position - _camera.position;
+                var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
             }
 
@@ -69,7 +72,7 @@ namespace NomaiVR
 
             internal void Update()
             {
-                var cameraToHead = Vector3.ProjectOnPlane(PlayerHelper.PlayerHead.position - _camera.position, PlayerHelper.PlayerHead.up);
+                var cameraToHead = Vector3.ProjectOnPlane(PlayerHelper.PlayerHead.position - _playerCamera.transform.position, PlayerHelper.PlayerHead.up);
 
                 if (cameraToHead.sqrMagnitude > 0.5f)
                 {
@@ -92,20 +95,29 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    //Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PatchTurning));
-                    Postfix<PlayerCharacterController>("FixedUpdate", nameof(Patch.PatchTurning));
+                    Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PostCharacterTurning));
+                    Postfix<JetpackThrusterController>("FixedUpdate", nameof(Patch.PostThrusterUpdate));
                 }
 
-                private static void PatchTurning(OWCamera ____playerCam, Transform ____transform)
+                private static void PostThrusterUpdate(Vector3 ____rotationalInput)
                 {
-                    var jetpackThrusterController = ____transform.GetComponent<JetpackThrusterController>();
-                    var rotationalInput = jetpackThrusterController.GetValue<Vector3>("_rotationalInput");
-
-                    if (rotationalInput.sqrMagnitude != 0)
+                    if (!PlayerState.InZeroG() || ____rotationalInput.sqrMagnitude != 0)
                     {
                         return;
                     }
 
+                    _playerBody.SetAngularVelocity(Vector3.zero);
+
+                    PatchTurning(rotation => _playerBody.MoveToRotation(rotation));
+                }
+
+                private static void PostCharacterTurning()
+                {
+                    PatchTurning(rotation => _playerBody.transform.rotation = rotation);
+                }
+
+                private static void PatchTurning(Action<Quaternion> rotationSetter)
+                {
                     var runSpeedX = _playerAnimator.GetFloat("RunSpeedX");
                     var runSpeedY = _playerAnimator.GetFloat("RunSpeedY");
                     var isStopped = runSpeedX + runSpeedY == 0;
@@ -116,15 +128,15 @@ namespace NomaiVR
                         return;
                     }
 
-                    var rotationSource = isControllerOriented ? LaserPointer.Behaviour.LeftHandLaser : ____playerCam.transform;
+                    var rotationSource = isControllerOriented ? LaserPointer.Behaviour.LeftHandLaser : _playerCamera.transform;
 
-                    var fromTo = Quaternion.FromToRotation(____transform.forward, Vector3.ProjectOnPlane(rotationSource.transform.forward, ____transform.up));
+                    var fromTo = Quaternion.FromToRotation(_playerBody.transform.forward, Vector3.ProjectOnPlane(rotationSource.transform.forward, _playerBody.transform.up));
 
                     var magnitude = 0f;
                     if (!isControllerOriented)
                     {
-                        var magnitudeUp = 1 - Vector3.ProjectOnPlane(rotationSource.transform.up, ____transform.up).magnitude;
-                        var magnitudeForward = 1 - Vector3.ProjectOnPlane(rotationSource.transform.up, ____transform.right).magnitude;
+                        var magnitudeUp = 1 - Vector3.ProjectOnPlane(rotationSource.transform.up, _playerBody.transform.up).magnitude;
+                        var magnitudeForward = 1 - Vector3.ProjectOnPlane(rotationSource.transform.up, _playerBody.transform.right).magnitude;
                         magnitude = magnitudeUp + magnitudeForward;
 
                         if (magnitude < 0.3f)
@@ -133,22 +145,20 @@ namespace NomaiVR
                         }
                     }
 
-                    var targetRotation = fromTo * ____transform.rotation;
+                    var targetRotation = fromTo * _playerBody.transform.rotation;
                     var inverseRotation = Quaternion.Inverse(fromTo) * _playArea.rotation;
 
                     if (isControllerOriented)
                     {
                         _playArea.rotation = inverseRotation;
-                        ____transform.rotation = targetRotation;
+                        rotationSetter(targetRotation);
                     }
                     else
                     {
                         var maxDegreesDelta = magnitude * 3f;
                         _playArea.rotation = Quaternion.RotateTowards(_playArea.rotation, inverseRotation, maxDegreesDelta);
-                        ____transform.rotation = Quaternion.RotateTowards(____transform.rotation, targetRotation, maxDegreesDelta);
+                        rotationSetter(Quaternion.RotateTowards(_playerBody.transform.rotation, targetRotation, maxDegreesDelta));
                     }
-
-
                 }
             }
 
