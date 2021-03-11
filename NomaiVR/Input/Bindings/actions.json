@@ -37,6 +37,10 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/GrabPinch",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/in/Look",
       "type": "vector2"
     },
@@ -55,6 +59,21 @@
     {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
+    },
+    {
+      "name": "/actions/default/in/SkeletonLeftHand",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/left"
+    },
+    {
+      "name": "/actions/default/in/SkeletonRightHand",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/right"
+    },
+    {
+      "name": "/actions/default/in/Squeeze",
+      "type": "vector1",
+      "requirement": "optional"
     }
   ],
   "action_sets": [
@@ -81,22 +100,27 @@
       "binding_url": "wmr-controller.json"
     }
   ],
-  "localization": [{
-    "language_tag": "en_us",
-    "/actions/default": "Default NomaiVR bindings",
-    "/actions/default/in/Grip": "Grip (hold tools)",
-    "/actions/default/in/ThrustUp": "Thrust Up",
-    "/actions/default/in/ThrustDown": "Thrust Down",
-    "/actions/default/in/RollMode": "Roll Mode",
-    "/actions/default/in/Interact": "Interact",
-    "/actions/default/in/Jump": "Jump",
-    "/actions/default/in/Back": "Back",
-    "/actions/default/in/Menu": "Menu",
-    "/actions/default/in/Map": "Map",
-    "/actions/default/in/Look": "Look",
-    "/actions/default/in/Move": "Move",
-    "/actions/default/in/LeftHand": "Left Hand",
-    "/actions/default/in/RightHand": "Right Hand",
-    "/actions/default/out/Haptic": "Haptic"
-  }]
+  "localization": [
+    {
+      "language_tag": "en_us",
+      "/actions/default": "Default NomaiVR bindings",
+      "/actions/default/in/Grip": "Grip (hold tools)",
+      "/actions/default/in/GrabPinch": "Grab Pinch",
+      "/actions/default/in/ThrustUp": "Thrust Up",
+      "/actions/default/in/ThrustDown": "Thrust Down",
+      "/actions/default/in/RollMode": "Roll Mode",
+      "/actions/default/in/Interact": "Interact",
+      "/actions/default/in/Jump": "Jump",
+      "/actions/default/in/Back": "Back",
+      "/actions/default/in/Menu": "Menu",
+      "/actions/default/in/Map": "Map",
+      "/actions/default/in/Look": "Look",
+      "/actions/default/in/Move": "Move",
+      "/actions/default/in/LeftHand": "Left Hand",
+      "/actions/default/in/RightHand": "Right Hand",
+      "/actions/default/in/SkeletonLeftHand": "Skeleton (Left)",
+      "/actions/default/in/SkeletonRightHand": "Skeleton (Right)",
+      "/actions/default/out/Haptic": "Haptic"
+    }
+  ]
 }

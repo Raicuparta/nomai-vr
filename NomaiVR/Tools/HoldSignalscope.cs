@@ -1,4 +1,4 @@
-﻿using OWML.ModHelper.Events;
+﻿using OWML.Utils;
 using UnityEngine;
 
 namespace NomaiVR
@@ -15,6 +15,8 @@ namespace NomaiVR
             protected static Signalscope _signalscope;
             private static Camera _lensCamera;
             private static Transform _lens;
+
+            private OWCamera _owLensCamera;
 
             internal void Start()
             {
@@ -45,7 +47,7 @@ namespace NomaiVR
                 signalScopeHolster.SetActive(true);
                 var holster = signalScopeHolster.AddComponent<HolsterTool>();
                 holster.hand = HandsController.Behaviour.RightHand;
-                holster.position = new Vector3(0.3f, -0.55f, 0);
+                holster.position = new Vector3(0.3f, 0, 0);
                 holster.mode = ToolMode.SignalScope;
                 holster.scale = 0.8f;
                 holster.angle = Vector3.right * 90;
@@ -61,33 +63,31 @@ namespace NomaiVR
                 _reticule.localPosition = Vector3.forward * 0.5f;
                 _reticule.localRotation = Quaternion.identity;
 
-                _signalscope.gameObject.AddComponent<ToolModeInteraction>();
-
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff);
-                helmetOff.localPosition += Vector3.up * 0.63f;
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.45f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
-                SetupSignalscopeUI(helmetOn);
+                SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.2f, 0));
                 LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
                 SetupScopeLens();
             }
 
-            private static void SetupSignalscopeUI(Transform parent)
+            private static void SetupSignalscopeUI(Transform parent, Vector3 position)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 parent.parent = _signalscope.transform;
                 parent.localScale = Vector3.one * 0.0005f;
-                parent.localPosition = new Vector3(-0.05f, -0.2f, 0);
+                parent.localPosition = position;
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
             }
 
             private void OnUnequip()
             {
+                _owLensCamera.SetEnabled(false);
                 _lens.gameObject.SetActive(false);
             }
 
-            private static void SetupScopeLens()
+            private void SetupScopeLens()
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
@@ -98,7 +98,7 @@ namespace NomaiVR
 
                 _lensCamera = _lens.GetComponentInChildren<Camera>();
                 _lensCamera.gameObject.SetActive(false);
-                _lensCamera.cullingMask = CameraMaskFix.Behaviour.cullingMask == -1 ? Locator.GetPlayerCamera().cullingMask : CameraMaskFix.Behaviour.cullingMask;
+                _lensCamera.cullingMask = CameraMaskFix.Behaviour.DefaultCullingMask;
                 _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI")) & ~(1 << LayerMask.NameToLayer("VisibleToPlayer"));
                 _lensCamera.fieldOfView = 5;
                 _lensCamera.transform.parent = null;
@@ -107,12 +107,12 @@ namespace NomaiVR
                 followTarget.rotationSmoothTime = 0.1f;
                 followTarget.positionSmoothTime = 0.1f;
 
-                var owCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
-                owCamera.useFarCamera = true;
-                owCamera.renderSkybox = true;
-                owCamera.useViewmodels = true;
-                owCamera.farCameraDistance = 50000;
-                owCamera.viewmodelFOV = 70;
+                _owLensCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
+                _owLensCamera.useFarCamera = true;
+                _owLensCamera.renderSkybox = true;
+                _owLensCamera.useViewmodels = true;
+                _owLensCamera.farCameraDistance = 50000;
+                _owLensCamera.viewmodelFOV = 70;
                 var fogEffect = _lensCamera.gameObject.AddComponent<PlanetaryFogImageEffect>();
                 fogEffect.fogShader = Locator.GetPlayerCamera().GetComponent<PlanetaryFogImageEffect>().fogShader;
                 _lensCamera.farClipPlane = 2000f;
@@ -121,13 +121,42 @@ namespace NomaiVR
                 _lensCamera.clearFlags = CameraClearFlags.Color;
                 _lensCamera.backgroundColor = Color.black;
                 _lensCamera.gameObject.SetActive(true);
+
+                // The camera on this prefab would istantiate an AudioListener enabled by default
+                // which would break 3DAudio and tie it to the hands.
+                _owLensCamera.SetEnabled(false);
+                _lensCamera.gameObject.GetComponent<AudioListener>().enabled = false;
             }
 
             internal void Update()
             {
+                UpdateSignalscopeReticuleVisibility();
+                UpdateSignalscipeZoom();
+            }
+
+            private void UpdateSignalscopeReticuleVisibility()
+            {
+                if (_reticule == null)
+                {
+                    return;
+                }
+
+                if (_reticule.gameObject.activeSelf && OWTime.IsPaused())
+                {
+                    _reticule.gameObject.SetActive(false);
+                }
+                else if (!_reticule.gameObject.activeSelf && !OWTime.IsPaused())
+                {
+                    _reticule.gameObject.SetActive(true);
+                }
+            }
+
+            private void UpdateSignalscipeZoom()
+            {
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
+                    _owLensCamera.SetEnabled(_lens.gameObject.activeSelf);
                 }
             }
 
@@ -135,10 +164,10 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<OWInput>("ChangeInputMode", typeof(Patch), nameof(ChangeInputMode));
-                    NomaiVR.Post<QuantumInstrument>("Update", typeof(Patch), nameof(PostQuantumInstrumentUpdate));
-                    NomaiVR.Empty<Signalscope>("EnterSignalscopeZoom");
-                    NomaiVR.Empty<Signalscope>("ExitSignalscopeZoom");
+                    Prefix<OWInput>("ChangeInputMode", nameof(ChangeInputMode));
+                    Postfix<QuantumInstrument>("Update", nameof(PostQuantumInstrumentUpdate));
+                    Empty<Signalscope>("EnterSignalscopeZoom");
+                    Empty<Signalscope>("ExitSignalscopeZoom");
                 }
 
                 private static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)

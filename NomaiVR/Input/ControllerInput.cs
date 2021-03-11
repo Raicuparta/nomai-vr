@@ -1,4 +1,5 @@
-﻿using OWML.ModHelper.Events;
+﻿using OWML.Utils;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -12,17 +13,22 @@ namespace NomaiVR
         public static Dictionary<JoystickButton, VRActionInput> buttonActions;
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
         public static VRActionInput[] otherActions;
+        private static bool _isActionInputsInitialized;
+        public static bool IsInputEnabled = true;
 
         public class Behaviour : MonoBehaviour
         {
-            private static Behaviour _instance;
-            private static Dictionary<JoystickButton, float> _buttons;
-            private static Dictionary<string, float> _singleAxes;
-            private static PlayerResources _playerResources;
             public static bool IsGripping { get; private set; }
 
-            private float _primaryLastTime = -1;
+            private const float deadZone = 0.25f;
             private const float holdDuration = 0.3f;
+
+            private static Behaviour _instance;
+            private static Dictionary<JoystickButton, float> _buttons;
+            private static Dictionary<string, float> _axes;
+            private static PlayerResources _playerResources;
+
+            private float _primaryLastTime = -1;
             private bool _justHeld;
             private ScreenPrompt _repairPrompt;
 
@@ -35,11 +41,11 @@ namespace NomaiVR
             {
                 _instance = this;
                 _buttons = new Dictionary<JoystickButton, float>();
-                _singleAxes = new Dictionary<string, float>();
+                _axes = new Dictionary<string, float>();
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
-                Invoke(nameof(SetUpActionInputs), 1);
+                SetUpActionInputs();
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
@@ -61,54 +67,18 @@ namespace NomaiVR
                 }
             }
 
-            private bool HasAxisWithSameName(VRActionInput button)
-            {
-                foreach (var axisEntry in axisActions)
-                {
-                    var axis = axisEntry.Value;
-                    if (button.Hand == axis.Hand && button.Source == axis.Source)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            private bool HasOppositeHandButtonWithSameName(VRActionInput actionInput)
-            {
-                foreach (var buttonEntry in buttonActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(buttonEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var axisEntry in axisActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(axisEntry.Value))
-                    {
-                        return true;
-                    }
-                }
-                foreach (var otherAction in otherActions)
-                {
-                    if (actionInput.IsOppositeHandWithSameName(otherAction))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public void SetUpActionInputs()
+            private static void SetUpActionInputs()
             {
                 var actionSet = SteamVR_Actions._default;
+                var gripActionInput = new VRActionInput(actionSet.Grip);
+
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
                 {
                     [JoystickButton.FaceDown] = new VRActionInput(actionSet.Jump, TextHelper.GREEN),
                     [JoystickButton.FaceRight] = new VRActionInput(actionSet.Back, TextHelper.RED),
                     [JoystickButton.FaceLeft] = new VRActionInput(actionSet.Interact, TextHelper.BLUE),
-                    [JoystickButton.RightBumper] = new VRActionInput(actionSet.Interact, TextHelper.BLUE),
+                    [JoystickButton.RightBumper] = new VRActionInput(actionSet.Interact, TextHelper.BLUE, false, gripActionInput),
+                    [JoystickButton.LeftStickClick] = new VRActionInput(actionSet.Interact, TextHelper.BLUE, true, gripActionInput),
                     [JoystickButton.FaceUp] = new VRActionInput(actionSet.Interact, TextHelper.BLUE, true),
                     [JoystickButton.LeftBumper] = new VRActionInput(actionSet.RollMode),
                     [JoystickButton.Start] = new VRActionInput(actionSet.Menu),
@@ -126,34 +96,59 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(actionSet.Move),
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(actionSet.Look),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(actionSet.Look),
-                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look)
+                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(actionSet.Look),
+                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(actionSet.Look, gripActionInput),
+                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(actionSet.Look, gripActionInput)
                 };
 
-                otherActions = new VRActionInput[]
+                otherActions = new VRActionInput[] { gripActionInput };
+            }
+
+            public static void InitializeActionInputs()
+            {
+                if (_isActionInputsInitialized)
                 {
-                    new VRActionInput(actionSet.Grip)
-                };
+                    return;
+                }
+
+                foreach (var axisEntry in axisActions)
+                {
+                    axisEntry.Value.Initialize();
+                }
+                foreach (var buttonEntry in buttonActions)
+                {
+                    buttonEntry.Value.Initialize();
+                }
+                foreach (var otherAction in otherActions)
+                {
+                    otherAction.Initialize();
+                }
 
                 foreach (var buttonEntry in buttonActions)
                 {
                     var button = buttonEntry.Value;
-                    if (HasAxisWithSameName(button))
+                    if (button.HasAxisWithSameName())
                     {
-                        button.Prefixes.Add("Click");
+                        button.SetAsClickable();
                     }
-
-                    if (!HasOppositeHandButtonWithSameName(button))
+                    if (!button.HasOppositeHandButtonWithSameName())
                     {
                         button.HideHand = true;
                     }
                 }
+
+                _isActionInputsInitialized = true;
+
+                // Only need to pause the game until prompts are set up.
+                // After that, forcing pauses can break stuff, so better disable it here.
+                SteamVR_Settings.instance.pauseGameWhenDashboardVisible = false;
             }
 
             private void SetUpSteamVRActionHandlers()
             {
                 SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.default_Back.onChange += OnBackChange;
-                SteamVR_Actions.default_Interact.onChange += OnPrimaryActionChange;
+                SteamVR_Actions.default_Interact.onChange += OnInteractChange;
                 SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
                 SteamVR_Actions.default_Grip.onChange += OnGripChange;
                 SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
@@ -163,7 +158,8 @@ namespace NomaiVR
                 SteamVR_Actions.default_ThrustDown.onChange += CreateSingleAxisHandler(JoystickButton.LeftTrigger);
                 SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(JoystickButton.RightTrigger);
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
-                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
+                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY, () => IsGripping);
+                SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY, () => !IsGripping);
             }
 
             private void OnWakeUp()
@@ -184,7 +180,7 @@ namespace NomaiVR
                 IsGripping = newState;
             }
 
-            private void OnPrimaryActionChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+            private void OnInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 var value = newState ? 1 : 0;
 
@@ -194,53 +190,31 @@ namespace NomaiVR
                     return;
                 }
 
-                var toolSwapper = ToolHelper.Swapper;
-                var isInShip = toolSwapper.GetToolGroup() == ToolGroup.Ship;
-                var isUsingSignalscope = toolSwapper.IsInToolMode(ToolMode.SignalScope);
-                var isUsingProbeLauncher = toolSwapper.IsInToolMode(ToolMode.Probe);
-                var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
+                var button = IsGripping ? JoystickButton.RightBumper : JoystickButton.FaceLeft;
 
-                if (!isUsingFixedProbeTool && !ToolHelper.IsUsingAnyTool())
+                var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
+                var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
+                var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
+
+                if (!isRepairPromptVisible && !canRepairSuit && !isUsingTranslator)
                 {
-                    var isRepairPromptVisible = _repairPrompt != null && !_repairPrompt.IsVisible();
-                    var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
-
-                    if (isRepairPromptVisible && !isInShip && !canRepairSuit)
+                    if (newState)
                     {
-                        if (newState)
-                        {
-                            _primaryLastTime = fromAction.changedTime;
-                        }
-                        else
-                        {
-                            _primaryLastTime = -1;
-                            if (!_justHeld)
-                            {
-                                SimulateInput(JoystickButton.FaceLeft);
-                            }
-                            _justHeld = false;
-                        }
+                        _primaryLastTime = fromAction.changedTime;
                     }
                     else
                     {
-                        _buttons[JoystickButton.FaceLeft] = value;
+                        _primaryLastTime = -1;
+                        if (!_justHeld)
+                        {
+                            SimulateInput(button);
+                        }
+                        _justHeld = false;
                     }
                 }
-                else if (!isInShip || isUsingProbeLauncher || isUsingFixedProbeTool)
+                else
                 {
-                    _buttons[JoystickButton.RightBumper] = value;
-                }
-                else if (isUsingSignalscope)
-                {
-                    _singleAxes[XboxAxis.dPadX.GetInputAxisName(0)] = value;
-                }
-
-                if (isInShip)
-                {
-                    if (!newState)
-                    {
-                        _buttons[JoystickButton.FaceLeft] = value;
-                    }
+                    _buttons[button] = value;
                 }
             }
 
@@ -263,7 +237,7 @@ namespace NomaiVR
 
             public static void SimulateInput(AxisIdentifier axis, float value)
             {
-                _singleAxes[InputTranslator.GetAxisName(axis)] = value;
+                _axes[InputTranslator.GetAxisName(axis)] = value;
             }
 
             private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(AxisIdentifier axis, int axisDirection = 1)
@@ -271,7 +245,7 @@ namespace NomaiVR
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
                     var axisName = InputTranslator.GetAxisName(axis);
-                    _singleAxes[axisName] = axisDirection * Mathf.Round(newAxis * 10) / 10;
+                    _axes[axisName] = axisDirection * Mathf.Round(newAxis * 10) / 10;
                 };
             }
 
@@ -283,24 +257,33 @@ namespace NomaiVR
                 };
             }
 
-            private static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(JoystickButton button)
+            private static SteamVR_Action_Boolean.ChangeHandler CreateButtonHandler(JoystickButton button, Func<bool> predicate = null)
             {
                 return (SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState) =>
                 {
+                    if (predicate != null && !predicate())
+                    {
+                        return;
+                    }
                     _buttons[button] = newState ? 1 : 0;
                 };
             }
 
-            private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(AxisIdentifier axisX, AxisIdentifier axisY)
+            private static SteamVR_Action_Vector2.ChangeHandler CreateDoubleAxisHandler(AxisIdentifier axisX, AxisIdentifier axisY, Func<bool> predicate = null)
             {
                 return (SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta) =>
                 {
+                    if (predicate != null && !predicate())
+                    {
+                        return;
+                    }
+
                     var axisNameX = InputTranslator.GetAxisName(axisX);
                     var axisNameY = InputTranslator.GetAxisName(axisY);
                     var x = Mathf.Round(axis.x * 100) / 100;
                     var y = Mathf.Round(axis.y * 100) / 100;
-                    _singleAxes[axisNameX] = x;
-                    _singleAxes[axisNameY] = y;
+                    _axes[axisNameX] = x;
+                    _axes[axisNameY] = y;
                 };
             }
 
@@ -308,7 +291,8 @@ namespace NomaiVR
             {
                 if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
                 {
-                    SimulateInput(JoystickButton.FaceUp);
+                    var button = IsGripping ? JoystickButton.LeftStickClick : JoystickButton.FaceUp;
+                    SimulateInput(button);
                     _primaryLastTime = -1;
                     _justHeld = true;
                 }
@@ -340,27 +324,34 @@ namespace NomaiVR
                 SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
                 SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
                 SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
+                SetCommandButton(InputLibrary.scopeView, JoystickButton.RightBumper);
+                SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.LeftStickClick);
+                SetCommandButton(InputLibrary.probeForward, JoystickButton.RightBumper);
+                SetCommandButton(InputLibrary.translate, JoystickButton.RightBumper);
+                SetCommandButton(InputLibrary.autopilot, JoystickButton.FaceUp);
+                SetCommandButton(InputLibrary.lockOn, JoystickButton.FaceLeft);
             }
 
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<SingleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(SingleAxisUpdate));
-                    NomaiVR.Pre<OWInput>("UpdateActiveInputDevice", typeof(Patch), nameof(OWInputUpdate));
-                    NomaiVR.Pre<OWInput>("Awake", typeof(Patch), nameof(PostEnableListenForAllJoysticks));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetAxis", typeof(Patch), nameof(GetAxis));
-                    NomaiVR.Post<PlayerResources>("Awake", typeof(Patch), nameof(PlayerResourcesAwake));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKey", typeof(Patch), nameof(ResetPadManagerKeyboard));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKeyDown", typeof(Patch), nameof(ResetPadManagerKeyboard));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("GetKeyUp", typeof(Patch), nameof(ResetPadManagerKeyboard));
-                    NomaiVR.Post<OWInput>("IsGamepadEnabled", typeof(Patch), nameof(PostIsGamepadEnabled));
-                    NomaiVR.Post<PadEZ.PadManager_OW>("IsGamepadActive", typeof(Patch), nameof(PostIsGamepadEnabled));
-                    NomaiVR.Pre<DoubleAxisCommand>("UpdateInputCommand", typeof(Patch), nameof(PreUpdateDoubleAxisCommand));
-                    NomaiVR.Pre<SubmitActionMenu>("Submit", typeof(Patch), nameof(PreSubmitActionMenu));
+                    Prefix<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
+                    Prefix<OWInput>("UpdateActiveInputDevice", nameof(OWInputUpdate));
+                    Prefix<OWInput>("Awake", nameof(PostEnableListenForAllJoysticks));
+                    Postfix<PlayerResources>("Awake", nameof(PlayerResourcesAwake));
+                    Postfix<PadEZ.PadManager_OW>("GetKey", nameof(ResetPadManagerKeyboard));
+                    Postfix<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
+                    Postfix<PadEZ.PadManager_OW>("GetKeyUp", nameof(ResetPadManagerKeyboard));
+                    Postfix<OWInput>("IsGamepadEnabled", nameof(PostIsGamepadEnabled));
+                    Postfix<PadEZ.PadManager_OW>("IsGamepadActive", nameof(PostIsGamepadEnabled));
+                    Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
+                    Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
+                    Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
 
-                    var rumbleMethod = typeof(RumbleManager).GetAnyMethod("Update");
-                    NomaiVR.Helper.HarmonyHelper.AddPrefix(rumbleMethod, typeof(Patch), nameof(PreUpdateRumble));
+                    //This method is only used in the intro screen and can break the intro sequence
+                    //It is checking for keys the game and the mod doesn't use, the intro sequence is still skippable without it
+                    Prefix<OWInput>("GetAnyJoystickButtonPressed", nameof(PrefixGetAnyJoystickButtonPressed));
                 }
 
                 private static bool PreSubmitActionMenu(SubmitActionMenu __instance)
@@ -370,7 +361,16 @@ namespace NomaiVR
                         SteamVR_Input.OpenBindingUI(SteamVR_Actions._default);
                         return false;
                     }
-                    else return true;
+                    else
+                    {
+                        return true;
+                    }
+                }
+
+                private static float DeadzonedValue(float axisValue)
+                {
+                    var absValue = Mathf.Abs(axisValue);
+                    return Mathf.Sign(axisValue) * Mathf.InverseLerp(deadZone, 1f - deadZone, absValue);
                 }
 
                 private static bool PreUpdateDoubleAxisCommand(
@@ -380,18 +380,29 @@ namespace NomaiVR
                     ref Vector2 ____cameraLookValue
                 )
                 {
+                    if (!IsInputEnabled)
+                    {
+                        return false;
+                    }
+
                     var axisX = InputTranslator.GetAxisName(____gamepadHorzBinding.axisID);
                     var axisY = InputTranslator.GetAxisName(____gamepadVertBinding.axisID);
-                    if (_singleAxes.ContainsKey(axisX))
+                    float x = 0;
+                    float y = 0;
+                    if (_axes.ContainsKey(axisX))
                     {
-                        ____value.x = _singleAxes[axisX];
-                        ____cameraLookValue.x = _singleAxes[axisX];
+                        x = DeadzonedValue(_axes[axisX]);
                     }
-                    if (_singleAxes.ContainsKey(axisY))
+                    if (_axes.ContainsKey(axisY))
                     {
-                        ____value.y = _singleAxes[axisY];
-                        ____cameraLookValue.y = _singleAxes[axisY];
+                        y = DeadzonedValue(_axes[axisY]);
                     }
+
+                    ____value.x = x;
+                    ____cameraLookValue.x = x;
+                    ____value.y = y;
+                    ____cameraLookValue.y = y;
+
                     if (____value.sqrMagnitude > 1f)
                     {
                         ____value.Normalize();
@@ -403,6 +414,12 @@ namespace NomaiVR
                 private static bool PostIsGamepadEnabled(bool __result)
                 {
                     return true;
+                }
+
+                private static bool PrefixGetAnyJoystickButtonPressed(ref bool __result)
+                {
+                    __result = false;
+                    return false;
                 }
 
                 private static void ResetPadManagerKeyboard(ref bool ____gotKeyboardInputThisFrame)
@@ -445,8 +462,8 @@ namespace NomaiVR
 
                         var haptic = SteamVR_Actions.default_Haptic;
                         var frequency = 0.1f;
-                        var amplitudeY = a.y * NomaiVR.Config.vibrationStrength;
-                        var amplitudeX = a.x * NomaiVR.Config.vibrationStrength;
+                        var amplitudeY = a.y * ModSettings.VibrationStrength;
+                        var amplitudeX = a.x * ModSettings.VibrationStrength;
                         haptic.Execute(0, frequency, 10, amplitudeY, SteamVR_Input_Sources.RightHand);
                         haptic.Execute(0, frequency, 50, amplitudeX, SteamVR_Input_Sources.RightHand);
                         haptic.Execute(0, frequency, 10, amplitudeY, SteamVR_Input_Sources.LeftHand);
@@ -461,15 +478,6 @@ namespace NomaiVR
                     _playerResources = GameObject.FindObjectOfType<PlayerResources>();
                 }
 
-                private static float GetAxis(float __result, string axisName)
-                {
-                    if (_singleAxes.ContainsKey(axisName))
-                    {
-                        return _singleAxes[axisName];
-                    }
-                    return __result;
-                }
-
                 private static bool SingleAxisUpdate(
                     SingleAxisCommand __instance,
                     InputBinding ____gamepadBinding,
@@ -481,6 +489,11 @@ namespace NomaiVR
                     ref float ____realtimeSinceLastUpdate
                 )
                 {
+                    if (!IsInputEnabled)
+                    {
+                        return false;
+                    }
+
                     var positive = ____gamepadBinding.gamepadButtonPos;
                     var negative = ____gamepadBinding.gamepadButtonNeg;
 
@@ -500,9 +513,9 @@ namespace NomaiVR
                     }
 
                     var axis = InputTranslator.GetAxisName(____gamepadBinding.axisID);
-                    if (_singleAxes.ContainsKey(axis))
+                    if (_axes.ContainsKey(axis))
                     {
-                        ____value += _singleAxes[axis] * ____gamepadBinding.axisDirection;
+                        ____value += DeadzonedValue(_axes[axis] * ____gamepadBinding.axisDirection);
                     }
 
                     ____lastPressedDuration = ____pressedDuration;

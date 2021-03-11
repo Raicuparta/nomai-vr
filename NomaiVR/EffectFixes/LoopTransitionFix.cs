@@ -1,4 +1,4 @@
-﻿using OWML.ModHelper.Events;
+﻿using OWML.Utils;
 using UnityEngine;
 
 namespace NomaiVR
@@ -14,16 +14,16 @@ namespace NomaiVR
 
             public override void ApplyPatches()
             {
-                NomaiVR.Pre<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PatchTriggerFlashback));
-                NomaiVR.Pre<Flashback>("Update", typeof(Patch), nameof(FlashbackUpdate));
-                NomaiVR.Pre<Flashback>("UpdateMemoryUplink", typeof(Patch), nameof(PostUpdateMemoryLink));
-                NomaiVR.Post<Flashback>("OnTriggerMemoryUplink", typeof(Patch), nameof(PostTriggerMemoryUplink));
+                Prefix<Flashback>("OnTriggerFlashback", nameof(PatchTriggerFlashback));
+                Prefix<Flashback>("Update", nameof(FlashbackUpdate));
+                Prefix<Flashback>("UpdateMemoryUplink", nameof(PostUpdateMemoryLink));
+                Postfix<Flashback>("OnTriggerMemoryUplink", nameof(PostTriggerMemoryUplink));
 
                 // Prevent flashing on energy death.
-                NomaiVR.Post<Flashback>("OnTriggerFlashback", typeof(Patch), nameof(PostTriggerFlashback));
+                Postfix<Flashback>("OnTriggerFlashback", nameof(PostTriggerFlashback));
 
                 // Fix loop picture scale.
-                NomaiVR.Post<Flashback>("Start", typeof(Patch), nameof(PostFlashbackRecorderAwake));
+                Postfix<Flashback>("Start", nameof(PostFlashbackRecorderAwake));
             }
 
             private static void PostFlashbackRecorderAwake(Transform ____screenTransform, ref Vector3 ____origScreenScale)

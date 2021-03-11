@@ -74,7 +74,7 @@ namespace NomaiVR
 
             private bool ShouldRender()
             {
-                return NomaiVR.Config.enableGesturePrompts && _text.text != GestureText.None;
+                return ModSettings.EnableGesturePrompts && _text.text != GestureText.None;
             }
 
             private static void SetText(string text)
@@ -209,12 +209,31 @@ namespace NomaiVR
                 }
             }
 
+            private static void UpdateWakeUpPrompt()
+            {
+                var hand = HandsController.Behaviour.RightHand;
+                var isLookingAtHand = hand != null && CameraHelper.IsOnScreen(hand.position);
+                var isSleeping = OWTime.IsPaused(OWTime.PauseType.Sleeping);
+                var shouldShowText = !isLookingAtHand && isSleeping;
+                var isShowingText = IsShowing(GestureText.WakeUp);
+
+                if (!isShowingText && shouldShowText)
+                {
+                    SetText(GestureText.WakeUp);
+                }
+                else if (isShowingText && !shouldShowText)
+                {
+                    SetText(GestureText.None);
+                }
+            }
+
             internal void LateUpdate()
             {
-                if (!NomaiVR.Config.enableGesturePrompts)
+                if (!ModSettings.EnableGesturePrompts)
                 {
                     return;
                 }
+                UpdateWakeUpPrompt();
                 UpdateRaycast();
             }
 
@@ -222,7 +241,7 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ToolModeUI>("Update", typeof(Patch), nameof(PostToolModeUiUpdate));
+                    Postfix<ToolModeUI>("Update", nameof(PostToolModeUiUpdate));
                 }
 
                 private static void PostToolModeUiUpdate(
@@ -234,7 +253,7 @@ namespace NomaiVR
                     bool ____playingHideAndSeek
                 )
                 {
-                    if (!NomaiVR.Config.enableGesturePrompts)
+                    if (!ModSettings.EnableGesturePrompts)
                     {
                         return;
                     }
@@ -252,6 +271,7 @@ namespace NomaiVR
             public static string Signalscope = GetToolBeltPrompt("Signalscope", "Right");
             public static string Translator = GetToolBeltPrompt("Translator", "Left");
             public static string Flashlight = "Touch right side of head with right hand to toggle <color=orange>Flashlight</color>.";
+            public static string WakeUp = "Look at your <color=orange>right hand</color>.";
 
             public static string GetToolBeltPrompt(string toolName, string slot)
             {

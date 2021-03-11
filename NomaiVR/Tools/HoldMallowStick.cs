@@ -1,4 +1,4 @@
-﻿using OWML.ModHelper.Events;
+﻿using OWML.Utils;
 using UnityEngine;
 
 namespace NomaiVR
@@ -84,7 +84,16 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     // Stop stick rotation animation.
-                    NomaiVR.Empty<RoastingStickController>("UpdateRotation");
+                    Empty<RoastingStickController>("UpdateRotation");
+
+                    // Prevent stick from moving on colliding with stuff.
+                    Postfix<RoastingStickController>("CalculateMaxStickExtension", nameof(PostCalculateMaxStickExtension));
+                }
+
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Result required for return passthrough")]
+                private static float PostCalculateMaxStickExtension(float __result, float ____stickMaxZ)
+                {
+                    return ____stickMaxZ;
                 }
             }
         }

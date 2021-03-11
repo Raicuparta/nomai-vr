@@ -2,127 +2,182 @@
    "action_manifest_version" : 0,
    "alias_info" : {},
    "bindings" : {
-      "/actions/default" : {
-         "haptics" : [
-            {
-               "output" : "/actions/default/out/haptic",
-               "path" : "/user/hand/left/output/haptic"
-            },
-            {
-               "output" : "/actions/default/out/haptic",
-               "path" : "/user/hand/right/output/haptic"
+    "/actions/default": {
+      "haptics": [
+        {
+          "output": "/actions/default/out/haptic",
+          "path": "/user/hand/left/output/haptic"
+        },
+        {
+          "output": "/actions/default/out/haptic",
+          "path": "/user/hand/right/output/haptic"
+        }
+      ],
+      "poses": [
+        {
+          "output": "/actions/default/in/lefthand",
+          "path": "/user/hand/left/pose/raw"
+        },
+        {
+          "output": "/actions/default/in/righthand",
+          "path": "/user/hand/right/pose/raw"
+        },
+        {
+          "output": "none",
+          "path": "/user/hand/left/pose/handgrip"
+        }
+      ],
+      "skeleton": [
+        {
+          "output": "/actions/default/in/skeletonlefthand",
+          "path": "/user/hand/left/input/skeleton/left"
+        },
+        {
+          "output": "/actions/default/in/skeletonrighthand",
+          "path": "/user/hand/right/input/skeleton/right"
+        }
+      ],
+      "sources": [
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/RollMode"
             }
-         ],
-         "poses" : [
-            {
-               "output" : "/actions/default/in/lefthand",
-               "path" : "/user/hand/left/pose/raw"
-            },
-            {
-               "output" : "/actions/default/in/righthand",
-               "path" : "/user/hand/right/pose/raw"
-            },
-            {
-               "output" : "none",
-               "path" : "/user/hand/left/pose/handgrip"
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/grip"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
             }
-         ],
-         "sources" : [
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/RollMode"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/grip"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/map"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/application_menu"
-            },
-            {
-               "inputs" : {
-                  "pull" : {
-                     "output" : "/actions/default/in/ThrustDown"
-                  }
-               },
-               "mode" : "trigger",
-               "path" : "/user/hand/left/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "position" : {
-                     "output" : "/actions/default/in/move"
-                  }
-               },
-               "mode" : "trackpad",
-               "path" : "/user/hand/left/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/Interact"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/application_menu"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/rt"
-                  },
-                  "pull" : {
-                     "output" : "/actions/default/in/ThrustUp"
-                  }
-               },
-               "mode" : "trigger",
-               "path" : "/user/hand/right/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "position" : {
-                     "output" : "/actions/default/in/look"
-                  }
-               },
-               "mode" : "trackpad",
-               "path" : "/user/hand/right/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/back"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/jump"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/grip"
-                  }
-               },
-               "mode" : "toggle_button",
-               "path" : "/user/hand/right/input/grip"
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.75",
+            "click_deactivate_threshold": "0.7",
+            "force_input": "value"
+          },
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/map"
             }
-         ]
-      }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/application_menu"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/ThrustDown"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "position": {
+              "output": "/actions/default/in/move"
+            }
+          },
+          "mode": "trackpad",
+          "path": "/user/hand/left/input/trackpad"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/Interact"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/application_menu"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/rt"
+            },
+            "pull": {
+              "output": "/actions/default/in/ThrustUp"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "inputs": {
+            "position": {
+              "output": "/actions/default/in/look"
+            }
+          },
+          "mode": "trackpad",
+          "path": "/user/hand/right/input/trackpad"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/back"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/trackpad"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/jump"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/trackpad"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grip"
+            }
+          },
+          "mode": "toggle_button",
+          "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.75",
+            "click_deactivate_threshold": "0.7"
+          },
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/trigger"
+        }
+      ]
+    }
    },
    "category" : "steamvr_input",
    "controller_type" : "vive_controller",

@@ -2,124 +2,178 @@
    "action_manifest_version" : 0,
    "alias_info" : {},
    "bindings" : {
-      "/actions/default": {
-         "poses": [
-            {
-               "output": "/actions/default/in/lefthand",
-               "path": "/user/hand/left/pose/raw"
-            },
-            {
-               "output": "/actions/default/in/righthand",
-               "path": "/user/hand/right/pose/raw"
+    "/actions/default": {
+      "poses": [
+        {
+          "output": "/actions/default/in/lefthand",
+          "path": "/user/hand/left/pose/raw"
+        },
+        {
+          "output": "/actions/default/in/righthand",
+          "path": "/user/hand/right/pose/raw"
+        }
+      ],
+      "haptics": [
+        {
+          "output": "/actions/default/out/haptic",
+          "path": "/user/hand/left/output/haptic"
+        },
+        {
+          "output": "/actions/default/out/haptic",
+          "path": "/user/hand/right/output/haptic"
+        }
+      ],
+      "sources": [
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "trigger",
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/ThrustDown"
             }
-         ],
-         "haptics": [
-            {
-               "output": "/actions/default/out/haptic",
-               "path": "/user/hand/left/output/haptic"
+          }
+        },
+        {
+          "path": "/user/hand/left/input/joystick",
+          "mode": "joystick",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/map"
             },
-            {
-               "output": "/actions/default/out/haptic",
-               "path": "/user/hand/right/output/haptic"
+            "position": {
+              "output": "/actions/default/in/move"
             }
-         ],
-         "sources": [
-            {
-               "path": "/user/hand/left/input/trigger",
-               "mode": "trigger",
-               "inputs": {
-                  "pull": {
-                     "output": "/actions/default/in/ThrustDown"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/left/input/joystick",
-               "mode": "joystick",
-               "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/map"
-                  },
-                  "position": {
-                     "output": "/actions/default/in/move"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/left/input/grip",
-               "mode": "button",
-               "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/RollMode"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/left/input/x",
-               "mode": "button",
-               "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/back"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/left/input/y",
-               "mode": "button",
-               "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/menu"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/right/input/trigger",
-               "mode": "trigger",
-               "inputs": {
-                  "pull": {
-                     "output": "/actions/default/in/ThrustUp"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/right/input/joystick",
-               "mode": "joystick",
-               "inputs": {
-                  "position": {
-                     "output": "/actions/default/in/look"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/right/input/grip",
-               "mode": "button",
-               "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/grip"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/right/input/a",
-               "mode": "button",
-               "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/jump"
-                  }
-               }
-            },
-            {
-               "path": "/user/hand/right/input/b",
-               "mode": "button",
-               "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/Interact"
-                  }
-               }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/RollMode"
             }
-         ],
-         "skeleton": []
-      }
+          }
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.8",
+            "click_deactivate_threshold": "0.7",
+            "force_input": "value"
+          },
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "path": "/user/hand/left/input/x",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/back"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/y",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/menu"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "trigger",
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/ThrustUp"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/joystick",
+          "mode": "joystick",
+          "inputs": {
+            "position": {
+              "output": "/actions/default/in/look"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/grip",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grip"
+            }
+          }
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          },
+          "mode": "button",
+          "parameters": {
+            "click_activate_threshold": "0.8",
+            "click_deactivate_threshold": "0.7"
+          },
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "path": "/user/hand/right/input/a",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/jump"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/b",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/Interact"
+            }
+          }
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/grip"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/squeeze"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/grip"
+        }
+      ],
+      "skeleton": [
+        {
+          "output": "/actions/default/in/skeletonlefthand",
+          "path": "/user/hand/left/input/skeleton/left"
+        },
+        {
+          "output": "/actions/default/in/skeletonrighthand",
+          "path": "/user/hand/right/input/skeleton/right"
+        }
+      ]
+    }
    },
    "category" : "steamvr_input",
    "controller_type" : "oculus_touch",

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,22 +14,113 @@ namespace NomaiVR
         {
             private static bool _shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
+            private static readonly string[] _ignoredCanvases = { "LoadManagerFadeCanvas", "PauseBackdropCanvas", "Reticule" };
+            private readonly List<GameObject> _canvasObjectsToHide = new List<GameObject>();
+            private Camera _flashbackCamera;
+            private Transform _flashbackCameraParent;
+            private bool _isCanvasObjectsActive;
+            private bool _fadeInLogo = false;
 
             internal void Start()
             {
-                var scene = LoadManager.GetCurrentScene();
+                if (SceneHelper.IsInGame())
+                {
+                    SetUpFlashbackCameraParent();
+                }
 
-                if (scene == OWScene.SolarSystem)
+                if (SceneHelper.IsInSolarSystem())
                 {
                     FixSleepTimerCanvas();
                 }
-                else if (scene == OWScene.TitleScreen)
+
+                if (SceneHelper.IsInTitle())
                 {
                     FixTitleMenuCanvases();
                     FixStarLogos();
-
+                    FixOuterWildsLogo();
+                    StopCameraRotation();
                 }
+
                 ScreenCanvasesToWorld();
+            }
+
+            internal void Update()
+            {
+                UpdateCanvasObjectsActive();
+            }
+
+            private void UpdateCanvasObjectsActive()
+            {
+                if (_isCanvasObjectsActive && !IsMenuInteractionAllowed())
+                {
+                    SetCanvasObjectsActive(false);
+                    return;
+                }
+                if (!_isCanvasObjectsActive && IsMenuInteractionAllowed())
+                {
+                    SetCanvasObjectsActive(true);
+                    return;
+                }
+            }
+
+            private void SetCanvasObjectsActive(bool active)
+            {
+                _canvasObjectsToHide.ForEach(canvasObject => canvasObject.SetActive(active));
+                _isCanvasObjectsActive = active;
+            }
+
+            private bool IsMenuInteractionAllowed()
+            {
+                return OWTime.IsPaused(OWTime.PauseType.Menu) || !SceneHelper.IsInGame() || PlayerState.IsSleepingAtCampfire();
+            }
+
+            private void SetUpFlashbackCameraParent()
+            {
+                _flashbackCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
+                if (!_flashbackCameraParent)
+                {
+                    _flashbackCameraParent = new GameObject().transform;
+                }
+                if (_flashbackCamera.transform.parent == null)
+                {
+                    _flashbackCamera.transform.SetParent(_flashbackCameraParent);
+                }
+                // FlashbackCamera objects starts really far from Vector3.zero.
+                // Far enough to cause floating point imprecision glitches.
+                // Usually the game would move the camera to Vector3.zero, but camera movement isn't possible in VR.
+                // So we need to apply the inverse position to make it move to Vector3.zero.
+                _flashbackCameraParent.position = _flashbackCamera.transform.localPosition * -1;
+            }
+
+            private static void StopCameraRotation()
+            {
+                var rotateTransformComponent = GameObject.Find("Scene/Background").GetComponent<RotateTransform>();
+                Destroy(rotateTransformComponent);
+            }
+
+            private void FixOuterWildsLogo()
+            {
+                Transform logoParentTranform = GameObject.Find("TitleCanvasHack/TitleLayoutGroup").transform;
+                Transform canvasHack = logoParentTranform.parent;
+                Destroy(canvasHack.GetComponent<CanvasScaler>()); //Remove Canvas Scaler
+                canvasHack.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+                logoParentTranform.localPosition = Vector3.left * 400;
+                _fadeInLogo = false;
+
+                LayerHelper.ChangeLayerRecursive(logoParentTranform.gameObject, "VisibleToPlayer");
+
+                //Logo Fade-In Animation
+                var logoFader = logoParentTranform.gameObject.AddComponent<TitleMenuLogoFader>();
+                var logoAnimator = logoParentTranform.GetComponentInChildren<Animator>();
+                logoFader.BeginFade(1, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true);
+
+                FindObjectOfType<TitleAnimationController>().OnTitleLogoAnimationComplete += () =>
+                {
+                    canvasHack.localScale = Vector3.one * 0.126f;
+                    canvasHack.position = new Vector3(17.344f, 136.154f, 10.499f);
+                    canvasHack.rotation = Quaternion.Euler(342.012f, 116.613f, 325.473f);
+                    _fadeInLogo = true;
+                };
             }
 
             private static void FixStarLogo(string objectName)
@@ -53,11 +145,11 @@ namespace NomaiVR
             private static void FixTitleMenuCanvases()
             {
                 var titleMenu = GameObject.Find("TitleMenu").transform;
+                var titleCanvas = titleMenu.Find("TitleCanvas");
 
                 // Hide the main menu while other menus are open,
                 // to prevent selecting with laser.
-                var titleCanvas = titleMenu.Find("TitleCanvas");
-                titleMenu.Find("TitleCanvas").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                titleCanvas.Find("TitleLayoutGroup").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
                     MenuStackManager.SharedInstance.GetMenuCount() == 0;
 
                 // Cant't get the footer to look good, so I'm hiding it.
@@ -71,8 +163,9 @@ namespace NomaiVR
                 splashImage.sprite = AssetLoader.SplashSprite;
             }
 
-            private static void AddFollowTarget(Canvas canvas)
+            private void AddFollowTarget(Canvas canvas)
             {
+                _canvasObjectsToHide.Add(canvas.gameObject);
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 if (SceneHelper.IsInGame())
                 {
@@ -82,7 +175,7 @@ namespace NomaiVR
                 else if (SceneHelper.IsInTitle())
                 {
                     followTarget.target = Camera.main.transform.parent;
-                    followTarget.localPosition = new Vector3(0, 1f, 2f);
+                    followTarget.localPosition = new Vector3(-0.2f, 1.3f, 2f);
                 }
                 else
                 {
@@ -91,6 +184,11 @@ namespace NomaiVR
                     followTarget.positionSmoothTime = 0.5f;
                     followTarget.rotationSmoothTime = 0.5f;
                 }
+
+                canvas.gameObject.AddComponent<DestroyObserver>().OnDestroyed += () =>
+                {
+                    _canvasObjectsToHide.Remove(canvas.gameObject);
+                };
             }
 
             private static void AdjustScaler(Canvas canvas)
@@ -102,7 +200,14 @@ namespace NomaiVR
                     scaler.scaleFactor = 1;
                     scaler.referencePixelsPerUnit = 100;
                 }
-                canvas.transform.localScale = Vector3.one * 0.001f;
+                if (SceneHelper.IsInTitle())
+                {
+                    canvas.transform.localScale = Vector3.one * 0.0015f;
+                }
+                else
+                {
+                    canvas.transform.localScale = Vector3.one * 0.001f;
+                }
             }
 
             // Mod config buttons generated by OWML get broken,
@@ -117,14 +222,46 @@ namespace NomaiVR
                 }
             }
 
-            private static void ScreenCanvasesToWorld()
+            private bool IsDeathTextCanvas(Canvas canvas)
+            {
+                return canvas.name == "Canvas_Text";
+            }
+
+            private bool IsIgnoredCanvas(Canvas canvas)
+            {
+                return _ignoredCanvases.Contains(canvas.name);
+            }
+
+            private bool IsOwmlModConfigMenuCanvas(Canvas canvas)
+            {
+                // Hack! If OWML ever changes this name, this check needs to be fixed.
+                return canvas.name == "KeyboardRebindingCanvas(Clone)";
+            }
+
+            private void SetUpDeathTextCanvas(Canvas canvas)
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = _flashbackCamera;
+                canvas.planeDistance = 15f;
+                var scaler = canvas.GetComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+                scaler.scaleFactor = 0.2f;
+                scaler.referencePixelsPerUnit = 100;
+            }
+
+            private void ScreenCanvasesToWorld()
             {
                 var canvases = Resources.FindObjectsOfTypeAll<Canvas>();
                 foreach (var canvas in canvases)
                 {
-                    // Filter out backdrop, to disable the background canvas during conversations.
-                    if (canvas.name == "PauseBackdropCanvas")
+                    if (IsIgnoredCanvas(canvas))
                     {
+                        continue;
+                    }
+
+                    if (IsDeathTextCanvas(canvas))
+                    {
+                        SetUpDeathTextCanvas(canvas);
                         continue;
                     }
 
@@ -143,9 +280,7 @@ namespace NomaiVR
                         AddFollowTarget(canvas);
                     }
 
-                    // Hack! This is the name of the mod config menu.
-                    // If OWML ever changes this name, this check needs to be fixed.
-                    if (isPatched && canvas.name == "KeyboardRebindingCanvas(Clone)")
+                    if (isPatched && IsOwmlModConfigMenuCanvas(canvas))
                     {
                         AdjustModConfigButtons(canvas);
                     }
@@ -156,10 +291,10 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Post<ProfileMenuManager>("PopulateProfiles", typeof(Patch), nameof(PostPopulateProfiles));
-                    NomaiVR.Post<CanvasMarkerManager>("Start", typeof(Patch), nameof(PostMarkerManagerStart));
-                    NomaiVR.Post<TitleScreenAnimation>("FadeInMusic", typeof(Patch), nameof(PostTitleScreenFadeInMusic));
-                    NomaiVR.Post<PopupMenu>("SetUpPopupCommands", typeof(Patch), nameof(PostSetPopupCommands));
+                    Postfix<ProfileMenuManager>("PopulateProfiles", nameof(PostPopulateProfiles));
+                    Postfix<CanvasMarkerManager>("Start", nameof(PostMarkerManagerStart));
+                    Postfix<TitleScreenAnimation>("FadeInMusic", nameof(PostTitleScreenFadeInMusic));
+                    Postfix<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
                 }
 
                 private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)

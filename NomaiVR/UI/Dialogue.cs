@@ -1,4 +1,4 @@
-﻿using OWML.ModHelper.Events;
+﻿using OWML.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,11 +47,11 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PreStartConversation));
-                    NomaiVR.Post<CharacterDialogueTree>("StartConversation", typeof(Patch), nameof(PostStartConversation));
-                    NomaiVR.Pre<CharacterDialogueTree>("EndConversation", typeof(Patch), nameof(PreEndConversation));
-                    NomaiVR.Post<DialogueOptionUI>("Awake", typeof(Patch), nameof(PostDialogueOptionAwake));
-                    NomaiVR.Post<DialogueOptionUI>("SetSelected", typeof(Patch), nameof(PreSetButtonPromptImage));
+                    Prefix<CharacterDialogueTree>("StartConversation", nameof(PreStartConversation));
+                    Postfix<CharacterDialogueTree>("StartConversation", nameof(PostStartConversation));
+                    Prefix<CharacterDialogueTree>("EndConversation", nameof(PreEndConversation));
+                    Postfix<DialogueOptionUI>("Awake", nameof(PostDialogueOptionAwake));
+                    Postfix<DialogueOptionUI>("SetSelected", nameof(PreSetButtonPromptImage));
                 }
 
                 private static void PreSetButtonPromptImage(Image ____buttonPromptImage)

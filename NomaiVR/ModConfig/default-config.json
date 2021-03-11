@@ -1,14 +1,81 @@
 {
-  "requireVR": true,
   "enabled": true,
   "settings": {
-    "showMirrorView": true,
-    "debugMode": true,
-    "overrideRefreshRate": 0,
-    "preventCursorLock": true,
-    "showHelmet": true,
-    "vibrationStrength": 1,
-    "enableGesturePrompts": true,
-    "controllerOrientedMovement": false
+    "refreshRateOverride": {
+      "type": "selector",
+      "value": 0,
+      "options": [0, 30, 60, 70, 72, 80, 90, 120, 144],
+      "title": "Physics refresh rate (zero = sync with HMD)"
+	},
+    "vibrationIntensity": {
+      "type": "slider",
+      "value": 1,
+      "min": 0,
+      "max": 3,
+      "title": "Vibration Intensity"
+	},
+    "toolbeltHeight": {
+      "type": "slider",
+      "value": 0.45,
+      "min": 0.2,
+      "max": 0.8,
+      "title": "Toolbelt Height"
+	},
+    "autoHideToolbelt": {
+      "type": "toggle",
+      "value": false,
+      "title": "Hide toolbelt if hand is far",
+      "yes": "Yes",
+      "no": "No"
+	},
+    "helmetVisibility": {
+      "type": "toggle",
+      "value": true,
+      "title": "Helmet around head",
+      "yes": "Visible",
+      "no": "Hidden"
+    },
+    "hudScale": {
+      "type": "slider",
+      "value": 1,
+      "min": 0.2,
+      "max": 1.8,
+      "title": "Helmet HUD scale"
+	},
+    "movementControllerOriented": {
+      "type": "toggle",
+      "value": false,
+      "title": "Movement orientation",
+      "yes": "Left controller",
+      "no": "Head"
+    },
+    "showGesturePrompts": {
+      "type": "toggle",
+      "value": true,
+      "title": "VR gesture tutorials",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
+    "disableCursorLock": {
+      "type": "toggle",
+      "value": true,
+      "title": "Lock mouse cursor to window",
+      "yes": "Unlocked",
+      "no": "Locked"
+    },
+    "debug": {
+      "type": "toggle",
+      "value": true,
+      "title": "Debug mode (more logs)",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
+    "bypassFatalErrors": {
+      "type": "toggle",
+      "value": false,
+      "title": "Bypass fatal errors",
+      "yes": "Enabled",
+      "no": "Disabled"
+    }
   }
 }

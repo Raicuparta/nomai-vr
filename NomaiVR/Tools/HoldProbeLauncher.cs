@@ -1,4 +1,4 @@
-﻿using OWML.ModHelper.Events;
+﻿using OWML.Utils;
 using UnityEngine;
 
 namespace NomaiVR
@@ -61,7 +61,7 @@ namespace NomaiVR
                 _probeLauncherHolster.SetActive(false);
                 var holster = _probeLauncherHolster.AddComponent<HolsterTool>();
                 holster.hand = HandsController.Behaviour.RightHand;
-                holster.position = new Vector3(0, -0.55f, 0.2f);
+                holster.position = new Vector3(0, 0, 0.2f);
                 holster.mode = ToolMode.Probe;
                 holster.scale = 0.15f;
                 holster.angle = Vector3.right * 90;
@@ -99,20 +99,24 @@ namespace NomaiVR
                 bracketImage.localRotation = Quaternion.identity;
                 bracketImage.localScale *= 0.5f;
 
-                probeLauncher.gameObject.AddComponent<ToolModeInteraction>();
-
                 GlobalMessenger.AddListener("SuitUp", OnSuitUp);
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
             }
 
             private void OnSuitUp()
             {
-                _probeLauncherHolster.SetActive(true);
+                if (_probeLauncherHolster)
+                {
+                    _probeLauncherHolster.SetActive(true);
+                }
             }
 
             private void OnRemoveSuit()
             {
-                _probeLauncherHolster.SetActive(false);
+                if (_probeLauncherHolster)
+                {
+                    _probeLauncherHolster.SetActive(false);
+                }
             }
 
             public class Patch : NomaiVRPatch
@@ -122,15 +126,15 @@ namespace NomaiVR
 
                 public override void ApplyPatches()
                 {
-                    NomaiVR.Pre<PlayerSpacesuit>("SuitUp", typeof(Patch), nameof(Patch.SuitUp));
-                    NomaiVR.Pre<PlayerSpacesuit>("RemoveSuit", typeof(Patch), nameof(Patch.RemoveSuit));
-                    NomaiVR.Post<ProbeLauncherUI>("HideProbeHUD", typeof(Patch), nameof(Patch.PostHideHUD));
+                    Prefix<PlayerSpacesuit>("SuitUp", nameof(SuitUp));
+                    Prefix<PlayerSpacesuit>("RemoveSuit", nameof(RemoveSuit));
+                    Postfix<ProbeLauncherUI>("HideProbeHUD", nameof(PostHideHUD));
 
                     // Prevent probe prompt zones from equipping / unequipping the probe launcher.
-                    NomaiVR.Pre<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PreLoseFocus));
-                    NomaiVR.Post<ProbePromptReceiver>("LoseFocus", typeof(Patch), nameof(Patch.PostLoseFocus));
-                    NomaiVR.Pre<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PreGainFocus));
-                    NomaiVR.Post<ProbePromptReceiver>("GainFocus", typeof(Patch), nameof(Patch.PostGainFocus));
+                    Prefix<ProbePromptReceiver>("LoseFocus", nameof(PreLoseFocus));
+                    Postfix<ProbePromptReceiver>("LoseFocus", nameof(PostLoseFocus));
+                    Prefix<ProbePromptReceiver>("GainFocus", nameof(PreGainFocus));
+                    Postfix<ProbePromptReceiver>("GainFocus", nameof(PostGainFocus));
                 }
 
                 private static void PreLoseFocus()

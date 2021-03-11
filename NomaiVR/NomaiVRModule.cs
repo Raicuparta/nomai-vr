@@ -15,6 +15,8 @@ namespace NomaiVR
         protected abstract bool IsPersistent { get; }
         protected abstract OWScene[] Scenes { get; }
 
+        private bool _isPersistentBehaviourSetUp;
+
         public NomaiVRModule()
         {
             if (IsSceneRelevant(LoadManager.GetCurrentScene()))
@@ -42,18 +44,19 @@ namespace NomaiVR
 
         private void SetupBehaviour()
         {
-            if (typeof(Behaviour) == typeof(NomaiVRModule.EmptyBehaviour))
+            if (_isPersistentBehaviourSetUp || typeof(Behaviour) == typeof(NomaiVRModule.EmptyBehaviour))
             {
                 return;
             }
 
-            NomaiVR.Log("Creating NomaiVR behaviour for", GetType().Name);
+            Logs.WriteInfo($"Creating NomaiVR behaviour for {GetType().Name}");
             var gameObject = new GameObject();
             gameObject.AddComponent<Behaviour>();
 
             if (IsPersistent)
             {
                 gameObject.AddComponent<PersistObject>();
+                _isPersistentBehaviourSetUp = true;
             }
         }
 
@@ -64,7 +67,7 @@ namespace NomaiVR
                 return;
             }
 
-            NomaiVR.Log("Applying NomaiVR patches for", GetType().Name);
+            Logs.WriteInfo($"Applying NomaiVR patches for {GetType().Name}");
             var patch = new Patch();
             patch.ApplyPatches();
         }
