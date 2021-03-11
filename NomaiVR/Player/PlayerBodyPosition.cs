@@ -122,8 +122,8 @@ namespace NomaiVR
                 {
                     var runSpeedX = _playerAnimator.GetFloat("RunSpeedX");
                     var runSpeedY = _playerAnimator.GetFloat("RunSpeedY");
-                    var isStopped = runSpeedX + runSpeedY == 0;
-                    var isControllerOriented = (!_playerController.IsGrounded() || !isStopped) && ModSettings.ControllerOrientedMovement;
+                    var isStoppedOnGround = _playerController.IsGrounded() && (runSpeedX + runSpeedY == 0);
+                    var isControllerOriented = !(isStoppedOnGround) && ModSettings.ControllerOrientedMovement;
 
                     if ((OWInput.GetInputMode() != InputMode.Character))
                     {
