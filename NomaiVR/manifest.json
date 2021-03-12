@@ -4,7 +4,7 @@
   "name": "NomaiVR",
   "uniqueName": "Raicuparta.NomaiVR",
   "description": "Outer Wilds VR mod, with full motion control support.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "owmlVersion": "1.0.1",
   "requireVR": true
 }
