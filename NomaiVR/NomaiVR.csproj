@@ -121,6 +121,7 @@
     <Compile Include="EffectFixes\LoopTransitionFix.cs" />
     <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
     <Compile Include="EffectFixes\CameraMaskFix.cs" />
+    <Compile Include="EffectFixes\StereoPlanetaryFogImageEffect.cs" />
     <Compile Include="EffectFixes\WaterFix.cs" />
     <Compile Include="FatalErrorChecker.cs" />
     <Compile Include="Helpers\CameraHelper.cs" />
