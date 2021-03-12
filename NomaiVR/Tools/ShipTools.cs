@@ -108,7 +108,7 @@ namespace NomaiVR
 
                 private static void PostExitFlightConsole(ShipCockpitController __instance)
                 {
-                    __instance.Invoke("ExitLandingView");
+                    __instance.ExitLandingView();
                 }
 
                 private static bool ShouldRenderScreenText()
@@ -168,7 +168,7 @@ namespace NomaiVR
                     {
                         if (_isLandingCamEnabled)
                         {
-                            _cockpitController.Invoke("ExitLandingView");
+                            _cockpitController.ExitLandingView();
                             return true;
                         }
                         return false;

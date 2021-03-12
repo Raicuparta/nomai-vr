@@ -65,7 +65,7 @@ namespace NomaiVR
             {
                 if (PlayerState.InMapView())
                 {
-                    _mapController.Invoke("ExitMapView");
+                    _mapController.ExitMapView();
                 }
             }
         }

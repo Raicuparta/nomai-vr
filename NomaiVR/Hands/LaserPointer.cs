@@ -160,7 +160,7 @@ namespace NomaiVR
             {
                 var selection = twoButtonToggle.GetValue();
                 twoButtonToggle._selection = !selection;
-                twoButtonToggle.Invoke("UpdateToggleColors");
+                twoButtonToggle.UpdateToggleColors();
             }
 
             private static void HandleSliderClick(Slider slider)

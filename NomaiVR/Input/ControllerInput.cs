@@ -427,7 +427,7 @@ namespace NomaiVR
                     ____gotKeyboardInputThisFrame = false;
                 }
 
-                private static bool PreUpdateRumble(object[] ___m_theList, bool ___m_isEnabled)
+                private static bool PreUpdateRumble(RumbleManager.Rumble[] ___m_theList, bool ___m_isEnabled)
                 {
                     if (OWTime.IsPaused())
                     {
@@ -441,20 +441,15 @@ namespace NomaiVR
                         for (var i = 0; i < ___m_theList.Length; i++)
                         {
                             var rumble = ___m_theList[i];
-                            var isAlive = (bool)rumble.GetType().GetMethod("IsAlive").Invoke(rumble, new object[] { });
 
-                            if (isAlive)
+                            if (rumble.IsAlive())
                             {
-                                rumble.Invoke("Update", deltaTime);
+                                rumble.Update(deltaTime);
                             }
 
-                            var isAliveAgain = (bool)rumble.GetType().GetMethod("IsAlive").Invoke(rumble, new object[] { });
-
-                            if (isAliveAgain)
+                            if (rumble.IsAlive())
                             {
-
-                                var power = (Vector2)rumble.GetType().GetMethod("GetPower").Invoke(rumble, new object[] { });
-                                a += power;
+                                a += rumble.GetPower();
                             }
                         }
                         a.x *= 1.42857146f;

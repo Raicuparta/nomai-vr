@@ -39,7 +39,7 @@ namespace NomaiVR
 
             private static void ResetInputsToDefault()
             {
-                FindObjectOfType<KeyRebinderManager>().Invoke("OnApplyDefaultsSubmit");
+                FindObjectOfType<KeyRebinderManager>().OnApplyDefaultsSubmit();
             }
 
             private static void UpdateActiveController()
