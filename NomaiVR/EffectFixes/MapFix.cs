@@ -51,7 +51,7 @@ namespace NomaiVR
                 _mapController = mapCameraTransform.GetComponent<MapController>();
 
                 newCamera.gameObject.SetActive(true);
-                _mapController.SetValue("_mapCamera", owCamera);
+                _mapController._mapCamera = owCamera;
 
                 var markerManager = mapCameraTransform.Find("MarkerManager").GetComponent<Canvas>();
                 var lockOnCanvas = mapCameraTransform.Find("MapLockOnCanvas").GetComponent<Canvas>();

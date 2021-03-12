@@ -164,7 +164,7 @@ namespace NomaiVR
 
             private void OnWakeUp()
             {
-                _repairPrompt = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt");
+                _repairPrompt = FindObjectOfType<FirstPersonManipulator>()._repairScreenPrompt;
             }
 
             private void OnBackChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
@@ -300,7 +300,7 @@ namespace NomaiVR
 
             private static void SetGamepadBinding(SingleAxisCommand command, InputBinding binding)
             {
-                command.SetValue("_gamepadBinding", binding);
+                command._gamepadBinding = binding;
             }
 
             private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)

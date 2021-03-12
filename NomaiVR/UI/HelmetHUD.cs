@@ -49,7 +49,7 @@ namespace NomaiVR
             private HUDHelmetAnimator SetUpHelmetAnimator()
             {
                 var helmetAnimator = FindObjectOfType<HUDHelmetAnimator>();
-                helmetAnimator.SetValue("_helmetOffsetSpring", new DampedSpring3D());
+                helmetAnimator._helmetOffsetSpring = new DampedSpring3D();
                 return helmetAnimator;
             }
 
@@ -89,7 +89,7 @@ namespace NomaiVR
 
             private void AdjustHudRenderer(HUDHelmetAnimator helmetAnimator)
             {
-                var hudRenderer = helmetAnimator.GetValue<MeshRenderer>("_hudRenderer").transform;
+                var hudRenderer = helmetAnimator._hudRenderer.transform;
                 hudRenderer.localScale = Vector3.one * 3.28f;
                 hudRenderer.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
                 hudRenderer.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => Locator.GetPlayerSuit().IsWearingHelmet();

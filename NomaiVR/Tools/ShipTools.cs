@@ -23,7 +23,7 @@ namespace NomaiVR
             {
                 _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
                 _cockpitController = FindObjectOfType<ShipCockpitController>();
-                _mapGridRenderer = FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
+                _mapGridRenderer = FindObjectOfType<MapController>()._gridRenderer.transform;
             }
 
             internal void Update()
@@ -61,12 +61,12 @@ namespace NomaiVR
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    ____shipSystemsCtrlr.SetValue("_usingLandingCam", _isLandingCamEnabled);
+                    ____shipSystemsCtrlr._usingLandingCam = _isLandingCamEnabled;
                 }
 
                 private static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    ____shipSystemsCtrlr.SetValue("_usingLandingCam", false);
+                    ____shipSystemsCtrlr._usingLandingCam = false;
                 }
 
                 private static bool PreEnterLandingView(

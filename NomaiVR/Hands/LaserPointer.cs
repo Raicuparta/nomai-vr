@@ -159,7 +159,7 @@ namespace NomaiVR
             private static void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
             {
                 var selection = twoButtonToggle.GetValue();
-                twoButtonToggle.SetValue("_selection", !selection);
+                twoButtonToggle._selection = !selection;
                 twoButtonToggle.Invoke("UpdateToggleColors");
             }
 
@@ -241,14 +241,14 @@ namespace NomaiVR
 
             private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
             {
-                if (_dialogueBox.GetValue<bool>("_revealingOptions"))
+                if (_dialogueBox._revealingOptions)
                 {
                     return;
                 }
                 var selectedOption = _dialogueBox.GetSelectedOption();
-                var options = _dialogueBox.GetValue<List<DialogueOptionUI>>("_optionsUIElements");
+                var options = _dialogueBox._optionsUIElements;
                 options[selectedOption].SetSelected(false);
-                _dialogueBox.SetValue("_selectedOption", options.IndexOf(dialogueOption));
+                _dialogueBox._selectedOption = options.IndexOf(dialogueOption);
                 dialogueOption.SetSelected(true);
             }
 

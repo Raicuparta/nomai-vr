@@ -77,7 +77,7 @@ namespace NomaiVR
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)
                 {
-                    _attentionPoint = __instance.GetValue<Transform>("_attentionPoint");
+                    _attentionPoint = __instance._attentionPoint;
                 }
 
                 private static void PostStartConversation()
