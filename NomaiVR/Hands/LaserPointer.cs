@@ -387,7 +387,6 @@ namespace NomaiVR
                     ____focused = allowInteraction && num <= ____viewingWindow;
                     var Base = __instance as SingleInteractionVolume;
 
-
                     // TODO: could be improved by caching?
                     var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
                     var ftn = method.MethodHandle.GetFunctionPointer();
