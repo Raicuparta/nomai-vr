@@ -366,6 +366,8 @@ namespace NomaiVR
 
             public class Patch : NomaiVRPatch
             {
+                private static IntPtr pointerUpdateInteractVolume;
+
                 public override void ApplyPatches()
                 {
                     Prefix<InteractZone>("UpdateInteractVolume", nameof(PreUpdateInteractVolume));
@@ -374,6 +376,8 @@ namespace NomaiVR
                     Prefix<ToolModeSwapper>("Update", nameof(PreToolModeUpdate));
                     Prefix<ItemTool>("UpdateIsDroppable", nameof(PreUpdateIsDroppable));
                     Postfix<ItemTool>("UpdateIsDroppable", nameof(PostUpdateIsDroppable));
+
+                    pointerUpdateInteractVolume = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume").MethodHandle.GetFunctionPointer();
                 }
 
                 private static bool PreUpdateInteractVolume(
@@ -385,14 +389,8 @@ namespace NomaiVR
                     var num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
                     var allowInteraction = ToolHelper.IsUsingNoTools();
                     ____focused = allowInteraction && num <= ____viewingWindow;
-                    var Base = __instance as SingleInteractionVolume;
 
-                    // TODO: could be improved by caching?
-                    var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
-                    var ftn = method.MethodHandle.GetFunctionPointer();
-                    var func = (Action)Activator.CreateInstance(typeof(Action), __instance, ftn);
-
-                    func();
+                    ((Action)Activator.CreateInstance(typeof(Action), __instance, pointerUpdateInteractVolume))();
 
                     return false;
                 }
