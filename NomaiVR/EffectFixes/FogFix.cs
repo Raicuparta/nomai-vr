@@ -30,7 +30,7 @@ namespace NomaiVR
                 var monoPlanetaryFog = camera.planetaryFog;
                 var stereoPlanetaryFog = camera.gameObject.AddComponent<StereoPlanetaryFogImageEffect>();
                 stereoPlanetaryFog.fogShader = monoPlanetaryFog.fogShader;
-                camera.SetValue("_planetaryFog", stereoPlanetaryFog);
+                camera._planetaryFog = stereoPlanetaryFog;
                 Destroy(monoPlanetaryFog);
             }
 

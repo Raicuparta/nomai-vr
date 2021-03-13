@@ -54,7 +54,7 @@ namespace NomaiVR
                 var scale = ____origScreenScale;
 
                 var uplinkTrigger = GameObject.FindObjectOfType<MemoryUplinkTrigger>();
-                var statue = uplinkTrigger.GetValue<Transform>("_lockOnTransform");
+                var statue = uplinkTrigger._lockOnTransform;
                 var eye = statue.Find("Props_NOM_StatueHead/eyelid_mid");
                 _focus = new GameObject().transform;
                 _focus.SetParent(eye, false);

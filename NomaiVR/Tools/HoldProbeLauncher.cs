@@ -37,7 +37,7 @@ namespace NomaiVR
                 {
                     if (renderer.name == "RecallEffect")
                     {
-                        renderer.GetComponent<SingularityController>().SetValue("_targetRadius", renderer.sharedMaterial.GetFloat("_Radius") * 0.2f);
+                        renderer.GetComponent<SingularityController>()._targetRadius = renderer.sharedMaterial.GetFloat("_Radius") * 0.2f;
                         continue;
                     }
                     foreach (var material in renderer.materials)
@@ -121,7 +121,7 @@ namespace NomaiVR
 
             public class Patch : NomaiVRPatch
             {
-                private static ToolMode? currentToolMode = null;
+                private static ToolMode currentToolMode = ToolMode.None;
                 private static bool isWearingSuit = false;
 
                 public override void ApplyPatches()
@@ -139,33 +139,32 @@ namespace NomaiVR
 
                 private static void PreLoseFocus()
                 {
-                    ToolMode? toolMode = ToolHelper.Swapper.GetValue<ToolMode>("_currentToolMode");
-                    if (toolMode == null)
+                    ToolMode toolMode = ToolHelper.Swapper._currentToolMode;
+                    if (toolMode == ToolMode.None)
                     {
                         return;
                     }
                     currentToolMode = toolMode;
-                    ToolHelper.Swapper.SetValue("_currentToolMode", null);
+                    ToolHelper.Swapper._currentToolMode = ToolMode.None;
                 }
 
                 private static void PostLoseFocus()
                 {
-                    if (currentToolMode == null)
+                    if (currentToolMode != ToolMode.None)
                     {
-                        return;
+                        ToolHelper.Swapper._currentToolMode = currentToolMode;
                     }
-                    ToolHelper.Swapper.SetValue("_currentToolMode", currentToolMode);
                 }
 
                 private static void PreGainFocus()
                 {
-                    isWearingSuit = Locator.GetPlayerSuit().GetValue<bool>("_isWearingSuit");
-                    Locator.GetPlayerSuit().SetValue("_isWearingSuit", false);
+                    isWearingSuit = Locator.GetPlayerSuit()._isWearingSuit;
+                    Locator.GetPlayerSuit()._isWearingSuit = false;
                 }
 
                 private static void PostGainFocus()
                 {
-                    Locator.GetPlayerSuit().SetValue("_isWearingSuit", isWearingSuit);
+                    Locator.GetPlayerSuit()._isWearingSuit = isWearingSuit;
                 }
 
                 private static void PostHideHUD(Canvas ____canvas)
@@ -179,12 +178,12 @@ namespace NomaiVR
 
                 private static void SuitUp()
                 {
-                    _probeUI.SetValue("_nonSuitUI", false);
+                    _probeUI._nonSuitUI = false;
                 }
 
                 private static void RemoveSuit()
                 {
-                    _probeUI.SetValue("_nonSuitUI", true);
+                    _probeUI._nonSuitUI = true;
                 }
             }
         }

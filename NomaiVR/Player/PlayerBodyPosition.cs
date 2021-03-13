@@ -33,7 +33,7 @@ namespace NomaiVR
                 SetupCamera();
                 CreateRecenterMenuEntry();
                 _playerBody = Locator.GetPlayerBody();
-                _playerAnimator = _playerBody.GetComponentInChildren<PlayerAnimController>().GetValue<Animator>("_animator");
+                _playerAnimator = _playerBody.GetComponentInChildren<PlayerAnimController>()._animator;
                 _playerController = _playerBody.GetComponent<PlayerCharacterController>();
                 _autopilot = _playerBody.GetComponent<Autopilot>();
             }

@@ -87,7 +87,7 @@ namespace NomaiVR
 
                 lineObject.AddComponent<ConditionalRenderer>().getShouldRender = () => ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
 
-                translator.GetComponent<NomaiTranslator>().SetValue("_raycastTransform", lineObject.transform);
+                translator.GetComponent<NomaiTranslator>()._raycastTransform = lineObject.transform;
 
                 return lineObject.transform;
             }

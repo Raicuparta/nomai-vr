@@ -21,7 +21,7 @@ namespace NomaiVR
 
             receiver = gameObject.AddComponent<InteractReceiver>();
             receiver.SetInteractRange(2);
-            receiver.SetValue("_usableInShip", true);
+            receiver._usableInShip = true;
             receiver.SetPromptText(text);
             receiver.OnPressInteract += OnPress;
             receiver.OnReleaseInteract += OnRelease;
