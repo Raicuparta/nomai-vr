@@ -17,7 +17,7 @@ namespace NomaiVR
                 var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
 
                 // Move the stick forward while not pressing RT.
-                stickController.SetValue("_stickMinZ", 1f);
+                stickController._stickMinZ = 1f;
 
                 var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
                 stickRoot.localScale = scale;

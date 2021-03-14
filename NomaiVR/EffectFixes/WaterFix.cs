@@ -17,8 +17,8 @@ namespace NomaiVR
 
                 // Disable water entering and exiting effect.
                 var visorEffects = FindObjectOfType<VisorEffectController>();
-                visorEffects.SetValue("_waterClearLength", 0);
-                visorEffects.SetValue("_waterFadeInLength", 0);
+                visorEffects._waterClearLength = 0;
+                visorEffects._waterFadeInLength = 0;
             }
         }
     }

@@ -23,8 +23,8 @@ namespace NomaiVR
             var tool = gameObject.GetComponent<PlayerTool>();
             if (tool)
             {
-                tool.SetValue("_stowTransform", null);
-                tool.SetValue("_holdTransform", null);
+                tool._stowTransform = null;
+                tool._holdTransform = null;
             }
 
             SetupPoses();
