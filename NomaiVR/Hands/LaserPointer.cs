@@ -159,8 +159,8 @@ namespace NomaiVR
             private static void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
             {
                 var selection = twoButtonToggle.GetValue();
-                twoButtonToggle.SetValue("_selection", !selection);
-                twoButtonToggle.Invoke("UpdateToggleColors");
+                twoButtonToggle._selection = !selection;
+                twoButtonToggle.UpdateToggleColors();
             }
 
             private static void HandleSliderClick(Slider slider)
@@ -241,14 +241,14 @@ namespace NomaiVR
 
             private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
             {
-                if (_dialogueBox.GetValue<bool>("_revealingOptions"))
+                if (_dialogueBox._revealingOptions)
                 {
                     return;
                 }
                 var selectedOption = _dialogueBox.GetSelectedOption();
-                var options = _dialogueBox.GetValue<List<DialogueOptionUI>>("_optionsUIElements");
+                var options = _dialogueBox._optionsUIElements;
                 options[selectedOption].SetSelected(false);
-                _dialogueBox.SetValue("_selectedOption", options.IndexOf(dialogueOption));
+                _dialogueBox._selectedOption = options.IndexOf(dialogueOption);
                 dialogueOption.SetSelected(true);
             }
 
@@ -366,6 +366,8 @@ namespace NomaiVR
 
             public class Patch : NomaiVRPatch
             {
+                private static IntPtr pointerUpdateInteractVolume;
+
                 public override void ApplyPatches()
                 {
                     Prefix<InteractZone>("UpdateInteractVolume", nameof(PreUpdateInteractVolume));
@@ -374,6 +376,8 @@ namespace NomaiVR
                     Prefix<ToolModeSwapper>("Update", nameof(PreToolModeUpdate));
                     Prefix<ItemTool>("UpdateIsDroppable", nameof(PreUpdateIsDroppable));
                     Postfix<ItemTool>("UpdateIsDroppable", nameof(PostUpdateIsDroppable));
+
+                    pointerUpdateInteractVolume = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume").MethodHandle.GetFunctionPointer();
                 }
 
                 private static bool PreUpdateInteractVolume(
@@ -385,13 +389,8 @@ namespace NomaiVR
                     var num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
                     var allowInteraction = ToolHelper.IsUsingNoTools();
                     ____focused = allowInteraction && num <= ____viewingWindow;
-                    var Base = __instance as SingleInteractionVolume;
 
-                    var method = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume");
-                    var ftn = method.MethodHandle.GetFunctionPointer();
-                    var func = (Action)Activator.CreateInstance(typeof(Action), __instance, ftn);
-
-                    func();
+                    ((Action)Activator.CreateInstance(typeof(Action), __instance, pointerUpdateInteractVolume))();
 
                     return false;
                 }

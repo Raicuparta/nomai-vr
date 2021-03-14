@@ -1,5 +1,4 @@
-﻿using NomaiVR.Delegates.Input;
-using OWML.Utils;
+﻿using OWML.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -166,7 +165,7 @@ namespace NomaiVR
 
             private void OnWakeUp()
             {
-                _repairPrompt = FindObjectOfType<FirstPersonManipulator>().GetValue<ScreenPrompt>("_repairScreenPrompt");
+                _repairPrompt = FindObjectOfType<FirstPersonManipulator>()._repairScreenPrompt;
             }
 
             private void OnBackChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
@@ -302,7 +301,7 @@ namespace NomaiVR
 
             private static void SetGamepadBinding(SingleAxisCommand command, InputBinding binding)
             {
-                command.SetValue("_gamepadBinding", binding);
+                command._gamepadBinding = binding;
             }
 
             private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)
@@ -336,9 +335,6 @@ namespace NomaiVR
 
             public class Patch : NomaiVRPatch
             {
-                //Cache methods to avoid using reflection constantly in an update script
-                private static Rumble[] _cachedDelegateRumbles;
-
                 public override void ApplyPatches()
                 {
                     Prefix<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
@@ -353,21 +349,10 @@ namespace NomaiVR
                     Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
                     Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
                     Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
-                    SetupRumbleWrappers();
 
                     //This method is only used in the intro screen and can break the intro sequence
                     //It is checking for keys the game and the mod doesn't use, the intro sequence is still skippable without it
                     Prefix<OWInput>("GetAnyJoystickButtonPressed", nameof(PrefixGetAnyJoystickButtonPressed));
-                }
-
-                private static void SetupRumbleWrappers()
-                {
-                    RumbleManager manager = (RumbleManager)typeof(RumbleManager).GetField("s_theManager", BindingFlags.NonPublic | BindingFlags.Static ).GetValue(null);
-                    object[] m_theList = manager.GetValue<object[]>("m_theList");
-                    _cachedDelegateRumbles = new Rumble[m_theList.Length];
-                    //Initialize our caches
-                    for (int i = 0; i < m_theList.Length; i++)
-                        _cachedDelegateRumbles[i] = new Rumble(m_theList[i]);
                 }
 
                 private static bool PreSubmitActionMenu(SubmitActionMenu __instance)
@@ -443,7 +428,7 @@ namespace NomaiVR
                     ____gotKeyboardInputThisFrame = false;
                 }
 
-                private static bool PreUpdateRumble(object[] ___m_theList, bool ___m_isEnabled)
+                private static bool PreUpdateRumble(RumbleManager.Rumble[] ___m_theList, bool ___m_isEnabled)
                 {
                     if (OWTime.IsPaused())
                     {
@@ -456,13 +441,17 @@ namespace NomaiVR
                         var deltaTime = Time.deltaTime;
                         for (var i = 0; i < ___m_theList.Length; i++)
                         {
-                            Rumble rumble = _cachedDelegateRumbles[i]; //Maybe also check instance with jagged array?
-                            if (rumble.IsAlive())
-                                rumble.Update(deltaTime);
+                            var rumble = ___m_theList[i];
 
-                            //Is alive again
                             if (rumble.IsAlive())
+                            {
+                                rumble.Update(deltaTime);
+                            }
+
+                            if (rumble.IsAlive())
+                            {
                                 a += rumble.GetPower();
+                            }
                         }
                         a.x *= 1.42857146f;
                         a.y *= 1.42857146f;

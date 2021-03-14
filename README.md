@@ -101,6 +101,9 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
 - Edit the entry `<GameDir>` to point to the directory where Outer Wilds is installed;
 - Edit the entry `<OwmlDir>` to point to your OWML directory (it is installed inside the Mod Manager directory);
 - Repeat this process for the file `SteamVR/SteamVR.csproj.user`;
+- Download the [AssemblyPublicizer](https://github.com/Raicuparta/AssemblyPublicizer/releases) and extract the exe anywhere;
+- Drag the file `OuterWilds\OuterWilds_Data\Managed\Assembly-CSharp.dll` and drop it on top of `AssemblyPublicizer.exe`;
+- Confirm that it generated a new file `OuterWilds\OuterWilds_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll`;
 - Open the project solution file `NomaiVR.sln` in Visual Studio;
 - If needed, right click `References` in the Solution Explorer > Manage NuGet Packages > Update OWML to fix missing references;
 

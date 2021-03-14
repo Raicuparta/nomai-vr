@@ -180,7 +180,7 @@ namespace NomaiVR
                         var num = Vector3.Angle(from, _lensCamera.transform.forward);
                         if (num < 1f && _lens.gameObject.activeSelf)
                         {
-                            __instance.Invoke("Gather");
+                            __instance.Gather();
                         }
                     }
                 }

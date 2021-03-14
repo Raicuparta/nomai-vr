@@ -1,7 +1,6 @@
 ﻿using OWML.Utils;
 using UnityEngine;
 using UnityEngine.UI;
-using static NomaiVR.Delegates.DelegateUtils;
 
 namespace NomaiVR
 {
@@ -24,7 +23,7 @@ namespace NomaiVR
             {
                 _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
                 _cockpitController = FindObjectOfType<ShipCockpitController>();
-                _mapGridRenderer = FindObjectOfType<MapController>().GetValue<MeshRenderer>("_gridRenderer").transform;
+                _mapGridRenderer = FindObjectOfType<MapController>()._gridRenderer.transform;
             }
 
             internal void Update()
@@ -60,15 +59,14 @@ namespace NomaiVR
                     Prefix(typeof(ReferenceFrameTracker).GetMethod("UntargetReferenceFrame", new[] { typeof(bool) }), nameof(PreUntargetFrame));
                 }
 
-                static RefGetter<ShipCockpitController, bool> __refget__usingLandingCam = CreateRefGetter<ShipCockpitController, bool>("_usingLandingCam");
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    __refget__usingLandingCam(____shipSystemsCtrlr) = _isLandingCamEnabled;
+                    ____shipSystemsCtrlr._usingLandingCam = _isLandingCamEnabled;
                 }
 
                 private static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    __refget__usingLandingCam(____shipSystemsCtrlr) = false;
+                    ____shipSystemsCtrlr._usingLandingCam = false;
                 }
 
                 private static bool PreEnterLandingView(
@@ -110,7 +108,7 @@ namespace NomaiVR
 
                 private static void PostExitFlightConsole(ShipCockpitController __instance)
                 {
-                    __instance.Invoke("ExitLandingView");
+                    __instance.ExitLandingView();
                 }
 
                 private static bool ShouldRenderScreenText()
@@ -170,7 +168,7 @@ namespace NomaiVR
                     {
                         if (_isLandingCamEnabled)
                         {
-                            _cockpitController.Invoke("ExitLandingView");
+                            _cockpitController.ExitLandingView();
                             return true;
                         }
                         return false;

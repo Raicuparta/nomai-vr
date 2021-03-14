@@ -54,7 +54,7 @@ namespace NomaiVR
             {
                 try
                 {
-                    FindObjectOfType<KeyRebinderManager>().Invoke("OnApplyDefaultsSubmit");
+                    FindObjectOfType<KeyRebinderManager>().OnApplyDefaultsSubmit();
                 }
                 catch
                 {
@@ -77,8 +77,7 @@ namespace NomaiVR
                 var overrideRefreshRate = ModSettings.OverrideRefreshRate;
                 var refreshRate = overrideRefreshRate > 0 ? overrideRefreshRate : deviceRefreshRate;
                 var fixedTimeStep = 1f / refreshRate;
-                var owTime = typeof(OWTime);
-                owTime.SetValue("s_fixedTimestep", fixedTimeStep);
+                OWTime.s_fixedTimestep = fixedTimeStep;
                 Time.fixedDeltaTime = fixedTimeStep;
             }
 
