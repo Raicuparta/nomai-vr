@@ -156,7 +156,9 @@ namespace NomaiVR
                 if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
-                    _owLensCamera.SetEnabled(_lens.gameObject.activeSelf);
+
+                    if(_owLensCamera.gameObject != null)
+                        _owLensCamera.SetEnabled(_lens.gameObject.activeSelf);
                 }
             }
 
