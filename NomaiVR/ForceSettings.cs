@@ -30,7 +30,7 @@ namespace NomaiVR
 
             private static void UpdateGameLogging()
             {
-                Debug.unityLogger.logEnabled = !ModSettings.DisableGameLogging;
+                Debug.unityLogger.logEnabled = ModSettings.DebugMode;
             }
 
             private static void SetResolution()
