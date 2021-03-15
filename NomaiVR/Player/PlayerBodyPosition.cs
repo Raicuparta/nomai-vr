@@ -170,9 +170,7 @@ namespace NomaiVR
                 {
                     //Prevents changing the fov of VR cameras
                     //This prevents log spams in projection pools
-                    if (__instance.mainCamera.stereoEnabled)
-                        return false;
-                    return true;
+                    return !__instance.mainCamera.stereoEnabled;
                 }
             }
 
