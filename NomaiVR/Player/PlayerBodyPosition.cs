@@ -56,6 +56,7 @@ namespace NomaiVR
                 _cameraParent.parent = _playArea;
                 _cameraParent.localRotation = Quaternion.identity;
                 _playerCamera.transform.parent = _cameraParent;
+                _playerCamera.gameObject.AddComponent<VRCameraManipulator>();
 
                 var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
