@@ -101,6 +101,7 @@ namespace NomaiVR
                 {
                     Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PostCharacterTurning));
                     Postfix<JetpackThrusterController>("FixedUpdate", nameof(Patch.PostThrusterUpdate));
+                    Prefix<OWCamera>("set_fieldOfView", nameof(Patch.PatchOWCameraFOV));
                 }
 
                 private static void PostThrusterUpdate(Vector3 ____rotationalInput)
@@ -163,6 +164,13 @@ namespace NomaiVR
                         _playArea.rotation = Quaternion.RotateTowards(_playArea.rotation, inverseRotation, maxDegreesDelta);
                         rotationSetter(Quaternion.RotateTowards(_playerBody.transform.rotation, targetRotation, maxDegreesDelta));
                     }
+                }
+
+                private static bool PatchOWCameraFOV(OWCamera __instance)
+                {
+                    //Prevents changing the fov of VR cameras
+                    //This prevents log spams in projection pools
+                    return !__instance.mainCamera.stereoEnabled;
                 }
             }
 

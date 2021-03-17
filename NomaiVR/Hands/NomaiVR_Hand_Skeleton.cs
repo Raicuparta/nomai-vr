@@ -11,6 +11,12 @@ namespace NomaiVR
     {
         private bool _snapshotCleanRequested = false;
 
+        public void OnDestroy()
+        {
+            //Fixes some exceptions when blending just before a scene transition
+            StopAllCoroutines();
+        }
+
         public void ClearSnapshot()
         {
             _snapshotCleanRequested = true;
