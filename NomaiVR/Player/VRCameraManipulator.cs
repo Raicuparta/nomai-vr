@@ -8,11 +8,11 @@ namespace NomaiVR
 {
     public class VRCameraManipulator : MonoBehaviour
     {
-        private IObservable _lastObservable;
+		private IObservable _lastObservable;
 		private Collider _lastHitCollider;
 
 		private RaycastHit ProcessRaycast()
-        {
+		{
 			if (Physics.Raycast(base.transform.position, base.transform.forward, out var hitInfo, 75f, OWLayerMask.blockableInteractMask))
 			{
 				if (hitInfo.collider != _lastHitCollider)
