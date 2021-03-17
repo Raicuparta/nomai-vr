@@ -13,7 +13,7 @@ namespace NomaiVR
 
 		private RaycastHit ProcessRaycast()
 		{
-			if (Physics.Raycast(base.transform.position, base.transform.forward, out var hitInfo, 75f, OWLayerMask.blockableInteractMask))
+			if (Physics.Raycast(transform.position, transform.forward, out var hitInfo, 75f, OWLayerMask.blockableInteractMask))
 			{
 				if (hitInfo.collider != _lastHitCollider)
 				{
@@ -43,7 +43,7 @@ namespace NomaiVR
 			var hitInfo = ProcessRaycast();
 
 			if (_lastObservable != null)
-				_lastObservable.Observe(hitInfo, base.transform.position);
+				_lastObservable.Observe(hitInfo, transform.position);
 		}
 	}
 }
