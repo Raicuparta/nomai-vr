@@ -138,6 +138,7 @@
     <Compile Include="Input\VRActionInput.cs" />
     <Compile Include="Logs.cs" />
     <Compile Include="ModConfig\ModSettings.cs" />
+    <Compile Include="Player\VRCameraManipulator.cs" />
     <Compile Include="ReusableBehaviours\ConditionalDisableRenderer.cs" />
     <Compile Include="ReusableBehaviours\DebugFollowTarget.cs" />
     <Compile Include="ReusableBehaviours\ShipMonitorInteraction.cs" />
