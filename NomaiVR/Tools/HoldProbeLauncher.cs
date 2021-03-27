@@ -121,7 +121,7 @@ namespace NomaiVR
 
             public class Patch : NomaiVRPatch
             {
-                private static ToolMode currentToolMode = ToolMode.None;
+                private static ToolMode? currentToolMode = null;
                 private static bool isWearingSuit = false;
 
                 public override void ApplyPatches()
@@ -139,21 +139,22 @@ namespace NomaiVR
 
                 private static void PreLoseFocus()
                 {
-                    ToolMode toolMode = ToolHelper.Swapper._currentToolMode;
-                    if (toolMode == ToolMode.None)
+                    ToolMode? toolMode = ToolHelper.Swapper.GetValue<ToolMode>("_currentToolMode");
+                    if (toolMode == null)
                     {
                         return;
                     }
                     currentToolMode = toolMode;
-                    ToolHelper.Swapper._currentToolMode = ToolMode.None;
+                    ToolHelper.Swapper.SetValue("_currentToolMode", null);
                 }
 
                 private static void PostLoseFocus()
                 {
-                    if (currentToolMode != ToolMode.None)
+                    if (currentToolMode == null)
                     {
-                        ToolHelper.Swapper._currentToolMode = currentToolMode;
+                        return;
                     }
+                    ToolHelper.Swapper.SetValue("_currentToolMode", currentToolMode);
                 }
 
                 private static void PreGainFocus()
