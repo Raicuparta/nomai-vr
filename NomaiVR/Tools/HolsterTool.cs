@@ -29,6 +29,12 @@ namespace NomaiVR
             GlobalMessenger.AddListener("RemoveSuit", Unequip);
         }
 
+        internal void OnDestroy()
+        {
+            GlobalMessenger.RemoveListener("SuitUp", Unequip);
+            GlobalMessenger.RemoveListener("RemoveSuit", Unequip);
+        }
+
         private void Equip()
         {
             VRToolSwapper.Equip(mode);

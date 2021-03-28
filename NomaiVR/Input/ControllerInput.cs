@@ -49,6 +49,11 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
             }
 
+            internal void OnDestroy()
+            {
+                GlobalMessenger.RemoveListener("WakeUp", OnWakeUp);
+            }
+
             internal void OnEnable()
             {
                 SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Listen(OnInputFocus);

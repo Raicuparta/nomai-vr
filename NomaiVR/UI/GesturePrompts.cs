@@ -21,6 +21,12 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("ExitProbePromptTrigger", OnExitProbePromptTrigger);
             }
 
+            internal void OnDestroy()
+            {
+                GlobalMessenger.RemoveListener("EnterProbePromptTrigger", OnEnterProbePromptTrigger);
+                GlobalMessenger.RemoveListener("ExitProbePromptTrigger", OnExitProbePromptTrigger);
+            }
+
             private void SetUpCanvas()
             {
                 _canvas = new GameObject().AddComponent<Canvas>();
