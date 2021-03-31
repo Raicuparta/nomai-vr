@@ -26,6 +26,7 @@ namespace NomaiVR
             new ControllerInput();
             new Dialogue();
             new FogFix();
+            new ShadowFix();
             new LoopTransitionFix();
             new WaterFix();
             new ProjectionStoneCameraFix();
