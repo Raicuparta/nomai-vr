@@ -71,7 +71,8 @@ namespace NomaiVR
             private static void SetUpActionInputs()
             {
                 var defaultActionSet = SteamVR_Actions._default;
-                var toolsActionSet = SteamVR_Actions._tools;
+                defaultActionSet.Activate(disableAllOtherActionSets: true);
+                var toolsActionSet = SteamVR_Actions.tools;
                 var gripActionInput = new VRActionInput(defaultActionSet.Grip);
 
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
@@ -162,8 +163,12 @@ namespace NomaiVR
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
                 SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
 
-                SteamVR_Actions.tools_Interact.onChange += OnToolInteractChange;
-                SteamVR_Actions.tools_DPad.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY);
+
+                SteamVR_Actions.tools_Interact.AddOnChangeListener(OnToolInteractChange, SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.LeftHand);
+
+                SteamVR_Actions.tools_Interact.AddOnChangeListener(OnToolInteractChange, SteamVR_Input_Sources.RightHand);
+                SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.RightHand);
             }
 
             private void OnWakeUp()
@@ -326,18 +331,20 @@ namespace NomaiVR
             private void EnterToolMode(bool rightHand = true)
             {
                 //Enables the tools override for the proper hand
-                SteamVR_Actions._tools.Activate(priority: 1, activateForSource: rightHand ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools.Activate(priority: 1, activateForSource: rightHand ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand);
             }
 
             private void ExitToolMode()
             {
                 //De-Activates the tools action-set (stops overriting same buttons)
-                SteamVR_Actions._tools.Deactivate();
+                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
+                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
             }
 
             internal void Update()
             {
-                bool canUseTools = !InputHelper.IsUIInteractionMode(true) && ToolHelper.IsUsingAnyTool();
+                //Ship Tools will have their buttons in cockpit
+                bool canUseTools = !InputHelper.IsUIInteractionMode(true) && ToolHelper.IsUsingAnyTool() && !ToolHelper.IsUsingAnyTool(ToolGroup.Ship);
                 if (!_isUsingTools && canUseTools)
                 {
                     _isUsingTools = true;
