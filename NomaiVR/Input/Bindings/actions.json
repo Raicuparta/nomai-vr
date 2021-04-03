@@ -74,12 +74,24 @@
       "name": "/actions/default/in/Squeeze",
       "type": "vector1",
       "requirement": "optional"
+    },
+    {
+      "name": "/actions/tools/in/DPad",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/tools/in/Interact",
+      "type": "boolean"
     }
   ],
   "action_sets": [
     {
       "name": "/actions/default",
       "usage": "leftright"
+    },
+    {
+      "name": "/actions/tools",
+      "usage": "single"
     }
   ],
   "default_bindings": [
@@ -120,7 +132,10 @@
       "/actions/default/in/RightHand": "Right Hand",
       "/actions/default/in/SkeletonLeftHand": "Skeleton (Left)",
       "/actions/default/in/SkeletonRightHand": "Skeleton (Right)",
-      "/actions/default/out/Haptic": "Haptic"
+      "/actions/default/out/Haptic": "Haptic",
+      "/actions/tools": "Holding Tool",
+      "/actions/tools/in/DPad": "DPad (tools)",
+      "/actions/tools/in/Interact": "Interact (tools)"
     }
   ]
 }

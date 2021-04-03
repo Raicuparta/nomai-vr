@@ -1,11 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using Valve.VR;
 
 namespace NomaiVR
 {
     internal class HolsterTool : MonoBehaviour
     {
-        public Transform hand;
+        private Transform _hand;
         public ToolMode mode;
         public Vector3 position;
         public Vector3 angle;
@@ -15,27 +16,39 @@ namespace NomaiVR
         public Action onUnequip;
         private const float _minHandDistance = 0.3f;
 
-        public ProximityDetector Detector { get; private set; }
+        public ProximityDetector[] Detectors { get; private set; }
 
         internal void Start()
         {
-            Detector = gameObject.AddComponent<ProximityDetector>();
-            Detector.other = HandsController.Behaviour.RightHand;
-            Detector.minDistance = 0.2f;
+            Detectors = new ProximityDetector[2];
+            Detectors[0] = gameObject.AddComponent<ProximityDetector>();
+            Detectors[0].other = HandsController.Behaviour.RightHand;
+            Detectors[0].minDistance = 0.2f;
+            Detectors[1] = gameObject.AddComponent<ProximityDetector>();
+            Detectors[1].other = HandsController.Behaviour.LeftHand;
+            Detectors[1].minDistance = 0.2f;
+            
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
 
+            SteamVR_Actions.default_Grip.onChange += OnGripChanged;
             GlobalMessenger.AddListener("SuitUp", Unequip);
             GlobalMessenger.AddListener("RemoveSuit", Unequip);
         }
 
+        internal void OnDestroy()
+        {
+            SteamVR_Actions.default_Grip.onChange -= OnGripChanged;
+        }
+
         private void Equip()
         {
-            VRToolSwapper.Equip(mode);
+            VRToolSwapper.Equip(mode, _hand.GetComponent<Hand>());
         }
 
         private void Unequip()
         {
+            _hand = null;
             onUnequip?.Invoke();
             VRToolSwapper.Unequip();
         }
@@ -64,11 +77,17 @@ namespace NomaiVR
                 }
                 return;
             }
-            if (ControllerInput.Behaviour.IsGripping && !IsEquipped() && Detector.isInside && _visible)
+        }
+
+        private void OnGripChanged(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+        {
+            var detector = Detectors[fromAction.activeDevice == SteamVR_Input_Sources.RightHand ? 0 : 1];
+            if (newState && _hand == null && !IsEquipped() && detector.isInside && _visible)
             {
+                _hand = detector.other;
                 Equip();
             }
-            if (!ControllerInput.Behaviour.IsGripping && IsEquipped())
+            if (!newState && detector.other == _hand && IsEquipped())
             {
                 Unequip();
             }
@@ -77,7 +96,7 @@ namespace NomaiVR
         private void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
-            var hand = HandsController.Behaviour.RightHand;
+            var hand = HandsController.Behaviour.RightHand; //TODO: Dominant Hand
 
             var isHandClose = !ModSettings.AutoHideToolbelt || (hand.position - transform.position).sqrMagnitude < _minHandDistance;
             var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && isHandClose;

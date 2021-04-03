@@ -189,6 +189,19 @@
         {
           "inputs": {
             "grab": {
+              "output": "/actions/default/in/grip"
+            }
+          },
+          "mode": "grab",
+          "parameters": {
+            "value_hold_threshold": "1.35",
+            "value_release_threshold": "1"
+          },
+          "path": "/user/hand/left/input/grip"
+        },
+        {
+          "inputs": {
+            "grab": {
               "output": "/actions/default/in/grabpinch"
             }
           },
@@ -231,6 +244,46 @@
           "path": "/user/hand/right/input/grip"
         }
       ]
+    },
+    "/actions/tools" : {
+         "sources" : [
+            {
+               "inputs" : {
+                  "position" : {
+                     "output" : "/actions/tools/in/dpad"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "position" : {
+                     "output" : "/actions/tools/in/dpad"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tools/in/interact"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/b"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tools/in/interact"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/b"
+            }
+         ]
     }
    },
    "category" : "steamvr_input",

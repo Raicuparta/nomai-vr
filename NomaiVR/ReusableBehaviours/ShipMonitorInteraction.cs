@@ -53,7 +53,8 @@ namespace NomaiVR
             {
                 if (mode != ToolMode.None)
                 {
-                    VRToolSwapper.Equip(mode);
+                    //TODO: Dominant Hand?
+                    VRToolSwapper.Equip(mode, null);
                 }
                 if (button != JoystickButton.None)
                 {

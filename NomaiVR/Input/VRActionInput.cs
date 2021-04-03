@@ -11,13 +11,15 @@ namespace NomaiVR
         private string _hand;
         private string _source;
         private readonly string _color;
+        private readonly bool _isDynamic;
         private readonly HashSet<string> _prefixes = new HashSet<string>();
         private readonly ISteamVR_Action_In _action;
         private readonly VRActionInput _holdActionInput;
 
-        public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false, VRActionInput holdActionInput = null)
+        public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false, VRActionInput holdActionInput = null, bool isDynamic = false)
         {
             _color = color;
+            _isDynamic = isDynamic;
             _action = action;
             _holdActionInput = holdActionInput;
 
@@ -27,7 +29,7 @@ namespace NomaiVR
             }
         }
 
-        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false, VRActionInput holdActionInput = null) : this(action, TextHelper.ORANGE, isLongPress, holdActionInput) { }
+        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false, VRActionInput holdActionInput = null, bool isDynamic = false) : this(action, TextHelper.ORANGE, isLongPress, holdActionInput, isDynamic) { }
 
         public VRActionInput(ISteamVR_Action_In action, VRActionInput holdActionInput) : this(action, TextHelper.ORANGE, false, holdActionInput) { }
 
@@ -36,7 +38,7 @@ namespace NomaiVR
             _hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
             _source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
 
-            if (string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
+            if (!_isDynamic && string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
             {
                 Logs.WriteError($"Could not find name for binding {_action.GetShortName()}.");
             }
@@ -44,6 +46,9 @@ namespace NomaiVR
 
         public string[] GetText()
         {
+            //Dynamic buttons need to be initialized each time
+            if (_isDynamic)
+                Initialize();
             ControllerInput.Behaviour.InitializeActionInputs();
             var prefix = GetPrefixText();
             var result = $"{prefix}{GetColoredLocalizedText()}";

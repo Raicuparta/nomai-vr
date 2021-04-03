@@ -8,21 +8,23 @@ namespace NomaiVR
         protected override OWScene[] Scenes => PlayableScenes;
 
         private static bool _isBuccklingUp = false;
+        public static Hand InteractingHand { get; private set; }
 
         private static readonly Dictionary<ToolMode, bool> _toolsAllowedToEquip = new Dictionary<ToolMode, bool>() {
             { ToolMode.Item, true }
         };
 
-        public static void Equip(ToolMode mode)
+        public static void Equip(ToolMode mode, Hand interactingHand)
         {
             _toolsAllowedToEquip[mode] = true;
             ToolHelper.Swapper.EquipToolMode(mode);
+            InteractingHand = interactingHand;
             _toolsAllowedToEquip[mode] = false;
         }
 
         public static void Unequip()
         {
-            Equip(ToolMode.None);
+            Equip(ToolMode.None, null);
         }
 
         public static bool IsAllowedToEquip(ToolMode mode)

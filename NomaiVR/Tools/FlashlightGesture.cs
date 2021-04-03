@@ -11,11 +11,8 @@ namespace NomaiVR
         {
             internal void Start()
             {
-                var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
-                detector.other = HandsController.Behaviour.RightHand;
-                detector.localOffset = Vector3.right * 0.15f;
-                detector.onEnter += FlashlightPress;
-                detector.onExit += FlashlightRelease;
+                SetupDetector(HandsController.Behaviour.RightHand, Vector3.right * 0.15f);
+                SetupDetector(HandsController.Behaviour.LeftHand, Vector3.left * 0.15f);
 
                 var flashLight = Locator.GetFlashlight();
                 var pivot = flashLight.transform.Find("Flashlight_BasePivot/Flashlight_WobblePivot");
@@ -24,6 +21,15 @@ namespace NomaiVR
 
                 fillLight.localPosition = spotLight.localPosition = flashLight.transform.localPosition = new Vector3(0, 0.05f, 0.05f);
                 fillLight.localRotation = spotLight.localRotation = flashLight.transform.localRotation = Quaternion.identity;
+            }
+
+            private void SetupDetector(Transform hand, Vector3 offset)
+            {
+                var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
+                detector.other = hand;
+                detector.localOffset = offset;
+                detector.onEnter += FlashlightPress;
+                detector.onExit += FlashlightRelease;
             }
 
             private void FlashlightPress()
