@@ -35,8 +35,8 @@ namespace NomaiVR
 
         public void Initialize()
         {
-            _hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
-            _source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
+            _hand = _action.GetLocalizedOriginPart(_action.activeDevice, new[] { EVRInputStringBits.VRInputString_Hand });
+            _source = _action.GetLocalizedOriginPart(_action.activeDevice, new[] { EVRInputStringBits.VRInputString_InputSource });
 
             if (!_isDynamic && string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
             {

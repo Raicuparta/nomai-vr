@@ -80,7 +80,7 @@
       "type": "vector2"
     },
     {
-      "name": "/actions/tools/in/Interact",
+      "name": "/actions/tools/in/Use",
       "type": "boolean"
     }
   ],
@@ -135,7 +135,7 @@
       "/actions/default/out/Haptic": "Haptic",
       "/actions/tools": "Holding Tool",
       "/actions/tools/in/DPad": "DPad (tools)",
-      "/actions/tools/in/Interact": "Interact (tools)"
+      "/actions/tools/in/Use": "Use (tools)"
     }
   ]
 }

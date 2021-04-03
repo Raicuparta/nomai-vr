@@ -28,8 +28,6 @@ namespace NomaiVR
             private static Dictionary<string, float> _axes;
             private static PlayerResources _playerResources;
 
-            private float _primaryLastTime = -1;
-            private bool _justHeld;
             private bool _isUsingTools;
             private ScreenPrompt _repairPrompt;
 
@@ -58,6 +56,7 @@ namespace NomaiVR
             internal void OnDisable()
             {
                 SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Remove(OnInputFocus);
+                StopAllCoroutines();
             }
 
             private void OnInputFocus(VREvent_t arg)
@@ -80,8 +79,8 @@ namespace NomaiVR
                     [JoystickButton.FaceDown] = new VRActionInput(defaultActionSet.Jump, TextHelper.GREEN),
                     [JoystickButton.FaceRight] = new VRActionInput(defaultActionSet.Back, TextHelper.RED),
                     [JoystickButton.FaceLeft] = new VRActionInput(defaultActionSet.Interact, TextHelper.BLUE),
-                    [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Interact, TextHelper.BLUE, false, isDynamic: true),
-                    [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Interact, TextHelper.BLUE, true, isDynamic: true),
+                    [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, false, isDynamic: true),
+                    [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, true, isDynamic: true),
                     [JoystickButton.FaceUp] = new VRActionInput(defaultActionSet.Interact, TextHelper.BLUE, true),
                     [JoystickButton.LeftBumper] = new VRActionInput(defaultActionSet.RollMode),
                     [JoystickButton.Start] = new VRActionInput(defaultActionSet.Menu),
@@ -163,11 +162,9 @@ namespace NomaiVR
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
                 SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
 
-
-                SteamVR_Actions.tools_Interact.AddOnChangeListener(OnToolInteractChange, SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools_Use.AddOnChangeListener(OnToolUseChange, SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools_Use.AddOnChangeListener(OnToolUseChange, SteamVR_Input_Sources.RightHand);
                 SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.LeftHand);
-
-                SteamVR_Actions.tools_Interact.AddOnChangeListener(OnToolInteractChange, SteamVR_Input_Sources.RightHand);
                 SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.RightHand);
             }
 
@@ -190,6 +187,7 @@ namespace NomaiVR
                 IsGripping = newState;
             }
 
+            private IEnumerator<WaitForSecondsRealtime> _delayedInteract = null;
             private void OnInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 var value = newState ? 1 : 0;
@@ -209,16 +207,21 @@ namespace NomaiVR
                 {
                     if (newState)
                     {
-                        _primaryLastTime = fromAction.changedTime;
+                        if (_delayedInteract != null)
+                            StopCoroutine(_delayedInteract);
+
+                        float waitTime = holdDuration - (Time.realtimeSinceStartup - fromAction.changedTime);
+                        _delayedInteract = DelayedPress(waitTime, JoystickButton.FaceUp, () => _delayedInteract = null);
+                        StartCoroutine(_delayedInteract);
                     }
                     else
                     {
-                        _primaryLastTime = -1;
-                        if (!_justHeld)
+                        if (_delayedInteract != null)
                         {
+                            StopCoroutine(_delayedInteract);
+                            _delayedInteract = null;
                             SimulateInput(button);
                         }
-                        _justHeld = false;
                     }
                 }
                 else
@@ -227,30 +230,34 @@ namespace NomaiVR
                 }
             }
 
-            private void OnToolInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+            private IEnumerator<WaitForSecondsRealtime> _delayedToolUse = null;
+            private void OnToolUseChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 //TODO: Maybe we can trim some things?
                 Logs.Write("Interacting with tool!");
                 var value = newState ? 1 : 0;
                 var button = JoystickButton.RightBumper;
-                var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
-                var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
                 var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
 
-                if (!isRepairPromptVisible && !canRepairSuit && !isUsingTranslator)
+                if (!isUsingTranslator)
                 {
                     if (newState)
                     {
-                        _primaryLastTime = fromAction.changedTime;
+                        if (_delayedToolUse != null)
+                            StopCoroutine(_delayedToolUse);
+
+                        float waitTime = holdDuration - (Time.realtimeSinceStartup - fromAction.changedTime);
+                        _delayedToolUse = DelayedPress(waitTime, JoystickButton.LeftStickClick, () => _delayedToolUse = null);
+                        StartCoroutine(_delayedToolUse);
                     }
                     else
                     {
-                        _primaryLastTime = -1;
-                        if (!_justHeld)
+                        if(_delayedToolUse != null)
                         {
+                            StopCoroutine(_delayedToolUse);
+                            _delayedToolUse = null;
                             SimulateInput(button);
                         }
-                        _justHeld = false;
                     }
                 }
                 else
@@ -344,7 +351,8 @@ namespace NomaiVR
             internal void Update()
             {
                 //Ship Tools will have their buttons in cockpit
-                bool canUseTools = !InputHelper.IsUIInteractionMode(true) && ToolHelper.IsUsingAnyTool() && !ToolHelper.IsUsingAnyTool(ToolGroup.Ship);
+                //Fixme: Remove IsGripping, use physical buttons in cockpit to avoid confusion
+                bool canUseTools = !InputHelper.IsUIInteractionMode(true) && ToolHelper.IsUsingAnyTool() && (!ToolHelper.IsUsingAnyTool(ToolGroup.Ship) || IsGripping);
                 if (!_isUsingTools && canUseTools)
                 {
                     _isUsingTools = true;
@@ -355,15 +363,13 @@ namespace NomaiVR
                     _isUsingTools = false;
                     ExitToolMode();
                 }
+            }
 
-                //FIXME: Change to Coroutine
-                if ((_primaryLastTime != -1) && (Time.realtimeSinceStartup - _primaryLastTime > holdDuration))
-                {
-                    var button = _isUsingTools ? JoystickButton.LeftStickClick : JoystickButton.FaceUp;
-                    SimulateInput(button);
-                    _primaryLastTime = -1;
-                    _justHeld = true;
-                }
+            private static IEnumerator<WaitForSecondsRealtime> DelayedPress(float time, JoystickButton button, Action then = null)
+            {
+                yield return new WaitForSecondsRealtime(time);
+                SimulateInput(button);
+                then?.Invoke();
             }
 
             private static void SetGamepadBinding(SingleAxisCommand command, InputBinding binding)

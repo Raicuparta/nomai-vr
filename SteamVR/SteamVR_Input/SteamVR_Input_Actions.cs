@@ -53,7 +53,7 @@ namespace Valve.VR {
 
         private static SteamVR_Action_Vector2 p_tools_DPad;
 
-        private static SteamVR_Action_Boolean p_tools_Interact;
+        private static SteamVR_Action_Boolean p_tools_Use;
 
         public static SteamVR_Action_Boolean default_Grip {
             get {
@@ -179,11 +179,11 @@ namespace Valve.VR {
             }
         }
 
-        public static SteamVR_Action_Boolean tools_Interact
+        public static SteamVR_Action_Boolean tools_Use
         {
             get
             {
-                return SteamVR_Actions.p_tools_Interact.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_tools_Use.GetCopy<SteamVR_Action_Boolean>();
             }
         }
 
@@ -209,7 +209,7 @@ namespace Valve.VR {
                     SteamVR_Actions.default_Squeeze,
                     SteamVR_Actions.default_Haptic,
                     SteamVR_Actions.p_tools_DPad,
-                    SteamVR_Actions.p_tools_Interact};
+                    SteamVR_Actions.p_tools_Use};
             Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[]
             {
                     SteamVR_Actions.default_Grip,
@@ -230,7 +230,7 @@ namespace Valve.VR {
                     SteamVR_Actions.default_SkeletonRightHand,
                     SteamVR_Actions.default_Squeeze,
                     SteamVR_Actions.p_tools_DPad,
-                    SteamVR_Actions.p_tools_Interact};
+                    SteamVR_Actions.p_tools_Use};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[]
             {
                     SteamVR_Actions.default_Haptic};
@@ -251,7 +251,7 @@ namespace Valve.VR {
                     SteamVR_Actions.default_Back,
                     SteamVR_Actions.default_Menu,
                     SteamVR_Actions.default_Map,
-                    SteamVR_Actions.p_tools_Interact};
+                    SteamVR_Actions.p_tools_Use};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[]
             {
                     SteamVR_Actions.default_Squeeze,
@@ -283,7 +283,7 @@ namespace Valve.VR {
                     SteamVR_Actions.default_Look,
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.p_tools_DPad,
-                    SteamVR_Actions.p_tools_Interact};
+                    SteamVR_Actions.p_tools_Use};
         }
 
         private static void PreInitActions () {
@@ -306,7 +306,7 @@ namespace Valve.VR {
             SteamVR_Actions.p_default_Squeeze = ((SteamVR_Action_Single)(SteamVR_Action.Create<SteamVR_Action_Single>("/actions/default/in/Squeeze")));
             SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration) (SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
             SteamVR_Actions.p_tools_DPad = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/tools/in/DPad")));
-            SteamVR_Actions.p_tools_Interact = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/Interact")));
+            SteamVR_Actions.p_tools_Use = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/Use")));
         }
     }
 }

@@ -1,7 +1,7 @@
 {
    "action_manifest_version" : 0,
    "alias_info" : {},
-   "bindings" : {
+  "bindings": {
     "/actions/default": {
       "chords": [],
       "haptics": [
@@ -245,47 +245,47 @@
         }
       ]
     },
-    "/actions/tools" : {
-         "sources" : [
-            {
-               "inputs" : {
-                  "position" : {
-                     "output" : "/actions/tools/in/dpad"
-                  }
-               },
-               "mode" : "trackpad",
-               "path" : "/user/hand/left/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "position" : {
-                     "output" : "/actions/tools/in/dpad"
-                  }
-               },
-               "mode" : "trackpad",
-               "path" : "/user/hand/right/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/tools/in/interact"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/b"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/tools/in/interact"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/b"
+    "/actions/tools": {
+      "sources": [
+        {
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
             }
-         ]
+          },
+          "mode": "trackpad",
+          "path": "/user/hand/left/input/trackpad"
+        },
+        {
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          },
+          "mode": "trackpad",
+          "path": "/user/hand/right/input/trackpad"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/b"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/b"
+        }
+      ]
     }
-   },
+  },
    "category" : "steamvr_input",
    "controller_type" : "knuckles",
    "description" : "",

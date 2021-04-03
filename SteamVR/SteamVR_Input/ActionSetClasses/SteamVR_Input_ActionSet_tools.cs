@@ -21,9 +21,9 @@ namespace Valve.VR {
             }
         }
 
-        public virtual SteamVR_Action_Boolean Interact {
+        public virtual SteamVR_Action_Boolean Use {
             get {
-                return SteamVR_Actions.tools_Interact;
+                return SteamVR_Actions.tools_Use;
             }
         }
     }
