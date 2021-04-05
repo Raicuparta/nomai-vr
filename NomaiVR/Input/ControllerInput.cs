@@ -1,6 +1,7 @@
 ﻿using OWML.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Valve.VR;
 
@@ -13,6 +14,7 @@ namespace NomaiVR
         public static Dictionary<JoystickButton, VRActionInput> buttonActions;
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
         public static VRActionInput[] otherActions;
+        private static VRActionInput[] toolsActions;
         private static bool _isActionInputsInitialized;
         public static bool IsInputEnabled = true;
 
@@ -30,6 +32,7 @@ namespace NomaiVR
 
             private bool _isUsingTools;
             private ScreenPrompt _repairPrompt;
+            private SteamVR_Input_Sources? _lastToolInputSource;
 
             internal void Awake()
             {
@@ -46,6 +49,9 @@ namespace NomaiVR
                 ReplaceInputs();
                 SetUpActionInputs();
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
+
+                //Wait for binding state change
+                SteamVR_Actions._default.LeftHand.onActiveBindingChange += (pose, source, val) => { if (val) InitializeActionInputs(); };
             }
 
             internal void OnEnable()
@@ -73,6 +79,7 @@ namespace NomaiVR
                 defaultActionSet.Activate(disableAllOtherActionSets: true);
                 var toolsActionSet = SteamVR_Actions.tools;
                 var gripActionInput = new VRActionInput(defaultActionSet.Grip);
+                gripActionInput.HideHand = true;
 
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
                 {
@@ -105,6 +112,13 @@ namespace NomaiVR
                 };
 
                 otherActions = new VRActionInput[] { gripActionInput };
+                toolsActions = GetActionsForSet(toolsActionSet).ToArray();
+            }
+
+            public static IEnumerable<VRActionInput> GetActionsForSet(SteamVR_ActionSet actionSet)
+            {
+                return buttonActions.Values.Union(axisActions.Values).Union(otherActions)
+                    .Where(x => x.DependsOnActionSet(actionSet));
             }
 
             public static void InitializeActionInputs()
@@ -134,7 +148,7 @@ namespace NomaiVR
                     {
                         button.SetAsClickable();
                     }
-                    if (!button.HasOppositeHandButtonWithSameName())
+                    if (!button.Dynamic && !button.HasOppositeHandButtonWithSameName())
                     {
                         button.HideHand = true;
                     }
@@ -167,6 +181,10 @@ namespace NomaiVR
                 SteamVR_Actions.tools_Use.AddOnChangeListener(OnToolUseChange, SteamVR_Input_Sources.RightHand);
                 SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.RightHand);
+
+                //Add Events used to update tool prompts
+                SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.RightHand);
             }
 
             private void OnWakeUp()
@@ -342,8 +360,25 @@ namespace NomaiVR
 
             private void EnterToolMode(bool rightHand = true)
             {
-                //Enables the tools override for the proper hand
+                //Enables the tools override for the proper hand and change affected prompts
                 SteamVR_Actions.tools.Activate(priority: 1, activateForSource: rightHand ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand);
+            }
+
+            private void ToolModeBound(SteamVR_Action_Boolean action, SteamVR_Input_Sources inputSource, bool newValue)
+            {
+                if (newValue)
+                {
+                    if (_lastToolInputSource != inputSource)
+                    {
+                        foreach (var vrActionInput in toolsActions)
+                        {
+                            vrActionInput.BindSource(inputSource);
+                            vrActionInput.Initialize();
+                        }
+                        InputPrompts.Behaviour.UpdatePrompts(toolsActions);
+                        _lastToolInputSource = inputSource;
+                    }
+                }
             }
 
             private void ExitToolMode()
@@ -368,6 +403,15 @@ namespace NomaiVR
                     _isUsingTools = false;
                     ExitToolMode();
                 }
+            }
+
+            private static IEnumerator<WaitForEndOfFrame> DelayedInvoke(Action action, int frames)
+            {
+                for(int i = 0; i < frames; i++)
+                    yield return null;
+                yield return new WaitForEndOfFrame();
+
+                action();
             }
 
             private static IEnumerator<WaitForSecondsRealtime> DelayedPress(float time, JoystickButton button, Action then = null)

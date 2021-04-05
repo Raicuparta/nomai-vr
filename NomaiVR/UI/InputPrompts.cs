@@ -11,7 +11,10 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static readonly List<ScreenPrompt> _toolUnequipPrompts = new List<ScreenPrompt>(2);
+            private static readonly List<ScreenPrompt> s_toolUnequipPrompts = new List<ScreenPrompt>(2);
+            private static readonly HashSet<ScreenPrompt> s_dynamicPrompts = new HashSet<ScreenPrompt>();
+            private static readonly Dictionary<VRActionInput, HashSet<ScreenPrompt>> s_dynamicPromptDependencies = new Dictionary<VRActionInput, HashSet<ScreenPrompt>>();
+            private static readonly Dictionary<ScreenPrompt, string> s_dynamicProptLastText = new Dictionary<ScreenPrompt, string>();
 
             private static PromptManager Manager => Locator.GetPromptManager();
 
@@ -21,11 +24,19 @@ namespace NomaiVR
                 var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
                 if (!isInShip && !isUsingFixedProbeTool)
                 {
-                    foreach (var prompt in _toolUnequipPrompts)
+                    //TODO: Maybe a better way than this?
+                    foreach (var prompt in s_toolUnequipPrompts)
                     {
                         prompt.SetVisibility(false);
                     }
                 }
+            }
+
+            public static void UpdatePrompts(VRActionInput[] actionsToUpdate)
+            {
+                foreach(var action in actionsToUpdate)
+                    foreach (ScreenPrompt prompt in s_dynamicPromptDependencies[action])
+                        prompt.SetText(s_dynamicProptLastText[prompt]);
             }
 
             public class Patch : NomaiVRPatch
@@ -82,7 +93,55 @@ namespace NomaiVR
                     return new List<string> { newText };
                 }
 
-                private static void AddTextIfNotExisting(string text, HashSet<string> actionTexts, VRActionInput actionInput)
+                private static VRActionInput GetActionInputFromCommand(InputCommand command)
+                {
+                    if (command is SingleAxisCommand singleAxisCommand)
+                    {
+                        var gamepadBinding = singleAxisCommand.GetGamepadBinding();
+                        if (gamepadBinding != null)
+                        {
+                            var button = gamepadBinding.gamepadButtonPos;
+                            if (ControllerInput.buttonActions.ContainsKey(button))
+                                return ControllerInput.buttonActions[button];
+
+                            var axis = gamepadBinding.axisID;
+                            if (ControllerInput.axisActions.ContainsKey(axis))
+                                return ControllerInput.axisActions[axis];
+                        }
+                    }
+                    else if (command.GetType() == typeof(DoubleAxisCommand))
+                    {
+                        var doubleAxisCommand = (DoubleAxisCommand)command;
+                        var axis = doubleAxisCommand.GetGamepadAxis();
+                        if (ControllerInput.axisActions.ContainsKey(axis))
+                            return ControllerInput.axisActions[axis];
+                    }
+                    return null;
+                }
+
+                private static void CheckDynamicPrompt(ScreenPrompt screenPrompt)
+                {
+                    if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
+                    {
+                        return;
+                    }
+
+                    foreach (var command in screenPrompt._commandList)
+                    {
+                        var actionInput = GetActionInputFromCommand(command);
+                        //Keep track of dynamic prompts
+                        if (actionInput != null && actionInput.Dynamic)
+                        {
+                            if (!s_dynamicPrompts.Contains(screenPrompt)) s_dynamicPrompts.Add(screenPrompt);
+
+                            if (!s_dynamicPromptDependencies.ContainsKey(actionInput))
+                                s_dynamicPromptDependencies.Add(actionInput, new HashSet<ScreenPrompt>());
+                            s_dynamicPromptDependencies[actionInput].Add(screenPrompt);
+                        }
+                    }
+                }
+
+                private static void AddTextIfNotExisting(string text, HashSet<string> actionTexts, VRActionInput actionInput, ScreenPrompt screenPrompt)
                 {
                     var actionInputTexts = actionInput.GetText();
                     foreach (var inputText in actionInputTexts)
@@ -94,7 +153,7 @@ namespace NomaiVR
                     }
                 }
 
-                private static void AddVRMappingToPrompt(ref string text, List<InputCommand> commandList)
+                private static void AddVRMappingToPrompt(ref string text, ScreenPrompt screenPrompt)
                 {
                     if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
                     {
@@ -103,38 +162,10 @@ namespace NomaiVR
 
                     var actionTexts = new HashSet<string>();
 
-
-                    for (var i = 0; i < commandList.Count; i++)
+                    foreach (var command in screenPrompt._commandList)
                     {
-                        var command = commandList[i];
-
-                        if (command.GetType() == typeof(SingleAxisCommand))
-                        {
-                            var singleAxisCommand = (SingleAxisCommand)command;
-                            var gamepadBinding = singleAxisCommand.GetGamepadBinding();
-                            if (gamepadBinding != null)
-                            {
-                                var button = gamepadBinding.gamepadButtonPos;
-                                if (ControllerInput.buttonActions.ContainsKey(button))
-                                {
-                                    AddTextIfNotExisting(text, actionTexts, ControllerInput.buttonActions[button]);
-                                }
-                                var axis = gamepadBinding.axisID;
-                                if (ControllerInput.axisActions.ContainsKey(axis))
-                                {
-                                    AddTextIfNotExisting(text, actionTexts, ControllerInput.axisActions[axis]);
-                                }
-                            }
-                        }
-                        else if (command.GetType() == typeof(DoubleAxisCommand))
-                        {
-                            var doubleAxisCommand = (DoubleAxisCommand)command;
-                            var axis = doubleAxisCommand.GetGamepadAxis();
-                            if (ControllerInput.axisActions.ContainsKey(axis))
-                            {
-                                AddTextIfNotExisting(text, actionTexts, ControllerInput.axisActions[axis]);
-                            }
-                        }
+                        var actionInput = GetActionInputFromCommand(command);
+                        if (actionInput != null) AddTextIfNotExisting(text, actionTexts, actionInput, screenPrompt);
                     }
 
                     actionTexts.Reverse();
@@ -143,17 +174,25 @@ namespace NomaiVR
                     text = $"{actionText} {cleanOriginalText}";
                 }
 
-                private static void PrePromptSetText(ref string text, List<InputCommand> ____commandList)
+                private static void PrePromptSetText(ref string text, ScreenPrompt __instance)
                 {
-                    AddVRMappingToPrompt(ref text, ____commandList);
+                    if (s_dynamicPrompts.Contains(__instance))
+                        s_dynamicProptLastText[__instance] = text;
+
+                    AddVRMappingToPrompt(ref text, __instance); //Only changes the string we pass to the PromptManager
                 }
 
-                private static void PrePromptInit(ref string prompt, List<InputCommand> ____commandList)
+                private static void PrePromptInit(ref string prompt, ScreenPrompt __instance)
                 {
-                    AddVRMappingToPrompt(ref prompt, ____commandList);
+                    CheckDynamicPrompt(__instance);
+
+                    if (s_dynamicPrompts.Contains(__instance))
+                        s_dynamicProptLastText[__instance] = prompt;
+
+                    AddVRMappingToPrompt(ref prompt, __instance);
                 }
 
-                private static void PostScreenPromptVisibility(bool isVisible)
+                private static void PostScreenPromptVisibility(bool isVisible, ScreenPrompt __instance)
                 {
                     if (isVisible)
                     {
@@ -203,7 +242,7 @@ namespace NomaiVR
 
                 private static void RemoveProbePrompts(ScreenPrompt ____unequipPrompt)
                 {
-                    _toolUnequipPrompts.Add(____unequipPrompt);
+                    s_toolUnequipPrompts.Add(____unequipPrompt);
                 }
 
                 private static void ChangeProbePrompts(ref ScreenPrompt ____retrievePrompt)
@@ -222,7 +261,7 @@ namespace NomaiVR
                     ScreenPrompt ____zoomLevelPrompt
                 )
                 {
-                    _toolUnequipPrompts.Add(____unequipPrompt);
+                    s_toolUnequipPrompts.Add(____unequipPrompt);
                     Manager.RemoveScreenPrompt(____zoomLevelPrompt);
                 }
 
