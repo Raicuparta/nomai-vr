@@ -191,7 +191,6 @@ namespace NomaiVR
             private IEnumerator<WaitForSecondsRealtime> _delayedInteract = null;
             private void OnInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
-                Logs.Write("Interacting normally!"); //FIXME: REMOVE DEBUG
                 var value = newState ? 1 : 0;
 
                 if (!SceneHelper.IsInGame())
@@ -212,7 +211,7 @@ namespace NomaiVR
                         if (_delayedInteract != null)
                             StopCoroutine(_delayedInteract);
 
-                        float waitTime = holdDuration - (Time.realtimeSinceStartup - fromAction.changedTime);
+                        float waitTime = holdDuration - (Time.realtimeSinceStartup - fromAction.GetTimeLastChanged(fromSource));
                         _delayedInteract = DelayedPress(waitTime, JoystickButton.FaceUp, () => _delayedInteract = null);
                         StartCoroutine(_delayedInteract);
                     }
@@ -236,7 +235,6 @@ namespace NomaiVR
             private void OnToolUseChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 //TODO: Maybe we can trim some things?
-                Logs.Write("Interacting with tool!"); //FIXME: REMOVE DEBUG
                 var value = newState ? 1 : 0;
 
                 if (!SceneHelper.IsInGame())
@@ -253,13 +251,13 @@ namespace NomaiVR
                         if (_delayedToolUse != null)
                             StopCoroutine(_delayedToolUse);
 
-                        float waitTime = holdDuration - (Time.realtimeSinceStartup - fromAction.changedTime);
+                        float waitTime = holdDuration - (Time.realtimeSinceStartup - fromAction.GetTimeLastChanged(fromSource));
                         _delayedToolUse = DelayedPress(waitTime, JoystickButton.LeftStickClick, () => _delayedToolUse = null);
                         StartCoroutine(_delayedToolUse);
                     }
                     else
                     {
-                        if(_delayedToolUse != null)
+                        if (_delayedToolUse != null)
                         {
                             StopCoroutine(_delayedToolUse);
                             _delayedToolUse = null;
