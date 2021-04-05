@@ -79,8 +79,9 @@ namespace NomaiVR
                     [JoystickButton.FaceDown] = new VRActionInput(defaultActionSet.Jump, TextHelper.GREEN),
                     [JoystickButton.FaceRight] = new VRActionInput(defaultActionSet.Back, TextHelper.RED),
                     [JoystickButton.FaceLeft] = new VRActionInput(defaultActionSet.Interact, TextHelper.BLUE),
-                    [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, false, isDynamic: true),
-                    [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, true, isDynamic: true),
+                    //TODO: For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
+                    [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, false, gripActionInput, isDynamic: true),
+                    [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, true, gripActionInput, isDynamic: true),
                     [JoystickButton.FaceUp] = new VRActionInput(defaultActionSet.Interact, TextHelper.BLUE, true),
                     [JoystickButton.LeftBumper] = new VRActionInput(defaultActionSet.RollMode),
                     [JoystickButton.Start] = new VRActionInput(defaultActionSet.Menu),
@@ -190,6 +191,7 @@ namespace NomaiVR
             private IEnumerator<WaitForSecondsRealtime> _delayedInteract = null;
             private void OnInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
+                Logs.Write("Interacting normally!"); //FIXME: REMOVE DEBUG
                 var value = newState ? 1 : 0;
 
                 if (!SceneHelper.IsInGame())
@@ -234,12 +236,17 @@ namespace NomaiVR
             private void OnToolUseChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 //TODO: Maybe we can trim some things?
-                Logs.Write("Interacting with tool!");
+                Logs.Write("Interacting with tool!"); //FIXME: REMOVE DEBUG
                 var value = newState ? 1 : 0;
-                var button = JoystickButton.RightBumper;
-                var isUsingTranslator = ToolHelper.Swapper.IsInToolMode(ToolMode.Translator);
 
-                if (!isUsingTranslator)
+                if (!SceneHelper.IsInGame())
+                {
+                    _buttons[JoystickButton.FaceLeft] = value;
+                    return;
+                }
+
+                var button = JoystickButton.RightBumper;
+                if (!ToolHelper.Swapper.IsInToolMode(ToolMode.Translator))
                 {
                     if (newState)
                     {
