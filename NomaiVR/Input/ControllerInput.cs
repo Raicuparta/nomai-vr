@@ -396,7 +396,7 @@ namespace NomaiVR
                 if (!_isUsingTools && canUseTools)
                 {
                     _isUsingTools = true;
-                    EnterToolMode();
+                    EnterToolMode(VRToolSwapper.InteractingHand == null || !VRToolSwapper.InteractingHand.isLeft);
                 } 
                 else if(_isUsingTools && !canUseTools)
                 {
