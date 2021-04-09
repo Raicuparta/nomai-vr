@@ -15,6 +15,7 @@ namespace NomaiVR
         public bool isLeft;
 
         public Transform Palm { get; private set; }
+        public Transform IndexTip => _skeleton.indexTip;
 
         private Renderer _handRenderer;
         private Renderer _gloveRenderer;

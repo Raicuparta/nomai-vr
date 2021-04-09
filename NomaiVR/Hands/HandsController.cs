@@ -11,6 +11,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            public static Transform DominantHand => !ModSettings.LeftHandDominant ? RightHand : LeftHand;
             public static Transform RightHand;
             public static Hand RightHandBehaviour;
             public static Transform LeftHand;

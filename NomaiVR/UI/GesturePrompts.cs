@@ -211,7 +211,7 @@ namespace NomaiVR
 
             private static void UpdateWakeUpPrompt()
             {
-                var hand = HandsController.Behaviour.RightHand;
+                var hand = HandsController.Behaviour.DominantHand;
                 var isLookingAtHand = hand != null && CameraHelper.IsOnScreen(hand.position);
                 var isSleeping = OWTime.IsPaused(OWTime.PauseType.Sleeping);
                 var shouldShowText = !isLookingAtHand && isSleeping;

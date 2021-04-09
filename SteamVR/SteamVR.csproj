@@ -275,6 +275,7 @@
     <Compile Include="SteamVR\Scripts\SteamVR_TrackedObject.cs" />
     <Compile Include="SteamVR\Scripts\SteamVR_TrackingReferenceManager.cs" />
     <Compile Include="SteamVR\Scripts\SteamVR_Utils.cs" />
+    <Compile Include="SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_inverted.cs" />
     <Compile Include="SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_tools.cs" />
     <Compile Include="SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_default.cs" />
     <Compile Include="SteamVR_Input\SteamVR_Input_Actions.cs" />

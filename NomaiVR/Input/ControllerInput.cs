@@ -20,7 +20,9 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            public static event Action BindingsChanged;
             public static bool IsGripping { get; private set; }
+            public static bool MovementOnLeftHand => SteamVR_Actions.default_Move.activeDevice == SteamVR_Input_Sources.LeftHand;
 
             private const float deadZone = 0.25f;
             private const float holdDuration = 0.3f;
@@ -30,6 +32,7 @@ namespace NomaiVR
             private static Dictionary<string, float> _axes;
             private static PlayerResources _playerResources;
 
+            private bool _isLeftDominant;
             private bool _isUsingTools;
             private ScreenPrompt _repairPrompt;
             private SteamVR_Input_Sources? _lastToolInputSource;
@@ -51,7 +54,32 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
                 //Wait for binding state change
-                SteamVR_Actions._default.LeftHand.onActiveBindingChange += (pose, source, val) => { if (val) InitializeActionInputs(); };
+                SteamVR_Actions._default.LeftHand.onActiveBindingChange += (pose, source, val) => { if (val) UpdateHandDominance(); };
+                SteamVR_Actions._default.Move.onActiveBindingChange += (pose, source, val) => { if (val) BindingsChanged?.Invoke(); };
+                SteamVR_Actions.inverted.Move.onActiveBindingChange += (pose, source, val) => { if (val) BindingsChanged?.Invoke(); };
+
+                ModSettings.OnConfigChange += OnSettingsChanged;
+            }
+
+            internal void OnSettingsChanged()
+            {
+                if(_isLeftDominant != ModSettings.LeftHandDominant)
+                {
+                    _isLeftDominant = ModSettings.LeftHandDominant;
+                    UpdateHandDominance();
+                }
+            }
+
+            internal void UpdateHandDominance()
+            {
+                if (_isLeftDominant)
+                    SteamVR_Actions.inverted.Activate(priority: 1);
+                else
+                    SteamVR_Actions.inverted.Deactivate();
+
+                _isActionInputsInitialized = false;
+                InitializeActionInputs();
+                BindingsChanged?.Invoke();
             }
 
             internal void OnEnable()
@@ -77,36 +105,37 @@ namespace NomaiVR
             {
                 var defaultActionSet = SteamVR_Actions._default;
                 defaultActionSet.Activate(disableAllOtherActionSets: true);
+                var invertedActionSet = SteamVR_Actions.inverted;
                 var toolsActionSet = SteamVR_Actions.tools;
                 var gripActionInput = new VRActionInput(defaultActionSet.Grip);
                 gripActionInput.HideHand = true;
 
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
                 {
-                    [JoystickButton.FaceDown] = new VRActionInput(defaultActionSet.Jump, TextHelper.GREEN),
-                    [JoystickButton.FaceRight] = new VRActionInput(defaultActionSet.Back, TextHelper.RED),
-                    [JoystickButton.FaceLeft] = new VRActionInput(defaultActionSet.Interact, TextHelper.BLUE),
+                    [JoystickButton.FaceDown] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Jump, invertedActionSet.Jump), TextHelper.GREEN),
+                    [JoystickButton.FaceRight] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Back, invertedActionSet.Back), TextHelper.RED),
+                    [JoystickButton.FaceLeft] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact), TextHelper.BLUE),
                     //TODO: For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
                     [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, false, gripActionInput, isDynamic: true),
                     [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, true, gripActionInput, isDynamic: true),
-                    [JoystickButton.FaceUp] = new VRActionInput(defaultActionSet.Interact, TextHelper.BLUE, true),
-                    [JoystickButton.LeftBumper] = new VRActionInput(defaultActionSet.RollMode),
-                    [JoystickButton.Start] = new VRActionInput(defaultActionSet.Menu),
-                    [JoystickButton.Select] = new VRActionInput(defaultActionSet.Map),
-                    [JoystickButton.LeftTrigger] = new VRActionInput(defaultActionSet.ThrustDown),
-                    [JoystickButton.RightTrigger] = new VRActionInput(defaultActionSet.ThrustUp)
+                    [JoystickButton.FaceUp] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact), TextHelper.BLUE, true),
+                    [JoystickButton.LeftBumper] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.RollMode, invertedActionSet.RollMode)),
+                    [JoystickButton.Start] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Menu, invertedActionSet.Menu)),
+                    [JoystickButton.Select] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Map, invertedActionSet.Map)),
+                    [JoystickButton.LeftTrigger] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustDown, invertedActionSet.ThrustDown)),
+                    [JoystickButton.RightTrigger] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustUp, invertedActionSet.ThrustUp))
                 };
 
                 axisActions = new Dictionary<AxisIdentifier, VRActionInput>
                 {
-                    [AxisIdentifier.CTRLR_LTRIGGER] = new VRActionInput(defaultActionSet.ThrustDown),
-                    [AxisIdentifier.CTRLR_RTRIGGER] = new VRActionInput(defaultActionSet.ThrustUp),
-                    [AxisIdentifier.CTRLR_LSTICK] = new VRActionInput(defaultActionSet.Move),
-                    [AxisIdentifier.CTRLR_LSTICKX] = new VRActionInput(defaultActionSet.Move),
-                    [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(defaultActionSet.Move),
-                    [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(defaultActionSet.Look),
-                    [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(defaultActionSet.Look),
-                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(defaultActionSet.Look),
+                    [AxisIdentifier.CTRLR_LTRIGGER] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustDown, invertedActionSet.ThrustDown)),
+                    [AxisIdentifier.CTRLR_RTRIGGER] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustUp, invertedActionSet.ThrustUp)),
+                    [AxisIdentifier.CTRLR_LSTICK] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Move, invertedActionSet.Move)),
+                    [AxisIdentifier.CTRLR_LSTICKX] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Move, invertedActionSet.Move)),
+                    [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Move, invertedActionSet.Move)),
+                    [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
+                    [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
+                    [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(toolsActionSet.DPad, isDynamic: true),
                     [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(toolsActionSet.DPad, isDynamic: true)
                 };
@@ -156,6 +185,9 @@ namespace NomaiVR
 
                 _isActionInputsInitialized = true;
 
+                Locator.GetPromptManager()?.RebuildUI();
+                BindingsChanged?.Invoke();
+
                 // Only need to pause the game until prompts are set up.
                 // After that, forcing pauses can break stuff, so better disable it here.
                 SteamVR_Settings.instance.pauseGameWhenDashboardVisible = false;
@@ -176,6 +208,20 @@ namespace NomaiVR
                 SteamVR_Actions.default_ThrustUp.onChange += CreateSingleAxisHandler(JoystickButton.RightTrigger);
                 SteamVR_Actions.default_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
                 SteamVR_Actions.default_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
+
+                SteamVR_Actions.inverted_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
+                SteamVR_Actions.inverted_Back.onChange += OnBackChange;
+                SteamVR_Actions.inverted_Interact.onChange += OnInteractChange;
+                SteamVR_Actions.inverted_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
+                SteamVR_Actions.inverted_Grip.onChange += OnGripChange;
+                SteamVR_Actions.inverted_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
+                SteamVR_Actions.inverted_Map.onChange += CreateButtonHandler(JoystickButton.Select);
+                SteamVR_Actions.inverted_ThrustDown.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_LTRIGGER);
+                SteamVR_Actions.inverted_ThrustUp.onChange += CreateSingleAxisHandler(AxisIdentifier.CTRLR_RTRIGGER);
+                SteamVR_Actions.inverted_ThrustDown.onChange += CreateSingleAxisHandler(JoystickButton.LeftTrigger);
+                SteamVR_Actions.inverted_ThrustUp.onChange += CreateSingleAxisHandler(JoystickButton.RightTrigger);
+                SteamVR_Actions.inverted_Move.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_LSTICKX, AxisIdentifier.CTRLR_LSTICKY);
+                SteamVR_Actions.inverted_Look.onChange += CreateDoubleAxisHandler(AxisIdentifier.CTRLR_RSTICKX, AxisIdentifier.CTRLR_RSTICKY);
 
                 SteamVR_Actions.tools_Use.AddOnChangeListener(OnToolUseChange, SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools_Use.AddOnChangeListener(OnToolUseChange, SteamVR_Input_Sources.RightHand);
@@ -210,6 +256,10 @@ namespace NomaiVR
             private void OnInteractChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 var value = newState ? 1 : 0;
+
+                //Don't Interact when holding a tool
+                if (ToolHelper.IsUsingAnyTool(ToolGroup.None | ToolGroup.Suit))
+                    return;
 
                 if (!SceneHelper.IsInGame())
                 {
@@ -361,7 +411,7 @@ namespace NomaiVR
             private void EnterToolMode(bool rightHand = true)
             {
                 //Enables the tools override for the proper hand and change affected prompts
-                SteamVR_Actions.tools.Activate(priority: 1, activateForSource: rightHand ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools.Activate(priority: 2, activateForSource: rightHand ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand);
             }
 
             private void ToolModeBound(SteamVR_Action_Boolean action, SteamVR_Input_Sources inputSource, bool newValue)
@@ -388,7 +438,7 @@ namespace NomaiVR
 
                 //Restores mainhand prompts, a bit of a hack...
                 //TODO: Get Dominant Hand
-                SteamVR_Actions.tools.Activate(SteamVR_Input_Sources.RightHand, priority: 1);
+                SteamVR_Actions.tools.Activate(SteamVR_Input_Sources.RightHand, priority: 2);
                 SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
             }
 

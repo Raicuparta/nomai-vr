@@ -11,6 +11,7 @@ namespace NomaiVR
         {
             private Transform _holdTransform;
             private bool _isTranslatorPosition;
+            private const float _canvasSizeX = 0.1f;
 
             internal void Start()
             {
@@ -25,7 +26,7 @@ namespace NomaiVR
                 canvas.transform.localRotation = Quaternion.identity;
 
                 _holdTransform = new GameObject().transform;
-                _holdTransform.SetParent(HandsController.Behaviour.RightHand, false);
+                ParentToDominantHand();
 
                 canvas.transform.SetParent(_holdTransform, false);
                 SetPositionToHand();
@@ -34,6 +35,43 @@ namespace NomaiVR
                 {
                     child.localPosition = Vector3.zero;
                 }
+
+                ModSettings.OnConfigChange += ParentToDominantHand;
+                VRToolSwapper.Equipped += ParentToInteractingHand;
+                VRToolSwapper.UnEquipped += ParentToDominantHand;
+            }
+
+            internal void OnDestroy()
+            {
+                ModSettings.OnConfigChange -= ParentToDominantHand;
+                VRToolSwapper.Equipped -= ParentToInteractingHand;
+                VRToolSwapper.UnEquipped -= ParentToDominantHand;
+            }
+
+            internal void ParentToInteractingHand()
+            {
+                if (VRToolSwapper.InteractingHand != null)
+                {
+                    _holdTransform.SetParent(VRToolSwapper.InteractingHand.transform, false);
+                    UpdateHandPosition();
+                }
+                else
+                    ParentToDominantHand();
+            }
+
+            internal void ParentToDominantHand()
+            {
+                Transform dominantHand = HandsController.Behaviour.DominantHand;
+                _holdTransform.SetParent(dominantHand, false);
+                UpdateHandPosition();
+            }
+
+            internal void UpdateHandPosition()
+            {
+                if (_isTranslatorPosition)
+                    SetPositionToTranslator();
+                else
+                    SetPositionToHand();
             }
 
             internal void Update()
@@ -66,13 +104,15 @@ namespace NomaiVR
 
             private void SetPositionToHand()
             {
-                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(-0.09f, -0.11f, 0.13f);
+                bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHand;
+                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(isRightHanded ? -0.09f : 0.09f + _canvasSizeX, -0.11f, 0.13f);
                 _isTranslatorPosition = false;
             }
 
             private void SetPositionToTranslator()
             {
-                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(-0.17f, 0.07f, -0.11f);
+                bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHand;
+                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(isRightHanded ? -0.17f : 0.17f + _canvasSizeX, 0.07f, -0.11f);
                 _isTranslatorPosition = true;
             }
         }

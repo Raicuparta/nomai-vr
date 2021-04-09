@@ -245,6 +245,218 @@
         }
       ]
     },
+    "/actions/inverted": {
+      "sources": [
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/inverted/in/ThrustDown"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/lclick"
+            },
+            "position": {
+              "output": "/actions/inverted/in/lstick"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/right/input/joystick"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/x"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/x"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/start"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/y"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/inverted/in/ThrustUp"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/trigger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/select"
+            },
+            "position": {
+              "output": "/actions/inverted/in/rstick"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/left/input/joystick"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/jump"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/a"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/Interact"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/b"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/map"
+            },
+            "position": {
+              "output": "/actions/inverted/in/move"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/right/input/thumbstick"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/menu"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/b"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/RollMode"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/a"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/select"
+            },
+            "position": {
+              "output": "/actions/inverted/in/look"
+            }
+          },
+          "mode": "joystick",
+          "path": "/user/hand/left/input/thumbstick"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/back"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/trackpad"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/back"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/trackpad"
+        },
+        {
+          "inputs": {
+            "grab": {
+              "output": "/actions/inverted/in/grip"
+            }
+          },
+          "mode": "grab",
+          "parameters": {
+            "value_hold_threshold": "1.35",
+            "value_release_threshold": "1"
+          },
+          "path": "/user/hand/left/input/grip"
+        },
+        {
+          "inputs": {
+            "grab": {
+              "output": "/actions/inverted/in/grip"
+            }
+          },
+          "mode": "grab",
+          "parameters": {
+            "value_hold_threshold": "1.35",
+            "value_release_threshold": "1"
+          },
+          "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "grab": {
+              "output": "/actions/inverted/in/grabpinch"
+            }
+          },
+          "mode": "grab",
+          "parameters": {
+            "force_hold_threshold": "0.02",
+            "force_release_threshold": "0.01"
+          },
+          "path": "/user/hand/right/input/pinch"
+        },
+        {
+          "inputs": {
+            "grab": {
+              "output": "/actions/inverted/in/grabpinch"
+            }
+          },
+          "mode": "grab",
+          "parameters": {
+            "force_hold_threshold": "0.02",
+            "force_release_threshold": "0.01"
+          },
+          "path": "/user/hand/left/input/pinch"
+        },
+        {
+          "inputs": {
+            "force": {
+              "output": "/actions/inverted/in/squeeze"
+            }
+          },
+          "mode": "force_sensor",
+          "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "force": {
+              "output": "/actions/inverted/in/squeeze"
+            }
+          },
+          "mode": "force_sensor",
+          "path": "/user/hand/left/input/grip"
+        }
+      ]
+    },
     "/actions/tools": {
       "sources": [
         {

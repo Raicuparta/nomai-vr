@@ -18,6 +18,7 @@ namespace Valve.VR
     {
         
         private static SteamVR_Input_ActionSet_default p__default;
+        private static SteamVR_Input_ActionSet_inverted p_inverted;
         private static SteamVR_Input_ActionSet_tools p_tools;
 
         public static SteamVR_Input_ActionSet_default _default
@@ -25,6 +26,14 @@ namespace Valve.VR
             get
             {
                 return SteamVR_Actions.p__default.GetCopy <SteamVR_Input_ActionSet_default>();
+            }
+        }
+
+        public static SteamVR_Input_ActionSet_inverted inverted
+        {
+            get
+            {
+                return SteamVR_Actions.p_inverted.GetCopy<SteamVR_Input_ActionSet_inverted>();
             }
         }
 
@@ -39,10 +48,12 @@ namespace Valve.VR
         private static void StartPreInitActionSets()
         {
             SteamVR_Actions.p__default = ((SteamVR_Input_ActionSet_default)(SteamVR_ActionSet.Create <SteamVR_Input_ActionSet_default>("/actions/default")));
+            SteamVR_Actions.p_inverted = ((SteamVR_Input_ActionSet_inverted)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_inverted>("/actions/inverted")));
             SteamVR_Actions.p_tools = ((SteamVR_Input_ActionSet_tools)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_tools>("/actions/tools")));
             Valve.VR.SteamVR_Input.actionSets = new Valve.VR.SteamVR_ActionSet[]
             {
                     SteamVR_Actions._default,
+                    SteamVR_Actions.inverted,
                     SteamVR_Actions.tools
             };
         }

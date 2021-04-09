@@ -96,9 +96,9 @@ namespace NomaiVR
         private void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
-            var hand = HandsController.Behaviour.RightHand; //TODO: Dominant Hand
+            Func<Transform,bool> handNear = (hand) => (hand.position - transform.position).sqrMagnitude < _minHandDistance;
 
-            var isHandClose = !ModSettings.AutoHideToolbelt || (hand.position - transform.position).sqrMagnitude < _minHandDistance;
+            var isHandClose = !ModSettings.AutoHideToolbelt || handNear(HandsController.Behaviour.RightHand) || handNear(HandsController.Behaviour.LeftHand);
             var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && isHandClose;
 
             if (!_visible && shouldBeVisible)

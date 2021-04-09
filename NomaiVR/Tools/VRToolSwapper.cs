@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NomaiVR
 {
@@ -10,6 +11,9 @@ namespace NomaiVR
         private static bool _isBuccklingUp = false;
         public static Hand InteractingHand { get; private set; }
 
+        public static event Action Equipped;
+        public static event Action UnEquipped;
+
         private static readonly Dictionary<ToolMode, bool> _toolsAllowedToEquip = new Dictionary<ToolMode, bool>() {
             { ToolMode.Item, true }
         };
@@ -19,11 +23,14 @@ namespace NomaiVR
             _toolsAllowedToEquip[mode] = true;
             ToolHelper.Swapper.EquipToolMode(mode);
             InteractingHand = interactingHand;
+            Equipped?.Invoke();
             _toolsAllowedToEquip[mode] = false;
         }
 
         public static void Unequip()
         {
+            InteractingHand = null;
+            UnEquipped?.Invoke();
             Equip(ToolMode.None, null);
         }
 
