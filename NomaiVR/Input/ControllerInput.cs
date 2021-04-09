@@ -22,16 +22,17 @@ namespace NomaiVR
         {
             public static event Action BindingsChanged;
             public static bool IsGripping { get; private set; }
-            public static bool MovementOnLeftHand => SteamVR_Actions.default_Move.activeDevice == SteamVR_Input_Sources.LeftHand;
-
+            public static bool MovementOnLeftHand => _movementAction.activeDevice == SteamVR_Input_Sources.LeftHand;
             private const float deadZone = 0.25f;
             private const float holdDuration = 0.3f;
 
             private static Behaviour _instance;
+            private static OverridableSteamVRAction _movementAction;
             private static Dictionary<JoystickButton, float> _buttons;
             private static Dictionary<string, float> _axes;
             private static PlayerResources _playerResources;
 
+            private bool _permanentBindingsChanged;
             private bool _isLeftDominant;
             private bool _isUsingTools;
             private ScreenPrompt _repairPrompt;
@@ -51,12 +52,8 @@ namespace NomaiVR
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
                 SetUpActionInputs();
+                UpdateHandDominance();
                 GlobalMessenger.AddListener("WakeUp", OnWakeUp);
-
-                //Wait for binding state change
-                SteamVR_Actions._default.LeftHand.onActiveBindingChange += (pose, source, val) => { if (val) UpdateHandDominance(); };
-                SteamVR_Actions._default.Move.onActiveBindingChange += (pose, source, val) => { if (val) BindingsChanged?.Invoke(); };
-                SteamVR_Actions.inverted.Move.onActiveBindingChange += (pose, source, val) => { if (val) BindingsChanged?.Invoke(); };
 
                 ModSettings.OnConfigChange += OnSettingsChanged;
             }
@@ -72,14 +69,10 @@ namespace NomaiVR
 
             internal void UpdateHandDominance()
             {
-                if (_isLeftDominant)
+                if (ModSettings.LeftHandDominant)
                     SteamVR_Actions.inverted.Activate(priority: 1);
                 else
                     SteamVR_Actions.inverted.Deactivate();
-
-                _isActionInputsInitialized = false;
-                InitializeActionInputs();
-                BindingsChanged?.Invoke();
             }
 
             internal void OnEnable()
@@ -107,8 +100,11 @@ namespace NomaiVR
                 defaultActionSet.Activate(disableAllOtherActionSets: true);
                 var invertedActionSet = SteamVR_Actions.inverted;
                 var toolsActionSet = SteamVR_Actions.tools;
-                var gripActionInput = new VRActionInput(defaultActionSet.Grip);
-                gripActionInput.HideHand = true;
+                var gripActionInput = new VRActionInput(defaultActionSet.Grip)
+                {
+                    HideHand = true
+                };
+                _movementAction = new OverridableSteamVRAction(defaultActionSet.Move, invertedActionSet.Move);
 
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
                 {
@@ -130,9 +126,9 @@ namespace NomaiVR
                 {
                     [AxisIdentifier.CTRLR_LTRIGGER] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustDown, invertedActionSet.ThrustDown)),
                     [AxisIdentifier.CTRLR_RTRIGGER] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustUp, invertedActionSet.ThrustUp)),
-                    [AxisIdentifier.CTRLR_LSTICK] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Move, invertedActionSet.Move)),
-                    [AxisIdentifier.CTRLR_LSTICKX] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Move, invertedActionSet.Move)),
-                    [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Move, invertedActionSet.Move)),
+                    [AxisIdentifier.CTRLR_LSTICK] = new VRActionInput(_movementAction),
+                    [AxisIdentifier.CTRLR_LSTICKX] = new VRActionInput(_movementAction),
+                    [AxisIdentifier.CTRLR_LSTICKY] = new VRActionInput(_movementAction),
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
@@ -228,9 +224,22 @@ namespace NomaiVR
                 SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.RightHand);
 
+                //Update Prompts events
+                foreach (var action in SteamVR_Input.actionsBoolean)
+                    action.onActiveBindingChange += OnPermanentBindingChanged;
+                foreach (var action in SteamVR_Input.actionsSingle)
+                    action.onActiveBindingChange += OnPermanentBindingChanged;
+                foreach (var action in SteamVR_Input.actionsVector2)
+                    action.onActiveBindingChange += OnPermanentBindingChanged;
+
                 //Add Events used to update tool prompts
                 SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.RightHand);
+            }
+
+            private void OnPermanentBindingChanged(ISteamVR_Action fromAction, SteamVR_Input_Sources fromSource, bool active)
+            {
+                if(active) _permanentBindingsChanged = true;
             }
 
             private void OnWakeUp()
@@ -459,6 +468,16 @@ namespace NomaiVR
                 {
                     _isUsingTools = false;
                     ExitToolMode();
+                }
+            }
+
+            internal void LateUpdate()
+            {
+                if (_permanentBindingsChanged)
+                {
+                    _isActionInputsInitialized = false;
+                    InitializeActionInputs();
+                    _permanentBindingsChanged = false;
                 }
             }
 
