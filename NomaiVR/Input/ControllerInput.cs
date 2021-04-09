@@ -384,15 +384,22 @@ namespace NomaiVR
             private void ExitToolMode()
             {
                 //De-Activates the tools action-set (stops overriting same buttons)
-                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
                 SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
+
+                //Restores mainhand prompts, a bit of a hack...
+                //TODO: Get Dominant Hand
+                SteamVR_Actions.tools.Activate(SteamVR_Input_Sources.RightHand, priority: 1);
+                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
             }
 
             internal void Update()
             {
                 //Ship Tools will have their buttons in cockpit
-                //Fixme: Remove IsGripping, use physical buttons in cockpit to avoid confusion
-                bool canUseTools = !InputHelper.IsUIInteractionMode(true) && ToolHelper.IsUsingAnyTool() && (!ToolHelper.IsUsingAnyTool(ToolGroup.Ship) || IsGripping);
+                //FIXME: Remove IsGripping, use physical buttons in cockpit to avoid confusion
+                bool inMenus = InputHelper.IsUIInteractionMode(true);
+                bool isUsingPlayerTools = ToolHelper.IsUsingAnyTool() && (!ToolHelper.IsUsingAnyTool(ToolGroup.Ship) || IsGripping);
+                bool isUsingStationaryTools = InputHelper.IsStationaryToolMode() && IsGripping;
+                bool canUseTools = !inMenus && (isUsingPlayerTools || isUsingStationaryTools);
                 if (!_isUsingTools && canUseTools)
                 {
                     _isUsingTools = true;
@@ -403,15 +410,6 @@ namespace NomaiVR
                     _isUsingTools = false;
                     ExitToolMode();
                 }
-            }
-
-            private static IEnumerator<WaitForEndOfFrame> DelayedInvoke(Action action, int frames)
-            {
-                for(int i = 0; i < frames; i++)
-                    yield return null;
-                yield return new WaitForEndOfFrame();
-
-                action();
             }
 
             private static IEnumerator<WaitForSecondsRealtime> DelayedPress(float time, JoystickButton button, Action then = null)

@@ -10,5 +10,13 @@
                 (includeDialogue ? InputMode.Dialogue : 0)
             );
         }
+
+        public static bool IsStationaryToolMode()
+        {
+            return OWInput.IsInputMode(
+                InputMode.StationaryProbeLauncher |
+                InputMode.SatelliteCam
+            );
+        }
     }
 }

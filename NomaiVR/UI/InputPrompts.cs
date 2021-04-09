@@ -21,8 +21,7 @@ namespace NomaiVR
             internal void LateUpdate()
             {
                 var isInShip = ToolHelper.Swapper.GetToolGroup() == ToolGroup.Ship;
-                var isUsingFixedProbeTool = OWInput.IsInputMode(InputMode.StationaryProbeLauncher) || OWInput.IsInputMode(InputMode.SatelliteCam);
-                if (!isInShip && !isUsingFixedProbeTool)
+                if (!isInShip && !InputHelper.IsStationaryToolMode())
                 {
                     //TODO: Maybe a better way than this?
                     foreach (var prompt in s_toolUnequipPrompts)
