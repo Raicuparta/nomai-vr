@@ -225,21 +225,30 @@ namespace NomaiVR
                 SteamVR_Actions.tools_DPad.AddOnChangeListener(CreateDoubleAxisHandler(AxisIdentifier.CTRLR_DPADX, AxisIdentifier.CTRLR_DPADY), SteamVR_Input_Sources.RightHand);
 
                 //Update Prompts events
-                foreach (var action in SteamVR_Input.actionsBoolean)
-                    action.onActiveBindingChange += OnBaseBindingChanged;
-                foreach (var action in SteamVR_Input.actionsSingle)
-                    action.onActiveBindingChange += OnBaseBindingChanged;
-                foreach (var action in SteamVR_Input.actionsVector2)
-                    action.onActiveBindingChange += OnBaseBindingChanged;
+                foreach (var action in SteamVR_Actions._default.nonVisualInActions)
+                    RegisterToActiveBindingChanged(action, OnBaseBindingChanged);
+                foreach (var action in SteamVR_Actions.inverted.nonVisualInActions)
+                    RegisterToActiveBindingChanged(action, OnBaseBindingChanged);
 
                 //Add Events used to update tool prompts
                 SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.RightHand);
             }
 
+            private void RegisterToActiveBindingChanged(ISteamVR_Action_In actionIn, Action<ISteamVR_Action, SteamVR_Input_Sources, bool> changeHandler)
+            {
+                if (actionIn is SteamVR_Action_Boolean boolAction)
+                    boolAction.onActiveBindingChange += (action, source, active) => changeHandler(action, source, active);
+                else if (actionIn is SteamVR_Action_Single singleAction)
+                    singleAction.onActiveBindingChange += (action, source, active) => changeHandler(action, source, active);
+                else if (actionIn is SteamVR_Action_Vector2 vectorAction)
+                    vectorAction.onActiveBindingChange += (action, source, active) => changeHandler(action, source, active);
+            }
+
+
             private void OnBaseBindingChanged(ISteamVR_Action fromAction, SteamVR_Input_Sources fromSource, bool active)
             {
-                if(active) _baseBindingsChanged = true;
+                if(active && fromAction != null && fromAction.active) _baseBindingsChanged = true;
             }
 
             private void OnWakeUp()
