@@ -38,13 +38,7 @@ namespace NomaiVR
                     if(s_vrActionPromptDependencies.ContainsKey(action))
                     {
                         foreach (ScreenPrompt prompt in s_vrActionPromptDependencies[action])
-                        {
-                            string actionText = s_vrActionProptLastText[prompt];
-                            
-                            //Only update prompts with actual text
-                            if (!string.IsNullOrEmpty(actionText))
-                                prompt.SetText(actionText);
-                        }
+                            prompt.SetText(s_vrActionProptLastText[prompt]);
                     }
                 }
             }
