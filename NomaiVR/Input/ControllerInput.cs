@@ -15,6 +15,7 @@ namespace NomaiVR
         public static Dictionary<AxisIdentifier, VRActionInput> axisActions;
         public static VRActionInput[] otherActions;
         private static VRActionInput[] toolsActions;
+        private static VRActionInput[] baseActions;
         private static bool _isActionInputsInitialized;
         public static bool IsInputEnabled = true;
 
@@ -32,7 +33,7 @@ namespace NomaiVR
             private static Dictionary<string, float> _axes;
             private static PlayerResources _playerResources;
 
-            private bool _permanentBindingsChanged;
+            private bool _baseBindingsChanged;
             private bool _isLeftDominant;
             private bool _isUsingTools;
             private ScreenPrompt _repairPrompt;
@@ -138,6 +139,7 @@ namespace NomaiVR
 
                 otherActions = new VRActionInput[] { gripActionInput };
                 toolsActions = GetActionsForSet(toolsActionSet).ToArray();
+                baseActions = GetActionsForSet(defaultActionSet).Union(GetActionsForSet(invertedActionSet)).ToArray();
             }
 
             public static IEnumerable<VRActionInput> GetActionsForSet(SteamVR_ActionSet actionSet)
@@ -180,8 +182,6 @@ namespace NomaiVR
                 }
 
                 _isActionInputsInitialized = true;
-
-                Locator.GetPromptManager()?.RebuildUI();
                 BindingsChanged?.Invoke();
 
                 // Only need to pause the game until prompts are set up.
@@ -226,20 +226,20 @@ namespace NomaiVR
 
                 //Update Prompts events
                 foreach (var action in SteamVR_Input.actionsBoolean)
-                    action.onActiveBindingChange += OnPermanentBindingChanged;
+                    action.onActiveBindingChange += OnBaseBindingChanged;
                 foreach (var action in SteamVR_Input.actionsSingle)
-                    action.onActiveBindingChange += OnPermanentBindingChanged;
+                    action.onActiveBindingChange += OnBaseBindingChanged;
                 foreach (var action in SteamVR_Input.actionsVector2)
-                    action.onActiveBindingChange += OnPermanentBindingChanged;
+                    action.onActiveBindingChange += OnBaseBindingChanged;
 
                 //Add Events used to update tool prompts
                 SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools_Use.AddOnActiveBindingChangeListener(ToolModeBound, SteamVR_Input_Sources.RightHand);
             }
 
-            private void OnPermanentBindingChanged(ISteamVR_Action fromAction, SteamVR_Input_Sources fromSource, bool active)
+            private void OnBaseBindingChanged(ISteamVR_Action fromAction, SteamVR_Input_Sources fromSource, bool active)
             {
-                if(active) _permanentBindingsChanged = true;
+                if(active) _baseBindingsChanged = true;
             }
 
             private void OnWakeUp()
@@ -473,11 +473,12 @@ namespace NomaiVR
 
             internal void LateUpdate()
             {
-                if (_permanentBindingsChanged)
+                if (_baseBindingsChanged)
                 {
                     _isActionInputsInitialized = false;
                     InitializeActionInputs();
-                    _permanentBindingsChanged = false;
+                    InputPrompts.Behaviour.UpdatePrompts(baseActions);
+                    _baseBindingsChanged = false;
                 }
             }
 

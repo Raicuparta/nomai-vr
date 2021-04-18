@@ -12,9 +12,9 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private static readonly List<ScreenPrompt> s_toolUnequipPrompts = new List<ScreenPrompt>(2);
-            private static readonly HashSet<ScreenPrompt> s_dynamicPrompts = new HashSet<ScreenPrompt>();
-            private static readonly Dictionary<VRActionInput, HashSet<ScreenPrompt>> s_dynamicPromptDependencies = new Dictionary<VRActionInput, HashSet<ScreenPrompt>>();
-            private static readonly Dictionary<ScreenPrompt, string> s_dynamicProptLastText = new Dictionary<ScreenPrompt, string>();
+            private static readonly HashSet<ScreenPrompt> s_vrActionPrompts = new HashSet<ScreenPrompt>();
+            private static readonly Dictionary<VRActionInput, HashSet<ScreenPrompt>> s_vrActionPromptDependencies = new Dictionary<VRActionInput, HashSet<ScreenPrompt>>();
+            private static readonly Dictionary<ScreenPrompt, string> s_vrActionProptLastText = new Dictionary<ScreenPrompt, string>();
 
             private static PromptManager Manager => Locator.GetPromptManager();
 
@@ -34,8 +34,19 @@ namespace NomaiVR
             public static void UpdatePrompts(VRActionInput[] actionsToUpdate)
             {
                 foreach(var action in actionsToUpdate)
-                    foreach (ScreenPrompt prompt in s_dynamicPromptDependencies[action])
-                        prompt.SetText(s_dynamicProptLastText[prompt]);
+                {
+                    if(s_vrActionPromptDependencies.ContainsKey(action))
+                    {
+                        foreach (ScreenPrompt prompt in s_vrActionPromptDependencies[action])
+                        {
+                            string actionText = s_vrActionProptLastText[prompt];
+                            
+                            //Only update prompts with actual text
+                            if (!string.IsNullOrEmpty(actionText))
+                                prompt.SetText(actionText);
+                        }
+                    }
+                }
             }
 
             public class Patch : NomaiVRPatch
@@ -80,16 +91,16 @@ namespace NomaiVR
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
-                private static Texture2D ReturnEmptyTexture(Texture2D _result)
+                private static void ReturnEmptyTexture(ref Texture2D __result)
                 {
-                    return AssetLoader.EmptyTexture;
+                    __result = AssetLoader.EmptyTexture;
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
-                private static List<string> PostBuildTwoCommandPromptElement(List<string> _result, string promptText)
+                private static void PostBuildTwoCommandPromptElement(ref List<string> __result, string promptText)
                 {
                     var newText = promptText.Replace("<CMD1>", "").Replace("<CMD2>", "");
-                    return new List<string> { newText };
+                    __result = new List<string> { newText };
                 }
 
                 private static VRActionInput GetActionInputFromCommand(InputCommand command)
@@ -118,7 +129,7 @@ namespace NomaiVR
                     return null;
                 }
 
-                private static void CheckDynamicPrompt(ScreenPrompt screenPrompt)
+                private static void RegisterVRActionPrompt(ScreenPrompt screenPrompt)
                 {
                     if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
                     {
@@ -128,14 +139,14 @@ namespace NomaiVR
                     foreach (var command in screenPrompt._commandList)
                     {
                         var actionInput = GetActionInputFromCommand(command);
-                        //Keep track of dynamic prompts
-                        if (actionInput != null && actionInput.Dynamic)
+                        //Keep track of prompts tied to VRActionInputs
+                        if (actionInput != null)
                         {
-                            if (!s_dynamicPrompts.Contains(screenPrompt)) s_dynamicPrompts.Add(screenPrompt);
+                            if (!s_vrActionPrompts.Contains(screenPrompt)) s_vrActionPrompts.Add(screenPrompt);
 
-                            if (!s_dynamicPromptDependencies.ContainsKey(actionInput))
-                                s_dynamicPromptDependencies.Add(actionInput, new HashSet<ScreenPrompt>());
-                            s_dynamicPromptDependencies[actionInput].Add(screenPrompt);
+                            if (!s_vrActionPromptDependencies.ContainsKey(actionInput))
+                                s_vrActionPromptDependencies.Add(actionInput, new HashSet<ScreenPrompt>());
+                            s_vrActionPromptDependencies[actionInput].Add(screenPrompt);
                         }
                     }
                 }
@@ -175,18 +186,18 @@ namespace NomaiVR
 
                 private static void PrePromptSetText(ref string text, ScreenPrompt __instance)
                 {
-                    if (s_dynamicPrompts.Contains(__instance))
-                        s_dynamicProptLastText[__instance] = text;
+                    if (s_vrActionPrompts.Contains(__instance))
+                        s_vrActionProptLastText[__instance] = text;
 
                     AddVRMappingToPrompt(ref text, __instance); //Only changes the string we pass to the PromptManager
                 }
 
                 private static void PrePromptInit(ref string prompt, ScreenPrompt __instance)
                 {
-                    CheckDynamicPrompt(__instance);
+                    RegisterVRActionPrompt(__instance);
 
-                    if (s_dynamicPrompts.Contains(__instance))
-                        s_dynamicProptLastText[__instance] = prompt;
+                    if (s_vrActionPrompts.Contains(__instance))
+                        s_vrActionProptLastText[__instance] = prompt;
 
                     AddVRMappingToPrompt(ref prompt, __instance);
                 }
