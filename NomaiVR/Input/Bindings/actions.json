@@ -202,7 +202,7 @@
       "/actions/default/in/SkeletonLeftHand": "Skeleton (Left)",
       "/actions/default/in/SkeletonRightHand": "Skeleton (Right)",
       "/actions/default/out/Haptic": "Haptic",
-      "/actions/inverted": "Left Handed Bindings",
+      "/actions/inverted": "Left Handed Overrides",
       "/actions/inverted/in/Grip": "Grip (hold tools)",
       "/actions/inverted/in/GrabPinch": "Grab Pinch",
       "/actions/inverted/in/ThrustUp": "Thrust Up",
@@ -219,5 +219,7 @@
       "/actions/tools/in/DPad": "DPad (tools)",
       "/actions/tools/in/Use": "Use (tools)"
     }
-  ]
+  ],
+  "version": 1,
+  "minimum_required_version": 1
 }

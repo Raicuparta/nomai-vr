@@ -1,7 +1,7 @@
 {
-   "action_manifest_version" : 0,
-   "alias_info" : {},
-   "bindings" : {
+  "action_manifest_version": 1,
+  "alias_info": {},
+  "bindings": {
     "/actions/default": {
       "poses": [
         {
@@ -55,18 +55,18 @@
           }
         },
         {
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/grabpinch"
-            }
-          },
+          "path": "/user/hand/left/input/trigger",
           "mode": "button",
           "parameters": {
             "click_activate_threshold": "0.8",
             "click_deactivate_threshold": "0.7",
             "force_input": "value"
           },
-          "path": "/user/hand/left/input/trigger"
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          }
         },
         {
           "path": "/user/hand/left/input/x",
@@ -114,17 +114,17 @@
           }
         },
         {
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/grabpinch"
-            }
-          },
+          "path": "/user/hand/right/input/trigger",
           "mode": "button",
           "parameters": {
             "click_activate_threshold": "0.8",
             "click_deactivate_threshold": "0.7"
           },
-          "path": "/user/hand/right/input/trigger"
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          }
         },
         {
           "path": "/user/hand/right/input/a",
@@ -145,22 +145,22 @@
           }
         },
         {
+          "path": "/user/hand/left/input/grip",
+          "mode": "trigger",
           "inputs": {
             "pull": {
               "output": "/actions/default/in/squeeze"
             }
-          },
-          "mode": "trigger",
-          "path": "/user/hand/left/input/grip"
+          }
         },
         {
+          "path": "/user/hand/right/input/grip",
+          "mode": "trigger",
           "inputs": {
             "pull": {
               "output": "/actions/default/in/squeeze"
             }
-          },
-          "mode": "trigger",
-          "path": "/user/hand/right/input/grip"
+          }
         }
       ],
       "skeleton": [
@@ -173,12 +173,110 @@
           "path": "/user/hand/right/input/skeleton/right"
         }
       ]
+    },
+    "/actions/tools": {
+      "sources": [
+        {
+          "path": "/user/hand/left/input/joystick",
+          "mode": "joystick",
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/joystick",
+          "mode": "joystick",
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/y",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/y",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          }
+        }
+      ]
+    },
+    "/actions/inverted": {
+      "sources": [
+        {
+          "path": "/user/hand/left/input/y",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/interact"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/b",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/menu"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "trigger",
+          "inputs": {
+            "pull": {
+              "output": "/actions/inverted/in/thrustup"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/grabpinch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "trigger",
+          "inputs": {
+            "pull": {
+              "output": "/actions/inverted/in/thrustdown"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/grabpinch"
+            }
+          }
+        }
+      ]
     }
-   },
-   "category" : "steamvr_input",
-   "controller_type" : "oculus_touch",
-   "description" : "",
-   "name" : "Outer Wilds Oculus Touch Bindings",
-   "options" : {},
-   "simulated_actions" : []
+  },
+  "category": "steamvr_input",
+  "controller_type": "oculus_touch",
+  "description": "",
+  "name": "Outer Wilds Oculus Touch Bindings",
+  "options": {},
+  "simulated_actions": []
 }
