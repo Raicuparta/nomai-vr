@@ -12,10 +12,6 @@
         {
           "output": "/actions/default/in/righthand",
           "path": "/user/hand/right/pose/raw"
-        },
-        {
-          "output": "none",
-          "path": "/user/hand/left/pose/handgrip"
         }
       ],
       "haptics": [
@@ -35,6 +31,15 @@
           "inputs": {
             "click": {
               "output": "/actions/default/in/RollMode"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grip"
             }
           }
         },

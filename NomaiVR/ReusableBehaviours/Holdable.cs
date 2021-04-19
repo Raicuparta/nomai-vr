@@ -7,7 +7,8 @@ namespace NomaiVR
 {
     public class Holdable : MonoBehaviour
     {
-        public Transform hand = HandsController.Behaviour.RightHand;
+        public bool IsOffhand { get; set; } = false;
+        private Transform _hand = HandsController.Behaviour.DominantHand;
         public bool CanFlipX { get; set; } = true;
         public Action<bool> onFlipped;
 
@@ -17,7 +18,7 @@ namespace NomaiVR
         internal void Start()
         {
             _holdableTransform = new GameObject().transform;
-            _holdableTransform.parent = hand;
+            _holdableTransform.parent = _hand;
             _holdableTransform.localPosition = (_positionOffset = transform.localPosition);
             _holdableTransform.localRotation = transform.localRotation;
             transform.parent = _holdableTransform;
@@ -35,13 +36,13 @@ namespace NomaiVR
         //FIXME: Do it better
         internal void Update()
         {
-            if(VRToolSwapper.InteractingHand?.transform != hand)
+            if(VRToolSwapper.InteractingHand?.transform != _hand)
             {
-                hand = VRToolSwapper.InteractingHand?.transform;
-                if (hand == null) hand = HandsController.Behaviour.RightHand;
-                _holdableTransform.SetParent(hand, false);
+                _hand = IsOffhand ? VRToolSwapper.NonInteractingHand?.transform : VRToolSwapper.InteractingHand?.transform;
+                if (_hand == null) _hand = IsOffhand ? HandsController.Behaviour.OffHand : HandsController.Behaviour.DominantHand;
+                _holdableTransform.SetParent(_hand, false);
 
-                var isRight = hand == HandsController.Behaviour.RightHand;
+                var isRight = _hand == HandsController.Behaviour.RightHand;
                 if (isRight)
                 {
                     _holdableTransform.localScale = new Vector3(1, 1, 1);

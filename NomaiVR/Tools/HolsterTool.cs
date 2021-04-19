@@ -6,49 +6,51 @@ namespace NomaiVR
 {
     internal class HolsterTool : MonoBehaviour
     {
-        private Transform _hand;
         public ToolMode mode;
         public Vector3 position;
         public Vector3 angle;
         public float scale;
         private MeshRenderer[] _renderers;
         private bool _visible = true;
+        private int _equippedIndex = -1;
+        private Transform _hand;
         public Action onUnequip;
         private const float _minHandDistance = 0.3f;
 
-        public ProximityDetector[] Detectors { get; private set; }
+        public ProximityDetector Detector { get; private set; }
 
         internal void Start()
         {
-            Detectors = new ProximityDetector[2];
-            Detectors[0] = gameObject.AddComponent<ProximityDetector>();
-            Detectors[0].other = HandsController.Behaviour.RightHand;
-            Detectors[0].minDistance = 0.2f;
-            Detectors[1] = gameObject.AddComponent<ProximityDetector>();
-            Detectors[1].other = HandsController.Behaviour.LeftHand;
-            Detectors[1].minDistance = 0.2f;
+            Detector = gameObject.AddComponent<ProximityDetector>();
+            Detector.SetTrackedObjects(HandsController.Behaviour.RightHand, HandsController.Behaviour.LeftHand);
+            Detector.MinDistance = 0.2f;
             
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
 
-            SteamVR_Actions.default_Grip.onChange += OnGripChanged;
+            SteamVR_Actions.default_Grip.AddOnChangeListener(OnGripUpdated, SteamVR_Input_Sources.RightHand);
+            SteamVR_Actions.default_Grip.AddOnChangeListener(OnGripUpdated, SteamVR_Input_Sources.LeftHand);
             GlobalMessenger.AddListener("SuitUp", Unequip);
             GlobalMessenger.AddListener("RemoveSuit", Unequip);
         }
 
         internal void OnDestroy()
         {
-            SteamVR_Actions.default_Grip.onChange -= OnGripChanged;
+            SteamVR_Actions.default_Grip.RemoveOnChangeListener(OnGripUpdated, SteamVR_Input_Sources.RightHand);
+            SteamVR_Actions.default_Grip.RemoveOnChangeListener(OnGripUpdated, SteamVR_Input_Sources.LeftHand);
         }
 
-        private void Equip()
+        private void Equip(int handIndex)
         {
+            _hand = Detector.GetTrackedObject(handIndex);
+            _equippedIndex = handIndex;
             VRToolSwapper.Equip(mode, _hand.GetComponent<Hand>());
         }
 
         private void Unequip()
         {
             _hand = null;
+            _equippedIndex = -1;
             onUnequip?.Invoke();
             VRToolSwapper.Unequip();
         }
@@ -69,28 +71,19 @@ namespace NomaiVR
 
         private void UpdateGrab()
         {
-            if (!OWInput.IsInputMode(InputMode.Character))
-            {
-                if (IsEquipped())
-                {
-                    Unequip();
-                }
-                return;
-            }
-        }
-
-        private void OnGripChanged(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
-        {
-            var detector = Detectors[fromAction.activeDevice == SteamVR_Input_Sources.RightHand ? 0 : 1];
-            if (newState && _hand == null && !IsEquipped() && detector.isInside && _visible)
-            {
-                _hand = detector.other;
-                Equip();
-            }
-            if (!newState && detector.other == _hand && IsEquipped())
+            if (!OWInput.IsInputMode(InputMode.Character) && IsEquipped())
             {
                 Unequip();
             }
+        }
+
+        private void OnGripUpdated(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+        {
+            var handIndex = fromSource == SteamVR_Input_Sources.RightHand ? 0 : 1;
+            if (fromAction.GetState(fromSource) && _hand == null && !IsEquipped() && Detector.IsInside(handIndex) && _visible)
+                Equip(handIndex);
+            else if (!fromAction.GetState(fromSource) && _equippedIndex == handIndex && IsEquipped())
+                Unequip();
         }
 
         private void UpdateVisibility()

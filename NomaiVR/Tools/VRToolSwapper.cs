@@ -10,6 +10,7 @@ namespace NomaiVR
 
         private static bool _isBuccklingUp = false;
         public static Hand InteractingHand { get; private set; }
+        public static Hand NonInteractingHand { get; private set; }
 
         public static event Action Equipped;
         public static event Action UnEquipped;
@@ -22,7 +23,7 @@ namespace NomaiVR
         {
             _toolsAllowedToEquip[mode] = true;
             ToolHelper.Swapper.EquipToolMode(mode);
-            InteractingHand = interactingHand;
+            UpdateHand(interactingHand);
             Equipped?.Invoke();
             _toolsAllowedToEquip[mode] = false;
         }
@@ -30,8 +31,23 @@ namespace NomaiVR
         public static void Unequip()
         {
             InteractingHand = null;
+            NonInteractingHand = null;
             UnEquipped?.Invoke();
             Equip(ToolMode.None, null);
+        }
+
+        private static void UpdateHand(Hand interactingHand)
+        {
+            if (interactingHand != null)
+            {
+                InteractingHand = interactingHand;
+                NonInteractingHand = HandsController.Behaviour.RightHandBehaviour == interactingHand ? HandsController.Behaviour.LeftHandBehaviour : HandsController.Behaviour.RightHandBehaviour;
+            }
+            else
+            {
+                InteractingHand = null;
+                NonInteractingHand = null;
+            }
         }
 
         public static bool IsAllowedToEquip(ToolMode mode)

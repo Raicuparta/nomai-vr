@@ -26,18 +26,18 @@ namespace NomaiVR
             private void SetupDetector(Transform hand, Vector3 offset)
             {
                 var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
-                detector.other = hand;
-                detector.localOffset = offset;
-                detector.onEnter += FlashlightPress;
-                detector.onExit += FlashlightRelease;
+                detector.Other = hand;
+                detector.LocalOffset = offset;
+                detector.OnEnter += FlashlightPress;
+                detector.OnExit += FlashlightRelease;
             }
 
-            private void FlashlightPress()
+            private void FlashlightPress(Transform hand)
             {
                 ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 1);
             }
 
-            private void FlashlightRelease()
+            private void FlashlightRelease(Transform hand)
             {
                 ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 0);
             }

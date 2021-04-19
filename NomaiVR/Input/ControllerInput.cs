@@ -276,7 +276,7 @@ namespace NomaiVR
                 var value = newState ? 1 : 0;
 
                 //Don't Interact when holding a tool
-                if (ToolHelper.IsUsingAnyTool(ToolGroup.None | ToolGroup.Suit))
+                if (ToolHelper.IsUsingAnyTool(ToolGroup.None) || ToolHelper.IsUsingAnyTool(ToolGroup.Suit))
                     return;
 
                 if (!SceneHelper.IsInGame())
@@ -487,6 +487,10 @@ namespace NomaiVR
                     _isActionInputsInitialized = false;
                     InitializeActionInputs();
                     InputPrompts.Behaviour.UpdatePrompts(baseActions);
+
+                    //Reset Axis Inputs
+                    foreach (var axis in _axes.Keys.ToArray())
+                        _axes[axis] = 0.0f;
                     _baseBindingsChanged = false;
                 }
             }
