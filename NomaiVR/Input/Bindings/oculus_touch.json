@@ -161,6 +161,15 @@
               "output": "/actions/default/in/squeeze"
             }
           }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grip"
+            }
+          }
         }
       ],
       "skeleton": [
@@ -171,46 +180,6 @@
         {
           "output": "/actions/default/in/skeletonrighthand",
           "path": "/user/hand/right/input/skeleton/right"
-        }
-      ]
-    },
-    "/actions/tools": {
-      "sources": [
-        {
-          "path": "/user/hand/left/input/joystick",
-          "mode": "joystick",
-          "inputs": {
-            "position": {
-              "output": "/actions/tools/in/dpad"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/joystick",
-          "mode": "joystick",
-          "inputs": {
-            "position": {
-              "output": "/actions/tools/in/dpad"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/y",
-          "mode": "button",
-          "inputs": {
-            "click": {
-              "output": "/actions/tools/in/use"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/y",
-          "mode": "button",
-          "inputs": {
-            "click": {
-              "output": "/actions/tools/in/use"
-            }
-          }
         }
       ]
     },
@@ -267,6 +236,55 @@
           "inputs": {
             "click": {
               "output": "/actions/inverted/in/grabpinch"
+            }
+          }
+        }
+      ]
+    },
+    "/actions/tools": {
+      "sources": [
+        {
+          "path": "/user/hand/left/input/joystick",
+          "mode": "joystick",
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/y",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/joystick",
+          "mode": "joystick",
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/y",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/b",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
             }
           }
         }
