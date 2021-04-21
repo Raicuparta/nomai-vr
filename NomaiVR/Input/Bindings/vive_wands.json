@@ -12,6 +12,10 @@
         {
           "output": "/actions/default/in/righthand",
           "path": "/user/hand/right/pose/raw"
+        },
+        {
+          "output": "none",
+          "path": "/user/hand/left/pose/handgrip"
         }
       ],
       "haptics": [
@@ -31,15 +35,6 @@
           "inputs": {
             "click": {
               "output": "/actions/default/in/RollMode"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/grip",
-          "mode": "button",
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/grip"
             }
           }
         },
@@ -177,6 +172,15 @@
               "output": "/actions/default/in/squeeze"
             }
           }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "toggle_button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/grip"
+            }
+          }
         }
       ],
       "skeleton": [
@@ -187,46 +191,6 @@
         {
           "output": "/actions/default/in/skeletonrighthand",
           "path": "/user/hand/right/input/skeleton/right"
-        }
-      ]
-    },
-    "/actions/tools": {
-      "sources": [
-        {
-          "path": "/user/hand/left/input/trackpad",
-          "mode": "trackpad",
-          "inputs": {
-            "position": {
-              "output": "/actions/tools/in/dpad"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/trackpad",
-          "mode": "trackpad",
-          "inputs": {
-            "position": {
-              "output": "/actions/tools/in/dpad"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/application_menu",
-          "mode": "button",
-          "inputs": {
-            "click": {
-              "output": "/actions/tools/in/use"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/application_menu",
-          "mode": "button",
-          "inputs": {
-            "click": {
-              "output": "/actions/tools/in/use"
-            }
-          }
         }
       ]
     },
@@ -301,6 +265,46 @@
           "inputs": {
             "click": {
               "output": "/actions/inverted/in/map"
+            }
+          }
+        }
+      ]
+    },
+    "/actions/tools": {
+      "sources": [
+        {
+          "path": "/user/hand/left/input/trackpad",
+          "mode": "trackpad",
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trackpad",
+          "mode": "trackpad",
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/application_menu",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/application_menu",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
             }
           }
         }
