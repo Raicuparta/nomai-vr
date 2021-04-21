@@ -249,6 +249,14 @@ namespace NomaiVR
             private void OnBaseBindingChanged(ISteamVR_Action fromAction, SteamVR_Input_Sources fromSource, bool active)
             {
                 if(active && fromAction != null && fromAction.active) _baseBindingsChanged = true;
+                
+                //If an action is unbound, set the related axis to 0
+                if(!active && fromAction != null)
+                {
+                    foreach(var axis in axisActions.Keys)
+                        if (!axisActions[axis].Active)
+                            SimulateInput(axis, 0.0f);
+                }
             }
 
             private void OnWakeUp()
