@@ -11,11 +11,17 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            Transform _translatorBeams;
+            private Transform _translatorBeams;
+            private MeshRenderer _originalLeftArrowRenderer;
+            private MeshRenderer _originalRightArrowRenderer;
+            private NomaiTranslatorProp _translatorProp;
 
             internal void Start()
             {
                 var translator = SetUpTranslator();
+                _translatorProp = translator.GetComponent<NomaiTranslatorProp>();
+                _originalLeftArrowRenderer = _translatorProp._leftPageArrowRenderer;
+                _originalRightArrowRenderer = _translatorProp._rightPageArrowRenderer;
                 var holdable = SetUpHoldable(translator);
                 var translatorGroup = SetUpTranslatorGroup(translator);
                 var translatorModel = SetUpTranslatorModel(translatorGroup);
@@ -29,6 +35,13 @@ namespace NomaiVR
                     float tagetScale = Mathf.Abs(_translatorBeams.localScale.x);
                     if (!isRight) tagetScale *= -1;
                     _translatorBeams.localScale = new Vector3(tagetScale, _translatorBeams.localScale.y, _translatorBeams.localScale.z);
+
+                    _translatorProp.TurnOffArrowEmission();
+
+                    _translatorProp._leftPageArrowRenderer = isRight ? _originalLeftArrowRenderer : _originalRightArrowRenderer;
+                    _translatorProp._rightPageArrowRenderer = isRight ? _originalRightArrowRenderer : _originalLeftArrowRenderer;
+
+                    _translatorProp.SetNomaiAudioArrowEmissions();
                 };
             }
 
