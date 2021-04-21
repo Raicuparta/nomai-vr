@@ -33,10 +33,11 @@ namespace NomaiVR
             private static Dictionary<string, float> _axes;
             private static PlayerResources _playerResources;
 
-            private bool _baseBindingsChanged;
             private bool _isLeftDominant;
             private bool _isUsingTools;
             private ScreenPrompt _repairPrompt;
+            private System.Collections.IEnumerator _executeBaseBindingsChanged;
+            private System.Collections.IEnumerator _executeBaseBindingsOverriden;
             private SteamVR_Input_Sources? _lastToolInputSource;
 
             internal void Awake()
@@ -85,6 +86,8 @@ namespace NomaiVR
             {
                 SteamVR_Events.System(EVREventType.VREvent_InputFocusChanged).Remove(OnInputFocus);
                 StopAllCoroutines();
+                _executeBaseBindingsOverriden = null;
+                _executeBaseBindingsChanged = null;
             }
 
             private void OnInputFocus(VREvent_t arg)
@@ -248,15 +251,12 @@ namespace NomaiVR
 
             private void OnBaseBindingChanged(ISteamVR_Action fromAction, SteamVR_Input_Sources fromSource, bool active)
             {
-                if(active && fromAction != null && fromAction.active) _baseBindingsChanged = true;
-                
+                if(active && _executeBaseBindingsChanged == null && fromAction != null && fromAction.active)
+                    StartCoroutine(_executeBaseBindingsChanged = ProcessBaseBindingsChanged());
+
                 //If an action is unbound, set the related axis to 0
-                if(!active && fromAction != null)
-                {
-                    foreach(var axis in axisActions.Keys)
-                        if (!axisActions[axis].Active)
-                            SimulateInput(axis, 0.0f);
-                }
+                if (!active && _executeBaseBindingsOverriden == null && fromAction != null)
+                    StartCoroutine(_executeBaseBindingsOverriden = ResetAllUnboundAxes());
             }
 
             private void OnWakeUp()
@@ -363,6 +363,29 @@ namespace NomaiVR
                 {
                     _buttons[button] = value;
                 }
+            }
+
+            private IEnumerator<WaitForEndOfFrame> ResetAllUnboundAxes()
+            {
+                yield return new WaitForEndOfFrame();
+                foreach (var axis in axisActions.Keys)
+                    if (!axisActions[axis].Active)
+                        SimulateInput(axis, 0.0f);
+                _executeBaseBindingsOverriden = null;
+            }
+
+            private IEnumerator<WaitForEndOfFrame> ProcessBaseBindingsChanged()
+            {
+                yield return new WaitForEndOfFrame();
+                _isActionInputsInitialized = false;
+                InitializeActionInputs();
+                InputPrompts.Behaviour.UpdatePrompts(baseActions);
+
+                //Reset all Axes (since the trigger used to change bindings is probably still pressed)
+                foreach (var axis in _axes.Keys.ToArray())
+                    _axes[axis] = 0.0f;
+
+                _executeBaseBindingsChanged = null;
             }
 
             private static IEnumerator<WaitForSecondsRealtime> ResetInput(JoystickButton button)
@@ -485,21 +508,6 @@ namespace NomaiVR
                 {
                     _isUsingTools = false;
                     ExitToolMode();
-                }
-            }
-
-            internal void LateUpdate()
-            {
-                if (_baseBindingsChanged)
-                {
-                    _isActionInputsInitialized = false;
-                    InitializeActionInputs();
-                    InputPrompts.Behaviour.UpdatePrompts(baseActions);
-
-                    //Reset Axis Inputs
-                    foreach (var axis in _axes.Keys.ToArray())
-                        _axes[axis] = 0.0f;
-                    _baseBindingsChanged = false;
                 }
             }
 
