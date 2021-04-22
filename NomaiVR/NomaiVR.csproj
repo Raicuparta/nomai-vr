@@ -85,6 +85,10 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
@@ -123,7 +127,7 @@
     <Compile Include="EffectFixes\LoopTransitionFix.cs" />
     <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
     <Compile Include="EffectFixes\CameraMaskFix.cs" />
-    <Compile Include="EffectFixes\WaterFix.cs" />
+    <Compile Include="EffectFixes\VisorEffectsFix.cs" />
     <Compile Include="FatalErrorChecker.cs" />
     <Compile Include="Hands\NomaiVR_Hand_Skeleton.cs" />
     <Compile Include="Helpers\CameraHelper.cs" />
