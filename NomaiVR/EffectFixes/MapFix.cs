@@ -58,7 +58,12 @@ namespace NomaiVR
 
                 markerManager.worldCamera = lockOnCanvas.worldCamera = camera;
 
-                GlobalMessenger.AddListener("GamePaused", new Callback(OnGamePaused));
+                GlobalMessenger.AddListener("GamePaused", OnGamePaused);
+            }
+
+            internal void OnDestroy()
+            {
+                GlobalMessenger.RemoveListener("GamePaused", OnGamePaused);
             }
 
             private void OnGamePaused()
