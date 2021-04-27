@@ -48,7 +48,7 @@ namespace NomaiVR
 
             private void FixCameraClipping()
             {
-                Camera.main.nearClipPlane = 0.01f;
+                Camera.main.nearClipPlane = 0.05f;
             }
 
             private HUDHelmetAnimator SetUpHelmetAnimator()

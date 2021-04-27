@@ -103,6 +103,12 @@ namespace NomaiVR
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
             }
 
+            internal void OnDestroy()
+            {
+                GlobalMessenger.RemoveListener("SuitUp", OnSuitUp);
+                GlobalMessenger.RemoveListener("RemoveSuit", OnRemoveSuit);
+            }
+
             private void OnSuitUp()
             {
                 if (_probeLauncherHolster)

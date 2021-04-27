@@ -36,6 +36,8 @@ namespace NomaiVR
 
         internal void OnDestroy()
         {
+            GlobalMessenger.RemoveListener("SuitUp", Unequip);
+            GlobalMessenger.RemoveListener("RemoveSuit", Unequip);
             SteamVR_Actions.default_Grip.RemoveOnChangeListener(OnGripUpdated, SteamVR_Input_Sources.RightHand);
             SteamVR_Actions.default_Grip.RemoveOnChangeListener(OnGripUpdated, SteamVR_Input_Sources.LeftHand);
         }
