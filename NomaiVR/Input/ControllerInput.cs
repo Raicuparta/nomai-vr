@@ -328,7 +328,6 @@ namespace NomaiVR
             private IEnumerator<WaitForSecondsRealtime> _delayedToolUse = null;
             private void OnToolUseChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
-                //TODO: Maybe we can trim some things?
                 var value = newState ? 1 : 0;
 
                 if (!SceneHelper.IsInGame())
@@ -486,9 +485,9 @@ namespace NomaiVR
                 SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
 
                 //Restores mainhand prompts, a bit of a hack...
-                //TODO: Get Dominant Hand
-                SteamVR_Actions.tools.Activate(SteamVR_Input_Sources.RightHand, priority: 2);
-                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
+                var dominantHandSource = ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
+                SteamVR_Actions.tools.Activate(dominantHandSource, priority: 2);
+                SteamVR_Actions.tools.Deactivate(dominantHandSource);
             }
 
             internal void Update()

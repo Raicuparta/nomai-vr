@@ -31,10 +31,16 @@ namespace NomaiVR
                 tool._stowTransform = null;
                 tool._holdTransform = null;
             }
+
+            VRToolSwapper.InteractiveHandChanged += OnInteractingHandChanged;
         }
 
-        //FIXME: Do it better
-        internal void Update()
+        internal void OnDestroy()
+        {
+            VRToolSwapper.InteractiveHandChanged -= OnInteractingHandChanged;
+        }
+
+        internal void OnInteractingHandChanged()
         {
             if(VRToolSwapper.InteractingHand?.transform != _hand)
             {
