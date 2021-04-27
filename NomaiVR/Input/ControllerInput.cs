@@ -481,11 +481,13 @@ namespace NomaiVR
 
             private void ExitToolMode()
             {
+                var dominantHandSource = ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
+                var nonDominantHand = !ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
+
                 //De-Activates the tools action-set (stops overriting same buttons)
-                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools.Deactivate(nonDominantHand);
 
                 //Restores mainhand prompts, a bit of a hack...
-                var dominantHandSource = ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
                 SteamVR_Actions.tools.Activate(dominantHandSource, priority: 2);
                 SteamVR_Actions.tools.Deactivate(dominantHandSource);
             }
