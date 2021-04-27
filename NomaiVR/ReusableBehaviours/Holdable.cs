@@ -13,15 +13,20 @@ namespace NomaiVR
         public Action<bool> onFlipped;
 
         private Transform _holdableTransform;
+        private Transform _rotationTransform;
         private Vector3 _positionOffset;
 
         internal void Start()
         {
             _holdableTransform = new GameObject().transform;
             _holdableTransform.parent = _hand;
-            _holdableTransform.localPosition = (_positionOffset = transform.localPosition);
-            _holdableTransform.localRotation = transform.localRotation;
-            transform.parent = _holdableTransform;
+            _holdableTransform.localPosition = _positionOffset = transform.localPosition;
+            _holdableTransform.localRotation = Quaternion.identity;
+            _rotationTransform = new GameObject().transform;
+            _rotationTransform.SetParent(_holdableTransform, false);
+            _rotationTransform.localPosition = Vector3.zero;
+            _rotationTransform.localRotation = transform.localRotation;
+            transform.parent = _rotationTransform;
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
 
