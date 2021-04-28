@@ -12,7 +12,7 @@ namespace NomaiVR
         public static Hand InteractingHand { get; private set; }
         public static Hand NonInteractingHand { get; private set; }
 
-        public static event Action InteractiveHandChanged;
+        public static event Action InteractingHandChanged;
         public static event Action Equipped;
         public static event Action UnEquipped;
 
@@ -49,7 +49,7 @@ namespace NomaiVR
                 NonInteractingHand = null;
             }
 
-            InteractiveHandChanged?.Invoke();
+            InteractingHandChanged?.Invoke();
         }
 
         public static bool IsAllowedToEquip(ToolMode mode)

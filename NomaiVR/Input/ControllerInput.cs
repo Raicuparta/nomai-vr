@@ -461,10 +461,10 @@ namespace NomaiVR
                 };
             }
 
-            private void EnterToolMode(bool rightHand = true)
+            private void EnterToolMode(SteamVR_Input_Sources inputSource)
             {
                 //Enables the tools override for the proper hand and change affected prompts
-                SteamVR_Actions.tools.Activate(priority: 2, activateForSource: rightHand ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools.Activate(priority: 2, activateForSource: inputSource);
             }
 
             private void ToolModeBound(SteamVR_Action_Boolean action, SteamVR_Input_Sources inputSource, bool newValue)
@@ -508,7 +508,10 @@ namespace NomaiVR
                 if (!_isUsingTools && canUseTools)
                 {
                     _isUsingTools = true;
-                    EnterToolMode(VRToolSwapper.InteractingHand == null || !VRToolSwapper.InteractingHand.isLeft);
+
+                    var interactingHandSource = VRToolSwapper.InteractingHand?.InputSource;
+                    var dominantHandSource = ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
+                    EnterToolMode(interactingHandSource ?? dominantHandSource);
                 } 
                 else if(_isUsingTools && !canUseTools)
                 {

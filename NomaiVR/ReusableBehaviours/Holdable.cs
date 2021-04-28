@@ -37,12 +37,14 @@ namespace NomaiVR
                 tool._holdTransform = null;
             }
 
-            VRToolSwapper.InteractiveHandChanged += OnInteractingHandChanged;
+            VRToolSwapper.InteractingHandChanged += OnInteractingHandChanged;
+            ModSettings.OnConfigChange += OnInteractingHandChanged;
         }
 
         internal void OnDestroy()
         {
-            VRToolSwapper.InteractiveHandChanged -= OnInteractingHandChanged;
+            ModSettings.OnConfigChange -= OnInteractingHandChanged;
+            VRToolSwapper.InteractingHandChanged -= OnInteractingHandChanged;
         }
 
         internal void OnInteractingHandChanged()
