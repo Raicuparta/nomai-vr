@@ -1,4 +1,5 @@
-﻿using OWML.Utils;
+﻿using NomaiVR.Helpers;
+using OWML.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,8 @@ namespace NomaiVR
 
             private static Behaviour _instance;
             private static OverridableSteamVRAction _movementAction;
-            private static Dictionary<JoystickButton, float> _buttons;
-            private static Dictionary<string, float> _axes;
+            private static Dictionary<int, float> _buttons;
+            private static Dictionary<int, float> _axes;
             private static PlayerResources _playerResources;
 
             private bool _isLeftDominant;
@@ -48,8 +49,10 @@ namespace NomaiVR
             internal void Start()
             {
                 _instance = this;
-                _buttons = new Dictionary<JoystickButton, float>();
-                _axes = new Dictionary<string, float>();
+
+                //We need to use ints here cause the Enums would use Mono's equality comparer which allocates some bytes for each call
+                _buttons = new Dictionary<int, float>();
+                _axes = new Dictionary<int, float>();
 
                 SetUpSteamVRActionHandlers();
                 ReplaceInputs();
@@ -274,7 +277,7 @@ namespace NomaiVR
                 //Only Allow Pressing Back while not in tool mode
                 if (!_isUsingTools)
                 {
-                    _buttons[JoystickButton.FaceRight] = newState ? 1 : 0;
+                    _buttons[(int)JoystickButton.FaceRight] = newState ? 1 : 0;
                 }
             }
 
@@ -294,7 +297,7 @@ namespace NomaiVR
 
                 if (!SceneHelper.IsInGame())
                 {
-                    _buttons[JoystickButton.FaceLeft] = value;
+                    _buttons[(int)JoystickButton.FaceLeft] = value;
                     return;
                 }
 
@@ -326,7 +329,7 @@ namespace NomaiVR
                 }
                 else
                 {
-                    _buttons[button] = value;
+                    _buttons[(int)button] = value;
                 }
             }
 
@@ -337,7 +340,7 @@ namespace NomaiVR
 
                 if (!SceneHelper.IsInGame())
                 {
-                    _buttons[JoystickButton.FaceLeft] = value;
+                    _buttons[(int)JoystickButton.FaceLeft] = value;
                     return;
                 }
 
@@ -365,7 +368,7 @@ namespace NomaiVR
                 }
                 else
                 {
-                    _buttons[button] = value;
+                    _buttons[(int)button] = value;
                 }
             }
 
@@ -400,26 +403,25 @@ namespace NomaiVR
 
             public static void SimulateInput(JoystickButton button)
             {
-                _buttons[button] = 1;
+                _buttons[(int)button] = 1;
                 _instance.StartCoroutine(ResetInput(button));
             }
 
             public static void SimulateInput(JoystickButton button, float value)
             {
-                _buttons[button] = value;
+                _buttons[(int)button] = value;
             }
 
             public static void SimulateInput(AxisIdentifier axis, float value)
             {
-                _axes[InputTranslator.GetAxisName(axis)] = value;
+                _axes[(int)axis] = value;
             }
 
             private static SteamVR_Action_Single.ChangeHandler CreateSingleAxisHandler(AxisIdentifier axis, int axisDirection = 1)
             {
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
-                    var axisName = InputTranslator.GetAxisName(axis);
-                    _axes[axisName] = axisDirection * Mathf.Round(newAxis * 10) / 10;
+                    _axes[(int)axis] = axisDirection * Mathf.Round(newAxis * 10) / 10;
                 };
             }
 
@@ -427,7 +429,7 @@ namespace NomaiVR
             {
                 return (SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta) =>
                 {
-                    _buttons[button] = newAxis;
+                    _buttons[(int)button] = newAxis;
                 };
             }
 
@@ -439,7 +441,7 @@ namespace NomaiVR
                     {
                         return;
                     }
-                    _buttons[button] = newState ? 1 : 0;
+                    _buttons[(int)button] = newState ? 1 : 0;
                 };
             }
 
@@ -452,12 +454,10 @@ namespace NomaiVR
                         return;
                     }
 
-                    var axisNameX = InputTranslator.GetAxisName(axisX);
-                    var axisNameY = InputTranslator.GetAxisName(axisY);
                     var x = Mathf.Round(axis.x * 100) / 100;
                     var y = Mathf.Round(axis.y * 100) / 100;
-                    _axes[axisNameX] = x;
-                    _axes[axisNameY] = y;
+                    _axes[(int)axisX] = x;
+                    _axes[(int)axisY] = y;
                 };
             }
 
@@ -614,28 +614,27 @@ namespace NomaiVR
                         return false;
                     }
 
-                    var axisX = InputTranslator.GetAxisName(____gamepadHorzBinding.axisID);
-                    var axisY = InputTranslator.GetAxisName(____gamepadVertBinding.axisID);
                     float x = 0;
                     float y = 0;
-                    if (_axes.ContainsKey(axisX))
+                    if (_axes.ContainsKey((int)____gamepadHorzBinding.axisID))
                     {
-                        x = DeadzonedValue(_axes[axisX]);
+                        x = DeadzonedValue(_axes[(int)____gamepadHorzBinding.axisID]);
                     }
-                    if (_axes.ContainsKey(axisY))
+                    if (_axes.ContainsKey((int)____gamepadVertBinding.axisID))
                     {
-                        y = DeadzonedValue(_axes[axisY]);
+                        y = DeadzonedValue(_axes[(int)____gamepadVertBinding.axisID]);
                     }
-
+                    
                     ____value.x = x;
                     ____cameraLookValue.x = x;
                     ____value.y = y;
                     ____cameraLookValue.y = y;
-
+                    
                     if (____value.sqrMagnitude > 1f)
                     {
                         ____value.Normalize();
                     }
+
                     return false;
                 }
 
@@ -726,20 +725,19 @@ namespace NomaiVR
                     ____value = 0f;
 
 
-                    if (_buttons.ContainsKey(positive))
+                    if (_buttons.ContainsKey((int)positive))
                     {
-                        ____value += _buttons[positive];
+                        ____value += _buttons[(int)positive];
                     }
 
-                    if (_buttons.ContainsKey(negative))
+                    if (_buttons.ContainsKey((int)negative))
                     {
-                        ____value -= _buttons[negative];
+                        ____value -= _buttons[(int)negative];
                     }
 
-                    var axis = InputTranslator.GetAxisName(____gamepadBinding.axisID);
-                    if (_axes.ContainsKey(axis))
+                    if (_axes.ContainsKey((int)____gamepadBinding.axisID))
                     {
-                        ____value += DeadzonedValue(_axes[axis] * ____gamepadBinding.axisDirection);
+                        ____value += DeadzonedValue(_axes[(int)____gamepadBinding.axisID] * ____gamepadBinding.axisDirection);
                     }
 
                     ____lastPressedDuration = ____pressedDuration;
