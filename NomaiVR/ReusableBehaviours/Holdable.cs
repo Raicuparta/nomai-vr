@@ -18,9 +18,7 @@ namespace NomaiVR
 
         internal void Start()
         {
-            UpdateHand();
             _holdableTransform = new GameObject().transform;
-            _holdableTransform.parent = _hand;
             _holdableTransform.localPosition = _positionOffset = transform.localPosition;
             _holdableTransform.localRotation = Quaternion.identity;
             _rotationTransform = new GameObject().transform;
@@ -31,6 +29,7 @@ namespace NomaiVR
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
 
+            OnInteractingHandChanged();
             var tool = gameObject.GetComponent<PlayerTool>();
             if (tool)
             {
