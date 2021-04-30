@@ -119,7 +119,7 @@
   <ItemGroup>
     <Compile Include="Assets\AssetLoader.cs" />
     <Compile Include="EffectFixes\DisableDeathAnimation.cs" />
-    <Compile Include="EffectFixes\ShadowFix.cs" />
+    <Compile Include="EffectFixes\ShadowsFix.cs" />
     <Compile Include="EffectFixes\FogFix.cs" />
     <Compile Include="EffectFixes\LoopTransitionFix.cs" />
     <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
