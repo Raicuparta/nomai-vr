@@ -1,5 +1,4 @@
-﻿using NomaiVR.Helpers;
-using OWML.Utils;
+﻿using OWML.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
