@@ -19,7 +19,6 @@ namespace NomaiVR
         internal void Start()
         {
             _holdableTransform = new GameObject().transform;
-            _holdableTransform.parent = _hand;
             _holdableTransform.localPosition = _positionOffset = transform.localPosition;
             _holdableTransform.localRotation = Quaternion.identity;
             _rotationTransform = new GameObject().transform;
@@ -30,6 +29,7 @@ namespace NomaiVR
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
 
+            OnInteractingHandChanged();
             var tool = gameObject.GetComponent<PlayerTool>();
             if (tool)
             {
@@ -46,13 +46,18 @@ namespace NomaiVR
             ModSettings.OnConfigChange -= OnInteractingHandChanged;
             VRToolSwapper.InteractingHandChanged -= OnInteractingHandChanged;
         }
+        
+        internal void UpdateHand()
+        {
+            _hand = IsOffhand ? VRToolSwapper.NonInteractingHand?.transform : VRToolSwapper.InteractingHand?.transform;
+            if (_hand == null) _hand = IsOffhand ? HandsController.Behaviour.OffHand : HandsController.Behaviour.DominantHand;
+        }
 
         internal void OnInteractingHandChanged()
         {
             if(VRToolSwapper.InteractingHand?.transform != _hand)
             {
-                _hand = IsOffhand ? VRToolSwapper.NonInteractingHand?.transform : VRToolSwapper.InteractingHand?.transform;
-                if (_hand == null) _hand = IsOffhand ? HandsController.Behaviour.OffHand : HandsController.Behaviour.DominantHand;
+                UpdateHand();
                 _holdableTransform.SetParent(_hand, false);
 
                 var isRight = _hand == HandsController.Behaviour.RightHand;
