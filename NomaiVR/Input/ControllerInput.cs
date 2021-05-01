@@ -178,17 +178,11 @@ namespace NomaiVR
                     otherAction.Initialize();
                 }
 
-                foreach (var buttonEntry in buttonActions)
+                foreach (var button in buttonActions.Values.Union(axisActions.Values).Union(otherActions))
                 {
-                    var button = buttonEntry.Value;
-                    if (button.HasAxisWithSameName())
-                    {
-                        button.SetAsClickable();
-                    }
-                    if (!button.Dynamic && !button.HasOppositeHandButtonWithSameName())
-                    {
-                        button.HideHand = true;
-                    }
+                    //These are a bit expensive
+                    button.SetClickable(button.HasAxisWithSameName());
+                    button.HideHand = !button.Dynamic && !button.HasOppositeHandButtonWithSameName();
                 }
 
                 _isActionInputsInitialized = true;

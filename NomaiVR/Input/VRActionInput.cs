@@ -50,11 +50,6 @@ namespace NomaiVR
 
             if (_holdActionInput  != null && _holdActionInput.Dynamic)
                 _holdActionInput.Initialize();
-
-            if (!_isDynamic && string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
-            {
-                Logs.WriteError($"Could not find name for binding {_action.GetShortName()}.");
-            }
         }
 
         public string[] GetText()
@@ -112,9 +107,12 @@ namespace NomaiVR
             return false;
         }
 
-        public void SetAsClickable()
+        public void SetClickable(bool clickable)
         {
-            _prefixes.Add("Click");
+            if (!clickable)
+                _prefixes.Remove("Click");
+            else if (!_prefixes.Contains("Click"))
+                _prefixes.Add("Click");
         }
 
         private string GetColoredLocalizedText()
