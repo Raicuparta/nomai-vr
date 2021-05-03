@@ -8,6 +8,9 @@ namespace NomaiVR
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
+        private const string k_flashLightTutorialStep = "flashlight";
+        private const string k_hasUsedTranslatorCondition = "HAS_USED_TRANSLATOR";
+
         public class Behaviour : MonoBehaviour
         {
             private static Text _text;
@@ -112,7 +115,7 @@ namespace NomaiVR
 
             private void UpdateTranslatorPrompt(RaycastHit hit)
             {
-                if (PlayerData.GetPersistentCondition("HAS_USED_TRANSLATOR"))
+                if (PlayerData.GetPersistentCondition(k_hasUsedTranslatorCondition))
                 {
                     return;
                 }
@@ -184,8 +187,7 @@ namespace NomaiVR
                 {
                     return;
                 }
-                var tutorialStep = "flashlight";
-                var hasUsedFlashlight = NomaiVR.Save.tutorialSteps.Contains(tutorialStep);
+                var hasUsedFlashlight = NomaiVR.Save.tutorialSteps.Contains(k_flashLightTutorialStep);
                 var isMainVisbileDark = main.IsVisible() && PlayerState.InDarkZone();
                 var shouldShowText = (center.IsVisible() || isMainVisbileDark) && !hasUsedFlashlight;
                 if (!isShowingText && shouldShowText)
@@ -197,7 +199,7 @@ namespace NomaiVR
                     SetText(GestureText.None);
                     if (PlayerState.IsFlashlightOn())
                     {
-                        NomaiVR.Save.AddTutorialStep(tutorialStep);
+                        NomaiVR.Save.AddTutorialStep(k_flashLightTutorialStep);
                     }
                 }
             }
@@ -272,16 +274,16 @@ namespace NomaiVR
 
         private static class GestureText
         {
-            public static string None = "";
-            public static string Probe = GetToolBeltPrompt("Probe Launcher", "Middle");
-            public static string Signalscope = GetToolBeltPrompt("Signalscope", "Right");
-            public static string Translator = GetToolBeltPrompt("Translator", "Left");
-            public static string Flashlight = "Touch right side of head with right hand to toggle <color=orange>Flashlight</color>.";
-            public static string WakeUp = "Look at your <color=orange>right hand</color>.";
+            public const string None = "";
+            public static readonly string Probe = GetToolBeltPrompt("Probe Launcher", "Middle");
+            public static readonly string Signalscope = GetToolBeltPrompt("Signalscope", "Right");
+            public static readonly string Translator = GetToolBeltPrompt("Translator", "Left");
+            public const string Flashlight = "Touch the side of your head to toggle <color=orange>Flashlight</color>.";
+            public const string WakeUp = "Look at your <color=orange>main hand</color>.";
 
             public static string GetToolBeltPrompt(string toolName, string slot)
             {
-                return $"Grab <color=orange>{toolName}</color> from tool belt with right hand.\n({slot} slot.)";
+                return $"Grab <color=orange>{toolName}</color> from tool belt\n({slot} slot.)";
             }
         }
     }
