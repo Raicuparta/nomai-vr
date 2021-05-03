@@ -17,7 +17,7 @@ namespace NomaiVR
             private static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)
             {
                 var camera = ____slavePlatform.GetOwnedCamera().transform;
-                if (camera.parent.name == "Prefab_NOM_RemoteViewer")
+                if (camera.parent.name.Contains("Prefab_NOM_RemoteViewer"))
                 {
                     var parent = new GameObject().transform;
                     parent.parent = ____playerHologram;
