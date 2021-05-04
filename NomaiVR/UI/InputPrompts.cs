@@ -31,6 +31,14 @@ namespace NomaiVR
                 }
             }
 
+            internal void OnDestroy()
+            {
+                s_toolUnequipPrompts.Clear();
+                s_vrActionPrompts.Clear();
+                s_vrActionPromptDependencies.Clear();
+                s_vrActionProptLastText.Clear();
+            }
+
             public static void UpdatePrompts(VRActionInput[] actionsToUpdate)
             {
                 foreach(var action in actionsToUpdate)
@@ -85,16 +93,16 @@ namespace NomaiVR
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
-                private static void ReturnEmptyTexture(ref Texture2D __result)
+                private static Texture2D ReturnEmptyTexture(Texture2D __result)
                 {
-                    __result = AssetLoader.EmptyTexture;
+                    return AssetLoader.EmptyTexture;
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
-                private static void PostBuildTwoCommandPromptElement(ref List<string> __result, string promptText)
+                private static List<string> PostBuildTwoCommandPromptElement(List<string> __result, string promptText)
                 {
                     var newText = promptText.Replace("<CMD1>", "").Replace("<CMD2>", "");
-                    __result = new List<string> { newText };
+                    return new List<string> { newText };
                 }
 
                 private static VRActionInput GetActionInputFromCommand(InputCommand command)
