@@ -11,13 +11,19 @@ namespace NomaiVR
         private string _hand;
         private string _source;
         private readonly string _color;
+        private readonly bool _isDynamic;
         private readonly HashSet<string> _prefixes = new HashSet<string>();
         private readonly ISteamVR_Action_In _action;
         private readonly VRActionInput _holdActionInput;
 
-        public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false, VRActionInput holdActionInput = null)
+        private SteamVR_Input_Sources? _dynamicSource;
+        public bool Dynamic => _isDynamic || (_holdActionInput != null && _holdActionInput.Dynamic);
+        public bool Active => _isDynamic ? (_dynamicSource != null && _action.GetActive(_dynamicSource.Value)) : _action.active;
+
+        public VRActionInput(ISteamVR_Action_In action, string color, bool isLongPress = false, VRActionInput holdActionInput = null, bool isDynamic = false)
         {
             _color = color;
+            _isDynamic = isDynamic;
             _action = action;
             _holdActionInput = holdActionInput;
 
@@ -27,24 +33,27 @@ namespace NomaiVR
             }
         }
 
-        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false, VRActionInput holdActionInput = null) : this(action, TextHelper.ORANGE, isLongPress, holdActionInput) { }
+        public VRActionInput(ISteamVR_Action_In action, bool isLongPress = false, VRActionInput holdActionInput = null, bool isDynamic = false) : this(action, TextHelper.ORANGE, isLongPress, holdActionInput, isDynamic) { }
 
         public VRActionInput(ISteamVR_Action_In action, VRActionInput holdActionInput) : this(action, TextHelper.ORANGE, false, holdActionInput) { }
 
+        public void BindSource(SteamVR_Input_Sources inputSource)
+        {
+            if (_isDynamic)
+                _dynamicSource = inputSource;
+        }
+
         public void Initialize()
         {
-            _hand = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_Hand });
-            _source = _action.GetLocalizedOriginPart(SteamVR_Input_Sources.Any, new[] { EVRInputStringBits.VRInputString_InputSource });
+            _hand = Active ? _action.GetLocalizedOriginPart(_dynamicSource ?? _action.activeDevice, new[] { EVRInputStringBits.VRInputString_Hand }) : _hand;
+            _source = Active ? _action.GetLocalizedOriginPart(_dynamicSource ?? _action.activeDevice, new[] { EVRInputStringBits.VRInputString_InputSource }) : _source;
 
-            if (string.IsNullOrEmpty(_hand) && string.IsNullOrEmpty(_source))
-            {
-                Logs.WriteError($"Could not find name for binding {_action.GetShortName()}.");
-            }
+            if (_holdActionInput  != null && _holdActionInput.Dynamic)
+                _holdActionInput.Initialize();
         }
 
         public string[] GetText()
         {
-            ControllerInput.Behaviour.InitializeActionInputs();
             var prefix = GetPrefixText();
             var result = $"{prefix}{GetColoredLocalizedText()}";
             if (string.IsNullOrEmpty(result))
@@ -65,6 +74,11 @@ namespace NomaiVR
                 }
             }
             return false;
+        }
+
+        public bool DependsOnActionSet(SteamVR_ActionSet actionSet)
+        {
+            return _action.actionSet == actionSet || (_holdActionInput != null && _holdActionInput.DependsOnActionSet(actionSet));
         }
 
         public bool HasOppositeHandButtonWithSameName()
@@ -93,9 +107,12 @@ namespace NomaiVR
             return false;
         }
 
-        public void SetAsClickable()
+        public void SetClickable(bool clickable)
         {
-            _prefixes.Add("Click");
+            if (!clickable)
+                _prefixes.Remove("Click");
+            else if (!_prefixes.Contains("Click"))
+                _prefixes.Add("Click");
         }
 
         private string GetColoredLocalizedText()

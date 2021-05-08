@@ -13,8 +13,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            public static Behaviour Instance { get; private set; }
             public static Transform Laser;
-            public static Transform LeftHandLaser;
+            public static Transform OffHandLaser;
+            public static Transform MovementLaser;
+            public FirstPersonManipulator Manipulator => _manipulator;
+
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
@@ -24,11 +28,14 @@ namespace NomaiVR
             private Transform _prevRayHit;
             private DialogueBoxVer2 _dialogueBox;
             private PauseMenuManager _pauseMenuManager;
+            private bool _rightMainHand;
 
             internal void Start()
             {
+                Instance = this;
                 SetUpLaserObject();
-                SetUpLeftHandLaser();
+                SetUpOffHandLaser();
+                ToDominantHand();
                 SetUpLineRenderer();
                 UpdateLineAppearance();
                 CreateButtonColliders();
@@ -44,6 +51,19 @@ namespace NomaiVR
                 {
                     SetUpTitleAnimationHandler();
                 }
+
+                ModSettings.OnConfigChange += ToDominantHand;
+                VRToolSwapper.Equipped += OnToolEquipped;
+                VRToolSwapper.UnEquipped += ToDominantHand;
+                ControllerInput.Behaviour.BindingsChanged += UpdateMovementLaser;
+            }
+
+            internal void OnDestroy()
+            {
+                ModSettings.OnConfigChange -= ToDominantHand;
+                VRToolSwapper.Equipped -= OnToolEquipped;
+                VRToolSwapper.UnEquipped -= ToDominantHand;
+                ControllerInput.Behaviour.BindingsChanged -= UpdateMovementLaser;
             }
 
             internal void Update()
@@ -59,23 +79,20 @@ namespace NomaiVR
                 }
             }
 
-            private static void SetUpLaserObject()
+            private void SetUpLaserObject()
             {
                 Laser = new GameObject("Laser").transform;
                 Laser.gameObject.layer = LayerMask.NameToLayer("UI");
-                Laser.transform.parent = HandsController.Behaviour.RightHand;
-                Laser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
-                Laser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+                Laser.localPosition = new Vector3(0f, -0.05f, 0.01f);
+                Laser.localRotation = Quaternion.Euler(45f, 0, 0);
             }
 
-            private static void SetUpLeftHandLaser()
+            private static void SetUpOffHandLaser()
             {
-                LeftHandLaser = new GameObject("LeftHandLaser").transform;
-                LeftHandLaser.transform.parent = HandsController.Behaviour.LeftHand;
-                LeftHandLaser.transform.localPosition = new Vector3(0f, -0.05f, 0.01f);
-                LeftHandLaser.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+                OffHandLaser = new GameObject("OffHandLaser").transform;
+                OffHandLaser.localPosition = new Vector3(0f, -0.05f, 0.01f);
+                OffHandLaser.localRotation = Quaternion.Euler(45f, 0, 0);
             }
-
             private void SetUpLineRenderer()
             {
                 _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
@@ -103,6 +120,30 @@ namespace NomaiVR
             {
                 var titleAnimationController = FindObjectOfType<TitleAnimationController>();
                 titleAnimationController.OnTitleMenuAnimationComplete += () => _isReady = true;
+            }
+
+            private void ToDominantHand() => ForceHand(HandsController.Behaviour.DominantHand);
+            private void ForceHand(Transform mainHand)
+            {
+                _rightMainHand = HandsController.Behaviour.RightHand == mainHand;
+                Laser.transform.SetParent(mainHand, false);
+                OffHandLaser.SetParent(_rightMainHand ? HandsController.Behaviour.LeftHand : HandsController.Behaviour.RightHand, false);
+                UpdateMovementLaser();
+            }
+
+            private void UpdateMovementLaser()
+            {
+                var rightHandLaser = _rightMainHand ? Laser : OffHandLaser;
+                var leftHandLaser = !_rightMainHand ? Laser : OffHandLaser;
+                MovementLaser = ControllerInput.Behaviour.MovementOnLeftHand ? leftHandLaser : rightHandLaser;
+            }
+
+            private void OnToolEquipped()
+            {
+                if (VRToolSwapper.InteractingHand != null)
+                    ForceHand(VRToolSwapper.InteractingHand.transform);
+                else
+                    ToDominantHand();
             }
 
             private void CreateButtonColliders()

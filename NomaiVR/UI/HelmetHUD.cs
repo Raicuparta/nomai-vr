@@ -31,6 +31,11 @@ namespace NomaiVR
                 ModSettings.OnConfigChange += SetHelmetScale;
             }
 
+            internal void OnDestroy()
+            {
+                ModSettings.OnConfigChange -= SetHelmetScale;
+            }
+
             public static void SetHelmetScale()
             {
                 var helmet = _instance?._helmet;

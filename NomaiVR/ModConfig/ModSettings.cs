@@ -8,6 +8,7 @@ namespace NomaiVR
     {
         public static event Action OnConfigChange;
 
+        public static bool LeftHandDominant { get; private set; } = false;
         public static bool DebugMode { get; private set; } = true;
         public static bool PreventCursorLock { get; private set; }
         public static bool ShowHelmet { get; private set; }
@@ -22,6 +23,7 @@ namespace NomaiVR
 
         public static void SetConfig(IModConfig config)
         {
+            LeftHandDominant = config.GetSettingsValue<bool>("leftHandDominant");
             OverrideRefreshRate = config.GetSettingsValue<int>("refreshRateOverride");
             VibrationStrength = config.GetSettingsValue<float>("vibrationIntensity");
             ShowHelmet = config.GetSettingsValue<bool>("helmetVisibility");

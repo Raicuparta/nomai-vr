@@ -46,7 +46,6 @@ namespace NomaiVR
                 var signalScopeHolster = Instantiate(signalScopeModel).gameObject;
                 signalScopeHolster.SetActive(true);
                 var holster = signalScopeHolster.AddComponent<HolsterTool>();
-                holster.hand = HandsController.Behaviour.RightHand;
                 holster.position = new Vector3(0.3f, 0, 0);
                 holster.mode = ToolMode.SignalScope;
                 holster.scale = 0.8f;
@@ -125,7 +124,7 @@ namespace NomaiVR
                 // The camera on this prefab would istantiate an AudioListener enabled by default
                 // which would break 3DAudio and tie it to the hands.
                 _owLensCamera.SetEnabled(false);
-                _lensCamera.gameObject.GetComponent<AudioListener>().enabled = false;
+                Destroy(_lensCamera.gameObject.GetComponent<AudioListener>());
             }
 
             internal void Update()

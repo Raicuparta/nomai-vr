@@ -27,7 +27,7 @@ namespace NomaiVR
 
                 var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
-                void EatMallow()
+                void EatMallow(Transform other)
                 {
                     if (mallow.GetState() != Marshmallow.MallowState.Gone)
                     {
@@ -35,7 +35,7 @@ namespace NomaiVR
                     }
                 }
 
-                void ReplaceMallow()
+                void ReplaceMallow(Transform other)
                 {
                     if (mallow.GetState() == Marshmallow.MallowState.Gone)
                     {
@@ -50,9 +50,9 @@ namespace NomaiVR
 
                 // Eat mallow by moving it to player head.
                 var eatDetector = mallow.gameObject.AddComponent<ProximityDetector>();
-                eatDetector.other = PlayerHelper.PlayerHead;
-                eatDetector.minDistance = 0.2f;
-                eatDetector.onEnter += EatMallow;
+                eatDetector.Other = Locator.GetPlayerCamera().transform;
+                eatDetector.MinDistance = 0.2f;
+                eatDetector.OnEnter += EatMallow;
 
                 // Hide arms that are part of the stick object.
                 var meshes = stickRoot.Find("Stick_Tip/Props_HEA_RoastingStick");
@@ -68,12 +68,12 @@ namespace NomaiVR
                 var holdMallow = mallowClone.gameObject.AddComponent<Holdable>();
                 holdMallow.transform.localPosition = new Vector3(0.02f, -0.03f, -0.08f);
                 holdMallow.transform.localRotation = Quaternion.Euler(80f, 100f, 110f);
-                holdMallow.hand = HandsController.Behaviour.LeftHand;
+                holdMallow.IsOffhand = true;
 
                 // Replace right hand mallow on proximity with left hand mallow.
                 var replaceDetector = mallowClone.gameObject.AddComponent<ProximityDetector>();
-                replaceDetector.other = mallow.transform;
-                replaceDetector.onEnter += ReplaceMallow;
+                replaceDetector.Other = mallow.transform;
+                replaceDetector.OnEnter += ReplaceMallow;
 
                 // Render left hand mallow only when right hand mallow is not present.
                 mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;

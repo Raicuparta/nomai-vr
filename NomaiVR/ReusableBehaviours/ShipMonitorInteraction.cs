@@ -53,7 +53,7 @@ namespace NomaiVR
             {
                 if (mode != ToolMode.None)
                 {
-                    VRToolSwapper.Equip(mode);
+                    VRToolSwapper.Equip(mode, null);
                 }
                 if (button != JoystickButton.None)
                 {

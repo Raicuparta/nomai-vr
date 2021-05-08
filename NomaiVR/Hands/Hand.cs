@@ -14,7 +14,9 @@ namespace NomaiVR
         public SteamVR_Skeleton_Pose fallbackFist;
         public bool isLeft;
 
+        public SteamVR_Input_Sources InputSource { get; private set; }
         public Transform Palm { get; private set; }
+        public Transform IndexTip => _skeleton.indexTip;
 
         private Renderer _handRenderer;
         private Renderer _gloveRenderer;
@@ -108,7 +110,8 @@ namespace NomaiVR
         private NomaiVR_Hand_Skeleton SetUpSkeleton(GameObject prefabObject, Transform prefabTransform)
         {
             var skeletonDriver = prefabObject.AddComponent<NomaiVR_Hand_Skeleton>();
-            skeletonDriver.inputSource = isLeft ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
+            InputSource = isLeft ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
+            skeletonDriver.inputSource = InputSource;
             skeletonDriver.rangeOfMotion = _rangeOfMotion;
             skeletonDriver.skeletonRoot = prefabTransform.Find("SourceSkeleton/Root");
             skeletonDriver.updatePose = false;

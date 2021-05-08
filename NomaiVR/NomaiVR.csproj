@@ -140,6 +140,7 @@
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Helpers\ToolHelper.cs" />
+    <Compile Include="Input\OverridableSteamVRAction.cs" />
     <Compile Include="Input\VRActionInput.cs" />
     <Compile Include="Logs.cs" />
     <Compile Include="ModConfig\ModSettings.cs" />

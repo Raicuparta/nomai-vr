@@ -134,7 +134,8 @@ namespace NomaiVR
                         return;
                     }
 
-                    var rotationSource = isControllerOriented ? LaserPointer.Behaviour.LeftHandLaser : _playerCamera.transform;
+
+                    var rotationSource = isControllerOriented ? LaserPointer.Behaviour.MovementLaser : _playerCamera.transform;
 
                     var fromTo = Quaternion.FromToRotation(_playerBody.transform.forward, Vector3.ProjectOnPlane(rotationSource.transform.forward, _playerBody.transform.up));
 

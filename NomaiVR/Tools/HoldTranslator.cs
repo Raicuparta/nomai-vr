@@ -11,16 +11,38 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            private Transform _translatorBeams;
+            private MeshRenderer _originalLeftArrowRenderer;
+            private MeshRenderer _originalRightArrowRenderer;
+            private NomaiTranslatorProp _translatorProp;
+
             internal void Start()
             {
                 var translator = SetUpTranslator();
-                SetUpHoldable(translator);
+                _translatorProp = translator.GetComponent<NomaiTranslatorProp>();
+                _originalLeftArrowRenderer = _translatorProp._leftPageArrowRenderer;
+                _originalRightArrowRenderer = _translatorProp._rightPageArrowRenderer;
+                var holdable = SetUpHoldable(translator);
                 var translatorGroup = SetUpTranslatorGroup(translator);
                 var translatorModel = SetUpTranslatorModel(translatorGroup);
                 SetUpLaser(translator);
                 RemoveTextMaterials(translator);
                 SetUpHolster(translatorModel);
                 SetUpLaser(translator);
+
+                holdable.onFlipped += (isRight) =>
+                {
+                    float tagetScale = Mathf.Abs(_translatorBeams.localScale.x);
+                    if (!isRight) tagetScale *= -1;
+                    _translatorBeams.localScale = new Vector3(tagetScale, _translatorBeams.localScale.y, _translatorBeams.localScale.z);
+
+                    _translatorProp.TurnOffArrowEmission();
+
+                    _translatorProp._leftPageArrowRenderer = isRight ? _originalLeftArrowRenderer : _originalRightArrowRenderer;
+                    _translatorProp._rightPageArrowRenderer = isRight ? _originalRightArrowRenderer : _originalLeftArrowRenderer;
+
+                    _translatorProp.SetNomaiAudioArrowEmissions();
+                };
             }
 
             private Transform SetUpTranslator()
@@ -30,11 +52,13 @@ namespace NomaiVR
                 return translator;
             }
 
-            private void SetUpHoldable(Transform translator)
+            private Holdable SetUpHoldable(Transform translator)
             {
                 var holdTranslator = translator.gameObject.AddComponent<Holdable>();
                 holdTranslator.transform.localPosition = new Vector3(-0.2f, 0.107f, 0.02f);
                 holdTranslator.transform.localRotation = Quaternion.Euler(32.8f, 0f, 0f);
+                holdTranslator.CanFlipX = true;
+                return holdTranslator;
             }
 
             private Transform SetUpTranslatorGroup(Transform translator)
@@ -42,7 +66,8 @@ namespace NomaiVR
                 var translatorGroup = translator.Find("TranslatorGroup");
                 translatorGroup.localPosition = Vector3.zero;
                 translatorGroup.localRotation = Quaternion.identity;
-                translatorGroup.Find("TranslatorBeams").localScale = Vector3.one / 0.3f;
+                _translatorBeams = translatorGroup.Find("TranslatorBeams");
+                _translatorBeams.localScale = Vector3.one / 0.3f;
                 return translatorGroup;
             }
 
@@ -106,7 +131,6 @@ namespace NomaiVR
                 var holsterModel = Instantiate(translatorModel).gameObject;
                 holsterModel.SetActive(true);
                 var holsterTool = holsterModel.AddComponent<HolsterTool>();
-                holsterTool.hand = HandsController.Behaviour.RightHand;
                 holsterTool.position = new Vector3(-0.3f, 0, 0);
                 holsterTool.mode = ToolMode.Translator;
                 holsterTool.scale = 0.15f;
