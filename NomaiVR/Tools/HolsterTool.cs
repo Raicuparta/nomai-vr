@@ -25,7 +25,10 @@ namespace NomaiVR
             Detector = gameObject.AddComponent<ProximityDetector>();
             Detector.SetTrackedObjects(HandsController.Behaviour.RightHand, HandsController.Behaviour.LeftHand);
             Detector.MinDistance = 0.2f;
-            
+
+            Detector.OnEnter += (hand) => { hand.GetComponent<Hand>().NotifyReachable(true); };
+            Detector.OnExit += (hand) => { hand.GetComponent<Hand>().NotifyReachable(false); };
+
             _renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             transform.localScale = Vector3.one * scale;
             _cachedTransform = transform;
@@ -65,6 +68,7 @@ namespace NomaiVR
             {
                 renderer.enabled = visible;
             }
+            Detector.enabled = visible;
             _visible = visible;
         }
 
@@ -115,9 +119,9 @@ namespace NomaiVR
             UpdateVisibility();
             var player = Locator.GetPlayerTransform();
             position.y = ModSettings.ToolbeltHeight;
-            transform.position = Locator.GetPlayerCamera().transform.position + player.TransformVector(position);
-            transform.rotation = player.rotation;
-            transform.Rotate(angle);
+            _cachedTransform.position = Locator.GetPlayerCamera().transform.position + player.TransformVector(position);
+            _cachedTransform.rotation = player.rotation;
+            _cachedTransform.Rotate(angle);
         }
     }
 }

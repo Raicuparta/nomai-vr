@@ -1,4 +1,5 @@
 ﻿using OWML.Utils;
+using System;
 using UnityEngine;
 
 namespace NomaiVR
@@ -8,22 +9,30 @@ namespace NomaiVR
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
+        internal static event Action StickExtensionUpdated;
+
         public class Behaviour : MonoBehaviour
         {
+            private RoastingStickController _stickController;
+            private Holdable _holdableStick;
+
             internal void Start()
             {
 
                 var scale = Vector3.one * 0.75f;
-                var stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
+                _stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
 
                 // Move the stick forward while not pressing RT.
-                stickController._stickMinZ = 1f;
+                _stickController._stickMinZ = 1f;
 
-                var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
+                var stickRoot = _stickController.transform.Find("Stick_Root/Stick_Pivot");
                 stickRoot.localScale = scale;
 
-                var holdStick = stickRoot.gameObject.AddComponent<Holdable>();
-                holdStick.transform.localPosition = new Vector3(-0.02f, -0.023f, -0.34f);
+                _holdableStick = stickRoot.gameObject.AddComponent<Holdable>();
+                _holdableStick.SetPositionOffset(new Vector3(-0.029f, -0.174f, -0.29f));
+                _holdableStick.SetRotationOffset(Quaternion.Euler(-20f, 0, 0));
+                _holdableStick.SetPoses(AssetLoader.Poses["holding_roastingstick_tip"], AssetLoader.Poses["holding_roastingstick_tip"]);
+                _holdableStick.SetBlendPoses(AssetLoader.Poses["holding_roastingstick_gloves"], blendSpeed: 10);
 
                 var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
@@ -43,9 +52,14 @@ namespace NomaiVR
                     }
                 }
 
+                bool ShouldRenderStick()
+                {
+                    return !InputHelper.IsUIInteractionMode();
+                }
+
                 bool ShouldRenderMallowClone()
                 {
-                    return stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
+                    return ShouldRenderStick() && _stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
                 }
 
                 // Eat mallow by moving it to player head.
@@ -59,6 +73,11 @@ namespace NomaiVR
                 meshes.Find("RoastingStick_Arm").GetComponent<Renderer>().enabled = false;
                 meshes.Find("RoastingStick_Arm_NoSuit").GetComponent<Renderer>().enabled = false;
 
+                //Render stick only when outside menus
+                var stickRenderer = meshes.Find("RoastingStick_Stick").gameObject.AddComponent<ConditionalRenderer>();
+                stickRenderer.getShouldRender += ShouldRenderStick;
+                _holdableStick.SetActiveObserver(stickRenderer);
+
                 // Hold mallow in left hand for replacing the one in the stick.
                 var mallowModel = mallow.transform.Find("Props_HEA_Marshmallow");
                 var mallowClone = Instantiate(mallowModel);
@@ -66,8 +85,9 @@ namespace NomaiVR
                 mallowClone.localScale = scale;
 
                 var holdMallow = mallowClone.gameObject.AddComponent<Holdable>();
-                holdMallow.transform.localPosition = new Vector3(0.02f, -0.03f, -0.08f);
-                holdMallow.transform.localRotation = Quaternion.Euler(80f, 100f, 110f);
+                holdMallow.SetPositionOffset(new Vector3(-0.0451f, -0.002f, 0.0097f));
+                holdMallow.SetRotationOffset(Quaternion.Euler(47.865f, 97.12901f, 83.881f));
+                holdMallow.SetPoses(AssetLoader.Poses["holding_marshmallow"]);
                 holdMallow.IsOffhand = true;
 
                 // Replace right hand mallow on proximity with left hand mallow.
@@ -77,6 +97,20 @@ namespace NomaiVR
 
                 // Render left hand mallow only when right hand mallow is not present.
                 mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
+
+                //Register for blending updates
+                StickExtensionUpdated += OnStickExtensionUpdate;
+            }
+
+            internal void OnDestroy()
+            {
+                StickExtensionUpdated -= OnStickExtensionUpdate;
+            }
+
+            internal void OnStickExtensionUpdate()
+            {
+                if (_stickController != null && _holdableStick != null)
+                    _holdableStick.UpdateBlending(_stickController._extendFraction);
             }
 
             public class Patch : NomaiVRPatch
@@ -93,6 +127,7 @@ namespace NomaiVR
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Result required for return passthrough")]
                 private static float PostCalculateMaxStickExtension(float __result, float ____stickMaxZ)
                 {
+                    StickExtensionUpdated?.Invoke();
                     return ____stickMaxZ;
                 }
             }

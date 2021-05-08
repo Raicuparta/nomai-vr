@@ -1,5 +1,5 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
-
+// WARNING: This file was modified for NomaiVR, if you are updating SteamVR be sure that these changes are merged
 using System.Collections;
 using UnityEngine;
 
@@ -372,10 +372,12 @@ namespace Valve.VR
             if (updatePose)
                 UpdatePose();
 
+            Vector3[] bonePositions = GetBonePositions();
+            Quaternion[] boneRotations = GetBoneRotations();
+
             if (blendPoser != null && skeletonBlend < 1)
             {
-                if (blendSnapshot == null) blendSnapshot = blendPoser.GetBlendedPose(this);
-                blendSnapshot = blendPoser.GetBlendedPose(this);
+                blendSnapshot = blendPoser.GetBlendedPose(this, bonePositions, boneRotations);
             }
 
             if (rangeOfMotionBlendRoutine == null)
@@ -385,7 +387,7 @@ namespace Valve.VR
                 else
                     skeletonAction.SetRangeOfMotion(rangeOfMotion); //this may be a frame behind
 
-                UpdateSkeletonTransforms();
+                UpdateSkeletonTransforms(bonePositions, boneRotations);
             }
         }
 
@@ -436,7 +438,7 @@ namespace Valve.VR
         public void BlendToSkeleton(float overTime = 0.1f)
         {
             if (blendPoser != null)
-                blendSnapshot = blendPoser.GetBlendedPose(this);
+                blendSnapshot = blendPoser.GetBlendedPose(this, skeletonAction.bonePositions, skeletonAction.boneRotations);
             blendPoser = null;
             BlendTo(1, overTime);
         }
@@ -628,11 +630,8 @@ namespace Valve.VR
             return poseRotation;
         }
 
-        public virtual void UpdateSkeletonTransforms()
+        public virtual void UpdateSkeletonTransforms(Vector3[] bonePositions, Quaternion[] boneRotations)
         {
-            Vector3[] bonePositions = GetBonePositions();
-            Quaternion[] boneRotations = GetBoneRotations();
-
             if (skeletonBlend <= 0)
             {
                 if (blendPoser != null)
@@ -801,7 +800,7 @@ namespace Valve.VR
                 //fallback to getting skeleton pose from skeletonPoser
                 if (fallbackPoser != null)
                 {
-                    return fallbackPoser.GetBlendedPose(skeletonAction, inputSource).bonePositions;
+                    return fallbackPoser.GetBlendedPose(skeletonAction, inputSource, skeletonAction.bonePositions, skeletonAction.boneRotations).bonePositions;
                 }
                 else
                 {
@@ -833,7 +832,7 @@ namespace Valve.VR
                 //fallback to getting skeleton pose from skeletonPoser
                 if (fallbackPoser != null)
                 {
-                    return fallbackPoser.GetBlendedPose(skeletonAction, inputSource).boneRotations;
+                    return fallbackPoser.GetBlendedPose(skeletonAction, inputSource, skeletonAction.bonePositions, skeletonAction.boneRotations).boneRotations;
                 }
                 else
                 {

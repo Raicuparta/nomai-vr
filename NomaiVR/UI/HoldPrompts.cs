@@ -10,28 +10,28 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private Transform _holdTransform;
+            private Canvas _promptCanvas;
             private bool _isTranslatorPosition;
-            private const float _canvasSizeX = 0.1f;
 
             internal void Start()
             {
-                var canvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
-                canvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
-                canvas.transform.localScale = Vector3.one * 0.0015f;
-                canvas.transform.localPosition = Vector3.zero;
-                canvas.transform.localRotation = Quaternion.identity;
+                _promptCanvas = GameObject.Find("ScreenPromptCanvas").GetComponent<Canvas>();
+                _promptCanvas.gameObject.layer = LayerMask.NameToLayer("VisibleToPlayer");
+                _promptCanvas.transform.localScale = Vector3.one * 0.0015f;
 
-                canvas.renderMode = RenderMode.WorldSpace;
-                canvas.transform.localPosition = Vector3.zero;
-                canvas.transform.localRotation = Quaternion.identity;
+                _promptCanvas.renderMode = RenderMode.WorldSpace;
+                _promptCanvas.transform.localPosition = Vector3.zero;
+                _promptCanvas.transform.localRotation = Quaternion.identity;
 
                 _holdTransform = new GameObject().transform;
-                ParentToDominantHand();
+                HandsController.Behaviour.DominantHandBehaviour.Initialized += ParentToDominantHand;
 
-                canvas.transform.SetParent(_holdTransform, false);
+                _promptCanvas.transform.SetParent(_holdTransform, false);
+                _promptCanvas.transform.localPosition = Vector3.down * 0.1f;
+                _promptCanvas.transform.localRotation = Quaternion.identity;
                 SetPositionToHand();
 
-                foreach (Transform child in canvas.transform)
+                foreach (Transform child in _promptCanvas.transform)
                 {
                     child.localPosition = Vector3.zero;
                 }
@@ -52,7 +52,7 @@ namespace NomaiVR
             {
                 if (VRToolSwapper.InteractingHand != null)
                 {
-                    _holdTransform.SetParent(VRToolSwapper.InteractingHand.transform, false);
+                    _holdTransform.SetParent(VRToolSwapper.InteractingHand.Palm, false);
                     UpdateHandPosition();
                 }
                 else
@@ -61,7 +61,7 @@ namespace NomaiVR
 
             internal void ParentToDominantHand()
             {
-                Transform dominantHand = HandsController.Behaviour.DominantHand;
+                Transform dominantHand = HandsController.Behaviour.DominantHandBehaviour.Palm;
                 _holdTransform.SetParent(dominantHand, false);
                 UpdateHandPosition();
             }
@@ -104,15 +104,15 @@ namespace NomaiVR
 
             private void SetPositionToHand()
             {
-                bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHand;
-                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(isRightHanded ? -0.09f : 0.09f + _canvasSizeX, -0.11f, 0.13f);
+                bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
+                _promptCanvas.transform.localPosition = Vector3.down * 0.1f;
                 _isTranslatorPosition = false;
             }
 
             private void SetPositionToTranslator()
             {
-                bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHand;
-                _holdTransform.localPosition = Quaternion.Euler(-32.8f, 0, 0) * new Vector3(isRightHanded ? -0.17f : 0.17f + _canvasSizeX, 0.07f, -0.11f);
+                bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
+                _promptCanvas.transform.localPosition = Vector3.down * 0.15f;
                 _isTranslatorPosition = true;
             }
         }

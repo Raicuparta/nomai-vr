@@ -2,6 +2,7 @@
 using UnityEngine;
 using Valve.VR;
 using Valve.Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace NomaiVR
 {
@@ -10,10 +11,13 @@ namespace NomaiVR
         public static GameObject PostCreditsPrefab;
         public static RenderTexture PostCreditsRenderTexture;
         public static GameObject HandPrefab;
+        public static Dictionary<string, SteamVR_Skeleton_Pose> Poses;
         public static SteamVR_Skeleton_Pose FallbackRelaxedPose;
         public static SteamVR_Skeleton_Pose FallbackPointPose;
         public static SteamVR_Skeleton_Pose FallbackFistPose;
         public static SteamVR_Skeleton_Pose ReachForPose;
+        public static SteamVR_Skeleton_Pose GrabbingHandlePose;
+        public static SteamVR_Skeleton_Pose GrabbingHandleGlovePose;
         public static GameObject FeetPositionPrefab;
         public static GameObject ScopeLensPrefab;
         public static GameObject HelmetPrefab;
@@ -49,11 +53,36 @@ namespace NomaiVR
             var splashBundle = LoadBundle("splash-screen");
             SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");
 
+            LoadPoses();
+            FallbackRelaxedPose = Poses["fallback_relaxed"];
+            FallbackPointPose = Poses["fallback_point"];
+            FallbackFistPose = Poses["fallback_fist"];
+            ReachForPose = Poses["reachFor"];
+            GrabbingHandlePose = Poses["grabbing_handle"];
+            GrabbingHandleGlovePose = Poses["grabbing_handle_gloves"];
+        }
 
-            FallbackRelaxedPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_relaxed.json");
-            FallbackPointPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_point.json");
-            FallbackFistPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/fallback_fist.json");
-            ReachForPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>("poses/reachFor.json");
+        private void LoadPoses()
+        {
+            Poses = new Dictionary<string, SteamVR_Skeleton_Pose>();
+            string posesPath = NomaiVR.Helper.Manifest.ModFolderPath + "poses";
+            string[] fileNames = Directory.GetFiles(posesPath);
+
+            foreach(var fileName in fileNames)
+            {
+                var path = Path.Combine(posesPath, fileName);
+                FileInfo fileInfo = new FileInfo(path);
+
+                if (fileInfo.Extension == ".json")
+                {
+                    var loadedPose = LoadModAssetFromJson<SteamVR_Skeleton_Pose>($"poses/{fileInfo.Name}");
+
+                    if(loadedPose != null)
+                        Poses.Add(fileInfo.Name.Replace(fileInfo.Extension, ""), loadedPose);
+                    else
+                        Logs.WriteError($"Failed to load pose {fileName}");
+                }
+            }
         }
 
         private T LoadModAssetFromJson<T>(string modAssetPath)

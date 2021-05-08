@@ -20,8 +20,8 @@ namespace NomaiVR
                 probeLauncher.localScale = Vector3.one * 0.3f;
 
                 var holdProbeLauncher = probeLauncher.gameObject.AddComponent<Holdable>();
-                holdProbeLauncher.transform.localPosition = new Vector3(0f, 0.21f, 0.05f);
-                holdProbeLauncher.transform.localRotation = Quaternion.Euler(45, 0, 0);
+                holdProbeLauncher.SetPositionOffset(new Vector3(-0.0014f, 0.2272f, -0.0593f));
+                holdProbeLauncher.SetPoses(AssetLoader.Poses["grabbing_probelauncher"], AssetLoader.Poses["grabbing_probelauncher_gloves"]);
                 holdProbeLauncher.CanFlipX = false;
 
                 _probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
