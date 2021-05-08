@@ -61,10 +61,12 @@ Only recommended for people who aren't usually prone to VR sickness:
 The mod tries its best to teach you how to play the game in VR, but it's not always easy with all the hacky stuff going on:
 
 - Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
-- You can interact with most stuff by aiming with the right-hand laser and pressing the interact button;
-- Always pay attention to the input prompts on your right hand;
+- You can interact with most stuff by aiming with your dominant hand laser and pressing the interact button;
+- Always pay attention to the input prompts on your hand;
 - Make sure you don't have the input prompts disabled in the game options when trying VR for the first time;
-- Holding the right hand grip changes the "interact" button's function, so make sure you're not accidentally trigerring the grip while trying to interact with objects (especially if you use the Index Knuckles controllers).
+- Depending on the hand you use to hold tools, movement or rotation will be disabled to allow you to interact with the tools functions. Controllers that have an additional trackpad will not suffer from this shortcoming (Index and old WMR controllers);
+- While using the ship tools hold down "Grip" on your dominant hand to switch to tool controls (beware that this can happen accidentally on Index);
+- Left hand mode swaps only some controls around, more controls can be swapped by changing the "Inverted" action set through SteamVR's bindings UI;
 
 ## Performance
 
