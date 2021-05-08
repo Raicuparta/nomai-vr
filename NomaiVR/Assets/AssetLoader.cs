@@ -27,7 +27,6 @@ namespace NomaiVR
 
         public AssetLoader()
         {
-            Shaders = new Dictionary<string, Shader>();
             EmptyTexture = new Texture2D(1, 1);
             EmptyTexture.SetPixel(0, 0, Color.clear);
             EmptyTexture.Apply();
