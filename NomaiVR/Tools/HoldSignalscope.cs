@@ -28,15 +28,14 @@ namespace NomaiVR
                 _signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
 
                 var holdSignalscope = _signalscope.gameObject.AddComponent<Holdable>();
-                holdSignalscope.transform.localPosition = new Vector3(0.013f, 0.1f, 0.123f);
-                holdSignalscope.transform.localRotation = Quaternion.Euler(32.8f, 0, 0);
+                holdSignalscope.SetPositionOffset(new Vector3(0.0074f, 0.0808f, 0.1343f), new Vector3(0.0046f, 0.1255f, 0.1625f));
 
                 var signalScopeModel = _signalscope.transform.GetChild(0);
                 // Tools have a special shader that draws them on top of everything
                 // and screws with perspective. Changing to Standard shader so they look
                 // like a normal 3D object.
                 signalScopeModel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
-                signalScopeModel.localPosition = Vector3.up * -0.1f;
+                signalScopeModel.localPosition = Vector3.zero;
                 signalScopeModel.localRotation = Quaternion.identity;
 
                 // This child seems to be only for some kind of shader effect.
@@ -57,18 +56,23 @@ namespace NomaiVR
 
                 // Attatch Signalscope UI to the Signalscope.
                 _reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                _reticule.parent = _signalscope.transform;
-                _reticule.localScale = Vector3.one * 0.0005f;
-                _reticule.localPosition = Vector3.forward * 0.5f;
-                _reticule.localRotation = Quaternion.identity;
+                SetupReticule(_reticule);
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.45f, 0));
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.75f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
-                SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.2f, 0));
+                SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.05f, 0));
                 LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
                 SetupScopeLens();
+            }
+
+            private static void SetupReticule(Transform reticule)
+            {
+                reticule.parent = _signalscope.transform;
+                reticule.localScale = Vector3.one * 0.0003f;
+                reticule.localPosition = new Vector3(0, 0.125f, 0.14f);
+                reticule.localRotation = Quaternion.identity;
             }
 
             private static void SetupSignalscopeUI(Transform parent, Vector3 position)
@@ -90,7 +94,7 @@ namespace NomaiVR
             {
                 _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 _lens.parent = _signalscope.transform;
-                _lens.localPosition = Vector3.forward * 0.14f;
+                _lens.localPosition = new Vector3(0, 0.1f, 0.14f);
                 _lens.localRotation = Quaternion.identity;
                 _lens.localScale = Vector3.one * 2f;
                 _lens.gameObject.SetActive(false);
@@ -198,12 +202,7 @@ namespace NomaiVR
                         _reticule.localRotation = Quaternion.identity;
                     }
                     else
-                    {
-                        _reticule.parent = _signalscope.transform;
-                        _reticule.localScale = Vector3.one * 0.0003f;
-                        _reticule.localPosition = Vector3.forward * 0.14f;
-                        _reticule.localRotation = Quaternion.identity;
-                    }
+                        SetupReticule(_reticule);
                 }
             }
         }
