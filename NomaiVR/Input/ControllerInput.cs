@@ -35,7 +35,6 @@ namespace NomaiVR
 
             private bool _isLeftDominant;
             private bool _isUsingTools;
-            private ScreenPrompt _repairPrompt;
             private System.Collections.IEnumerator _executeBaseBindingsChanged;
             private System.Collections.IEnumerator _executeBaseBindingsOverriden;
             private SteamVR_Input_Sources? _lastToolInputSource;
@@ -57,7 +56,6 @@ namespace NomaiVR
                 ReplaceInputs();
                 SetUpActionInputs();
                 UpdateHandDominance();
-                GlobalMessenger.AddListener("WakeUp", OnWakeUp);
 
                 ModSettings.OnConfigChange += OnSettingsChanged;
             }
@@ -77,11 +75,6 @@ namespace NomaiVR
                     SteamVR_Actions.inverted.Activate(priority: 1);
                 else
                     SteamVR_Actions.inverted.Deactivate();
-            }
-
-            internal void OnDestroy()
-            {
-                GlobalMessenger.RemoveListener("WakeUp", OnWakeUp);
             }
 
             internal void OnEnable()
@@ -260,11 +253,6 @@ namespace NomaiVR
                     StartCoroutine(_executeBaseBindingsOverriden = ResetAllUnboundAxes());
             }
 
-            private void OnWakeUp()
-            {
-                _repairPrompt = FindObjectOfType<FirstPersonManipulator>()._repairScreenPrompt;
-            }
-
             private void OnBackChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
             {
                 //Only Allow Pressing Back while not in tool mode
@@ -295,8 +283,8 @@ namespace NomaiVR
                 }
 
                 var button = JoystickButton.FaceLeft;
-
-                var isRepairPromptVisible = _repairPrompt != null && _repairPrompt.IsVisible();
+                var repairPrompt = LaserPointer.Behaviour.Instance?.Manipulator?._repairScreenPrompt;
+                var isRepairPromptVisible = repairPrompt != null && repairPrompt.IsVisible();
                 var canRepairSuit = _playerResources.IsSuitPunctured() && OWInput.IsInputMode(InputMode.Character) && !ToolHelper.Swapper.IsSuitPatchingBlocked();
 
                 if (!isRepairPromptVisible && !canRepairSuit)

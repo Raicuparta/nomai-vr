@@ -124,7 +124,7 @@ namespace NomaiVR
                 // The camera on this prefab would istantiate an AudioListener enabled by default
                 // which would break 3DAudio and tie it to the hands.
                 _owLensCamera.SetEnabled(false);
-                _lensCamera.gameObject.GetComponent<AudioListener>().enabled = false;
+                Destroy(_lensCamera.gameObject.GetComponent<AudioListener>());
             }
 
             internal void Update()

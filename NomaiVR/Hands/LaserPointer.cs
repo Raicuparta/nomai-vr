@@ -13,9 +13,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            public static Behaviour Instance { get; private set; }
             public static Transform Laser;
             public static Transform OffHandLaser;
             public static Transform MovementLaser;
+            public FirstPersonManipulator Manipulator => _manipulator;
+
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
@@ -29,6 +32,7 @@ namespace NomaiVR
 
             internal void Start()
             {
+                Instance = this;
                 SetUpLaserObject();
                 SetUpOffHandLaser();
                 ToDominantHand();
