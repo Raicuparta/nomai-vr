@@ -6,7 +6,7 @@
   "description": "Outer Wilds VR mod, with full motion control support.",
   "warning": {
     "title": "Follow these steps before starting the game in VR:",
-    "body": "- Disable all other mods (can heavily affect performance);\n\n- Close SteamVR (let the game open SteamVR automatically);\n\n- Make sure your headset and both of your VR controllers are connected and working;\n\n- If you have the game on Steam:\n--- Right-click Outer Wilds on your Steam library\n--- Select \"Properties...\"\n--- Disable \"Use Desktop Game Theatre.\""
+    "body": "- Disable all other mods (can heavily affect performance);\n\n- Close SteamVR (let the game open SteamVR automatically);\n\n- Make sure your headset and both of your VR controllers are connected and working;\n\n- If you have the game on Steam:\n--- Right-click Outer Wilds on your Steam library\n--- Select 'Properties...'\n--- Disable 'Use Desktop Game Theatre.'"
   },
   "version": "1.1.4",
   "owmlVersion": "1.0.1",
