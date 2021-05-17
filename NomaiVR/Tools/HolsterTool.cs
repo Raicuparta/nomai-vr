@@ -88,7 +88,7 @@ namespace NomaiVR
         private void OnGripUpdated(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
         {
             var handIndex = fromSource == SteamVR_Input_Sources.RightHand ? 0 : 1;
-            if (fromAction.GetState(fromSource) && _hand == null && !IsEquipped() && Detector.IsInside(handIndex) && _visible)
+            if (fromAction.GetState(fromSource) && _hand == null && !IsEquipped() && Detector.IsInside(handIndex) && _visible && ToolHelper.IsUsingNoTools())
                 Equip(handIndex);
             else if (!fromAction.GetState(fromSource) && _equippedIndex == handIndex && IsEquipped())
                 Unequip();
