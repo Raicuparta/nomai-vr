@@ -112,16 +112,16 @@ namespace NomaiVR
 
                 buttonActions = new Dictionary<JoystickButton, VRActionInput>
                 {
-                    [JoystickButton.FaceDown] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Jump, invertedActionSet.Jump), TextHelper.GREEN),
-                    [JoystickButton.FaceRight] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Back, invertedActionSet.Back), TextHelper.RED),
-                    [JoystickButton.FaceLeft] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact), TextHelper.BLUE),
+                    [JoystickButton.FaceDown] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Jump, invertedActionSet.Jump), TextHelper.GREEN, isClickable: true),
+                    [JoystickButton.FaceRight] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Back, invertedActionSet.Back), TextHelper.RED, isClickable: true),
+                    [JoystickButton.FaceLeft] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact)),
                     //TODO: For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
-                    [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, false, gripActionInput, isDynamic: true),
-                    [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Use, TextHelper.BLUE, true, gripActionInput, isDynamic: true),
-                    [JoystickButton.FaceUp] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact), TextHelper.BLUE, true),
+                    [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Use, holdActionInput: gripActionInput, isDynamic: true, isClickable: true),
+                    [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Use, holdActionInput: gripActionInput, isDynamic: true, isLongPress: true),
+                    [JoystickButton.FaceUp] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact), isLongPress: true),
                     [JoystickButton.LeftBumper] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.RollMode, invertedActionSet.RollMode)),
-                    [JoystickButton.Start] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Menu, invertedActionSet.Menu)),
-                    [JoystickButton.Select] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Map, invertedActionSet.Map)),
+                    [JoystickButton.Start] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Menu, invertedActionSet.Menu), isClickable: true),
+                    [JoystickButton.Select] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Map, invertedActionSet.Map), isClickable: true),
                     [JoystickButton.LeftTrigger] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustDown, invertedActionSet.ThrustDown)),
                     [JoystickButton.RightTrigger] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.ThrustUp, invertedActionSet.ThrustUp))
                 };
@@ -171,12 +171,7 @@ namespace NomaiVR
                     otherAction.Initialize();
                 }
 
-                foreach (var button in buttonActions.Values.Union(axisActions.Values).Union(otherActions))
-                {
-                    //These are a bit expensive
-                    button.SetClickable(button.HasAxisWithSameName());
-                    button.HideHand = !button.Dynamic && !button.HasOppositeHandButtonWithSameName();
-                }
+                CheckForOppositeHandButtons();
 
                 _isActionInputsInitialized = true;
                 BindingsChanged?.Invoke();
@@ -184,6 +179,40 @@ namespace NomaiVR
                 // Only need to pause the game until prompts are set up.
                 // After that, forcing pauses can break stuff, so better disable it here.
                 SteamVR_Settings.instance.pauseGameWhenDashboardVisible = false;
+            }
+
+            private static void CheckForOppositeHandButtons()
+            {
+                var handMappings = new Dictionary<bool, Dictionary<string, List<VRActionInput>>>(2);
+                handMappings.Add(true, new Dictionary<string, List<VRActionInput>>());
+                handMappings.Add(false, new Dictionary<string, List<VRActionInput>>());
+
+                foreach (var button in buttonActions.Values.Union(axisActions.Values).Union(otherActions).Where(x => !x.Dynamic && !String.IsNullOrEmpty(x.Source)))
+                {
+                    //Dynamic buttons are always escluded from this and should default to HideHand = false
+                    //permanent buttons without duplicates on the other hand should default to HideHand = true
+                    bool boolHand = button.Hand == SteamVR_Input_Sources.RightHand;
+                    var handMapping = handMappings[boolHand];
+                    var otherHandMapping = handMappings[!boolHand];
+
+                    //Setup duplicate structure and add this button to its hand
+                    button.HideHand = true;
+                    if (!handMapping.ContainsKey(button.Source))
+                        handMapping.Add(button.Source, new List<VRActionInput>(2));
+                    else
+                        button.HideHand = handMapping[button.Source][0].HideHand;
+                    handMapping[button.Source].Add(button);
+
+                    //Check for duplicates on the other hand
+                    if(otherHandMapping.ContainsKey(button.Source))
+                    {
+                        //I only need to set all the other mappings to duplicate if the first isn't marked as duplicate
+                        var duplicateKeysOnOtherHand = otherHandMapping[button.Source];
+                        if (duplicateKeysOnOtherHand[0].HideHand)
+                            duplicateKeysOnOtherHand.ForEach(x => x.HideHand = false);
+                        button.HideHand = false;
+                    }
+                }
             }
 
             private void SetUpSteamVRActionHandlers()
