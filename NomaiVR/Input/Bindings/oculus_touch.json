@@ -55,6 +55,15 @@
           }
         },
         {
+          "path": "/user/hand/right/input/grip",
+          "mode": "button",
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/RollMode"
+            }
+          }
+        },
+        {
           "path": "/user/hand/left/input/trigger",
           "mode": "button",
           "parameters": {
