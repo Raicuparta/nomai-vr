@@ -280,15 +280,6 @@
           }
         },
         {
-          "path": "/user/hand/right/input/y",
-          "mode": "button",
-          "inputs": {
-            "click": {
-              "output": "/actions/tools/in/use"
-            }
-          }
-        },
-        {
           "path": "/user/hand/right/input/b",
           "mode": "button",
           "inputs": {

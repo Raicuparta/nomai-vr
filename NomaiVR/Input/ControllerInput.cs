@@ -193,7 +193,7 @@ namespace NomaiVR
                 handMappings.Add(true, new Dictionary<string, List<VRActionInput>>());
                 handMappings.Add(false, new Dictionary<string, List<VRActionInput>>());
 
-                foreach (var button in buttonActions.Values.Union(axisActions.Values).Where(x => !x.Dynamic && !String.IsNullOrEmpty(x.Source)))
+                foreach (var button in buttonActions.Values.Union(axisActions.Values).Where(x => !x.Dynamic && x.Active && !String.IsNullOrEmpty(x.Source)))
                 {
                     //Dynamic buttons are always escluded from this and should default to HideHand = false
                     //permanent buttons without duplicates on the other hand should default to HideHand = true
