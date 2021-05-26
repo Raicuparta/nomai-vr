@@ -141,8 +141,9 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
-                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(toolsActionSet.DPad, isDynamic: true),
-                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(toolsActionSet.DPad, isDynamic: true)
+                    //TODO: For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
+                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(toolsActionSet.DPad, holdActionInput: gripActionInput, isDynamic: true),
+                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(toolsActionSet.DPad, holdActionInput: gripActionInput, isDynamic: true)
                 };
 
                 otherActions = new VRActionInput[] { gripActionInput };
@@ -192,7 +193,7 @@ namespace NomaiVR
                 handMappings.Add(true, new Dictionary<string, List<VRActionInput>>());
                 handMappings.Add(false, new Dictionary<string, List<VRActionInput>>());
 
-                foreach (var button in buttonActions.Values.Union(axisActions.Values).Union(otherActions).Where(x => !x.Dynamic && !String.IsNullOrEmpty(x.Source)))
+                foreach (var button in buttonActions.Values.Union(axisActions.Values).Where(x => !x.Dynamic && !String.IsNullOrEmpty(x.Source)))
                 {
                     //Dynamic buttons are always escluded from this and should default to HideHand = false
                     //permanent buttons without duplicates on the other hand should default to HideHand = true
