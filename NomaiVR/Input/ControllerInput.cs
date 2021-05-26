@@ -35,6 +35,7 @@ namespace NomaiVR
 
             private bool _isLeftDominant;
             private bool _isUsingTools;
+            private bool _isBuildingDefaultToolPrompts = true;
             private System.Collections.IEnumerator _executeBaseBindingsChanged;
             private System.Collections.IEnumerator _executeBaseBindingsOverriden;
             private SteamVR_Input_Sources? _lastToolInputSource;
@@ -56,6 +57,7 @@ namespace NomaiVR
                 ReplaceInputs();
                 SetUpActionInputs();
                 UpdateHandDominance();
+                ToolModeBound(null, ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand, false); //Force update tool prompts
 
                 ModSettings.OnConfigChange += OnSettingsChanged;
             }
@@ -75,6 +77,9 @@ namespace NomaiVR
                     SteamVR_Actions.inverted.Activate(priority: 1);
                 else
                     SteamVR_Actions.inverted.Deactivate();
+
+                _isBuildingDefaultToolPrompts = true;
+                ToolModeBound(null, ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand, false); //Force update tool prompts
             }
 
             internal void OnEnable()
@@ -136,8 +141,9 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
-                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(toolsActionSet.DPad, isDynamic: true),
-                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(toolsActionSet.DPad, isDynamic: true)
+                    //TODO: For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
+                    [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(toolsActionSet.DPad, holdActionInput: gripActionInput, isDynamic: true),
+                    [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(toolsActionSet.DPad, holdActionInput: gripActionInput, isDynamic: true)
                 };
 
                 otherActions = new VRActionInput[] { gripActionInput };
@@ -187,7 +193,7 @@ namespace NomaiVR
                 handMappings.Add(true, new Dictionary<string, List<VRActionInput>>());
                 handMappings.Add(false, new Dictionary<string, List<VRActionInput>>());
 
-                foreach (var button in buttonActions.Values.Union(axisActions.Values).Union(otherActions).Where(x => !x.Dynamic && !String.IsNullOrEmpty(x.Source)))
+                foreach (var button in buttonActions.Values.Union(axisActions.Values).Where(x => !x.Dynamic && x.Active && !String.IsNullOrEmpty(x.Source)))
                 {
                     //Dynamic buttons are always escluded from this and should default to HideHand = false
                     //permanent buttons without duplicates on the other hand should default to HideHand = true
@@ -385,9 +391,8 @@ namespace NomaiVR
             private IEnumerator<WaitForEndOfFrame> ResetAllUnboundAxes()
             {
                 yield return new WaitForEndOfFrame();
-                foreach (var axis in axisActions.Keys)
-                    if (!axisActions[axis].Active)
-                        SimulateInput(axis, 0.0f);
+                foreach (var axis in _axes.Keys.ToArray())
+                    _axes[axis] = 0.0f;
                 _executeBaseBindingsOverriden = null;
             }
 
@@ -474,14 +479,26 @@ namespace NomaiVR
             private void EnterToolMode(SteamVR_Input_Sources inputSource)
             {
                 //Enables the tools override for the proper hand and change affected prompts
+                _isBuildingDefaultToolPrompts = false;
                 SteamVR_Actions.tools.Activate(priority: 2, activateForSource: inputSource);
             }
 
+            private IEnumerator<WaitForEndOfFrame> _executeProcessToolModeBound;
             private void ToolModeBound(SteamVR_Action_Boolean action, SteamVR_Input_Sources inputSource, bool newValue)
             {
-                if (newValue)
+                if (_executeProcessToolModeBound != null)
+                    StopCoroutine(_executeProcessToolModeBound);    
+                StartCoroutine(_executeProcessToolModeBound = ProcessToolModeBound(newValue, inputSource));
+            }
+
+            private IEnumerator<WaitForEndOfFrame> ProcessToolModeBound(bool bound, SteamVR_Input_Sources inputSource)
+            {
+                yield return new WaitForEndOfFrame();
+
+                //Update screen prompts only when all controls are bound
+                if (bound)
                 {
-                    if (_lastToolInputSource != inputSource)
+                    if(_lastToolInputSource != inputSource)
                     {
                         foreach (var vrActionInput in toolsActions)
                         {
@@ -491,20 +508,30 @@ namespace NomaiVR
                         InputPrompts.Behaviour.UpdatePrompts(toolsActions);
                         _lastToolInputSource = inputSource;
                     }
+
+                    if (_isBuildingDefaultToolPrompts)
+                    {
+                        _isBuildingDefaultToolPrompts = false;
+                        SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
+                        SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
+                    }
                 }
+                else if(_isBuildingDefaultToolPrompts)
+                {
+                    //Restores mainhand prompts, an ugly hack to avoid issues with OpenVR...
+                    var dominantHand = !ModSettings.LeftHandDominant ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand;
+                    SteamVR_Actions.tools.Activate(dominantHand, priority: 2);
+                }
+
+                _executeProcessToolModeBound = null;
             }
 
             private void ExitToolMode()
             {
-                var dominantHandSource = ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
-                var nonDominantHand = !ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
-
                 //De-Activates the tools action-set (stops overriting same buttons)
-                SteamVR_Actions.tools.Deactivate(nonDominantHand);
-
-                //Restores mainhand prompts, a bit of a hack...
-                SteamVR_Actions.tools.Activate(dominantHandSource, priority: 2);
-                SteamVR_Actions.tools.Deactivate(dominantHandSource);
+                _isBuildingDefaultToolPrompts = true;
+                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
             }
 
             internal void Update()
