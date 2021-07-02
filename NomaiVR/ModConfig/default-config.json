@@ -11,7 +11,7 @@
     "refreshRateOverride": {
       "type": "selector",
       "value": 0,
-      "options": [0, 30, 60, 70, 72, 80, 90, 120, 144],
+      "options": [ 0, 30, 60, 70, 72, 80, 90, 120, 144 ],
       "title": "Physics refresh rate (zero = sync with HMD)"
     },
     "vibrationIntensity": {
@@ -49,6 +49,13 @@
       "max": 1.8,
       "title": "Helmet HUD scale"
     },
+    "hudOpacity": {
+      "type": "slider",
+      "value": 1,
+      "min": 0,
+      "max": 1,
+      "title": "Helmet HUD Opacity"
+    },
     "movementControllerOriented": {
       "type": "toggle",
       "value": false,
@@ -63,6 +70,20 @@
       "yes": "Enabled",
       "no": "Disabled"
     },
+    "showHandLaser": {
+      "type": "toggle",
+      "value": true,
+      "title": "Hand laser pointer",
+      "yes": "Show",
+      "no": "Hide"
+    },
+    "showFeetMarker": {
+      "type": "toggle",
+      "value": true,
+      "title": "Feet markers",
+      "yes": "Show",
+      "no": "Hide"
+    },
     "disableCursorLock": {
       "type": "toggle",
       "value": true,
@@ -72,7 +93,7 @@
     },
     "debug": {
       "type": "toggle",
-      "value": true,
+      "value": false,
       "title": "Debug mode (more logs)",
       "yes": "Enabled",
       "no": "Disabled"

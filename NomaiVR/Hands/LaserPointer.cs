@@ -377,9 +377,13 @@ namespace NomaiVR
                 {
                     _lineRenderer.enabled = false;
                 }
-                else if (!_lineRenderer.enabled && !isUsingTool)
+                else if(!_lineRenderer.enabled && InputHelper.IsUIInteractionMode(true))
                 {
                     _lineRenderer.enabled = true;
+                }
+                else if (!isUsingTool && !InputHelper.IsUIInteractionMode(true) && _lineRenderer.enabled != ModSettings.EnableHandLaser)
+                {
+                    _lineRenderer.enabled = ModSettings.EnableHandLaser;
                 }
             }
 
