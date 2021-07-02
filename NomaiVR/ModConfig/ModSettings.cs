@@ -15,11 +15,14 @@ namespace NomaiVR
         public static int OverrideRefreshRate { get; private set; }
         public static float VibrationStrength { get; private set; }
         public static bool EnableGesturePrompts { get; private set; }
+        public static bool EnableHandLaser { get; private set; }
+        public static bool EnableFeetMarker { get; private set; }
         public static bool ControllerOrientedMovement { get; private set; }
         public static bool AutoHideToolbelt { get; private set; }
         public static bool BypassFatalErrors { get; private set; }
         public static float ToolbeltHeight { get; private set; }
         public static float HudScale { get; private set; }
+        public static float HudOpacity { get; private set; }
 
         public static void SetConfig(IModConfig config)
         {
@@ -29,10 +32,13 @@ namespace NomaiVR
             ShowHelmet = config.GetSettingsValue<bool>("helmetVisibility");
             ControllerOrientedMovement = config.GetSettingsValue<bool>("movementControllerOriented");
             EnableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
+            EnableHandLaser = config.GetSettingsValue<bool>("showHandLaser");
+            EnableFeetMarker = config.GetSettingsValue<bool>("showFeetMarker");
             PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
             DebugMode = config.GetSettingsValue<bool>("debug");
             AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
             HudScale = config.GetSettingsValue<float>("hudScale");
+            HudOpacity = config.GetSettingsValue<float>("hudOpacity");
             BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");
 
             // OWML doesn't support negative slider values so I subtract it here.

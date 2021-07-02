@@ -9,6 +9,8 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            private SpriteRenderer _renderer;
+
             internal void Start()
             {
                 var marker = Instantiate(AssetLoader.FeetPositionPrefab).transform;
@@ -18,7 +20,22 @@ namespace NomaiVR
                 marker.localScale *= 0.75f;
                 LayerHelper.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
 
-                marker.GetComponentInChildren<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
+                _renderer = marker.GetComponentInChildren<SpriteRenderer>();
+                _renderer.material = MaterialHelper.GetOverlayMaterial();
+
+                SetFeetMarkerVisibility();
+
+                ModSettings.OnConfigChange += SetFeetMarkerVisibility;
+            }
+
+            internal void OnDestroy()
+            {
+                ModSettings.OnConfigChange -= SetFeetMarkerVisibility;
+            }
+
+            void SetFeetMarkerVisibility()
+            {
+                _renderer.enabled = ModSettings.EnableFeetMarker;
             }
         }
     }

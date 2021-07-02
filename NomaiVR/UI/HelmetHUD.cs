@@ -12,6 +12,7 @@ namespace NomaiVR
         {
             private static Transform _thrusterHUD;
             private Transform _helmet;
+            private HUDHelmetAnimator _helmetAnimator;
             private static Behaviour _instance;
 
             internal void Awake()
@@ -19,31 +20,32 @@ namespace NomaiVR
                 _instance = this;
 
                 FixCameraClipping();
-                var helmetAnimator = SetUpHelmetAnimator();
-                var helmet = SetUpHelmet(helmetAnimator);
+                _helmetAnimator = SetUpHelmetAnimator();
+                var helmet = SetUpHelmet(_helmetAnimator);
                 CreateForwardIndicator(helmet);
                 ReplaceHelmetModel(helmet);
-                AdjustHudRenderer(helmetAnimator);
+                AdjustHudRenderer(_helmetAnimator);
                 var playerHud = GetPlayerHud(helmet);
                 FixLockOnUI(playerHud);
                 HideHudDuringDialogue(playerHud);
-                SetHelmetScale();
-                ModSettings.OnConfigChange += SetHelmetScale;
+                SetHelmetScaleAndHUDOpacity();
+                ModSettings.OnConfigChange += SetHelmetScaleAndHUDOpacity;
             }
 
             internal void OnDestroy()
             {
-                ModSettings.OnConfigChange -= SetHelmetScale;
+                ModSettings.OnConfigChange -= SetHelmetScaleAndHUDOpacity;
             }
 
-            public static void SetHelmetScale()
+            public void SetHelmetScaleAndHUDOpacity()
             {
-                var helmet = _instance?._helmet;
-                if (!helmet)
+                if (_helmet)
                 {
-                    return;
+                    _helmet.localScale = new Vector3(ModSettings.HudScale, ModSettings.HudScale, 1f) * 0.5f;
+                    var uiColor = _helmetAnimator._hudRenderer.material.color;
+                    uiColor.a = ModSettings.HudOpacity * ModSettings.HudOpacity; //Squared for more drastic changes
+                    _helmetAnimator._hudRenderer.material.SetColor("_Color", uiColor);
                 }
-                helmet.localScale = new Vector3(ModSettings.HudScale, ModSettings.HudScale, 1f) * 0.5f;
             }
 
             private void FixCameraClipping()
@@ -103,7 +105,7 @@ namespace NomaiVR
 
                 // HUD shader looks funky in stereo, so it needs to be replaced.
                 var surfaceRenderer = hudRenderer.GetComponent<MeshRenderer>();
-                surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, 1));
+                surfaceRenderer.material.SetColor("_Color", new Color(1.5f, 1.5f, 1.5f, surfaceRenderer.material.color.a));
                 MaterialHelper.MakeMaterialDrawOnTop(surfaceRenderer.material);
             }
 
