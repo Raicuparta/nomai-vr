@@ -1,8 +1,9 @@
 # NomaiVR - Outer Wilds VR Mod
 
-![NomaiVR](banner/banner.png)
+![NomaiVR](RepoAssets/banner.png)
 
-[![Donate with PayPal](paypal-button.png)](https://paypal.me/raicuparta/5usd)
+[![Support on Patreon](RepoAssets/patreon-button.png)](https://www.patreon.com/raivr)
+[![Donate with PayPal](RepoAssets/paypal-button.png)](https://paypal.me/raicuparta/5usd)
 
 <!-- TOC -->
 
