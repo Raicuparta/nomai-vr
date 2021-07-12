@@ -5,6 +5,8 @@
 [![Support on Patreon](RepoAssets/patreon-button.png)](https://www.patreon.com/raivr)
 [![Donate with PayPal](RepoAssets/paypal-button.png)](https://paypal.me/raicuparta/5usd)
 
+[![NomaiVR Video](RepoAssets/video-thumbnail.jpg)](https://www.youtube.com/watch?v=gPFiYRMm8Ok)
+
 <!-- TOC -->
 
 - [Installation](#installation)
