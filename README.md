@@ -1,8 +1,10 @@
 # NomaiVR - Outer Wilds VR Mod
 
-## ⚠️ NOT COMPATIBLE WITH DLC (Echoes of the Eye) UNTIL FURTHER NOTICE
+## ⚠️ ONLY COMPATIBLE WITH VERSION 1.0.7
+On the 28th of September 2021, a new update will be released. Even if you haven't purchased the DLC, NomaiVR won't work. You'll need to get version 1.0.7 somehow, or wait for a NomaiVR update.
 
-Only the base Outer Wilds 1.0.7 version is supported right now.
+## ⚠️ NOT COMPATIBLE WITH DLC (Echoes of the Eye)
+Need to wait for a NomaiVR update for DLC compatibility.
 
 ![NomaiVR](RepoAssets/banner.png)
 
