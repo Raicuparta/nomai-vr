@@ -1,17 +1,25 @@
-﻿using OWML.Common;
-using OWML.ModHelper;
-using Valve.VR;
+﻿using Valve.VR;
+using BepInEx;
+using System.IO;
+using HarmonyLib;
+using System.Reflection;
 
 namespace NomaiVR
 {
-    public class NomaiVR : ModBehaviour
+    [BepInPlugin("raicuparta.nomaivr", "NomaiVR", "2.0.0")]
+    public class NomaiVR : BaseUnityPlugin
     {
-        public static IModHelper Helper;
         public static ModSaveFile Save;
+        public static readonly string ModFolderPath = $"{Directory.GetCurrentDirectory()}/BepInEx/plugins/NomaiVR/";
+        public static Harmony HarmonyInstance;
+
+        internal void Awake()
+        {
+            HarmonyInstance = new Harmony("raicuparta.nomaivr");
+        }
 
         internal void Start()
         {
-            Helper.Console.WriteLine("Start NomaiVR");
             Save = ModSaveFile.LoadSaveFile();
             new FatalErrorChecker();
 
@@ -61,18 +69,12 @@ namespace NomaiVR
             {
                 SteamVR.Initialize();
                 SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
-                OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
+                OpenVR.Input.SetActionManifestPath(ModFolderPath + @"\bindings\actions.json");
             }
             catch
             {
                 FatalErrorChecker.ThrowSteamVRError();
             }
-        }
-
-        public override void Configure(IModConfig config)
-        {
-            Helper = ModHelper;
-            ModSettings.SetConfig(config);
         }
     }
 }

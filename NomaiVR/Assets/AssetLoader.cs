@@ -65,7 +65,7 @@ namespace NomaiVR
         private void LoadPoses()
         {
             Poses = new Dictionary<string, SteamVR_Skeleton_Pose>();
-            string posesPath = NomaiVR.Helper.Manifest.ModFolderPath + "poses";
+            string posesPath = NomaiVR.ModFolderPath + "/poses";
             string[] fileNames = Directory.GetFiles(posesPath);
 
             foreach(var fileName in fileNames)
@@ -87,7 +87,7 @@ namespace NomaiVR
 
         private T LoadModAssetFromJson<T>(string modAssetPath)
         {
-            string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
+            string fullPath = NomaiVR.ModFolderPath + modAssetPath;
             if (!File.Exists(fullPath))
                 return default(T);
 
@@ -107,9 +107,18 @@ namespace NomaiVR
             return bundle.LoadAsset<T>($"assets/{prefabName}");
         }
 
-        private AssetBundle LoadBundle(string fileName)
+        private static AssetBundle LoadBundle(string assetName)
         {
-            return NomaiVR.Helper.Assets.LoadBundle($"assets/{fileName}");
+            var myLoadedAssetBundle =
+                AssetBundle.LoadFromFile(
+                    $"{NomaiVR.ModFolderPath}/Assets/{assetName}");
+            if (myLoadedAssetBundle == null)
+            {
+                Logs.WriteError($"Failed to load AssetBundle {assetName}");
+                return null;
+            }
+
+            return myLoadedAssetBundle;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using OWML.Utils;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NomaiVR
 {

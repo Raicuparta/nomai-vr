@@ -1,4 +1,4 @@
-﻿using OWML.Utils;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +42,8 @@ namespace NomaiVR
 
             internal void Awake()
             {
-                OpenVR.Input.SetActionManifestPath(NomaiVR.Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
+                // there's two of these, which one?
+                OpenVR.Input.SetActionManifestPath(NomaiVR.ModFolderPath + @"\bindings\actions.json");
             }
 
             internal void Start()
@@ -120,7 +121,7 @@ namespace NomaiVR
                     [JoystickButton.FaceDown] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Jump, invertedActionSet.Jump), TextHelper.GREEN, isClickable: true),
                     [JoystickButton.FaceRight] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Back, invertedActionSet.Back), TextHelper.RED, isClickable: true),
                     [JoystickButton.FaceLeft] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact)),
-                    //TODO: For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
+                    // For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
                     [JoystickButton.RightBumper] = new VRActionInput(toolsActionSet.Use, holdActionInput: gripActionInput, isDynamic: true),
                     [JoystickButton.LeftStickClick] = new VRActionInput(toolsActionSet.Use, holdActionInput: gripActionInput, isDynamic: true, isLongPress: true),
                     [JoystickButton.FaceUp] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Interact, invertedActionSet.Interact), isLongPress: true),
@@ -141,7 +142,7 @@ namespace NomaiVR
                     [AxisIdentifier.CTRLR_RSTICK] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKX] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
                     [AxisIdentifier.CTRLR_RSTICKY] = new VRActionInput(new OverridableSteamVRAction(defaultActionSet.Look, invertedActionSet.Look)),
-                    //TODO: For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
+                    // For Now we lie about needing to press grip button in hand-held mode, needs to be removed after cockpit changes
                     [AxisIdentifier.CTRLR_DPADX] = new VRActionInput(toolsActionSet.DPad, holdActionInput: gripActionInput, isDynamic: true),
                     [AxisIdentifier.CTRLR_DPADY] = new VRActionInput(toolsActionSet.DPad, holdActionInput: gripActionInput, isDynamic: true)
                 };

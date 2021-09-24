@@ -15,13 +15,16 @@ namespace NomaiVR
 
         private void Save()
         {
-            NomaiVR.Helper.Storage.Save(this, _fileName);
+            // TODO Storage
+            //NomaiVR.Helper.Storage.Save(this, _fileName);
         }
 
         public static ModSaveFile LoadSaveFile()
         {
-            var save = NomaiVR.Helper.Storage.Load<ModSaveFile>(_fileName);
-            return save ?? new ModSaveFile();
+            // TODO Storage
+            //var save = NomaiVR.Helper.Storage.Load<ModSaveFile>(_fileName);
+            //return save ?? new ModSaveFile();
+            return new ModSaveFile();
         }
     }
 }

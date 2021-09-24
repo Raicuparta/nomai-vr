@@ -1,4 +1,4 @@
-﻿using OWML.Utils;
+﻿
 using System;
 using UnityEngine;
 
@@ -71,8 +71,9 @@ namespace NomaiVR
 
             private void CreateRecenterMenuEntry()
             {
-                var button = NomaiVR.Helper.Menus.PauseMenu.OptionsButton.Duplicate("RESET VR POSITION");
-                button.OnClick += MoveCameraToPlayerHead;
+                // TODO Menu Buttons
+                // var button = NomaiVR.Helper.Menus.PauseMenu.OptionsButton.Duplicate("RESET VR POSITION");
+                // button.OnClick += MoveCameraToPlayerHead;
             }
 
             internal void Update()
