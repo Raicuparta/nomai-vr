@@ -53,10 +53,9 @@ namespace NomaiVR
         private static ConfigEntry<float> hudOpacity;
         public static float HudOpacity => hudOpacity.Value;
 
-
-        // TODO ModConfig
         public static void SetConfig(ConfigFile config)
         {
+            // TODO ranges and descriptions and shit.
             const string section = "NomaiVRSettings";
             leftHandDominant = config.Bind(section, "leftHandDominant", false, "");
             overrideRefreshRate = config.Bind(section, "refreshRateOverride", 0, "");
@@ -66,21 +65,17 @@ namespace NomaiVR
             enableGesturePrompts = config.Bind(section, "showGesturePrompts", true, "");
             enableHandLaser = config.Bind(section, "showHandLaser", true, "");
             enableFeetMarker = config.Bind(section, "showFeetMarker", true, "");
-            preventCursorLock = config.Bind(section, "disableCursorLock", false, "");
+            preventCursorLock = config.Bind(section, "disableCursorLock", true, "");
             debugMode = config.Bind(section, "debug", false, "");
             autoHideToolbelt = config.Bind(section, "autoHideToolbelt", false, "");
             hudScale = config.Bind(section, "hudScale", 1f, "");
             hudOpacity = config.Bind(section, "hudOpacity", 1f, "");
             bypassFatalErrors = config.Bind(section, "bypassFatalErrors", false, "");
 
-            // TODO comment
-            // OWML doesn't support negative slider values so I subtract it here.
             toolbeltHeight = config.Bind(section, "toolbeltHeight", -0.55f, ""); // min: 0.2 - 1; max: 0.8 - 1.
 
             if (PreventCursorLock)
             {
-                // TODO: disable cursor
-                // NomaiVRPatch.Empty<CursorManager>("Update");
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }

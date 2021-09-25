@@ -18,11 +18,19 @@ namespace NomaiVR
                 SetRefreshRate();
                 SetFov();
                 ResetInputsToDefault();
+                UnlockMouse();
             }
 
             internal void OnDestroy()
             {
                 ModSettings.OnConfigChange -= UpdateGameLogging;
+            }
+
+            private static void UnlockMouse()
+            {
+                if (!ModSettings.PreventCursorLock) return;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
 
             private static void UpdateGameLogging()
@@ -90,6 +98,11 @@ namespace NomaiVR
                     Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PostApplySettings));
                     Empty<InputRebindableLibrary>("SetKeyBindings");
                     Empty<GraphicSettings>("SetSliderValFOV");
+                    
+                    if (ModSettings.PreventCursorLock)
+                    {
+                        Empty<CursorManager>("Update");
+                    }
                 }
 
                 private static void PostApplySettings()
