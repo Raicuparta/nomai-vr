@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BepInEx.Configuration;
+using System;
 using UnityEngine;
 
 namespace NomaiVR
@@ -7,42 +8,74 @@ namespace NomaiVR
     {
         public static event Action OnConfigChange;
 
-        public static bool LeftHandDominant { get; private set; } = false;
-        public static bool DebugMode { get; private set; } = true;
-        public static bool PreventCursorLock { get; private set; }
-        public static bool ShowHelmet { get; private set; }
-        public static int OverrideRefreshRate { get; private set; }
-        public static float VibrationStrength { get; private set; }
-        public static bool EnableGesturePrompts { get; private set; }
-        public static bool EnableHandLaser { get; private set; }
-        public static bool EnableFeetMarker { get; private set; }
-        public static bool ControllerOrientedMovement { get; private set; }
-        public static bool AutoHideToolbelt { get; private set; }
-        public static bool BypassFatalErrors { get; private set; }
-        public static float ToolbeltHeight { get; private set; }
-        public static float HudScale { get; private set; }
-        public static float HudOpacity { get; private set; }
+        private static ConfigEntry<bool> leftHandDominant;
+        public static bool LeftHandDominant => leftHandDominant.Value;
+
+        private static ConfigEntry<bool> debugMode;
+        public static bool DebugMode => debugMode.Value;
+
+        private static ConfigEntry<bool> preventCursorLock;
+        public static bool PreventCursorLock => preventCursorLock.Value;
+
+        private static ConfigEntry<bool> showHelmet;
+        public static bool ShowHelmet => showHelmet.Value;
+
+        private static ConfigEntry<int> overrideRefreshRate;
+        public static int OverrideRefreshRate => overrideRefreshRate.Value;
+
+        private static ConfigEntry<float> vibrationStrength;
+        public static float VibrationStrength => vibrationStrength.Value;
+
+        private static ConfigEntry<bool> enableGesturePrompts;
+        public static bool EnableGesturePrompts => enableGesturePrompts.Value;
+
+        private static ConfigEntry<bool> enableHandLaser;
+        public static bool EnableHandLaser => enableHandLaser.Value;
+
+        private static ConfigEntry<bool> enableFeetMarker;
+        public static bool EnableFeetMarker => enableFeetMarker.Value;
+
+        private static ConfigEntry<bool> controllerOrientedMovement;
+        public static bool ControllerOrientedMovement => controllerOrientedMovement.Value;
+
+        private static ConfigEntry<bool> autoHideToolbelt;
+        public static bool AutoHideToolbelt => autoHideToolbelt.Value;
+
+        private static ConfigEntry<bool> bypassFatalErrors;
+        public static bool BypassFatalErrors => bypassFatalErrors.Value;
+
+        private static ConfigEntry<float> toolbeltHeight;
+        public static float ToolbeltHeight => toolbeltHeight.Value;
+
+        private static ConfigEntry<float> hudScale;
+        public static float HudScale => hudScale.Value;
+
+        private static ConfigEntry<float> hudOpacity;
+        public static float HudOpacity => hudOpacity.Value;
+
 
         // TODO ModConfig
-        public static void SetConfig(/*IModConfig config*/)
+        public static void SetConfig(ConfigFile config)
         {
-            //LeftHandDominant = config.GetSettingsValue<bool>("leftHandDominant");
-            //OverrideRefreshRate = config.GetSettingsValue<int>("refreshRateOverride");
-            //VibrationStrength = config.GetSettingsValue<float>("vibrationIntensity");
-            //ShowHelmet = config.GetSettingsValue<bool>("helmetVisibility");
-            //ControllerOrientedMovement = config.GetSettingsValue<bool>("movementControllerOriented");
-            //EnableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
-            //EnableHandLaser = config.GetSettingsValue<bool>("showHandLaser");
-            //EnableFeetMarker = config.GetSettingsValue<bool>("showFeetMarker");
-            //PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
-            //DebugMode = config.GetSettingsValue<bool>("debug");
-            //AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
-            //HudScale = config.GetSettingsValue<float>("hudScale");
-            //HudOpacity = config.GetSettingsValue<float>("hudOpacity");
-            //BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");
+            const string section = "NomaiVRSettings";
+            leftHandDominant = config.Bind(section, "leftHandDominant", false, "");
+            overrideRefreshRate = config.Bind(section, "refreshRateOverride", 0, "");
+            vibrationStrength = config.Bind(section, "vibrationIntensity", 1f, "");
+            showHelmet = config.Bind(section, "helmetVisibility", true, "");
+            controllerOrientedMovement = config.Bind(section, "movementControllerOriented", false, "");
+            enableGesturePrompts = config.Bind(section, "showGesturePrompts", true, "");
+            enableHandLaser = config.Bind(section, "showHandLaser", true, "");
+            enableFeetMarker = config.Bind(section, "showFeetMarker", true, "");
+            preventCursorLock = config.Bind(section, "disableCursorLock", false, "");
+            debugMode = config.Bind(section, "debug", false, "");
+            autoHideToolbelt = config.Bind(section, "autoHideToolbelt", false, "");
+            hudScale = config.Bind(section, "hudScale", 1f, "");
+            hudOpacity = config.Bind(section, "hudOpacity", 1f, "");
+            bypassFatalErrors = config.Bind(section, "bypassFatalErrors", false, "");
 
-            //// OWML doesn't support negative slider values so I subtract it here.
-            //ToolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
+            // TODO comment
+            // OWML doesn't support negative slider values so I subtract it here.
+            toolbeltHeight = config.Bind(section, "toolbeltHeight", -0.55f, ""); // min: 0.2 - 1; max: 0.8 - 1.
 
             if (PreventCursorLock)
             {

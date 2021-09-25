@@ -16,6 +16,7 @@ namespace NomaiVR
         internal void Awake()
         {
             HarmonyInstance = new Harmony("raicuparta.nomaivr");
+            ModSettings.SetConfig(Config);
         }
 
         internal void Start()

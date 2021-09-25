@@ -116,10 +116,12 @@
     <Compile Include="Hands\NomaiVR_Hand_Skeleton.cs" />
     <Compile Include="Helpers\CameraHelper.cs" />
     <Compile Include="Helpers\InputHelper.cs" />
+    <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\LayerHelper.cs" />
     <Compile Include="Helpers\MaterialHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="Helpers\SceneHelper.cs" />
+    <Compile Include="Helpers\StorageHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\TimerHelper.cs" />
     <Compile Include="Helpers\ToolHelper.cs" />
