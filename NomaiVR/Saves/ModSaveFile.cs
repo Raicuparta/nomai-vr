@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NomaiVR.Helpers;
+using System.Collections.Generic;
 
 namespace NomaiVR
 {
@@ -15,16 +16,13 @@ namespace NomaiVR
 
         private void Save()
         {
-            // TODO Storage
-            //NomaiVR.Helper.Storage.Save(this, _fileName);
+            StorageHelper.Save(this, _fileName);
         }
 
         public static ModSaveFile LoadSaveFile()
         {
-            // TODO Storage
-            //var save = NomaiVR.Helper.Storage.Load<ModSaveFile>(_fileName);
-            //return save ?? new ModSaveFile();
-            return new ModSaveFile();
+            var save = StorageHelper.Load<ModSaveFile>(_fileName);
+            return save ?? new ModSaveFile();
         }
     }
 }
