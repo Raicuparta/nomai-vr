@@ -18,26 +18,21 @@
 
         public static void Write(string message, MessageType messageType = MessageType.Message, bool debugOnly = true)
         {
-            // TODO Debug mode
-            //var isDebugMode = !debugOnly || ModSettings.DebugMode;
-            var isDebugMode = true;
-            if (isDebugMode)
+            if (debugOnly && !ModSettings.DebugMode) return;
+            switch (messageType)
             {
-                switch (messageType)
-                {
-                    case MessageType.Error:
-                    case MessageType.Fatal:
-                        UnityEngine.Debug.LogError(message);
-                        break;
+                case MessageType.Error:
+                case MessageType.Fatal:
+                    UnityEngine.Debug.LogError(message);
+                    break;
 
-                    case MessageType.Warning:
-                        UnityEngine.Debug.LogWarning(message);
-                        break;
+                case MessageType.Warning:
+                    UnityEngine.Debug.LogWarning(message);
+                    break;
 
-                    default:
-                        UnityEngine.Debug.Log(message);
-                        break;
-                }
+                default:
+                    UnityEngine.Debug.Log(message);
+                    break;
             }
         }
 
