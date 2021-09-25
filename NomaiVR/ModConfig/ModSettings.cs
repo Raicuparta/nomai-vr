@@ -1,5 +1,5 @@
-﻿using BepInEx.Configuration;
-using System;
+﻿using System;
+using BepInEx.Configuration;
 using UnityEngine;
 
 namespace NomaiVR
@@ -55,12 +55,15 @@ namespace NomaiVR
 
         public static void SetConfig(ConfigFile config)
         {
-            // TODO ranges and descriptions and shit.
+            // TODO: setting descriptions.
             const string section = "NomaiVRSettings";
             leftHandDominant = config.Bind(section, "leftHandDominant", false, "");
-            overrideRefreshRate = config.Bind(section, "refreshRateOverride", 0, "");
-            vibrationStrength = config.Bind(section, "vibrationIntensity", 1f, "");
+            overrideRefreshRate = config.Bind(section, "refreshRateOverride", 0, new ConfigDescription("", new AcceptableValueList<int>(0, 30, 60, 70, 72, 80, 90, 120, 144)));
+            vibrationStrength = config.Bind(section, "vibrationIntensity", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 3f)));
+            toolbeltHeight = config.Bind(section, "toolbeltHeight", -0.55f, new ConfigDescription("", new AcceptableValueRange<float>(-0.8f, -0.2f)));
             showHelmet = config.Bind(section, "helmetVisibility", true, "");
+            hudScale = config.Bind(section, "hudScale", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0.2f, 1.8f)));
+            hudOpacity = config.Bind(section, "hudOpacity", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 1f)));
             controllerOrientedMovement = config.Bind(section, "movementControllerOriented", false, "");
             enableGesturePrompts = config.Bind(section, "showGesturePrompts", true, "");
             enableHandLaser = config.Bind(section, "showHandLaser", true, "");
@@ -68,11 +71,7 @@ namespace NomaiVR
             preventCursorLock = config.Bind(section, "disableCursorLock", true, "");
             debugMode = config.Bind(section, "debug", false, "");
             autoHideToolbelt = config.Bind(section, "autoHideToolbelt", false, "");
-            hudScale = config.Bind(section, "hudScale", 1f, "");
-            hudOpacity = config.Bind(section, "hudOpacity", 1f, "");
             bypassFatalErrors = config.Bind(section, "bypassFatalErrors", false, "");
-
-            toolbeltHeight = config.Bind(section, "toolbeltHeight", -0.55f, ""); // min: 0.2 - 1; max: 0.8 - 1.
 
             if (PreventCursorLock)
             {
