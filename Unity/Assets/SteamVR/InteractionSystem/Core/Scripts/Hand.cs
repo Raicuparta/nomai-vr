@@ -476,7 +476,7 @@ namespace Valve.VR.InteractionSystem
             {
                 if (attachedObject.interactable != null && attachedObject.interactable.skeletonPoser != null && HasSkeleton())
                 {
-                    SteamVR_Skeleton_PoseSnapshot pose = attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton);
+                    SteamVR_Skeleton_PoseSnapshot pose = attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton, skeleton.GetBonePositions(), skeleton.GetBoneRotations());
 
                     //snap the object to the center of the attach point
                     objectToAttach.transform.position = this.transform.TransformPoint(pose.position);
@@ -1132,7 +1132,7 @@ namespace Valve.VR.InteractionSystem
 
                     if (currentAttachedObjectInfo.Value.interactable.skeletonPoser != null && HasSkeleton())
                     {
-                        pose = currentAttachedObjectInfo.Value.interactable.skeletonPoser.GetBlendedPose(skeleton);
+                        pose = currentAttachedObjectInfo.Value.interactable.skeletonPoser.GetBlendedPose(skeleton, skeleton.GetBonePositions(), skeleton.GetBoneRotations());
                     }
 
                     if (currentAttachedObjectInfo.Value.interactable.handFollowTransform)
@@ -1265,7 +1265,7 @@ namespace Valve.VR.InteractionSystem
         {
             if (attachedObject.interactable != null && attachedObject.interactable.skeletonPoser != null && HasSkeleton())
             {
-                Vector3 tp = attachedObject.handAttachmentPointTransform.InverseTransformPoint(transform.TransformPoint(attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton).position));
+                Vector3 tp = attachedObject.handAttachmentPointTransform.InverseTransformPoint(transform.TransformPoint(attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton, skeleton.GetBonePositions(), skeleton.GetBoneRotations()).position));
                 //tp.x *= -1;
                 return currentAttachedObjectInfo.Value.handAttachmentPointTransform.TransformPoint(tp);
             }
@@ -1279,7 +1279,7 @@ namespace Valve.VR.InteractionSystem
         {
             if (attachedObject.interactable != null && attachedObject.interactable.skeletonPoser != null && HasSkeleton())
             {
-                Quaternion tr = Quaternion.Inverse(attachedObject.handAttachmentPointTransform.rotation) * (transform.rotation * attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton).rotation);
+                Quaternion tr = Quaternion.Inverse(attachedObject.handAttachmentPointTransform.rotation) * (transform.rotation * attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton, skeleton.GetBonePositions(), skeleton.GetBoneRotations()).rotation);
                 return currentAttachedObjectInfo.Value.handAttachmentPointTransform.rotation * tr;
             }
             else
