@@ -1,0 +1,303 @@
+{
+  "bindings": {
+    "/actions/default": {
+      "chords": [],
+      "poses": [
+        {
+          "output": "/actions/default/in/lefthand",
+          "path": "/user/hand/left/pose/raw"
+        },
+        {
+          "output": "/actions/default/in/righthand",
+          "path": "/user/hand/right/pose/raw"
+        }
+      ],
+      "haptics": [
+        {
+          "output": "/actions/default/out/haptic",
+          "path": "/user/hand/left/output/haptic"
+        },
+        {
+          "output": "/actions/default/out/haptic",
+          "path": "/user/hand/right/output/haptic"
+        }
+      ],
+      "sources": [
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/ThrustDown"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "pull": {
+              "output": "/actions/default/in/ThrustUp"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/a",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/jump"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/b",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/Interact"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/thumbstick",
+          "mode": "joystick",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/map"
+            },
+            "position": {
+              "output": "/actions/default/in/move"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/b",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/menu"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/a",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/RollMode"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/trackpad",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/back"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trackpad",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/default/in/back"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/grip",
+          "mode": "grab",
+          "parameters": {
+            "value_hold_threshold": "1.35",
+            "value_release_threshold": "1"
+          },
+          "inputs": {
+            "grab": {
+              "output": "/actions/default/in/grip"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "grab",
+          "parameters": {
+            "value_hold_threshold": "1.35",
+            "value_release_threshold": "1"
+          },
+          "inputs": {
+            "grab": {
+              "output": "/actions/default/in/grip"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/pinch",
+          "mode": "grab",
+          "parameters": {
+            "force_hold_threshold": "0.02",
+            "force_release_threshold": "0.01"
+          },
+          "inputs": {
+            "grab": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/pinch",
+          "mode": "grab",
+          "parameters": {
+            "force_hold_threshold": "0.02",
+            "force_release_threshold": "0.01"
+          },
+          "inputs": {
+            "grab": {
+              "output": "/actions/default/in/grabpinch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "force_sensor",
+          "parameters": {},
+          "inputs": {
+            "force": {
+              "output": "/actions/default/in/squeeze"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/grip",
+          "mode": "force_sensor",
+          "parameters": {},
+          "inputs": {
+            "force": {
+              "output": "/actions/default/in/squeeze"
+            }
+          }
+        }
+      ],
+      "skeleton": [
+        {
+          "output": "/actions/default/in/skeletonlefthand",
+          "path": "/user/hand/left/input/skeleton/left"
+        },
+        {
+          "output": "/actions/default/in/skeletonrighthand",
+          "path": "/user/hand/right/input/skeleton/right"
+        }
+      ]
+    },
+    "/actions/inverted": {
+      "chords": [],
+      "poses": [],
+      "haptics": [],
+      "sources": [
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "pull": {
+              "output": "/actions/inverted/in/ThrustDown"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "pull": {
+              "output": "/actions/inverted/in/ThrustUp"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/b",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/Interact"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/b",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/inverted/in/menu"
+            }
+          }
+        }
+      ],
+      "skeleton": []
+    },
+    "/actions/tools": {
+      "chords": [],
+      "poses": [],
+      "haptics": [],
+      "sources": [
+        {
+          "path": "/user/hand/left/input/trackpad",
+          "mode": "trackpad",
+          "parameters": {},
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trackpad",
+          "mode": "trackpad",
+          "parameters": {},
+          "inputs": {
+            "position": {
+              "output": "/actions/tools/in/dpad"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/b",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/b",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tools/in/use"
+            }
+          }
+        }
+      ],
+      "skeleton": []
+    }
+  },
+  "controller_type": "knuckles",
+  "description": "",
+  "name": "Outer Wilds Index Knuckles Bindings"
+}
