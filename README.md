@@ -1,9 +1,11 @@
 # NomaiVR - Outer Wilds VR Mod
 
 ## ⚠️ ONLY COMPATIBLE WITH VERSION 1.0.7
-On the 28th of September 2021, a new update will be released. Even if you haven't purchased the DLC, NomaiVR won't work. You'll need to get version 1.0.7 somehow, or wait for a NomaiVR update.
+
+As of 28th of September 2021, NomaiVR won't work with the latest version of the game. You need version 1.0.7. Check the [Rolling back to 1.0.7](#rolling-back-to-version-107-of-outer-wilds) section for detailed instructions.
 
 ## ⚠️ NOT COMPATIBLE WITH DLC (Echoes of the Eye)
+
 Need to wait for a NomaiVR update for DLC compatibility.
 
 ![NomaiVR](RepoAssets/banner.png)
@@ -12,10 +14,9 @@ Need to wait for a NomaiVR update for DLC compatibility.
 
 [![NomaiVR Video](RepoAssets/video-thumbnail.jpg)](https://www.youtube.com/watch?v=gPFiYRMm8Ok)
 
-
-
-<!-- TOC -->
-
+- [Rolling back to version 1.0.7 of Outer Wilds](#rolling-back-to-version-107-of-outer-wilds)
+  - [Steam version](#steam-version)
+  - [Epic Store version](#epic-store-version)
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
   - [Manual installation](#manual-installation)
@@ -31,7 +32,24 @@ Need to wait for a NomaiVR update for DLC compatibility.
 - [Special Thanks](#special-thanks)
 - [Help / Discuss development / Tell me about your day](#help--discuss-development--tell-me-about-your-day)
 
-<!-- /TOC -->
+## Rolling back to version 1.0.7 of Outer Wilds
+
+### Steam version
+
+Follow the instructions given by Logan, one of the Outer Wilds devs:
+
+> **A pre-DLC version of Outer Wilds (1.0.7) is available as a Beta on Steam!**
+>
+> To access it, right-click on Outer Wilds in Steam, select "Properties...", click on the "Betas" tab, enter the beta access code `moddersGetYourStuff`, and click "Check Code". You should now be able to select "1.0.7.481 - Outer Wilds v1.0.7.418" in the dropdown to have Steam start downloading that version over your current version.
+>
+> **Notes:**
+>
+> - You may have to restart Steam to get the branch to show up, or to trigger its download.
+> - Save files from later versions of Outer Wilds are not backwards compatible with earlier versions.
+
+### Epic Store version
+
+Epic store doesn't have an option for beta branches or anything of the sort, so you'd have to make a backup of version 1.0.7 yourself, or find it by some other means.
 
 ## Installation
 
