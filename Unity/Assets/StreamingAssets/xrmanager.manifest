@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 3284397142
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8acdf843ccb5aae68a0b1ab78a2a713e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5450e007d0dcd1194eddfe27570537ef
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: 7a32bfe54d957ec4581fa4a630f1647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/XR/Settings/Open VR Settings.asset
+Dependencies: []

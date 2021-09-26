@@ -3,6 +3,8 @@ using BepInEx;
 using System.IO;
 using HarmonyLib;
 using System.Reflection;
+using UnityEngine.XR.Management;
+using Unity.XR.OpenVR;
 
 namespace NomaiVR
 {
@@ -68,14 +70,44 @@ namespace NomaiVR
         {
             try
             {
+                SteamVR_Actions.PreInitialize();
+                LoadXRModule();
                 SteamVR.Initialize();
                 SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
                 OpenVR.Input.SetActionManifestPath(ModFolderPath + @"\bindings\actions.json");
+
+                if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null
+                    && XRGeneralSettings.Instance.Manager.activeLoader != null)
+                {
+                    XRGeneralSettings.Instance.Manager.StartSubsystems();
+                }
+                else
+                    throw new System.Exception("Cannot initialize VRSubsystem");
             }
             catch
             {
                 FatalErrorChecker.ThrowSteamVRError();
             }
+        }
+
+        private void LoadXRModule()
+        {
+            foreach(var xrManager in AssetLoader.XRManager.LoadAllAssets())
+                Logs.WriteInfo($"Loaded xrManager: {xrManager.name}");
+
+            XRGeneralSettings instance = XRGeneralSettings.Instance;
+            if (instance == null) throw new System.Exception("XRGeneralSettings instance is null");
+
+            var xrManagerSettings = instance.Manager;
+            if(xrManagerSettings == null) throw new System.Exception("XRManagerSettings instance is null");
+
+            xrManagerSettings.InitializeLoaderSync();
+            if (xrManagerSettings.activeLoader == null) throw new System.Exception("Cannot initialize OpenVR Loader");
+
+            OpenVRSettings openVrSettings = OpenVRSettings.GetSettings(false);
+            if(openVrSettings == null) throw new System.Exception("OpenVRSettings instance is null");
+
+            openVrSettings.SetMirrorViewMode(OpenVRSettings.MirrorViewModes.Right);
         }
     }
 }

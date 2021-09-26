@@ -12,6 +12,10 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds</GameDir>
+    <OwmlDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds\BepInEx\plugins</OwmlDir>
+    <UnityEditor>F:\Program Files (x86)\Unity\2019.4.27f1\Editor\Unity.exe</UnityEditor>
+    <ModDir>NomaiVR</ModDir>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -263,6 +267,8 @@
 
       copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\$(ModDir)\poses"
 
+      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\*" "$(OwmlDir)\$(ModDir)\assets"
+
       copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\$(ModDir)\assets"
 
       copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"
@@ -271,6 +277,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
+      "$(UnityEditor)" -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath "$(ProjectDir)..\Unity" -buildWindows64Player -quit
     </PreBuildEvent>
   </PropertyGroup>
 </Project>
