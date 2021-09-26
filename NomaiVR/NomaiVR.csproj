@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NomaiVR</RootNamespace>
     <AssemblyName>NomaiVR</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,9 +33,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.5.4.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="0Harmony">
       <HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
@@ -43,10 +45,10 @@
     <Reference Include="Assembly-CSharp_publicized">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx, Version=5.4.15.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="BepInEx">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx.Harmony, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="BepInEx.Harmony">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -87,17 +89,41 @@
     <Reference Include="UnityEngine.AudioModule">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.XR.Management, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\Unity.XR.Management.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
-    <Reference Include="Valve.Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Valve.Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SteamVR\lib\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SteamVR">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll</HintPath>
+    </Reference>
+    <Reference Include="SteamVR_Actions">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll</HintPath>
+    </Reference>
+    <Reference Include="SteamVR_Actions">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +138,7 @@
     <Compile Include="FatalErrorChecker.cs" />
     <Compile Include="Hands\NomaiVR_Hand_Skeleton.cs" />
     <Compile Include="Helpers\CameraHelper.cs" />
+    <Compile Include="Helpers\CustomSkeletonHelper.cs" />
     <Compile Include="Helpers\InputHelper.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\LayerHelper.cs" />
@@ -219,34 +246,28 @@
     <None Include="Saves\save.json" />
     <None Include="manifest.json" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SteamVR\SteamVR.csproj">
-      <Project>{da60553a-09e1-4c55-8826-953ecb0612a2}</Project>
-      <Name>SteamVR</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-            del "$(OwmlDir)\$(ModDir)\config.json"
+      del "$(OwmlDir)\$(ModDir)\config.json"
 
-            md "$(OwmlDir)\$(ModDir)"
-            md "$(OwmlDir)\$(ModDir)\bindings"
-            md "$(OwmlDir)\$(ModDir)\assets"
-            md "$(OwmlDir)\$(ModDir)\poses"
+      md "$(OwmlDir)\$(ModDir)"
+      md "$(OwmlDir)\$(ModDir)\bindings"
+      md "$(OwmlDir)\$(ModDir)\assets"
+      md "$(OwmlDir)\$(ModDir)\poses"
 
-            copy /y "$(TargetPath)" "$(OwmlDir)"
+      copy /y "$(TargetPath)" "$(OwmlDir)"
 
-            copy /y "$(ProjectDir)\Input\Bindings\*.json" "$(OwmlDir)\$(ModDir)\bindings"
+      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(OwmlDir)\$(ModDir)\bindings"
 
-            copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\$(ModDir)\poses"
+      copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\$(ModDir)\poses"
 
-            copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\$(ModDir)\assets"
+      copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\$(ModDir)\assets"
 
-            copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"
-            copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\$(ModDir)"
-</PostBuildEvent>
+      copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"
+      copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\$(ModDir)"
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

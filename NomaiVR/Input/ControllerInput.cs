@@ -227,7 +227,7 @@ namespace NomaiVR
                 SteamVR_Actions.default_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.default_Back.onChange += OnBackChange;
                 SteamVR_Actions.default_Interact.onChange += OnInteractChange;
-                SteamVR_Actions.default_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
+                SteamVR_Actions.default_RollMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
                 SteamVR_Actions.default_Grip.onChange += OnGripChange;
                 SteamVR_Actions.default_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
                 SteamVR_Actions.default_Map.onChange += CreateButtonHandler(JoystickButton.Select);
@@ -241,7 +241,7 @@ namespace NomaiVR
                 SteamVR_Actions.inverted_Jump.onChange += CreateButtonHandler(JoystickButton.FaceDown);
                 SteamVR_Actions.inverted_Back.onChange += OnBackChange;
                 SteamVR_Actions.inverted_Interact.onChange += OnInteractChange;
-                SteamVR_Actions.inverted_RoolMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
+                SteamVR_Actions.inverted_RollMode.onChange += CreateButtonHandler(JoystickButton.LeftBumper);
                 SteamVR_Actions.inverted_Grip.onChange += OnGripChange;
                 SteamVR_Actions.inverted_Menu.onChange += CreateButtonHandler(JoystickButton.Start);
                 SteamVR_Actions.inverted_Map.onChange += CreateButtonHandler(JoystickButton.Select);
