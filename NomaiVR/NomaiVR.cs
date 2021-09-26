@@ -2,7 +2,6 @@
 using BepInEx;
 using System.IO;
 using HarmonyLib;
-using System.Reflection;
 using UnityEngine.XR.Management;
 using Unity.XR.OpenVR;
 
@@ -25,11 +24,9 @@ namespace NomaiVR
         {
             Save = ModSaveFile.LoadSaveFile();
             new FatalErrorChecker();
-
-            InitSteamVR();
-
             new AssetLoader();
 
+            InitSteamVR();
 
             // Load all modules.
             // I'm sorry to say that order does matter here.
@@ -105,7 +102,9 @@ namespace NomaiVR
             if (xrManagerSettings.activeLoader == null) throw new System.Exception("Cannot initialize OpenVR Loader");
 
             OpenVRSettings openVrSettings = OpenVRSettings.GetSettings(false);
-            if(openVrSettings == null) throw new System.Exception("OpenVRSettings instance is null");
+            openVrSettings.EditorAppKey = "steam.app.753640";
+            openVrSettings.InitializationType = OpenVRSettings.InitializationTypes.Scene;
+            if (openVrSettings == null) throw new System.Exception("OpenVRSettings instance is null");
 
             openVrSettings.SetMirrorViewMode(OpenVRSettings.MirrorViewModes.Right);
         }

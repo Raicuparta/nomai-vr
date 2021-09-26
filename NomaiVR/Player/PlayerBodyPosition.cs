@@ -1,6 +1,7 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.SpatialTracking;
 
 namespace NomaiVR
 {
@@ -57,6 +58,12 @@ namespace NomaiVR
                 _cameraParent.localRotation = Quaternion.identity;
                 _playerCamera.transform.parent = _cameraParent;
                 _playerCamera.gameObject.AddComponent<VRCameraManipulator>();
+
+                _playerCamera.mainCamera.stereoTargetEye = StereoTargetEyeMask.Both;
+                var hmdTracking = _playerCamera.gameObject.AddComponent<TrackedPoseDriver>();
+                hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
+                hmdTracking.UseRelativeTransform = true;
+
 
                 var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
