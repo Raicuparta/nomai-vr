@@ -34,7 +34,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
+    <Reference Include="0Harmony, Version=2.5.4.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
@@ -43,10 +43,10 @@
     <Reference Include="Assembly-CSharp_publicized">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx">
+    <Reference Include="BepInEx, Version=5.4.15.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx.Harmony">
+    <Reference Include="BepInEx.Harmony, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="System" />

@@ -69,21 +69,9 @@ namespace NomaiVR
             EmptyMethod(GetMethod<T>(methodName));
 
         public void EmptyMethod(MethodBase methodInfo) =>
-            Transpile(methodInfo, typeof(NomaiVRPatch), nameof(EmptyMethodPatch));
+            AddPrefix(methodInfo, typeof(NomaiVRPatch), nameof(EmptyMethodPatch));
 
-        public static IEnumerable<CodeInstruction> EmptyMethodPatch(IEnumerable<CodeInstruction> _) =>
-            new List<CodeInstruction>();
-
-        public void Transpile(MethodBase original, Type patchType, string patchMethodName)
-        {
-            var patchMethod = TypeExtensions.GetAnyMethod(patchType, patchMethodName);
-            if (patchMethod == null)
-            {
-                Logs.WriteError($"Error in {nameof(Transpile)}: {patchType.Name}.{patchMethodName} is null.");
-                return;
-            }
-            Patch(original, null, null, patchMethod);
-        }
+        public static bool EmptyMethodPatch() => false;
 
         private MethodInfo GetMethod<T>(string methodName)
         {
