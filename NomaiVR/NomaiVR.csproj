@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,13 +8,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NomaiVR</RootNamespace>
     <AssemblyName>NomaiVR</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds</GameDir>
     <OwmlDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds\BepInEx\plugins</OwmlDir>
     <UnityEditor>F:\Program Files (x86)\Unity\2019.4.27f1\Editor\Unity.exe</UnityEditor>
     <ModDir>NomaiVR</ModDir>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -55,12 +55,6 @@
     <Reference Include="BepInEx.Harmony">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -113,6 +107,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\Unity.InputSystem.dll</HintPath>
+    </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll</HintPath>
@@ -129,82 +131,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\AssetLoader.cs" />
-    <Compile Include="EffectFixes\DisableDeathAnimation.cs" />
-    <Compile Include="EffectFixes\ShadowsFix.cs" />
-    <Compile Include="EffectFixes\FogFix.cs" />
-    <Compile Include="EffectFixes\LoopTransitionFix.cs" />
-    <Compile Include="EffectFixes\ProjectionStoneCameraFix.cs" />
-    <Compile Include="EffectFixes\CameraMaskFix.cs" />
-    <Compile Include="EffectFixes\VisorEffectsFix.cs" />
-    <Compile Include="FatalErrorChecker.cs" />
-    <Compile Include="Hands\NomaiVR_Hand_Skeleton.cs" />
-    <Compile Include="Helpers\CameraHelper.cs" />
-    <Compile Include="Helpers\CustomSkeletonHelper.cs" />
-    <Compile Include="Helpers\InputHelper.cs" />
-    <Compile Include="Helpers\JsonHelper.cs" />
-    <Compile Include="Helpers\LayerHelper.cs" />
-    <Compile Include="Helpers\MaterialHelper.cs" />
-    <Compile Include="Helpers\PlayerHelper.cs" />
-    <Compile Include="Helpers\SceneHelper.cs" />
-    <Compile Include="Helpers\StorageHelper.cs" />
-    <Compile Include="Helpers\TextHelper.cs" />
-    <Compile Include="Helpers\TimerHelper.cs" />
-    <Compile Include="Helpers\ToolHelper.cs" />
-    <Compile Include="Input\OverridableSteamVRAction.cs" />
-    <Compile Include="Input\VRActionInput.cs" />
-    <Compile Include="Logs.cs" />
-    <Compile Include="ModConfig\ModSettings.cs" />
-    <Compile Include="Player\VRCameraManipulator.cs" />
-    <Compile Include="ReusableBehaviours\DebugFollowTarget.cs" />
-    <Compile Include="ReusableBehaviours\ChildThresholdObserver.cs" />
-    <Compile Include="ReusableBehaviours\EnableObserver.cs" />
-    <Compile Include="ReusableBehaviours\IActiveObserver.cs" />
-    <Compile Include="ReusableBehaviours\ShipMonitorInteraction.cs" />
-    <Compile Include="Saves\ModSaveFile.cs" />
-    <Compile Include="Hands\Hand.cs" />
-    <Compile Include="NomaiVRModule.cs" />
-    <Compile Include="NomaiVRPatch.cs" />
-    <Compile Include="ReusableBehaviours\ConditionalRenderer.cs" />
-    <Compile Include="ReusableBehaviours\DebugTransform.cs" />
-    <Compile Include="ReusableBehaviours\Holdable.cs" />
-    <Compile Include="ReusableBehaviours\PersistObject.cs" />
-    <Compile Include="ReusableBehaviours\SmoothFollowCameraRotation.cs" />
-    <Compile Include="ReusableBehaviours\DestroyObserver.cs" />
-    <Compile Include="Tools\VRToolSwapper.cs" />
-    <Compile Include="TypeExtensions.cs" />
-    <Compile Include="UI\ControllerModels.cs" />
-    <Compile Include="UI\Dialogue.cs" />
-    <Compile Include="Player\FeetMarker.cs" />
-    <Compile Include="ReusableBehaviours\FollowTarget.cs" />
-    <Compile Include="ForceSettings.cs" />
-    <Compile Include="UI\GesturePrompts.cs" />
-    <Compile Include="UI\InputPrompts.cs" />
-    <Compile Include="Tools\FlashlightGesture.cs" />
-    <Compile Include="Tools\HoldItem.cs" />
-    <Compile Include="UI\HelmetHUD.cs" />
-    <Compile Include="Tools\HoldMallowStick.cs" />
-    <Compile Include="Tools\HoldProbeLauncher.cs" />
-    <Compile Include="UI\HoldPrompts.cs" />
-    <Compile Include="Tools\HoldSignalscope.cs" />
-    <Compile Include="Tools\HoldTranslator.cs" />
-    <Compile Include="Hands\LaserPointer.cs" />
-    <Compile Include="Tools\ShipTools.cs" />
-    <Compile Include="ReusableBehaviours\ProximityDetector.cs" />
-    <Compile Include="UI\LookArrow.cs" />
-    <Compile Include="UI\Menus.cs" />
-    <Compile Include="Hands\HandsController.cs" />
-    <Compile Include="Player\PlayerBodyPosition.cs" />
-    <Compile Include="Input\ControllerInput.cs" />
-    <Compile Include="Tools\HolsterTool.cs" />
-    <Compile Include="Helpers\QuaternionHelper.cs" />
-    <Compile Include="EffectFixes\MapFix.cs" />
-    <Compile Include="NomaiVR.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EffectFixes\PostCreditsFix.cs" />
-    <Compile Include="UI\TitleMenuLogoFader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AssetFiles\cinema-camera" />
@@ -251,42 +177,37 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-      del "$(OwmlDir)\$(ModDir)\config.json"
+  <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
+      <Exec Command='del "$(OwmlDir)\$(ModDir)\config.json"' />
 
-      md "$(OwmlDir)\$(ModDir)"
-      md "$(OwmlDir)\$(ModDir)\bindings"
-      md "$(OwmlDir)\$(ModDir)\assets"
-      md "$(OwmlDir)\$(ModDir)\poses"
+      <Exec Command='md "$(OwmlDir)\$(ModDir)"' IgnoreExitCode='true' />
+      <Exec Command='md "$(OwmlDir)\$(ModDir)\bindings"' IgnoreExitCode='true' />
+      <Exec Command='md "$(OwmlDir)\$(ModDir)\assets"' IgnoreExitCode='true' />
+      <Exec Command='md "$(OwmlDir)\$(ModDir)\poses"' IgnoreExitCode='true' />
 
-      copy /y "$(TargetPath)" "$(OwmlDir)"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll" "$(OwmlDir)\SteamVR.dll"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll" "$(OwmlDir)\SteamVR_Actions.dll"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll" "$(OwmlDir)\Unity.XR.OpenVR.dll"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll" "$(OwmlDir)\Unity.XR.Management.dll"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll" "$(OwmlDir)\UnityEngine.XR.LegacyInputHelpers.dll"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll" "$(OwmlDir)\Valve.Newtonsoft.Json.dll"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.Subsystem.Registration.dll" "$(OwmlDir)\Unity.Subsystem.Registration.dll"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll" "$(OwmlDir)\UnityEngine.SpatialTracking.dll"
+      <Exec Command='copy /y "$(TargetPath)" "$(OwmlDir)"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll" "$(OwmlDir)\SteamVR.dll"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll" "$(OwmlDir)\SteamVR_Actions.dll"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll" "$(OwmlDir)\Unity.XR.OpenVR.dll"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll" "$(OwmlDir)\Unity.XR.Management.dll"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll" "$(OwmlDir)\UnityEngine.XR.LegacyInputHelpers.dll"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll" "$(OwmlDir)\Valve.Newtonsoft.Json.dll"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.Subsystem.Registration.dll" "$(OwmlDir)\Unity.Subsystem.Registration.dll"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll" "$(OwmlDir)\UnityEngine.SpatialTracking.dll"' />
 
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(OwmlDir)\$(ModDir)\bindings"
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(GameDir)\OuterWilds_Data\StreamingAssets\SteamVR"
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(OwmlDir)\$(ModDir)\bindings"' />
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(GameDir)\OuterWilds_Data\StreamingAssets\SteamVR"' />
 
-      copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\$(ModDir)\poses"
+      <Exec Command='copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\$(ModDir)\poses"' />
 
-      copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\*" "$(OwmlDir)\$(ModDir)\assets"
+      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\*" "$(OwmlDir)\$(ModDir)\assets"' />
 
-      copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\$(ModDir)\assets"
+      <Exec Command='copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\$(ModDir)\assets"' />
 
-      copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"
-      copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\$(ModDir)"
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-      "$(UnityEditor)" -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath "$(ProjectDir)..\Unity" -buildWindows64Player -quit
-    </PreBuildEvent>
-  </PropertyGroup>
+      <Exec Command='copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"' />
+      <Exec Command='copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\$(ModDir)"' />
+    </Target>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command='"$(UnityEditor)" -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath "$(ProjectDir)..\Unity" -buildWindows64Player -quit' />
+  </Target>
 </Project>
