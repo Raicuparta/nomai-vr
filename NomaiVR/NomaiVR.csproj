@@ -178,35 +178,35 @@
   </ItemGroup>
   <ItemGroup />
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
-      <Exec Command='del "$(OwmlDir)\$(ModDir)\config.json"' />
+    <Exec Command='del "$(OwmlDir)\$(ModDir)\config.json"' />
 
-      <Exec Command='md "$(OwmlDir)\$(ModDir)"' IgnoreExitCode='true' />
-      <Exec Command='md "$(OwmlDir)\$(ModDir)\bindings"' IgnoreExitCode='true' />
-      <Exec Command='md "$(OwmlDir)\$(ModDir)\assets"' IgnoreExitCode='true' />
-      <Exec Command='md "$(OwmlDir)\$(ModDir)\poses"' IgnoreExitCode='true' />
+    <Exec Command='md "$(OwmlDir)\$(ModDir)"' IgnoreExitCode='true' />
+    <Exec Command='md "$(OwmlDir)\$(ModDir)\bindings"' IgnoreExitCode='true' />
+    <Exec Command='md "$(OwmlDir)\$(ModDir)\assets"' IgnoreExitCode='true' />
+    <Exec Command='md "$(OwmlDir)\$(ModDir)\poses"' IgnoreExitCode='true' />
 
-      <Exec Command='copy /y "$(TargetPath)" "$(OwmlDir)"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll" "$(OwmlDir)\SteamVR.dll"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll" "$(OwmlDir)\SteamVR_Actions.dll"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll" "$(OwmlDir)\Unity.XR.OpenVR.dll"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll" "$(OwmlDir)\Unity.XR.Management.dll"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll" "$(OwmlDir)\UnityEngine.XR.LegacyInputHelpers.dll"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll" "$(OwmlDir)\Valve.Newtonsoft.Json.dll"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.Subsystem.Registration.dll" "$(OwmlDir)\Unity.Subsystem.Registration.dll"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll" "$(OwmlDir)\UnityEngine.SpatialTracking.dll"' />
+    <Exec Command='copy /y "$(TargetPath)" "$(OwmlDir)"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll" "$(OwmlDir)\SteamVR.dll"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll" "$(OwmlDir)\SteamVR_Actions.dll"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll" "$(OwmlDir)\Unity.XR.OpenVR.dll"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll" "$(OwmlDir)\Unity.XR.Management.dll"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll" "$(OwmlDir)\UnityEngine.XR.LegacyInputHelpers.dll"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll" "$(OwmlDir)\Valve.Newtonsoft.Json.dll"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.Subsystem.Registration.dll" "$(OwmlDir)\Unity.Subsystem.Registration.dll"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll" "$(OwmlDir)\UnityEngine.SpatialTracking.dll"' />
 
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(OwmlDir)\$(ModDir)\bindings"' />
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(GameDir)\OuterWilds_Data\StreamingAssets\SteamVR"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(OwmlDir)\$(ModDir)\bindings"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*" "$(GameDir)\OuterWilds_Data\StreamingAssets\SteamVR"' />
 
-      <Exec Command='copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\$(ModDir)\poses"' />
+    <Exec Command='copy /y "$(ProjectDir)\Hands\Poses\*.json" "$(OwmlDir)\$(ModDir)\poses"' />
 
-      <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\*" "$(OwmlDir)\$(ModDir)\assets"' />
+    <Exec Command='copy /y "$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\*" "$(OwmlDir)\$(ModDir)\assets"' />
 
-      <Exec Command='copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\$(ModDir)\assets"' />
+    <Exec Command='copy /y "$(ProjectDir)\Assets\AssetFiles\*" "$(OwmlDir)\$(ModDir)\assets"' />
 
-      <Exec Command='copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"' />
-      <Exec Command='copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\$(ModDir)"' />
-    </Target>
+    <Exec Command='copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"' />
+    <Exec Command='copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\$(ModDir)"' />
+  </Target>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command='"$(UnityEditor)" -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath "$(ProjectDir)..\Unity" -buildWindows64Player -quit' />
   </Target>
