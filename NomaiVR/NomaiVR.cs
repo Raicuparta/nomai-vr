@@ -2,6 +2,7 @@
 using BepInEx;
 using System.IO;
 using HarmonyLib;
+using NomaiVR.Input;
 using UnityEngine.XR.Management;
 using Unity.XR.OpenVR;
 
@@ -31,7 +32,8 @@ namespace NomaiVR
             // Load all modules.
             // I'm sorry to say that order does matter here.
             new ForceSettings();
-            new ControllerInput();
+            //new ControllerInput();
+            new NewControllerInput();
             new Dialogue();
             new FogFix();
             new ShadowsFix();
