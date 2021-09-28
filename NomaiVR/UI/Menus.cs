@@ -214,7 +214,7 @@ namespace NomaiVR
             // this workaround fixes their position;
             private static void AdjustModConfigButtons(Canvas canvas)
             {
-                var selectables = canvas.GetComponentsInChildren<TooltipSelectable>(true);
+                var selectables = canvas.GetComponentsInChildren<TooltipDisplay>(true);
                 foreach (var selectable in selectables)
                 {
                     selectable.transform.localPosition = new Vector3(851.5f, -35f, 0);
@@ -294,16 +294,16 @@ namespace NomaiVR
                     Postfix<ProfileMenuManager>("PopulateProfiles", nameof(PostPopulateProfiles));
                     Postfix<CanvasMarkerManager>("Start", nameof(PostMarkerManagerStart));
                     Postfix<TitleScreenAnimation>("FadeInMusic", nameof(PostTitleScreenFadeInMusic));
-                    Postfix<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
+                    //Postfix<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
                 }
 
-                private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
-                {
-                    if (okCommand == InputLibrary.select)
-                    {
-                        ____okCommand = InputLibrary.confirm;
-                    }
-                }
+                //private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
+                //{
+                //    if (okCommand == InputLibrary.select)
+                //    {
+                //        ____okCommand = InputLibrary.confirm;
+                //    }
+                //}
 
                 private static void PostTitleScreenFadeInMusic()
                 {

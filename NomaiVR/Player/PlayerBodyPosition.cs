@@ -93,14 +93,15 @@ namespace NomaiVR
                 }
                 if (ModSettings.DebugMode)
                 {
-                    if (Input.GetKeyDown(KeyCode.KeypadPlus))
-                    {
-                        _cameraParent.localScale *= 0.9f;
-                    }
-                    if (Input.GetKeyDown(KeyCode.KeypadMinus))
-                    {
-                        _cameraParent.localScale /= 0.9f;
-                    }
+                    //FIXME
+                    //if (Input.GetKeyDown(KeyCode.KeypadPlus))
+                    //{
+                    //    _cameraParent.localScale *= 0.9f;
+                    //}
+                    //if (Input.GetKeyDown(KeyCode.KeypadMinus))
+                    //{
+                    //    _cameraParent.localScale /= 0.9f;
+                    //}
                 }
             }
 

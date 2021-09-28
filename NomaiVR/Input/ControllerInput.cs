@@ -55,7 +55,7 @@ namespace NomaiVR
                 _axes = new Dictionary<int, float>();
 
                 SetUpSteamVRActionHandlers();
-                ReplaceInputs();
+                //ReplaceInputs();
                 SetUpActionInputs();
                 UpdateHandDominance();
                 ToolModeBound(null, ModSettings.LeftHandDominant ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand, false); //Force update tool prompts
@@ -565,54 +565,54 @@ namespace NomaiVR
                 then?.Invoke();
             }
 
-            private static void SetGamepadBinding(SingleAxisCommand command, InputBinding binding)
-            {
-                command._gamepadBinding = binding;
-            }
-
-            private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)
-            {
-                SetGamepadBinding(command, new InputBinding(button));
-            }
-
-            private static void SetCommandButton(SingleAxisCommand command, JoystickButton buttonPositive, JoystickButton buttonNegative)
-            {
-                SetGamepadBinding(command, new InputBinding(buttonPositive, buttonNegative));
-            }
-
-            private static void ReplaceInputs()
-            {
-                SetCommandButton(InputLibrary.landingCamera, JoystickButton.DPadDown);
-                SetCommandButton(InputLibrary.signalscope, JoystickButton.DPadRight);
-                SetCommandButton(InputLibrary.tabL, JoystickButton.None);
-                SetCommandButton(InputLibrary.tabR, JoystickButton.None);
-                SetCommandButton(InputLibrary.setDefaults, JoystickButton.None);
-                SetCommandButton(InputLibrary.confirm, JoystickButton.None);
-                SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
-                SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
-                SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
-                SetCommandButton(InputLibrary.scopeView, JoystickButton.RightBumper);
-                SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.LeftStickClick);
-                SetCommandButton(InputLibrary.probeForward, JoystickButton.RightBumper);
-                SetCommandButton(InputLibrary.translate, JoystickButton.RightBumper);
-                SetCommandButton(InputLibrary.autopilot, JoystickButton.FaceUp);
-                SetCommandButton(InputLibrary.lockOn, JoystickButton.FaceLeft);
-            }
+            //private static void SetGamepadBinding(SingleAxisCommand command, InputBinding binding)
+            //{
+            //    command._gamepadBinding = binding;
+            //}
+            //
+            //private static void SetCommandButton(SingleAxisCommand command, JoystickButton button)
+            //{
+            //    SetGamepadBinding(command, new InputBinding(button));
+            //}
+            //
+            //private static void SetCommandButton(SingleAxisCommand command, JoystickButton buttonPositive, JoystickButton buttonNegative)
+            //{
+            //    SetGamepadBinding(command, new InputBinding(buttonPositive, buttonNegative));
+            //}
+            //
+            //private static void ReplaceInputs()
+            //{
+            //    SetCommandButton(InputLibrary.landingCamera, JoystickButton.DPadDown);
+            //    SetCommandButton(InputLibrary.signalscope, JoystickButton.DPadRight);
+            //    SetCommandButton(InputLibrary.tabL, JoystickButton.None);
+            //    SetCommandButton(InputLibrary.tabR, JoystickButton.None);
+            //    SetCommandButton(InputLibrary.setDefaults, JoystickButton.None);
+            //    SetCommandButton(InputLibrary.confirm, JoystickButton.None);
+            //    SetCommandButton(InputLibrary.confirm2, JoystickButton.None);
+            //    SetCommandButton(InputLibrary.enter, JoystickButton.FaceLeft);
+            //    SetCommandButton(InputLibrary.mapZoom, JoystickButton.RightTrigger, JoystickButton.LeftTrigger);
+            //    SetCommandButton(InputLibrary.scopeView, JoystickButton.RightBumper);
+            //    SetCommandButton(InputLibrary.probeRetrieve, JoystickButton.LeftStickClick);
+            //    SetCommandButton(InputLibrary.probeForward, JoystickButton.RightBumper);
+            //    SetCommandButton(InputLibrary.translate, JoystickButton.RightBumper);
+            //    SetCommandButton(InputLibrary.autopilot, JoystickButton.FaceUp);
+            //    SetCommandButton(InputLibrary.lockOn, JoystickButton.FaceLeft);
+            //}
 
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
+                    //Prefix<SingleAxisCommand>("UpdateInputCommand", nameof(SingleAxisUpdate));
                     Prefix<OWInput>("UpdateActiveInputDevice", nameof(OWInputUpdate));
                     Prefix<OWInput>("Awake", nameof(PostEnableListenForAllJoysticks));
                     Postfix<PlayerResources>("Awake", nameof(PlayerResourcesAwake));
-                    Postfix<PadEZ.PadManager_OW>("GetKey", nameof(ResetPadManagerKeyboard));
-                    Postfix<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
-                    Postfix<PadEZ.PadManager_OW>("GetKeyUp", nameof(ResetPadManagerKeyboard));
+                    //Postfix<PadEZ.PadManager_OW>("GetKey", nameof(ResetPadManagerKeyboard));
+                    //Postfix<PadEZ.PadManager_OW>("GetKeyDown", nameof(ResetPadManagerKeyboard));
+                    //Postfix<PadEZ.PadManager_OW>("GetKeyUp", nameof(ResetPadManagerKeyboard));
                     Postfix<OWInput>("IsGamepadEnabled", nameof(PostIsGamepadEnabled));
-                    Postfix<PadEZ.PadManager_OW>("IsGamepadActive", nameof(PostIsGamepadEnabled));
-                    Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
+                    //Postfix<PadEZ.PadManager_OW>("IsGamepadActive", nameof(PostIsGamepadEnabled));
+                    //Prefix<DoubleAxisCommand>("UpdateInputCommand", nameof(PreUpdateDoubleAxisCommand));
                     Prefix<SubmitActionMenu>("Submit", nameof(PreSubmitActionMenu));
                     Prefix(typeof(RumbleManager).GetAnyMethod("Update"), nameof(PreUpdateRumble));
 
@@ -740,7 +740,7 @@ namespace NomaiVR
                 }
 
                 private static bool SingleAxisUpdate(
-                    SingleAxisCommand __instance,
+                    //SingleAxisCommand __instance,
                     InputBinding ____gamepadBinding,
                     ref float ____value,
                     ref bool ____newlyPressedThisFrame,
@@ -779,7 +779,7 @@ namespace NomaiVR
                     }
 
                     ____lastPressedDuration = ____pressedDuration;
-                    ____pressedDuration = ((!__instance.IsPressed()) ? 0f : (____pressedDuration + (Time.realtimeSinceStartup - ____realtimeSinceLastUpdate)));
+                    //____pressedDuration = ((!__instance.IsPressed()) ? 0f : (____pressedDuration + (Time.realtimeSinceStartup - ____realtimeSinceLastUpdate)));
                     ____realtimeSinceLastUpdate = Time.realtimeSinceStartup;
 
                     return false;
@@ -793,7 +793,7 @@ namespace NomaiVR
 
                 private static void PostEnableListenForAllJoysticks()
                 {
-                    ReplaceInputs();
+                    //ReplaceInputs();
                 }
             }
         }

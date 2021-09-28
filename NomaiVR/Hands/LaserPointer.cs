@@ -153,7 +153,7 @@ namespace NomaiVR
                 var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
                 foreach (var selectable in selectables)
                 {
-                    var tooltipSelectable = selectable.GetComponent<TooltipSelectable>();
+                    var tooltipSelectable = selectable.GetComponent<TooltipDisplay>();
                     if (tooltipSelectable != null)
                     {
                         // Move children to avoid ray z-fighting;
@@ -199,8 +199,7 @@ namespace NomaiVR
 
             private static void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
             {
-                var selection = twoButtonToggle.GetValue();
-                twoButtonToggle._selection = !selection;
+                twoButtonToggle.Toggle();
                 twoButtonToggle.UpdateToggleColors();
             }
 

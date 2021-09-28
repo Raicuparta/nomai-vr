@@ -57,24 +57,25 @@ namespace NomaiVR
 
             private static void ResetInputsToDefault()
             {
-                try
-                {
-                    FindObjectOfType<KeyRebinderManager>().OnApplyDefaultsSubmit();
-                }
-                catch
-                {
-                    Logs.WriteWarning("Failed to reset inputs to default");
-                }
+                Logs.WriteWarning("Failed to reset inputs to default");
+                //try
+                //{
+                //    FindObjectOfType<KeyRebindingElement>().OnApplyDefaultsSubmit();
+                //}
+                //catch
+                //{
+                //    Logs.WriteWarning("Failed to reset inputs to default");
+                //}
             }
 
-            private static void UpdateActiveController()
-            {
-                if (OWInput.GetActivePadNumber() != 0)
-                {
-                    Logs.WriteWarning("Wrong gamepad selected. Resetting to 0");
-                    OWInput.SetActiveGamePad(0);
-                }
-            }
+            //private static void UpdateActiveController()
+            //{
+            //    if (OWInput.GetActivePadNumber() != 0)
+            //    {
+            //        Logs.WriteWarning("Wrong gamepad selected. Resetting to 0");
+            //        OWInput.SetActiveGamePad(0);
+            //    }
+            //}
 
             private static void SetRefreshRate()
             {
@@ -88,7 +89,7 @@ namespace NomaiVR
 
             internal void Update()
             {
-                UpdateActiveController();
+                //UpdateActiveController();
             }
 
             public class Patch : NomaiVRPatch
@@ -96,7 +97,7 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PostApplySettings));
-                    Empty<InputRebindableLibrary>("SetKeyBindings");
+                    //Empty<InputRebindableLibrary>("SetKeyBindings");
                     Empty<GraphicSettings>("SetSliderValFOV");
                     
                     if (ModSettings.PreventCursorLock)

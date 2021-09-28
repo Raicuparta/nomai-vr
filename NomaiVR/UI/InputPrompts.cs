@@ -105,31 +105,31 @@ namespace NomaiVR
                     return new List<string> { newText };
                 }
 
-                private static VRActionInput GetActionInputFromCommand(InputCommand command)
-                {
-                    if (command is SingleAxisCommand singleAxisCommand)
-                    {
-                        var gamepadBinding = singleAxisCommand.GetGamepadBinding();
-                        if (gamepadBinding != null)
-                        {
-                            var button = gamepadBinding.gamepadButtonPos;
-                            if (ControllerInput.buttonActions.ContainsKey(button))
-                                return ControllerInput.buttonActions[button];
-
-                            var axis = gamepadBinding.axisID;
-                            if (ControllerInput.axisActions.ContainsKey(axis))
-                                return ControllerInput.axisActions[axis];
-                        }
-                    }
-                    else if (command.GetType() == typeof(DoubleAxisCommand))
-                    {
-                        var doubleAxisCommand = (DoubleAxisCommand)command;
-                        var axis = doubleAxisCommand.GetGamepadAxis();
-                        if (ControllerInput.axisActions.ContainsKey(axis))
-                            return ControllerInput.axisActions[axis];
-                    }
-                    return null;
-                }
+                //private static VRActionInput GetActionInputFromCommand(InputCommand command)
+                //{
+                //    if (command is SingleAxisCommand singleAxisCommand)
+                //    {
+                //        var gamepadBinding = singleAxisCommand.GetGamepadBinding();
+                //        if (gamepadBinding != null)
+                //        {
+                //            var button = gamepadBinding.gamepadButtonPos;
+                //            if (ControllerInput.buttonActions.ContainsKey(button))
+                //                return ControllerInput.buttonActions[button];
+                //
+                //            var axis = gamepadBinding.axisID;
+                //            if (ControllerInput.axisActions.ContainsKey(axis))
+                //                return ControllerInput.axisActions[axis];
+                //        }
+                //    }
+                //    else if (command.GetType() == typeof(DoubleAxisCommand))
+                //    {
+                //        var doubleAxisCommand = (DoubleAxisCommand)command;
+                //        var axis = doubleAxisCommand.GetGamepadAxis();
+                //        if (ControllerInput.axisActions.ContainsKey(axis))
+                //            return ControllerInput.axisActions[axis];
+                //    }
+                //    return null;
+                //}
 
                 private static void RegisterVRActionPrompt(ScreenPrompt screenPrompt)
                 {
@@ -140,16 +140,16 @@ namespace NomaiVR
 
                     foreach (var command in screenPrompt._commandList)
                     {
-                        var actionInput = GetActionInputFromCommand(command);
-                        //Keep track of prompts tied to VRActionInputs
-                        if (actionInput != null)
-                        {
-                            if (!s_vrActionPrompts.Contains(screenPrompt)) s_vrActionPrompts.Add(screenPrompt);
-
-                            if (!s_vrActionPromptDependencies.ContainsKey(actionInput))
-                                s_vrActionPromptDependencies.Add(actionInput, new HashSet<ScreenPrompt>());
-                            s_vrActionPromptDependencies[actionInput].Add(screenPrompt);
-                        }
+                        //var actionInput = GetActionInputFromCommand(command);
+                        ////Keep track of prompts tied to VRActionInputs
+                        //if (actionInput != null)
+                        //{
+                        //    if (!s_vrActionPrompts.Contains(screenPrompt)) s_vrActionPrompts.Add(screenPrompt);
+                        //
+                        //    if (!s_vrActionPromptDependencies.ContainsKey(actionInput))
+                        //        s_vrActionPromptDependencies.Add(actionInput, new HashSet<ScreenPrompt>());
+                        //    s_vrActionPromptDependencies[actionInput].Add(screenPrompt);
+                        //}
                     }
                 }
 
@@ -174,11 +174,11 @@ namespace NomaiVR
 
                     var actionTexts = new HashSet<string>();
 
-                    foreach (var command in screenPrompt._commandList)
-                    {
-                        var actionInput = GetActionInputFromCommand(command);
-                        if (actionInput != null) AddTextIfNotExisting(text, actionTexts, actionInput, screenPrompt);
-                    }
+                    //foreach (var command in screenPrompt._commandList)
+                    //{
+                    //    var actionInput = GetActionInputFromCommand(command);
+                    //    if (actionInput != null) AddTextIfNotExisting(text, actionTexts, actionInput, screenPrompt);
+                    //}
 
                     actionTexts.Reverse();
                     var cleanOriginalText = text.Replace("+", "");
@@ -265,7 +265,7 @@ namespace NomaiVR
 
                 private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
                 {
-                    ____zoomModePrompt = new ScreenPrompt(InputLibrary.scopeView, UITextLibrary.GetString(UITextType.SignalscopeZoomInPrompt) + "   <CMD>");
+                    ____zoomModePrompt = new ScreenPrompt(InputLibrary.signalscope, UITextLibrary.GetString(UITextType.SignalscopeZoomInPrompt) + "   <CMD>");
                 }
 
                 private static void RemoveSignalscopePrompts(

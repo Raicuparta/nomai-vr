@@ -156,7 +156,7 @@ namespace NomaiVR
 
             private void UpdateSignalscipeZoom()
             {
-                if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
+                if (OWInput.IsNewlyPressed(InputLibrary.signalscope, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
 
