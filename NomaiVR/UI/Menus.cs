@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SpatialTracking;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -35,6 +36,7 @@ namespace NomaiVR
 
                 if (SceneHelper.IsInTitle())
                 {
+                    AddCameraTracking();
                     FixTitleMenuCanvases();
                     FixStarLogos();
                     FixOuterWildsLogo();
@@ -92,6 +94,15 @@ namespace NomaiVR
                 _flashbackCameraParent.position = _flashbackCamera.transform.localPosition * -1;
             }
 
+            private static void AddCameraTracking()
+            {
+                var titleCamera = Locator.GetPlayerCamera().mainCamera;
+                titleCamera.stereoTargetEye = StereoTargetEyeMask.Both;
+                var hmdTracking = titleCamera.gameObject.AddComponent<TrackedPoseDriver>();
+                hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
+                hmdTracking.UseRelativeTransform = false;
+            }
+
             private static void StopCameraRotation()
             {
                 var rotateTransformComponent = GameObject.Find("Scene/Background").GetComponent<RotateTransform>();
@@ -112,7 +123,7 @@ namespace NomaiVR
                 //Logo Fade-In Animation
                 var logoFader = logoParentTranform.gameObject.AddComponent<TitleMenuLogoFader>();
                 var logoAnimator = logoParentTranform.GetComponentInChildren<Animator>();
-                logoFader.BeginFade(1, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true);
+                logoFader.BeginFade(0.1f, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true); //FIXME: Broke, too fast
 
                 FindObjectOfType<TitleAnimationController>().OnTitleLogoAnimationComplete += () =>
                 {

@@ -30,17 +30,17 @@ namespace NomaiVR
 
             // Load all modules.
             // I'm sorry to say that order does matter here.
-            //new ForceSettings();
-            //new ControllerInput();
-            //new Dialogue();
-            //new FogFix();
-            //new ShadowsFix();
-            //new LoopTransitionFix();
-            //new VisorEffectsFix();
-            //new ProjectionStoneCameraFix();
-            //new CameraMaskFix();
-            //new MapFix();
-            //new PlayerBodyPosition();
+            new ForceSettings();
+            new ControllerInput();
+            new Dialogue();
+            new FogFix();
+            new ShadowsFix();
+            new LoopTransitionFix();
+            new VisorEffectsFix();
+            new ProjectionStoneCameraFix();
+            new CameraMaskFix();
+            new MapFix();
+            new PlayerBodyPosition();
             //new VRToolSwapper();
             //new HandsController();
             //new ShipTools();
@@ -57,10 +57,10 @@ namespace NomaiVR
             //new InputPrompts();
             //new ControllerModels();
             //new GesturePrompts();
-            //new PostCreditsFix();
+            new PostCreditsFix();
             //new LookArrow();
             //new DisableDeathAnimation();
-            //new Menus();
+            new Menus();
         }
 
         private void InitSteamVR()
