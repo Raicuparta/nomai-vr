@@ -67,6 +67,7 @@ namespace NomaiVR
 
                 var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
+                _cameraParent.localEulerAngles += new Vector3(90f, 0, 0);
 
             }
 
