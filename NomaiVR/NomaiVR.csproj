@@ -207,7 +207,7 @@
     <Exec Command='copy /y "$(ProjectDir)\ModConfig\default-config.json" "$(OwmlDir)\$(ModDir)"' />
     <Exec Command='copy /y "$(ProjectDir)\manifest.json" "$(OwmlDir)\$(ModDir)"' />
   </Target>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
     <Exec Command='"$(UnityEditor)" -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath "$(ProjectDir)..\Unity" -buildWindows64Player -quit' />
   </Target>
 </Project>
