@@ -67,6 +67,8 @@ namespace NomaiVR
 
                 var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
+                // TODO: I don't think it's really 90 degreens,
+                // there's probably a better propper fix but this is fine for now.
                 _cameraParent.localEulerAngles += new Vector3(90f, 0, 0);
 
             }
