@@ -31,7 +31,7 @@ namespace NomaiVR
             // Load all modules.
             // I'm sorry to say that order does matter here.
             new ForceSettings();
-            new ControllerInput();
+            // new ControllerInput();
             new Dialogue();
             new FogFix();
             new ShadowsFix();
@@ -42,7 +42,7 @@ namespace NomaiVR
             new MapFix();
             new PlayerBodyPosition();
             //new VRToolSwapper();
-            //new HandsController();
+            new HandsController();
             //new ShipTools();
             //new FlashlightGesture();
             //new HoldMallowStick();
