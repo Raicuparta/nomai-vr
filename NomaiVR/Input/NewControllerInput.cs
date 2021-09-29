@@ -32,6 +32,10 @@ namespace NomaiVR.Input
             {
                 Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchVectorInput));
                 Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchAxisInput));
+                Prefix<AbstractCompositeInputCommands<IVectorInputAction>>(nameof(AbstractCompositeInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchCompositeVectorInput));
+                Prefix<AbstractCompositeInputCommands<IAxisInputAction>>(nameof(AbstractCompositeInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchCompositeAxisInput));
+                Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
+                Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
             }
 
             private static Vector2 AxisValueFromAction(ISteamVR_Action_Boolean action)
@@ -43,12 +47,27 @@ namespace NomaiVR.Input
                return new Vector2(action.axis, 0f);
             }
 
+            private static void PatchCompositeInput(CompositeInputCommands __instance)
+            {
+                Command(__instance);
+            }
+
             public static void PatchVectorInput(AbstractInputCommands<IVectorInputAction> __instance)
             {
                 Command(__instance);
             }
 
             public static void PatchAxisInput(AbstractInputCommands<IAxisInputAction> __instance)
+            {
+                Command(__instance);
+            }
+
+            public static void PatchCompositeVectorInput(AbstractCompositeInputCommands<IVectorInputAction> __instance)
+            {
+                Command(__instance);
+            }
+
+            public static void PatchCompositeAxisInput(AbstractCompositeInputCommands<IAxisInputAction> __instance)
             {
                 Command(__instance);
             }
@@ -92,15 +111,12 @@ namespace NomaiVR.Input
                         __instance.AxisValue = new Vector2(actions.Look.axis.y, 0);
                         break;
                     case InputConsts.InputCommandType.MOVE_XZ:
-                        Debug.Log("axissss " + actions.Move.axis);
                         __instance.AxisValue = actions.Move.axis;
                         break; 
                     case InputConsts.InputCommandType.MOVE_X:
-                        Debug.Log("axissss X" + actions.Move.axis);
                         __instance.AxisValue = actions.Move.axis;
                         break;
                     case InputConsts.InputCommandType.MOVE_Z:
-                        Debug.Log("axissss Z" + actions.Move.axis);
                         __instance.AxisValue = new Vector2(actions.Move.axis.y, 0);
                         break;
                     case InputConsts.InputCommandType.THRUST_UP:
@@ -108,6 +124,9 @@ namespace NomaiVR.Input
                         break;
                     case InputConsts.InputCommandType.THRUST_DOWN:
                         __instance.AxisValue = AxisValueFromAction(actions.ThrustDown);
+                        break;
+                    case InputConsts.InputCommandType.ROLL_MODE:
+                        __instance.AxisValue = AxisValueFromAction(actions.RollMode);
                         break;
                 }
             }
