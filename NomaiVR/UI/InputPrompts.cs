@@ -133,10 +133,10 @@ namespace NomaiVR
 
                 private static void RegisterVRActionPrompt(ScreenPrompt screenPrompt)
                 {
-                    if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
-                    {
-                        return;
-                    }
+                    // if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
+                    // {
+                    //     return;
+                    // }
 
                     foreach (var command in screenPrompt._commandList)
                     {
@@ -167,10 +167,10 @@ namespace NomaiVR
 
                 private static void AddVRMappingToPrompt(ref string text, ScreenPrompt screenPrompt)
                 {
-                    if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
-                    {
-                        return;
-                    }
+                    // if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
+                    // {
+                    //     return;
+                    // }
 
                     var actionTexts = new HashSet<string>();
 

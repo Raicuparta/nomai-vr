@@ -57,7 +57,7 @@ namespace NomaiVR
                 }
                 if (button != JoystickButton.None)
                 {
-                    ControllerInput.Behaviour.SimulateInput(button, 1);
+                    // ControllerInput.Behaviour.SimulateInput(button, 1);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace NomaiVR
         {
             if (button != JoystickButton.None)
             {
-                ControllerInput.Behaviour.SimulateInput(button, 0);
+                // ControllerInput.Behaviour.SimulateInput(button, 0);
             }
             receiver.ResetInteraction();
         }
