@@ -13,17 +13,6 @@ namespace NomaiVR.Input
 
         public class Behaviour : MonoBehaviour
         {
-            private void Update()
-            {
-                if (!SteamVR_Input.initialized)
-                {
-                    Debug.Log("not initialized");
-                }
-                if (SteamVR_Actions._default.Jump.stateDown)
-                {
-                    Debug.Log("pressing!");
-                }
-            }
         }
 
         public class Patch: NomaiVRPatch
