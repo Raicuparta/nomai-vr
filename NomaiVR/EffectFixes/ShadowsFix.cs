@@ -17,7 +17,7 @@ namespace NomaiVR
 
             private static bool PreOnAnyCameraPostRender(Camera camera)
             {
-                return !camera.stereoEnabled || camera.stereoActiveEye == Camera.MonoOrStereoscopicEye.Right;
+                return !camera.stereoEnabled || camera.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
             }
         }
     }

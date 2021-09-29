@@ -26,11 +26,11 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<PlanetaryFogController>("ResetFogSettings", nameof(Patch.PatchResetFog));
-                    Prefix<PlanetaryFogController>("UpdateFogSettings", nameof(Patch.PatchUpdateFog));
-                    Prefix<FogOverrideVolume>("OverrideFogSettings", nameof(Patch.PatchOverrideFog));
-                    Prefix<PlanetaryFogImageEffect>("OnRenderImage", nameof(Patch.PreFogImageEffectRenderImage));
-                    Prefix<PlanetaryFogRenderer>("CalcFrustumCorners", nameof(Patch.PreCalcFrustumCorners));
+                    Prefix<PlanetaryFogController>(nameof(PlanetaryFogController.ResetFogSettings), nameof(Patch.PatchResetFog));
+                    Prefix<PlanetaryFogController>(nameof(PlanetaryFogController.UpdateFogSettings), nameof(Patch.PatchUpdateFog));
+                    Prefix<FogOverrideVolume>(nameof(FogOverrideVolume.OverrideFogSettings), nameof(Patch.PatchOverrideFog));
+                    Prefix<PlanetaryFogImageEffect>(nameof(PlanetaryFogImageEffect.OnRenderImage), nameof(Patch.PreFogImageEffectRenderImage));
+                    Prefix<PlanetaryFogRenderer>(nameof(PlanetaryFogRenderer.CalcFrustumCorners), nameof(Patch.PreCalcFrustumCorners));
                 }
 
                 private static Vector3[] _frustumCornersBuffer = new Vector3[4];
@@ -46,7 +46,8 @@ namespace NomaiVR
                     frustumMatrix.SetRow(3, camtr.TransformVector(_frustumCornersBuffer[0])); //bottomLeft
                     return frustumMatrix;
                 }
-
+                private static readonly int _propID_RingworldFogClipPlane1 = Shader.PropertyToID("_RingworldFogClipPlane1");
+                private static readonly int _propID_RingworldFogClipPlane2 = Shader.PropertyToID("_RingworldFogClipPlane2");
                 private static bool PreFogImageEffectRenderImage(RenderTexture source, RenderTexture destination, PlanetaryFogImageEffect __instance)
                 {
                     if (__instance._camera == null)
@@ -62,6 +63,23 @@ namespace NomaiVR
                     if (__instance.fogMaterial != null)
                     {
                         __instance.fogMaterial.SetMatrix("_FrustumCornersWS", FrustumCornersMatrix(__instance._camera, __instance._camera.stereoActiveEye));
+
+                        PlanetaryFogController activeFogSphere = PlanetaryFogController.GetActiveFogSphere();
+                        if (activeFogSphere != null && activeFogSphere.isRingworldFog)
+                        {
+                            Vector3 position = activeFogSphere.transform.position;
+                            Vector3 up = activeFogSphere.transform.up;
+                            Plane plane = new Plane(up, position - up * activeFogSphere.ringworldPlaneDist1);
+                            Plane plane2 = new Plane(-up, position + up * activeFogSphere.ringworldPlaneDist2);
+                            __instance.fogMaterial.EnableKeyword("USE_RINGWORLD_LIGHTING");
+                            __instance.fogMaterial.SetVector(_propID_RingworldFogClipPlane1, new Vector4(plane.normal.x, plane.normal.y, plane.normal.z, plane.distance));
+                            __instance.fogMaterial.SetVector(_propID_RingworldFogClipPlane2, new Vector4(plane2.normal.x, plane2.normal.y, plane2.normal.z, plane2.distance));
+                        }
+                        else
+                        {
+                            __instance.fogMaterial.DisableKeyword("USE_RINGWORLD_LIGHTING");
+                        }
+
                         __instance.CustomGraphicsBlit(source, destination, __instance.fogMaterial);
                     }
                     return false;
