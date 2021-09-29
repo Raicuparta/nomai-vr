@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -40,39 +41,49 @@ namespace NomaiVR
             private void SetUpWrapperTittle()
             {
                 var activeCamera = Locator.GetActiveCamera();
-                // activeCamera.gameObject.SetActive(false);
+                activeCamera.gameObject.SetActive(false);
                 _wrapper = activeCamera.transform.parent;
-                // var cameraObject = new GameObject();
-                // cameraObject.SetActive(false);
-                // cameraObject.tag = "MainCamera";
-                // var camera = cameraObject.AddComponent<Camera>();
-                // camera.transform.parent = _wrapper;
-                // camera.transform.localPosition = Vector3.zero;
-                // camera.transform.localRotation = Quaternion.identity;
-                //
-                // camera.nearClipPlane = activeCamera.nearClipPlane;
-                // camera.farClipPlane = activeCamera.farClipPlane;
-                // camera.clearFlags = activeCamera.clearFlags;
-                // camera.backgroundColor = activeCamera.backgroundColor;
-                // camera.cullingMask = activeCamera.cullingMask;
-                // camera.depth = activeCamera.mainCamera.depth;
-                // camera.tag = activeCamera.tag;
-                //
-                // var owCamera = cameraObject.AddComponent<OWCamera>();
-                // owCamera.renderSkybox = true;
-                //
-                // cameraObject.AddComponent<FlareLayer>();
-                // cameraObject.SetActive(true);
-                //
-                // cameraObject.AddComponent<Light>();
+                var cameraObject = new GameObject();
+                cameraObject.SetActive(false);
+                cameraObject.tag = "MainCamera";
+                var camera = cameraObject.AddComponent<Camera>();
+                camera.transform.parent = _wrapper;
+                camera.transform.localPosition = Vector3.zero;
+                camera.transform.localRotation = Quaternion.identity;
+                
+                camera.nearClipPlane = activeCamera.nearClipPlane;
+                camera.farClipPlane = activeCamera.farClipPlane;
+                camera.clearFlags = activeCamera.clearFlags;
+                camera.backgroundColor = activeCamera.backgroundColor;
+                camera.cullingMask = activeCamera.cullingMask;
+                camera.depth = activeCamera.mainCamera.depth;
+                camera.tag = activeCamera.tag;
+                ActivateCameraTracking(camera);
+
+                var owCamera = cameraObject.AddComponent<OWCamera>();
+                owCamera.renderSkybox = true;
+                
+                cameraObject.AddComponent<FlareLayer>();
+                cameraObject.SetActive(true);
+                
+                cameraObject.AddComponent<Light>();
             }
 
             private void SetUpWrapperInGame()
             {
+                ActivateCameraTracking(Camera.main);
                 _wrapper = new GameObject().transform;
                 _wrapper.parent = Camera.main.transform.parent;
                 _wrapper.localRotation = Quaternion.identity;
                 _wrapper.localPosition = Camera.main.transform.localPosition;
+            }
+
+            private void ActivateCameraTracking(Camera camera)
+            {
+                camera.stereoTargetEye = StereoTargetEyeMask.Both;
+                var hmdTracking = camera.gameObject.AddComponent<TrackedPoseDriver>();
+                hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
+                hmdTracking.UseRelativeTransform = true;
             }
 
             private void SetUpHands()

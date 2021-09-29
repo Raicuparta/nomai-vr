@@ -36,7 +36,6 @@ namespace NomaiVR
 
                 if (SceneHelper.IsInTitle())
                 {
-                    AddCameraTracking();
                     FixTitleMenuCanvases();
                     FixStarLogos();
                     FixOuterWildsLogo();
@@ -94,15 +93,6 @@ namespace NomaiVR
                 _flashbackCameraParent.position = _flashbackCamera.transform.localPosition * -1;
             }
 
-            private static void AddCameraTracking()
-            {
-                var titleCamera = Locator.GetPlayerCamera().mainCamera;
-                titleCamera.stereoTargetEye = StereoTargetEyeMask.Both;
-                var hmdTracking = titleCamera.gameObject.AddComponent<TrackedPoseDriver>();
-                hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
-                hmdTracking.UseRelativeTransform = false;
-            }
-
             private static void StopCameraRotation()
             {
                 var rotateTransformComponent = GameObject.Find("Scene/Background").GetComponent<RotateTransform>();
@@ -123,7 +113,7 @@ namespace NomaiVR
                 //Logo Fade-In Animation
                 var logoFader = logoParentTranform.gameObject.AddComponent<TitleMenuLogoFader>();
                 var logoAnimator = logoParentTranform.GetComponentInChildren<Animator>();
-                logoFader.BeginFade(0.1f, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true); //FIXME: Broke, too fast
+                logoFader.BeginFade(1f, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true); //FIXME: Broke, too fast
 
                 FindObjectOfType<TitleAnimationController>().OnTitleLogoAnimationComplete += () =>
                 {
@@ -302,19 +292,19 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ProfileMenuManager>("PopulateProfiles", nameof(PostPopulateProfiles));
-                    Postfix<CanvasMarkerManager>("Start", nameof(PostMarkerManagerStart));
-                    Postfix<TitleScreenAnimation>("FadeInMusic", nameof(PostTitleScreenFadeInMusic));
-                    //Postfix<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
+                    Postfix<ProfileMenuManager>(nameof(ProfileMenuManager.PopulateProfiles), nameof(PostPopulateProfiles));
+                    Postfix<CanvasMarkerManager>(nameof(CanvasMarkerManager.Start), nameof(PostMarkerManagerStart));
+                    Postfix<TitleScreenAnimation>(nameof(TitleScreenAnimation.FadeInMusic), nameof(PostTitleScreenFadeInMusic));
+                    Postfix<PopupMenu>(nameof(PopupMenu.SetUpPopupCommands), nameof(PostSetPopupCommands));
                 }
 
-                //private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
-                //{
-                //    if (okCommand == InputLibrary.select)
-                //    {
-                //        ____okCommand = InputLibrary.confirm;
-                //    }
-                //}
+                private static void PostSetPopupCommands(IInputCommands okCommand, ref IInputCommands ____okCommand)
+                {
+                    if (okCommand == InputLibrary.select)
+                    {
+                        ____okCommand = InputLibrary.confirm;
+                    }
+                }
 
                 private static void PostTitleScreenFadeInMusic()
                 {

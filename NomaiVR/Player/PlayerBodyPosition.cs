@@ -53,23 +53,17 @@ namespace NomaiVR
                 _playArea = new GameObject().transform;
                 _playArea.parent = Locator.GetPlayerTransform();
                 _playArea.position = PlayerHelper.PlayerHead.position;
-                _playArea.rotation = PlayerHelper.PlayerHead.rotation;
+                _playArea.rotation = Quaternion.identity;
                 _cameraParent.parent = _playArea;
                 _cameraParent.localRotation = Quaternion.identity;
                 _playerCamera.transform.parent = _cameraParent;
+                _playerCamera.transform.localPosition = Vector3.zero; 
+                _playerCamera.transform.localRotation = Quaternion.identity;
                 _playerCamera.gameObject.AddComponent<VRCameraManipulator>();
-
-                _playerCamera.mainCamera.stereoTargetEye = StereoTargetEyeMask.Both;
-                var hmdTracking = _playerCamera.gameObject.AddComponent<TrackedPoseDriver>();
-                hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
-                hmdTracking.UseRelativeTransform = true;
-
 
                 var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
-                // TODO: I don't think it's really 90 degreens,
-                // there's probably a better propper fix but this is fine for now.
-                _cameraParent.localEulerAngles += new Vector3(90f, 0, 0);
+                _playArea.localRotation = Quaternion.identity;
 
             }
 
