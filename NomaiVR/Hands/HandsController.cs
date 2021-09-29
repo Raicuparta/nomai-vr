@@ -40,31 +40,31 @@ namespace NomaiVR
             private void SetUpWrapperTittle()
             {
                 var activeCamera = Locator.GetActiveCamera();
-                activeCamera.gameObject.SetActive(false);
+                // activeCamera.gameObject.SetActive(false);
                 _wrapper = activeCamera.transform.parent;
-                var cameraObject = new GameObject();
-                cameraObject.SetActive(false);
-                cameraObject.tag = "MainCamera";
-                var camera = cameraObject.AddComponent<Camera>();
-                camera.transform.parent = _wrapper;
-                camera.transform.localPosition = Vector3.zero;
-                camera.transform.localRotation = Quaternion.identity;
-
-                camera.nearClipPlane = activeCamera.nearClipPlane;
-                camera.farClipPlane = activeCamera.farClipPlane;
-                camera.clearFlags = activeCamera.clearFlags;
-                camera.backgroundColor = activeCamera.backgroundColor;
-                camera.cullingMask = activeCamera.cullingMask;
-                camera.depth = activeCamera.mainCamera.depth;
-                camera.tag = activeCamera.tag;
-
-                var owCamera = cameraObject.AddComponent<OWCamera>();
-                owCamera.renderSkybox = true;
-
-                cameraObject.AddComponent<FlareLayer>();
-                cameraObject.SetActive(true);
-
-                cameraObject.AddComponent<Light>();
+                // var cameraObject = new GameObject();
+                // cameraObject.SetActive(false);
+                // cameraObject.tag = "MainCamera";
+                // var camera = cameraObject.AddComponent<Camera>();
+                // camera.transform.parent = _wrapper;
+                // camera.transform.localPosition = Vector3.zero;
+                // camera.transform.localRotation = Quaternion.identity;
+                //
+                // camera.nearClipPlane = activeCamera.nearClipPlane;
+                // camera.farClipPlane = activeCamera.farClipPlane;
+                // camera.clearFlags = activeCamera.clearFlags;
+                // camera.backgroundColor = activeCamera.backgroundColor;
+                // camera.cullingMask = activeCamera.cullingMask;
+                // camera.depth = activeCamera.mainCamera.depth;
+                // camera.tag = activeCamera.tag;
+                //
+                // var owCamera = cameraObject.AddComponent<OWCamera>();
+                // owCamera.renderSkybox = true;
+                //
+                // cameraObject.AddComponent<FlareLayer>();
+                // cameraObject.SetActive(true);
+                //
+                // cameraObject.AddComponent<Light>();
             }
 
             private void SetUpWrapperInGame()

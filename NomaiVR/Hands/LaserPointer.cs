@@ -55,7 +55,7 @@ namespace NomaiVR
                 ModSettings.OnConfigChange += ToDominantHand;
                 VRToolSwapper.Equipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += ToDominantHand;
-                ControllerInput.Behaviour.BindingsChanged += UpdateMovementLaser;
+                // ControllerInput.Behaviour.BindingsChanged += UpdateMovementLaser;
             }
 
             internal void OnDestroy()
@@ -63,7 +63,7 @@ namespace NomaiVR
                 ModSettings.OnConfigChange -= ToDominantHand;
                 VRToolSwapper.Equipped -= OnToolEquipped;
                 VRToolSwapper.UnEquipped -= ToDominantHand;
-                ControllerInput.Behaviour.BindingsChanged -= UpdateMovementLaser;
+                // ControllerInput.Behaviour.BindingsChanged -= UpdateMovementLaser;
             }
 
             internal void Update()
@@ -135,7 +135,7 @@ namespace NomaiVR
             {
                 var rightHandLaser = _rightMainHand ? Laser : OffHandLaser;
                 var leftHandLaser = !_rightMainHand ? Laser : OffHandLaser;
-                MovementLaser = ControllerInput.Behaviour.MovementOnLeftHand ? leftHandLaser : rightHandLaser;
+                MovementLaser = /*ControllerInput.Behaviour.MovementOnLeftHand*/false ? leftHandLaser : rightHandLaser;
             }
 
             private void OnToolEquipped()
@@ -400,11 +400,11 @@ namespace NomaiVR
 
                 if (PlayerState.InConversation() && (hasPressedConfirm || hasPressedThrustUp))
                 {
-                    ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceLeft);
+                    // ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceLeft);
                 }
                 if ((IsPaused() || isTitleScreen) && (hasPressedInteract || hasPressedThrustUp))
                 {
-                    ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceDown);
+                    // ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceDown);
                 }
             }
 

@@ -41,13 +41,13 @@ namespace NomaiVR
 
             private void ShowArrow()
             {
-                ControllerInput.IsInputEnabled = false;
+                // ControllerInput.IsInputEnabled = false;
                 _wrapper.gameObject.SetActive(true);
             }
 
             private void HideArrow()
             {
-                ControllerInput.IsInputEnabled = true;
+                // ControllerInput.IsInputEnabled = true;
                 _wrapper.gameObject.SetActive(false);
             }
 

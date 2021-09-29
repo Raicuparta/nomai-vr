@@ -23,9 +23,6 @@ namespace NomaiVR
 
         internal void Start()
         {
-            RestoreLogging();
-            LoadManager.OnCompleteSceneLoad += (original, newScene) => RestoreLogging();
-
             Save = ModSaveFile.LoadSaveFile();
             new FatalErrorChecker();
             new AssetLoader();
@@ -46,32 +43,26 @@ namespace NomaiVR
             new CameraMaskFix();
             new MapFix();
             new PlayerBodyPosition();
-            //new VRToolSwapper();
-            //new HandsController();
-            //new ShipTools();
-            //new FlashlightGesture();
-            //new HoldMallowStick();
-            //new HoldProbeLauncher();
-            //new HoldSignalscope();
-            //new HoldTranslator();
-            //new HoldItem();
-            //new HoldPrompts();
-            //new LaserPointer();
-            //new FeetMarker();
-            //new HelmetHUD();
-            //new InputPrompts();
-            //new ControllerModels();
-            //new GesturePrompts();
+            new VRToolSwapper();
+            new HandsController();
+            new ShipTools();
+            new FlashlightGesture();
+            new HoldMallowStick();
+            new HoldProbeLauncher();
+            new HoldSignalscope();
+            new HoldTranslator();
+            new HoldItem();
+            new HoldPrompts();
+            new LaserPointer();
+            new FeetMarker();
+            new HelmetHUD();
+            new InputPrompts();
+            new ControllerModels();
+            new GesturePrompts();
             new PostCreditsFix();
-            //new LookArrow();
-            //new DisableDeathAnimation();
+            new LookArrow();
+            new DisableDeathAnimation();
             new Menus();
-        }
-
-        private void RestoreLogging()
-        {
-            UnityEngine.Debug.unityLogger.logEnabled = true;
-            UnityEngine.Debug.unityLogger.filterLogType = UnityEngine.LogType.Error;
         }
 
         private void InitSteamVR()
