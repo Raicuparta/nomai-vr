@@ -22,9 +22,6 @@ namespace NomaiVR
 
         internal void Start()
         {
-            RestoreLogging();
-            LoadManager.OnCompleteSceneLoad += (original, newScene) => RestoreLogging();
-
             Save = ModSaveFile.LoadSaveFile();
             new FatalErrorChecker();
             new AssetLoader();
@@ -64,12 +61,6 @@ namespace NomaiVR
             //new LookArrow();
             //new DisableDeathAnimation();
             new Menus();
-        }
-
-        private void RestoreLogging()
-        {
-            UnityEngine.Debug.unityLogger.logEnabled = true;
-            UnityEngine.Debug.unityLogger.filterLogType = UnityEngine.LogType.Error;
         }
 
         private void InitSteamVR()
