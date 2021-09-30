@@ -365,7 +365,7 @@ namespace NomaiVR
                 else
                 {
                     SetLineLength(_gameLineLength);
-                    _lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                    _lineRenderer.material.shader = Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply");
                 }
             }
 
@@ -414,7 +414,8 @@ namespace NomaiVR
 
                 public override void ApplyPatches()
                 {
-                    Prefix<InteractZone>("UpdateInteractVolume", nameof(PreUpdateInteractVolume));
+                    //FIXME still needed?
+                    //Prefix<InteractZone>("UpdateInteractVolume", nameof(PreUpdateInteractVolume));
                     Prefix<InteractZone>("OnEntry", nameof(PreInteractZoneEntry));
                     Prefix<InteractZone>("OnExit", nameof(PreInteractZoneExit));
                     Prefix<ToolModeSwapper>("Update", nameof(PreToolModeUpdate));

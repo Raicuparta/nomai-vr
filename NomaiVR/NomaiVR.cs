@@ -39,7 +39,7 @@ namespace NomaiVR
             new VisorEffectsFix();
             new ProjectionStoneCameraFix();
             new CameraMaskFix();
-            //new MapFix();
+            new MapFix();
             new PlayerBodyPosition();
             new VRToolSwapper();
             new HandsController();
@@ -50,8 +50,8 @@ namespace NomaiVR
             new HoldSignalscope();
             new HoldTranslator();
             new HoldItem();
-            //new HoldPrompts();
-            //new LaserPointer();
+            new HoldPrompts();
+            new LaserPointer();
             new FeetMarker();
             new HelmetHUD();
             //new InputPrompts();

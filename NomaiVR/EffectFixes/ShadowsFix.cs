@@ -30,11 +30,6 @@ namespace NomaiVR
                 Prefix<TessellatedSphereRenderer>(nameof(TessellatedSphereRenderer.Clear), nameof(Patch.OWCameraPostRenderDisabler));
                 Prefix<TessellatedPlaneRenderer>(nameof(TessellatedPlaneRenderer.Clear), nameof(Patch.OWCameraPostRenderDisabler));
                 Prefix<TessellatedRingRenderer>(nameof(TessellatedRingRenderer.Clear), nameof(Patch.OWCameraPostRenderDisabler));
-
-                //Ensure CommandBuffers are only built once
-                //Prefix<ProxyShadowLight>(nameof(ProxyShadowLight.BuildCommandBuffers), nameof(Patch.Pre_ProxyShadowLight_BuildCommandBuffers));
-                //Prefix<ProxyShadowLight>(nameof(ProxyShadowLight.ClearCommandBuffers), nameof(Patch.Pre_ProxyShadowLight_ClearCommandBuffers));
-
                 Prefix<UnderwaterCurrentFadeController>(nameof(UnderwaterCurrentFadeController.OnAnyPrerender), nameof(Patch.Pre_UnderwaterCurrentFadeController_OnAnyPrerender));
                 Prefix<UnderwaterCurrentFadeController>(nameof(UnderwaterCurrentFadeController.OnAnyPostrender), nameof(Patch.Pre_UnderwaterCurrentFadeController_OnAnyPostRender));
             }
@@ -47,17 +42,6 @@ namespace NomaiVR
             private static bool PreOnAnyCameraPostRender(Camera camera)
             {
                 return !camera.stereoEnabled || camera.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
-            }
-
-            //ProxyShadowLight updates for some reason have garbage data on the left eye, only update them on the right
-            private static bool Pre_ProxyShadowLight_BuildCommandBuffers(Camera camera)
-            {
-                return !camera.stereoEnabled || camera.stereoActiveEye != Camera.MonoOrStereoscopicEye.Left;
-            }
-
-            private static bool Pre_ProxyShadowLight_ClearCommandBuffers(Camera camera)
-            {
-                return !camera.stereoEnabled || camera.stereoActiveEye != Camera.MonoOrStereoscopicEye.Right;
             }
 
             //ProxyShadowLight updates for some reason have garbage data on the left eye, only update them on the right
