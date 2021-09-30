@@ -43,10 +43,11 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     Postfix<ShipBody>("Start", nameof(ShipStart));
-                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PreFindFrame));
-                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PostFindFrame));
-                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PreFindFrame));
-                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PostFindFrame));
+                    //TODO FIXME
+                    //Prefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PreFindFrame));
+                    //Postfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PostFindFrame));
+                    //Prefix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PreFindFrame));
+                    //Postfix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PostFindFrame));
                     Empty<PlayerCameraController>("OnEnterLandingView");
                     Empty<PlayerCameraController>("OnExitLandingView");
                     Empty<PlayerCameraController>("OnEnterShipComputer");

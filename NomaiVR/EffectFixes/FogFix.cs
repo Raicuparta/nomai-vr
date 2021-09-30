@@ -31,6 +31,7 @@ namespace NomaiVR
                     Prefix<FogOverrideVolume>(nameof(FogOverrideVolume.OverrideFogSettings), nameof(Patch.PatchOverrideFog));
                     Prefix<PlanetaryFogImageEffect>(nameof(PlanetaryFogImageEffect.OnRenderImage), nameof(Patch.PreFogImageEffectRenderImage));
                     Prefix<PlanetaryFogRenderer>(nameof(PlanetaryFogRenderer.CalcFrustumCorners), nameof(Patch.PreCalcFrustumCorners));
+                    Prefix<HeightmapAmbientLightRenderer>(nameof(HeightmapAmbientLightRenderer.CalcFrustumCorners), nameof(Patch.Prefix_HeightmapAmbientLightRenderer_CalcFrustumCorners));
                 }
 
                 private static Vector3[] _frustumCornersBuffer = new Vector3[4];
@@ -85,7 +86,13 @@ namespace NomaiVR
                     return false;
                 }
 
-                private static bool PreCalcFrustumCorners(PlanetaryFogRenderer __instance, ref Matrix4x4 __result)
+                private static bool Prefix_HeightmapAmbientLightRenderer_CalcFrustumCorners(PlanetaryFogRenderer __instance, ref Matrix4x4 __result)
+                {
+                    __result = FrustumCornersMatrix(__instance._owCamera.mainCamera, __instance._owCamera.mainCamera.stereoActiveEye);
+                    return false;
+                }
+
+                private static bool PreCalcFrustumCorners(HeightmapAmbientLightRenderer __instance, ref Matrix4x4 __result)
                 {
                     __result = FrustumCornersMatrix(__instance._owCamera.mainCamera, __instance._owCamera.mainCamera.stereoActiveEye);
                     return false;
