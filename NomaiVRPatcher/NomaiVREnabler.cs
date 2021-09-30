@@ -49,10 +49,30 @@ namespace NomaiVRPatcher
             disableOldInputManagerSupport.value = new AssetTypeValue(EnumValueTypes.ValueType_Bool, false);
             replacers.Add(new AssetsReplacerFromMemory(0, playerSettings.index, (int)playerSettings.curFileType, 0xffff, playerSettingsBase.WriteToByteArray()));
 
+
+            AssetFileInfoEx buildSettings = assetsFileTable.GetAssetInfo(11);
+            AssetTypeValueField buildSettingsBase = assetsManager.GetTypeInstance(assetsFile, buildSettings).GetBaseField();
+            AssetTypeValueField enabledVRDevices = buildSettingsBase.Get("enabledVRDevices").Get("Array");
+            AssetTypeTemplateField stringTemplate = enabledVRDevices.templateField.children[1];
+            AssetTypeValueField[] vrDevicesList = new AssetTypeValueField[] { StringField("OpenVR", stringTemplate) };
+            enabledVRDevices.SetChildrenList(vrDevicesList);
+            replacers.Add(new AssetsReplacerFromMemory(0, buildSettings.index, (int)buildSettings.curFileType, 0xffff, buildSettingsBase.WriteToByteArray()));
+
             using (AssetsFileWriter writer = new AssetsFileWriter(File.OpenWrite(gameManagersPath)))
             {
                 assetsFile.Write(writer, 0, replacers, 0);
             }
+        }
+
+        static AssetTypeValueField StringField(string str, AssetTypeTemplateField template)
+        {
+            return new AssetTypeValueField()
+            {
+                children = null,
+                childrenCount = 0,
+                templateField = template,
+                value = new AssetTypeValue(EnumValueTypes.ValueType_String, str)
+            };
         }
 
         private static string BackupFile(string fileName)

@@ -3,8 +3,6 @@ using BepInEx;
 using System.IO;
 using HarmonyLib;
 using NomaiVR.Input;
-using UnityEngine.XR.Management;
-using Unity.XR.OpenVR;
 
 namespace NomaiVR
 {
@@ -28,9 +26,9 @@ namespace NomaiVR
             new AssetLoader();
 
             InitSteamVR();
-
-            // Load all modules.
-            // I'm sorry to say that order does matter here.
+            
+            //// Load all modules.
+            //// I'm sorry to say that order does matter here.
             new ForceSettings();
             //new ControllerInput();
             new NewControllerInput();
@@ -41,7 +39,7 @@ namespace NomaiVR
             new VisorEffectsFix();
             new ProjectionStoneCameraFix();
             new CameraMaskFix();
-            new MapFix();
+            //new MapFix();
             new PlayerBodyPosition();
             new VRToolSwapper();
             new HandsController();
@@ -52,13 +50,13 @@ namespace NomaiVR
             new HoldSignalscope();
             new HoldTranslator();
             new HoldItem();
-            new HoldPrompts();
-            new LaserPointer();
+            //new HoldPrompts();
+            //new LaserPointer();
             new FeetMarker();
             new HelmetHUD();
-            new InputPrompts();
+            //new InputPrompts();
             new ControllerModels();
-            new GesturePrompts();
+            //new GesturePrompts();
             new PostCreditsFix();
             new LookArrow();
             new DisableDeathAnimation();
@@ -70,45 +68,14 @@ namespace NomaiVR
             try
             {
                 SteamVR_Actions.PreInitialize();
-                LoadXRModule();
                 SteamVR.Initialize();
                 SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
                 OpenVR.Input.SetActionManifestPath(ModFolderPath + @"\bindings\actions.json");
-
-                if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null
-                    && XRGeneralSettings.Instance.Manager.activeLoader != null)
-                {
-                    XRGeneralSettings.Instance.Manager.StartSubsystems();
-                }
-                else
-                    throw new System.Exception("Cannot initialize VRSubsystem");
             }
             catch
             {
                 FatalErrorChecker.ThrowSteamVRError();
             }
-        }
-
-        private void LoadXRModule()
-        {
-            foreach(var xrManager in AssetLoader.XRManager.LoadAllAssets())
-                Logs.WriteInfo($"Loaded xrManager: {xrManager.name}");
-
-            XRGeneralSettings instance = XRGeneralSettings.Instance;
-            if (instance == null) throw new System.Exception("XRGeneralSettings instance is null");
-
-            var xrManagerSettings = instance.Manager;
-            if(xrManagerSettings == null) throw new System.Exception("XRManagerSettings instance is null");
-
-            xrManagerSettings.InitializeLoaderSync();
-            if (xrManagerSettings.activeLoader == null) throw new System.Exception("Cannot initialize OpenVR Loader");
-
-            OpenVRSettings openVrSettings = OpenVRSettings.GetSettings(false);
-            openVrSettings.EditorAppKey = "steam.app.753640";
-            openVrSettings.InitializationType = OpenVRSettings.InitializationTypes.Scene;
-            if (openVrSettings == null) throw new System.Exception("OpenVRSettings instance is null");
-
-            openVrSettings.SetMirrorViewMode(OpenVRSettings.MirrorViewModes.Right);
         }
     }
 }
