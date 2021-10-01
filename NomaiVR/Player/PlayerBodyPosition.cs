@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -19,6 +20,7 @@ namespace NomaiVR
             private static OWRigidbody _playerBody;
             private static PlayerCharacterController _playerController;
             private static Autopilot _autopilot;
+            private readonly SteamVR_Action_Boolean recenterAction = SteamVR_Actions._default.Recenter;
 
             internal void Start()
             {
@@ -64,7 +66,6 @@ namespace NomaiVR
                 var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
                 _cameraParent.position += movement;
                 _playArea.localRotation = Quaternion.identity;
-
             }
 
             private void MoveCameraToPlayerHead()
@@ -80,6 +81,14 @@ namespace NomaiVR
                 // button.OnClick += MoveCameraToPlayerHead;
             }
 
+            private void UpdateRecenter()
+            {
+                if (recenterAction.stateDown)
+                {
+                    MoveCameraToPlayerHead();
+                }
+            }
+
             internal void Update()
             {
                 var cameraToHead = Vector3.ProjectOnPlane(PlayerHelper.PlayerHead.position - _playerCamera.transform.position, PlayerHelper.PlayerHead.up);
@@ -88,18 +97,8 @@ namespace NomaiVR
                 {
                     MoveCameraToPlayerHead();
                 }
-                if (ModSettings.DebugMode)
-                {
-                    //FIXME
-                    //if (Input.GetKeyDown(KeyCode.KeypadPlus))
-                    //{
-                    //    _cameraParent.localScale *= 0.9f;
-                    //}
-                    //if (Input.GetKeyDown(KeyCode.KeypadMinus))
-                    //{
-                    //    _cameraParent.localScale /= 0.9f;
-                    //}
-                }
+                
+                UpdateRecenter();
             }
 
             public class Patch : NomaiVRPatch
