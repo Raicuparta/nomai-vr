@@ -25,8 +25,6 @@ namespace NomaiVR.Input
             {
                 Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchVectorInput));
                 Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchAxisInput));
-                Prefix<AbstractCompositeInputCommands<IVectorInputAction>>(nameof(AbstractCompositeInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchCompositeVectorInput));
-                Prefix<AbstractCompositeInputCommands<IAxisInputAction>>(nameof(AbstractCompositeInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchCompositeAxisInput));
                 Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
                 Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
             }
