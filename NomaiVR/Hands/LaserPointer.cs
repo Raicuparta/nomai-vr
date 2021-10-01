@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,7 +69,6 @@ namespace NomaiVR
                 UpdateLineVisibility();
                 UpdateLineAppearance();
                 UpdateUiRayCast();
-                UpdateAlternativeButtons();
 
                 if (IsSelectNewlyPressed())
                 {
@@ -389,23 +386,6 @@ namespace NomaiVR
             private bool IsPaused()
             {
                 return _pauseMenuManager != null && _pauseMenuManager.IsOpen();
-            }
-
-            private void UpdateAlternativeButtons()
-            {
-                var hasPressedConfirm = OWInput.IsNewlyPressed(InputLibrary.menuConfirm);
-                var hasPressedThrustUp = OWInput.IsNewlyPressed(InputLibrary.thrustUp);
-                var hasPressedInteract = OWInput.IsNewlyPressed(InputLibrary.interact);
-                var isTitleScreen = LoadManager.GetCurrentScene() == OWScene.TitleScreen;
-
-                if (PlayerState.InConversation() && (hasPressedConfirm || hasPressedThrustUp))
-                {
-                    // ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceLeft);
-                }
-                if ((IsPaused() || isTitleScreen) && (hasPressedInteract || hasPressedThrustUp))
-                {
-                    // ControllerInput.Behaviour.SimulateInput(JoystickButton.FaceDown);
-                }
             }
 
             public class Patch : NomaiVRPatch
