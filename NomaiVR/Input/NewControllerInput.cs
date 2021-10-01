@@ -114,6 +114,10 @@ namespace NomaiVR.Input
                         break;
                     case InputConsts.InputCommandType.INTERACT:
                     case InputConsts.InputCommandType.LOCKON:
+                    case InputConsts.InputCommandType.PROBELAUNCH:
+                    case InputConsts.InputCommandType.PROBERETRIEVE:
+                    case InputConsts.InputCommandType.SCOPEVIEW:
+                    case InputConsts.InputCommandType.TOOL_PRIMARY:
                         __instance.AxisValue = AxisValue(actions.Interact);
                         break;
                     case InputConsts.InputCommandType.LOOK:
