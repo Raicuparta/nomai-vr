@@ -161,6 +161,14 @@ namespace Valve.VR
             }
         }
         
+        public virtual SteamVR_Action_Boolean Recenter
+        {
+            get
+            {
+                return SteamVR_Actions.default_Recenter;
+            }
+        }
+        
         public virtual SteamVR_Action_Vibration Haptic
         {
             get

@@ -76,6 +76,10 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/Recenter",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -219,7 +223,8 @@
       "/actions/inverted/in/Move": "Move",
       "/actions/tools/in/DPad": "DPad (tools)",
       "/actions/tools/in/Use": "Use (tools)",
-      "/actions/default/in/Autopilot": "Autopilot"
+      "/actions/default/in/Autopilot": "Autopilot",
+      "/actions/default/in/Recenter": "Recenter VR"
     }
   ]
 }
