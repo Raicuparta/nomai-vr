@@ -80,6 +80,10 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/UISelect",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -224,7 +228,8 @@
       "/actions/tools/in/DPad": "DPad (tools)",
       "/actions/tools/in/Use": "Use (tools)",
       "/actions/default/in/Autopilot": "Autopilot",
-      "/actions/default/in/Recenter": "Recenter VR"
+      "/actions/default/in/Recenter": "Recenter VR",
+      "/actions/default/in/UISelect": "Select UI Item"
     }
   ]
 }

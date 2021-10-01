@@ -91,9 +91,11 @@ namespace NomaiVR.Input
                 switch (commandType)
                 {
                     case InputConsts.InputCommandType.JUMP:
-                    case InputConsts.InputCommandType.ENTER:
-                    case InputConsts.InputCommandType.CONFIRM:
                         __instance.AxisValue = AxisValue(actions.Jump);
+                        break;
+                    case InputConsts.InputCommandType.ENTER:
+                    case InputConsts.InputCommandType.SELECT:
+                        __instance.AxisValue = AxisValue(actions.UISelect);
                         break;
                     case InputConsts.InputCommandType.UP:
                         __instance.AxisValue = actions.Move.axis;
@@ -105,6 +107,7 @@ namespace NomaiVR.Input
                         __instance.AxisValue = AxisValue(actions.Map);
                         break;
                     case InputConsts.InputCommandType.PAUSE:
+                    case InputConsts.InputCommandType.CONFIRM:
                         __instance.AxisValue = AxisValue(actions.Menu);
                         break;
                     case InputConsts.InputCommandType.ESCAPE:

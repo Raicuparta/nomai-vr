@@ -34,6 +34,15 @@
                }
             },
             {
+               "path": "/user/hand/right/input/trigger",
+               "mode": "button",
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/uiselect"
+                  }
+               }
+            },
+            {
                "path": "/user/hand/left/input/joystick",
                "mode": "joystick",
                "inputs": {
@@ -147,6 +156,15 @@
                   },
                   "double": {
                      "output": "/actions/default/in/autopilot"
+                  }
+               }
+            },
+            {
+               "path": "/user/hand/right/input/a",
+               "mode": "button",
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/uiselect"
                   }
                }
             },
