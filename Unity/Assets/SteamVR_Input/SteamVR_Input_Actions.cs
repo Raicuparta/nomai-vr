@@ -51,6 +51,8 @@ namespace Valve.VR
         
         private static SteamVR_Action_Skeleton p_default_SkeletonRightHand;
         
+        private static SteamVR_Action_Boolean p_default_Autopilot;
+        
         private static SteamVR_Action_Vibration p_default_Haptic;
         
         private static SteamVR_Action_Boolean p_inverted_Grip;
@@ -219,6 +221,14 @@ namespace Valve.VR
             }
         }
         
+        public static SteamVR_Action_Boolean default_Autopilot
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_Autopilot.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
         public static SteamVR_Action_Vibration default_Haptic
         {
             get
@@ -367,6 +377,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_RightHand,
                     SteamVR_Actions.default_SkeletonLeftHand,
                     SteamVR_Actions.default_SkeletonRightHand,
+                    SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.default_Haptic,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_ThrustUp,
@@ -401,6 +412,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_RightHand,
                     SteamVR_Actions.default_SkeletonLeftHand,
                     SteamVR_Actions.default_SkeletonRightHand,
+                    SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_ThrustUp,
                     SteamVR_Actions.inverted_ThrustDown,
@@ -432,6 +444,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_Menu,
                     SteamVR_Actions.default_Map,
                     SteamVR_Actions.default_GrabPinch,
+                    SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_RollMode,
                     SteamVR_Actions.inverted_Interact,
@@ -472,6 +485,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_Look,
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.default_Squeeze,
+                    SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_ThrustUp,
                     SteamVR_Actions.inverted_ThrustDown,
@@ -508,6 +522,7 @@ namespace Valve.VR
             SteamVR_Actions.p_default_RightHand = ((SteamVR_Action_Pose)(SteamVR_Action.Create<SteamVR_Action_Pose>("/actions/default/in/RightHand")));
             SteamVR_Actions.p_default_SkeletonLeftHand = ((SteamVR_Action_Skeleton)(SteamVR_Action.Create<SteamVR_Action_Skeleton>("/actions/default/in/SkeletonLeftHand")));
             SteamVR_Actions.p_default_SkeletonRightHand = ((SteamVR_Action_Skeleton)(SteamVR_Action.Create<SteamVR_Action_Skeleton>("/actions/default/in/SkeletonRightHand")));
+            SteamVR_Actions.p_default_Autopilot = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Autopilot")));
             SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
             SteamVR_Actions.p_inverted_Grip = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Grip")));
             SteamVR_Actions.p_inverted_ThrustUp = ((SteamVR_Action_Single)(SteamVR_Action.Create<SteamVR_Action_Single>("/actions/inverted/in/ThrustUp")));

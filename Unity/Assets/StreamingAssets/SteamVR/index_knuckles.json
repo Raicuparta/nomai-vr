@@ -50,6 +50,9 @@
           "inputs": {
             "click": {
               "output": "/actions/default/in/jump"
+            },
+            "double": {
+              "output": "/actions/default/in/autopilot"
             }
           }
         },

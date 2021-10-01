@@ -72,6 +72,10 @@
       "skeleton": "/skeleton/hand/right"
     },
     {
+      "name": "/actions/default/in/Autopilot",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -214,7 +218,8 @@
       "/actions/inverted/in/Look": "Look",
       "/actions/inverted/in/Move": "Move",
       "/actions/tools/in/DPad": "DPad (tools)",
-      "/actions/tools/in/Use": "Use (tools)"
+      "/actions/tools/in/Use": "Use (tools)",
+      "/actions/default/in/Autopilot": "Autopilot"
     }
   ]
 }

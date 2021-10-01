@@ -205,6 +205,15 @@
               "output": "/actions/default/in/back"
             }
           }
+        },
+        {
+          "path": "/user/hand/right/input/trackpad",
+          "mode": "button",
+          "inputs": {
+            "double": {
+              "output": "/actions/default/in/autopilot"
+            }
+          }
         }
       ],
       "skeleton": [
