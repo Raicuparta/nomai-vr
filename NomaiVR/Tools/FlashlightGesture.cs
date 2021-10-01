@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Input;
+using UnityEngine;
 
 namespace NomaiVR
 {
@@ -34,11 +35,12 @@ namespace NomaiVR
 
             private void FlashlightPress(Transform hand)
             {
-                // ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 1);
+                NewControllerInput.SimulateInputPress(InputConsts.InputCommandType.FLASHLIGHT);
             }
 
             private void FlashlightRelease(Transform hand)
             {
+                // TODO decide if this is needed.
                 // ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 0);
             }
         }
