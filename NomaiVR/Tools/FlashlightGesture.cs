@@ -41,7 +41,6 @@ namespace NomaiVR
             private void FlashlightRelease(Transform hand)
             {
                 // TODO decide if this is needed.
-                // ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 0);
             }
         }
     }
