@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,15 +7,18 @@ using Valve.VR;
 
 namespace NomaiVR.Input
 {
-    internal class NewControllerInput: NomaiVRModule<NewControllerInput.Behaviour, NewControllerInput.Patch>
+    internal class NewControllerInput: NomaiVRModule<NomaiVRModule.EmptyBehaviour, NewControllerInput.Patch>
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
 
-        public class Behaviour : MonoBehaviour
-        {
-        }
+        private static readonly Dictionary<int, bool> simulatedBoolInputs = new Dictionary<int, bool>();
 
+        public static void SimulateInputPress(InputConsts.InputCommandType commandType)
+        {
+            simulatedBoolInputs[(int)commandType] = true;
+        }
+        
         public class Patch: NomaiVRPatch
         {
             public override void ApplyPatches()
@@ -26,11 +30,17 @@ namespace NomaiVR.Input
                 Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
                 Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
             }
+            
+            private static Vector2 AxisValueFromValue(bool value)
+            {
+               return new Vector2(value ? 1f : 0f, 0f);
+            }
 
             private static Vector2 AxisValueFromAction(ISteamVR_Action_Boolean action)
             {
-               return new Vector2(action.state ? 1f : 0f, 0f);
+               return AxisValueFromValue(action.state);
             }
+
             private static Vector2 AxisValueFromAction(ISteamVR_Action_Single action)
             {
                return new Vector2(action.axis, 0f);
@@ -62,9 +72,18 @@ namespace NomaiVR.Input
             }
 
             private static void Command(AbstractCommands __instance)
-            { 
+            {
+                var commandType = __instance.CommandType;
+                var commandTypeKey = (int) commandType;
+                if (simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey])
+                {
+                    __instance.AxisValue = AxisValueFromValue(true);
+                    simulatedBoolInputs[(int) commandType] = false;
+                    return;
+                }
+                
                 var actions = SteamVR_Actions._default;
-                switch (__instance.CommandType)
+                switch (commandType)
                 {
                     case InputConsts.InputCommandType.JUMP:
                     case InputConsts.InputCommandType.ENTER:

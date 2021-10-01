@@ -164,7 +164,7 @@ namespace NomaiVR
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
                     _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipMonitorInteraction>();
-                    _landingCam.button = JoystickButton.DPadDown;
+                    _landingCam.button = InputConsts.InputCommandType.LANDING_CAMERA;
                     _landingCam.skipPressCallback = () =>
                     {
                         if (_isLandingCamEnabled)
