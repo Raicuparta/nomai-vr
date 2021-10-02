@@ -177,19 +177,59 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Stationary_Use
+        public virtual SteamVR_Action_Boolean StationaryUse
         {
             get
             {
-                return SteamVR_Actions.default_Stationary_Use;
+                return SteamVR_Actions.default_StationaryUse;
             }
         }
         
-        public virtual SteamVR_Action_Vector2 Stationary_DPAD
+        public virtual SteamVR_Action_Vector2 StationaryDpad
         {
             get
             {
-                return SteamVR_Actions.default_Stationary_DPAD;
+                return SteamVR_Actions.default_StationaryDpad;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UITabLeft
+        {
+            get
+            {
+                return SteamVR_Actions.default_UITabLeft;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UITabRight
+        {
+            get
+            {
+                return SteamVR_Actions.default_UITabRight;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UISubtabLeft
+        {
+            get
+            {
+                return SteamVR_Actions.default_UISubtabLeft;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UISubtabRight
+        {
+            get
+            {
+                return SteamVR_Actions.default_UISubtabRight;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vector2 UIDpad
+        {
+            get
+            {
+                return SteamVR_Actions.default_UIDpad;
             }
         }
         

@@ -57,9 +57,19 @@ namespace Valve.VR
         
         private static SteamVR_Action_Boolean p_default_UISelect;
         
-        private static SteamVR_Action_Boolean p_default_Stationary_Use;
+        private static SteamVR_Action_Boolean p_default_StationaryUse;
         
-        private static SteamVR_Action_Vector2 p_default_Stationary_DPAD;
+        private static SteamVR_Action_Vector2 p_default_StationaryDpad;
+        
+        private static SteamVR_Action_Boolean p_default_UITabLeft;
+        
+        private static SteamVR_Action_Boolean p_default_UITabRight;
+        
+        private static SteamVR_Action_Boolean p_default_UISubtabLeft;
+        
+        private static SteamVR_Action_Boolean p_default_UISubtabRight;
+        
+        private static SteamVR_Action_Vector2 p_default_UIDpad;
         
         private static SteamVR_Action_Vibration p_default_Haptic;
         
@@ -253,19 +263,59 @@ namespace Valve.VR
             }
         }
         
-        public static SteamVR_Action_Boolean default_Stationary_Use
+        public static SteamVR_Action_Boolean default_StationaryUse
         {
             get
             {
-                return SteamVR_Actions.p_default_Stationary_Use.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_StationaryUse.GetCopy<SteamVR_Action_Boolean>();
             }
         }
         
-        public static SteamVR_Action_Vector2 default_Stationary_DPAD
+        public static SteamVR_Action_Vector2 default_StationaryDpad
         {
             get
             {
-                return SteamVR_Actions.p_default_Stationary_DPAD.GetCopy<SteamVR_Action_Vector2>();
+                return SteamVR_Actions.p_default_StationaryDpad.GetCopy<SteamVR_Action_Vector2>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean default_UITabLeft
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_UITabLeft.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean default_UITabRight
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_UITabRight.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean default_UISubtabLeft
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_UISubtabLeft.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean default_UISubtabRight
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_UISubtabRight.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Vector2 default_UIDpad
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_UIDpad.GetCopy<SteamVR_Action_Vector2>();
             }
         }
         
@@ -420,8 +470,13 @@ namespace Valve.VR
                     SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.default_Recenter,
                     SteamVR_Actions.default_UISelect,
-                    SteamVR_Actions.default_Stationary_Use,
-                    SteamVR_Actions.default_Stationary_DPAD,
+                    SteamVR_Actions.default_StationaryUse,
+                    SteamVR_Actions.default_StationaryDpad,
+                    SteamVR_Actions.default_UITabLeft,
+                    SteamVR_Actions.default_UITabRight,
+                    SteamVR_Actions.default_UISubtabLeft,
+                    SteamVR_Actions.default_UISubtabRight,
+                    SteamVR_Actions.default_UIDpad,
                     SteamVR_Actions.default_Haptic,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_ThrustUp,
@@ -459,8 +514,13 @@ namespace Valve.VR
                     SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.default_Recenter,
                     SteamVR_Actions.default_UISelect,
-                    SteamVR_Actions.default_Stationary_Use,
-                    SteamVR_Actions.default_Stationary_DPAD,
+                    SteamVR_Actions.default_StationaryUse,
+                    SteamVR_Actions.default_StationaryDpad,
+                    SteamVR_Actions.default_UITabLeft,
+                    SteamVR_Actions.default_UITabRight,
+                    SteamVR_Actions.default_UISubtabLeft,
+                    SteamVR_Actions.default_UISubtabRight,
+                    SteamVR_Actions.default_UIDpad,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_ThrustUp,
                     SteamVR_Actions.inverted_ThrustDown,
@@ -495,7 +555,11 @@ namespace Valve.VR
                     SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.default_Recenter,
                     SteamVR_Actions.default_UISelect,
-                    SteamVR_Actions.default_Stationary_Use,
+                    SteamVR_Actions.default_StationaryUse,
+                    SteamVR_Actions.default_UITabLeft,
+                    SteamVR_Actions.default_UITabRight,
+                    SteamVR_Actions.default_UISubtabLeft,
+                    SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_RollMode,
                     SteamVR_Actions.inverted_Interact,
@@ -515,7 +579,8 @@ namespace Valve.VR
             Valve.VR.SteamVR_Input.actionsVector2 = new Valve.VR.SteamVR_Action_Vector2[] {
                     SteamVR_Actions.default_Look,
                     SteamVR_Actions.default_Move,
-                    SteamVR_Actions.default_Stationary_DPAD,
+                    SteamVR_Actions.default_StationaryDpad,
+                    SteamVR_Actions.default_UIDpad,
                     SteamVR_Actions.inverted_Look,
                     SteamVR_Actions.inverted_Move,
                     SteamVR_Actions.tools_DPad};
@@ -540,8 +605,13 @@ namespace Valve.VR
                     SteamVR_Actions.default_Autopilot,
                     SteamVR_Actions.default_Recenter,
                     SteamVR_Actions.default_UISelect,
-                    SteamVR_Actions.default_Stationary_Use,
-                    SteamVR_Actions.default_Stationary_DPAD,
+                    SteamVR_Actions.default_StationaryUse,
+                    SteamVR_Actions.default_StationaryDpad,
+                    SteamVR_Actions.default_UITabLeft,
+                    SteamVR_Actions.default_UITabRight,
+                    SteamVR_Actions.default_UISubtabLeft,
+                    SteamVR_Actions.default_UISubtabRight,
+                    SteamVR_Actions.default_UIDpad,
                     SteamVR_Actions.inverted_Grip,
                     SteamVR_Actions.inverted_ThrustUp,
                     SteamVR_Actions.inverted_ThrustDown,
@@ -581,8 +651,13 @@ namespace Valve.VR
             SteamVR_Actions.p_default_Autopilot = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Autopilot")));
             SteamVR_Actions.p_default_Recenter = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Recenter")));
             SteamVR_Actions.p_default_UISelect = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UISelect")));
-            SteamVR_Actions.p_default_Stationary_Use = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Stationary_Use")));
-            SteamVR_Actions.p_default_Stationary_DPAD = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/default/in/Stationary_DPAD")));
+            SteamVR_Actions.p_default_StationaryUse = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/StationaryUse")));
+            SteamVR_Actions.p_default_StationaryDpad = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/default/in/StationaryDpad")));
+            SteamVR_Actions.p_default_UITabLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UITabLeft")));
+            SteamVR_Actions.p_default_UITabRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UITabRight")));
+            SteamVR_Actions.p_default_UISubtabLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UISubtabLeft")));
+            SteamVR_Actions.p_default_UISubtabRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UISubtabRight")));
+            SteamVR_Actions.p_default_UIDpad = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/default/in/UIDpad")));
             SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
             SteamVR_Actions.p_inverted_Grip = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Grip")));
             SteamVR_Actions.p_inverted_ThrustUp = ((SteamVR_Action_Single)(SteamVR_Action.Create<SteamVR_Action_Single>("/actions/inverted/in/ThrustUp")));

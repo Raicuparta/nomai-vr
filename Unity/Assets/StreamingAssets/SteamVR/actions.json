@@ -84,11 +84,31 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/Stationary_Use",
+      "name": "/actions/default/in/StationaryUse",
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/Stationary_DPAD",
+      "name": "/actions/default/in/StationaryDpad",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/UITabLeft",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/UITabRight",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/UISubtabLeft",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/UISubtabRight",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/UIDpad",
       "type": "vector2"
     },
     {
@@ -237,7 +257,14 @@
       "/actions/tools/in/Use": "Use (tools)",
       "/actions/default/in/Autopilot": "Autopilot",
       "/actions/default/in/Recenter": "Recenter VR",
-      "/actions/default/in/UISelect": "Select UI Item"
+      "/actions/default/in/UISelect": "Select (UI)",
+      "/actions/default/in/UITabRight": "Tab Right (UI)",
+      "/actions/default/in/UISubtabLeft": "Subtab Left (UI)",
+      "/actions/default/in/UISubtabRight": "Subtab Right (UI)",
+      "/actions/default/in/StationaryUse": "Use Stationary Tool",
+      "/actions/default/in/StationaryDpad": "Stationary Toll Dpad",
+      "/actions/default/in/UITabLeft": "Tab Left (UI)",
+      "/actions/default/in/UIDpad": "Dpad (UI)"
     }
   ]
 }
