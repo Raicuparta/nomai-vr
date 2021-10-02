@@ -23,10 +23,9 @@ namespace NomaiVR.Input
         {
             public override void ApplyPatches()
             {
-                Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchVectorInput));
-                Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchAxisInput));
-                Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
-                Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
+                Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(Command));
+                Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(Command));
+                Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(Command));
                 Prefix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
@@ -52,9 +51,9 @@ namespace NomaiVR.Input
                 return new Vector2(value ? 1f : 0f, 0f);
             }
 
-            private static Vector2 AxisValue(float value)
+            private static Vector2 AxisValue(float value, bool clamp = false)
             {
-                return new Vector2(value, 0f);
+                return new Vector2(clamp ? Mathf.Clamp(value, 0f, 1f) : value, 0f);
             }
 
             private static Vector2 AxisValue(ISteamVR_Action_Boolean action)
@@ -65,31 +64,6 @@ namespace NomaiVR.Input
             private static Vector2 AxisValue(ISteamVR_Action_Single action)
             {
                 return new Vector2(action.axis, 0f);
-            }
-
-            private static void PatchCompositeInput(CompositeInputCommands __instance)
-            {
-                Command(__instance);
-            }
-
-            public static void PatchVectorInput(AbstractInputCommands<IVectorInputAction> __instance)
-            {
-                Command(__instance);
-            }
-
-            public static void PatchAxisInput(AbstractInputCommands<IAxisInputAction> __instance)
-            {
-                Command(__instance);
-            }
-
-            public static void PatchCompositeVectorInput(AbstractCompositeInputCommands<IVectorInputAction> __instance)
-            {
-                Command(__instance);
-            }
-
-            public static void PatchCompositeAxisInput(AbstractCompositeInputCommands<IAxisInputAction> __instance)
-            {
-                Command(__instance);
             }
 
             private static void Command(AbstractCommands __instance)
@@ -116,16 +90,16 @@ namespace NomaiVR.Input
                         __instance.AxisValue = AxisValue(actions.UISelect);
                         break;
                     case InputConsts.InputCommandType.UP:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(actions.Move.axis.y, 0f, 1f));
+                        __instance.AxisValue = AxisValue(actions.Move.axis.y, true);
                         break;
                     case InputConsts.InputCommandType.DOWN:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(-actions.Move.axis.y, 0f, 1f));
+                        __instance.AxisValue = AxisValue(-actions.Move.axis.y, true);
                         break;
                     case InputConsts.InputCommandType.RIGHT:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(actions.Move.axis.x, 0f, 1f));
+                        __instance.AxisValue = AxisValue(actions.Move.axis.x, true);
                         break;
                     case InputConsts.InputCommandType.LEFT:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(-actions.Move.axis.x, 0f, 1f));
+                        __instance.AxisValue = AxisValue(-actions.Move.axis.x, true);
                         break;
                     case InputConsts.InputCommandType.MAP:
                         __instance.AxisValue = AxisValue(actions.Map);
@@ -180,20 +154,20 @@ namespace NomaiVR.Input
                                                              AxisValue(actions.Stationary_Use);
                         break;
                     case InputConsts.InputCommandType.TOOL_UP:
-                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(tools.DPad.axis.y, 0f, 1f)) :
-                                                             AxisValue(Mathf.Clamp(actions.Stationary_DPAD.axis.y, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(tools.DPad.axis.y, true) :
+                                                             AxisValue(actions.Stationary_DPAD.axis.y, true);
                         break;
                     case InputConsts.InputCommandType.TOOL_DOWN:
-                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(-tools.DPad.axis.y, 0f, 1f)):
-                                                             AxisValue(Mathf.Clamp(-actions.Stationary_DPAD.axis.y, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(-tools.DPad.axis.y, true):
+                                                             AxisValue(-actions.Stationary_DPAD.axis.y, true);
                         break;
                     case InputConsts.InputCommandType.TOOL_RIGHT:
-                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(tools.DPad.axis.x, 0f, 1f)):
-                                                             AxisValue(Mathf.Clamp(actions.Stationary_DPAD.axis.x, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(tools.DPad.axis.x, true):
+                                                             AxisValue(actions.Stationary_DPAD.axis.x, true);
                         break;
                     case InputConsts.InputCommandType.TOOL_LEFT:
-                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(-tools.DPad.axis.x, 0f, 1f)):
-                                                             AxisValue(Mathf.Clamp(-actions.Stationary_DPAD.axis.x, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(-tools.DPad.axis.x, true):
+                                                             AxisValue(-actions.Stationary_DPAD.axis.x, true);
                         break;
                 }
             }
