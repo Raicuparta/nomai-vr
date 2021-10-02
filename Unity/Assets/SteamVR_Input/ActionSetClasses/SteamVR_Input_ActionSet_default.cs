@@ -177,6 +177,22 @@ namespace Valve.VR
             }
         }
         
+        public virtual SteamVR_Action_Boolean Stationary_Use
+        {
+            get
+            {
+                return SteamVR_Actions.default_Stationary_Use;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vector2 Stationary_DPAD
+        {
+            get
+            {
+                return SteamVR_Actions.default_Stationary_DPAD;
+            }
+        }
+        
         public virtual SteamVR_Action_Vibration Haptic
         {
             get

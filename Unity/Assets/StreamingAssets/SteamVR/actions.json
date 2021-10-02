@@ -84,6 +84,14 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/Stationary_Use",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/Stationary_DPAD",
+      "type": "vector2"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },

@@ -27,6 +27,7 @@ namespace NomaiVR.Input
                 Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchAxisInput));
                 Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
                 Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
+                Postfix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
 
                 VRToolSwapper.Equipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
@@ -139,9 +140,7 @@ namespace NomaiVR.Input
                         break;
                     case InputConsts.InputCommandType.INTERACT:
                     case InputConsts.InputCommandType.LOCKON:
-                        __instance.AxisValue = AxisValue(!SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
-                                                      && !SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand)
-                                                      && actions.Interact.state);
+                        __instance.AxisValue = AxisValue(!ToolsActive && actions.Interact.state);
                         break;
                     case InputConsts.InputCommandType.LOOK:
                         __instance.AxisValue = actions.Look.axis;
@@ -177,21 +176,43 @@ namespace NomaiVR.Input
                     case InputConsts.InputCommandType.PROBERETRIEVE:
                     case InputConsts.InputCommandType.SCOPEVIEW:
                     case InputConsts.InputCommandType.TOOL_PRIMARY:
-                        __instance.AxisValue = AxisValue(tools.Use.GetState(SteamVR_Input_Sources.LeftHand) || tools.Use.GetState(SteamVR_Input_Sources.RightHand));
+                        __instance.AxisValue = ToolsActive ? AxisValue(tools.Use.GetState(SteamVR_Input_Sources.LeftHand) || tools.Use.GetState(SteamVR_Input_Sources.RightHand)) :
+                                                             AxisValue(actions.Stationary_Use);
                         break;
                     case InputConsts.InputCommandType.TOOL_UP:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(tools.DPad.axis.y, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(tools.DPad.axis.y, 0f, 1f)) :
+                                                             AxisValue(Mathf.Clamp(actions.Stationary_DPAD.axis.y, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.TOOL_DOWN:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(-tools.DPad.axis.y, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(-tools.DPad.axis.y, 0f, 1f)):
+                                                             AxisValue(Mathf.Clamp(-actions.Stationary_DPAD.axis.y, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.TOOL_RIGHT:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(tools.DPad.axis.x, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(tools.DPad.axis.x, 0f, 1f)):
+                                                             AxisValue(Mathf.Clamp(actions.Stationary_DPAD.axis.x, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.TOOL_LEFT:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(-tools.DPad.axis.x, 0f, 1f));
+                        __instance.AxisValue = ToolsActive ? AxisValue(Mathf.Clamp(-tools.DPad.axis.x, 0f, 1f)):
+                                                             AxisValue(Mathf.Clamp(-actions.Stationary_DPAD.axis.x, 0f, 1f));
                         break;
                 }
+            }
+
+            public static bool ToolsActive => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
+                                            || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
+
+            public static void DoRumble(float hiPower, float lowPower)
+            {
+                hiPower *= 1.42857146f;
+                lowPower *= 1.42857146f;
+                var haptic = SteamVR_Actions.default_Haptic;
+                var frequency = 0.1f;
+                var amplitudeY = lowPower * ModSettings.VibrationStrength;
+                var amplitudeX = hiPower * ModSettings.VibrationStrength;
+                haptic.Execute(0, frequency, 10, amplitudeY, SteamVR_Input_Sources.RightHand);
+                haptic.Execute(0, frequency, 50, amplitudeX, SteamVR_Input_Sources.RightHand);
+                haptic.Execute(0, frequency, 10, amplitudeY, SteamVR_Input_Sources.LeftHand);
+                haptic.Execute(0, frequency, 50, amplitudeX, SteamVR_Input_Sources.LeftHand);
             }
         }
     }
