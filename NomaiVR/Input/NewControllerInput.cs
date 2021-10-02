@@ -28,6 +28,8 @@ namespace NomaiVR.Input
                 Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchInputCommands));
                 Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchInputCommands));
                 Prefix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
+                Postfix<InputManager>(nameof(InputManager.IsGamepadEnabled), nameof(ForceGamepadEnabled));
+                Postfix<InputManager>(nameof(InputManager.UsingGamepad), nameof(ForceGamepadEnabled));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
@@ -178,6 +180,7 @@ namespace NomaiVR.Input
 
             public static void DoRumble(float hiPower, float lowPower)
             {
+                Logs.Write($"hiPower: {lowPower}, lowPower: {lowPower}");
                 hiPower *= 1.42857146f;
                 lowPower *= 1.42857146f;
                 var haptic = SteamVR_Actions.default_Haptic;
@@ -188,6 +191,11 @@ namespace NomaiVR.Input
                 haptic.Execute(0, frequency, 50, amplitudeX, SteamVR_Input_Sources.RightHand);
                 haptic.Execute(0, frequency, 10, amplitudeY, SteamVR_Input_Sources.LeftHand);
                 haptic.Execute(0, frequency, 50, amplitudeX, SteamVR_Input_Sources.LeftHand);
+            }
+
+            private static void ForceGamepadEnabled(ref bool __result)
+            {
+                __result = true;
             }
         }
     }
