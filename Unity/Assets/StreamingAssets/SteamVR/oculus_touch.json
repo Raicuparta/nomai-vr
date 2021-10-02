@@ -3,7 +3,25 @@
    "alias_info": {},
    "bindings": {
       "/actions/default": {
-         "chords": [],
+         "chords": [
+            {
+               "inputs": [
+                  [
+                     "/user/hand/left/input/x",
+                     "click"
+                  ],
+                  [
+                     "/user/hand/right/input/grip",
+                     "click"
+                  ],
+                  [
+                     "/user/hand/left/input/grip",
+                     "click"
+                  ]
+               ],
+               "output": "/actions/default/in/recenter"
+            }
+         ],
          "haptics": [
             {
                "output": "/actions/default/out/haptic",
@@ -120,6 +138,9 @@
             },
             {
                "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/autopilot"
+                  },
                   "position": {
                      "output": "/actions/default/in/look"
                   }
