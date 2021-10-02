@@ -15,6 +15,7 @@ namespace NomaiVR
 
         public static event Action InteractingHandChanged;
         public static event Action Equipped;
+        public static event Action ToolEquipped;
         public static event Action UnEquipped;
 
         private static readonly Dictionary<ToolMode, bool> _toolsAllowedToEquip = new Dictionary<ToolMode, bool>() {
@@ -91,6 +92,7 @@ namespace NomaiVR
                     UpdateHand(_pendingHandInteract);
                     _pendingHandInteract = null;
                     Equipped?.Invoke();
+                    if (__instance._currentToolMode != ToolMode.Item) ToolEquipped?.Invoke();
                 }
             }
 

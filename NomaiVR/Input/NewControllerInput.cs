@@ -27,9 +27,9 @@ namespace NomaiVR.Input
                 Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchAxisInput));
                 Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
                 Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
-                Postfix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
+                Prefix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
 
-                VRToolSwapper.Equipped += OnToolEquipped;
+                VRToolSwapper.ToolEquipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
             }
 
@@ -122,10 +122,10 @@ namespace NomaiVR.Input
                         __instance.AxisValue = AxisValue(Mathf.Clamp(-actions.Move.axis.y, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.RIGHT:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(actions.Look.axis.x, 0f, 1f));
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(actions.Move.axis.x, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.LEFT:
-                        __instance.AxisValue = AxisValue(Mathf.Clamp(-actions.Look.axis.x, 0f, 1f));
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(-actions.Move.axis.x, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.MAP:
                         __instance.AxisValue = AxisValue(actions.Map);
