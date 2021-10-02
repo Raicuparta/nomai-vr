@@ -99,10 +99,19 @@ namespace NomaiVR.Input
                         __instance.AxisValue = AxisValue(-defaultActions.Move.axis.y, true);
                         break;
                     case InputCommandType.RIGHT:
+                    case InputCommandType.MENU_RIGHT:
                         __instance.AxisValue = AxisValue(defaultActions.Move.axis.x, true);
                         break;
                     case InputCommandType.LEFT:
+                    case InputCommandType.MENU_LEFT:
                         __instance.AxisValue = AxisValue(-defaultActions.Move.axis.x, true);
+                        break;
+                    // TODO set up specific SteamVR inputs for this UI stuff too, and add the submenu left / right.
+                    case InputCommandType.TABR:
+                        __instance.AxisValue = AxisValue(defaultActions.Look.axis.x, true);
+                        break;
+                    case InputCommandType.TABL:
+                        __instance.AxisValue = AxisValue(-defaultActions.Look.axis.x, true);
                         break;
                     case InputCommandType.MAP:
                         __instance.AxisValue = AxisValue(defaultActions.Map);
@@ -122,7 +131,7 @@ namespace NomaiVR.Input
                     case InputCommandType.LOOK:
                         __instance.AxisValue = defaultActions.Look.axis;
                         break;
-                    case InputCommandType.LOOK_X:
+                    case InputCommandType.LOOK_X: 
                         __instance.AxisValue = defaultActions.Look.axis;
                         break;
                     case InputCommandType.LOOK_Y:
