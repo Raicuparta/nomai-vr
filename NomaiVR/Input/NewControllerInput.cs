@@ -89,6 +89,7 @@ namespace NomaiVR.Input
                 switch (commandType)
                 {
                     case InputConsts.InputCommandType.JUMP:
+                    case InputConsts.InputCommandType.BOOST:
                         __instance.AxisValue = AxisValue(actions.Jump);
                         break;
                     case InputConsts.InputCommandType.ENTER:
