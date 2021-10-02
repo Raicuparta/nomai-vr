@@ -61,6 +61,7 @@ namespace NomaiVR
             new LookArrow();
             new DisableDeathAnimation();
             new Menus();
+            new DebugCheats();
         }
 
         private void InitSteamVR()
