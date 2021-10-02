@@ -58,7 +58,7 @@ namespace NomaiVR
             //new InputPrompts();
             new NewInputPrompts();
             new ControllerModels();
-            //new GesturePrompts();
+            new GesturePrompts();
             new PostCreditsFix();
             new LookArrow();
             new DisableDeathAnimation();
