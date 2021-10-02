@@ -58,7 +58,6 @@ namespace NomaiVR
                 camera.cullingMask = activeCamera.cullingMask;
                 camera.depth = activeCamera.mainCamera.depth;
                 camera.tag = activeCamera.tag;
-                ActivateCameraTracking(camera);
 
                 var owCamera = cameraObject.AddComponent<OWCamera>();
                 owCamera.renderSkybox = true;
@@ -71,19 +70,10 @@ namespace NomaiVR
 
             private void SetUpWrapperInGame()
             {
-                ActivateCameraTracking(Camera.main);
                 _wrapper = new GameObject().transform;
                 _wrapper.parent = Camera.main.transform.parent;
                 _wrapper.localRotation = Quaternion.identity;
                 _wrapper.localPosition = Camera.main.transform.localPosition;
-            }
-
-            private void ActivateCameraTracking(Camera camera)
-            {
-                camera.stereoTargetEye = StereoTargetEyeMask.Both;
-                var hmdTracking = camera.gameObject.AddComponent<TrackedPoseDriver>();
-                hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
-                hmdTracking.UseRelativeTransform = true;
             }
 
             private void SetUpHands()

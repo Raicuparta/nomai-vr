@@ -55,17 +55,13 @@ namespace NomaiVR
                 _playArea = new GameObject().transform;
                 _playArea.parent = Locator.GetPlayerTransform();
                 _playArea.position = PlayerHelper.PlayerHead.position;
-                _playArea.rotation = Quaternion.identity;
+                _playArea.rotation = PlayerHelper.PlayerHead.rotation;
                 _cameraParent.parent = _playArea;
                 _cameraParent.localRotation = Quaternion.identity;
                 _playerCamera.transform.parent = _cameraParent;
-                _playerCamera.transform.localPosition = Vector3.zero; 
-                _playerCamera.transform.localRotation = Quaternion.identity;
                 _playerCamera.gameObject.AddComponent<VRCameraManipulator>();
 
-                var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
-                _cameraParent.position += movement;
-                _playArea.localRotation = Quaternion.identity;
+                MoveCameraToPlayerHead();
             }
 
             private void MoveCameraToPlayerHead()
