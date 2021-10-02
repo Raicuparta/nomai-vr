@@ -9,7 +9,7 @@ namespace NomaiVR
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
 
-        private const string SupportedVersion = "1.0.7";
+        private const string supportedVersion = "1.1.10";
 
         public static void ThrowSteamVRError()
         {
@@ -57,7 +57,7 @@ namespace NomaiVR
                 if (!IsGameVersionSupported())
                 {
                     Logs.WriteFatal(
-                        $"Fatal error: this version of NomaiVR only supports Outer Wilds {SupportedVersion}.\n" +
+                        $"Fatal error: this version of NomaiVR only supports Outer Wilds {supportedVersion}.\n" +
                         $"Currently installed version of Outer Wilds is {Application.version}.\n" +
                         "Make sure you are using the latest version of NomaiVR"
                     );
@@ -67,7 +67,7 @@ namespace NomaiVR
             private bool IsGameVersionSupported()
             {
                 var gameVersionParts = SplitVersion(Application.version);
-                var supportedVersionParts = SplitVersion(SupportedVersion);
+                var supportedVersionParts = SplitVersion(supportedVersion);
 
                 for (var i = 0; i < supportedVersionParts.Length; i++)
                 {
