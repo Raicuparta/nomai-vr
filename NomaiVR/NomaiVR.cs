@@ -3,6 +3,7 @@ using BepInEx;
 using System.IO;
 using HarmonyLib;
 using NomaiVR.Input;
+using NomaiVR.UI;
 
 namespace NomaiVR
 {
@@ -55,6 +56,7 @@ namespace NomaiVR
             new FeetMarker();
             new HelmetHUD();
             //new InputPrompts();
+            new NewInputPrompts();
             new ControllerModels();
             //new GesturePrompts();
             new PostCreditsFix();

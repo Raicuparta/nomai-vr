@@ -164,16 +164,13 @@
     <None Include="Hands\Poses\holding_warpcore_gloves.json" />
     <None Include="Hands\Poses\holding_wordstone.json" />
     <None Include="Hands\Poses\reachFor.json" />
-    <None Include="Input\Bindings\actions.json" />
-    <None Include="Input\Bindings\index_knuckles.json" />
-    <None Include="Input\Bindings\oculus_touch.json" />
-    <None Include="Input\Bindings\wmr-controller.json" />
-    <None Include="Input\Bindings\vive_wands.json" />
     <None Include="ModConfig\default-config.json" />
     <None Include="Saves\save.json" />
     <None Include="manifest.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Input\Bindings\" />
+  </ItemGroup>
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
     <Exec Command="del &quot;$(OwmlDir)\$(ModDir)\config.json&quot;" IgnoreExitCode="true" />
 
