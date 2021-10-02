@@ -16,13 +16,17 @@ namespace NomaiVR
                 _itemTool = FindObjectOfType<ItemTool>();
                 _itemTool.transform.localScale = 1.8f * Vector3.one;
 
-                //Used by wordstones
-                var wordStone = _itemTool.transform.Find("ItemSocket").gameObject.AddComponent<Holdable>();
-                wordStone.SetPositionOffset(new Vector3(-0.1652f, 0.0248f, 0.019f), new Vector3(-0.1804f, 0.013f, 0.019f));
-                wordStone.SetRotationOffset(Quaternion.Euler(0f, -90f, 10f));
-                wordStone.SetPoses(AssetLoader.Poses["holding_wordstone"]);
+                // Used by wordstones.
+                // TODO This doesn't seem to exist anymore. Go to quantum moon and check what's up.
+                // var wordStone = _itemTool.transform.Find("ItemSocket").gameObject.AddComponent<Holdable>();
+                // wordStone.SetPositionOffset(new Vector3(-0.1652f, 0.0248f, 0.019f), new Vector3(-0.1804f, 0.013f, 0.019f));
+                // wordStone.SetRotationOffset(Quaternion.Euler(0f, -90f, 10f));
+                // wordStone.SetPoses(AssetLoader.Poses["holding_wordstone"]);
 
-                _itemTool.transform.Find("LanternSocket").gameObject.AddComponent<Holdable>();
+                _itemTool.transform.Find("SimpleLanternSocket").gameObject.AddComponent<Holdable>();
+                _itemTool.transform.Find("DreamLanternSocket").gameObject.AddComponent<Holdable>();
+                _itemTool.transform.Find("SlideReelSocket").gameObject.AddComponent<Holdable>();
+                _itemTool.transform.Find("VisionTorchSocket").gameObject.AddComponent<Holdable>();
 
                 var scroll = _itemTool.transform.Find("ScrollSocket").gameObject.AddComponent<Holdable>();
                 scroll.SetPositionOffset(new Vector3(-0.022f, -0.033f, -0.03f), new Vector3(-0.0436f, -0.033f, -0.03f));

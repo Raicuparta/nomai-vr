@@ -86,6 +86,7 @@ namespace NomaiVR.Input
                 {
                     case InputCommandType.JUMP:
                     case InputCommandType.BOOST:
+                    case InputCommandType.MATCH_VELOCITY:
                         __instance.AxisValue = AxisValue(defaultActions.Jump);
                         break;
                     case InputCommandType.ENTER:
