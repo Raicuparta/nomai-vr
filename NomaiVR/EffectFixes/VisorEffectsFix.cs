@@ -17,9 +17,6 @@ namespace NomaiVR
 
             internal void Start()
             {
-                // Disable underwater distortion.
-                FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
-
                 // Disable water entering and exiting effect.
                 var visorEffects = FindObjectOfType<VisorEffectController>();
                 visorEffects._waterClearLength = 1f;
@@ -60,7 +57,8 @@ namespace NomaiVR
         {
             public override void ApplyPatches()
             {
-                Postfix<VisorEffectController>("OnCameraExitWater", nameof(PostOnCameraExitWater));
+                Postfix<VisorEffectController>(nameof(VisorEffectController.OnCameraExitWater), nameof(PostOnCameraExitWater));
+                Postfix<UnderwaterEffectBubbleController>(nameof(UnderwaterEffectBubbleController.LateUpdate), nameof(DisableUnderwaterDistorsion));
             }
 
             public static void PostOnCameraExitWater(VisorEffectController __instance)
@@ -68,6 +66,15 @@ namespace NomaiVR
                 if (!s_canShowCameraWaterEffect)
                     __instance._waterClearTimer = __instance._waterClearLength;
                 s_canShowCameraWaterEffect = false;
+            }
+
+            public static void DisableUnderwaterDistorsion(UnderwaterEffectBubbleController __instance)
+            {
+                if (__instance._fluidDetector != null)
+                {
+                    __instance._matPropBlock.SetFloat(__instance._propID_DistortMag, 0);
+                    __instance._effectBubbleRenderer.SetPropertyBlock(__instance._matPropBlock);
+                }
             }
         }
     }
