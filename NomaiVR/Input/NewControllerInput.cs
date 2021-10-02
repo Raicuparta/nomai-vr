@@ -4,6 +4,7 @@ using System.Data;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Valve.VR;
+using static InputConsts;
 
 namespace NomaiVR.Input
 {
@@ -14,7 +15,7 @@ namespace NomaiVR.Input
 
         private static readonly Dictionary<int, bool> simulatedBoolInputs = new Dictionary<int, bool>();
 
-        public static void SimulateInputPress(InputConsts.InputCommandType commandType)
+        public static void SimulateInputPress(InputCommandType commandType)
         {
             simulatedBoolInputs[(int)commandType] = true;
         }
@@ -23,9 +24,9 @@ namespace NomaiVR.Input
         {
             public override void ApplyPatches()
             {
-                Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(Command));
-                Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(Command));
-                Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(Command));
+                Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchInputCommands));
+                Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchInputCommands));
+                Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchInputCommands));
                 Prefix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
@@ -66,7 +67,7 @@ namespace NomaiVR.Input
                 return new Vector2(action.axis, 0f);
             }
 
-            private static void Command(AbstractCommands __instance)
+            private static void PatchInputCommands(AbstractCommands __instance)
             {
                 var commandType = __instance.CommandType;
                 var commandTypeKey = (int)commandType;
@@ -77,97 +78,97 @@ namespace NomaiVR.Input
                     return;
                 }
 
-                var actions = SteamVR_Actions._default;
-                var tools = SteamVR_Actions.tools;
+                var defaultActions = SteamVR_Actions._default;
+                var toolActions = SteamVR_Actions.tools;
                 switch (commandType)
                 {
-                    case InputConsts.InputCommandType.JUMP:
-                    case InputConsts.InputCommandType.BOOST:
-                        __instance.AxisValue = AxisValue(actions.Jump);
+                    case InputCommandType.JUMP:
+                    case InputCommandType.BOOST:
+                        __instance.AxisValue = AxisValue(defaultActions.Jump);
                         break;
-                    case InputConsts.InputCommandType.ENTER:
-                    case InputConsts.InputCommandType.SELECT:
-                        __instance.AxisValue = AxisValue(actions.UISelect);
+                    case InputCommandType.ENTER:
+                    case InputCommandType.SELECT:
+                        __instance.AxisValue = AxisValue(defaultActions.UISelect);
                         break;
-                    case InputConsts.InputCommandType.UP:
-                        __instance.AxisValue = AxisValue(actions.Move.axis.y, true);
+                    case InputCommandType.UP:
+                        __instance.AxisValue = AxisValue(defaultActions.Move.axis.y, true);
                         break;
-                    case InputConsts.InputCommandType.DOWN:
-                        __instance.AxisValue = AxisValue(-actions.Move.axis.y, true);
+                    case InputCommandType.DOWN:
+                        __instance.AxisValue = AxisValue(-defaultActions.Move.axis.y, true);
                         break;
-                    case InputConsts.InputCommandType.RIGHT:
-                        __instance.AxisValue = AxisValue(actions.Move.axis.x, true);
+                    case InputCommandType.RIGHT:
+                        __instance.AxisValue = AxisValue(defaultActions.Move.axis.x, true);
                         break;
-                    case InputConsts.InputCommandType.LEFT:
-                        __instance.AxisValue = AxisValue(-actions.Move.axis.x, true);
+                    case InputCommandType.LEFT:
+                        __instance.AxisValue = AxisValue(-defaultActions.Move.axis.x, true);
                         break;
-                    case InputConsts.InputCommandType.MAP:
-                        __instance.AxisValue = AxisValue(actions.Map);
+                    case InputCommandType.MAP:
+                        __instance.AxisValue = AxisValue(defaultActions.Map);
                         break;
-                    case InputConsts.InputCommandType.PAUSE:
-                    case InputConsts.InputCommandType.CONFIRM:
-                        __instance.AxisValue = AxisValue(actions.Menu);
+                    case InputCommandType.PAUSE:
+                    case InputCommandType.CONFIRM:
+                        __instance.AxisValue = AxisValue(defaultActions.Menu);
                         break;
-                    case InputConsts.InputCommandType.ESCAPE:
-                    case InputConsts.InputCommandType.CANCEL:
-                        __instance.AxisValue = AxisValue(actions.Back);
+                    case InputCommandType.ESCAPE:
+                    case InputCommandType.CANCEL:
+                        __instance.AxisValue = AxisValue(defaultActions.Back);
                         break;
-                    case InputConsts.InputCommandType.INTERACT:
-                    case InputConsts.InputCommandType.LOCKON:
-                        __instance.AxisValue = AxisValue(!ToolsActive && actions.Interact.state);
+                    case InputCommandType.INTERACT:
+                    case InputCommandType.LOCKON:
+                        __instance.AxisValue = AxisValue(!ToolsActive && defaultActions.Interact.state);
                         break;
-                    case InputConsts.InputCommandType.LOOK:
-                        __instance.AxisValue = actions.Look.axis;
+                    case InputCommandType.LOOK:
+                        __instance.AxisValue = defaultActions.Look.axis;
                         break;
-                    case InputConsts.InputCommandType.LOOK_X:
-                        __instance.AxisValue = actions.Look.axis;
+                    case InputCommandType.LOOK_X:
+                        __instance.AxisValue = defaultActions.Look.axis;
                         break;
-                    case InputConsts.InputCommandType.LOOK_Y:
-                        __instance.AxisValue = AxisValue(actions.Look.axis.y);
+                    case InputCommandType.LOOK_Y:
+                        __instance.AxisValue = AxisValue(defaultActions.Look.axis.y);
                         break;
-                    case InputConsts.InputCommandType.MOVE_XZ:
-                        __instance.AxisValue = actions.Move.axis;
+                    case InputCommandType.MOVE_XZ:
+                        __instance.AxisValue = defaultActions.Move.axis;
                         break;
-                    case InputConsts.InputCommandType.MOVE_X:
-                        __instance.AxisValue = actions.Move.axis;
+                    case InputCommandType.MOVE_X:
+                        __instance.AxisValue = defaultActions.Move.axis;
                         break;
-                    case InputConsts.InputCommandType.MOVE_Z:
-                        __instance.AxisValue = AxisValue(actions.Move.axis.y);
+                    case InputCommandType.MOVE_Z:
+                        __instance.AxisValue = AxisValue(defaultActions.Move.axis.y);
                         break;
-                    case InputConsts.InputCommandType.THRUST_UP:
-                        __instance.AxisValue = AxisValue(actions.ThrustUp);
+                    case InputCommandType.THRUST_UP:
+                        __instance.AxisValue = AxisValue(defaultActions.ThrustUp);
                         break;
-                    case InputConsts.InputCommandType.THRUST_DOWN:
-                        __instance.AxisValue = AxisValue(actions.ThrustDown);
+                    case InputCommandType.THRUST_DOWN:
+                        __instance.AxisValue = AxisValue(defaultActions.ThrustDown);
                         break;
-                    case InputConsts.InputCommandType.ROLL_MODE:
-                        __instance.AxisValue = AxisValue(actions.RollMode);
+                    case InputCommandType.ROLL_MODE:
+                        __instance.AxisValue = AxisValue(defaultActions.RollMode);
                         break;
-                    case InputConsts.InputCommandType.AUTOPILOT:
-                        __instance.AxisValue = AxisValue(actions.Autopilot);
+                    case InputCommandType.AUTOPILOT:
+                        __instance.AxisValue = AxisValue(defaultActions.Autopilot);
                         break;
-                    case InputConsts.InputCommandType.PROBELAUNCH:
-                    case InputConsts.InputCommandType.PROBERETRIEVE:
-                    case InputConsts.InputCommandType.SCOPEVIEW:
-                    case InputConsts.InputCommandType.TOOL_PRIMARY:
-                        __instance.AxisValue = ToolsActive ? AxisValue(tools.Use.GetState(SteamVR_Input_Sources.LeftHand) || tools.Use.GetState(SteamVR_Input_Sources.RightHand)) :
-                                                             AxisValue(actions.Stationary_Use);
+                    case InputCommandType.PROBELAUNCH:
+                    case InputCommandType.PROBERETRIEVE:
+                    case InputCommandType.SCOPEVIEW:
+                    case InputCommandType.TOOL_PRIMARY:
+                        __instance.AxisValue = ToolsActive ? AxisValue(toolActions.Use.GetState(SteamVR_Input_Sources.LeftHand) || toolActions.Use.GetState(SteamVR_Input_Sources.RightHand)) :
+                                                             AxisValue(defaultActions.Stationary_Use);
                         break;
-                    case InputConsts.InputCommandType.TOOL_UP:
-                        __instance.AxisValue = ToolsActive ? AxisValue(tools.DPad.axis.y, true) :
-                                                             AxisValue(actions.Stationary_DPAD.axis.y, true);
+                    case InputCommandType.TOOL_UP:
+                        __instance.AxisValue = ToolsActive ? AxisValue(toolActions.DPad.axis.y, true) :
+                                                             AxisValue(defaultActions.Stationary_DPAD.axis.y, true);
                         break;
-                    case InputConsts.InputCommandType.TOOL_DOWN:
-                        __instance.AxisValue = ToolsActive ? AxisValue(-tools.DPad.axis.y, true):
-                                                             AxisValue(-actions.Stationary_DPAD.axis.y, true);
+                    case InputCommandType.TOOL_DOWN:
+                        __instance.AxisValue = ToolsActive ? AxisValue(-toolActions.DPad.axis.y, true):
+                                                             AxisValue(-defaultActions.Stationary_DPAD.axis.y, true);
                         break;
-                    case InputConsts.InputCommandType.TOOL_RIGHT:
-                        __instance.AxisValue = ToolsActive ? AxisValue(tools.DPad.axis.x, true):
-                                                             AxisValue(actions.Stationary_DPAD.axis.x, true);
+                    case InputCommandType.TOOL_RIGHT:
+                        __instance.AxisValue = ToolsActive ? AxisValue(toolActions.DPad.axis.x, true):
+                                                             AxisValue(defaultActions.Stationary_DPAD.axis.x, true);
                         break;
-                    case InputConsts.InputCommandType.TOOL_LEFT:
-                        __instance.AxisValue = ToolsActive ? AxisValue(-tools.DPad.axis.x, true):
-                                                             AxisValue(-actions.Stationary_DPAD.axis.x, true);
+                    case InputCommandType.TOOL_LEFT:
+                        __instance.AxisValue = ToolsActive ? AxisValue(-toolActions.DPad.axis.x, true):
+                                                             AxisValue(-defaultActions.Stationary_DPAD.axis.x, true);
                         break;
                 }
             }
