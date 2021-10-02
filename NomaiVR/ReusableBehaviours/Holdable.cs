@@ -36,17 +36,17 @@ namespace NomaiVR
             _glovePositionOffset = gloveOffset ?? handOffset;
         }
 
-        public void SetPoses(SteamVR_Skeleton_Pose handPose, SteamVR_Skeleton_Pose glovePose = null)
+        public void SetPoses(string handPoseName, string glovePoseName = null)
         {
-            _handHoldPose = handPose;
-            _gloveHoldPose = glovePose ?? handPose;
+            _handHoldPose = AssetLoader.Poses[handPoseName];
+            _gloveHoldPose = glovePoseName != null ? AssetLoader.Poses[glovePoseName] : _handHoldPose;
         }
 
-        public void SetBlendPoses(SteamVR_Skeleton_Pose handBlendedPose, SteamVR_Skeleton_Pose gloveBlendedPose = null, float blendSpeed = 0f)
+        public void SetBlendPoses(string handBlendedPoseName, string gloveBlendedPoseName = null, float blendSpeed = 0f)
         {
             _blendSpeed = blendSpeed;
-            _handBlendedPose = handBlendedPose;
-            _gloveBlendedPose = gloveBlendedPose ?? handBlendedPose;
+            _handBlendedPose = AssetLoader.Poses[handBlendedPoseName];
+            _gloveBlendedPose = gloveBlendedPoseName != null ? AssetLoader.Poses[gloveBlendedPoseName] : _handBlendedPose;
         }
 
         public void SetActiveObserver(IActiveObserver observer)

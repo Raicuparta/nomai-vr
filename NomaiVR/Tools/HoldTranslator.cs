@@ -56,7 +56,7 @@ namespace NomaiVR
             {
                 var holdTranslator = translator.gameObject.AddComponent<Holdable>();
                 holdTranslator.SetPositionOffset(new Vector3(-0.2019f, 0.1323f, 0.0451f), new Vector3(-0.209f, 0.1396f, 0.0451f));
-                holdTranslator.SetPoses(AssetLoader.Poses["grabbing_translator"], AssetLoader.Poses["grabbing_translator_gloves"]);
+                holdTranslator.SetPoses("grabbing_translator", "grabbing_translator_gloves");
                 holdTranslator.CanFlipX = true;
                 return holdTranslator;
             }
