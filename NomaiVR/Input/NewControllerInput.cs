@@ -7,7 +7,7 @@ using Valve.VR;
 
 namespace NomaiVR.Input
 {
-    internal class NewControllerInput: NomaiVRModule<NomaiVRModule.EmptyBehaviour, NewControllerInput.Patch>
+    internal class NewControllerInput : NomaiVRModule<NomaiVRModule.EmptyBehaviour, NewControllerInput.Patch>
     {
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => TitleScene;
@@ -18,8 +18,8 @@ namespace NomaiVR.Input
         {
             simulatedBoolInputs[(int)commandType] = true;
         }
-        
-        public class Patch: NomaiVRPatch
+
+        public class Patch : NomaiVRPatch
         {
             public override void ApplyPatches()
             {
@@ -27,26 +27,43 @@ namespace NomaiVR.Input
                 Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.UpdateFromAction), nameof(PatchAxisInput));
                 Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
                 Postfix<CompositeInputCommands>(nameof(CompositeInputCommands.UpdateFromAction), nameof(PatchCompositeInput));
+
+                VRToolSwapper.Equipped += OnToolEquipped;
+                VRToolSwapper.UnEquipped += OnToolUnequipped;
             }
-            
+
+            private void OnToolUnequipped()
+            {
+                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
+                SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
+            }
+
+            private void OnToolEquipped()
+            {
+                if (VRToolSwapper.InteractingHand != null)
+                {
+                    SteamVR_Actions.tools.Activate(VRToolSwapper.InteractingHand.isLeft ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand, 1);
+                }
+            }
+
             private static Vector2 AxisValue(bool value)
             {
-               return new Vector2(value ? 1f : 0f, 0f);
+                return new Vector2(value ? 1f : 0f, 0f);
             }
-            
+
             private static Vector2 AxisValue(float value)
             {
-               return new Vector2(value, 0f);
+                return new Vector2(value, 0f);
             }
 
             private static Vector2 AxisValue(ISteamVR_Action_Boolean action)
             {
-               return AxisValue(action.state);
+                return AxisValue(action.state);
             }
 
             private static Vector2 AxisValue(ISteamVR_Action_Single action)
             {
-               return new Vector2(action.axis, 0f);
+                return new Vector2(action.axis, 0f);
             }
 
             private static void PatchCompositeInput(CompositeInputCommands __instance)
@@ -77,15 +94,16 @@ namespace NomaiVR.Input
             private static void Command(AbstractCommands __instance)
             {
                 var commandType = __instance.CommandType;
-                var commandTypeKey = (int) commandType;
+                var commandTypeKey = (int)commandType;
                 if (simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey])
                 {
                     __instance.AxisValue = AxisValue(true);
-                    simulatedBoolInputs[(int) commandType] = false;
+                    simulatedBoolInputs[(int)commandType] = false;
                     return;
                 }
-                
+
                 var actions = SteamVR_Actions._default;
+                var tools = SteamVR_Actions.tools;
                 switch (commandType)
                 {
                     case InputConsts.InputCommandType.JUMP:
@@ -97,10 +115,16 @@ namespace NomaiVR.Input
                         __instance.AxisValue = AxisValue(actions.UISelect);
                         break;
                     case InputConsts.InputCommandType.UP:
-                        __instance.AxisValue = actions.Move.axis;
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(actions.Move.axis.y, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.DOWN:
-                        __instance.AxisValue = -actions.Move.axis;
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(-actions.Move.axis.y, 0f, 1f));
+                        break;
+                    case InputConsts.InputCommandType.RIGHT:
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(actions.Look.axis.x, 0f, 1f));
+                        break;
+                    case InputConsts.InputCommandType.LEFT:
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(-actions.Look.axis.x, 0f, 1f));
                         break;
                     case InputConsts.InputCommandType.MAP:
                         __instance.AxisValue = AxisValue(actions.Map);
@@ -115,11 +139,9 @@ namespace NomaiVR.Input
                         break;
                     case InputConsts.InputCommandType.INTERACT:
                     case InputConsts.InputCommandType.LOCKON:
-                    case InputConsts.InputCommandType.PROBELAUNCH:
-                    case InputConsts.InputCommandType.PROBERETRIEVE:
-                    case InputConsts.InputCommandType.SCOPEVIEW:
-                    case InputConsts.InputCommandType.TOOL_PRIMARY:
-                        __instance.AxisValue = AxisValue(actions.Interact);
+                        __instance.AxisValue = AxisValue(!SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
+                                                      && !SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand)
+                                                      && actions.Interact.state);
                         break;
                     case InputConsts.InputCommandType.LOOK:
                         __instance.AxisValue = actions.Look.axis;
@@ -132,7 +154,7 @@ namespace NomaiVR.Input
                         break;
                     case InputConsts.InputCommandType.MOVE_XZ:
                         __instance.AxisValue = actions.Move.axis;
-                        break; 
+                        break;
                     case InputConsts.InputCommandType.MOVE_X:
                         __instance.AxisValue = actions.Move.axis;
                         break;
@@ -150,6 +172,24 @@ namespace NomaiVR.Input
                         break;
                     case InputConsts.InputCommandType.AUTOPILOT:
                         __instance.AxisValue = AxisValue(actions.Autopilot);
+                        break;
+                    case InputConsts.InputCommandType.PROBELAUNCH:
+                    case InputConsts.InputCommandType.PROBERETRIEVE:
+                    case InputConsts.InputCommandType.SCOPEVIEW:
+                    case InputConsts.InputCommandType.TOOL_PRIMARY:
+                        __instance.AxisValue = AxisValue(tools.Use.GetState(SteamVR_Input_Sources.LeftHand) || tools.Use.GetState(SteamVR_Input_Sources.RightHand));
+                        break;
+                    case InputConsts.InputCommandType.TOOL_UP:
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(tools.DPad.axis.y, 0f, 1f));
+                        break;
+                    case InputConsts.InputCommandType.TOOL_DOWN:
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(-tools.DPad.axis.y, 0f, 1f));
+                        break;
+                    case InputConsts.InputCommandType.TOOL_RIGHT:
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(tools.DPad.axis.x, 0f, 1f));
+                        break;
+                    case InputConsts.InputCommandType.TOOL_LEFT:
+                        __instance.AxisValue = AxisValue(Mathf.Clamp(-tools.DPad.axis.x, 0f, 1f));
                         break;
                 }
             }
