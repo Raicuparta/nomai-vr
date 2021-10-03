@@ -185,12 +185,12 @@ MonoBehaviour:
   poseEditorExpanded: 1
   blendEditorExpanded: 1
   poseNames:
-  - free (MAIN)
+  - '[not set]'
   overridePreviewLeftHandPrefab: {fileID: 3898887254349111745, guid: 6f808b50dc490744980f6d2954782cbf,
     type: 3}
   overridePreviewRightHandPrefab: {fileID: 3898887254349111745, guid: 6f808b50dc490744980f6d2954782cbf,
     type: 3}
-  skeletonMainPose: {fileID: 11400000, guid: 32c9d3c9d8c670148a03dfa9f902e237, type: 2}
+  skeletonMainPose: {fileID: 0}
   skeletonAdditionalPoses: []
   showLeftPreview: 0
   showRightPreview: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   previewRightInstance: {fileID: 0}
   previewPoseSelection: 0
   blendingBehaviours: []
-  scale: 1
+  scale: 10
 --- !u!1 &479701995
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,8 +397,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1604342034}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000015978734, y: -0.0000031924487, z: -0.00006257087}
+  m_LocalRotation: {x: 0.37929636, y: -0.0551466, z: 0.07860814, w: 0.92027926}
+  m_LocalPosition: {x: 0.034037676, y: 0.03650266, z: -0.16472164}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1661844231097484695}
@@ -691,7 +691,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1664500168086902123
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,7 +851,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1664930890470896805
 GameObject:
   m_ObjectHideFlags: 0
