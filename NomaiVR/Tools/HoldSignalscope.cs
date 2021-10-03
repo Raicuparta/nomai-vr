@@ -156,7 +156,7 @@ namespace NomaiVR
 
             private void UpdateSignalscipeZoom()
             {
-                if (OWInput.IsNewlyPressed(InputLibrary.signalscope, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
+                if (OWInput.IsNewlyPressed(InputLibrary.toolActionPrimary, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
 
@@ -169,10 +169,10 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<OWInput>("ChangeInputMode", nameof(ChangeInputMode));
-                    Postfix<QuantumInstrument>("Update", nameof(PostQuantumInstrumentUpdate));
-                    Empty<Signalscope>("EnterSignalscopeZoom");
-                    Empty<Signalscope>("ExitSignalscopeZoom");
+                    Prefix<OWInput>(nameof(OWInput.ChangeInputMode), nameof(ChangeInputMode));
+                    Postfix<QuantumInstrument>(nameof(QuantumInstrument.Update), nameof(PostQuantumInstrumentUpdate));
+                    Empty<Signalscope>(nameof(Signalscope.EnterSignalscopeZoom));
+                    Empty<Signalscope>(nameof(Signalscope.ExitSignalscopeZoom));
                 }
 
                 private static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)
