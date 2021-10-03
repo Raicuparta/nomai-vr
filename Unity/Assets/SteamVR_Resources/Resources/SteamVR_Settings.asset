@@ -28,5 +28,7 @@ MonoBehaviour:
     needsReinit: 1
   mixedRealityCameraInputSource: 11
   mixedRealityActionSetAutoEnable: 1
-  previewHandLeft: {fileID: 0}
-  previewHandRight: {fileID: 0}
+  previewHandLeft: {fileID: 3898887254349111745, guid: 6f808b50dc490744980f6d2954782cbf,
+    type: 3}
+  previewHandRight: {fileID: 3898887254349111745, guid: 6f808b50dc490744980f6d2954782cbf,
+    type: 3}
