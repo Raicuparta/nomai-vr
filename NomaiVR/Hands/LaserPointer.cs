@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -16,17 +18,17 @@ namespace NomaiVR
             public static Transform OffHandLaser;
             public static Transform MovementLaser;
             public FirstPersonManipulator Manipulator => _manipulator;
+            
 
             private static FirstPersonManipulator _manipulator;
             private LineRenderer _lineRenderer;
             private const float _gameLineLength = 0.5f;
-            private const float _menuLineLength = 2f;
-            private TabButton[] _tabButtons;
-            private bool _isReady;
-            private Transform _prevRayHit;
-            private DialogueBoxVer2 _dialogueBox;
-            private PauseMenuManager _pauseMenuManager;
+            private const float _menuLineLength = 3f;
             private bool _rightMainHand;
+            private bool _isReady;
+            private OWMenuInputModule _inputModule;
+            private DialogueBoxVer2 _dialogueBox;
+            private PointerModelExposed _fakePointer;
 
             internal void Start()
             {
@@ -41,8 +43,7 @@ namespace NomaiVR
                 if (SceneHelper.IsInGame())
                 {
                     SetUpFirstPersonManipulator();
-                    SetUpDialogueOptions();
-                    _pauseMenuManager = FindObjectOfType<PauseMenuManager>();
+                    _dialogueBox = FindObjectOfType<DialogueBoxVer2>();
                 }
 
                 if (SceneHelper.IsInTitle())
@@ -53,7 +54,11 @@ namespace NomaiVR
                 ModSettings.OnConfigChange += ToDominantHand;
                 VRToolSwapper.Equipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += ToDominantHand;
-                // ControllerInput.Behaviour.BindingsChanged += UpdateMovementLaser;
+                //FIXME: Change movement to movement hand
+                //ControllerInput.Behaviour.BindingsChanged += UpdateMovementLaser;
+
+                _fakePointer = new PointerModelExposed(new ExtendedPointerEventData(EventSystem.current));
+                _inputModule = FindObjectOfType<OWMenuInputModule>();
             }
 
             internal void OnDestroy()
@@ -61,18 +66,31 @@ namespace NomaiVR
                 ModSettings.OnConfigChange -= ToDominantHand;
                 VRToolSwapper.Equipped -= OnToolEquipped;
                 VRToolSwapper.UnEquipped -= ToDominantHand;
-                // ControllerInput.Behaviour.BindingsChanged -= UpdateMovementLaser;
+                //ControllerInput.Behaviour.BindingsChanged -= UpdateMovementLaser;
             }
 
             internal void Update()
             {
                 UpdateLineVisibility();
                 UpdateLineAppearance();
-                UpdateUiRayCast();
 
-                if (IsSelectNewlyPressed())
+                RaycastHit raycast = DoUIRaycast(_menuLineLength);
+
+                if (raycast.transform != null)
                 {
-                    HandleTransformClick(_prevRayHit);
+                    SetLineLength(raycast.distance);
+
+                    var dialogueOption = raycast.transform.GetComponent<DialogueOptionUI>();
+                    if (dialogueOption != null)
+                    {
+                        HandleDialogueOptionHit(dialogueOption);
+                    }
+
+                    //Send fake events
+                    _fakePointer.screenPosition = Camera.main.WorldToScreenPoint(raycast.point);
+                    _fakePointer.leftButton.isPressed = SteamVR_Actions._default.UISelect.stateDown;
+                    _fakePointer.changedThisFrame = SteamVR_Actions._default.UISelect.stateDown;
+                    _inputModule.ProcessPointer(ref _fakePointer);
                 }
             }
 
@@ -90,6 +108,7 @@ namespace NomaiVR
                 OffHandLaser.localPosition = new Vector3(0f, -0.05f, 0.01f);
                 OffHandLaser.localRotation = Quaternion.Euler(45f, 0, 0);
             }
+
             private void SetUpLineRenderer()
             {
                 _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
@@ -106,11 +125,6 @@ namespace NomaiVR
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
                 _isReady = true;
-            }
-
-            private void SetUpDialogueOptions()
-            {
-                _dialogueBox = FindObjectOfType<DialogueBoxVer2>();
             }
 
             private void SetUpTitleAnimationHandler()
@@ -143,208 +157,6 @@ namespace NomaiVR
                     ToDominantHand();
             }
 
-            private void CreateButtonColliders()
-            {
-                _tabButtons = Resources.FindObjectsOfTypeAll<TabButton>();
-
-                var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
-                foreach (var selectable in selectables)
-                {
-                    var tooltipSelectable = selectable.GetComponent<TooltipDisplay>();
-                    if (tooltipSelectable != null)
-                    {
-                        // Move children to avoid ray z-fighting;
-                        foreach (Transform child in selectable.transform)
-                        {
-                            child.localPosition += Vector3.forward;
-                        }
-                    }
-                    var collider = selectable.gameObject.AddComponent<BoxCollider>();
-                    var rectTransform = selectable.GetComponent<RectTransform>();
-                    var thickness = 10f;
-                    var height = Math.Max(60f, rectTransform.rect.height);
-                    var width = Math.Max(60f, rectTransform.rect.width);
-                    collider.size = new Vector3(width, height, thickness);
-                    collider.center = new Vector3(0, 0, thickness * 0.5f);
-                }
-            }
-
-            private static bool IsSelectNewlyPressed()
-            {
-                return OWInput.IsNewlyPressed(InputLibrary.menuConfirm);
-            }
-
-            private void HandleSelectableRayHit(Selectable selectable)
-            {
-                var tab = selectable.transform.GetComponent<TabButton>();
-                if (tab == null)
-                {
-                    selectable.Select();
-                }
-                else
-                {
-                    DeselectAllTabs();
-                    tab.OnPointerEnter(null);
-                }
-            }
-
-            private static void HandleOptionsSelectorClick(OptionsSelectorElement optionsSelector)
-            {
-                optionsSelector.OnArrowSelectableOnRightClick();
-                optionsSelector.OnArrowSelectableOnDownClick();
-            }
-
-            private static void HandleTwoButtonToggleClick(TwoButtonToggleElement twoButtonToggle)
-            {
-                twoButtonToggle.Toggle();
-                twoButtonToggle.UpdateToggleColors();
-            }
-
-            private static void HandleSliderClick(Slider slider)
-            {
-                if (slider.value < slider.maxValue)
-                {
-                    slider.value += 1;
-                }
-                else
-                {
-                    slider.value = slider.minValue;
-                }
-            }
-
-            private static void HandleButtonBlick(Button button)
-            {
-                button.onClick.Invoke();
-            }
-
-            private static void HandleSelectableClick(Selectable selectable)
-            {
-                var optionsSelector = selectable.GetComponent<OptionsSelectorElement>();
-                if (optionsSelector != null)
-                {
-                    HandleOptionsSelectorClick(optionsSelector);
-                    return;
-                }
-
-                var twoButtonToggle = selectable.GetComponent<TwoButtonToggleElement>();
-                if (twoButtonToggle != null)
-                {
-                    HandleTwoButtonToggleClick(twoButtonToggle);
-                    return;
-                }
-
-                var slider = selectable.GetComponentInChildren<Slider>();
-                if (slider != null)
-                {
-                    HandleSliderClick(slider);
-                    return;
-                }
-
-                var button = selectable.GetComponent<Button>();
-                if (button != null)
-                {
-                    HandleButtonBlick(button);
-                    return;
-                }
-            }
-
-            private static void HandleTabClick(TabButton tab)
-            {
-                tab.OnSelect(null);
-            }
-
-            private void HandleTransformClick(Transform clickTransform)
-            {
-                if (clickTransform == null || !clickTransform.gameObject.activeInHierarchy)
-                {
-                    return;
-                }
-                var selectable = clickTransform.GetComponent<Selectable>();
-                if (selectable == null)
-                {
-                    return;
-                }
-                var tab = selectable.transform.GetComponent<TabButton>();
-                if (tab == null)
-                {
-                    HandleSelectableClick(selectable);
-                }
-                else
-                {
-                    HandleTabClick(tab);
-                }
-                return;
-            }
-
-            private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
-            {
-                if (_dialogueBox._revealingOptions)
-                {
-                    return;
-                }
-                var selectedOption = _dialogueBox.GetSelectedOption();
-                var options = _dialogueBox._optionsUIElements;
-                options[selectedOption].SetSelected(false);
-                _dialogueBox._selectedOption = options.IndexOf(dialogueOption);
-                dialogueOption.SetSelected(true);
-            }
-
-            private void DeselectAllTabs()
-            {
-                foreach (var tabButton in _tabButtons)
-                {
-                    tabButton.OnPointerExit(null);
-                }
-            }
-
-            private bool HandleTransformHit(Transform hitTransform)
-            {
-                if (hitTransform == null)
-                {
-                    return false;
-                }
-                var selectable = hitTransform.GetComponent<Selectable>();
-                if (selectable != null)
-                {
-                    HandleSelectableRayHit(selectable);
-                    return true;
-                }
-                var dialogueOption = hitTransform.GetComponent<DialogueOptionUI>();
-                if (dialogueOption != null)
-                {
-                    HandleDialogueOptionHit(dialogueOption);
-                    return true;
-                }
-                return false;
-            }
-
-            private void UpdateUiRayCast()
-            {
-                if (!_isReady || !InputHelper.IsUIInteractionMode(true) || LoadManager.IsBusy())
-                {
-                    return;
-                }
-
-                if (Physics.Raycast(Laser.position, Laser.forward, out var hit, _menuLineLength, LayerMask.GetMask("UI")))
-                {
-                    SetLineLength(hit.distance);
-                    if (hit.transform == _prevRayHit && !IsSelectNewlyPressed())
-                    {
-                        return;
-                    }
-                    _prevRayHit = hit.transform;
-
-                    if (HandleTransformHit(hit.transform))
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    DeselectAllTabs();
-                }
-            }
-
             private void SetLineLength(float length)
             {
                 _lineRenderer.SetPosition(1, Vector3.forward * length);
@@ -373,7 +185,7 @@ namespace NomaiVR
                 {
                     _lineRenderer.enabled = false;
                 }
-                else if(!_lineRenderer.enabled && InputHelper.IsUIInteractionMode(true))
+                else if (!_lineRenderer.enabled && InputHelper.IsUIInteractionMode(true))
                 {
                     _lineRenderer.enabled = true;
                 }
@@ -383,9 +195,69 @@ namespace NomaiVR
                 }
             }
 
-            private bool IsPaused()
+            public RaycastHit DoUIRaycast(float distance)
             {
-                return _pauseMenuManager != null && _pauseMenuManager.IsOpen();
+                if (!_isReady || !InputHelper.IsUIInteractionMode(true) || LoadManager.IsBusy())
+                {
+                    return default;
+                }
+
+                Physics.Raycast(Laser.position, Laser.forward, out var hit, distance, LayerMask.GetMask("UI"));
+
+                return hit;
+            }
+
+            private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
+            {
+                if (_dialogueBox._revealingOptions)
+                {
+                    return;
+                }
+                var selectedOption = _dialogueBox.GetSelectedOption();
+                var options = _dialogueBox._optionsUIElements;
+                options[selectedOption].SetSelected(false);
+                _dialogueBox._selectedOption = options.IndexOf(dialogueOption);
+                dialogueOption.SetSelected(true);
+            }
+
+            private void CreateButtonColliders()
+            {
+                var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
+                foreach (var selectable in selectables)
+                {
+                    if (selectable.targetGraphic != null &&
+                       selectable.targetGraphic.canvas != null)
+                    {
+                        SetupInteractableCanvasCollider(selectable.targetGraphic.canvas);
+                    }
+                }
+
+                var shipLogCanvas = FindObjectOfType<ShipLogController>()?._shipLogCanvas;
+                if(shipLogCanvas != null)
+                {
+                    shipLogCanvas.worldCamera = Camera.main;
+                    var shipLogCanvasInteractor = new GameObject("ShipLogCanvasInteractor").transform;
+                    shipLogCanvasInteractor.SetParent(shipLogCanvas.transform, false);
+                    shipLogCanvasInteractor.localPosition = Vector3.zero;
+                    shipLogCanvasInteractor.localRotation = Quaternion.identity;
+                    SetupInteractableCanvasCollider(shipLogCanvas, shipLogCanvasInteractor.gameObject);
+                }
+            }
+
+            private void SetupInteractableCanvasCollider(Canvas canvas, GameObject proxy = null)
+            {
+                if (proxy == null) proxy = canvas.gameObject;
+                var collider = proxy.GetComponent<BoxCollider>();
+                if(collider == null)
+                {
+                    var rectTransform = canvas.GetComponent<RectTransform>();
+                    var thickness = 0.1f;
+                    collider = proxy.gameObject.AddComponent<BoxCollider>();
+                    collider.size = rectTransform.sizeDelta;
+                    collider.center = new Vector3(0, 0, thickness * 0.5f);
+                    proxy.layer = LayerMask.NameToLayer("UI");
+                    canvas.worldCamera = Camera.main;
+                }
             }
 
             public class Patch : NomaiVRPatch
@@ -396,11 +268,11 @@ namespace NomaiVR
                 {
                     //FIXME still needed?
                     //Prefix<InteractZone>("UpdateInteractVolume", nameof(PreUpdateInteractVolume));
-                    Prefix<InteractZone>("OnEntry", nameof(PreInteractZoneEntry));
-                    Prefix<InteractZone>("OnExit", nameof(PreInteractZoneExit));
-                    Prefix<ToolModeSwapper>("Update", nameof(PreToolModeUpdate));
-                    Prefix<ItemTool>("UpdateIsDroppable", nameof(PreUpdateIsDroppable));
-                    Postfix<ItemTool>("UpdateIsDroppable", nameof(PostUpdateIsDroppable));
+                    Prefix<InteractZone>(nameof(InteractZone.OnEntry), nameof(PreInteractZoneEntry));
+                    Prefix<InteractZone>(nameof(InteractZone.OnExit), nameof(PreInteractZoneExit));
+                    Prefix<ToolModeSwapper>(nameof(ToolModeSwapper.Update), nameof(PreToolModeUpdate));
+                    Prefix<ItemTool>(nameof(ItemTool.UpdateIsDroppable), nameof(PreUpdateIsDroppable));
+                    Postfix<ItemTool>(nameof(ItemTool.UpdateIsDroppable), nameof(PostUpdateIsDroppable));
 
                     pointerUpdateInteractVolume = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume").MethodHandle.GetFunctionPointer();
                 }

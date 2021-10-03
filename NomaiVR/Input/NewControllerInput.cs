@@ -83,12 +83,9 @@ namespace NomaiVR.Input
                 {
                     case InputCommandType.JUMP:
                     case InputCommandType.BOOST:
+                    case InputCommandType.SWAP_SHIP_LOG_MODE:
                     case InputCommandType.MATCH_VELOCITY:
                         __instance.AxisValue = AxisValue(defaultActions.Jump);
-                        break;
-                    case InputCommandType.ENTER:
-                    case InputCommandType.SELECT:
-                        __instance.AxisValue = AxisValue(defaultActions.UISelect);
                         break;
                     case InputCommandType.UP:
                         __instance.AxisValue = AxisValue(defaultActions.UIDpad.axis.y, true);
@@ -127,8 +124,10 @@ namespace NomaiVR.Input
                     case InputCommandType.CANCEL:
                         __instance.AxisValue = AxisValue(defaultActions.Back);
                         break;
+                    case InputCommandType.SELECT:
                     case InputCommandType.INTERACT:
                     case InputCommandType.LOCKON:
+                    case InputCommandType.ENTER:
                         __instance.AxisValue = AxisValue(!ToolsActive && defaultActions.Interact.state);
                         break;
                     case InputCommandType.LOOK:
