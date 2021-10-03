@@ -83,7 +83,8 @@ namespace NomaiVR.Input
                 {
                     case InputCommandType.JUMP:
                     case InputCommandType.BOOST:
-                    case InputCommandType.SWAP_SHIP_LOG_MODE:
+                    case InputCommandType.SWAP_SHIP_LOG_MODE: //This isn't used actually
+                    case InputCommandType.INTERACT_SECONDARY: //TODO: Maybe press-hold interact primary?
                     case InputCommandType.MATCH_VELOCITY:
                         __instance.AxisValue = AxisValue(defaultActions.Jump);
                         break;
