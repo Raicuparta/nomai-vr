@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
@@ -39,6 +41,31 @@ namespace NomaiVR
             foreach (var graphic in graphics)
             {
                 MakeGraphicDrawOnTop(graphic);
+            }
+        }
+
+        public static void ReplaceShadersInChildren(GameObject parent, Dictionary<Shader, Shader> shaderMap)
+        {
+            var renderers = parent.GetComponentsInChildren<Renderer>(true);
+            foreach (var renderer in renderers)
+            {
+                foreach(var mat in renderer.materials)
+                {
+                    if (shaderMap.ContainsKey(mat.shader))
+                        mat.shader = shaderMap[mat.shader];
+                }
+            }
+        }
+
+        public static void DisableRenderersWithShaderInChildren(GameObject parent, Shader shader)
+        {
+            var renderers = parent.GetComponentsInChildren<Renderer>(true);
+            foreach (var renderer in renderers)
+            {
+                if(renderer.materials.Any(m => m.shader == shader))
+                {
+                    renderer.gameObject.SetActive(false);
+                }
             }
         }
     }

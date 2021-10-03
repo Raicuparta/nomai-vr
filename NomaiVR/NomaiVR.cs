@@ -38,6 +38,7 @@ namespace NomaiVR
             new ShadowsFix();
             new LoopTransitionFix();
             new VisorEffectsFix();
+            new DreamLanternFix();
             new ProjectionStoneCameraFix();
             new CameraMaskFix();
             new MapFix();
