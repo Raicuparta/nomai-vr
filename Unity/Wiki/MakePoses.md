@@ -60,7 +60,8 @@ holdSignalscope.SetRotationOffset(Quaternion.Euler(50, 3, 3));
 holdSignalscope.SetPositionOffset(new Vector3(1,2,1), new Vector3(0,0,1));
 ```
 
-Will have a *{Name}* node like this
+Will have a *{Name}* node like this:
+
 ![Signalscope example](img/poses/signalscope_position.png)
 
 Items will have a name ending with *Socket* and they mostly have the same Scale and Position (just copy it from the other already available). Some items require to look at their scale in the game though (like the VesselSocket) to do this UnityExplorer is needed.
@@ -90,7 +91,7 @@ holdSignalscope.SetPositionOffset(new Vector3(1,2,1), new Vector3(0,0,1));
 
 ## Make Pose
 
-![Signalscope pose](img/poses/signalscope_pose.png)
+![Signalscope pose](img/poses/signalscope_pose.PNG)
 
 To make a pose just select the *PoseSetup* object in the scene and in the inspector in the SteamVR_Pose_Editor create a new pose.
 
@@ -106,6 +107,6 @@ When done save the pose as mentioned in the **PoseSetup** section.
 
 When a pose is saved as an asset, to export it to the mod's folder. Right click on the generated asset, then "*JSON->To JSON*".
 
-![Export example](img/poses/export_example.png)
+![Export example](img/poses/export_example.PNG)
 
 Save the file to */NomaiVR/Hands/Poses* and you should be able to use the pose in the mod.
