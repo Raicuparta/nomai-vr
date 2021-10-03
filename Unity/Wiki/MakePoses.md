@@ -17,7 +17,7 @@ The generic steps to make a pose are
 
 ## Tool/Item extraction
 
-You can exctrat prefabs from the game with commonly used extraction tools from the game. In order to have an easier time, be sure that the prefab you extract has the same hierarchy which it will have when parented to the hand in the mod.
+You can extract prefabs from the game with commonly used extraction tools from the game. In order to have an easier time, be sure that the prefab you extract has the same hierarchy which it will have when parented to the hand in the mod.
 
 Generally, though, models for items are expected to be centered with their origin in the origin of the prefab and no additional rotations, since most of the movements will be done in the playground hierarchy (documented later).
 
@@ -35,7 +35,7 @@ This is the object where the SteamVR_Skeleton_Poser is placed, this will be used
 
 The features that we'll use are the right hand preview (left hand preview hasn't been setup in the project) and the basic functionalities of the pose editor, everything else (Fallbacks, Blenders, etc.) will be ignored.
 
-Only bone rotations for the Thumb, Index and Ring fingers are stored and used in the mod. Save old the poses to *Assets/Poses/* and remember to copy the right pose to the left one before saving. The naming scheme for the poses is *{posename_glove/hand}*, if a pose is good for both gloves and hands omit the last part. Poses are assigned to objects in their respective NomaiVR/Tools/{HoldItem/HoldSignalscope/...} classes.
+Only bone rotations for the Thumb, Index and Ring fingers are stored and used in the mod. Save all the poses to *Assets/Poses/* and remember to copy the right pose to the left one before saving. The naming scheme for the poses is *{posename_glove/hand}*, if a pose is good for both gloves and hands omit the last part. Poses are assigned to objects in their respective NomaiVR/Tools/{HoldItem/HoldSignalscope/...} classes.
 
 ### WristFollower/HoldPoint
 
@@ -60,7 +60,8 @@ holdSignalscope.SetRotationOffset(Quaternion.Euler(50, 3, 3));
 holdSignalscope.SetPositionOffset(new Vector3(1,2,1), new Vector3(0,0,1));
 ```
 
-Will have a *{Name}* node like this
+Will have a *{Name}* node like this:
+
 ![Signalscope example](img/poses/signalscope_position.png)
 
 Items will have a name ending with *Socket* and they mostly have the same Scale and Position (just copy it from the other already available). Some items require to look at their scale in the game though (like the VesselSocket) to do this UnityExplorer is needed.
@@ -90,7 +91,7 @@ holdSignalscope.SetPositionOffset(new Vector3(1,2,1), new Vector3(0,0,1));
 
 ## Make Pose
 
-![Signalscope pose](img/poses/signalscope_pose.png)
+![Signalscope pose](img/poses/signalscope_pose.PNG)
 
 To make a pose just select the *PoseSetup* object in the scene and in the inspector in the SteamVR_Pose_Editor create a new pose.
 
@@ -106,6 +107,6 @@ When done save the pose as mentioned in the **PoseSetup** section.
 
 When a pose is saved as an asset, to export it to the mod's folder. Right click on the generated asset, then "*JSON->To JSON*".
 
-![Export example](img/poses/export_example.png)
+![Export example](img/poses/export_example.PNG)
 
 Save the file to */NomaiVR/Hands/Poses* and you should be able to use the pose in the mod.
