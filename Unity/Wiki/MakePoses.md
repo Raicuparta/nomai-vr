@@ -17,7 +17,7 @@ The generic steps to make a pose are
 
 ## Tool/Item extraction
 
-You can exctrat prefabs from the game with commonly used extraction tools from the game. In order to have an easier time, be sure that the prefab you extract has the same hierarchy which it will have when parented to the hand in the mod.
+You can extract prefabs from the game with commonly used extraction tools from the game. In order to have an easier time, be sure that the prefab you extract has the same hierarchy which it will have when parented to the hand in the mod.
 
 Generally, though, models for items are expected to be centered with their origin in the origin of the prefab and no additional rotations, since most of the movements will be done in the playground hierarchy (documented later).
 
@@ -35,7 +35,7 @@ This is the object where the SteamVR_Skeleton_Poser is placed, this will be used
 
 The features that we'll use are the right hand preview (left hand preview hasn't been setup in the project) and the basic functionalities of the pose editor, everything else (Fallbacks, Blenders, etc.) will be ignored.
 
-Only bone rotations for the Thumb, Index and Ring fingers are stored and used in the mod. Save old the poses to *Assets/Poses/* and remember to copy the right pose to the left one before saving. The naming scheme for the poses is *{posename_glove/hand}*, if a pose is good for both gloves and hands omit the last part. Poses are assigned to objects in their respective NomaiVR/Tools/{HoldItem/HoldSignalscope/...} classes.
+Only bone rotations for the Thumb, Index and Ring fingers are stored and used in the mod. Save all the poses to *Assets/Poses/* and remember to copy the right pose to the left one before saving. The naming scheme for the poses is *{posename_glove/hand}*, if a pose is good for both gloves and hands omit the last part. Poses are assigned to objects in their respective NomaiVR/Tools/{HoldItem/HoldSignalscope/...} classes.
 
 ### WristFollower/HoldPoint
 
