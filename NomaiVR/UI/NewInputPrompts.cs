@@ -79,7 +79,7 @@ namespace NomaiVR.UI
                 }
 
                 Logs.Write($"Controller platform: {Platform}");
-                if (currentPlatform != Platform) Manager.OnButtonImagesChanged();
+                if (currentPlatform != Platform) Manager?.OnButtonImagesChanged();
             }
 
             public Texture2D GetTexture(string path)
