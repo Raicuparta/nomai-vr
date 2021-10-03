@@ -219,7 +219,9 @@ namespace NomaiVR
 
                 private static bool IsAnyInteractionFocused()
                 {
-                    return _probe.IsFocused() || _signalscope.IsFocused() || _landingCam.IsFocused();
+                    return (_probe != null && _probe.IsFocused()) || 
+                           (_signalscope != null && _signalscope.IsFocused()) || 
+                           (_landingCam != null && _landingCam.IsFocused());
                 }
 
                 private static bool PreUntargetFrame()
