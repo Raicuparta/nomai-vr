@@ -86,7 +86,7 @@ namespace NomaiVR.Input
 
             if (ToolHelper.HasUsableItem() && UsableItemMap.ContainsKey(commandType))
             {
-                return ToolsInputMap[commandType];
+                return UsableItemMap[commandType];
             }
 
             DefaultInputMap.TryGetValue(commandType, out var actionInput);

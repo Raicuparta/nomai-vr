@@ -50,13 +50,13 @@ namespace NomaiVR.Input.ActionInputs
             new BooleanActionInput(action: _default.StationaryUse);
 
         public static readonly Vector2ActionInput StationaryUp =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput StationaryDown =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput StationaryLeft =
-            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true);
+            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput StationaryRight =
             new Vector2ActionInput(action: tools.DPad, clamp: true);
@@ -68,16 +68,16 @@ namespace NomaiVR.Input.ActionInputs
             new SingleActionInput(action: _default.ThrustUp);
 
         public static readonly Vector2ActionInput Up =
-            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, clamp: true);
+            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput Down =
-            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, invert: true, clamp: true);
+            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput Left =
-            new Vector2ActionInput(action: _default.UIDpad, invert: true, clamp: true);
+            new Vector2ActionInput(action: _default.UIDpad, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput Right =
-            new Vector2ActionInput(action: _default.UIDpad, clamp: true);
+            new Vector2ActionInput(action: _default.UIDpad, clamp: true, yZero: true);
 
         public static readonly BooleanActionInput UISelect =
             new BooleanActionInput(action: _default.UISelect);
@@ -98,15 +98,15 @@ namespace NomaiVR.Input.ActionInputs
             new BooleanActionInput(action: tools.Use, eitherHand: true);
 
         public static readonly Vector2ActionInput ToolUp =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput ToolDown =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput ToolLeft =
-            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true);
+            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput ToolRight =
-            new Vector2ActionInput(action: tools.DPad, clamp: true);
+            new Vector2ActionInput(action: tools.DPad, clamp: true, yZero: true);
     }
 }
