@@ -12,8 +12,9 @@ namespace NomaiVR.Input
                 { InputCommandType.JUMP, ActionInputDefinitions.Jump },
                 { InputCommandType.BOOST, ActionInputDefinitions.Jump },
                 { InputCommandType.SWAP_SHIP_LOG_MODE, ActionInputDefinitions.Jump },  // This isn't used actually.
-                { InputCommandType.INTERACT_SECONDARY, ActionInputDefinitions.Jump }, // TODO: Maybe press-hold interact primary?
                 { InputCommandType.MATCH_VELOCITY, ActionInputDefinitions.Jump },
+                { InputCommandType.INTERACT_SECONDARY, ActionInputDefinitions.Grip }, // TODO: Temporary, need to find something better.
+                { InputCommandType.TOOL_SECONDARY, ActionInputDefinitions.Grip },
                 { InputCommandType.AUTOPILOT, ActionInputDefinitions.Autopilot },
                 { InputCommandType.ROLL_MODE, ActionInputDefinitions.RollMode },
                 { InputCommandType.UP, ActionInputDefinitions.Up },
@@ -65,6 +66,13 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_RIGHT, ActionInputDefinitions.ToolRight },
                 { InputCommandType.TOOL_LEFT, ActionInputDefinitions.ToolLeft },
                 { InputCommandType.INTERACT, ActionInputDefinitions.Empty },
+            };
+        
+        
+        public static readonly Dictionary<InputCommandType, IActionInput> UsableItemMap =
+            new Dictionary<InputCommandType, IActionInput>()
+            {
+                { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Back },
             };
     }
 }
