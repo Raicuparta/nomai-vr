@@ -34,11 +34,12 @@ namespace NomaiVR
 
                 AdjustPlayerHeadPosition();
                 SetupCamera();
-                CreateRecenterMenuEntry();
                 _playerBody = Locator.GetPlayerBody();
                 _playerAnimator = _playerBody.GetComponentInChildren<PlayerAnimController>()._animator;
                 _playerController = _playerBody.GetComponent<PlayerCharacterController>();
                 _autopilot = _playerBody.GetComponent<Autopilot>();
+
+                CreateRecenterMenuEntry();
             }
 
             private static void AdjustPlayerHeadPosition()
@@ -72,9 +73,7 @@ namespace NomaiVR
 
             private void CreateRecenterMenuEntry()
             {
-                // TODO Menu Buttons
-                // var button = NomaiVR.Helper.Menus.PauseMenu.OptionsButton.Duplicate("RESET VR POSITION");
-                // button.OnClick += MoveCameraToPlayerHead;
+                FindObjectOfType<PauseMenuManager>().AddPauseMenuAction("RECENTER VR", 2, MoveCameraToPlayerHead);
             }
 
             private void UpdateRecenter()
