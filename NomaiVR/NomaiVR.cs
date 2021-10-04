@@ -59,6 +59,7 @@ namespace NomaiVR
             new HelmetHUD();
             //new InputPrompts();
             new NewInputPrompts();
+            new RemoveUnusedInputPrompts();
             new ControllerModels();
             new GesturePrompts();
             new PostCreditsFix();
