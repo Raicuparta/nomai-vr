@@ -59,7 +59,7 @@ namespace NomaiVR
                 SetupReticule(_reticule);
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.75f, 0));
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.15f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
                 SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.05f, 0));
@@ -78,7 +78,7 @@ namespace NomaiVR
             private static void SetupSignalscopeUI(Transform parent, Vector3 position)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                parent.parent = _signalscope.transform;
+                parent.SetParent(_signalscope.transform, false);
                 parent.localScale = Vector3.one * 0.0005f;
                 parent.localPosition = position;
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
