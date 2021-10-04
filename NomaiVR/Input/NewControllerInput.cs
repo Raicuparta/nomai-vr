@@ -84,9 +84,12 @@ namespace NomaiVR.Input
                     case InputCommandType.JUMP:
                     case InputCommandType.BOOST:
                     case InputCommandType.SWAP_SHIP_LOG_MODE: //This isn't used actually
-                    case InputCommandType.INTERACT_SECONDARY: //TODO: Maybe press-hold interact primary?
                     case InputCommandType.MATCH_VELOCITY:
                         __instance.AxisValue = AxisValue(defaultActions.Jump);
+                        break;
+                    case InputCommandType.INTERACT_SECONDARY:
+                    case InputCommandType.TOOL_SECONDARY:
+                        __instance.AxisValue = AxisValue(defaultActions.Grip); //TODO: Temporary, need to find something better
                         break;
                     case InputCommandType.UP:
                         __instance.AxisValue = AxisValue(defaultActions.UIDpad.axis.y, true);
@@ -165,8 +168,9 @@ namespace NomaiVR.Input
                     case InputCommandType.PROBERETRIEVE:
                     case InputCommandType.SCOPEVIEW:
                     case InputCommandType.TOOL_PRIMARY:
+                        //Some tools require that TOOL_PRIMARY and INTERACT need to be different, so right now we have to do this ToolHelper.HasUsableItem()
                         __instance.AxisValue = ToolsActive ? AxisValue(toolActions.Use.GetState(SteamVR_Input_Sources.LeftHand) || toolActions.Use.GetState(SteamVR_Input_Sources.RightHand)) :
-                                                             AxisValue(defaultActions.StationaryUse);
+                                                             AxisValue(ToolHelper.HasUsableItem() ? defaultActions.Back : defaultActions.StationaryUse);
                         break;
                     case InputCommandType.TOOL_UP:
                         __instance.AxisValue = ToolsActive ? AxisValue(toolActions.DPad.axis.y, true) :
