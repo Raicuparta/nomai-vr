@@ -5,9 +5,9 @@ namespace NomaiVR.Input.ActionInputs
 {
     public class Vector2ActionInput : ActionInput<SteamVR_Action_Vector2>
     {
-        private readonly bool yOnly;
-        private readonly bool invert;
         private readonly bool clamp;
+        private readonly bool invert;
+        private readonly bool yOnly;
 
         public Vector2ActionInput(bool yOnly = false, bool invert = false, bool clamp = false)
         {

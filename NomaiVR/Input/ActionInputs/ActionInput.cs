@@ -7,7 +7,7 @@ namespace NomaiVR.Input.ActionInputs
     {
         public TAction SpecificAction;
         public ISteamVR_Action Action => SpecificAction;
-            
+
         public abstract Vector2 Value { get; }
     }
 }
