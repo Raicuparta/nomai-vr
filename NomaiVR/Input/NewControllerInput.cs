@@ -57,27 +57,10 @@ namespace NomaiVR.Input
                     return;
                 }
 
-                if (ToolsActive && InputMap.ToolsInputMap.ContainsKey(commandType))
-                {
-                    __instance.AxisValue = InputMap.ToolsInputMap[commandType].Value;
-                    return;
-                }
-
-                if (ToolHelper.HasUsableItem() && InputMap.UsableItemMap.ContainsKey(commandType))
-                {
-                    __instance.AxisValue = InputMap.ToolsInputMap[commandType].Value;
-                    return;
-                }
-
-                if (InputMap.DefaultInputMap.ContainsKey(commandType))
-                {
-                    __instance.AxisValue = InputMap.DefaultInputMap[commandType].Value;
-                    return;
-                }
+                var actionInput = InputMap.GetActionInput(commandType);
+                if (actionInput == null) return;
+                __instance.AxisValue = actionInput.Value;
             }
-
-            private static bool ToolsActive => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
-                                            || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
 
             public static void DoRumble(float hiPower, float lowPower)
             {
