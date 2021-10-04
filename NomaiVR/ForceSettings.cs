@@ -46,6 +46,7 @@ namespace NomaiVR
 
                 PlayerPrefs.SetInt("Screenmanager Resolution Width", displayResWidth);
                 PlayerPrefs.SetInt("Screenmanager Resolution Height", displayResHeight);
+                QualitySettings.vSyncCount = 0;
                 Screen.SetResolution(displayResWidth, displayResHeight, fullScreen);
             }
 

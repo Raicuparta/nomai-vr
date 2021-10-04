@@ -1,4 +1,5 @@
-﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+﻿// CAUTION: This file has be altered to ensure that some things in the mod work, don't override when updating SteamVR
+//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using UnityEngine;
 using System.Collections;
@@ -131,6 +132,8 @@ namespace Valve.VR
 
         private static void SetDefaultsIfNeeded()
         {
+            //We add our settings from code
+            _instance.editorAppKey = "steam.app.753640";
             if (string.IsNullOrEmpty(_instance.editorAppKey))
             {
                 _instance.editorAppKey = SteamVR.GenerateAppKey();
