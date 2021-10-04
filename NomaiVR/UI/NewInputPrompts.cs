@@ -52,9 +52,9 @@ namespace NomaiVR.UI
             private void RegisterToControllerChanges()
             {
                 Logs.Write($"Registering for controller binding changes");
-                SteamVR_Actions._default.Interact.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => ActiveDeviceChanged(fromAction), SteamVR_Input_Sources.Any);
+                SteamVR_Actions._default.Grip.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => ActiveDeviceChanged(fromAction), SteamVR_Input_Sources.Any);
 
-                ActiveDeviceChanged(SteamVR_Actions._default.Interact);
+                ActiveDeviceChanged(SteamVR_Actions._default.Grip);
             }
 
             private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)

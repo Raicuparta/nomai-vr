@@ -86,13 +86,13 @@ namespace NomaiVR
                     return false;
                 }
 
-                private static bool Prefix_HeightmapAmbientLightRenderer_CalcFrustumCorners(PlanetaryFogRenderer __instance, ref Matrix4x4 __result)
+                private static bool Prefix_HeightmapAmbientLightRenderer_CalcFrustumCorners(HeightmapAmbientLightRenderer __instance, ref Matrix4x4 __result)
                 {
                     __result = FrustumCornersMatrix(__instance._owCamera.mainCamera, __instance._owCamera.mainCamera.stereoActiveEye);
                     return false;
                 }
 
-                private static bool PreCalcFrustumCorners(HeightmapAmbientLightRenderer __instance, ref Matrix4x4 __result)
+                private static bool PreCalcFrustumCorners(PlanetaryFogRenderer __instance, ref Matrix4x4 __result)
                 {
                     __result = FrustumCornersMatrix(__instance._owCamera.mainCamera, __instance._owCamera.mainCamera.stereoActiveEye);
                     return false;

@@ -231,17 +231,6 @@ namespace NomaiVR
                         SetupInteractableCanvasCollider(selectable.targetGraphic.canvas);
                     }
                 }
-
-                var shipLogCanvas = FindObjectOfType<ShipLogController>()?._shipLogCanvas;
-                if(shipLogCanvas != null)
-                {
-                    shipLogCanvas.worldCamera = Camera.main;
-                    var shipLogCanvasInteractor = new GameObject("ShipLogCanvasInteractor").transform;
-                    shipLogCanvasInteractor.SetParent(shipLogCanvas.transform, false);
-                    shipLogCanvasInteractor.localPosition = Vector3.zero;
-                    shipLogCanvasInteractor.localRotation = Quaternion.identity;
-                    SetupInteractableCanvasCollider(shipLogCanvas, shipLogCanvasInteractor.gameObject);
-                }
             }
 
             private void SetupInteractableCanvasCollider(Canvas canvas, GameObject proxy = null)
