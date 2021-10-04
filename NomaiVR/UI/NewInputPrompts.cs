@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using Valve.VR;
+using static InputConsts;
 
 namespace NomaiVR.UI
 {
@@ -39,6 +40,7 @@ namespace NomaiVR.UI
                 _textureCache = new Dictionary<string, Texture2D>();
                 foreach(var texturePath in AssetLoader.VRBindingTextures.GetAllAssetNames())
                 {
+                    Debug.Log($"texturePath {texturePath}");
                     var assetPath = texturePath.Substring(0, texturePath.LastIndexOf('.'));
                     _textureCache.Add(assetPath.ToLower(), AssetLoader.VRBindingTextures.LoadAsset<Texture2D>(texturePath));
                 }
@@ -57,11 +59,11 @@ namespace NomaiVR.UI
             private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)
             {
                 var activeDevice = SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ControllerType_String, fromAction.trackedDeviceIndex);
-                Logs.Write($"Got active device: {activeDevice}");
+                Logs.Write($"#### Got active device: {activeDevice}");
                 var currentPlatform = Platform;
                 switch(activeDevice)
                 {
-                    case "oculus":
+                    case "oculus_touch":
                         Platform = ActiveVRPlatform.Oculus;
                         break;
                     case "vive_controller":
@@ -84,6 +86,7 @@ namespace NomaiVR.UI
 
             public Texture2D GetTexture(string path)
             {
+                Debug.Log($"loading texture with path {path}");
                 Texture2D outTexture;
                 _textureCache.TryGetValue(path.ToLower(), out outTexture);
                 return outTexture;
@@ -107,7 +110,23 @@ namespace NomaiVR.UI
                         return false;
                     }
                     __instance.textureList.Clear();
-                    var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{__instance.CommandType}");
+                    var name = "";
+                    if (!InputMap.Map.ContainsKey(__instance.CommandType)) name = __instance.CommandType.ToString();
+                    else
+                    {
+                        var vrInputAction = InputMap.Map[__instance.CommandType];
+                        if (vrInputAction is SteamVR_Action_Boolean vrBooleanInputAction)
+                        {
+                            name = vrBooleanInputAction.renderModelComponentName;
+                            Debug.Log($"######### the name really is {name}");
+                        }
+                    }
+                    var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{name}");
+                    // var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{__instance.CommandType}");
+                    if (texture == null && __instance.CommandType == InputCommandType.INTERACT)
+                    {
+                        Debug.Log("texture is null");
+                    }
                     if(texture != null) __instance.textureList.Add(texture);
                     __result = __instance.textureList;
                     return __instance.textureList.Count == 0;
