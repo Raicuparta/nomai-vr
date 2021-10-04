@@ -112,10 +112,10 @@ namespace NomaiVR.UI
                     }
                     __instance.textureList.Clear();
                     var name = "";
-                    if (!InputMap.Map.ContainsKey(__instance.CommandType)) name = __instance.CommandType.ToString();
+                    if (!InputMap.DefaultInputMap.ContainsKey(__instance.CommandType)) name = __instance.CommandType.ToString();
                     else
                     {
-                        var vrInputAction = InputMap.Map[__instance.CommandType].Action;
+                        var vrInputAction = InputMap.DefaultInputMap[__instance.CommandType].Action;
                         if (vrInputAction is SteamVR_Action_Boolean vrBooleanInputAction)
                         {
                             var hand = vrBooleanInputAction.activeDevice == SteamVR_Input_Sources.RightHand

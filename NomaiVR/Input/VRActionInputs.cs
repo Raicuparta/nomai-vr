@@ -11,7 +11,6 @@ namespace NomaiVR.Input
         {
             Vector2 Value { get; } 
             ISteamVR_Action Action { get; }
-
         }
         
         public abstract class VRActionInput<TAction> : IVRActionInput where TAction : ISteamVR_Action
@@ -24,8 +23,19 @@ namespace NomaiVR.Input
         
         public class VRBooleanActionInput : VRActionInput<SteamVR_Action_Boolean>
         {
-            public override Vector2 Value =>
-                new Vector2(SpecificAction.state ? 1f : 0f, 0f);
+            public bool IsEitherHand;
+
+            public override Vector2 Value
+            {
+                get
+                {
+                    var state = IsEitherHand
+                        ? SpecificAction.GetState(SteamVR_Input_Sources.LeftHand) ||
+                          SpecificAction.GetState(SteamVR_Input_Sources.RightHand)
+                        : SpecificAction.state;
+                    return new Vector2(state ? 1f : 0f, 0f);
+                }
+            }
         }
         
         public class VRSingleActionInput : VRActionInput<SteamVR_Action_Single>
@@ -59,6 +69,12 @@ namespace NomaiVR.Input
             }
         }
 
+        public class VREmptyActionInput : VRActionInput<ISteamVR_Action>
+        {
+            public override Vector2 Value => Vector2.zero;
+        }
+
+        public static readonly VREmptyActionInput Empty = new VREmptyActionInput();
         public static readonly VRBooleanActionInput Autopilot = new VRBooleanActionInput() {
             SpecificAction = _default.Autopilot,
         };
@@ -98,11 +114,20 @@ namespace NomaiVR.Input
         public static readonly VRBooleanActionInput RollMode = new VRBooleanActionInput() {
             SpecificAction = _default.RollMode
         };
-        public static readonly VRVector2ActionInput StationaryDpad = new VRVector2ActionInput() {
-            SpecificAction = _default.StationaryDpad
-        };
         public static readonly VRBooleanActionInput StationaryUse = new VRBooleanActionInput() {
             SpecificAction = _default.StationaryUse
+        };
+        public static readonly VRVector2ActionInput StationaryUp = new VRVector2ActionInput(yOnly: true, clamp: true) {
+            SpecificAction = tools.DPad
+        };
+        public static readonly VRVector2ActionInput StationaryDown = new VRVector2ActionInput(yOnly: true, invert: true, clamp: true) {
+            SpecificAction = tools.DPad
+        };
+        public static readonly VRVector2ActionInput StationaryLeft = new VRVector2ActionInput(invert: true, clamp: true) {
+            SpecificAction = tools.DPad
+        };
+        public static readonly VRVector2ActionInput StationaryRight = new VRVector2ActionInput(clamp: true) {
+            SpecificAction = tools.DPad
         };
         public static readonly VRSingleActionInput ThrustDown = new VRSingleActionInput() {
             SpecificAction = _default.ThrustDown
@@ -136,6 +161,22 @@ namespace NomaiVR.Input
         };
         public static readonly VRBooleanActionInput UITabRight = new VRBooleanActionInput() {
             SpecificAction = _default.UITabRight
+        };
+        public static readonly VRBooleanActionInput ToolUse = new VRBooleanActionInput() {
+            SpecificAction = tools.Use,
+            IsEitherHand = true
+        };
+        public static readonly VRVector2ActionInput ToolUp = new VRVector2ActionInput(yOnly: true, clamp: true) {
+            SpecificAction = tools.DPad
+        };
+        public static readonly VRVector2ActionInput ToolDown = new VRVector2ActionInput(yOnly: true, invert: true, clamp: true) {
+            SpecificAction = tools.DPad
+        };
+        public static readonly VRVector2ActionInput ToolLeft = new VRVector2ActionInput(invert: true, clamp: true) {
+            SpecificAction = tools.DPad
+        };
+        public static readonly VRVector2ActionInput ToolRight = new VRVector2ActionInput(clamp: true) {
+            SpecificAction = tools.DPad
         };
     }
 }
