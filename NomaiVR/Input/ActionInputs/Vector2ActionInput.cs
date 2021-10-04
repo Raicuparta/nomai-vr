@@ -9,7 +9,7 @@ namespace NomaiVR.Input.ActionInputs
         private readonly bool invert;
         private readonly bool yOnly;
 
-        public Vector2ActionInput(bool yOnly = false, bool invert = false, bool clamp = false)
+        public Vector2ActionInput(SteamVR_Action_Vector2 action, bool yOnly = false, bool invert = false, bool clamp = false): base(action)
         {
             this.yOnly = yOnly;
             this.invert = invert;
@@ -20,10 +20,10 @@ namespace NomaiVR.Input.ActionInputs
         {
             get
             {
-                var axis = yOnly ? SpecificAction.axis.y : SpecificAction.axis.x;
+                var axis = yOnly ? specificAction.axis.y : specificAction.axis.x;
                 var rawValue = invert ? -axis : axis;
                 var clampedValue = clamp ? Mathf.Clamp(rawValue, 0f, 1f) : rawValue;
-                return new Vector2(clampedValue, yOnly ? 0f : SpecificAction.axis.y);
+                return new Vector2(clampedValue, yOnly ? 0f : specificAction.axis.y);
             }
         }
     }

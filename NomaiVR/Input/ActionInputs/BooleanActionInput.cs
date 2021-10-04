@@ -5,18 +5,23 @@ namespace NomaiVR.Input.ActionInputs
 {
     public class BooleanActionInput : ActionInput<SteamVR_Action_Boolean>
     {
-        public bool IsEitherHand;
+        private readonly bool isEitherHand;
 
         public override Vector2 Value
         {
             get
             {
-                var state = IsEitherHand
-                    ? SpecificAction.GetState(SteamVR_Input_Sources.LeftHand) ||
-                      SpecificAction.GetState(SteamVR_Input_Sources.RightHand)
-                    : SpecificAction.state;
+                var state = isEitherHand
+                    ? specificAction.GetState(SteamVR_Input_Sources.LeftHand) ||
+                      specificAction.GetState(SteamVR_Input_Sources.RightHand)
+                    : specificAction.state;
                 return new Vector2(state ? 1f : 0f, 0f);
             }
+        }
+
+        public BooleanActionInput(SteamVR_Action_Boolean action, bool eitherHand = false) : base(action)
+        {
+            isEitherHand = eitherHand;
         }
     }
 }
