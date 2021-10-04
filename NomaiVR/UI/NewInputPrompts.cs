@@ -41,7 +41,6 @@ namespace NomaiVR.UI
                 _textureCache = new Dictionary<string, Texture2D>();
                 foreach(var texturePath in AssetLoader.VRBindingTextures.GetAllAssetNames())
                 {
-                    Debug.Log($"texturePath {texturePath}");
                     var assetPath = texturePath.Substring(0, texturePath.LastIndexOf('.'));
                     _textureCache.Add(assetPath.ToLower(), AssetLoader.VRBindingTextures.LoadAsset<Texture2D>(texturePath));
                 }
@@ -87,9 +86,7 @@ namespace NomaiVR.UI
 
             public Texture2D GetTexture(string path)
             {
-                Debug.Log($"loading texture with path {path}");
-                Texture2D outTexture;
-                _textureCache.TryGetValue(path.ToLower(), out outTexture);
+                _textureCache.TryGetValue(path.ToLower(), out var outTexture);
                 return outTexture;
             }
 
@@ -111,25 +108,19 @@ namespace NomaiVR.UI
                         return false;
                     }
                     __instance.textureList.Clear();
+                    var vrInputAction = InputMap.GetActionInput(__instance.CommandType);
+                    if (vrInputAction == null) return true;
+
+                    var steamVrAction = vrInputAction.Action;
                     var name = "";
-                    if (!InputMap.DefaultInputMap.ContainsKey(__instance.CommandType)) name = __instance.CommandType.ToString();
-                    else
-                    {
-                        var vrInputAction = InputMap.DefaultInputMap[__instance.CommandType].Action;
-                        if (vrInputAction is SteamVR_Action_Boolean vrBooleanInputAction)
-                        {
-                            var hand = vrBooleanInputAction.activeDevice == SteamVR_Input_Sources.RightHand
-                                ? "Right"
-                                : "Left";
-                            name = $"{hand}/{vrBooleanInputAction.renderModelComponentName}";
-                        }
-                    }
+                    var hand = steamVrAction.activeDevice == SteamVR_Input_Sources.RightHand
+                        ? "Right"
+                        : "Left";
+                    name = $"{hand}/{steamVrAction.renderModelComponentName}";
+
+                    Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
+                    
                     var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{name}");
-                    // var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{__instance.CommandType}");
-                    if (texture == null && __instance.CommandType == InputCommandType.INTERACT)
-                    {
-                        Debug.Log("texture is null");
-                    }
                     if(texture != null) __instance.textureList.Add(texture);
                     __result = __instance.textureList;
                     return __instance.textureList.Count == 0;

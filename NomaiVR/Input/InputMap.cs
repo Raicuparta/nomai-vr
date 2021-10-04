@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using NomaiVR.Input.ActionInputs;
+using UnityEngine;
+using Valve.VR;
 using static InputConsts;
 
 namespace NomaiVR.Input
@@ -7,7 +9,7 @@ namespace NomaiVR.Input
     public static class InputMap
     {
         public static readonly Dictionary<InputCommandType, IActionInput> DefaultInputMap =
-            new Dictionary<InputCommandType, IActionInput>()
+            new Dictionary<InputCommandType, IActionInput>
             {
                 { InputCommandType.JUMP, ActionInputDefinitions.Jump },
                 { InputCommandType.BOOST, ActionInputDefinitions.Jump },
@@ -55,7 +57,7 @@ namespace NomaiVR.Input
             };
 
         public static readonly Dictionary<InputCommandType, IActionInput> ToolsInputMap =
-            new Dictionary<InputCommandType, IActionInput>()
+            new Dictionary<InputCommandType, IActionInput>
             {
                 { InputCommandType.PROBELAUNCH, ActionInputDefinitions.ToolUse },
                 { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.ToolUse },
@@ -70,9 +72,28 @@ namespace NomaiVR.Input
         
         
         public static readonly Dictionary<InputCommandType, IActionInput> UsableItemMap =
-            new Dictionary<InputCommandType, IActionInput>()
+            new Dictionary<InputCommandType, IActionInput>
             {
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Back },
             };
+
+        public static IActionInput GetActionInput(InputCommandType commandType)
+        {
+            if (ToolsActive && ToolsInputMap.ContainsKey(commandType))
+            {
+                return ToolsInputMap[commandType];
+            }
+
+            if (ToolHelper.HasUsableItem() && UsableItemMap.ContainsKey(commandType))
+            {
+                return ToolsInputMap[commandType];
+            }
+
+            DefaultInputMap.TryGetValue(commandType, out var actionInput);
+            return actionInput;
+        }
+        
+        private static bool ToolsActive => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
+                                        || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
     }
 }
