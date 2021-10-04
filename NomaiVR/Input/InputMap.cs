@@ -10,8 +10,8 @@ namespace NomaiVR.Input
         {
             { InputCommandType.JUMP, VRActionInputs.Jump },
             { InputCommandType.BOOST, VRActionInputs.Jump },
-            { InputCommandType.SWAP_SHIP_LOG_MODE, VRActionInputs.Jump },
-            { InputCommandType.INTERACT_SECONDARY, VRActionInputs.Jump },
+            { InputCommandType.SWAP_SHIP_LOG_MODE, VRActionInputs.Jump },  // This isn't used actually.
+            { InputCommandType.INTERACT_SECONDARY, VRActionInputs.Jump }, // TODO: Maybe press-hold interact primary?
             { InputCommandType.MATCH_VELOCITY, VRActionInputs.Jump },
             { InputCommandType.UP, VRActionInputs.Up },
             { InputCommandType.DOWN, VRActionInputs.Down },

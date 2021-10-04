@@ -54,7 +54,7 @@ namespace NomaiVR.Input
                     var axis = yOnly ? SpecificAction.axis.y : SpecificAction.axis.x;
                     var rawValue = invert ? -axis : axis;
                     var clampedValue = clamp ? Mathf.Clamp(rawValue, 0f, 1f) : rawValue;
-                    return new Vector2(clampedValue, SpecificAction.axis.y);
+                    return new Vector2(clampedValue, yOnly ? 0f : SpecificAction.axis.y);
                 }
             }
         }
