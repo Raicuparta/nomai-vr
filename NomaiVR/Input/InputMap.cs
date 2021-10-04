@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
+using Valve.VR;
 using static InputConsts;
 
 namespace NomaiVR.Input
 {
     public static class InputMap
     {
-        public static readonly Dictionary<InputCommandType, VRActionInputs.VRActionInput> Map = new Dictionary<InputCommandType, VRActionInputs.VRActionInput>()
+        public static readonly Dictionary<InputCommandType, VRActionInputs.IVRActionInput> Map = new Dictionary<InputCommandType, VRActionInputs.IVRActionInput>()
         {
             { InputCommandType.JUMP, VRActionInputs.Jump },
             { InputCommandType.BOOST, VRActionInputs.Jump },
             { InputCommandType.SWAP_SHIP_LOG_MODE, VRActionInputs.Jump },
             { InputCommandType.INTERACT_SECONDARY, VRActionInputs.Jump },
             { InputCommandType.MATCH_VELOCITY, VRActionInputs.Jump },
-            { InputCommandType.UP, VRActionInputs.UIDpad },
-            { InputCommandType.DOWN, VRActionInputs.UIDpad },
-            { InputCommandType.RIGHT, VRActionInputs.UIDpad },
-            { InputCommandType.MENU_RIGHT, VRActionInputs.UIDpad },
-            { InputCommandType.LEFT, VRActionInputs.UIDpad },
-            { InputCommandType.MENU_LEFT, VRActionInputs.UIDpad },
+            { InputCommandType.UP, VRActionInputs.Up },
+            { InputCommandType.DOWN, VRActionInputs.Down },
+            { InputCommandType.RIGHT, VRActionInputs.Right },
+            { InputCommandType.MENU_RIGHT, VRActionInputs.Right },
+            { InputCommandType.LEFT, VRActionInputs.Left },
+            { InputCommandType.MENU_LEFT, VRActionInputs.Left },
             { InputCommandType.TABR, VRActionInputs.UITabRight },
             { InputCommandType.TABL, VRActionInputs.UITabLeft },
             { InputCommandType.SUBMENU_RIGHT, VRActionInputs.UISubtabRight },
@@ -33,10 +34,10 @@ namespace NomaiVR.Input
             { InputCommandType.ENTER, VRActionInputs.Interact },
             { InputCommandType.LOOK, VRActionInputs.Look },
             { InputCommandType.LOOK_X, VRActionInputs.Look },
-            { InputCommandType.LOOK_Y, VRActionInputs.Look },
+            { InputCommandType.LOOK_Y, VRActionInputs.LookY },
             { InputCommandType.MOVE_XZ, VRActionInputs.Move },
             { InputCommandType.MOVE_X, VRActionInputs.Move },
-            { InputCommandType.MOVE_Z, VRActionInputs.Move },
+            { InputCommandType.MOVE_Z, VRActionInputs.MoveZ },
             { InputCommandType.THRUST_UP, VRActionInputs.ThrustUp },
             { InputCommandType.THRUST_DOWN, VRActionInputs.ThrustDown },
         };
