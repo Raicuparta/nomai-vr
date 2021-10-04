@@ -57,13 +57,22 @@ namespace NomaiVR.Input
                     return;
                 }
 
-                var isToolInput = ToolsActive && InputMap.ToolsInputMap.ContainsKey(commandType);
-                var inputMap = isToolInput ? InputMap.ToolsInputMap :
-                    ToolHelper.HasUsableItem() ? InputMap.UsableItemMap : InputMap.DefaultInputMap;
-                
-                if (isToolInput || inputMap.ContainsKey(commandType))
+                if (ToolsActive && InputMap.ToolsInputMap.ContainsKey(commandType))
                 {
-                    __instance.AxisValue = inputMap[commandType].Value;
+                    __instance.AxisValue = InputMap.ToolsInputMap[commandType].Value;
+                    return;
+                }
+
+                if (ToolHelper.HasUsableItem() && InputMap.UsableItemMap.ContainsKey(commandType))
+                {
+                    __instance.AxisValue = InputMap.ToolsInputMap[commandType].Value;
+                    return;
+                }
+
+                if (InputMap.DefaultInputMap.ContainsKey(commandType))
+                {
+                    __instance.AxisValue = InputMap.DefaultInputMap[commandType].Value;
+                    return;
                 }
             }
 
