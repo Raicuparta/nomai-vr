@@ -1,0 +1,84 @@
+ManifestFileVersion: 0
+CRC: 476177087
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7255fe67a43000abddc131f2e353d0a2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7859cd501ea75098bcf7e53f1b477c26
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/VRBindings/Texture2D/Generic/ENTER.png
+- Assets/VRBindings/Texture2D/Vive/ROLL_MODE.png
+- Assets/VRBindings/Texture2D/Generic/MAP.png
+- Assets/VRBindings/Texture2D/Oculus/Right/button_b.png
+- Assets/VRBindings/Texture2D/WMR/THRUST_DOWN.png
+- Assets/VRBindings/Texture2D/Vive/THRUST_UP.png
+- Assets/VRBindings/Texture2D/Oculus/trigger.png
+- Assets/VRBindings/Texture2D/Vive/BOOST.png
+- Assets/VRBindings/Texture2D/Oculus/button_grip.png
+- Assets/VRBindings/Texture2D/Vive/ENTER.png
+- Assets/VRBindings/Texture2D/Oculus/Left/button_y.png
+- Assets/VRBindings/Texture2D/Generic/SELECT.png
+- Assets/VRBindings/Texture2D/Index/CANCEL.png
+- Assets/VRBindings/Texture2D/Generic/MATCH_VELOCITY.png
+- Assets/VRBindings/Texture2D/Oculus/Left/trigger.png
+- Assets/VRBindings/Texture2D/Index/ESCAPE.png
+- Assets/VRBindings/Texture2D/Index/BACK.png
+- Assets/VRBindings/Texture2D/WMR/BACK.png
+- Assets/VRBindings/Texture2D/Index/BOOST.png
+- Assets/VRBindings/Texture2D/Index/JUMP.png
+- Assets/VRBindings/Texture2D/Oculus/Left/button_grip.png
+- Assets/VRBindings/Texture2D/WMR/THRUST_UP.png
+- Assets/VRBindings/Texture2D/Index/THRUST_UP.png
+- Assets/VRBindings/Texture2D/WMR/JUMP.png
+- Assets/VRBindings/Texture2D/Vive/MAP.png
+- Assets/VRBindings/Texture2D/WMR/SELECT.png
+- Assets/VRBindings/Texture2D/Generic/THRUST_DOWN.png
+- Assets/VRBindings/Texture2D/Generic/ESCAPE.png
+- Assets/VRBindings/Texture2D/Index/INTERACT.png
+- Assets/VRBindings/Texture2D/Oculus/Right/trigger.png
+- Assets/VRBindings/Texture2D/Oculus/Right/button_grip.png
+- Assets/VRBindings/Texture2D/WMR/INTERACT.png
+- Assets/VRBindings/Texture2D/Vive/CANCEL.png
+- Assets/VRBindings/Texture2D/Vive/THRUST_DOWN.png
+- Assets/VRBindings/Texture2D/Oculus/Right/thumbstick.png
+- Assets/VRBindings/Texture2D/Oculus/Left/button_x.png
+- Assets/VRBindings/Texture2D/Vive/SELECT.png
+- Assets/VRBindings/Texture2D/Generic/LOCKON.png
+- Assets/VRBindings/Texture2D/Oculus/Right/button_a.png
+- Assets/VRBindings/Texture2D/Vive/INTERACT.png
+- Assets/VRBindings/Texture2D/Index/ROLL_MODE.png
+- Assets/VRBindings/Texture2D/WMR/ENTER.png
+- Assets/VRBindings/Texture2D/Index/SELECT.png
+- Assets/VRBindings/Texture2D/WMR/MATCH_VELOCITY.png
+- Assets/VRBindings/Texture2D/Index/LOCKON.png
+- Assets/VRBindings/Texture2D/Vive/JUMP.png
+- Assets/VRBindings/Texture2D/Generic/JUMP.png
+- Assets/VRBindings/Texture2D/WMR/MAP.png
+- Assets/VRBindings/Texture2D/Index/MAP.png
+- Assets/VRBindings/Texture2D/Index/ENTER.png
+- Assets/VRBindings/Texture2D/WMR/CANCEL.png
+- Assets/VRBindings/Texture2D/Generic/BOOST.png
+- Assets/VRBindings/Texture2D/WMR/BOOST.png
+- Assets/VRBindings/Texture2D/Oculus/Left/thumbstick.png
+- Assets/VRBindings/Texture2D/Index/THRUST_DOWN.png
+- Assets/VRBindings/Texture2D/Vive/ESCAPE.png
+- Assets/VRBindings/Texture2D/WMR/ROLL_MODE.png
+- Assets/VRBindings/Texture2D/Vive/LOCKON.png
+- Assets/VRBindings/Texture2D/Vive/BACK.png
+- Assets/VRBindings/Texture2D/Generic/ROLL_MODE.png
+- Assets/VRBindings/Texture2D/Generic/CANCEL.png
+- Assets/VRBindings/Texture2D/WMR/ESCAPE.png
+- Assets/VRBindings/Texture2D/WMR/LOCKON.png
+- Assets/VRBindings/Texture2D/Generic/INTERACT.png
+- Assets/VRBindings/Texture2D/Index/MATCH_VELOCITY.png
+- Assets/VRBindings/Texture2D/Generic/THRUST_UP.png
+- Assets/VRBindings/Texture2D/Generic/BACK.png
+- Assets/VRBindings/Texture2D/Vive/MATCH_VELOCITY.png
+Dependencies: []

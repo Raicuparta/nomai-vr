@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using NomaiVR.Input;
 using UnityEngine;
 using Valve.VR;
 using static InputConsts;
@@ -114,11 +115,13 @@ namespace NomaiVR.UI
                     if (!InputMap.Map.ContainsKey(__instance.CommandType)) name = __instance.CommandType.ToString();
                     else
                     {
-                        var vrInputAction = InputMap.Map[__instance.CommandType];
+                        var vrInputAction = InputMap.Map[__instance.CommandType].Action;
                         if (vrInputAction is SteamVR_Action_Boolean vrBooleanInputAction)
                         {
-                            name = vrBooleanInputAction.renderModelComponentName;
-                            Debug.Log($"######### the name really is {name}");
+                            var hand = vrBooleanInputAction.activeDevice == SteamVR_Input_Sources.RightHand
+                                ? "Right"
+                                : "Left";
+                            name = $"{hand}/{vrBooleanInputAction.renderModelComponentName}";
                         }
                     }
                     var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{name}");
