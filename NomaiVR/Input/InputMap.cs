@@ -13,6 +13,8 @@ namespace NomaiVR.Input
             { InputCommandType.SWAP_SHIP_LOG_MODE, VRActionInputs.Jump },  // This isn't used actually.
             { InputCommandType.INTERACT_SECONDARY, VRActionInputs.Jump }, // TODO: Maybe press-hold interact primary?
             { InputCommandType.MATCH_VELOCITY, VRActionInputs.Jump },
+            { InputCommandType.AUTOPILOT, VRActionInputs.Autopilot },
+            { InputCommandType.ROLL_MODE, VRActionInputs.RollMode },
             { InputCommandType.UP, VRActionInputs.Up },
             { InputCommandType.DOWN, VRActionInputs.Down },
             { InputCommandType.RIGHT, VRActionInputs.Right },
@@ -40,6 +42,14 @@ namespace NomaiVR.Input
             { InputCommandType.MOVE_Z, VRActionInputs.MoveZ },
             { InputCommandType.THRUST_UP, VRActionInputs.ThrustUp },
             { InputCommandType.THRUST_DOWN, VRActionInputs.ThrustDown },
+            { InputCommandType.PROBELAUNCH, VRActionInputs.ToolUse },
+            { InputCommandType.PROBERETRIEVE, VRActionInputs.ToolUse },
+            { InputCommandType.SCOPEVIEW, VRActionInputs.ToolUse },
+            { InputCommandType.TOOL_PRIMARY, VRActionInputs.ToolUse },
+            { InputCommandType.TOOL_UP, VRActionInputs.ToolUp },
+            { InputCommandType.TOOL_DOWN, VRActionInputs.ToolDown },
+            { InputCommandType.TOOL_RIGHT, VRActionInputs.ToolRight },
+            { InputCommandType.TOOL_LEFT, VRActionInputs.ToolLeft },
         };
     }
 }
