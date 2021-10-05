@@ -101,17 +101,22 @@ namespace NomaiVR.UI
 
                 public static bool GetVRUITextures(bool gamepad, bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
                 {
+                    __result = __instance.textureList;
+
                     if (__instance.textureList.Count > 0 && !forceRefresh)
                     {
                         //Cache textures
-                        __result = __instance.textureList;
                         return false;
                     }
+
                     __instance.textureList.Clear();
+
                     var vrInputAction = InputMap.GetActionInput(__instance.CommandType);
                     if (vrInputAction == null) return true;
 
                     var steamVrAction = vrInputAction.Action;
+                    if (steamVrAction == null) return true;
+
                     var name = "";
                     var hand = steamVrAction.activeDevice == SteamVR_Input_Sources.RightHand
                         ? "Right"
@@ -122,7 +127,6 @@ namespace NomaiVR.UI
                     
                     var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{name}");
                     if(texture != null) __instance.textureList.Add(texture);
-                    __result = __instance.textureList;
                     return __instance.textureList.Count == 0;
                 }
             }
