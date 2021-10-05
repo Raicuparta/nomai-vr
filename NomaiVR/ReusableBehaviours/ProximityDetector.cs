@@ -5,6 +5,7 @@ namespace NomaiVR
 {
     internal class ProximityDetector : MonoBehaviour
     {
+        public event Action OnStay;
         public event Action<Transform> OnEnter;
         public event Action<Transform> OnExit;
         public float MinDistance { get; set; } = 0.15f;
@@ -60,6 +61,7 @@ namespace NomaiVR
 
         internal void Update()
         {
+            bool isStaying = false;
             for(int i = 0; i < _trackedObjects.Length; i++)
             {
                 var other = _trackedObjects[i];
@@ -81,7 +83,9 @@ namespace NomaiVR
                     OnExit?.Invoke(other);
                     _isInside[i] = false;
                 }
+                isStaying |= _isInside[i];
             }
+            if (isStaying) OnStay?.Invoke();
         }
     }
 }

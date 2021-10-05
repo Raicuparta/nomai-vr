@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Input;
+using UnityEngine;
 
 namespace NomaiVR
 {
@@ -47,6 +48,16 @@ namespace NomaiVR
             {
                 var holdable = MakeSocketHoldable("DreamLanternSocket");
                 if (holdable == null) return;
+                var dreamLanternFocuser = holdable.gameObject.AddComponent<ProximityDetector>();
+                dreamLanternFocuser.MinDistance = 0.25f;
+                dreamLanternFocuser.ExitThreshold = 0.05f;
+                dreamLanternFocuser.Other = HandsController.Behaviour.OffHand;
+                dreamLanternFocuser.OnStay += () =>
+                {
+                    Logs.Write("Stay!");
+                    NewControllerInput.SimulateInputPress(InputConsts.InputCommandType.TOOL_PRIMARY);
+                };
+                // TODO: Properly disable this when latern is not equipped
                 // TODO: Poses.
             }
 
@@ -139,6 +150,11 @@ namespace NomaiVR
                 {
                     SetActive(true);
                 }
+            }
+
+            internal void OnDestroy()
+            {
+
             }
         }
     }
