@@ -30,7 +30,7 @@ namespace NomaiVR
                 SetUpHolster(translatorModel);
                 SetUpLaser(translator);
 
-                holdable.onFlipped += (isRight) =>
+                holdable.OnFlipped += (isRight) =>
                 {
                     float tagetScale = Mathf.Abs(_translatorBeams.localScale.x);
                     if (!isRight) tagetScale *= -1;
@@ -104,7 +104,7 @@ namespace NomaiVR
                 lineRenderer.endWidth = 0.001f;
                 lineRenderer.endColor = Color.clear;
                 lineRenderer.startColor = new Color(0.4f, 0.5f, 0.8f, 0.3f); ;
-                lineRenderer.material.shader = Shader.Find("Particles/Alpha Blended Premultiply");
+                lineRenderer.material.shader = Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply");
 
                 lineObject.transform.SetParent(translator, false);
                 lineObject.transform.localPosition = new Vector3(0.74f, 0.37f, 0f);

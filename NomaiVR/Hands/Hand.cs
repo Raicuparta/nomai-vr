@@ -12,6 +12,7 @@ namespace NomaiVR
         private const float k_GloveSkeletonBlendAmmount = 0.275f;
 
         public event Action Initialized;
+        public event Action SkeletonBlendReset;
         public GameObject handPrefab;
         public SteamVR_Action_Pose pose;
         public SteamVR_Skeleton_Pose fallbackPoint;
@@ -243,6 +244,8 @@ namespace NomaiVR
 
             _lastHandState = _handState;
             _handState = EHandState.Free;
+
+            SkeletonBlendReset?.Invoke();
         }
 
         internal void BlendToReach(SteamVR_Skeleton_Poser overrideReachPoser = null, float time = 0.1f)

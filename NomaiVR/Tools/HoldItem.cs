@@ -50,6 +50,7 @@ namespace NomaiVR
                 var holdable = MakeSocketHoldable("DreamLanternSocket");
                 if (holdable == null) return;
                 var dreamLanternFocuser = holdable.gameObject.AddComponent<ProximityDetector>();
+                dreamLanternFocuser.enabled = false;
                 dreamLanternFocuser.MinDistance = 0.25f;
                 dreamLanternFocuser.ExitThreshold = 0.05f;
                 dreamLanternFocuser.Other = HandsController.Behaviour.OffHand;
@@ -61,7 +62,11 @@ namespace NomaiVR
                 {
                     NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
                 };
-                // TODO: Properly disable this when latern is not equipped
+                holdable.OnHoldStateChanged += (holden) =>
+                {
+                    Debug.Log("Lantern interact changed");
+                    dreamLanternFocuser.enabled = holden;
+                };
                 // TODO: Poses.
             }
 
