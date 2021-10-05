@@ -3,6 +3,7 @@ using BepInEx;
 using System.IO;
 using HarmonyLib;
 using NomaiVR.Input;
+using NomaiVR.Tools;
 using NomaiVR.UI;
 
 namespace NomaiVR

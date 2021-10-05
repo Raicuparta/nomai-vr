@@ -1,7 +1,8 @@
 ﻿using NomaiVR.Input;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class FlashlightGesture : NomaiVRModule<FlashlightGesture.Behaviour, NomaiVRModule.EmptyPatch>
     {
@@ -35,12 +36,12 @@ namespace NomaiVR
 
             private void FlashlightPress(Transform hand)
             {
-                NewControllerInput.SimulateInputPress(InputConsts.InputCommandType.FLASHLIGHT);
+                NewControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, true);
             }
 
             private void FlashlightRelease(Transform hand)
             {
-                // TODO decide if this is needed.
+                NewControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, false);
             }
         }
     }

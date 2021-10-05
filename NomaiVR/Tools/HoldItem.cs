@@ -1,4 +1,5 @@
 ﻿using NomaiVR.Input;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
 namespace NomaiVR
@@ -52,10 +53,13 @@ namespace NomaiVR
                 dreamLanternFocuser.MinDistance = 0.25f;
                 dreamLanternFocuser.ExitThreshold = 0.05f;
                 dreamLanternFocuser.Other = HandsController.Behaviour.OffHand;
-                dreamLanternFocuser.OnStay += () =>
+                dreamLanternFocuser.OnEnter += (Transform hand) =>
                 {
-                    Logs.Write("Stay!");
-                    NewControllerInput.SimulateInputPress(InputConsts.InputCommandType.TOOL_PRIMARY);
+                    NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
+                };
+                dreamLanternFocuser.OnExit += (Transform hand) =>
+                {
+                    NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
                 };
                 // TODO: Properly disable this when latern is not equipped
                 // TODO: Poses.

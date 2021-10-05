@@ -12,9 +12,14 @@ namespace NomaiVR.Input
 
         private static readonly Dictionary<int, bool> simulatedBoolInputs = new Dictionary<int, bool>();
 
-        public static void SimulateInputPress(InputCommandType commandType)
+        public static void SimulateInput(InputCommandType commandType, bool value)
         {
-            simulatedBoolInputs[(int)commandType] = true;
+            if (!value)
+            {
+                // TODO maybe not good to keep adding and removing from dictionary.
+                simulatedBoolInputs.Remove((int) commandType);
+            } 
+            simulatedBoolInputs[(int)commandType] = value;
         }
 
         public class Patch : NomaiVRPatch
@@ -52,8 +57,8 @@ namespace NomaiVR.Input
                 var commandTypeKey = (int)commandType;
                 if (simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey])
                 {
+                    Debug.Log("simulate input");
                     __instance.AxisValue = new Vector2(1f, 0f);
-                    simulatedBoolInputs[(int)commandType] = false;
                     return;
                 }
 

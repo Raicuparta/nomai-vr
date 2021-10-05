@@ -1,5 +1,6 @@
 ﻿
 using System;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
 namespace NomaiVR
