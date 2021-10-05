@@ -1,7 +1,36 @@
-﻿namespace NomaiVR
+﻿using UnityEngine;
+using Valve.VR;
+
+namespace NomaiVR
 {
-    internal class DebugCheats: NomaiVRModule<NomaiVRModule.EmptyBehaviour, DebugCheats.Patch>
+    internal class DebugCheats: NomaiVRModule<DebugCheats.Behaviour, DebugCheats.Patch>
     {
+        public class Behaviour : MonoBehaviour
+        {
+            private void Update()
+            {
+                if (!SteamVR_Actions.default_Jump.state || !SteamVR_Actions.default_Back.state) return;
+
+                // Wake up in dream (requires invincibility).
+                if (SteamVR_Actions.default_Interact.stateDown)
+                {
+                    var dreamWorldController = FindObjectOfType<DreamWorldController>();
+                    dreamWorldController._dreamCampfire = FindObjectOfType<DreamCampfire>();
+                    dreamWorldController._dreamArrivalPoint = FindObjectOfType<DreamArrivalPoint>();
+                    dreamWorldController._relativeSleepLocation = new RelativeLocationData(new Vector3(0f, 1f, -2f), Quaternion.identity, Vector3.zero);
+                    dreamWorldController._playerLantern = FindObjectOfType<DreamLanternItem>();
+                    dreamWorldController._enteringDream = true;
+                    FindObjectOfType<ItemTool>().MoveItemToCarrySocket(FindObjectOfType<DreamLanternItem>());
+                }
+                
+                // Start mind projection.
+                if (SteamVR_Actions.default_Grip.stateDown)
+                {
+                    FindObjectOfType<MindSlideProjector>().Play(true);
+                }
+            }
+        }
+        
         internal class Patch : NomaiVRPatch
         {
             public override void ApplyPatches()
