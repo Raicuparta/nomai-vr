@@ -2,6 +2,7 @@
 using BepInEx;
 using System.IO;
 using HarmonyLib;
+using NomaiVR.EffectFixes;
 using NomaiVR.Input;
 using NomaiVR.Tools;
 using NomaiVR.UI;

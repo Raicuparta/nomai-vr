@@ -1,10 +1,7 @@
 ﻿using NomaiVR.ReusableBehaviours;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class DreamFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, DreamFix.Patch>
     {
@@ -16,11 +13,11 @@ namespace NomaiVR
             public override void ApplyPatches()
             {
                 Postfix<PostProcessingGameplaySettings>(nameof(PostProcessingGameplaySettings.ApplySettings), nameof(DisableScreenSpaceReflections));
-                Prefix<MindProjectorImageEffect>(nameof(MindProjectorImageEffect.Awake), nameof(ChangeProjector));
-                Prefix<MindProjectorImageEffect>(nameof(MindProjectorImageEffect.OnRenderImage), nameof(BlitImageEffect));
-                Prefix<MindProjectorImageEffect>("set_eyeOpenness", nameof(SetEyeOpennes));
-                Prefix<MindProjectorImageEffect>("set_slideFade", nameof(SetSlideFade));
-                Prefix<MindProjectorImageEffect>("set_slideTexture", nameof(SetSlideTexture));
+                // Prefix<MindProjectorImageEffect>(nameof(MindProjectorImageEffect.Awake), nameof(ChangeProjector));
+                // Prefix<MindProjectorImageEffect>(nameof(MindProjectorImageEffect.OnRenderImage), nameof(BlitImageEffect));
+                // Prefix<MindProjectorImageEffect>("set_eyeOpenness", nameof(SetEyeOpennes));
+                // Prefix<MindProjectorImageEffect>("set_slideFade", nameof(SetSlideFade));
+                // Prefix<MindProjectorImageEffect>("set_slideTexture", nameof(SetSlideTexture));
             }
 
             public static void DisableScreenSpaceReflections(PostProcessingGameplaySettings __instance)

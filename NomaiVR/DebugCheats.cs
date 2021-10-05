@@ -26,7 +26,24 @@ namespace NomaiVR
                 // Start mind projection.
                 if (SteamVR_Actions.default_Grip.stateDown)
                 {
-                    FindObjectOfType<MindSlideProjector>().Play(true);
+                    var projector = FindObjectOfType<MindSlideProjector>();
+                    projector.Play(true);
+
+                    var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    plane.name = "MindProjectorPlane";
+                    var imageEffect = projector._mindProjectorImageEffect;
+                    imageEffect.enabled = false;
+                    plane.GetComponent<Renderer>().material = projector._mindProjectorImageEffect._localMaterial;
+
+                    var playerBody = Locator.GetPlayerBody().transform;
+                    var playerCamera = Locator.GetPlayerCamera();
+                    var planeTransform = plane.transform;
+                    planeTransform.SetParent(playerCamera.transform, false);
+                    planeTransform.localPosition = Vector3.forward * 4f;
+                    planeTransform.localScale = Vector3.one * 0.3f;
+                    planeTransform.LookAt(playerCamera.transform, playerBody.transform.up);
+                    planeTransform.Rotate(90f, 0f, 0f);
+                    planeTransform.SetParent(playerBody, true);
                 }
             }
         }
