@@ -57,7 +57,6 @@ namespace NomaiVR.Input
                 var commandTypeKey = (int)commandType;
                 if (simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey])
                 {
-                    Debug.Log("simulate input");
                     __instance.AxisValue = new Vector2(1f, 0f);
                     return;
                 }

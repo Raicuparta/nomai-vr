@@ -49,6 +49,7 @@ namespace NomaiVR
             new VRToolSwapper();
             new HandsController();
             new ShipTools();
+            new AutopilotButtonPatch();
             new FlashlightGesture();
             new HoldMallowStick();
             new HoldProbeLauncher();

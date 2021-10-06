@@ -1,6 +1,8 @@
 ﻿
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
+using static NomaiVR.Tools.AutopilotButtonPatch;
 
 namespace NomaiVR
 {
@@ -16,6 +18,7 @@ namespace NomaiVR
             private static ShipMonitorInteraction _probe;
             private static ShipMonitorInteraction _signalscope;
             private static ShipMonitorInteraction _landingCam;
+            private static ShipMonitorInteraction _autoPilot;
             private static ShipCockpitController _cockpitController;
             private static bool _isLandingCamEnabled;
 
@@ -189,6 +192,8 @@ namespace NomaiVR
                     landingText.alignment = TextAnchor.MiddleCenter;
                     landingText.fontSize = 8;
                     landingText.font = font;
+
+                    _autoPilot = cockpitTech.GetComponentInChildren<AutopilotButton>().GetComponent<ShipMonitorInteraction>();
                 }
 
                 private static Vector3 _cameraPosition;
@@ -221,7 +226,8 @@ namespace NomaiVR
                 {
                     return (_probe != null && _probe.IsFocused()) || 
                            (_signalscope != null && _signalscope.IsFocused()) || 
-                           (_landingCam != null && _landingCam.IsFocused());
+                           (_landingCam != null && _landingCam.IsFocused()) ||
+                           (_autoPilot != null && _autoPilot.IsFocused());
                 }
 
                 private static bool PreUntargetFrame()
