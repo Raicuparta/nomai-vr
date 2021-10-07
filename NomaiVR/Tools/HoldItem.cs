@@ -49,14 +49,14 @@ namespace NomaiVR
             {
                 var holdable = MakeSocketHoldable("DreamLanternSocket");
                 if (holdable == null) return;
-                holdable.SetRotationOffset(Quaternion.Euler(-15.326f, 3.915f, -90.661f));
-                holdable.SetPositionOffset(new Vector3(-0.462f, 0.136f, -0.013f), new Vector3(-0.48f, 0.14f, -0.01f));
+                holdable.SetPositionOffset(new Vector3(-0.505f, 0.094f, 0.017f), new Vector3(-0.52f, 0.094f, 0.029f));
+                holdable.SetRotationOffset(Quaternion.Euler(0f, 0f, -100.5f));
                 holdable.SetPoses("holding_dreamlantern", "holding_dreamlantern_gloves");
 
                 var dreamLanternFocuser = holdable.gameObject.AddComponent<ProximityDetector>();
-                dreamLanternFocuser.LocalOffset = new Vector3(0, 0.55f, 0.15f);
+                dreamLanternFocuser.LocalOffset = new Vector3(0, 0.6f, 0.1f);
                 dreamLanternFocuser.enabled = false;
-                dreamLanternFocuser.MinDistance = 0.25f;
+                dreamLanternFocuser.MinDistance = 0.15f;
                 dreamLanternFocuser.ExitThreshold = 0.05f;
                 dreamLanternFocuser.Other = HandsController.Behaviour.OffHand;
                 dreamLanternFocuser.OnEnter += (Transform hand) =>

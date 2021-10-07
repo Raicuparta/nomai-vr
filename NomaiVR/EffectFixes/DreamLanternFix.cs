@@ -29,19 +29,27 @@ namespace NomaiVR
 
             public override void ApplyPatches()
             {
-                Postfix<DreamLanternItem>(nameof(DreamLanternItem.Start), nameof(DisablePrepass));
+                Postfix<DreamLanternItem>(nameof(DreamLanternItem.Start), nameof(Fixup));
             }
 
-            public static void DisablePrepass(DreamLanternItem __instance)
+            public static void Fixup(DreamLanternItem __instance)
             {
+                //Fix rotations
+                var viewModelTransform = __instance.transform.Find("Props_IP_Artifact_ViewModel") ?? __instance.transform.Find("ViewModel/Props_IP_Artifact_ViewModel");
+                if(viewModelTransform != null)
+                {
+                    viewModelTransform.transform.localRotation = Quaternion.identity;
+                    viewModelTransform.transform.localPosition = new Vector3(0, 0.35f, 0);
+                }
+
+                //Fix materials
                 MaterialHelper.DisableRenderersWithShaderInChildren(__instance.gameObject, prepassShader);
 
                 //Replace all the others
                 MaterialHelper.ReplaceShadersInChildren(__instance.gameObject, s_dreamShaderFix);
 
                 //Change the glass material to be translucent again
-                var glassElement = __instance.transform.Find("Props_IP_Artifact_ViewModel/artifact_glass");
-                if (glassElement == null) glassElement = __instance.transform.Find("ViewModel/Props_IP_Artifact_ViewModel/artifact_glass");
+                var glassElement = viewModelTransform.Find("artifact_glass");
 
                 if (glassElement != null)
                 {
