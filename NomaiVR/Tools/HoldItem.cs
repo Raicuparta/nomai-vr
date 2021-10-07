@@ -49,18 +49,23 @@ namespace NomaiVR
             {
                 var holdable = MakeSocketHoldable("DreamLanternSocket");
                 if (holdable == null) return;
-                holdable.SetPositionOffset(new Vector3(0f, -0.865f, 0.029f), new Vector3(0.004f, -0.89f, 0.048f));
-                holdable.SetRotationOffset(Quaternion.Euler(0f, 0f, -100.5f));
+                holdable.SetRotationOffset(Quaternion.Euler(-15.326f, 3.915f, -90.661f));
+                holdable.SetPositionOffset(new Vector3(-0.462f, 0.136f, -0.013f), new Vector3(-0.48f, 0.14f, -0.01f));
                 holdable.SetPoses("holding_dreamlantern", "holding_dreamlantern_gloves");
 
                 var dreamLanternFocuser = holdable.gameObject.AddComponent<ProximityDetector>();
+                dreamLanternFocuser.LocalOffset = new Vector3(0, 0.55f, 0.15f);
                 dreamLanternFocuser.enabled = false;
                 dreamLanternFocuser.MinDistance = 0.25f;
                 dreamLanternFocuser.ExitThreshold = 0.05f;
                 dreamLanternFocuser.Other = HandsController.Behaviour.OffHand;
                 dreamLanternFocuser.OnEnter += (Transform hand) =>
                 {
-                    NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
+                    var lanternController = holdable.GetComponentInChildren<DreamLanternController>(false);
+                    if (lanternController != null && lanternController.IsHeldByPlayer())
+                    {
+                        NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
+                    }
                 };
                 dreamLanternFocuser.OnExit += (Transform hand) =>
                 {

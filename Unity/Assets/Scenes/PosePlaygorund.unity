@@ -121,6 +121,38 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &125129909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 125129910}
+  m_Layer: 0
+  m_Name: Glove
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &125129910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125129909}
+  m_LocalRotation: {x: 0.000000029802322, y: -0.0000000037252903, z: -0.0000000037252903,
+    w: 1}
+  m_LocalPosition: {x: -0.48, y: 0.14, z: -0.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1352604667}
+  m_Father: {fileID: 1318533834}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &312400084
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +196,7 @@ Transform:
   m_GameObject: {fileID: 312400084}
   m_LocalRotation: {x: -0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1604342035}
   m_Father: {fileID: 0}
@@ -198,38 +230,7 @@ MonoBehaviour:
   previewRightInstance: {fileID: 0}
   previewPoseSelection: 0
   blendingBehaviours: []
-  scale: 10
---- !u!1 &463620427
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 463620428}
-  m_Layer: 0
-  m_Name: Hand
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &463620428
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 463620427}
-  m_LocalRotation: {x: 0.000000043841847, y: 0.00000004106234, z: -0.00000017881389,
-    w: 1}
-  m_LocalPosition: {x: 0, y: -0.865, z: 0.029}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 694300186}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  scale: 1
 --- !u!1 &479701995
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,15 +429,45 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 694300185}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7688418, w: 0.6394391}
+  m_LocalRotation: {x: -0.11776525, y: -0.07097767, z: -0.7012092, w: 0.6995708}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5940026, y: 0.5940026, z: 0.5940026}
+  m_Children: []
+  m_Father: {fileID: 846926589}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -15.326, y: 3.915, z: -90.661}
+--- !u!1 &846926588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 846926589}
+  m_Layer: 0
+  m_Name: Hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &846926589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846926588}
+  m_LocalRotation: {x: 0.000000029802322, y: -0.0000000037252903, z: -0.0000000037252903,
+    w: 1}
+  m_LocalPosition: {x: -0.462, y: 0.136, z: -0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1580683030}
-  - {fileID: 463620428}
+  - {fileID: 694300186}
   m_Father: {fileID: 1318533834}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -100.5}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1318533833
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,13 +493,14 @@ Transform:
   m_GameObject: {fileID: 1318533833}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5940026, y: 0.5940026, z: 0.5940026}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 694300186}
+  - {fileID: 846926589}
+  - {fileID: 125129910}
   m_Father: {fileID: 1661844231097484695}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1580683029
+--- !u!1 &1352604666
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -476,28 +508,28 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1580683030}
+  - component: {fileID: 1352604667}
   m_Layer: 0
-  m_Name: Glove
+  m_Name: Rotation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1580683030
+--- !u!4 &1352604667
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1580683029}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.004, y: -0.89, z: 0.048}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_GameObject: {fileID: 1352604666}
+  m_LocalRotation: {x: -0.11776728, y: -0.07098153, z: -0.7012072, w: 0.69957197}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5940026, y: 0.5940026, z: 0.5940026}
   m_Children: []
-  m_Father: {fileID: 694300186}
+  m_Father: {fileID: 125129910}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -15.326001, y: 3.9150002, z: -90.661}
 --- !u!1 &1604342034
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,7 +554,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1604342034}
   m_LocalRotation: {x: 0.37929636, y: -0.0551466, z: 0.07860814, w: 0.92027926}
-  m_LocalPosition: {x: 0.034037676, y: 0.03650266, z: -0.16472164}
+  m_LocalPosition: {x: 0.034037672, y: 0.03650266, z: -0.16472165}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1661844231097484695}

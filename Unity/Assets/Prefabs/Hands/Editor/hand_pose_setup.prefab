@@ -733,8 +733,8 @@ MonoBehaviour:
   rangeOfMotion: 1
   skeletonRoot: {fileID: 6602614494656088641}
   origin: {fileID: 0}
-  updatePose: 1
-  onlySetRotations: 0
+  updatePose: 0
+  onlySetRotations: 1
   skeletonBlend: 1
   onBoneTransformsUpdated:
     m_PersistentCalls:

@@ -5,6 +5,7 @@ A few rules to start:
 - It should be clear that uploading game assets extracted from the game as-is without remaking them or havily modfying is not allowed and should be avoided, assets exported from the game to create new poses for should be placed under the *Assets/Exported/* directory
 - Never override the PosesPlayground scene with changes that aren't necessary
 - Due to the nature of asset bundles, poses can't be directly imported so the last few steps of the guide will explain how to export them
+- Be sure to set Unity's rotation and coordinates handling to **Pivot** and **Global/Local**
 
 ## Process Steps
 

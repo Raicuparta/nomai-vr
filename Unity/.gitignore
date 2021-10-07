@@ -72,3 +72,6 @@ crashlytics-build.properties
 
 # Exported content from the game
 /[Aa]ssets/[Ee]xported
+
+#Plugins
+/[Aa]ssets/[Pp]lugins
