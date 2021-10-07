@@ -3,6 +3,7 @@ using UnityEngine;
 using Valve.VR;
 using Valve.Newtonsoft.Json;
 using System.Collections.Generic;
+using NomaiVR.Assets;
 
 namespace NomaiVR
 {
@@ -34,6 +35,7 @@ namespace NomaiVR
             EmptyTexture.Apply();
 
             VRBindingTextures = LoadBundle("vrbindings-textures");
+            ShaderLoader.LoadBundle(LoadBundle("steamvr-shaders"));
 
             var postCreditsBundle = LoadBundle("cinema-camera");
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");

@@ -1,89 +1,88 @@
-﻿using System;
+﻿using NomaiVR.Assets;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 using Valve.VR;
 
 namespace NomaiVR.ReusableBehaviours
 {
+    //Some code from SteamVR_Fade behaviour
     public class VRMindProjectorImageEffect : MonoBehaviour
     {
-        private const float k_ProjectionMeters = 1;
-        
-        public float slideFade 
-        { 
-            set
-            {
-                if(_textureImage != null)
-                    _textureImage.CrossFadeAlpha((1 - value), 0, true);
-            }
-        }
+        public float eyeOpenness { get; set; }
+        private Transform quadTransform;
+        private Transform eyeDome;
 
-        public Texture slideTexture 
-        { 
-            set
-            {
-                if(_textureImage != null && value != null)
-                {
-                    _textureImage.texture = value;
-                }
-            }
-        }
+        private Color currentColor = new Color(0, 0, 0, 0);
+        private Material fadeMaterial = null;
+        private int fadeMaterialColorID = -1;
 
-        public float eyeOpenness
+        private void Start()
         {
-            set
-            {
-                //Hopefully this is enough
-                Color color = Color.black;
-                color.a = (1 - value);
-                SteamVR_Fade.Start(color, 0f, true);
-            }
-        }
+            var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            GameObject.Destroy(quad.GetComponent<Collider>());
+            GameObject.Destroy(quad.GetComponent<Rigidbody>());
+            quad.name = "MindProjectorPlane";
 
-        private Canvas _slideCanvas;
-        private RawImage _textureImage;
+            var dome = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            GameObject.Destroy(dome.GetComponent<Collider>());
+            GameObject.Destroy(dome.GetComponent<Rigidbody>());
+            Mesh domeMesh = dome.GetComponent<MeshFilter>().mesh;
+            domeMesh.triangles = domeMesh.triangles.Reverse().ToArray(); //We need a reverse dome
+            dome.name = "MindProjectorEyeDome";
+
+            var imageEffect = FindObjectOfType<MindProjectorImageEffect>();
+            quad.GetComponent<Renderer>().material = imageEffect._localMaterial;
+            imageEffect._localMaterial.shader = ShaderLoader.GetShader("NomaiVR/Mind_Projection_Fix");
+            imageEffect._localMaterial.renderQueue = (int)RenderQueue.Overlay;
+
+            fadeMaterial = new Material(ShaderLoader.GetShader("Custom/SteamVR_Fade_WorldSpace"));
+            fadeMaterial.renderQueue = (int)RenderQueue.Overlay - 100;
+            fadeMaterialColorID = Shader.PropertyToID("fadeColor");
+            dome.GetComponent<Renderer>().material = fadeMaterial;
+
+            dome.layer = LayerMask.NameToLayer("UI");
+            quad.layer = LayerMask.NameToLayer("UI");
+
+            var playerBody = Locator.GetPlayerBody().transform;
+
+            quadTransform = quad.transform;
+            quadTransform.SetParent(playerBody, false);
+            quadTransform.localPosition = Vector3.forward * 4f;
+            quadTransform.localScale = Vector3.one * 3;
+            quadTransform.LookAt(playerBody.transform, playerBody.transform.up);
+
+            eyeDome = dome.transform;
+            eyeDome.SetParent(playerBody, false);
+            eyeDome.localPosition = Vector3.zero;
+            eyeDome.localScale = Vector3.one * 10;
+
+            this.enabled = false;
+        }
 
         private void OnEnable()
         {
             //Projection start
-            var playerBody = Locator.GetPlayerBody().transform;
-            var playerCamera = Locator.GetPlayerCamera();
-            var projectionCanvas = new GameObject("MindProjectionCanvas").transform;
-            var projectionImage = new GameObject("ProjectionImage").transform;
-            projectionCanvas.SetParent(playerCamera.transform, false);
-            projectionCanvas.localPosition = Vector3.forward * 4f;
-            projectionCanvas.LookAt(playerCamera.transform, playerBody.transform.up);
-            projectionCanvas.SetParent(playerBody, true);
-            projectionCanvas.gameObject.layer = LayerMask.NameToLayer("UI");
-            _slideCanvas = projectionCanvas.gameObject.AddComponent<Canvas>();
-            _slideCanvas.renderMode = RenderMode.WorldSpace;
-            _slideCanvas.worldCamera = playerCamera.mainCamera;
-            _slideCanvas.transform.localScale *= 0.75f;
-            //_slideCanvas.transform.localScale = new Vector3(k_ProjectionMeters / 1920, k_ProjectionMeters / 1920, k_ProjectionMeters / 1920); //too small?
-            projectionImage.SetParent(projectionCanvas, false);
-            projectionImage.localPosition = Vector3.zero;
-            _textureImage = projectionImage.gameObject.AddComponent<RawImage>();
-            _textureImage.material = MaterialHelper.GetOverlayMaterial();
-
-            LayerHelper.ChangeLayerRecursive(_slideCanvas.gameObject, "VisibleToPlayer");
+            quadTransform?.gameObject.SetActive(true);
+            eyeDome?.gameObject.SetActive(true);
         }
 
         private void OnDisable()
         {
             //Projection finished
-            if(_slideCanvas != null)
-            {
-                GameObject.Destroy(_slideCanvas.gameObject);
-                _textureImage = null;
-                _slideCanvas = null;
-            }
+            quadTransform?.gameObject.SetActive(false);
+            eyeDome?.gameObject.SetActive(false);
         }
 
-        private void Awake()
+        void Update()
         {
-            this.enabled = false;
+            currentColor = Color.black;
+            currentColor.a = (1 - eyeOpenness);
+            fadeMaterial.SetColor(fadeMaterialColorID, currentColor);
         }
     }
 }
