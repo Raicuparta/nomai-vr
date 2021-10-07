@@ -49,6 +49,10 @@ namespace NomaiVR
             {
                 var holdable = MakeSocketHoldable("DreamLanternSocket");
                 if (holdable == null) return;
+                holdable.SetPositionOffset(new Vector3(0f, -0.865f, 0.029f), new Vector3(0.004f, -0.89f, 0.048f));
+                holdable.SetRotationOffset(Quaternion.Euler(0f, 0f, -100.5f));
+                holdable.SetPoses("holding_dreamlantern", "holding_dreamlantern_gloves");
+
                 var dreamLanternFocuser = holdable.gameObject.AddComponent<ProximityDetector>();
                 dreamLanternFocuser.enabled = false;
                 dreamLanternFocuser.MinDistance = 0.25f;
@@ -67,7 +71,6 @@ namespace NomaiVR
                     Debug.Log("Lantern interact changed");
                     dreamLanternFocuser.enabled = holden;
                 };
-                // TODO: Poses.
             }
 
             private void HoldSlideReel()
