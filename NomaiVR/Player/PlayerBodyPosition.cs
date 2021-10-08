@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
+using UnityEngine.XR;
 using Valve.VR;
 
 namespace NomaiVR
@@ -103,6 +104,7 @@ namespace NomaiVR
                     Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PostCharacterTurning));
                     Postfix<JetpackThrusterController>("FixedUpdate", nameof(Patch.PostThrusterUpdate));
                     Prefix<OWCamera>("set_fieldOfView", nameof(Patch.PatchOWCameraFOV));
+                    Prefix<OWCamera>("get_fieldOfView", nameof(Patch.GetOWCameraFOVScaled));
                 }
 
                 private static void PostThrusterUpdate(Vector3 ____rotationalInput)
@@ -172,6 +174,13 @@ namespace NomaiVR
                 {
                     //Prevents changing the fov of VR cameras
                     //This prevents log spams in projection pools
+                    return !__instance.mainCamera.stereoEnabled;
+                }
+
+                private static bool GetOWCameraFOVScaled(OWCamera __instance, ref float __result)
+                {
+                    //Returns FOV scaled by scale factor
+                    if (__instance.mainCamera.stereoEnabled) __result = __instance.mainCamera.fieldOfView / XRDevice.fovZoomFactor;
                     return !__instance.mainCamera.stereoEnabled;
                 }
             }

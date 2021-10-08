@@ -21,8 +21,8 @@ namespace NomaiVR.EffectFixes
 
                 Prefix<LanternZoomPoint>(nameof(LanternZoomPoint.UpdateRetroZoom), nameof(UpdateRetrozoomFOVScale));
                 Prefix<LanternZoomPoint>(nameof(LanternZoomPoint.UpdateZoomIn), nameof(UpdateZoomInFOVScale));
-                Postfix<LanternZoomPoint>(nameof(LanternZoomPoint.StartRetroZoom), nameof(HeadIndependentHeading));
                 Postfix<LanternZoomPoint>(nameof(LanternZoomPoint.FinishRetroZoom), nameof(ResetScaleFactor));
+                Postfix<LanternZoomPoint>(nameof(LanternZoomPoint.StartRetroZoom), nameof(HeadIndependentHeading));
             }
 
             public static void DisableScreenSpaceReflections(PostProcessingGameplaySettings __instance)
@@ -91,8 +91,10 @@ namespace NomaiVR.EffectFixes
 
             public static void HeadIndependentHeading(LanternZoomPoint __instance)
             {
+                var playerPos = Locator.GetPlayerTransform().position;
+                var heading = (__instance.transform.position - playerPos).normalized;
                 float d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
-                Vector3 position = Locator.GetPlayerTransform().position + (__instance.transform.position - Locator.GetPlayerTransform().position).normalized * d;
+                Vector3 position = playerPos + heading * d;
                 __instance._endLocalPos = __instance.transform.InverseTransformPoint(position);
             }
 
