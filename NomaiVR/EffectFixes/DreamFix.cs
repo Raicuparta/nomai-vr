@@ -1,5 +1,6 @@
 ﻿using NomaiVR.ReusableBehaviours;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace NomaiVR.EffectFixes
 {
@@ -17,6 +18,11 @@ namespace NomaiVR.EffectFixes
                 Prefix<MindProjectorImageEffect>(nameof(MindProjectorImageEffect.OnRenderImage), nameof(BlitImageEffect));
                 Prefix<MindProjectorImageEffect>("set_eyeOpenness", nameof(SetEyeOpennes));
                 Prefix<MindProjectorImageEffect>("set_slideTexture", nameof(SetSlideTexture));
+
+                Prefix<LanternZoomPoint>(nameof(LanternZoomPoint.UpdateRetroZoom), nameof(UpdateRetrozoomFOVScale));
+                Prefix<LanternZoomPoint>(nameof(LanternZoomPoint.UpdateZoomIn), nameof(UpdateZoomInFOVScale));
+                Postfix<LanternZoomPoint>(nameof(LanternZoomPoint.StartRetroZoom), nameof(HeadIndependentHeading));
+                Postfix<LanternZoomPoint>(nameof(LanternZoomPoint.FinishRetroZoom), nameof(ResetScaleFactor));
             }
 
             public static void DisableScreenSpaceReflections(PostProcessingGameplaySettings __instance)
@@ -48,6 +54,51 @@ namespace NomaiVR.EffectFixes
             {
                 var vrProjector = __instance.GetComponent<VRMindProjectorImageEffect>();
                 if (value == null) vrProjector.enabled = false;
+            }
+
+            public static bool UpdateZoomInFOVScale(LanternZoomPoint __instance)
+            {
+                float time = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 0.5f, Time.time);
+                float t = __instance._zoomInCurve.Evaluate(time);
+                float targetFieldOfView = Mathf.Lerp(Locator.GetPlayerCameraController().GetOrigFieldOfView(), __instance._startFOV, t);
+                XRDevice.fovZoomFactor = Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView;
+                if (Time.time > __instance._stateChangeTime + 0.5f)
+                {
+                    __instance.ChangeState(LanternZoomPoint.State.RetroZoom);
+                    __instance.StartRetroZoom();
+                }
+                return false;
+            }
+
+            public static bool UpdateRetrozoomFOVScale(LanternZoomPoint __instance)
+            {
+                float num = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 1.2f, Time.time);
+                float focus = Mathf.Pow(Mathf.SmoothStep(0f, 1f, 1f - num), 0.2f);
+                __instance._playerLantern.GetLanternController().SetFocus(focus);
+                float t = __instance._retroZoomCurve.Evaluate(num);
+                float targetFieldOfView = Mathf.Lerp(__instance._startFOV, Locator.GetPlayerCameraController().GetOrigFieldOfView(), t);
+                XRDevice.fovZoomFactor = Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView;
+                float d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
+                Vector3 vector = __instance._startLocalPos - __instance._endLocalPos;
+                __instance._attachPoint.transform.localPosition = __instance._endLocalPos + vector.normalized * d;
+                if (num >= 1f)
+                {
+                    __instance.FinishRetroZoom();
+                }
+
+                return false;
+            }
+
+            public static void HeadIndependentHeading(LanternZoomPoint __instance)
+            {
+                float d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
+                Vector3 position = Locator.GetPlayerTransform().position + (__instance.transform.position - Locator.GetPlayerTransform().position).normalized * d;
+                __instance._endLocalPos = __instance.transform.InverseTransformPoint(position);
+            }
+
+            private static void ResetScaleFactor()
+            {
+                XRDevice.fovZoomFactor = 1;
             }
         }
     }

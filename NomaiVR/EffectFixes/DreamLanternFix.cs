@@ -49,8 +49,7 @@ namespace NomaiVR
                 MaterialHelper.ReplaceShadersInChildren(__instance.gameObject, s_dreamShaderFix);
 
                 //Change the glass material to be translucent again
-                var glassElement = viewModelTransform.Find("artifact_glass");
-
+                var glassElement = viewModelTransform?.Find("artifact_glass");
                 if (glassElement != null)
                 {
                     var renderer = glassElement.GetComponent<Renderer>();

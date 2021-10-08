@@ -1,4 +1,6 @@
-﻿namespace NomaiVR
+﻿using UnityEngine;
+
+namespace NomaiVR
 {
     public static class SceneHelper
     {
@@ -18,6 +20,14 @@
         public static bool IsPreviousScene(OWScene scene)
         {
             return LoadManager.GetPreviousScene() == scene;
+        }
+
+        public static void PrintHierarchy(Transform parent, int depth = 0)
+        {
+            Logs.Write(depth == 0 ? $"Childs of {parent.name}:" 
+                                  : parent.name.PadLeft(parent.name.Length + depth, '-'));
+            for (int i = 0; i < parent.childCount; i++)
+                PrintHierarchy(parent.GetChild(i), depth + 1);
         }
     }
 }
