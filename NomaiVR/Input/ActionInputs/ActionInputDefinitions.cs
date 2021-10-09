@@ -50,16 +50,16 @@ namespace NomaiVR.Input.ActionInputs
             new BooleanActionInput(action: _default.StationaryUse);
 
         public static readonly Vector2ActionInput StationaryUp =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, yOnly: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput StationaryDown =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, yOnly: true, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput StationaryLeft =
-            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, invert: true, clamp: true, yZero: true);
 
         public static readonly Vector2ActionInput StationaryRight =
-            new Vector2ActionInput(action: tools.DPad, clamp: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, clamp: true);
 
         public static readonly SingleActionInput ThrustDown =
             new SingleActionInput(action: _default.ThrustDown);

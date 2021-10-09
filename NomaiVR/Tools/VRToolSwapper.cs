@@ -27,7 +27,7 @@ namespace NomaiVR
             ToolHelper.Swapper.EquipToolMode(mode);
             UpdateHand(interactingHand);
             Equipped?.Invoke();
-            if (mode != ToolMode.Item && mode != ToolMode.None) ToolEquipped?.Invoke();
+            if (mode != ToolMode.Item && mode != ToolMode.None && InputHelper.IsHandheldTool()) ToolEquipped?.Invoke();
             _toolsAllowedToEquip[mode] = false;
         }
 

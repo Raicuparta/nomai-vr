@@ -18,5 +18,13 @@
                 InputMode.SatelliteCam
             );
         }
+
+        public static bool IsHandheldTool()
+        {
+            return OWInput.IsInputMode(
+                InputMode.Character |
+                InputMode.ScopeZoom
+            );
+        }
     }
 }
