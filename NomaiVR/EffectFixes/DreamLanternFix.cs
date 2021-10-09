@@ -29,10 +29,11 @@ namespace NomaiVR
 
             public override void ApplyPatches()
             {
-                Postfix<DreamLanternItem>(nameof(DreamLanternItem.Start), nameof(Fixup));
+                Postfix<DreamLanternItem>(nameof(DreamLanternItem.Start), nameof(FixupModel));
+                Postfix<DreamLanternItem>(nameof(DreamLanternItem.CheckIsDroppable), nameof(FixDropBehaviourInDream));
             }
 
-            public static void Fixup(DreamLanternItem __instance)
+            public static void FixupModel(DreamLanternItem __instance)
             {
                 //Fix rotations
                 var viewModelTransform = __instance.transform.Find("Props_IP_Artifact_ViewModel") ?? __instance.transform.Find("ViewModel/Props_IP_Artifact_ViewModel");
@@ -54,6 +55,17 @@ namespace NomaiVR
                 {
                     var renderer = glassElement.GetComponent<Renderer>();
                     renderer.material.shader = standardTranslucent;
+                }
+            }
+
+            public static void FixDropBehaviourInDream(DreamLanternItem __instance, ref bool __result)
+            {
+                var originalCheck = __instance._lanternController != null && (__instance._lanternController.IsFocused(0.01f) || __instance._lanternController.IsConcealed());
+                if (!__result && !originalCheck)
+                {
+                    bool flag1 = Vector3.SignedAngle(Locator.GetPlayerTransform().forward, __instance.transform.forward, Locator.GetPlayerTransform().forward) < -80f;
+                    bool flag2 = Locator.GetPlayerController().GetRelativeGroundVelocity().sqrMagnitude < Locator.GetPlayerController().GetWalkSpeedMagnitude() * Locator.GetPlayerController().GetWalkSpeedMagnitude();
+                    __result = flag1 && flag2;
                 }
             }
         }

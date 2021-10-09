@@ -48,12 +48,16 @@ namespace NomaiVR
 
             GlobalMessenger.AddListener("SuitUp", OnSuitChanged);
             GlobalMessenger.AddListener("RemoveSuit", OnSuitChanged);
+            GlobalMessenger.AddListener("SimulationEnter", OnSimulationEnter);
+            GlobalMessenger.AddListener("SimulationExit", OnSimulationExit);
         }
 
         internal void OnDestroy()
         {
             GlobalMessenger.RemoveListener("SuitUp", OnSuitChanged);
             GlobalMessenger.RemoveListener("RemoveSuit", OnSuitChanged);
+            GlobalMessenger.RemoveListener("SimulationEnter", OnSimulationEnter);
+            GlobalMessenger.RemoveListener("SimulationExit", OnSimulationExit);
         }
 
         private void SetUpModel()
@@ -78,6 +82,22 @@ namespace NomaiVR
 
 
             handObject.SetActive(true);
+        }
+
+        private void OnSimulationEnter()
+        {
+            _handRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
+            _gloveRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
+            SetUpShaders(_handRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace", "Outer Wilds/Environment/Invisible Planet/Cyberspace");
+            SetUpShaders(_gloveRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace");
+        }
+
+        private void OnSimulationExit()
+        {
+            _handRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            _gloveRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            SetUpShaders(_handRenderer, "Outer Wilds/Character/Skin", "Outer Wilds/Character/Skin");
+            SetUpShaders(_gloveRenderer, "Outer Wilds/Character/Clothes");
         }
 
         private void SetUpShaders(Renderer renderer, params string[] shader)

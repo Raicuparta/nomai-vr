@@ -100,9 +100,9 @@ namespace NomaiVR
         private void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
-
+            var isInDream = Locator.GetDreamWorldController() != null && Locator.GetDreamWorldController().IsInDream();
             var isHandClose = !ModSettings.AutoHideToolbelt || IsHandNear(HandsController.Behaviour.RightHand) || IsHandNear(HandsController.Behaviour.LeftHand);
-            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && isHandClose;
+            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && !isInDream && isHandClose;
 
             if (!_visible && shouldBeVisible)
             {
