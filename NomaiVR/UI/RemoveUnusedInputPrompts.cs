@@ -51,7 +51,7 @@ namespace NomaiVR.UI
                     Postfix<RoastingStickController>(nameof(RoastingStickController.LateInitialize), nameof(RemoveRoastingStickPrompts));
                     Postfix<ToolModeUI>(nameof(ToolModeUI.LateInitialize), nameof(RemoveToolModePrompts));
                     
-                    Postfix<ScreenPrompt>(nameof(ScreenPrompt.SetVisibility), nameof(PostScreenPromptVisibility)); // TODO move this elswhere.
+                    Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(PostScreenPromptVisibility)); // TODO move this elswhere.
 
                     // Prevent probe launcher from moving the prompts around.
                     Empty<PromptManager>(nameof(PromptManager.OnProbeSnapshot));
@@ -60,12 +60,9 @@ namespace NomaiVR.UI
                     Empty<PromptManager>(nameof(PromptManager.OnProbeLauncherUnequipped));
                 }
 
-                private static void PostScreenPromptVisibility(bool isVisible)
+                private static void PostScreenPromptVisibility(ScreenPromptElement __instance)
                 {
-                    if (isVisible)
-                    {
-                        MaterialHelper.MakeGraphicChildrenDrawOnTop(Locator.GetPromptManager().gameObject);
-                    }
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(__instance.gameObject);
                 }
 
                 private static void RemoveJoystickPrompts(PlayerSpawner __instance)
