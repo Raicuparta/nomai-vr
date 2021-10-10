@@ -1,8 +1,10 @@
-﻿using System;
+﻿using NomaiVR.Input;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Valve.VR;
+using static InputConsts;
 
 namespace NomaiVR
 {
@@ -38,7 +40,7 @@ namespace NomaiVR
                 ToDominantHand();
                 SetUpLineRenderer();
                 UpdateLineAppearance();
-                CreateButtonColliders();
+                CreateUIColliders();
 
                 if (SceneHelper.IsInGame())
                 {
@@ -79,12 +81,6 @@ namespace NomaiVR
                 if (raycast.transform != null)
                 {
                     SetLineLength(raycast.distance);
-
-                    var dialogueOption = raycast.transform.GetComponent<DialogueOptionUI>();
-                    if (dialogueOption != null)
-                    {
-                        HandleDialogueOptionHit(dialogueOption);
-                    }
 
                     //Send fake events
                     _fakePointer.screenPosition = Camera.main.WorldToScreenPoint(raycast.point);
@@ -146,7 +142,8 @@ namespace NomaiVR
             {
                 var rightHandLaser = _rightMainHand ? Laser : OffHandLaser;
                 var leftHandLaser = !_rightMainHand ? Laser : OffHandLaser;
-                MovementLaser = /*ControllerInput.Behaviour.MovementOnLeftHand*/false ? leftHandLaser : rightHandLaser;
+                var movementOnLeftHand = InputMap.GetActionInput(InputCommandType.MOVE_X)?.Action?.activeDevice == SteamVR_Input_Sources.LeftHand;
+                MovementLaser = movementOnLeftHand ? leftHandLaser : rightHandLaser;
             }
 
             private void OnToolEquipped()
@@ -207,20 +204,10 @@ namespace NomaiVR
                 return hit;
             }
 
-            private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
-            {
-                if (_dialogueBox._revealingOptions)
-                {
-                    return;
-                }
-                var selectedOption = _dialogueBox.GetSelectedOption();
-                var options = _dialogueBox._optionsUIElements;
-                options[selectedOption].SetSelected(false);
-                _dialogueBox._selectedOption = options.IndexOf(dialogueOption);
-                dialogueOption.SetSelected(true);
-            }
-
-            private void CreateButtonColliders()
+            /// <summary>
+            /// Creates box colliders for all canvases that have at least one selectable item
+            /// </summary>
+            private void CreateUIColliders()
             {
                 var selectables = Resources.FindObjectsOfTypeAll<Selectable>();
                 foreach (var selectable in selectables)
@@ -255,8 +242,6 @@ namespace NomaiVR
 
                 public override void ApplyPatches()
                 {
-                    //FIXME still needed?
-                    //Prefix<InteractZone>("UpdateInteractVolume", nameof(PreUpdateInteractVolume));
                     Prefix<InteractZone>(nameof(InteractZone.OnEntry), nameof(PreInteractZoneEntry));
                     Prefix<InteractZone>(nameof(InteractZone.OnExit), nameof(PreInteractZoneExit));
                     Prefix<ToolModeSwapper>(nameof(ToolModeSwapper.Update), nameof(PreToolModeUpdate));
@@ -264,21 +249,6 @@ namespace NomaiVR
                     Postfix<ItemTool>(nameof(ItemTool.UpdateIsDroppable), nameof(PostUpdateIsDroppable));
 
                     pointerUpdateInteractVolume = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume").MethodHandle.GetFunctionPointer();
-                }
-
-                private static bool PreUpdateInteractVolume(
-                    InteractZone __instance,
-                    float ____viewingWindow,
-                    ref bool ____focused
-                )
-                {
-                    var num = 2f * Vector3.Angle(Laser.forward, __instance.transform.forward);
-                    var allowInteraction = ToolHelper.IsUsingNoTools();
-                    ____focused = allowInteraction && num <= ____viewingWindow;
-
-                    ((Action)Activator.CreateInstance(typeof(Action), __instance, pointerUpdateInteractVolume))();
-
-                    return false;
                 }
 
                 private static bool PreInteractZoneEntry(GameObject hitObj, InteractZone __instance)

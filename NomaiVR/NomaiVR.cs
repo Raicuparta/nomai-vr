@@ -43,6 +43,7 @@ namespace NomaiVR
             new DreamLanternFix();
             new DreamFix();
             new ProjectionStoneCameraFix();
+            new PeepholeCameraFix();
             new CameraMaskFix();
             new MapFix();
             new PlayerBodyPosition();

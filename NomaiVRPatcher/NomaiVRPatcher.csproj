@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds</GameDir>
+    <ModDir>NomaiVR</ModDir>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
