@@ -43,6 +43,13 @@ namespace NomaiVR
                     viewModelTransform.transform.localPosition = new Vector3(0, 0.35f, 0);
                 }
 
+                var prortotypeViewModelTransform = __instance.transform.Find("ViewModel/Props_IP_DreamLanternItem_Malfunctioning (1)");
+                if (prortotypeViewModelTransform != null)
+                {
+                    prortotypeViewModelTransform.transform.localRotation = Quaternion.identity;
+                    prortotypeViewModelTransform.transform.localPosition = Vector3.zero;
+                }
+
                 //Fix materials
                 MaterialHelper.DisableRenderersWithShaderInChildren(__instance.gameObject, prepassShader);
 
@@ -63,7 +70,7 @@ namespace NomaiVR
                 var originalCheck = __instance._lanternController != null && (__instance._lanternController.IsFocused(0.01f) || __instance._lanternController.IsConcealed());
                 if (!__result && !originalCheck)
                 {
-                    bool flag1 = Vector3.SignedAngle(Locator.GetPlayerTransform().forward, __instance.transform.forward, Locator.GetPlayerTransform().forward) < -80f;
+                    bool flag1 = Vector3.SignedAngle(Locator.GetPlayerTransform().forward, __instance.transform.forward, Locator.GetPlayerTransform().forward) < -70f;
                     bool flag2 = Locator.GetPlayerController().GetRelativeGroundVelocity().sqrMagnitude < Locator.GetPlayerController().GetWalkSpeedMagnitude() * Locator.GetPlayerController().GetWalkSpeedMagnitude();
                     __result = flag1 && flag2;
                 }
