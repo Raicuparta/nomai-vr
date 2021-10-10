@@ -82,12 +82,32 @@ namespace NomaiVR
                 {
                     SetLineLength(raycast.distance);
 
+                    //Dialogue handling
+                    var dialogueOption = raycast.transform.GetComponent<DialogueOptionUI>();
+                    if (dialogueOption != null)
+                    {
+                        HandleDialogueOptionHit(dialogueOption);
+                    }
+
                     //Send fake events
                     _fakePointer.screenPosition = Camera.main.WorldToScreenPoint(raycast.point);
                     _fakePointer.leftButton.isPressed = SteamVR_Actions._default.UISelect.stateDown;
                     _fakePointer.changedThisFrame = SteamVR_Actions._default.UISelect.stateDown;
                     _inputModule.ProcessPointer(ref _fakePointer);
                 }
+            }
+
+            private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
+            {
+                if (_dialogueBox._revealingOptions)
+                {
+                    return;
+                }
+                var selectedOption = _dialogueBox.GetSelectedOption();
+                var options = _dialogueBox._optionsUIElements;
+                options[selectedOption].SetSelected(false);
+                _dialogueBox._selectedOption = options.IndexOf(dialogueOption);
+                dialogueOption.SetSelected(true);
             }
 
             private void SetUpLaserObject()
