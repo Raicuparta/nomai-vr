@@ -38,6 +38,7 @@ namespace NomaiVR.Input
                 { InputCommandType.INTERACT, ActionInputDefinitions.Interact },
                 { InputCommandType.LOCKON, ActionInputDefinitions.Interact },
                 { InputCommandType.ENTER, ActionInputDefinitions.Interact },
+                { InputCommandType.MENU_CONFIRM, ActionInputDefinitions.Interact },
                 { InputCommandType.LOOK, ActionInputDefinitions.Look },
                 { InputCommandType.LOOK_X, ActionInputDefinitions.Look },
                 { InputCommandType.LOOK_Y, ActionInputDefinitions.LookY },

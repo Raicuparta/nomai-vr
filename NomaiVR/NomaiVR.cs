@@ -69,6 +69,7 @@ namespace NomaiVR
             new PostCreditsFix();
             new LookArrow();
             new DisableDeathAnimation();
+            new VirtualKeyboard();
             new Menus();
             new DebugCheats();
         }

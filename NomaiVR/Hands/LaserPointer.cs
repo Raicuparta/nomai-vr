@@ -27,7 +27,6 @@ namespace NomaiVR
             private const float _gameLineLength = 0.5f;
             private const float _menuLineLength = 3f;
             private bool _rightMainHand;
-            private bool _isReady;
             private OWMenuInputModule _inputModule;
             private DialogueBoxVer2 _dialogueBox;
             private PointerModelExposed _fakePointer;
@@ -46,11 +45,6 @@ namespace NomaiVR
                 {
                     SetUpFirstPersonManipulator();
                     _dialogueBox = FindObjectOfType<DialogueBoxVer2>();
-                }
-
-                if (SceneHelper.IsInTitle())
-                {
-                    SetUpTitleAnimationHandler();
                 }
 
                 ModSettings.OnConfigChange += ToDominantHand;
@@ -140,13 +134,6 @@ namespace NomaiVR
             {
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
                 _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
-                _isReady = true;
-            }
-
-            private void SetUpTitleAnimationHandler()
-            {
-                var titleAnimationController = FindObjectOfType<TitleAnimationController>();
-                titleAnimationController.OnTitleMenuAnimationComplete += () => _isReady = true;
             }
 
             private void ToDominantHand() => ForceHand(HandsController.Behaviour.DominantHand);
@@ -214,7 +201,7 @@ namespace NomaiVR
 
             public RaycastHit DoUIRaycast(float distance)
             {
-                if (!_isReady || !InputHelper.IsUIInteractionMode(true) || LoadManager.IsBusy())
+                if (!InputHelper.IsUIInteractionMode(true) || LoadManager.IsBusy())
                 {
                     return default;
                 }
