@@ -36,6 +36,7 @@ namespace NomaiVR
 
                 if (SceneHelper.IsInTitle())
                 {
+                    LoadManager.LoadScene(OWScene.PostCreditsScene, LoadManager.FadeType.ToWhite, 1f, true);
                     FixTitleMenuCanvases();
                     FixStarLogos();
                     FixOuterWildsLogo();
@@ -276,7 +277,7 @@ namespace NomaiVR
                         patchedCanvases.Add(canvas);
                     }
 
-                    if (isScreenSpaceOverlay || isPatched)
+                    if ((isScreenSpaceOverlay || isPatched) && !SceneHelper.IsInPostCredits())
                     {
                         AddFollowTarget(canvas);
                     }
