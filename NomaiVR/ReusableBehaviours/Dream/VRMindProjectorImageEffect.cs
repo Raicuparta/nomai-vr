@@ -13,6 +13,8 @@ namespace NomaiVR.ReusableBehaviours
     //Some code from SteamVR_Fade behaviour
     public class VRMindProjectorImageEffect : MonoBehaviour
     {
+        private readonly int _shaderPropID_UnscaledTime = Shader.PropertyToID("_UnscaledTime");
+
         public float eyeOpenness { get; set; }
         private Transform quadTransform;
         private Transform eyeDome;
@@ -20,6 +22,7 @@ namespace NomaiVR.ReusableBehaviours
         private Color currentColor = new Color(0, 0, 0, 0);
         private Material fadeMaterial = null;
         private int fadeMaterialColorID = -1;
+        private Material projectionMaterial;
 
         private void Start()
         {
@@ -39,6 +42,7 @@ namespace NomaiVR.ReusableBehaviours
             quad.GetComponent<Renderer>().material = imageEffect._localMaterial;
             imageEffect._localMaterial.shader = ShaderLoader.GetShader("NomaiVR/Mind_Projection_Fix");
             imageEffect._localMaterial.renderQueue = (int)RenderQueue.Overlay;
+            projectionMaterial = imageEffect._localMaterial;
 
             fadeMaterial = new Material(ShaderLoader.GetShader("Custom/SteamVR_Fade_WorldSpace"));
             fadeMaterial.renderQueue = (int)RenderQueue.Overlay - 100;
@@ -53,7 +57,7 @@ namespace NomaiVR.ReusableBehaviours
             quadTransform = quad.transform;
             quadTransform.SetParent(playerBody, false);
             quadTransform.localPosition = Vector3.forward * 4f;
-            quadTransform.localScale = Vector3.one * 3;
+            quadTransform.localScale = new Vector3(-3, 3, 3); //We need to flip the X axis
             quadTransform.LookAt(playerBody.transform, playerBody.transform.up);
 
             eyeDome = dome.transform;
@@ -81,8 +85,9 @@ namespace NomaiVR.ReusableBehaviours
         void Update()
         {
             currentColor = Color.black;
-            currentColor.a = (1 - eyeOpenness);
+            currentColor.a = (1 - eyeOpenness*eyeOpenness);
             fadeMaterial.SetColor(fadeMaterialColorID, currentColor);
+            this.projectionMaterial.SetFloat(_shaderPropID_UnscaledTime, Time.unscaledTime);
         }
     }
 }
