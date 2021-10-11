@@ -36,7 +36,6 @@ namespace NomaiVR
 
                 if (SceneHelper.IsInTitle())
                 {
-                    LoadManager.LoadScene(OWScene.PostCreditsScene, LoadManager.FadeType.ToWhite, 1f, true);
                     FixTitleMenuCanvases();
                     FixStarLogos();
                     FixOuterWildsLogo();
