@@ -45,7 +45,7 @@ namespace NomaiVRPatcher
 
             AssetFileInfoEx playerSettings = assetsFileTable.GetAssetInfo(1);
             AssetTypeValueField playerSettingsBase = assetsManager.GetTypeInstance(assetsFile, playerSettings).GetBaseField();
-            AssetTypeValueField disableOldInputManagerSupport = playerSettingsBase.Get("disableOldInputManagerSupport");
+            AssetTypeValueField disableOldInputManagerSupport = playerSettingsBase.Get("enableNativePlatformBackendsForNewInputSystem");
             disableOldInputManagerSupport.value = new AssetTypeValue(EnumValueTypes.ValueType_Bool, false);
             replacers.Add(new AssetsReplacerFromMemory(0, playerSettings.index, (int)playerSettings.curFileType, 0xffff, playerSettingsBase.WriteToByteArray()));
 

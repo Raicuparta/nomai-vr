@@ -39,7 +39,11 @@ namespace NomaiVR
                 ToDominantHand();
                 SetUpLineRenderer();
                 UpdateLineAppearance();
-                CreateUIColliders();
+
+                if (!SceneHelper.IsInCreditsScene())
+                {
+                    CreateUIColliders();
+                }
 
                 if (SceneHelper.IsInGame())
                 {

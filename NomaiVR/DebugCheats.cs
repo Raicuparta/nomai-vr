@@ -11,6 +11,11 @@ namespace NomaiVR
             {
                 if (!SteamVR_Actions.default_Jump.state || !SteamVR_Actions.default_Back.state) return;
 
+                if(SteamVR_Actions.default_Map.stateDown)
+                {
+                    LoadManager.LoadScene(OWScene.Credits_Final, LoadManager.FadeType.ToWhite, 1f, true);
+                }
+
                 // Wake up in dream (requires invincibility).
                 if (SteamVR_Actions.default_Interact.stateDown)
                 {

@@ -21,7 +21,11 @@ namespace NomaiVR
         {
             return LoadManager.GetPreviousScene() == scene;
         }
-
+        public static bool IsInCreditsScene()
+        {
+            var scene = LoadManager.GetCurrentScene();
+            return scene == OWScene.Credits_Fast || scene == OWScene.Credits_Final || scene == OWScene.PostCreditsScene;
+        }
         public static void PrintHierarchy(Transform parent, int depth = 0)
         {
             Logs.Write(depth == 0 ? $"Childs of {parent.name}:" 
