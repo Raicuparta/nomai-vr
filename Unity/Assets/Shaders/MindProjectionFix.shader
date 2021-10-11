@@ -20,6 +20,7 @@ Shader "NomaiVR/Mind_Projection_Fix"
 			ZTest Always
 			ZWrite Off
 			Cull Off
+			Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM
 				#pragma vertex MainVS
@@ -33,27 +34,20 @@ Shader "NomaiVR/Mind_Projection_Fix"
 			{
 				float4 vertex : POSITION;
                 float2 uv : TEXCOORD;
-
-				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
 			struct VertexOutput
 			{
 				float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD;
-
-				UNITY_VERTEX_OUTPUT_STEREO
 			};
 				// Globals --------------------------------------------------------------------------------------------------------------------------------------------------
-				UNITY_INSTANCING_BUFFER_START( Props )
-					UNITY_DEFINE_INSTANCED_PROP( float4, _NoiseTex1_ST )
-					UNITY_DEFINE_INSTANCED_PROP( float4, _NoiseTex2_ST )
-					UNITY_DEFINE_INSTANCED_PROP( float4, _NoiseStrength )
-					UNITY_DEFINE_INSTANCED_PROP( float, _EyeOpenness )
-					UNITY_DEFINE_INSTANCED_PROP( float, _BlendWidth )
-					UNITY_DEFINE_INSTANCED_PROP( float, _SlideFade )
-					UNITY_DEFINE_INSTANCED_PROP( float, _UnscaledTime )
-				UNITY_INSTANCING_BUFFER_END( Props )
+
+				float _NoiseStrength;
+				float _EyeOpenness;
+				float _BlendWidth;
+				float _SlideFade;
+				float _UnscaledTime;
 
 				sampler2D _MainTex;
 				sampler2D _EyeTex;
@@ -61,13 +55,14 @@ Shader "NomaiVR/Mind_Projection_Fix"
 				sampler2D _NoiseTex1;
 				sampler2D _NoiseTex2;
 				sampler2D _VignetteTex;
+				
+				float4 _NoiseTex1_ST;
+				float4 _NoiseTex2_ST;
 
 				VertexOutput MainVS( VertexInput i )
 				{
 					VertexOutput o;
-					UNITY_SETUP_INSTANCE_ID( i );
 					UNITY_INITIALIZE_OUTPUT( VertexOutput, o );
-					UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o ); 
 
 					o.vertex = UnityObjectToClipPos(i.vertex);
                     o.uv = i.uv;
@@ -77,40 +72,27 @@ Shader "NomaiVR/Mind_Projection_Fix"
 
 				float4 MainPS( VertexOutput i ) : SV_Target
 				{
-					UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( i );
-                    float4 Noise1_ST = UNITY_ACCESS_INSTANCED_PROP( Props, _NoiseTex1_ST.xyzw );
-                    float4 Noise2_ST = UNITY_ACCESS_INSTANCED_PROP( Props, _NoiseTex2_ST.xyzw );
-					float time = UNITY_ACCESS_INSTANCED_PROP( Props, _UnscaledTime);
-					float blendWidth = UNITY_ACCESS_INSTANCED_PROP( Props, _BlendWidth );
-					float noiseStrength = UNITY_ACCESS_INSTANCED_PROP( Props, _NoiseStrength );
-
-                    float2 noiseUV = Noise1_ST.zw * time;
-                    noiseUV =  i.uv * Noise1_ST.xy + noiseUV;
+                    float2 noiseUV =  i.uv * _NoiseTex1_ST.xy + _NoiseTex1_ST.zw * _UnscaledTime;
                     float4 noise1 = tex2D(_NoiseTex1, noiseUV);
-                    noise1.x = noise1.x * 2 - 1;
-                    float2 noise2UV = Noise2_ST.zw * time;
-                    noise2UV.xy = i.uv * Noise2_ST.xy + noise2UV.xy;
-                    float4 noise2 = tex2D(_NoiseTex2, noise2UV.xy);
-                    float temp2 = noise2.x * 2 - 1;
-                    noise1.x = temp2 + noise1.x;
-                    noise1.x = noise1.x * noiseStrength;
+                    noise1.x = noise1.x * 2.0 - 1.0;
+                    float2 noise2UV = i.uv * _NoiseTex2_ST.xy + _NoiseTex2_ST.zw * _UnscaledTime;
+                    float4 noise2 = tex2D(_NoiseTex2, noise2UV);
+                    noise1.x += noise2.x * 2.0 - 1.0;
+                    noise1.x *= _NoiseStrength;
                     bool flip = 0.5 < i.uv.x;
-                    temp2 = (flip) ? 1 : -1;
+                    float temp2 = (flip) ? 1.0 : -1.0;
                     float temp = noise1.x * temp2 + i.uv.x;
                     float4 slideTex = tex2D(_SlideTex, i.uv);
                     float4 vignette = tex2D(_VignetteTex, float2(temp, i.uv.y));
-                    float oneMinusVignette = clamp(1 - vignette.a, 0, 1);
-                    slideTex = slideTex * oneMinusVignette + float4(0, 0, 0, -1);
-					slideTex = slideTex * UNITY_ACCESS_INSTANCED_PROP( Props, _SlideFade ) + float4(0, 0, 0, 1);
-                    float mainTex = tex2D(_MainTex, i.uv);
-                    mainTex = vignette - slideTex;
-                    float eyeCloseLevel = 1 - UNITY_ACCESS_INSTANCED_PROP( Props, _EyeOpenness );
-                    eyeCloseLevel = eyeCloseLevel * (blendWidth + 1) - blendWidth;
+                    float oneMinusVignette = clamp(1.0 - vignette.a, 0.0, 1.0);
+                    slideTex = slideTex * oneMinusVignette + float4(0.0, 0.0, 0.0, -1.0);
+					slideTex = slideTex * _SlideFade + float4(0.0, 0.0, 0.0, 1.0);
+                    float eyeCloseLevel = 1.0 - _EyeOpenness;
+                    eyeCloseLevel = eyeCloseLevel * (_BlendWidth + 1) - _BlendWidth;
                     float4 eyeTex = tex2D(_EyeTex, i.uv);
-                    eyeCloseLevel = eyeTex.x - eyeCloseLevel;
-                    eyeCloseLevel = eyeCloseLevel / blendWidth;
+                    eyeCloseLevel = (eyeTex.x - eyeCloseLevel) / _BlendWidth;
                     eyeCloseLevel = clamp(eyeCloseLevel, 0.0, 1.0);
-                    return eyeCloseLevel * mainTex + slideTex;
+                    return eyeCloseLevel * (-slideTex) + slideTex;
 				}
 			ENDCG
 		}
