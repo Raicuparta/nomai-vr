@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net35</TargetFramework>
     <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds</GameDir>
     <ModDir>NomaiVR</ModDir>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -9,20 +9,17 @@
 
   <ItemGroup>
     <PackageReference Include="AssetsTools.NET" Version="2.0.9" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="BepInEx">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
   </ItemGroup>
   
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
-    <Exec Command='md "$(GameDir)\BepInEx\patchers\$(ModDir)"' IgnoreExitCode='true' />
-    <Exec Command='copy /y "$(TargetPath)" "$(GameDir)\BepInEx\patchers\$(ModDir)"' />
-    <Exec Command='copy /y "$(TargetDir)\AssetsTools.NET.dll" "$(GameDir)\BepInEx\patchers\$(ModDir)"' />
-    <Exec Command='copy /y "$(TargetDir)\Mono*.dll" "$(GameDir)\BepInEx\patchers\$(ModDir)"' />
-    <Exec Command='copy /y "$(ProjectDir)\ClassDatabase\*" "$(GameDir)\BepInEx\patchers\$(ModDir)"' />
+    <Exec Command="md &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" IgnoreExitCode="true" />
+    <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
+    <Exec Command="copy /y &quot;$(TargetDir)\AssetsTools.NET.dll&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
+    <Exec Command="copy /y &quot;$(TargetDir)\Mono*.dll&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\ClassDatabase\*&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
   </Target>
 
   <ItemGroup>
