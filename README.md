@@ -34,6 +34,8 @@ Need to wait for a NomaiVR update for DLC compatibility.
 
 ## Rolling back to version 1.0.7 of Outer Wilds
 
+You also need to downgrade OWML to 1.1.8! Instructions [here](#easy-installation-recommended).
+
 ### Steam version
 
 Follow the instructions given by Logan, one of the Outer Wilds devs:
@@ -56,6 +58,8 @@ Epic store doesn't have an option for beta branches or anything of the sort, so 
 ### Easy installation (recommended)
 
 - Get the Mod Manager from the [Outer Wilds Mods](https://outerwildsmods.com/) website;
+- Install OWML and downgrade it to version 1.1.8:
+![owml-pre](https://user-images.githubusercontent.com/3955124/137026170-4b0777cd-3af2-4e35-8dbd-76a0cf557302.gif)
 - Install NomaiVR from the mod list displayed in the application;
 - If you can't get the mod manager to work, follow the instructions for manual installation.
 
