@@ -1,6 +1,4 @@
-﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Reflection;
 
 namespace NomaiVR
@@ -32,46 +30,23 @@ namespace NomaiVR
             EmptyMethod<T>(methodName);
         }
 
-        public static void Empty(MethodBase method)
-        {
-            // NomaiVR.Helper.HarmonyHelper.EmptyMethod(method);
-        }
-
         public void AddPrefix<T>(string methodName, Type patchType, string patchMethodName) =>
-    AddPrefix(GetMethod<T>(methodName), patchType, patchMethodName);
+            AddPrefix(GetMethod<T>(methodName), patchType, patchMethodName);
 
-        public void AddPrefix(MethodBase original, Type patchType, string patchMethodName)
-        {
-            var prefix = TypeExtensions.GetAnyMethod(patchType, patchMethodName);
-            if (prefix == null)
-            {
-                Logs.WriteError($"Error in {nameof(AddPrefix)}: {patchType.Name}.{patchMethodName} is null.");
-                return;
-            }
-            Patch(original, prefix, null, null);
-        }
+        public void AddPrefix(MethodBase original, Type patchType, string patchMethodName) => 
+            NomaiVR.HarmonyInstance.AddPrefix(original, patchType, patchMethodName);
 
         public void AddPostfix<T>(string methodName, Type patchType, string patchMethodName) =>
             AddPostfix(GetMethod<T>(methodName), patchType, patchMethodName);
 
-        public void AddPostfix(MethodBase original, Type patchType, string patchMethodName)
-        {
-            var postfix = TypeExtensions.GetAnyMethod(patchType, patchMethodName);
-            if (postfix == null)
-            {
-                Logs.WriteError($"Error in {nameof(AddPostfix)}: {patchType.Name}.{patchMethodName} is null.");
-                return;
-            }
-            Patch(original, null, postfix, null);
-        }
+        public void AddPostfix(MethodBase original, Type patchType, string patchMethodName) =>
+            NomaiVR.HarmonyInstance.AddPostfix(original, patchType, patchMethodName);
 
         public void EmptyMethod<T>(string methodName) =>
             EmptyMethod(GetMethod<T>(methodName));
 
         public void EmptyMethod(MethodBase methodInfo) =>
             AddPrefix(methodInfo, typeof(NomaiVRPatch), nameof(EmptyMethodPatch));
-
-        public static bool EmptyMethodPatch() => false;
 
         private MethodInfo GetMethod<T>(string methodName)
         {
@@ -93,27 +68,8 @@ namespace NomaiVR
             }
         }
 
-        private void Patch(MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler)
-        {
-            if (original == null)
-            {
-                Logs.WriteError($"Error in {nameof(Patch)}: original MethodInfo is null.");
-                return;
-            }
-            var prefixMethod = prefix == null ? null : new HarmonyMethod(prefix);
-            var postfixMethod = postfix == null ? null : new HarmonyMethod(postfix);
-            var transpilerMethod = transpiler == null ? null : new HarmonyMethod(transpiler);
-            var fullName = $"{original.DeclaringType}.{original.Name}";
-            try
-            {
-                NomaiVR.HarmonyInstance.Patch(original, prefixMethod, postfixMethod, transpilerMethod);
-                Logs.Write($"Patched {fullName}!");
-            }
-            catch (Exception ex)
-            {
-                Logs.WriteError($"Exception while patching {fullName}: {ex}");
-            }
-        }
+        public static bool EmptyMethodPatch() => false;
+
         public abstract void ApplyPatches();
     }
 }

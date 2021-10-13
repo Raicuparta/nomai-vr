@@ -1,28 +1,19 @@
 ﻿using Valve.VR;
-using BepInEx;
-using System.IO;
-using HarmonyLib;
 using NomaiVR.EffectFixes;
 using NomaiVR.Input;
 using NomaiVR.Tools;
 using NomaiVR.UI;
+using NomaiVR.Loaders;
 
 namespace NomaiVR
 {
-    [BepInPlugin("raicuparta.nomaivr", "NomaiVR", "2.0.0")]
-    public class NomaiVR : BaseUnityPlugin
+    public class NomaiVR
     {
+        public static IHarmonyInstance HarmonyInstance;
         public static ModSaveFile Save;
-        public static readonly string ModFolderPath = $"{Directory.GetCurrentDirectory()}/BepInEx/plugins/NomaiVR/";
-        public static Harmony HarmonyInstance;
+        public static string ModFolderPath;
 
-        internal void Awake()
-        {
-            HarmonyInstance = new Harmony("raicuparta.nomaivr");
-            ModSettings.SetConfig(Config);
-        }
-
-        internal void Start()
+        internal static void ApplyMod()
         {
             Save = ModSaveFile.LoadSaveFile();
             new FatalErrorChecker();
@@ -74,7 +65,7 @@ namespace NomaiVR
             new DebugCheats();
         }
 
-        private void InitSteamVR()
+        private static void InitSteamVR()
         {
             try
             {

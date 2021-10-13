@@ -6,7 +6,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NomaiVR</RootNamespace>
     <AssemblyName>NomaiVR</AssemblyName>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net4.6</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <GameDir>C:\Program Files\Epic Games\OuterWilds</GameDir>
@@ -16,6 +16,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetFrameworkProfile />
+    <Configurations>Debug;Release;OWML</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,9 +37,19 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OWML|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;OWML</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath>
+    <Reference Include="0Harmony20">
+      <HintPath>$(GameDir)\BepInEx\core\0Harmony20.dll</HintPath>
+      <Aliases>BepInEx</Aliases>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
@@ -54,6 +65,9 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="netstandard">
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\netstandard.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -175,6 +189,10 @@
   <ItemGroup>
     <EmbeddedResource Remove="Input\Bindings\**" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OWML" Version="2.0.0">
+    </PackageReference>
+  </ItemGroup>
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
     <Exec Command="del &quot;$(OwmlDir)\$(ModDir)\config.json&quot;" IgnoreExitCode="true" />
 
@@ -210,6 +228,9 @@
     <Exec Command="copy /y &quot;$(ProjectDir)\manifest.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
   </Target>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
+    <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />
+  </Target>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(Configuration)' == 'OWML' ">
     <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />
   </Target>
 </Project>
