@@ -7,5 +7,6 @@ namespace NomaiVR.Input.ActionInputs
     {
         Vector2 Value { get; }
         ISteamVR_Action_In Action { get; }
+        bool Active { get; }
     }
 }

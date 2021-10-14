@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3577043261
+CRC: 3579089867
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f00222dd9a8f010f6a8035968238ec56
+    Hash: 8dc1d336662af258d39a4afed0c649ce
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7859cd501ea75098bcf7e53f1b477c26
@@ -36,6 +36,7 @@ Assets:
 - Assets/VRBindings/Texture2D/Oculus/Left/trigger.png
 - Assets/VRBindings/Texture2D/Index/Left/button_a.png
 - Assets/VRBindings/Texture2D/WMR/Left/button_back.png
+- Assets/VRBindings/Texture2D/Interactions/hold_together.png
 - Assets/VRBindings/Texture2D/Index/Left/trackpad.png
 - Assets/VRBindings/Texture2D/Generic/Right/button_menu.png
 - Assets/VRBindings/Texture2D/WMR/Right/button_b.png

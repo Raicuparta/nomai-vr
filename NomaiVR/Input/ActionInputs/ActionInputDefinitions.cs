@@ -7,6 +7,9 @@ namespace NomaiVR.Input.ActionInputs
         public static readonly EmptyActionInput Empty =
             new EmptyActionInput();
 
+        public static readonly EmptyActionInput HoldHands =
+            new EmptyActionInput(texturePath: "interactions/hold_together");
+
         public static readonly BooleanActionInput Autopilot =
             new BooleanActionInput(action: _default.Autopilot);
 
@@ -98,15 +101,15 @@ namespace NomaiVR.Input.ActionInputs
             new BooleanActionInput(action: tools.Use, eitherHand: true);
 
         public static readonly Vector2ActionInput ToolUp =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true, yZero: true, eitherHand: true);
 
         public static readonly Vector2ActionInput ToolDown =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true, yZero: true, eitherHand: true);
 
         public static readonly Vector2ActionInput ToolLeft =
-            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true, yZero: true, eitherHand: true);
 
         public static readonly Vector2ActionInput ToolRight =
-            new Vector2ActionInput(action: tools.DPad, clamp: true, yZero: true);
+            new Vector2ActionInput(action: tools.DPad, clamp: true, yZero: true, eitherHand: true);
     }
 }

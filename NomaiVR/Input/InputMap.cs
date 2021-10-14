@@ -75,7 +75,7 @@ namespace NomaiVR.Input
         public static readonly Dictionary<InputCommandType, IActionInput> UsableItemMap =
             new Dictionary<InputCommandType, IActionInput>
             {
-                { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Empty },
+                { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.HoldHands },
             };
 
         public static IActionInput GetActionInput(InputCommandType commandType)

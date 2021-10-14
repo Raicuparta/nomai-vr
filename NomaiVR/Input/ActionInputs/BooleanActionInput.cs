@@ -19,6 +19,18 @@ namespace NomaiVR.Input.ActionInputs
             }
         }
 
+        public override bool Active
+        {
+            get
+            {
+                var state = isEitherHand
+                    ? specificAction.GetActive(SteamVR_Input_Sources.LeftHand) ||
+                      specificAction.GetActive(SteamVR_Input_Sources.RightHand)
+                    : specificAction.active;
+                return state;
+            }
+        }
+
         public BooleanActionInput(SteamVR_Action_Boolean action, bool eitherHand = false) : base(action)
         {
             isEitherHand = eitherHand;

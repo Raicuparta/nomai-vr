@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using NomaiVR.Input;
+using NomaiVR.Input.ActionInputs;
 using UnityEngine;
 using Valve.VR;
 using static InputConsts;
@@ -32,6 +33,7 @@ namespace NomaiVR.UI
 
             public ActiveVRPlatform Platform { get; private set; }
             private Dictionary<string, Texture2D> _textureCache;
+            private Dictionary<ISteamVR_Action, string> _pathCache;
 
             public void Awake()
             {
@@ -39,11 +41,13 @@ namespace NomaiVR.UI
                 Platform = ActiveVRPlatform.Generic;
 
                 _textureCache = new Dictionary<string, Texture2D>();
-                foreach(var texturePath in AssetLoader.VRBindingTextures.GetAllAssetNames())
+                _pathCache = new Dictionary<ISteamVR_Action, string>();
+                foreach (var texturePath in AssetLoader.VRBindingTextures.GetAllAssetNames())
                 {
                     var assetPath = texturePath.Substring(0, texturePath.LastIndexOf('.'));
                     _textureCache.Add(assetPath.ToLower(), AssetLoader.VRBindingTextures.LoadAsset<Texture2D>(texturePath));
                 }
+                _textureCache.Add("empty", new Texture2D(0, 0));
 
                 RegisterToControllerChanges();
             }
@@ -52,14 +56,18 @@ namespace NomaiVR.UI
             {
                 Logs.Write($"Registering for controller binding changes");
                 SteamVR_Actions._default.Grip.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => ActiveDeviceChanged(fromAction), SteamVR_Input_Sources.Any);
-
                 ActiveDeviceChanged(SteamVR_Actions._default.Grip);
+
+                Logs.Write($"Registering for game events");
+                VRToolSwapper.ToolEquipped += () => Invoke(nameof(InvalidateButtonImages), Time.deltaTime * 3);
+                VRToolSwapper.UnEquipped += () => Invoke(nameof(InvalidateButtonImages), Time.deltaTime * 3);
             }
 
             private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)
             {
                 var activeDevice = SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ControllerType_String, fromAction.trackedDeviceIndex);
                 Logs.Write($"#### Got active device: {activeDevice}");
+
                 var currentPlatform = Platform;
                 switch(activeDevice)
                 {
@@ -75,14 +83,33 @@ namespace NomaiVR.UI
                     case "holographic":
                         Platform = ActiveVRPlatform.WMR;
                         break;
+                    case "<unknown>":
+                        return;
                     default:
                         Platform = ActiveVRPlatform.Generic;
                         break;
                 }
 
                 Logs.Write($"Controller platform: {Platform}");
-                if (currentPlatform != Platform) Manager?.OnButtonImagesChanged();
+                if (currentPlatform != Platform)
+                {
+                    _pathCache.Clear(); //Invalidate learned paths
+                    InvalidateButtonImages();
+                }
             }
+
+            private void InvalidateButtonImages()
+            {
+                Manager?.OnButtonImagesChanged();
+            }
+
+            public string GetCachedPartName(ISteamVR_Action action)
+            {
+                _pathCache.TryGetValue(action, out var path);
+                return path;
+            }
+
+            public void SetCachedPartName(ISteamVR_Action action, string path) => _pathCache[action] = path;
 
             public Texture2D GetTexture(string path)
             {
@@ -114,14 +141,31 @@ namespace NomaiVR.UI
                     var vrInputAction = InputMap.GetActionInput(__instance.CommandType);
                     if (vrInputAction == null) return true;
 
+                    if(vrInputAction is EmptyActionInput emptyInput
+                        && !String.IsNullOrEmpty(emptyInput.TexturePath))
+                    {
+                        var emptyActionTexture = Instance.GetTexture($"{k_baseAssetPath}/{emptyInput.TexturePath}");
+                        if (emptyActionTexture != null) __instance.textureList.Add(emptyActionTexture);
+                        return __instance.textureList.Count == 0;
+                    }
+
                     var steamVrAction = vrInputAction.Action;
-                    if (steamVrAction == null) return true;
+                    if (steamVrAction == null)
+                    {
+                        __instance.textureList.Add(Instance.GetTexture("empty"));
+                        return __instance.textureList.Count == 0;
+                    }
 
                     var name = "";
-                    var hand = steamVrAction.activeDevice == SteamVR_Input_Sources.RightHand
-                        ? "Right"
-                        : "Left";
-                    name = $"{hand}/{steamVrAction.renderModelComponentName}";
+                    if (vrInputAction.Active)
+                    {
+                        var hand = steamVrAction.activeDevice == SteamVR_Input_Sources.RightHand
+                            ? "Right"
+                            : "Left";
+                        name = $"{hand}/{steamVrAction.renderModelComponentName}";
+                        Instance.SetCachedPartName(steamVrAction, name);
+                    }
+                    if (String.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
 
                     Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
                     
