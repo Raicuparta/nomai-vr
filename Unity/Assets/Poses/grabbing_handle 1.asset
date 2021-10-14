@@ -3,13 +3,14 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e90911e410742a1498a167540c7865bf, type: 3}
-  m_Name: grabbing_handle
+  m_Name: grabbing_handle 1
   m_EditorClassIdentifier: 
   leftHand:
     inputSource: 1

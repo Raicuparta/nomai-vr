@@ -42,7 +42,9 @@ namespace NomaiVR
             {
                 var holdable = MakeSocketHoldable("SimpleLanternSocket");
                 if (holdable == null) return;
-                // TODO: Poses.
+                holdable.SetPositionOffset(new Vector3(-0.45f, 0.093f, 0.044f), new Vector3(-0.458f, 0.0709f, 0.0376f));
+                holdable.SetRotationOffset(Quaternion.Euler(0f, 2.16f, -101.03f));
+                holdable.SetPoses("holding_dreamlantern", "holding_simplelantern_gloves");
             }
 
             private void HoldDreamLantern()
@@ -72,16 +74,21 @@ namespace NomaiVR
             {
                 var holdable = MakeSocketHoldable("SlideReelSocket");
                 if (holdable == null) return;
-                // TODO: Poses.
+                holdable.SetPositionOffset(new Vector3(-0.2581f, -0.1659f, 0.009f), new Vector3(-0.2581f, -0.1659f, 0.009f));
+                holdable.SetRotationOffset(Quaternion.Euler(-2.75f, -12.15f, -10.617f));
+                holdable.SetPoses("holding_slidereel", "holding_slidereel_gloves");
             }
 
             private void HoldVisionTorch()
             {
                 var holdable = MakeSocketHoldable("VisionTorchSocket");
                 if (holdable == null) return;
-                // TODO: Poses.
+                holdable.SetPositionOffset(new Vector3(-0.0092f, -0.0522f, 0.0107f));
+                holdable.SetRotationOffset(Quaternion.Euler(-0.404f, 0.109f, -9.991f));
+                holdable.SetPoses("holding_visiontorch");
 
-                SetupUsableItem(holdable, 0.15f, 0.05f, Vector3.zero,
+                SetupUsableItem(holdable, 0.15f, 0.05f, 
+                                new Vector3(0.0092f, 0.0522f, 0.0107f),
                                 onEnter: (Transform hand) =>
                                 {
                                     var torchItem = holdable.GetComponentInChildren<VisionTorchItem>(false);
