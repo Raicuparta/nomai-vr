@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1889035945
+CRC: 3820554850
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d48a8c79917c719aa3b9bd67ead7e0b7
+    Hash: c7fb028340e615778712ca8e7d30fae8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7859cd501ea75098bcf7e53f1b477c26
@@ -30,6 +30,7 @@ Assets:
 - Assets/VRBindings/Texture2D/Oculus/Left/button_back.png
 - Assets/VRBindings/Texture2D/Oculus/Left/button_y.png
 - Assets/VRBindings/Texture2D/Index/Left/thumbstick.png
+- Assets/VRBindings/Texture2D/Vive/Right/button.png
 - Assets/VRBindings/Texture2D/Index/Left/button_b.png
 - Assets/VRBindings/Texture2D/Index/Right/button_a.png
 - Assets/VRBindings/Texture2D/Generic/Right/button_system.png
@@ -49,7 +50,7 @@ Assets:
 - Assets/VRBindings/Texture2D/WMR/Left/button_system.png
 - Assets/VRBindings/Texture2D/Vive/Left/trackpad_right.png
 - Assets/VRBindings/Texture2D/WMR/Right/trackpad_down.png
-- Assets/VRBindings/Texture2D/Vive/Right/grip.png
+- Assets/VRBindings/Texture2D/Vive/Right/lgrip.png
 - Assets/VRBindings/Texture2D/Oculus/Left/trigger.png
 - Assets/VRBindings/Texture2D/Index/Left/button_a.png
 - Assets/VRBindings/Texture2D/Vive/Right/trackpad_left.png
@@ -123,7 +124,7 @@ Assets:
 - Assets/VRBindings/Texture2D/Generic/Right/thumbstick.png
 - Assets/VRBindings/Texture2D/Generic/Left/button_back.png
 - Assets/VRBindings/Texture2D/Vive/Right/button_menu.png
-- Assets/VRBindings/Texture2D/Vive/Left/button_grip.png
+- Assets/VRBindings/Texture2D/Vive/Left/lgrip.png
 - Assets/VRBindings/Texture2D/WMR/Left/button_grip.png
 - Assets/VRBindings/Texture2D/Index/Right/trackpad_down.png
 - Assets/VRBindings/Texture2D/Index/Left/trigger.png
@@ -160,6 +161,7 @@ Assets:
 - Assets/VRBindings/Texture2D/WMR/Left/button_x.png
 - Assets/VRBindings/Texture2D/Generic/Left/thumbstick.png
 - Assets/VRBindings/Texture2D/Generic/Left/thumbstick_left.png
+- Assets/VRBindings/Texture2D/Vive/Left/button.png
 - Assets/VRBindings/Texture2D/Index/Left/squeeze.png
 - Assets/VRBindings/Texture2D/Generic/Right/button_grip.png
 - Assets/VRBindings/Texture2D/WMR/Right/trackpad.png
