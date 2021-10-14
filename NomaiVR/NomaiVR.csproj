@@ -16,7 +16,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetFrameworkProfile />
-    <Configurations>Debug;Release;OWML</Configurations>
+    <Configurations>Debug;Release;OWML;DebugOWML</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +41,16 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;OWML</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugOWML|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;OWML</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -203,15 +213,15 @@
     <Exec Command="md &quot;$(GameDir)\OuterWilds_Data\UnitySubsystems\XRSDKOpenVR&quot;" IgnoreExitCode="true" />
     
 
-    <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(OwmlDir)&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll&quot; &quot;$(OwmlDir)\SteamVR.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll&quot; &quot;$(OwmlDir)\SteamVR_Actions.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll&quot; &quot;$(OwmlDir)\Unity.XR.OpenVR.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll&quot; &quot;$(OwmlDir)\Unity.XR.Management.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll&quot; &quot;$(OwmlDir)\UnityEngine.XR.LegacyInputHelpers.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll&quot; &quot;$(OwmlDir)\Valve.Newtonsoft.Json.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.Subsystem.Registration.dll&quot; &quot;$(OwmlDir)\Unity.Subsystem.Registration.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll&quot; &quot;$(OwmlDir)\UnityEngine.SpatialTracking.dll&quot;" />
+    <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR_Actions.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.XR.OpenVR.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.XR.Management.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll&quot; &quot;$(OwmlDir)\$(ModDir)\UnityEngine.XR.LegacyInputHelpers.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Valve.Newtonsoft.Json.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.Subsystem.Registration.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.Subsystem.Registration.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll&quot; &quot;$(OwmlDir)\$(ModDir)\UnityEngine.SpatialTracking.dll&quot;" />
     
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(GameDir)\OuterWilds_Data\StreamingAssets\SteamVR&quot;" />

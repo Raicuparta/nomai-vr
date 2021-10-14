@@ -4,7 +4,7 @@ using System.IO;
 
 namespace NomaiVR.Loaders
 {
-    public class NomaiVRLoaderAOWML : ModBehaviour
+    public class NomaiVRLoaderOWML : ModBehaviour
     {
         private IModHelper Helper { get; set; }
         internal void Start()
