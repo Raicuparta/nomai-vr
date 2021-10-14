@@ -68,6 +68,8 @@ namespace NomaiVR.Input
 
             public static void DoRumble(float hiPower, float lowPower)
             {
+                if (hiPower <= float.Epsilon && lowPower <= float.Epsilon) return;
+
                 hiPower *= 1.42857146f;
                 lowPower *= 1.42857146f;
                 var haptic = SteamVR_Actions.default_Haptic;
