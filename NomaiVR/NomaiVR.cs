@@ -25,7 +25,7 @@ namespace NomaiVR
             //// I'm sorry to say that order does matter here.
             new ForceSettings();
             //new ControllerInput();
-            new NewControllerInput();
+            new ControllerInput();
             new Dialogue();
             new FogFix();
             new ShadowsFix();
@@ -53,7 +53,7 @@ namespace NomaiVR
             new FeetMarker();
             new HelmetHUD();
             //new InputPrompts();
-            new NewInputPrompts();
+            new InputPrompts();
             new RemoveUnusedInputPrompts();
             new ControllerModels();
             new GesturePrompts();

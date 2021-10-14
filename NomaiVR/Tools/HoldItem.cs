@@ -61,12 +61,12 @@ namespace NomaiVR
                                     var lanternController = holdable.GetComponentInChildren<DreamLanternController>(false);
                                     if (lanternController != null && lanternController.IsHeldByPlayer())
                                     {
-                                        NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
+                                        ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
                                     }
                                 },
                                 onExit: (Transform hand) =>
                                 {
-                                    NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
+                                    ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
                                 });
             }
 
@@ -94,12 +94,12 @@ namespace NomaiVR
                                     var torchItem = holdable.GetComponentInChildren<VisionTorchItem>(false);
                                     if (torchItem != null && torchItem._visible)
                                     {
-                                        NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
+                                        ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
                                     }
                                 },
                                 onExit: (Transform hand) =>
                                 {
-                                    NewControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
+                                    ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
                                 });
             }
 

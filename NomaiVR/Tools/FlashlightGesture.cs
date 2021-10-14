@@ -36,12 +36,12 @@ namespace NomaiVR.Tools
 
             private void FlashlightPress(Transform hand)
             {
-                NewControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, true);
+                ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, true);
             }
 
             private void FlashlightRelease(Transform hand)
             {
-                NewControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, false);
+                ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, false);
             }
         }
     }

@@ -56,7 +56,7 @@ namespace NomaiVR
             }
             if (button != InputConsts.InputCommandType.UNDEFINED)
             {
-                NewControllerInput.SimulateInput(button, true);
+                ControllerInput.SimulateInput(button, true);
             }
         }
 
@@ -64,7 +64,7 @@ namespace NomaiVR
         {
             if (button != InputConsts.InputCommandType.UNDEFINED)
             {
-                NewControllerInput.SimulateInput(button, false);
+                ControllerInput.SimulateInput(button, false);
             }
             receiver.ResetInteraction();
         }
