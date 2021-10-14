@@ -38,7 +38,7 @@ namespace NomaiVR.Tools
                 transform.localPosition = cockpitTech.Find("LandingCamScreen").transform.localPosition + new Vector3(-0.93f, 3.6f, 5.2f);
                 transform.localRotation = Quaternion.Euler(45, 180, 0);
                 _interactor = gameObject.AddComponent<ShipMonitorInteraction>();
-                _interactor.text = UITextType.AutopilotPrompt;
+                _interactor.text = UITextType.ShipAutopilotPrompt;
                 _interactor.button = InputConsts.InputCommandType.AUTOPILOT;
                 _interactor.skipPressCallback = OnPress;
 
@@ -63,6 +63,25 @@ namespace NomaiVR.Tools
                 {
                     _autoPilotLightEnabled = false;
                     _buttonTopMat.SetColor("_EmissionColor", Color.black);
+                }
+
+                UpdatePrompts();
+            }
+
+            private void UpdatePrompts()
+            {
+                if (_cockpitController._autopilot.IsFlyingToDestination()
+                    && _interactor.text != UITextType.ShipAbortAutopilotPrompt)
+                {
+                    _interactor.text = UITextType.ShipAbortAutopilotPrompt;
+                    _interactor.receiver?.SetPromptText(_interactor.text);
+                }
+
+                if (!_cockpitController._autopilot.IsFlyingToDestination()
+                    && _interactor.text != UITextType.ShipAutopilotPrompt)
+                {
+                    _interactor.text = UITextType.ShipAutopilotPrompt;
+                    _interactor.receiver?.SetPromptText(_interactor.text);
                 }
             }
         }
