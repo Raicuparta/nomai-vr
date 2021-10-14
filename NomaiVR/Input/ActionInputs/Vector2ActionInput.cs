@@ -42,5 +42,17 @@ namespace NomaiVR.Input.ActionInputs
                 return state;
             }
         }
+
+        public override SteamVR_Input_Sources ActiveSource
+        {
+            get
+            {
+                var state = isEitherHand
+                    ? (SteamVR_Input_Sources)((int)specificAction.GetActiveDevice(SteamVR_Input_Sources.LeftHand) +
+                                              (int)specificAction.GetActiveDevice(SteamVR_Input_Sources.RightHand))
+                    : specificAction.activeDevice;
+                return state;
+            }
+        }
     }
 }

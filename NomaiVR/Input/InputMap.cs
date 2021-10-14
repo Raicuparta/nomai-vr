@@ -62,6 +62,7 @@ namespace NomaiVR.Input
             {
                 { InputCommandType.PROBELAUNCH, ActionInputDefinitions.ToolUse },
                 { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.ToolUse },
+                { InputCommandType.SIGNALSCOPE, ActionInputDefinitions.ToolUse },
                 { InputCommandType.SCOPEVIEW, ActionInputDefinitions.ToolUse },
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.ToolUse },
                 { InputCommandType.TOOL_UP, ActionInputDefinitions.ToolUp },

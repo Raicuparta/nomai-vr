@@ -9,6 +9,8 @@ namespace NomaiVR.Input.ActionInputs
 
         public override bool Active => specificAction.active;
 
+        public override SteamVR_Input_Sources ActiveSource => specificAction.activeDevice;
+
         public SingleActionInput(SteamVR_Action_Single action) : base(action)
         {
         }

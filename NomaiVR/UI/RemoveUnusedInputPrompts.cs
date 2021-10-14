@@ -120,6 +120,8 @@ namespace NomaiVR.UI
                     Manager.RemoveScreenPrompt(__instance._freeLookPrompt);
                     Manager.RemoveScreenPrompt(__instance._landingModePrompt);
                     Manager.RemoveScreenPrompt(__instance._liftoffCamera);
+                    Manager.RemoveScreenPrompt(__instance._autopilotPrompt);
+                    Manager.RemoveScreenPrompt(__instance._abortAutopilotPrompt);
                 }
 
                 private static void RemoveTranslatorPrompts(NomaiTranslatorProp __instance)

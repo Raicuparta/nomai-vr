@@ -56,11 +56,8 @@ namespace NomaiVR.UI
             {
                 Logs.Write($"Registering for controller binding changes");
                 SteamVR_Actions._default.Grip.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => ActiveDeviceChanged(fromAction), SteamVR_Input_Sources.Any);
+                SteamVR_Actions.tools.Use.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => InvalidateButtonImages(), SteamVR_Input_Sources.Any);
                 ActiveDeviceChanged(SteamVR_Actions._default.Grip);
-
-                Logs.Write($"Registering for game events");
-                VRToolSwapper.ToolEquipped += () => Invoke(nameof(InvalidateButtonImages), Time.deltaTime * 3);
-                VRToolSwapper.UnEquipped += () => Invoke(nameof(InvalidateButtonImages), Time.deltaTime * 3);
             }
 
             private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)
@@ -139,7 +136,11 @@ namespace NomaiVR.UI
                     __instance.textureList.Clear();
 
                     var vrInputAction = InputMap.GetActionInput(__instance.CommandType);
-                    if (vrInputAction == null) return true;
+                    if (vrInputAction == null)
+                    {
+                        Logs.Write($"No action currently bound for texture {__instance.CommandType}");
+                        return true;
+                    }
 
                     if(vrInputAction is EmptyActionInput emptyInput
                         && !String.IsNullOrEmpty(emptyInput.TexturePath))
@@ -159,10 +160,11 @@ namespace NomaiVR.UI
                     var name = "";
                     if (vrInputAction.Active)
                     {
-                        var hand = steamVrAction.activeDevice == SteamVR_Input_Sources.RightHand
+                        var activeInputDevice = vrInputAction.ActiveSource;
+                        var hand = activeInputDevice == SteamVR_Input_Sources.RightHand
                             ? "Right"
                             : "Left";
-                        name = $"{hand}/{steamVrAction.renderModelComponentName}";
+                        name = $"{hand}/{steamVrAction.GetRenderModelComponentName(activeInputDevice)}";
                         Instance.SetCachedPartName(steamVrAction, name);
                     }
                     if (String.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
