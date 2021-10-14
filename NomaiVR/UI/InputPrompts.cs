@@ -77,7 +77,7 @@ namespace NomaiVR.UI
                     case "knuckles":
                         Platform = ActiveVRPlatform.Index;
                         break;
-                    case "holographic":
+                    case "holographic_controller":
                         Platform = ActiveVRPlatform.WMR;
                         break;
                     case "<unknown>":
@@ -160,11 +160,28 @@ namespace NomaiVR.UI
                     var name = "";
                     if (vrInputAction.Active)
                     {
+                        //Solve for hand + controller part
                         var activeInputDevice = vrInputAction.ActiveSource;
                         var hand = activeInputDevice == SteamVR_Input_Sources.RightHand
                             ? "Right"
                             : "Left";
-                        name = $"{hand}/{steamVrAction.GetRenderModelComponentName(activeInputDevice)}";
+                        var partName = steamVrAction.GetRenderModelComponentName(activeInputDevice);
+                        name = $"{hand}/{partName}";
+
+                        //Special actions modifiers
+                        if (vrInputAction is Vector2ActionInput vectorAction &&
+                            !String.IsNullOrEmpty(vectorAction.TextureModifier))
+                        {
+                            name += "_" + vectorAction.TextureModifier;
+                        }
+                        else if (vrInputAction is BooleanActionInput booleanAction &&
+                                booleanAction.Clickable &&
+                                (partName == "trackpad" || partName == "thumbstick"))
+                        {
+                            //This would probably be the place to try and solve for click directions
+                            name += "_click";
+                        }
+
                         Instance.SetCachedPartName(steamVrAction, name);
                     }
                     if (String.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);

@@ -6,6 +6,7 @@ namespace NomaiVR.Input.ActionInputs
     public class BooleanActionInput : ActionInput<SteamVR_Action_Boolean>
     {
         private readonly bool isEitherHand;
+        private readonly bool clickable;
 
         public override Vector2 Value
         {
@@ -43,9 +44,12 @@ namespace NomaiVR.Input.ActionInputs
             }
         }
 
-        public BooleanActionInput(SteamVR_Action_Boolean action, bool eitherHand = false) : base(action)
+        public bool Clickable => clickable;
+
+        public BooleanActionInput(SteamVR_Action_Boolean action, bool eitherHand = false, bool clickable = true) : base(action)
         {
             isEitherHand = eitherHand;
+            this.clickable = clickable;
         }
     }
 }

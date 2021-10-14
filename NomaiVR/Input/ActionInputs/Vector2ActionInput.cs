@@ -10,14 +10,16 @@ namespace NomaiVR.Input.ActionInputs
         private readonly bool yOnly;
         private readonly bool yZero;
         private readonly bool isEitherHand;
+        private readonly string textureModifier;
 
-        public Vector2ActionInput(SteamVR_Action_Vector2 action, bool yOnly = false, bool invert = false, bool clamp = false, bool yZero = false, bool eitherHand = false): base(action)
+        public Vector2ActionInput(SteamVR_Action_Vector2 action, bool yOnly = false, bool invert = false, bool clamp = false, bool yZero = false, bool eitherHand = false, string textureModifier = null): base(action)
         {
             this.yOnly = yOnly;
             this.invert = invert;
             this.clamp = clamp;
             this.yZero = yZero;
             this.isEitherHand = eitherHand;
+            this.textureModifier = textureModifier;
         }
 
         public override Vector2 Value
@@ -54,5 +56,7 @@ namespace NomaiVR.Input.ActionInputs
                 return state;
             }
         }
+
+        public string TextureModifier => this.textureModifier;
     }
 }

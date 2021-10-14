@@ -53,16 +53,16 @@ namespace NomaiVR.Input.ActionInputs
             new BooleanActionInput(action: _default.StationaryUse);
 
         public static readonly Vector2ActionInput StationaryUp =
-            new Vector2ActionInput(action: _default.StationaryDpad, yOnly: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, yOnly: true, clamp: true, yZero: true, textureModifier: "up");
 
         public static readonly Vector2ActionInput StationaryDown =
-            new Vector2ActionInput(action: _default.StationaryDpad, yOnly: true, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, yOnly: true, invert: true, clamp: true, yZero: true, textureModifier: "down");
 
         public static readonly Vector2ActionInput StationaryLeft =
-            new Vector2ActionInput(action: _default.StationaryDpad, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, invert: true, clamp: true, yZero: true, textureModifier: "left");
 
         public static readonly Vector2ActionInput StationaryRight =
-            new Vector2ActionInput(action: _default.StationaryDpad, clamp: true);
+            new Vector2ActionInput(action: _default.StationaryDpad, clamp: true, textureModifier: "right");
 
         public static readonly SingleActionInput ThrustDown =
             new SingleActionInput(action: _default.ThrustDown);
@@ -71,45 +71,45 @@ namespace NomaiVR.Input.ActionInputs
             new SingleActionInput(action: _default.ThrustUp);
 
         public static readonly Vector2ActionInput Up =
-            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, clamp: true, yZero: true, textureModifier: "up");
 
         public static readonly Vector2ActionInput Down =
-            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.UIDpad, yOnly: true, invert: true, clamp: true, yZero: true, textureModifier: "down");
 
         public static readonly Vector2ActionInput Left =
-            new Vector2ActionInput(action: _default.UIDpad, invert: true, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.UIDpad, invert: true, clamp: true, yZero: true, textureModifier: "left");
 
         public static readonly Vector2ActionInput Right =
-            new Vector2ActionInput(action: _default.UIDpad, clamp: true, yZero: true);
+            new Vector2ActionInput(action: _default.UIDpad, clamp: true, yZero: true, textureModifier: "right");
 
         public static readonly BooleanActionInput UISelect =
             new BooleanActionInput(action: _default.UISelect);
 
         public static readonly BooleanActionInput UISubtabLeft =
-            new BooleanActionInput(action: _default.UISubtabLeft);
+            new BooleanActionInput(action: _default.UISubtabLeft, clickable: false);
 
         public static readonly BooleanActionInput UISubtabRight =
-            new BooleanActionInput(action: _default.UISubtabRight);
+            new BooleanActionInput(action: _default.UISubtabRight, clickable: false);
 
         public static readonly BooleanActionInput UITabLeft =
-            new BooleanActionInput(action: _default.UITabLeft);
+            new BooleanActionInput(action: _default.UITabLeft, clickable: false);
 
         public static readonly BooleanActionInput UITabRight =
-            new BooleanActionInput(action: _default.UITabRight);
+            new BooleanActionInput(action: _default.UITabRight, clickable: false);
 
         public static readonly BooleanActionInput ToolUse =
             new BooleanActionInput(action: tools.Use, eitherHand: true);
 
         public static readonly Vector2ActionInput ToolUp =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true, yZero: true, eitherHand: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, clamp: true, yZero: true, eitherHand: true, textureModifier: "up");
 
         public static readonly Vector2ActionInput ToolDown =
-            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true, yZero: true, eitherHand: true);
+            new Vector2ActionInput(action: tools.DPad, yOnly: true, invert: true, clamp: true, yZero: true, eitherHand: true, textureModifier: "down");
 
         public static readonly Vector2ActionInput ToolLeft =
-            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true, yZero: true, eitherHand: true);
+            new Vector2ActionInput(action: tools.DPad, invert: true, clamp: true, yZero: true, eitherHand: true, textureModifier: "left");
 
         public static readonly Vector2ActionInput ToolRight =
-            new Vector2ActionInput(action: tools.DPad, clamp: true, yZero: true, eitherHand: true);
+            new Vector2ActionInput(action: tools.DPad, clamp: true, yZero: true, eitherHand: true, textureModifier: "right");
     }
 }
