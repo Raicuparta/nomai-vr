@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3820554850
+CRC: 1262293604
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c7fb028340e615778712ca8e7d30fae8
+    Hash: 21eb5b387dbeeafc63ddc78d3d01497c
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7859cd501ea75098bcf7e53f1b477c26
@@ -14,9 +14,13 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/VRBindings/Texture2D/Generic/Left/trackpad_down.png
+- Assets/VRBindings/Texture2D/Oculus/Right/b_button.png
 - Assets/VRBindings/Texture2D/WMR/Right/button_grip.png
 - Assets/VRBindings/Texture2D/Vive/Left/thumbstick_click.png
+- Assets/VRBindings/Texture2D/Generic/Right/button_enter.png
+- Assets/VRBindings/Texture2D/Oculus/Right/grip.png
 - Assets/VRBindings/Texture2D/Vive/Left/thumbstick_up.png
+- Assets/VRBindings/Texture2D/Oculus/Right/a_button.png
 - Assets/VRBindings/Texture2D/Generic/Left/trackpad_up.png
 - Assets/VRBindings/Texture2D/WMR/Right/trackpad_left.png
 - Assets/VRBindings/Texture2D/Oculus/Right/thumbstick_click.png
@@ -30,6 +34,7 @@ Assets:
 - Assets/VRBindings/Texture2D/Oculus/Left/button_back.png
 - Assets/VRBindings/Texture2D/Oculus/Left/button_y.png
 - Assets/VRBindings/Texture2D/Index/Left/thumbstick.png
+- Assets/VRBindings/Texture2D/Oculus/Left/x_button.png
 - Assets/VRBindings/Texture2D/Vive/Right/button.png
 - Assets/VRBindings/Texture2D/Index/Left/button_b.png
 - Assets/VRBindings/Texture2D/Index/Right/button_a.png
@@ -77,6 +82,8 @@ Assets:
 - Assets/VRBindings/Texture2D/Vive/Right/button_system.png
 - Assets/VRBindings/Texture2D/Index/Right/thumbstick_left.png
 - Assets/VRBindings/Texture2D/Generic/Right/button_a.png
+- Assets/VRBindings/Texture2D/Oculus/Left/grip.png
+- Assets/VRBindings/Texture2D/Generic/Left/enter_button.png
 - Assets/VRBindings/Texture2D/Vive/Right/trigger.png
 - Assets/VRBindings/Texture2D/Oculus/Right/trigger.png
 - Assets/VRBindings/Texture2D/Vive/Right/trackpad.png
@@ -94,7 +101,9 @@ Assets:
 - Assets/VRBindings/Texture2D/Index/Right/squeeze.png
 - Assets/VRBindings/Texture2D/Vive/Left/trackpad_down.png
 - Assets/VRBindings/Texture2D/Generic/Left/trigger.png
+- Assets/VRBindings/Texture2D/Generic/Right/b_button.png
 - Assets/VRBindings/Texture2D/Oculus/Right/thumbstick.png
+- Assets/VRBindings/Texture2D/Oculus/Right/enter_button.png
 - Assets/VRBindings/Texture2D/Index/Left/thumbstick_left.png
 - Assets/VRBindings/Texture2D/Vive/Right/trackpad_down.png
 - Assets/VRBindings/Texture2D/WMR/Right/button_a.png
@@ -105,9 +114,11 @@ Assets:
 - Assets/VRBindings/Texture2D/Index/Left/thumbstick_up.png
 - Assets/VRBindings/Texture2D/Generic/Left/trackpad_click.png
 - Assets/VRBindings/Texture2D/Index/Left/trackpad_click.png
+- Assets/VRBindings/Texture2D/Oculus/Right/button_enter.png
 - Assets/VRBindings/Texture2D/WMR/Left/trackpad_left.png
 - Assets/VRBindings/Texture2D/Vive/Left/trackpad_click.png
 - Assets/VRBindings/Texture2D/Vive/Left/trackpad.png
+- Assets/VRBindings/Texture2D/Oculus/Left/enter_button.png
 - Assets/VRBindings/Texture2D/Vive/Left/button_menu.png
 - Assets/VRBindings/Texture2D/WMR/Right/button_system.png
 - Assets/VRBindings/Texture2D/Generic/Right/grip.png
@@ -128,6 +139,7 @@ Assets:
 - Assets/VRBindings/Texture2D/WMR/Left/button_grip.png
 - Assets/VRBindings/Texture2D/Index/Right/trackpad_down.png
 - Assets/VRBindings/Texture2D/Index/Left/trigger.png
+- Assets/VRBindings/Texture2D/Generic/Left/button_enter.png
 - Assets/VRBindings/Texture2D/Oculus/Right/button_menu.png
 - Assets/VRBindings/Texture2D/Generic/Right/trackpad_down.png
 - Assets/VRBindings/Texture2D/Generic/Left/button_grip.png
@@ -142,6 +154,7 @@ Assets:
 - Assets/VRBindings/Texture2D/Index/Left/thumbstick_down.png
 - Assets/VRBindings/Texture2D/Oculus/Left/thumbstick_click.png
 - Assets/VRBindings/Texture2D/WMR/Right/trigger.png
+- Assets/VRBindings/Texture2D/Generic/Right/enter_button.png
 - Assets/VRBindings/Texture2D/Vive/Left/thumbstick_left.png
 - Assets/VRBindings/Texture2D/Vive/Right/trackpad_click.png
 - Assets/VRBindings/Texture2D/Index/Right/thumbstick_click.png
@@ -149,6 +162,7 @@ Assets:
 - Assets/VRBindings/Texture2D/WMR/Right/grip.png
 - Assets/VRBindings/Texture2D/Generic/Left/button_y.png
 - Assets/VRBindings/Texture2D/WMR/Right/trackpad_click.png
+- Assets/VRBindings/Texture2D/Generic/Right/grip 1.png
 - Assets/VRBindings/Texture2D/WMR/Right/thumbstick_down.png
 - Assets/VRBindings/Texture2D/Vive/Left/button_system.png
 - Assets/VRBindings/Texture2D/Generic/Left/trackpad_left.png
@@ -162,8 +176,12 @@ Assets:
 - Assets/VRBindings/Texture2D/Generic/Left/thumbstick.png
 - Assets/VRBindings/Texture2D/Generic/Left/thumbstick_left.png
 - Assets/VRBindings/Texture2D/Vive/Left/button.png
+- Assets/VRBindings/Texture2D/Generic/Left/y_button.png
 - Assets/VRBindings/Texture2D/Index/Left/squeeze.png
 - Assets/VRBindings/Texture2D/Generic/Right/button_grip.png
+- Assets/VRBindings/Texture2D/Generic/Left/x_button.png
+- Assets/VRBindings/Texture2D/Generic/Left/grip.png
+- Assets/VRBindings/Texture2D/Generic/Right/a_button.png
 - Assets/VRBindings/Texture2D/WMR/Right/trackpad.png
 - Assets/VRBindings/Texture2D/WMR/Left/thumbstick_click.png
 - Assets/VRBindings/Texture2D/Index/Right/trigger.png
@@ -173,5 +191,7 @@ Assets:
 - Assets/VRBindings/Texture2D/Vive/Left/trackpad_up.png
 - Assets/VRBindings/Texture2D/Index/Right/trackpad.png
 - Assets/VRBindings/Texture2D/Vive/Left/thumbstick_right.png
+- Assets/VRBindings/Texture2D/Oculus/Left/button_enter.png
+- Assets/VRBindings/Texture2D/Oculus/Left/y_button.png
 - Assets/VRBindings/Texture2D/Index/Right/thumbstick.png
 Dependencies: []
