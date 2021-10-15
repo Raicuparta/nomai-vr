@@ -15,15 +15,16 @@ namespace NomaiVRPatcher
     /// </summary>
     public static class NomaiVREnabler
     {
-        //Called by Doorstop
-        public static void Main()
+        //Called by OWML
+        public static void Main(string[] args)
         {
-            var gameManagersPath = Path.Combine("OuterWilds_Data", "globalgamemanagers");
+            var basePath = args.Length > 0 ? args[0] : ".";
+            var gameManagersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("OuterWilds_Data", "globalgamemanagers"));
             var backupPath = BackupFile(gameManagersPath);
 
-            //TODO: Copy relevant files?
+            CopyGameFiles(AppDomain.CurrentDomain.BaseDirectory, Path.Combine(basePath, "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, backupPath, ".");
+            PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
         }
 
         // List of assemblies to patch
@@ -39,15 +40,47 @@ namespace NomaiVRPatcher
             var gameManagersPath = Path.Combine(Path.Combine(Paths.ManagedPath, ".."), "globalgamemanagers");
             var backupPath = BackupFile(gameManagersPath);
 
-            //TODO: Copy relevant files?
+            CopyGameFiles(Assembly.GetExecutingAssembly().Location, Path.Combine(Path.Combine(Paths.PatcherPluginPath, "NomaiVR"), "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, backupPath, Paths.PatcherPluginPath);
+            PatchGlobalGameManagers(gameManagersPath, backupPath, Path.Combine(Paths.PatcherPluginPath, "NomaiVR"));
+        }
+
+        private static void CopyGameFiles(string gamePath, string filesPath)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(filesPath);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + filesPath);
+            }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            // If the destination directory doesn't exist, create it.       
+            Directory.CreateDirectory(gamePath);
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(gamePath, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                string tempPath = Path.Combine(gamePath, subdir.Name);
+                CopyGameFiles(tempPath, subdir.FullName);
+            }
         }
 
         private static void PatchGlobalGameManagers(string gameManagersPath, string gameManagersBackup, string patchFilesPath)
         {
             AssetsManager assetsManager = new AssetsManager();
-            assetsManager.LoadClassPackage(Path.Combine(Path.Combine(patchFilesPath, "NomaiVR"), "classdata.tpk"));
+            assetsManager.LoadClassPackage(Path.Combine(patchFilesPath, "classdata.tpk"));
             AssetsFileInstance assetsFileInstance = assetsManager.LoadAssetsFile(gameManagersBackup, false);
             AssetsFile assetsFile = assetsFileInstance.file;
             AssetsFileTable assetsFileTable = assetsFileInstance.table;

@@ -210,7 +210,6 @@
     <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" IgnoreExitCode="true" />
     <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\assets&quot;" IgnoreExitCode="true" />
     <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\poses&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(GameDir)\OuterWilds_Data\UnitySubsystems\XRSDKOpenVR&quot;" IgnoreExitCode="true" />
     
 
     <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
@@ -224,9 +223,6 @@
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll&quot; &quot;$(OwmlDir)\$(ModDir)\UnityEngine.SpatialTracking.dll&quot;" />
     
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(GameDir)\OuterWilds_Data\StreamingAssets\SteamVR&quot;" />
-    
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\UnitySubsystems\XRSDKOpenVR\*&quot; &quot;$(GameDir)\OuterWilds_Data\UnitySubsystems\XRSDKOpenVR&quot;" />
 
     <Exec Command="copy /y &quot;$(ProjectDir)\Hands\Poses\*.json&quot; &quot;$(OwmlDir)\$(ModDir)\poses&quot;" />
 

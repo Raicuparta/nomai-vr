@@ -1,5 +1,6 @@
 {
   "filename": "NomaiVR.dll",
+  "patcher": "patcher/NomaiVRPatcher.dll",
   "author": "Raicuparta",
   "name": "NomaiVR",
   "uniqueName": "Raicuparta.NomaiVR",

@@ -3,8 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
     <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds</GameDir>
-    <ModDir>NomaiVR</ModDir>
+    <PatcherDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds\BepInEx\patchers\NomaiVR</PatcherDir>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <ApplicationIcon />
+    <OutputType>WinExe</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,11 +18,18 @@
   </ItemGroup>
   
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
-    <Exec Command="md &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" IgnoreExitCode="true" />
-    <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
-    <Exec Command="copy /y &quot;$(TargetDir)\AssetsTools.NET.dll&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
-    <Exec Command="copy /y &quot;$(TargetDir)\Mono*.dll&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\ClassDatabase\*&quot; &quot;$(GameDir)\BepInEx\patchers\$(ModDir)&quot;" />
+    <Exec Command="md &quot;$(PatcherDir)&quot;" IgnoreExitCode="true" />
+    <Exec Command="md &quot;$(PatcherDir)\files\OuterWilds_Data\StreamingAssets\SteamVR&quot;" IgnoreExitCode="true" />
+    <Exec Command="md &quot;$(PatcherDir)\files\OuterWilds_Data\UnitySubsystems\XRSDKOpenVR&quot;" IgnoreExitCode="true" />
+    <Exec Command="md &quot;$(PatcherDir)\files\OuterWilds_Data\Plugins\x86_64&quot;" IgnoreExitCode="true" />
+    <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(PatcherDir)\$(TargetName).dll&quot;" />
+    <Exec Command="copy /y &quot;$(TargetDir)\AssetsTools.NET.dll&quot; &quot;$(PatcherDir)&quot;" />
+    <Exec Command="copy /y &quot;$(TargetDir)\Mono*.dll&quot; &quot;$(PatcherDir)&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\ClassDatabase\*&quot; &quot;$(PatcherDir)&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(PatcherDir)\files\OuterWilds_Data\StreamingAssets\SteamVR&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\UnitySubsystems\XRSDKOpenVR\*&quot; &quot;$(PatcherDir)\files\OuterWilds_Data\UnitySubsystems\XRSDKOpenVR&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Plugins\x86_64\openvr_api.dll&quot; &quot;$(PatcherDir)\files\OuterWilds_Data\Plugins\x86_64\openvr_api.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Plugins\x86_64\XRSDKOpenVR.dll&quot; &quot;$(PatcherDir)\files\OuterWilds_Data\Plugins\x86_64\XRSDKOpenVR.dll&quot;" />
   </Target>
 
   <ItemGroup>
