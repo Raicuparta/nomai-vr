@@ -67,7 +67,12 @@ namespace NomaiVRPatcher
             foreach (FileInfo file in files)
             {
                 string tempPath = Path.Combine(gamePath, file.Name);
-                file.CopyTo(tempPath, false);
+
+                try
+                {
+                    file.CopyTo(tempPath, false);
+                }
+                catch (IOException) { }
             }
 
             foreach (DirectoryInfo subdir in dirs)
