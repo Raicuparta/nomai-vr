@@ -1,25 +1,15 @@
 # NomaiVR - Outer Wilds VR Mod
 
-## ⚠️ ONLY COMPATIBLE WITH VERSION 1.0.7
-
-As of 28th of September 2021, NomaiVR won't work with the latest version of the game. You need version 1.0.7. Check the [Rolling back to 1.0.7](#rolling-back-to-version-107-of-outer-wilds) section for detailed instructions.
-
-## ⚠️ NOT COMPATIBLE WITH DLC (Echoes of the Eye)
-
-Need to wait for a NomaiVR update for DLC compatibility.
-
 ![NomaiVR](RepoAssets/banner.png)
 
 [![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=for-the-badge&color=%23e85b46&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=for-the-badge&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
 
 [![NomaiVR Video](RepoAssets/video-thumbnail.jpg)](https://www.youtube.com/watch?v=gPFiYRMm8Ok)
 
-- [Rolling back to version 1.0.7 of Outer Wilds](#rolling-back-to-version-107-of-outer-wilds)
-  - [Steam version](#steam-version)
-  - [Epic Store version](#epic-store-version)
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
   - [Manual installation](#manual-installation)
+  - [Uninstall](#uninstall)
 - [Requirements](#requirements)
 - [Comfort](#comfort)
 - [VR Controller Inputs](#vr-controller-inputs)
@@ -31,25 +21,6 @@ Need to wait for a NomaiVR update for DLC compatibility.
 - [Development Setup](#development-setup)
 - [Special Thanks](#special-thanks)
 - [Help / Discuss development / Tell me about your day](#help--discuss-development--tell-me-about-your-day)
-
-## Rolling back to version 1.0.7 of Outer Wilds
-
-### Steam version
-
-Follow the instructions given by Logan, one of the Outer Wilds devs:
-
-> **A pre-DLC version of Outer Wilds (1.0.7) is available as a Beta on Steam!**
->
-> To access it, right-click on Outer Wilds in Steam, select "Properties...", click on the "Betas" tab, enter the beta access code `moddersGetYourStuff`, and click "Check Code". You should now be able to select "1.0.7.481 - Outer Wilds v1.0.7.418" in the dropdown to have Steam start downloading that version over your current version.
->
-> **Notes:**
->
-> - You may have to restart Steam to get the branch to show up, or to trigger its download.
-> - Save files from later versions of Outer Wilds are not backwards compatible with earlier versions.
-
-### Epic Store version
-
-Epic store doesn't have an option for beta branches or anything of the sort, so you'd have to make a backup of version 1.0.7 yourself, or find it by some other means.
 
 ## Installation
 
@@ -66,15 +37,19 @@ Epic store doesn't have an option for beta branches or anything of the sort, so 
 - Extract the `Raicuparta.NomaiVR` directory to the `OWML/Mods` directory;
 - Run `OWML.Launcher.exe` to start the game.
 
+### Uninstall
+
+- Remove `Raicuparta.NomaiVR` from the Mod Manager or by deleting its files under `OWML/Mods`;
+- Check the game file integrity from Steam.
+
 ## Requirements
 
-- Version 1.0.7 of the game installed (both Epic and Steam are supported).
-- Echoes of the Eye DLC not supported, neither is any version of the game after 1.0.7;
+- Version 1.10.0 of the game installed (both Epic and Steam are supported).
+- Echoes of the Eye DLC is supported and fully playable, although not thoroughly tested;
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
 - Steam and SteamVR installed (even if you have the Epic version);
-- For some people, it only works if SteamVR is already running before starting the game. For others, only when SteamVR is closed (SteamVR will open automatically). Try both and stick with what works for you;
 - Strong VR legs (both due to the nature of the game, and due to the glitchiness of this VR implementation).
 
 ## Comfort
@@ -94,8 +69,7 @@ The mod tries its best to teach you how to play the game in VR, but it's not alw
 - Always pay attention to the input prompts on your hand;
 - Make sure you don't have the input prompts disabled in the game options when trying VR for the first time;
 - Depending on the hand you use to hold tools, movement or rotation will be disabled to allow you to interact with the tools functions. Controllers that have an additional trackpad will not suffer from this shortcoming (Index and old WMR controllers);
-- While using the ship tools hold down "Grip" on your dominant hand to switch to tool controls (beware that this can happen accidentally on Index);
-- Left hand mode swaps only some controls around, more controls can be swapped by changing the "Inverted" action set through SteamVR's bindings UI;
+- Left hand mode is currently in the game but you need to manually change the SteamVR bindings;
 
 ## Performance
 
@@ -125,13 +99,15 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
 
 ## Development Setup
 
+- Install Unity 2019.4.27
 - [Download the Outer Wilds Mod Manager](https://outerwildsmods.com/) and install it anywhere you like;
 - Install OWML using the Mod Manager;
+- [Download BepInEx](https://github.com/BepInEx/BepInEx/releases) to the games's folder;
 - Clone NomaiVR's source;
 - Open the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
 - Edit the entry `<GameDir>` to point to the directory where Outer Wilds is installed;
 - Edit the entry `<OwmlDir>` to point to your OWML directory (it is installed inside the Mod Manager directory);
-- Repeat this process for the file `SteamVR/SteamVR.csproj.user`;
+- Edit the entry `<UnityEditor>` to point to your Unity 2019.4.27 editor executable;
 - Download the [AssemblyPublicizer](https://github.com/Raicuparta/AssemblyPublicizer/releases) and extract the exe anywhere;
 - Drag the file `OuterWilds\OuterWilds_Data\Managed\Assembly-CSharp.dll` and drop it on top of `AssemblyPublicizer.exe`;
 - Confirm that it generated a new file `OuterWilds\OuterWilds_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll`;
