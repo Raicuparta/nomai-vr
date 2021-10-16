@@ -295,20 +295,3 @@ index f1755454..a749fff5 100644
                  return currentAttachedObjectInfo.Value.handAttachmentPointTransform.rotation * tr;
              }
              else
-diff --git a/Unity/Assets/SteamVR/Scripts/SteamVR_Render.cs b/Unity/Assets/SteamVR/Scripts/SteamVR_Render.cs
-index 80b42ec2..a7a461fb 100644
---- a/Unity/Assets/SteamVR/Scripts/SteamVR_Render.cs
-+++ b/Unity/Assets/SteamVR/Scripts/SteamVR_Render.cs
-@@ -461,7 +461,11 @@ void Update()
-                     //timing.m_nSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
-                     //vr.compositor.GetFrameTiming(ref timing, 0);
- 
--                    Time.fixedDeltaTime = Time.timeScale / vr.hmd_DisplayFrequency;
-+                    // ############ IMPORTANT FOR NOMAIVR !!!!!!!!!!!!!!!!! ###############
-+                    // If you are from the future and are trying to update the SteamVR dependency,
-+                    // You need to make sure it doesn't mess with the game's fixedDeltaTime!
-+                    // This is because NomaiVR sets the physics step itself.
-+                    //Time.fixedDeltaTime = Time.timeScale / vr.hmd_DisplayFrequency;
-                 }
-             }
-         }

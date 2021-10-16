@@ -10,12 +10,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            private static float _expectedTimestep = 1f/90f;
             internal void Awake()
             {
                 UpdateGameLogging();
                 ModSettings.OnConfigChange += UpdateGameLogging;
                 SetResolution();
-                SetRefreshRate();
                 SetFov();
                 ResetInputsToDefault();
                 UnlockMouse();
@@ -78,33 +78,24 @@ namespace NomaiVR
             //    }
             //}
 
-            private static void SetRefreshRate()
-            {
-                var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
-                var overrideRefreshRate = ModSettings.OverrideRefreshRate;
-                var refreshRate = overrideRefreshRate > 0 ? overrideRefreshRate : deviceRefreshRate;
-                var fixedTimeStep = 1f / refreshRate;
-                OWTime.s_fixedTimestep = fixedTimeStep;
-                Time.fixedDeltaTime = fixedTimeStep;
-            }
-
-            internal void Update()
-            {
-                //UpdateActiveController();
-            }
-
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
                     Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PostApplySettings));
                     //Empty<InputRebindableLibrary>("SetKeyBindings");
+                    Postfix<SteamVR_Render>("Update", nameof(UpdateOWTimestep));
                     Empty<GraphicSettings>("SetSliderValFOV");
                     
                     if (ModSettings.PreventCursorLock)
                     {
                         Empty<CursorManager>("Update");
                     }
+                }
+
+                private static void UpdateOWTimestep()
+                {
+                    OWTime.s_fixedTimestep = Time.fixedDeltaTime;
                 }
 
                 private static void PostApplySettings()

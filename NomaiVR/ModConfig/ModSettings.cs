@@ -13,7 +13,6 @@ namespace NomaiVR
         public static bool DebugMode => settingsProvider.DebugMode;
         public static bool PreventCursorLock => settingsProvider.PreventCursorLock;
         public static bool ShowHelmet => settingsProvider.ShowHelmet;
-        public static int OverrideRefreshRate => settingsProvider.OverrideRefreshRate;
         public static float VibrationStrength => settingsProvider.VibrationStrength;
         public static bool EnableGesturePrompts => settingsProvider.EnableGesturePrompts;
         public static bool EnableHandLaser => settingsProvider.EnableHandLaser;

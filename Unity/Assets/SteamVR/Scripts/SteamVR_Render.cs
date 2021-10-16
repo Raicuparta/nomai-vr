@@ -460,12 +460,8 @@ namespace Valve.VR
                     //var timing = new Compositor_FrameTiming();
                     //timing.m_nSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
                     //vr.compositor.GetFrameTiming(ref timing, 0);
-
-                    // ############ IMPORTANT FOR NOMAIVR !!!!!!!!!!!!!!!!! ###############
-                    // If you are from the future and are trying to update the SteamVR dependency,
-                    // You need to make sure it doesn't mess with the game's fixedDeltaTime!
-                    // This is because NomaiVR sets the physics step itself.
-                    //Time.fixedDeltaTime = Time.timeScale / vr.hmd_DisplayFrequency;
+                    
+                    Time.fixedDeltaTime = Time.timeScale / vr.hmd_DisplayFrequency;
                 }
             }
         }

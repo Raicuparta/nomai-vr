@@ -1,4 +1,5 @@
-﻿using BepInEx.Configuration;
+﻿#if !OWML
+using BepInEx.Configuration;
 using System;
 
 namespace NomaiVR.ModConfig
@@ -18,9 +19,6 @@ namespace NomaiVR.ModConfig
 
         private ConfigEntry<bool> showHelmet;
         public bool ShowHelmet => showHelmet.Value;
-
-        private ConfigEntry<int> overrideRefreshRate;
-        public int OverrideRefreshRate => overrideRefreshRate.Value;
 
         private ConfigEntry<float> vibrationStrength;
         public float VibrationStrength => vibrationStrength.Value;
@@ -63,7 +61,6 @@ namespace NomaiVR.ModConfig
             // TODO: setting descriptions.
             const string section = "NomaiVRSettings";
             leftHandDominant = config.Bind(section, "leftHandDominant", false, "");
-            overrideRefreshRate = config.Bind(section, "refreshRateOverride", 0, new ConfigDescription("", new AcceptableValueList<int>(0, 30, 60, 70, 72, 80, 90, 120, 144)));
             vibrationStrength = config.Bind(section, "vibrationIntensity", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 3f)));
             toolbeltHeight = config.Bind(section, "toolbeltHeight", -0.55f, new ConfigDescription("", new AcceptableValueRange<float>(-0.8f, -0.2f)));
             showHelmet = config.Bind(section, "helmetVisibility", true, "");
@@ -82,3 +79,4 @@ namespace NomaiVR.ModConfig
         }
     }
 }
+#endif

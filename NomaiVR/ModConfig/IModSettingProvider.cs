@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NomaiVR.ModConfig
 {
@@ -13,7 +10,6 @@ namespace NomaiVR.ModConfig
         bool DebugMode { get; }
         bool PreventCursorLock { get; }
         bool ShowHelmet { get; }
-        int OverrideRefreshRate { get; }
         float VibrationStrength { get; }
         bool EnableGesturePrompts { get; }
         bool EnableHandLaser { get; }

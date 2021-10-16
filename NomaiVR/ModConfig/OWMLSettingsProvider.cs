@@ -11,7 +11,6 @@ namespace NomaiVR.ModConfig
         public bool DebugMode { get; private set; } = true;
         public bool PreventCursorLock { get; private set; }
         public bool ShowHelmet { get; private set; }
-        public int OverrideRefreshRate { get; private set; }
         public float VibrationStrength { get; private set; }
         public bool EnableGesturePrompts { get; private set; }
         public bool EnableHandLaser { get; private set; }
@@ -32,7 +31,6 @@ namespace NomaiVR.ModConfig
         public void Configure()
         {
             LeftHandDominant = config.GetSettingsValue<bool>("leftHandDominant");
-            OverrideRefreshRate = config.GetSettingsValue<int>("refreshRateOverride");
             VibrationStrength = config.GetSettingsValue<float>("vibrationIntensity");
             ShowHelmet = config.GetSettingsValue<bool>("helmetVisibility");
             ControllerOrientedMovement = config.GetSettingsValue<bool>("movementControllerOriented");

@@ -4,15 +4,9 @@
     "leftHandDominant": {
       "type": "toggle",
       "value": false,
-      "title": "Dominant Hand",
+      "title": "Left Hand Dominant",
       "yes": "Left",
       "no": "Right"
-    },
-    "refreshRateOverride": {
-      "type": "selector",
-      "value": 0,
-      "options": [ 0, 30, 60, 70, 72, 80, 90, 120, 144 ],
-      "title": "Physics refresh rate (zero = sync with HMD)"
     },
     "vibrationIntensity": {
       "type": "slider",
@@ -59,7 +53,7 @@
     "movementControllerOriented": {
       "type": "toggle",
       "value": false,
-      "title": "Movement orientation",
+      "title": "Controller oriented movement",
       "yes": "Controller",
       "no": "Head"
     },
