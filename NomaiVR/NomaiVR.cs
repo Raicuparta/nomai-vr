@@ -24,7 +24,6 @@ namespace NomaiVR
             //// Load all modules.
             //// I'm sorry to say that order does matter here.
             new ForceSettings();
-            //new ControllerInput();
             new ControllerInput();
             new Dialogue();
             new FogFix();
@@ -52,7 +51,6 @@ namespace NomaiVR
             new LaserPointer();
             new FeetMarker();
             new HelmetHUD();
-            //new InputPrompts();
             new InputPrompts();
             new RemoveUnusedInputPrompts();
             new ControllerModels();
@@ -62,7 +60,6 @@ namespace NomaiVR
             new DisableDeathAnimation();
             new VirtualKeyboard();
             new Menus();
-            new DebugCheats();
         }
 
         private static void InitSteamVR()

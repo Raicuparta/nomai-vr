@@ -42,7 +42,6 @@ namespace NomaiVR
             public override void ApplyPatches()
             {
                 Prefix<DebugInputManager>(nameof(DebugInputManager.Update), nameof(ForceDebugInputMode));
-                Postfix<EntitlementsManager>(nameof(EntitlementsManager.IsDlcOwned), nameof(GimmeFreeDlc));
                 Prefix<DebugInputManager>(nameof(DebugInputManager.Awake), nameof(ForceDebugMode));
                 Empty<DebugInputManager>(nameof(DebugInputManager.CheckDebugInputMode));
             }
@@ -58,11 +57,6 @@ namespace NomaiVR
             private static void ForceDebugInputMode(DebugInputManager __instance)
             {
                 __instance._debugInputMode = DebugInputManager.DebugInputMode.NORMAL;
-            }
-
-            private static void GimmeFreeDlc(ref EntitlementsManager.AsyncOwnershipStatus __result)
-            {
-                __result = EntitlementsManager.AsyncOwnershipStatus.Owned;
             }
         }
 
