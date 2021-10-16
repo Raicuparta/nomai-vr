@@ -11,6 +11,7 @@ namespace NomaiVR.Loaders
         {
             NomaiVR.HarmonyInstance = new OWMLHarmonyInstance(ModHelper);
             NomaiVR.ModFolderPath = Helper.Manifest.ModFolderPath;
+            NomaiVR.GameDataPath = Helper.OwmlConfig.DataPath;
             NomaiVR.ApplyMod();
         }
 

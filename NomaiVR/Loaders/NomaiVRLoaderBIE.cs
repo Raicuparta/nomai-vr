@@ -13,6 +13,7 @@ namespace NomaiVR.Loaders.BepInEx
             var harmony = new BepInEx::HarmonyLib.Harmony("raicuparta.nomaivr");
             NomaiVR.HarmonyInstance = new BIEHarmonyInstance(harmony);
             NomaiVR.ModFolderPath = $"{Directory.GetCurrentDirectory()}/BepInEx/plugins/NomaiVR/";
+            NomaiVR.GameDataPath = $"{Paths.ManagedPath}/../";
             var settingsProvider = new ModConfig.BepInExSettingsProvider(Config);
             ModSettings.SetProvider(settingsProvider);
         }

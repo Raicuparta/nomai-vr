@@ -12,6 +12,7 @@ namespace NomaiVR
         public static IHarmonyInstance HarmonyInstance;
         public static ModSaveFile Save;
         public static string ModFolderPath;
+        public static string GameDataPath;
 
         internal static void ApplyMod()
         {
@@ -70,7 +71,7 @@ namespace NomaiVR
                 SteamVR.Initialize();
                 SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
 
-                ApplicationManifestHelper.UpdateManifest(ModFolderPath + @"\assets\outerwilds.vrmanifest",
+                ApplicationManifestHelper.UpdateManifest(GameDataPath + @"\StreamingAssets\outerwilds.vrmanifest",
                                                         "steam.app.753640",
                                                         "https://steamcdn-a.akamaihd.net/steam/apps/753640/header.jpg",
                                                         "Outer Wilds VR",
