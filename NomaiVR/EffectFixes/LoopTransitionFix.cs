@@ -1,5 +1,6 @@
 ﻿
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace NomaiVR
 {
@@ -75,6 +76,7 @@ namespace NomaiVR
             private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
             {
                 Transform parent;
+                XRDevice.fovZoomFactor = 1;
 
                 if (____screenTransform.parent == __instance.transform)
                 {

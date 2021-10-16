@@ -10,6 +10,8 @@ namespace NomaiVR.EffectFixes
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
+        private static float _prePauseFovFactor = 1;
+        private static bool _isPaused = false;
 
         public class Patch : NomaiVRPatch
         {
@@ -73,6 +75,7 @@ namespace NomaiVR.EffectFixes
 
             public static bool UpdateZoomInFOVScale(LanternZoomPoint __instance)
             {
+                if (!UpdatePauseFov()) return false;
                 float time = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 0.5f, Time.time);
                 float t = __instance._zoomInCurve.Evaluate(time);
                 float targetFieldOfView = Mathf.Lerp(Locator.GetPlayerCameraController().GetOrigFieldOfView(), __instance._startFOV, t);
@@ -87,6 +90,7 @@ namespace NomaiVR.EffectFixes
 
             public static bool UpdateRetrozoomFOVScale(LanternZoomPoint __instance)
             {
+                if (!UpdatePauseFov()) return false;
                 float num = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 1.2f, Time.time);
                 float focus = Mathf.Pow(Mathf.SmoothStep(0f, 1f, 1f - num), 0.2f);
                 __instance._playerLantern.GetLanternController().SetFocus(focus);
@@ -102,6 +106,27 @@ namespace NomaiVR.EffectFixes
                 }
 
                 return false;
+            }
+
+            private static bool UpdatePauseFov()
+            {
+                if (InputHelper.IsUIInteractionMode())
+                {
+                    if(!_isPaused)
+                    {
+                        _isPaused = true;
+                        _prePauseFovFactor = XRDevice.fovZoomFactor;
+                        ResetScaleFactor();
+                    }
+                    return false;
+                }
+
+                if (!InputHelper.IsUIInteractionMode() && _isPaused)
+                {
+                    XRDevice.fovZoomFactor = _prePauseFovFactor;
+                    _isPaused = false;
+                }
+                return true;
             }
 
             public static void HeadIndependentHeading(LanternZoomPoint __instance)

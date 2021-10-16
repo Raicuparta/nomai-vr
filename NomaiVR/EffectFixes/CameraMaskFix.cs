@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.XR;
 
 namespace NomaiVR
 {
@@ -75,6 +76,7 @@ namespace NomaiVR
 
             private void CloseEyes()
             {
+                XRDevice.fovZoomFactor = 1;
                 //We don't want to save the mask when closing the eyes in the dream world
                 if (Locator.GetDreamWorldController() == null ||
                     (!Locator.GetDreamWorldController().IsInDream() && !Locator.GetDreamWorldController().IsExitingDream()))
