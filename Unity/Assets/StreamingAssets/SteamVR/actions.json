@@ -112,73 +112,12 @@
       "type": "vector2"
     },
     {
+      "name": "/actions/default/in/SecondaryInteract",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
-    },
-    {
-      "name": "/actions/inverted/in/Grip",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/ThrustUp",
-      "type": "vector1",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/ThrustDown",
-      "type": "vector1",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/RollMode",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Interact",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Jump",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Back",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Menu",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Map",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/GrabPinch",
-      "type": "boolean",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Look",
-      "type": "vector2",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Move",
-      "type": "vector2",
-      "requirement": "optional"
-    },
-    {
-      "name": "/actions/inverted/in/Squeeze",
-      "type": "vector1",
-      "requirement": "optional"
     },
     {
       "name": "/actions/tools/in/DPad",
@@ -192,10 +131,6 @@
   "action_sets": [
     {
       "name": "/actions/default",
-      "usage": "leftright"
-    },
-    {
-      "name": "/actions/inverted",
       "usage": "leftright"
     },
     {
@@ -241,18 +176,6 @@
       "/actions/default/in/SkeletonLeftHand": "Skeleton (Left)",
       "/actions/default/in/SkeletonRightHand": "Skeleton (Right)",
       "/actions/default/out/Haptic": "Haptic",
-      "/actions/inverted/in/Grip": "Grip (hold tools)",
-      "/actions/inverted/in/GrabPinch": "Grab Pinch",
-      "/actions/inverted/in/ThrustUp": "Thrust Up",
-      "/actions/inverted/in/ThrustDown": "Thrust Down",
-      "/actions/inverted/in/RollMode": "Roll Mode",
-      "/actions/inverted/in/Interact": "Interact",
-      "/actions/inverted/in/Jump": "Jump",
-      "/actions/inverted/in/Back": "Back",
-      "/actions/inverted/in/Menu": "Menu",
-      "/actions/inverted/in/Map": "Map",
-      "/actions/inverted/in/Look": "Look",
-      "/actions/inverted/in/Move": "Move",
       "/actions/tools/in/DPad": "DPad (tools)",
       "/actions/tools/in/Use": "Use (tools)",
       "/actions/default/in/Autopilot": "Autopilot",
@@ -262,9 +185,10 @@
       "/actions/default/in/UISubtabLeft": "Subtab Left (UI)",
       "/actions/default/in/UISubtabRight": "Subtab Right (UI)",
       "/actions/default/in/StationaryUse": "Use Stationary Tool",
-      "/actions/default/in/StationaryDpad": "Stationary Toll Dpad",
+      "/actions/default/in/StationaryDpad": "Stationary Tool Dpad",
       "/actions/default/in/UITabLeft": "Tab Left (UI)",
-      "/actions/default/in/UIDpad": "Dpad (UI)"
+      "/actions/default/in/UIDpad": "Dpad (UI)",
+      "/actions/default/in/SecondaryInteract": "Secondary Interact"
     }
   ]
 }

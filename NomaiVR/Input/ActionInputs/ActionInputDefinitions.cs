@@ -19,6 +19,9 @@ namespace NomaiVR.Input.ActionInputs
         public static readonly BooleanActionInput Grip =
             new BooleanActionInput(action: _default.Grip);
 
+        public static readonly BooleanActionInput SecondaryInteract =
+            new BooleanActionInput(action: _default.SecondaryInteract);
+
         public static readonly BooleanActionInput Interact =
             new BooleanActionInput(action: _default.Interact);
 

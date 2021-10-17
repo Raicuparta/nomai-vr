@@ -15,8 +15,8 @@ namespace NomaiVR.Input
                 { InputCommandType.BOOST, ActionInputDefinitions.Jump },
                 { InputCommandType.SWAP_SHIP_LOG_MODE, ActionInputDefinitions.Jump },  // This isn't used actually.
                 { InputCommandType.MATCH_VELOCITY, ActionInputDefinitions.Jump },
-                { InputCommandType.INTERACT_SECONDARY, ActionInputDefinitions.Grip }, // TODO: Temporary, need to find something better.
-                { InputCommandType.TOOL_SECONDARY, ActionInputDefinitions.Grip },
+                { InputCommandType.INTERACT_SECONDARY, ActionInputDefinitions.SecondaryInteract },
+                { InputCommandType.TOOL_SECONDARY, ActionInputDefinitions.SecondaryInteract },
                 { InputCommandType.AUTOPILOT, ActionInputDefinitions.Autopilot },
                 { InputCommandType.ROLL_MODE, ActionInputDefinitions.RollMode },
                 { InputCommandType.UP, ActionInputDefinitions.Up },

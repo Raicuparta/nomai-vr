@@ -71,33 +71,9 @@ namespace Valve.VR
         
         private static SteamVR_Action_Vector2 p_default_UIDpad;
         
+        private static SteamVR_Action_Boolean p_default_SecondaryInteract;
+        
         private static SteamVR_Action_Vibration p_default_Haptic;
-        
-        private static SteamVR_Action_Boolean p_inverted_Grip;
-        
-        private static SteamVR_Action_Single p_inverted_ThrustUp;
-        
-        private static SteamVR_Action_Single p_inverted_ThrustDown;
-        
-        private static SteamVR_Action_Boolean p_inverted_RollMode;
-        
-        private static SteamVR_Action_Boolean p_inverted_Interact;
-        
-        private static SteamVR_Action_Boolean p_inverted_Jump;
-        
-        private static SteamVR_Action_Boolean p_inverted_Back;
-        
-        private static SteamVR_Action_Boolean p_inverted_Menu;
-        
-        private static SteamVR_Action_Boolean p_inverted_Map;
-        
-        private static SteamVR_Action_Boolean p_inverted_GrabPinch;
-        
-        private static SteamVR_Action_Vector2 p_inverted_Look;
-        
-        private static SteamVR_Action_Vector2 p_inverted_Move;
-        
-        private static SteamVR_Action_Single p_inverted_Squeeze;
         
         private static SteamVR_Action_Vector2 p_tools_DPad;
         
@@ -319,115 +295,19 @@ namespace Valve.VR
             }
         }
         
+        public static SteamVR_Action_Boolean default_SecondaryInteract
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_SecondaryInteract.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
         public static SteamVR_Action_Vibration default_Haptic
         {
             get
             {
                 return SteamVR_Actions.p_default_Haptic.GetCopy<SteamVR_Action_Vibration>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_Grip
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Grip.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Single inverted_ThrustUp
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_ThrustUp.GetCopy<SteamVR_Action_Single>();
-            }
-        }
-        
-        public static SteamVR_Action_Single inverted_ThrustDown
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_ThrustDown.GetCopy<SteamVR_Action_Single>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_RollMode
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_RollMode.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_Interact
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Interact.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_Jump
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Jump.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_Back
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Back.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_Menu
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Menu.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_Map
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Map.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Boolean inverted_GrabPinch
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_GrabPinch.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
-        public static SteamVR_Action_Vector2 inverted_Look
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Look.GetCopy<SteamVR_Action_Vector2>();
-            }
-        }
-        
-        public static SteamVR_Action_Vector2 inverted_Move
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Move.GetCopy<SteamVR_Action_Vector2>();
-            }
-        }
-        
-        public static SteamVR_Action_Single inverted_Squeeze
-        {
-            get
-            {
-                return SteamVR_Actions.p_inverted_Squeeze.GetCopy<SteamVR_Action_Single>();
             }
         }
         
@@ -477,20 +357,8 @@ namespace Valve.VR
                     SteamVR_Actions.default_UISubtabLeft,
                     SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.default_UIDpad,
+                    SteamVR_Actions.default_SecondaryInteract,
                     SteamVR_Actions.default_Haptic,
-                    SteamVR_Actions.inverted_Grip,
-                    SteamVR_Actions.inverted_ThrustUp,
-                    SteamVR_Actions.inverted_ThrustDown,
-                    SteamVR_Actions.inverted_RollMode,
-                    SteamVR_Actions.inverted_Interact,
-                    SteamVR_Actions.inverted_Jump,
-                    SteamVR_Actions.inverted_Back,
-                    SteamVR_Actions.inverted_Menu,
-                    SteamVR_Actions.inverted_Map,
-                    SteamVR_Actions.inverted_GrabPinch,
-                    SteamVR_Actions.inverted_Look,
-                    SteamVR_Actions.inverted_Move,
-                    SteamVR_Actions.inverted_Squeeze,
                     SteamVR_Actions.tools_DPad,
                     SteamVR_Actions.tools_Use};
             Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[] {
@@ -521,19 +389,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_UISubtabLeft,
                     SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.default_UIDpad,
-                    SteamVR_Actions.inverted_Grip,
-                    SteamVR_Actions.inverted_ThrustUp,
-                    SteamVR_Actions.inverted_ThrustDown,
-                    SteamVR_Actions.inverted_RollMode,
-                    SteamVR_Actions.inverted_Interact,
-                    SteamVR_Actions.inverted_Jump,
-                    SteamVR_Actions.inverted_Back,
-                    SteamVR_Actions.inverted_Menu,
-                    SteamVR_Actions.inverted_Map,
-                    SteamVR_Actions.inverted_GrabPinch,
-                    SteamVR_Actions.inverted_Look,
-                    SteamVR_Actions.inverted_Move,
-                    SteamVR_Actions.inverted_Squeeze,
+                    SteamVR_Actions.default_SecondaryInteract,
                     SteamVR_Actions.tools_DPad,
                     SteamVR_Actions.tools_Use};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[] {
@@ -560,29 +416,17 @@ namespace Valve.VR
                     SteamVR_Actions.default_UITabRight,
                     SteamVR_Actions.default_UISubtabLeft,
                     SteamVR_Actions.default_UISubtabRight,
-                    SteamVR_Actions.inverted_Grip,
-                    SteamVR_Actions.inverted_RollMode,
-                    SteamVR_Actions.inverted_Interact,
-                    SteamVR_Actions.inverted_Jump,
-                    SteamVR_Actions.inverted_Back,
-                    SteamVR_Actions.inverted_Menu,
-                    SteamVR_Actions.inverted_Map,
-                    SteamVR_Actions.inverted_GrabPinch,
+                    SteamVR_Actions.default_SecondaryInteract,
                     SteamVR_Actions.tools_Use};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[] {
                     SteamVR_Actions.default_ThrustUp,
                     SteamVR_Actions.default_ThrustDown,
-                    SteamVR_Actions.default_Squeeze,
-                    SteamVR_Actions.inverted_ThrustUp,
-                    SteamVR_Actions.inverted_ThrustDown,
-                    SteamVR_Actions.inverted_Squeeze};
+                    SteamVR_Actions.default_Squeeze};
             Valve.VR.SteamVR_Input.actionsVector2 = new Valve.VR.SteamVR_Action_Vector2[] {
                     SteamVR_Actions.default_Look,
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.default_StationaryDpad,
                     SteamVR_Actions.default_UIDpad,
-                    SteamVR_Actions.inverted_Look,
-                    SteamVR_Actions.inverted_Move,
                     SteamVR_Actions.tools_DPad};
             Valve.VR.SteamVR_Input.actionsVector3 = new Valve.VR.SteamVR_Action_Vector3[0];
             Valve.VR.SteamVR_Input.actionsSkeleton = new Valve.VR.SteamVR_Action_Skeleton[] {
@@ -612,19 +456,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_UISubtabLeft,
                     SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.default_UIDpad,
-                    SteamVR_Actions.inverted_Grip,
-                    SteamVR_Actions.inverted_ThrustUp,
-                    SteamVR_Actions.inverted_ThrustDown,
-                    SteamVR_Actions.inverted_RollMode,
-                    SteamVR_Actions.inverted_Interact,
-                    SteamVR_Actions.inverted_Jump,
-                    SteamVR_Actions.inverted_Back,
-                    SteamVR_Actions.inverted_Menu,
-                    SteamVR_Actions.inverted_Map,
-                    SteamVR_Actions.inverted_GrabPinch,
-                    SteamVR_Actions.inverted_Look,
-                    SteamVR_Actions.inverted_Move,
-                    SteamVR_Actions.inverted_Squeeze,
+                    SteamVR_Actions.default_SecondaryInteract,
                     SteamVR_Actions.tools_DPad,
                     SteamVR_Actions.tools_Use};
         }
@@ -658,20 +490,8 @@ namespace Valve.VR
             SteamVR_Actions.p_default_UISubtabLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UISubtabLeft")));
             SteamVR_Actions.p_default_UISubtabRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UISubtabRight")));
             SteamVR_Actions.p_default_UIDpad = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/default/in/UIDpad")));
+            SteamVR_Actions.p_default_SecondaryInteract = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SecondaryInteract")));
             SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
-            SteamVR_Actions.p_inverted_Grip = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Grip")));
-            SteamVR_Actions.p_inverted_ThrustUp = ((SteamVR_Action_Single)(SteamVR_Action.Create<SteamVR_Action_Single>("/actions/inverted/in/ThrustUp")));
-            SteamVR_Actions.p_inverted_ThrustDown = ((SteamVR_Action_Single)(SteamVR_Action.Create<SteamVR_Action_Single>("/actions/inverted/in/ThrustDown")));
-            SteamVR_Actions.p_inverted_RollMode = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/RollMode")));
-            SteamVR_Actions.p_inverted_Interact = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Interact")));
-            SteamVR_Actions.p_inverted_Jump = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Jump")));
-            SteamVR_Actions.p_inverted_Back = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Back")));
-            SteamVR_Actions.p_inverted_Menu = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Menu")));
-            SteamVR_Actions.p_inverted_Map = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/Map")));
-            SteamVR_Actions.p_inverted_GrabPinch = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/inverted/in/GrabPinch")));
-            SteamVR_Actions.p_inverted_Look = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/inverted/in/Look")));
-            SteamVR_Actions.p_inverted_Move = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/inverted/in/Move")));
-            SteamVR_Actions.p_inverted_Squeeze = ((SteamVR_Action_Single)(SteamVR_Action.Create<SteamVR_Action_Single>("/actions/inverted/in/Squeeze")));
             SteamVR_Actions.p_tools_DPad = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/tools/in/DPad")));
             SteamVR_Actions.p_tools_Use = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/Use")));
         }
