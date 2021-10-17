@@ -242,12 +242,12 @@
     <Exec Command="copy /y &quot;$(ProjectDir)\ModConfig\default-config.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\manifest.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
     
-    <Exec Command="xcopy &quot;$(ProjectDir)\..\NomaiVRPatcher\bin\dist\*&quot; &quot;$(OwmlDir)\$(ModDir)\patcher&quot; /s /e" />
+    <Exec Command="xcopy &quot;$(ProjectDir)\..\NomaiVRPatcher\bin\dist\*&quot; &quot;$(OwmlDir)\$(ModDir)\patcher&quot; /s /e /y" />
   </Target>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
+  <Target Name="PreBuild" BeforeTargets="ResolveReferences" Condition=" '$(Configuration)' == 'Release' ">
     <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />
   </Target>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(Configuration)' == 'OWML' ">
+  <Target Name="PreBuild" BeforeTargets="ResolveReferences" Condition=" '$(Configuration)' == 'OWML' ">
     <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />
   </Target>
 </Project>
