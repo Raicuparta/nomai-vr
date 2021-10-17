@@ -23,6 +23,7 @@ namespace NomaiVR
         public static float ToolbeltHeight { get; private set; }
         public static float HudScale { get; private set; }
         public static float HudOpacity { get; private set; }
+        public static bool HudSmoothFollowEnabled { get; private set; } = true;
 
         public static void SetConfig(IModConfig config)
         {
@@ -39,6 +40,7 @@ namespace NomaiVR
             AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
             HudScale = config.GetSettingsValue<float>("hudScale");
             HudOpacity = config.GetSettingsValue<float>("hudOpacity");
+            HudSmoothFollowEnabled = config.GetSettingsValue<bool>("hudSmoothFollow");
             BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");
 
             // OWML doesn't support negative slider values so I subtract it here.

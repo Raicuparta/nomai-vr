@@ -11,6 +11,15 @@ namespace NomaiVR
         internal void Start()
         {
             _lastFrameRotation = transform.rotation;
+
+            SetSmoothEnabled();
+
+            ModSettings.OnConfigChange += SetSmoothEnabled;
+        }
+
+        internal void OnDestroy()
+        {
+            ModSettings.OnConfigChange -= SetSmoothEnabled;
         }
 
         internal void LateUpdate()
@@ -34,6 +43,11 @@ namespace NomaiVR
             }
 
             _lastFrameRotation = transform.rotation;
+        }
+
+        void SetSmoothEnabled()
+        {
+            smoothEnabled = ModSettings.HudSmoothFollowEnabled;
         }
     }
 }
