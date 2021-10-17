@@ -203,6 +203,14 @@
     <PackageReference Include="OWML" Version="2.0.0">
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NomaiVRPatcher\NomaiVRPatcher.csproj">
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes>false</EmbedInteropTypes>
+    </ProjectReference>
+  </ItemGroup>
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
     <Exec Command="del &quot;$(OwmlDir)\$(ModDir)\config.json&quot;" IgnoreExitCode="true" />
 
@@ -210,6 +218,7 @@
     <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" IgnoreExitCode="true" />
     <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\assets&quot;" IgnoreExitCode="true" />
     <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\poses&quot;" IgnoreExitCode="true" />
+    <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\patcher&quot;" IgnoreExitCode="true" />
     
 
     <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
@@ -232,6 +241,8 @@
 
     <Exec Command="copy /y &quot;$(ProjectDir)\ModConfig\default-config.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\manifest.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
+    
+    <Exec Command="xcopy &quot;$(ProjectDir)\..\NomaiVRPatcher\bin\dist\*&quot; &quot;$(OwmlDir)\$(ModDir)\patcher&quot; /s /e" />
   </Target>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
     <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />

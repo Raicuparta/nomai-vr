@@ -1,6 +1,5 @@
 ﻿using AssetsTools.NET;
 using AssetsTools.NET.Extra;
-using BepInEx;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -37,12 +36,13 @@ namespace NomaiVRPatcher
         public static void Initialize()
         {
             var executablePath = Assembly.GetExecutingAssembly().Location;
-            var gameManagersPath = Path.Combine(Path.Combine(Paths.ManagedPath, ".."), "globalgamemanagers");
+            var gameManagersPath = Path.Combine(Path.Combine(executablePath, "OuterWilds_Data"), "globalgamemanagers");
+            var patchersPath = Path.Combine(Path.Combine(Path.Combine(executablePath, "BepInEx"), "patchers"), "NomaiVR");
             var backupPath = BackupFile(gameManagersPath);
 
-            CopyGameFiles(Assembly.GetExecutingAssembly().Location, Path.Combine(Path.Combine(Paths.PatcherPluginPath, "NomaiVR"), "files"));
+            CopyGameFiles(Assembly.GetExecutingAssembly().Location, Path.Combine(patchersPath, "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, backupPath, Path.Combine(Paths.PatcherPluginPath, "NomaiVR"));
+            PatchGlobalGameManagers(gameManagersPath, backupPath, patchersPath);
         }
 
         private static void CopyGameFiles(string gamePath, string filesPath)
@@ -67,12 +67,7 @@ namespace NomaiVRPatcher
             foreach (FileInfo file in files)
             {
                 string tempPath = Path.Combine(gamePath, file.Name);
-
-                try
-                {
-                    file.CopyTo(tempPath, false);
-                }
-                catch (IOException) { }
+                file.CopyTo(tempPath, true);
             }
 
             foreach (DirectoryInfo subdir in dirs)
