@@ -1,5 +1,6 @@
 ﻿using NomaiVR.Input;
 using NomaiVR.ReusableBehaviours;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NomaiVR
@@ -12,6 +13,7 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             private ItemTool _itemTool;
+            private List<ProximityDetector> _detectors = new List<ProximityDetector>();
 
             internal void Start()
             {
@@ -27,6 +29,18 @@ namespace NomaiVR
                 HoldSharedStone();
                 HoldWarpCore();
                 HoldVesselCore();
+
+                VRToolSwapper.InteractingHandChanged += OnInteractingHandChanged;
+            }
+
+            internal void OnDestroy()
+            {
+                VRToolSwapper.InteractingHandChanged -= OnInteractingHandChanged;
+            }
+
+            private void OnInteractingHandChanged()
+            {
+                _detectors.ForEach(x => x.Other = HandsController.Behaviour.OffHand);
             }
 
             private void HoldWordStone()
@@ -163,6 +177,7 @@ namespace NomaiVR
                 {
                     itemInteractor.enabled = holden;
                 };
+                _detectors.Add(itemInteractor);
             }
 
             private void SetActive(bool active)
@@ -195,11 +210,6 @@ namespace NomaiVR
                 {
                     SetActive(true);
                 }
-            }
-
-            internal void OnDestroy()
-            {
-
             }
         }
     }
