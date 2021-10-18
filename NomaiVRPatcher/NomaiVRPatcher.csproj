@@ -15,16 +15,13 @@
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
     <Exec Command="md &quot;$(TargetDir)\..\..\dist&quot;" IgnoreExitCode="true" />
     <Exec Command="md &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\StreamingAssets\SteamVR&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\UnitySubsystems\XRSDKOpenVR&quot;" IgnoreExitCode="true" />
     <Exec Command="md &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64&quot;" IgnoreExitCode="true" />
     <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(TargetDir)\..\..\dist\$(TargetName).dll&quot;" />
     <Exec Command="copy /y &quot;$(TargetDir)\AssetsTools.NET.dll&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
     <Exec Command="copy /y &quot;$(TargetDir)\Mono*.dll&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\ClassDatabase\*&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\StreamingAssets\SteamVR&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\UnitySubsystems\XRSDKOpenVR\*&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\UnitySubsystems\XRSDKOpenVR&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Plugins\x86_64\openvr_api.dll&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_api.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Plugins\x86_64\XRSDKOpenVR.dll&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\XRSDKOpenVR.dll&quot;" />
   </Target>
 
   <ItemGroup>

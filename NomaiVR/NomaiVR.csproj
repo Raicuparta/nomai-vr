@@ -148,10 +148,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.XR.Management, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AssetFiles\cinema-camera" />
@@ -224,12 +220,7 @@
     <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR.dll&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR_Actions.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.XR.OpenVR.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.XR.Management.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll&quot; &quot;$(OwmlDir)\$(ModDir)\UnityEngine.XR.LegacyInputHelpers.dll&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Valve.Newtonsoft.Json.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.Subsystem.Registration.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.Subsystem.Registration.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\UnityEngine.SpatialTracking.dll&quot; &quot;$(OwmlDir)\$(ModDir)\UnityEngine.SpatialTracking.dll&quot;" />
     
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" />
 
