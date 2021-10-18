@@ -122,10 +122,11 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
 - Download the [AssemblyPublicizer](https://github.com/Raicuparta/AssemblyPublicizer/releases) and extract the exe anywhere;
 - Drag the file `OuterWilds\OuterWilds_Data\Managed\Assembly-CSharp.dll` and drop it on top of `AssemblyPublicizer.exe`;
 - Confirm that it generated a new file `OuterWilds\OuterWilds_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll`;
+- Open Unity and import the project under `Unity`, some dependencies should be downloaded
+- When asked about VR support select `Legacy VR`
+- Close Unity when the project has finished importing
 - Open the project solution file `NomaiVR.sln` in Visual Studio;
 - If needed, right click `References` in the Solution Explorer > Manage NuGet Packages > Update OWML to fix missing references;
-- Open Unity and import the project under `Unity`, some dependencies should be downloaded
-- Close Unity when the project has finished importing
 
 After doing this you should compile a release build from Visual Studio (the configuration to select is `OWML`), it'll let unity compile the support project and assetbundles and then compile the mod.
 The project references should now be working. When you build the solution, the dll and json files will be copied to `[Mod Manager directory]/OWML/NomaiVR`. If this process is successful, you should see the mod show up in the Mod Manager.
