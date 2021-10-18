@@ -102,7 +102,6 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
 - Install Unity 2019.4.27
 - [Download the Outer Wilds Mod Manager](https://outerwildsmods.com/) and install it anywhere you like;
 - Install OWML using the Mod Manager;
-- [Download BepInEx](https://github.com/BepInEx/BepInEx/releases) to the games's folder;
 - Clone NomaiVR's source;
 - Open the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
 - Edit the entry `<GameDir>` to point to the directory where Outer Wilds is installed;
@@ -113,8 +112,17 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
 - Confirm that it generated a new file `OuterWilds\OuterWilds_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll`;
 - Open the project solution file `NomaiVR.sln` in Visual Studio;
 - If needed, right click `References` in the Solution Explorer > Manage NuGet Packages > Update OWML to fix missing references;
+- Open Unity and import the project under `Unity`, some dependencies should be downloaded
+- Close Unity when the project has finished importing
 
-After doing this, the project references should be working. When you build the solution, the dll and json files will be copied to `[Mod Manager directory]/OWML/NomaiVR`. If this process is successful, you should see the mod show up in the Mod Manager.
+After doing this you should compile a release build from Visual Studio (the configuration to select is `OWML`), it'll let unity compile the support project and assetbundles and then compile the mod.
+The project references should now be working. When you build the solution, the dll and json files will be copied to `[Mod Manager directory]/OWML/NomaiVR`. If this process is successful, you should see the mod show up in the Mod Manager.
+
+The available build configurations are:
+- `Debug` which compiles only the mod and patcher binaries for BepInEx
+- `DebugOWML` which compiles only the mod and patcher binaries for OWML
+- `Release` which compiles both the unity project and the mod + patcher for BepInEx
+- `OWML` which compiles both the unity project and the mod + patcher for OWML
 
 If for some reason none of this is working, you might have to set everything manually:
 
