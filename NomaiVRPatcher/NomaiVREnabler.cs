@@ -21,6 +21,8 @@ namespace NomaiVRPatcher
             var gameManagersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("OuterWilds_Data", "globalgamemanagers"));
             var backupPath = BackupFile(gameManagersPath);
 
+            Cleanup(AppDomain.CurrentDomain.BaseDirectory);
+
             CopyGameFiles(AppDomain.CurrentDomain.BaseDirectory, Path.Combine(basePath, "files"));
 
             PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
@@ -40,9 +42,29 @@ namespace NomaiVRPatcher
             var patchersPath = Path.Combine(Path.Combine(Path.Combine(executablePath, "BepInEx"), "patchers"), "NomaiVR");
             var backupPath = BackupFile(gameManagersPath);
 
-            CopyGameFiles(Assembly.GetExecutingAssembly().Location, Path.Combine(patchersPath, "files"));
+            Cleanup(executablePath);
+
+            CopyGameFiles(executablePath, Path.Combine(patchersPath, "files"));
 
             PatchGlobalGameManagers(gameManagersPath, backupPath, patchersPath);
+        }
+
+        // Clean up files left from previous versions of the mod
+        private static void Cleanup(string gamePath)
+        {
+            var dataPath = Path.Combine(gamePath, "OuterWilds_Data");
+            var managedPath = Path.Combine(dataPath, "Managed");
+            var pluginsPath = Path.Combine(dataPath, "Plugins");
+            var toDelete = new[]
+            {
+                Path.Combine(managedPath, "SteamVR.dll"),
+                Path.Combine(managedPath, "SteamVR_Actions.dll"),
+                Path.Combine(pluginsPath, "openvr_api.dll"),
+                Path.Combine(pluginsPath, "OVRPlugin.dll"),
+            };
+
+            foreach(var file in toDelete)
+                if (File.Exists(file)) File.Delete(file);
         }
 
         private static void CopyGameFiles(string gamePath, string filesPath)
