@@ -103,7 +103,19 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
 - [Download the Outer Wilds Mod Manager](https://outerwildsmods.com/) and install it anywhere you like;
 - Install OWML using the Mod Manager;
 - Clone NomaiVR's source;
-- Open the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
+- Create the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+    <GameDir>C:\Program Files\Steam\steamapps\common\Outer Wilds</GameDir>
+    <OwmlDir>C:\Users\USER\AppData\Roaming\OuterWildsModManager\OWML</OwmlDir>
+    <UnityEditor>C:\Program Files (x86)\Unity\2019.4.27f1\Editor\Unity.exe</UnityEditor>
+    <ModDir>NomaiVR</ModDir>
+  </PropertyGroup>
+</Project>
+```
 - Edit the entry `<GameDir>` to point to the directory where Outer Wilds is installed;
 - Edit the entry `<OwmlDir>` to point to your OWML directory (it is installed inside the Mod Manager directory);
 - Edit the entry `<UnityEditor>` to point to your Unity 2019.4.27 editor executable;
