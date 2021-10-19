@@ -76,7 +76,7 @@ namespace NomaiVR
 
             private void CloseEyes()
             {
-                XRDevice.fovZoomFactor = 1;
+                CameraHelper.SetFieldOfViewFactor(1, true);
                 //We don't want to save the mask when closing the eyes in the dream world
                 if (Locator.GetDreamWorldController() == null ||
                     (!Locator.GetDreamWorldController().IsInDream() && !Locator.GetDreamWorldController().IsExitingDream()))
