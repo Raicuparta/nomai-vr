@@ -180,7 +180,7 @@ namespace NomaiVR
                 private static bool GetOWCameraFOVScaled(OWCamera __instance, ref float __result)
                 {
                     //Returns FOV scaled by scale factor
-                    if (__instance.mainCamera.stereoEnabled) __result = __instance.mainCamera.fieldOfView / XRDevice.fovZoomFactor;
+                    if (__instance.mainCamera.stereoEnabled) __result = CameraHelper.GetScaledFieldOfView(__instance.mainCamera);
                     return !__instance.mainCamera.stereoEnabled;
                 }
             }

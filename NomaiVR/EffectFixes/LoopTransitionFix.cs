@@ -76,7 +76,7 @@ namespace NomaiVR
             private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
             {
                 Transform parent;
-                XRDevice.fovZoomFactor = 1;
+                CameraHelper.SetFieldOfViewFactor(1, true);
 
                 if (____screenTransform.parent == __instance.transform)
                 {

@@ -79,7 +79,7 @@ namespace NomaiVR.EffectFixes
                 float time = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 0.5f, Time.time);
                 float t = __instance._zoomInCurve.Evaluate(time);
                 float targetFieldOfView = Mathf.Lerp(Locator.GetPlayerCameraController().GetOrigFieldOfView(), __instance._startFOV, t);
-                XRDevice.fovZoomFactor = Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView;
+                CameraHelper.SetFieldOfViewFactor(Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView);
                 if (Time.time > __instance._stateChangeTime + 0.5f)
                 {
                     __instance.ChangeState(LanternZoomPoint.State.RetroZoom);
@@ -96,7 +96,7 @@ namespace NomaiVR.EffectFixes
                 __instance._playerLantern.GetLanternController().SetFocus(focus);
                 float t = __instance._retroZoomCurve.Evaluate(num);
                 float targetFieldOfView = Mathf.Lerp(__instance._startFOV, Locator.GetPlayerCameraController().GetOrigFieldOfView(), t);
-                XRDevice.fovZoomFactor = Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView;
+                CameraHelper.SetFieldOfViewFactor(Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView);
                 float d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
                 Vector3 vector = __instance._startLocalPos - __instance._endLocalPos;
                 __instance._attachPoint.transform.localPosition = __instance._endLocalPos + vector.normalized * d;
@@ -115,7 +115,7 @@ namespace NomaiVR.EffectFixes
                     if(!_isPaused)
                     {
                         _isPaused = true;
-                        _prePauseFovFactor = XRDevice.fovZoomFactor;
+                        _prePauseFovFactor = CameraHelper.GetFieldOfViewFactor();
                         ResetScaleFactor();
                     }
                     return false;
@@ -123,7 +123,7 @@ namespace NomaiVR.EffectFixes
 
                 if (!InputHelper.IsUIInteractionMode() && _isPaused)
                 {
-                    XRDevice.fovZoomFactor = _prePauseFovFactor;
+                    CameraHelper.SetFieldOfViewFactor(_prePauseFovFactor);
                     _isPaused = false;
                 }
                 return true;
@@ -140,7 +140,7 @@ namespace NomaiVR.EffectFixes
 
             private static void ResetScaleFactor()
             {
-                XRDevice.fovZoomFactor = 1;
+                CameraHelper.SetFieldOfViewFactor(1, true);
             }
 
             private static void Post_SimulationCamera_Awake(SimulationCamera __instance)
