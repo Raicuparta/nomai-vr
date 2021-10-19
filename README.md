@@ -9,7 +9,7 @@
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
   - [Manual installation](#manual-installation)
-  - [Uninstall](#uninstall)
+  - [Uninstalling](#uninstalling)
 - [Requirements](#requirements)
 - [Comfort](#comfort)
 - [VR Controller Inputs](#vr-controller-inputs)
@@ -37,10 +37,12 @@
 - Extract the `Raicuparta.NomaiVR` directory to the `OWML/Mods` directory;
 - Run `OWML.Launcher.exe` to start the game.
 
-### Uninstall
+### Uninstalling
 
-- Remove `Raicuparta.NomaiVR` from the Mod Manager or by deleting its files under `OWML/Mods`;
-- Check the game file integrity from Steam.
+- Uninstall NomaiVR from the Mod Manager, or delete the mod folder in `OWML/Mods/Raicuparta.NomaiVR`;
+- **Important**! Verify game file integrity:
+  - **Steam**: Library > Right-click Outer Wilds > Properties > Local Files > Verify integrity of game files.
+  - **Epic**: Library > Click three dots under Outer Wilds > Verify.
 
 ## Requirements
 
@@ -77,12 +79,6 @@ This game was not developed with VR in mind. It was also never a super lightweig
 
 Besides lowering the graphics in-game (shadows, antialiasing and ambient occlusion are the heaviest hitters), try lowering the rendering resolution in SteamVR's settings.SteamVR defaults to 150%, try something like 100% instead. Changing resolution and V-sync in-game has no effect.
 
-### Framerate
-
-Outer Wilds was originally locked to 60 FPS. To work around this, NomaiVR forces the game's physics refresh rate to match your VR headset's refresh rate. This can have a high impact on performance. Try lowering your refresh rate through SteamVR's settings (if your headset supports this) to get a more stable framerate.
-
-If your headset doesn't support multiple refresh rates, you can override the game's physics refresh rate in NomaiVR's options (pause the game, select Mods > NomaiVR and change Physics Refresh Rate). This will cause a disconnect between the framerate of the VR camera rotation and the framerate of the game's physics, so it's not very pleasant. Setting it to zero makes it follow your VR headset's refresh rate.
-
 ## Compatibility with other mods
 
 NomaiVR affects code in pretty much the whole game, and drastically changes things in ways that are sure to break other mods. If you are having issues, make sure you disable any other mods you might have installed.
@@ -104,6 +100,7 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
 - Install OWML using the Mod Manager;
 - Clone NomaiVR's source;
 - Create the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -116,6 +113,7 @@ If you need help, leave a comment on the issue, or ask via [Discord](https://dis
   </PropertyGroup>
 </Project>
 ```
+
 - Edit the entry `<GameDir>` to point to the directory where Outer Wilds is installed;
 - Edit the entry `<OwmlDir>` to point to your OWML directory (it is installed inside the Mod Manager directory);
 - Edit the entry `<UnityEditor>` to point to your Unity 2019.4.27 editor executable;
@@ -132,6 +130,7 @@ After doing this you should compile a release build from Visual Studio (the conf
 The project references should now be working. When you build the solution, the dll and json files will be copied to `[Mod Manager directory]/OWML/NomaiVR`. If this process is successful, you should see the mod show up in the Mod Manager.
 
 The available build configurations are:
+
 - `Debug` which compiles only the mod and patcher binaries for BepInEx
 - `DebugOWML` which compiles only the mod and patcher binaries for OWML
 - `Release` which compiles both the unity project and the mod + patcher for BepInEx
