@@ -28,8 +28,7 @@
 ### Easy installation (recommended)
 
 - Get the Mod Manager from the [Outer Wilds Mods](https://outerwildsmods.com/) website;
-- Install OWML and downgrade it to version 1.1.8:
-![owml-pre](https://user-images.githubusercontent.com/3955124/137026170-4b0777cd-3af2-4e35-8dbd-76a0cf557302.gif)
+- Install OWML
 - Install NomaiVR from the mod list displayed in the application;
 - If you can't get the mod manager to work, follow the instructions for manual installation.
 
