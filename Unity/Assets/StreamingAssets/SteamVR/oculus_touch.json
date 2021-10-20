@@ -320,6 +320,15 @@
                },
                "mode": "button",
                "path": "/user/hand/right/input/y"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/tools/in/use"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/b"
             }
          ]
       }
