@@ -7,9 +7,6 @@ namespace NomaiVR.Input.ActionInputs
         public static readonly EmptyActionInput Empty =
             new EmptyActionInput();
 
-        public static readonly EmptyActionInput HoldHands =
-            new EmptyActionInput(texturePath: "interactions/hold_together");
-
         public static readonly BooleanActionInput Autopilot =
             new BooleanActionInput(action: _default.Autopilot);
 

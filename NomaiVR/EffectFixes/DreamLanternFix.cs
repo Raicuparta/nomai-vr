@@ -31,6 +31,9 @@ namespace NomaiVR
             {
                 Postfix<DreamLanternItem>(nameof(DreamLanternItem.Start), nameof(FixupModel));
                 Postfix<DreamLanternItem>(nameof(DreamLanternItem.CheckIsDroppable), nameof(FixDropBehaviourInDream));
+                Prefix<ToolModeSwapper>(nameof(ToolModeSwapper.Update), nameof(PreItemToolSwapperUpdate));
+                Prefix<ItemTool>(nameof(ItemTool.UpdateInteract), nameof(PreItemToolUpdateInteract));
+                Postfix<ToolModeSwapper>(nameof(ToolModeSwapper.Update), nameof(AllowLanternDropWhenFocusing));
             }
 
             public static void FixupModel(DreamLanternItem __instance)
@@ -67,12 +70,32 @@ namespace NomaiVR
 
             public static void FixDropBehaviourInDream(DreamLanternItem __instance, ref bool __result)
             {
-                var originalCheck = __instance._lanternController != null && (__instance._lanternController.IsFocused(0.01f) || __instance._lanternController.IsConcealed());
+                var originalCheck = __instance._lanternController != null && (__instance._lanternController.IsFocused(0.1f) || __instance._lanternController.IsConcealed());
                 if (!__result && !originalCheck)
                 {
                     bool flag1 = Vector3.SignedAngle(Locator.GetPlayerTransform().forward, __instance.transform.forward, Locator.GetPlayerTransform().forward) < -70f;
                     bool flag2 = Locator.GetPlayerController().GetRelativeGroundVelocity().sqrMagnitude < Locator.GetPlayerController().GetWalkSpeedMagnitude() * Locator.GetPlayerController().GetWalkSpeedMagnitude();
                     __result = flag1 && flag2;
+                }
+            }
+
+            private static bool _itemToolUpdateInteractCalled = false;
+            public static void PreItemToolSwapperUpdate() => _itemToolUpdateInteractCalled = false;
+            public static void PreItemToolUpdateInteract() => _itemToolUpdateInteractCalled = true;
+            public static void AllowLanternDropWhenFocusing(ToolModeSwapper __instance)
+            {
+                if (_itemToolUpdateInteractCalled) return; //Avoid calling UpdateInteract twice when unsocketing the lantern
+
+                if (__instance._shipDestroyed && __instance._currentToolGroup == ToolGroup.Ship)
+                {
+                    return;
+                }
+                if (__instance._currentToolMode == ToolMode.Item 
+                            && OWInput.IsNewlyPressed(InputLibrary.probeLaunch, InputMode.Character | InputMode.ShipCockpit) 
+                            && __instance._currentToolGroup == ToolGroup.Suit 
+                            && __instance._itemCarryTool.GetHeldItemType() == ItemType.DreamLantern)
+                {
+                    __instance._itemCarryTool.UpdateInteract(__instance._firstPersonManipulator, __instance.IsItemToolBlocked());
                 }
             }
         }

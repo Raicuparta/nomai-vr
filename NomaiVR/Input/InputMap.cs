@@ -71,24 +71,12 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_LEFT, ActionInputDefinitions.ToolLeft },
                 { InputCommandType.INTERACT, ActionInputDefinitions.Empty },
             };
-        
-        
-        public static readonly Dictionary<InputCommandType, IActionInput> UsableItemMap =
-            new Dictionary<InputCommandType, IActionInput>
-            {
-                { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.HoldHands },
-            };
 
         public static IActionInput GetActionInput(InputCommandType commandType)
         {
             if (ToolsActive && ToolsInputMap.ContainsKey(commandType))
             {
                 return ToolsInputMap[commandType];
-            }
-
-            if (ToolHelper.HasUsableItem() && UsableItemMap.ContainsKey(commandType))
-            {
-                return UsableItemMap[commandType];
             }
 
             DefaultInputMap.TryGetValue(commandType, out var actionInput);

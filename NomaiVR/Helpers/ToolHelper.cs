@@ -33,17 +33,5 @@
 
             return Swapper.IsInToolMode(ToolMode.None) || Swapper.IsInToolMode(ToolMode.Item);
         }
-
-        public static bool HasUsableItem()
-        {
-            if (Swapper == null)
-            {
-                return false;
-            }
-
-            var item = Swapper.GetItemCarryTool();
-            return Swapper.IsInToolMode(ToolMode.Item) && item != null 
-                && (item.GetHeldItemType() == ItemType.VisionTorch || item.GetHeldItemType() == ItemType.DreamLantern);
-        }
     }
 }

@@ -68,20 +68,6 @@ namespace NomaiVR
                 holdable.SetPositionOffset(new Vector3(-0.505f, 0.094f, 0.017f), new Vector3(-0.52f, 0.094f, 0.029f));
                 holdable.SetRotationOffset(Quaternion.Euler(0f, 0f, -100.5f));
                 holdable.SetPoses("holding_dreamlantern", "holding_dreamlantern_gloves");
-
-                SetupUsableItem(holdable, 0.15f, 0.05f, new Vector3(0, 0.6f, 0.1f),
-                                onEnter: (Transform hand) =>
-                                {
-                                    var lanternController = holdable.GetComponentInChildren<DreamLanternController>(false);
-                                    if (lanternController != null && lanternController.IsHeldByPlayer())
-                                    {
-                                        ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
-                                    }
-                                },
-                                onExit: (Transform hand) =>
-                                {
-                                    ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
-                                });
             }
 
             private void HoldSlideReel()
@@ -100,21 +86,6 @@ namespace NomaiVR
                 holdable.SetPositionOffset(new Vector3(-0.0092f, -0.0522f, 0.0107f));
                 holdable.SetRotationOffset(Quaternion.Euler(-0.404f, 0.109f, -9.991f));
                 holdable.SetPoses("holding_visiontorch");
-
-                SetupUsableItem(holdable, 0.15f, 0.05f, 
-                                new Vector3(0.0092f, 0.0522f, 0.0107f),
-                                onEnter: (Transform hand) =>
-                                {
-                                    var torchItem = holdable.GetComponentInChildren<VisionTorchItem>(false);
-                                    if (torchItem != null && torchItem._visible)
-                                    {
-                                        ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
-                                    }
-                                },
-                                onExit: (Transform hand) =>
-                                {
-                                    ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
-                                });
             }
 
             private void HoldScroll()
@@ -160,24 +131,6 @@ namespace NomaiVR
                 if (socketTransform != null) return socketTransform.gameObject.AddComponent<Holdable>();
                 Logs.WriteError($"Could not find socket with name {socketName}");
                 return null;
-            }
-
-            private void SetupUsableItem(Holdable holdable, float useDistance, float useExitThreshold, Vector3 useOffest, 
-                                            System.Action<Transform> onEnter, System.Action<Transform> onExit)
-            {
-                var itemInteractor = holdable.gameObject.AddComponent<ProximityDetector>();
-                itemInteractor.LocalOffset = useOffest;
-                itemInteractor.enabled = false;
-                itemInteractor.MinDistance = useDistance;
-                itemInteractor.ExitThreshold = useExitThreshold;
-                itemInteractor.Other = HandsController.Behaviour.OffHand;
-                itemInteractor.OnEnter += onEnter;
-                itemInteractor.OnExit += onExit;
-                holdable.OnHoldStateChanged += (holden) =>
-                {
-                    itemInteractor.enabled = holden;
-                };
-                _detectors.Add(itemInteractor);
             }
 
             private void SetActive(bool active)
