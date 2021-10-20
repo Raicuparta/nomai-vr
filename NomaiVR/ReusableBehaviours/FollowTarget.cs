@@ -20,7 +20,7 @@ namespace NomaiVR
 
         private void OnDestroy()
         {
-            Camera.onPreRender -= UpdatePosition;
+            Camera.onPreCull -= UpdatePosition;
         }
 
         private void UpdatePosition(Camera camera)
