@@ -63,6 +63,10 @@ The mod tries its best to teach you how to play the game in VR, but it's not alw
 - Depending on the hand you use to hold tools, movement or rotation will be disabled to allow you to interact with the tools functions. Controllers that have an additional trackpad will not suffer from this shortcoming (Index and old WMR controllers);
 - Left hand mode is currently in the game but you need to manually change the SteamVR bindings;
 
+### Missing button icons
+
+Some controllers, like WMR, might be missing icons in the prompts. If you have one of these devices and want to help, please [contact us](#support) so we can add these icons in.
+
 ### Poor performance
 
 This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance.
