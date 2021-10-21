@@ -19,12 +19,13 @@ namespace NomaiVRPatcher
         {
             var basePath = args.Length > 0 ? args[0] : ".";
             var gameManagersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("OuterWilds_Data", "globalgamemanagers"));
+            var backupPath = BackupFile(gameManagersPath);
 
             Cleanup(AppDomain.CurrentDomain.BaseDirectory);
 
             CopyGameFiles(AppDomain.CurrentDomain.BaseDirectory, Path.Combine(basePath, "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, gameManagersPath, basePath);
+            PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
         }
 
         // List of assemblies to patch
@@ -39,12 +40,13 @@ namespace NomaiVRPatcher
             var executablePath = Assembly.GetExecutingAssembly().Location;
             var gameManagersPath = Path.Combine(Path.Combine(executablePath, "OuterWilds_Data"), "globalgamemanagers");
             var patchersPath = Path.Combine(Path.Combine(Path.Combine(executablePath, "BepInEx"), "patchers"), "NomaiVR");
+            var backupPath = BackupFile(gameManagersPath);
 
             Cleanup(executablePath);
 
             CopyGameFiles(executablePath, Path.Combine(patchersPath, "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, gameManagersPath, patchersPath);
+            PatchGlobalGameManagers(gameManagersPath, backupPath, patchersPath);
         }
 
         // Clean up files left from previous versions of the mod
@@ -97,11 +99,11 @@ namespace NomaiVRPatcher
             }
         }
 
-        private static void PatchGlobalGameManagers(string gameManagersPath, string gameManagers, string patchFilesPath)
+        private static void PatchGlobalGameManagers(string gameManagersPath, string gameManagersBackup, string patchFilesPath)
         {
             AssetsManager assetsManager = new AssetsManager();
             assetsManager.LoadClassPackage(Path.Combine(patchFilesPath, "classdata.tpk"));
-            AssetsFileInstance assetsFileInstance = assetsManager.LoadAssetsFile(gameManagers, false);
+            AssetsFileInstance assetsFileInstance = assetsManager.LoadAssetsFile(gameManagersBackup, false);
             AssetsFile assetsFile = assetsFileInstance.file;
             AssetsFileTable assetsFileTable = assetsFileInstance.table;
             assetsManager.LoadClassDatabaseFromPackage(assetsFile.typeTree.unityVersion);
@@ -138,6 +140,13 @@ namespace NomaiVRPatcher
                 templateField = template,
                 value = new AssetTypeValue(EnumValueTypes.ValueType_String, str)
             };
+        }
+
+        private static string BackupFile(string fileName)
+        {
+            var backupName = fileName + ".bak";
+            File.Copy(fileName, backupName);
+            return backupName;
         }
     }
 }
