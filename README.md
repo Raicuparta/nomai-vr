@@ -9,7 +9,6 @@
 - [Requirements](#requirements)
 - [VR Controller Inputs](#vr-controller-inputs)
 - [Performance](#performance)
-- [Compatibility with other mods](#compatibility-with-other-mods)
 - [People](#people)
 - [Support](#support)
 - [Development Setup](#development-setup)
