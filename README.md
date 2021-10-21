@@ -56,7 +56,7 @@
 
 ### Error when starting game
 
-If you get an error saying something like "Failed to initialize player" or "Failed to load PlayerSettings", you need to verify the integrity of your game files before installing NomaiVR:
+If you get an error saying something like "Failed to initialize player" or "Failed to load PlayerSettings", make sure you are **NOT** in the Steam beta branch for Outer Wilds 1.0.7, you need to be on Outer Wilds 1.10.0. Then, make sure to verify the integrity of your game files before running NomaiVR:
 
 - **Steam**: Library > Right-click Outer Wilds > Properties > Local Files > Verify integrity of game files.
 - **Epic**: Library > Click three dots under Outer Wilds > Verify.
