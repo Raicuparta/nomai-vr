@@ -73,11 +73,13 @@
     },
     {
       "name": "/actions/default/in/Autopilot",
-      "type": "boolean"
+      "type": "boolean",
+      "requirement": "optional"
     },
     {
       "name": "/actions/default/in/Recenter",
-      "type": "boolean"
+      "type": "boolean",
+      "requirement": "optional"
     },
     {
       "name": "/actions/default/in/UISelect",
