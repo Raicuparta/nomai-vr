@@ -37,7 +37,6 @@ namespace NomaiVR.UI
                 public override void ApplyPatches()
                 {
                     Postfix<ProbePromptController>(nameof(ProbePromptController.LateInitialize), nameof(RemoveProbePrompts));
-                    Postfix<ProbePromptController>(nameof(ProbePromptController.Awake), nameof(ChangeProbePrompts));
 
                     Postfix<ShipPromptController>(nameof(ShipPromptController.LateInitialize), nameof(RemoveShipPrompts));
                     Postfix<ShipPromptController>(nameof(ShipPromptController.Awake), nameof(ChangeShipPrompts));
@@ -97,12 +96,6 @@ namespace NomaiVR.UI
                 {
                     toolUnequipPrompts.Add(__instance._unequipPrompt);
                 }
-
-                private static void ChangeProbePrompts(ProbePromptController __instance)
-                {
-                    __instance._retrievePrompt = new ScreenPrompt(InputLibrary.probeRetrieve, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
-                }
-
 
                 private static void ChangeSignalscopePrompts(SignalscopePromptController __instance)
                 {
