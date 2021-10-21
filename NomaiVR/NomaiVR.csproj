@@ -10,7 +10,7 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Outer Wilds</GameDir>
-    <OwmlDir>C:\Users\rai\AppData\Roaming\OuterWildsModManager\OWML</OwmlDir>
+    <OwmlDir>C:\Users\rai\AppData\Roaming\OuterWildsModManager\OWML\Mods</OwmlDir>
     <UnityEditor>C:\Program Files\Unity\Editor\Unity.exe</UnityEditor>
     <ModDir>NomaiVR</ModDir>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
