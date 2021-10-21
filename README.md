@@ -7,7 +7,6 @@
   - [Manual installation](#manual-installation)
   - [Uninstalling](#uninstalling)
 - [Requirements](#requirements)
-- [Comfort](#comfort)
 - [VR Controller Inputs](#vr-controller-inputs)
 - [Performance](#performance)
 - [Compatibility with other mods](#compatibility-with-other-mods)
@@ -46,16 +45,8 @@
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
 - Steam and SteamVR installed (even if you have the Epic version);
-- Strong VR legs (both due to the nature of the game, and due to the glitchiness of this VR implementation);
+- Strong VR legs (it can be a very intense VR experience);
 - Not compatible with any other mods.
-
-## Comfort
-
-NomaiVR is only recommended for people who aren't usually prone to VR sickness:
-
-- A good portion of the game is spent spinning around in zero-g, which can be very disorienting;
-- No comfort features like teleport and snap turning were implemented;
-- Performance tends to not be that great, which can cause nausea;
 
 ## VR Controller Inputs
 
