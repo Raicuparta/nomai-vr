@@ -145,8 +145,7 @@ namespace NomaiVRPatcher
         private static string BackupFile(string fileName)
         {
             var backupName = fileName + ".bak";
-            if (!File.Exists(backupName))
-                File.Copy(fileName, backupName);
+            File.Copy(fileName, backupName, true);
             return backupName;
         }
     }
