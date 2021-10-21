@@ -7,8 +7,11 @@
   - [Manual installation](#manual-installation)
   - [Uninstalling](#uninstalling)
 - [Requirements](#requirements)
-- [VR Controller Inputs](#vr-controller-inputs)
-- [Performance](#performance)
+- [Troubleshooting](#troubleshooting)
+  - [VR Controller Inputs](#vr-controller-inputs)
+  - [Poor performance](#poor-performance)
+  - [Game doesn't work after removing NomaiVR](#game-doesnt-work-after-removing-nomaivr)
+  - [Game doesn't start in VR / Desktop Game Theatre shenanigans](#game-doesnt-start-in-vr--desktop-game-theatre-shenanigans)
 - [Support](#support)
 - [People](#people)
 - [Development Setup](#development-setup)
@@ -47,7 +50,9 @@
 - Strong VR legs (it can be a very intense VR experience);
 - Not compatible with any other mods.
 
-## VR Controller Inputs
+## Troubleshooting
+
+### VR Controller Inputs
 
 The mod tries its best to teach you how to play the game in VR, but it's not always easy with all the hacky stuff going on:
 
@@ -58,11 +63,23 @@ The mod tries its best to teach you how to play the game in VR, but it's not alw
 - Depending on the hand you use to hold tools, movement or rotation will be disabled to allow you to interact with the tools functions. Controllers that have an additional trackpad will not suffer from this shortcoming (Index and old WMR controllers);
 - Left hand mode is currently in the game but you need to manually change the SteamVR bindings;
 
-## Performance
+### Poor performance
 
 This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance.
 
 Besides lowering the graphics in-game (shadows, antialiasing and ambient occlusion are the heaviest hitters), try lowering the rendering resolution in SteamVR's settings. SteamVR defaults to 150%, try something like 100% instead. Changing resolution and V-sync in-game has no effect.
+
+### Game doesn't work after removing NomaiVR
+
+Follow the steps in [Uninstalling](#uninstalling). If all else fails, completely delete the game folder and install it again. Your saves are in another folder, so you won't lose them.
+
+### Game doesn't start in VR / Desktop Game Theatre shenanigans
+
+This only helps if you have the game on Steam:
+
+- Right-click Outer Wilds on your Steam library
+- Select 'Properties...'
+- Disable 'Use Desktop Game Theatre.
 
 ## Support
 
