@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 546150449
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: xrmanager
+      Dependencies: {}
+    Info_1:
+      Name: vrbindings-textures
+      Dependencies: {}

@@ -105,14 +105,14 @@ namespace NomaiVR
             private void SetPositionToHand()
             {
                 bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
-                _promptCanvas.transform.localPosition = Vector3.down * 0.1f;
+                _promptCanvas.transform.localPosition = new Vector3(-0.1f, -0.05f, 0.1f);
                 _isTranslatorPosition = false;
             }
 
             private void SetPositionToTranslator()
             {
                 bool isRightHanded = _holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
-                _promptCanvas.transform.localPosition = Vector3.down * 0.15f;
+                _promptCanvas.transform.localPosition = Vector3.down * 0.1f;
                 _isTranslatorPosition = true;
             }
         }

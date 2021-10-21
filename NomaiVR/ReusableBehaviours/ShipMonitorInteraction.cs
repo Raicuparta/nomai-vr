@@ -1,5 +1,6 @@
-﻿using OWML.Utils;
+﻿
 using System;
+using NomaiVR.Input;
 using UnityEngine;
 
 namespace NomaiVR
@@ -7,7 +8,7 @@ namespace NomaiVR
     internal class ShipMonitorInteraction : MonoBehaviour
     {
         public ToolMode mode;
-        public JoystickButton button;
+        public InputConsts.InputCommandType button;
         public UITextType text;
         public InteractReceiver receiver;
         public Func<bool> skipPressCallback;
@@ -48,25 +49,22 @@ namespace NomaiVR
 
         private void OnPress()
         {
-            var skip = skipPressCallback != null && skipPressCallback.Invoke();
-            if (!skip)
+            if (skipPressCallback != null && skipPressCallback.Invoke()) return;
+            if (mode != ToolMode.None)
             {
-                if (mode != ToolMode.None)
-                {
-                    VRToolSwapper.Equip(mode, null);
-                }
-                if (button != JoystickButton.None)
-                {
-                    ControllerInput.Behaviour.SimulateInput(button, 1);
-                }
+                VRToolSwapper.Equip(mode, null);
+            }
+            if (button != InputConsts.InputCommandType.UNDEFINED)
+            {
+                ControllerInput.SimulateInput(button, true);
             }
         }
 
         private void OnRelease()
         {
-            if (button != JoystickButton.None)
+            if (button != InputConsts.InputCommandType.UNDEFINED)
             {
-                ControllerInput.Behaviour.SimulateInput(button, 0);
+                ControllerInput.SimulateInput(button, false);
             }
             receiver.ResetInteraction();
         }

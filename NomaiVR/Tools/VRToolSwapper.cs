@@ -13,6 +13,7 @@ namespace NomaiVR
         public static Hand NonInteractingHand { get; private set; }
 
         public static event Action InteractingHandChanged;
+        public static event Action ToolEquipped;
         public static event Action Equipped;
         public static event Action UnEquipped;
 
@@ -26,6 +27,7 @@ namespace NomaiVR
             ToolHelper.Swapper.EquipToolMode(mode);
             UpdateHand(interactingHand);
             Equipped?.Invoke();
+            if (mode != ToolMode.Item && mode != ToolMode.None && InputHelper.IsHandheldTool()) ToolEquipped?.Invoke();
             _toolsAllowedToEquip[mode] = false;
         }
 

@@ -1,7 +1,4 @@
-﻿using OWML.ModHelper.Input;
-using OWML.Utils;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR
@@ -18,14 +15,20 @@ namespace NomaiVR
                 UpdateGameLogging();
                 ModSettings.OnConfigChange += UpdateGameLogging;
                 SetResolution();
-                SetRefreshRate();
                 SetFov();
-                ResetInputsToDefault();
+                UnlockMouse();
             }
 
             internal void OnDestroy()
             {
                 ModSettings.OnConfigChange -= UpdateGameLogging;
+            }
+
+            private static void UnlockMouse()
+            {
+                if (!ModSettings.PreventCursorLock) return;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
 
             private static void UpdateGameLogging()
@@ -41,6 +44,7 @@ namespace NomaiVR
 
                 PlayerPrefs.SetInt("Screenmanager Resolution Width", displayResWidth);
                 PlayerPrefs.SetInt("Screenmanager Resolution Height", displayResHeight);
+                QualitySettings.vSyncCount = 0;
                 Screen.SetResolution(displayResWidth, displayResHeight, fullScreen);
             }
 
@@ -50,50 +54,23 @@ namespace NomaiVR
                 GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
             }
 
-            private static void ResetInputsToDefault()
-            {
-                try
-                {
-                    FindObjectOfType<KeyRebinderManager>().OnApplyDefaultsSubmit();
-                }
-                catch
-                {
-                    Logs.WriteWarning("Failed to reset inputs to default");
-                }
-            }
-
-            private static void UpdateActiveController()
-            {
-                if (OWInput.GetActivePadNumber() != 0)
-                {
-                    Logs.WriteWarning("Wrong gamepad selected. Resetting to 0");
-                    OWInput.SetActiveGamePad(0);
-                }
-            }
-
-            private static void SetRefreshRate()
-            {
-                var deviceRefreshRate = SteamVR.instance.hmd_DisplayFrequency;
-                var overrideRefreshRate = ModSettings.OverrideRefreshRate;
-                var refreshRate = overrideRefreshRate > 0 ? overrideRefreshRate : deviceRefreshRate;
-                var fixedTimeStep = 1f / refreshRate;
-                OWTime.s_fixedTimestep = fixedTimeStep;
-                Time.fixedDeltaTime = fixedTimeStep;
-            }
-
-            internal void Update()
-            {
-                UpdateActiveController();
-            }
-
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PostApplySettings));
-                    Empty<InputRebindableLibrary>("SetKeyBindings");
-                    Empty<GraphicSettings>("SetSliderValFOV");
-                    Empty<ModCommandListener>("Update");
+                    Postfix<GraphicSettings>(nameof(GraphicSettings.ApplyAllGraphicSettings), nameof(PostApplySettings));
+                    Postfix<SteamVR_Render>("Update", nameof(UpdateOWTimestep));
+                    Empty<GraphicSettings>(nameof(GraphicSettings.SetSliderValFOV));
+                    
+                    if (ModSettings.PreventCursorLock)
+                    {
+                        Empty<CursorManager>(nameof(CursorManager.Update));
+                    }
+                }
+
+                private static void UpdateOWTimestep()
+                {
+                    OWTime.s_fixedTimestep = Time.fixedDeltaTime;
                 }
 
                 private static void PostApplySettings()

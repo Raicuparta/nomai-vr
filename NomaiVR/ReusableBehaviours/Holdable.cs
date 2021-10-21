@@ -1,4 +1,4 @@
-﻿using OWML.Utils;
+﻿
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +10,8 @@ namespace NomaiVR
     {
         public bool IsOffhand { get; set; } = false;
         public bool CanFlipX { get; set; } = true;
-        public Action<bool> onFlipped;
+        public event Action<bool> OnFlipped;
+        public event Action<bool> OnHoldStateChanged;
 
         private Vector3 CurrentPositionOffset => PlayerHelper.IsWearingSuit() ? _glovePositionOffset : _handPositionOffset;
         private SteamVR_Skeleton_Poser CurrentPoser => PlayerHelper.IsWearingSuit() ? _glovePoser : _handPoser;
@@ -28,6 +29,7 @@ namespace NomaiVR
         private SteamVR_Skeleton_Poser _handPoser;
         private SteamVR_Skeleton_Poser _glovePoser;
         private float _blendSpeed;
+        private bool _beingHold;
         private IActiveObserver _activeObserver;
 
         public void SetPositionOffset(Vector3 handOffset, Vector3? gloveOffset = null)
@@ -36,17 +38,17 @@ namespace NomaiVR
             _glovePositionOffset = gloveOffset ?? handOffset;
         }
 
-        public void SetPoses(SteamVR_Skeleton_Pose handPose, SteamVR_Skeleton_Pose glovePose = null)
+        public void SetPoses(string handPoseName, string glovePoseName = null)
         {
-            _handHoldPose = handPose;
-            _gloveHoldPose = glovePose ?? handPose;
+            _handHoldPose = AssetLoader.Poses[handPoseName];
+            _gloveHoldPose = glovePoseName != null ? AssetLoader.Poses[glovePoseName] : _handHoldPose;
         }
 
-        public void SetBlendPoses(SteamVR_Skeleton_Pose handBlendedPose, SteamVR_Skeleton_Pose gloveBlendedPose = null, float blendSpeed = 0f)
+        public void SetBlendPoses(string handBlendedPoseName, string gloveBlendedPoseName = null, float blendSpeed = 0f)
         {
             _blendSpeed = blendSpeed;
-            _handBlendedPose = handBlendedPose;
-            _gloveBlendedPose = gloveBlendedPose ?? handBlendedPose;
+            _handBlendedPose = AssetLoader.Poses[handBlendedPoseName];
+            _gloveBlendedPose = gloveBlendedPoseName != null ? AssetLoader.Poses[gloveBlendedPoseName] : _handBlendedPose;
         }
 
         public void SetActiveObserver(IActiveObserver observer)
@@ -133,7 +135,8 @@ namespace NomaiVR
             {
                 Transform solveToolsTransform = transform.Find("Props_HEA_Signalscope") ??
                                                 transform.Find("Props_HEA_ProbeLauncher") ??
-                                                transform.Find("TranslatorGroup/Props_HEA_Translator"); //Tried to find the first renderer but the probelauncher has multiple of them, doing it this way for now...
+                                                transform.Find("TranslatorGroup/Props_HEA_Translator") ??
+                                                transform.GetComponentInChildren<DreamLanternController>()?.transform; //Tried to find the first renderer but the probelauncher has multiple of them, doing it this way for now...
                 _activeObserver = transform.GetComponent<IActiveObserver>();
                 if (_activeObserver == null)
                 {
@@ -145,9 +148,34 @@ namespace NomaiVR
             // Both this holdable and the observer should be destroyed at the end of a cycle so no leaks here
             if (_activeObserver != null)
             {
-                _activeObserver.OnActivate += () =>_hand.GetComponent<Hand>().NotifyAttachedTo(CurrentPoser);
-                _activeObserver.OnDeactivate += () => _hand.GetComponent<Hand>().NotifyDetachedFrom(CurrentPoser);
+                _activeObserver.OnActivate += () => SetBeingHold(true);
+                _activeObserver.OnDeactivate += () => SetBeingHold(false);
             }
+        }
+
+        public void OnHandReset()
+        {
+            //On unpause we need to reset the pose since it was probably removed by the pose menu logic
+            //this happens if for some reason the hand has reset the blend state
+            if(_beingHold) _hand.GetComponent<Hand>().NotifyAttachedTo(CurrentPoser);
+        }
+
+        //Checks if this holdable is currently active and set the proper pose and events
+        private void SetBeingHold(bool active)
+        {
+            _beingHold = active;
+            var hand = _hand.GetComponent<Hand>();
+            if (_beingHold)
+            {
+                hand.NotifyAttachedTo(CurrentPoser);
+                hand.SkeletonBlendReset += OnHandReset;
+            }
+            else
+            {
+                _hand.GetComponent<Hand>().NotifyDetachedFrom(CurrentPoser);
+                hand.SkeletonBlendReset -= OnHandReset;
+            }
+            OnHoldStateChanged?.Invoke(active);
         }
 
         private void SetupBlending(SteamVR_Skeleton_Poser poser, SteamVR_Skeleton_Pose blendedPose)
@@ -183,7 +211,11 @@ namespace NomaiVR
             if(VRToolSwapper.InteractingHand?.transform != _hand)
             {
                 if (_hand != null && _activeObserver != null && _activeObserver.IsActive)
-                    _hand.GetComponent<Hand>().NotifyDetachedFrom(CurrentPoser);
+                {
+                    var oldHand = _hand.GetComponent<Hand>();
+                    oldHand.SkeletonBlendReset -= OnHandReset;
+                    oldHand.NotifyDetachedFrom(CurrentPoser);
+                }
 
                 UpdateHand();
 
@@ -204,11 +236,14 @@ namespace NomaiVR
                 if (CanFlipX)
                 {
                     RestoreCanvases(isRight);
-                    onFlipped?.Invoke(isRight);
+                    OnFlipped?.Invoke(isRight);
                 }
 
                 if (_hand != null && _activeObserver != null && _activeObserver.IsActive)
+                {
                     handBehaviour.NotifyAttachedTo(CurrentPoser);
+                    handBehaviour.SkeletonBlendReset += OnHandReset;
+                }
             }
         }
 

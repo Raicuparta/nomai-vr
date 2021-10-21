@@ -1,5 +1,5 @@
-﻿using OWML.Common;
-using System;
+﻿using System;
+using NomaiVR.ModConfig;
 using UnityEngine;
 
 namespace NomaiVR
@@ -7,50 +7,41 @@ namespace NomaiVR
     public static class ModSettings
     {
         public static event Action OnConfigChange;
+        private static IModSettingProvider settingsProvider;
 
-        public static bool LeftHandDominant { get; private set; } = false;
-        public static bool DebugMode { get; private set; } = true;
-        public static bool PreventCursorLock { get; private set; }
-        public static bool ShowHelmet { get; private set; }
-        public static int OverrideRefreshRate { get; private set; }
-        public static float VibrationStrength { get; private set; }
-        public static bool EnableGesturePrompts { get; private set; }
-        public static bool EnableHandLaser { get; private set; }
-        public static bool EnableFeetMarker { get; private set; }
-        public static bool ControllerOrientedMovement { get; private set; }
-        public static bool AutoHideToolbelt { get; private set; }
-        public static bool BypassFatalErrors { get; private set; }
-        public static float ToolbeltHeight { get; private set; }
-        public static float HudScale { get; private set; }
-        public static float HudOpacity { get; private set; }
+        public static bool LeftHandDominant => settingsProvider.LeftHandDominant;
+        public static bool DebugMode => settingsProvider.DebugMode;
+        public static bool PreventCursorLock => settingsProvider.PreventCursorLock;
+        public static bool ShowHelmet => settingsProvider.ShowHelmet;
+        public static float VibrationStrength => settingsProvider.VibrationStrength;
+        public static bool EnableGesturePrompts => settingsProvider.EnableGesturePrompts;
+        public static bool EnableHandLaser => settingsProvider.EnableHandLaser;
+        public static bool EnableFeetMarker => settingsProvider.EnableFeetMarker;
+        public static bool ControllerOrientedMovement => settingsProvider.ControllerOrientedMovement;
+        public static bool AutoHideToolbelt => settingsProvider.AutoHideToolbelt;
+        public static bool BypassFatalErrors => settingsProvider.BypassFatalErrors;
+        public static float ToolbeltHeight => settingsProvider.ToolbeltHeight;
+        public static float HudScale => settingsProvider.HudScale;
+        public static float HudOpacity => settingsProvider.HudOpacity;
 
-        public static void SetConfig(IModConfig config)
+        public static void SetProvider(IModSettingProvider provider)
         {
-            LeftHandDominant = config.GetSettingsValue<bool>("leftHandDominant");
-            OverrideRefreshRate = config.GetSettingsValue<int>("refreshRateOverride");
-            VibrationStrength = config.GetSettingsValue<float>("vibrationIntensity");
-            ShowHelmet = config.GetSettingsValue<bool>("helmetVisibility");
-            ControllerOrientedMovement = config.GetSettingsValue<bool>("movementControllerOriented");
-            EnableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
-            EnableHandLaser = config.GetSettingsValue<bool>("showHandLaser");
-            EnableFeetMarker = config.GetSettingsValue<bool>("showFeetMarker");
-            PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
-            DebugMode = config.GetSettingsValue<bool>("debug");
-            AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
-            HudScale = config.GetSettingsValue<float>("hudScale");
-            HudOpacity = config.GetSettingsValue<float>("hudOpacity");
-            BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");
+            if (settingsProvider != null) settingsProvider.OnConfigChange -= OnConfigChanged;
 
-            // OWML doesn't support negative slider values so I subtract it here.
-            ToolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
+            settingsProvider = provider;
+
+            provider.OnConfigChange += OnConfigChanged;
+            provider.Configure();
 
             if (PreventCursorLock)
             {
-                NomaiVRPatch.Empty<CursorManager>("Update");
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
+        }
 
+        private static void OnConfigChanged()
+        {
             OnConfigChange?.Invoke();
         }
     }

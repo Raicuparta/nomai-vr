@@ -3,6 +3,7 @@ using UnityEngine;
 using Valve.VR;
 using Valve.Newtonsoft.Json;
 using System.Collections.Generic;
+using NomaiVR.Assets;
 
 namespace NomaiVR
 {
@@ -22,6 +23,8 @@ namespace NomaiVR
         public static GameObject ScopeLensPrefab;
         public static GameObject HelmetPrefab;
         public static GameObject LookArrowPrefab;
+        public static GameObject AutopilotButtonPrefab;
+        public static AssetBundle VRBindingTextures;
         public static Sprite SplashSprite;
         public static Texture2D EmptyTexture;
 
@@ -30,6 +33,9 @@ namespace NomaiVR
             EmptyTexture = new Texture2D(1, 1);
             EmptyTexture.SetPixel(0, 0, Color.clear);
             EmptyTexture.Apply();
+
+            VRBindingTextures = LoadBundle("vrbindings-textures");
+            ShaderLoader.LoadBundle(LoadBundle("steamvr-shaders"));
 
             var postCreditsBundle = LoadBundle("cinema-camera");
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
@@ -50,6 +56,9 @@ namespace NomaiVR
             var lookArrowBundle = LoadBundle("look-arrow");
             LookArrowPrefab = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");
 
+            var autopilotBundle = LoadBundle("autopilot-button");
+            AutopilotButtonPrefab = LoadAsset<GameObject>(autopilotBundle, "models/tools/autopilot/autopilot_button.prefab");
+
             var splashBundle = LoadBundle("splash-screen");
             SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");
 
@@ -65,7 +74,7 @@ namespace NomaiVR
         private void LoadPoses()
         {
             Poses = new Dictionary<string, SteamVR_Skeleton_Pose>();
-            string posesPath = NomaiVR.Helper.Manifest.ModFolderPath + "poses";
+            string posesPath = NomaiVR.ModFolderPath + "/poses";
             string[] fileNames = Directory.GetFiles(posesPath);
 
             foreach(var fileName in fileNames)
@@ -87,7 +96,7 @@ namespace NomaiVR
 
         private T LoadModAssetFromJson<T>(string modAssetPath)
         {
-            string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
+            string fullPath = NomaiVR.ModFolderPath + modAssetPath;
             if (!File.Exists(fullPath))
                 return default(T);
 
@@ -107,9 +116,18 @@ namespace NomaiVR
             return bundle.LoadAsset<T>($"assets/{prefabName}");
         }
 
-        private AssetBundle LoadBundle(string fileName)
+        private static AssetBundle LoadBundle(string assetName)
         {
-            return NomaiVR.Helper.Assets.LoadBundle($"assets/{fileName}");
+            var myLoadedAssetBundle =
+                AssetBundle.LoadFromFile(
+                    $"{NomaiVR.ModFolderPath}/Assets/{assetName}");
+            if (myLoadedAssetBundle == null)
+            {
+                Logs.WriteError($"Failed to load AssetBundle {assetName}");
+                return null;
+            }
+
+            return myLoadedAssetBundle;
         }
     }
 }

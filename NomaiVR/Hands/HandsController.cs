@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -49,7 +50,7 @@ namespace NomaiVR
                 camera.transform.parent = _wrapper;
                 camera.transform.localPosition = Vector3.zero;
                 camera.transform.localRotation = Quaternion.identity;
-
+                
                 camera.nearClipPlane = activeCamera.nearClipPlane;
                 camera.farClipPlane = activeCamera.farClipPlane;
                 camera.clearFlags = activeCamera.clearFlags;
@@ -60,10 +61,10 @@ namespace NomaiVR
 
                 var owCamera = cameraObject.AddComponent<OWCamera>();
                 owCamera.renderSkybox = true;
-
+                
                 cameraObject.AddComponent<FlareLayer>();
                 cameraObject.SetActive(true);
-
+                
                 cameraObject.AddComponent<Light>();
             }
 

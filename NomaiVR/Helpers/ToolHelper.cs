@@ -26,6 +26,11 @@
 
         public static bool IsUsingNoTools()
         {
+            if (Swapper == null)
+            {
+                return true;
+            }
+
             return Swapper.IsInToolMode(ToolMode.None) || Swapper.IsInToolMode(ToolMode.Item);
         }
     }

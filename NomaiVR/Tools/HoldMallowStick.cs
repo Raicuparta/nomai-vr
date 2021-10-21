@@ -1,5 +1,6 @@
-﻿using OWML.Utils;
+﻿
 using System;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
 namespace NomaiVR
@@ -31,8 +32,8 @@ namespace NomaiVR
                 _holdableStick = stickRoot.gameObject.AddComponent<Holdable>();
                 _holdableStick.SetPositionOffset(new Vector3(-0.029f, -0.174f, -0.29f));
                 _holdableStick.SetRotationOffset(Quaternion.Euler(-20f, 0, 0));
-                _holdableStick.SetPoses(AssetLoader.Poses["holding_roastingstick_tip"], AssetLoader.Poses["holding_roastingstick_tip"]);
-                _holdableStick.SetBlendPoses(AssetLoader.Poses["holding_roastingstick_gloves"], blendSpeed: 10);
+                _holdableStick.SetPoses("holding_roastingstick_tip", "holding_roastingstick_tip");
+                _holdableStick.SetBlendPoses("holding_roastingstick_gloves", blendSpeed: 10);
 
                 var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
@@ -87,7 +88,7 @@ namespace NomaiVR
                 var holdMallow = mallowClone.gameObject.AddComponent<Holdable>();
                 holdMallow.SetPositionOffset(new Vector3(-0.0451f, -0.002f, 0.0097f));
                 holdMallow.SetRotationOffset(Quaternion.Euler(47.865f, 97.12901f, 83.881f));
-                holdMallow.SetPoses(AssetLoader.Poses["holding_marshmallow"]);
+                holdMallow.SetPoses("holding_marshmallow");
                 holdMallow.IsOffhand = true;
 
                 // Replace right hand mallow on proximity with left hand mallow.

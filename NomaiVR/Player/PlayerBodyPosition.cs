@@ -1,6 +1,9 @@
-﻿using OWML.Utils;
+﻿
 using System;
 using UnityEngine;
+using UnityEngine.SpatialTracking;
+using UnityEngine.XR;
+using Valve.VR;
 
 namespace NomaiVR
 {
@@ -18,6 +21,7 @@ namespace NomaiVR
             private static OWRigidbody _playerBody;
             private static PlayerCharacterController _playerController;
             private static Autopilot _autopilot;
+            private readonly SteamVR_Action_Boolean recenterAction = SteamVR_Actions._default.Recenter;
 
             internal void Start()
             {
@@ -31,11 +35,12 @@ namespace NomaiVR
 
                 AdjustPlayerHeadPosition();
                 SetupCamera();
-                CreateRecenterMenuEntry();
                 _playerBody = Locator.GetPlayerBody();
                 _playerAnimator = _playerBody.GetComponentInChildren<PlayerAnimController>()._animator;
                 _playerController = _playerBody.GetComponent<PlayerCharacterController>();
                 _autopilot = _playerBody.GetComponent<Autopilot>();
+
+                CreateRecenterMenuEntry();
             }
 
             private static void AdjustPlayerHeadPosition()
@@ -58,9 +63,7 @@ namespace NomaiVR
                 _playerCamera.transform.parent = _cameraParent;
                 _playerCamera.gameObject.AddComponent<VRCameraManipulator>();
 
-                var movement = PlayerHelper.PlayerHead.position - _playerCamera.transform.position;
-                _cameraParent.position += movement;
-
+                MoveCameraToPlayerHead();
             }
 
             private void MoveCameraToPlayerHead()
@@ -71,8 +74,15 @@ namespace NomaiVR
 
             private void CreateRecenterMenuEntry()
             {
-                var button = NomaiVR.Helper.Menus.PauseMenu.OptionsButton.Duplicate("RESET VR POSITION");
-                button.OnClick += MoveCameraToPlayerHead;
+                FindObjectOfType<PauseMenuManager>().AddPauseMenuAction("RECENTER VR", 2, MoveCameraToPlayerHead);
+            }
+
+            private void UpdateRecenter()
+            {
+                if (recenterAction.stateDown)
+                {
+                    MoveCameraToPlayerHead();
+                }
             }
 
             internal void Update()
@@ -83,17 +93,8 @@ namespace NomaiVR
                 {
                     MoveCameraToPlayerHead();
                 }
-                if (ModSettings.DebugMode)
-                {
-                    if (Input.GetKeyDown(KeyCode.KeypadPlus))
-                    {
-                        _cameraParent.localScale *= 0.9f;
-                    }
-                    if (Input.GetKeyDown(KeyCode.KeypadMinus))
-                    {
-                        _cameraParent.localScale /= 0.9f;
-                    }
-                }
+                
+                UpdateRecenter();
             }
 
             public class Patch : NomaiVRPatch
@@ -103,6 +104,7 @@ namespace NomaiVR
                     Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PostCharacterTurning));
                     Postfix<JetpackThrusterController>("FixedUpdate", nameof(Patch.PostThrusterUpdate));
                     Prefix<OWCamera>("set_fieldOfView", nameof(Patch.PatchOWCameraFOV));
+                    Prefix<OWCamera>("get_fieldOfView", nameof(Patch.GetOWCameraFOVScaled));
                 }
 
                 private static void PostThrusterUpdate(Vector3 ____rotationalInput)
@@ -172,6 +174,13 @@ namespace NomaiVR
                 {
                     //Prevents changing the fov of VR cameras
                     //This prevents log spams in projection pools
+                    return !__instance.mainCamera.stereoEnabled;
+                }
+
+                private static bool GetOWCameraFOVScaled(OWCamera __instance, ref float __result)
+                {
+                    //Returns FOV scaled by scale factor
+                    if (__instance.mainCamera.stereoEnabled) __result = CameraHelper.GetScaledFieldOfView(__instance.mainCamera);
                     return !__instance.mainCamera.stereoEnabled;
                 }
             }

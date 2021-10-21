@@ -1,7 +1,15 @@
-﻿using OWML.Common;
-
-namespace NomaiVR
+﻿namespace NomaiVR
 {
+    public enum MessageType
+    {
+        Message,
+        Info,
+        Success,
+        Warning,
+        Error,
+        Fatal,
+    }
+
     public static class Logs
     {
         private const string fatalMessageSufix =
@@ -10,10 +18,21 @@ namespace NomaiVR
 
         public static void Write(string message, MessageType messageType = MessageType.Message, bool debugOnly = true)
         {
-            var isDebugMode = !debugOnly || ModSettings.DebugMode;
-            if (NomaiVR.Helper != null && isDebugMode)
+            if (debugOnly && !ModSettings.DebugMode) return;
+            switch (messageType)
             {
-                NomaiVR.Helper.Console.WriteLine(message, messageType);
+                case MessageType.Error:
+                case MessageType.Fatal:
+                    UnityEngine.Debug.LogError(message);
+                    break;
+
+                case MessageType.Warning:
+                    UnityEngine.Debug.LogWarning(message);
+                    break;
+
+                default:
+                    UnityEngine.Debug.Log(message);
+                    break;
             }
         }
 

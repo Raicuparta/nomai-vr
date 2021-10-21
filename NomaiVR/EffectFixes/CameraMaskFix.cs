@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.XR;
 
 namespace NomaiVR
 {
@@ -68,15 +69,21 @@ namespace NomaiVR
                 Camera.main.cullingMask = _prePauseCullingMask;
             }
 
-            private void CloseEyesDelayed()
+            private void CloseEyesDelayed(float animDuration)
             {
-                Invoke(nameof(CloseEyes), 3);
+                Invoke(nameof(CloseEyes), animDuration);
             }
 
             private void CloseEyes()
             {
-                _preSleepCullingMask = Camera.main.cullingMask;
-                _farClipPlane = Camera.main.farClipPlane;
+                CameraHelper.SetFieldOfViewFactor(1, true);
+                //We don't want to save the mask when closing the eyes in the dream world
+                if (Locator.GetDreamWorldController() == null ||
+                    (!Locator.GetDreamWorldController().IsInDream() && !Locator.GetDreamWorldController().IsExitingDream()))
+                {
+                    _preSleepCullingMask = Camera.main.cullingMask;
+                    _farClipPlane = Camera.main.farClipPlane;
+                }
                 Camera.main.cullingMask = LayerMask.GetMask("VisibleToPlayer", "UI");
                 Camera.main.farClipPlane = 5;
                 Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
@@ -92,14 +99,14 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<Campfire>("StartFastForwarding", nameof(PostStartFastForwarding));
+                    Postfix<Campfire>(nameof(Campfire.StartFastForwarding), nameof(PostStartFastForwarding));
 
                     var openEyesMethod =
                         typeof(PlayerCameraEffectController)
                         .GetMethod("OpenEyes", new[] { typeof(float), typeof(AnimationCurve) });
                     Postfix(openEyesMethod, nameof(PostOpenEyes));
 
-                    Postfix<PlayerCameraEffectController>("CloseEyes", nameof(PostCloseEyes));
+                    Postfix<PlayerCameraEffectController>(nameof(PlayerCameraEffectController.CloseEyes), nameof(PostCloseEyes));
                 }
 
                 private static void PostStartFastForwarding()
@@ -112,9 +119,9 @@ namespace NomaiVR
                     _instance.OpenEyes();
                 }
 
-                private static void PostCloseEyes()
+                private static void PostCloseEyes(float animDuration)
                 {
-                    _instance.CloseEyesDelayed();
+                    _instance.CloseEyesDelayed(animDuration);
                 }
             }
         }

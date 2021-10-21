@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class ProximityDetector : MonoBehaviour
     {
@@ -13,56 +13,47 @@ namespace NomaiVR
 
         public Transform Other 
         { 
-            get
-            {
-                return _trackedObjects != null ? GetTrackedObject() : null;
-            }
+            get => trackedObjects != null ? GetTrackedObject() : null;
             set
             {
-                if (_trackedObjects != null)
+                if (trackedObjects != null)
                 {
-                    _trackedObjects[0] = value;
-                    _isInside[0] = false;
+                    trackedObjects[0] = value;
+                    isInside[0] = false;
                 }
                 else
                 {
-                    _trackedObjects = new[] { value };
-                    _isInside = new bool[1];
+                    trackedObjects = new[] { value };
+                    isInside = new bool[1];
                 }
             }
         }
 
-        private bool[] _isInside;
-        private Transform[] _trackedObjects;
+        private bool[] isInside;
+        private Transform[] trackedObjects;
 
         public void SetTrackedObjects(params Transform[] others)
         {
-            if (others != null && others.Length > 0)
-            {
-                _trackedObjects = others;
-                _isInside = new bool[others.Length];
-            }
+            if (others == null || others.Length <= 0) return;
+            trackedObjects = others;
+            isInside = new bool[others.Length];
         }
 
         public bool IsInside(int index = 0)
         {
-            if (index >= _isInside.Length)
-                return false;
-            return _isInside[index];
+            return index < isInside.Length && isInside[index];
         }
 
         public Transform GetTrackedObject(int index = 0)
         {
-            if (index >= _trackedObjects.Length)
-                return null;
-            return _trackedObjects[index];
+            return index >= trackedObjects.Length ? null : trackedObjects[index];
         }
 
         internal void Update()
         {
-            for(int i = 0; i < _trackedObjects.Length; i++)
+            for(var i = 0; i < trackedObjects.Length; i++)
             {
-                var other = _trackedObjects[i];
+                var other = trackedObjects[i];
 
                 if (!other.gameObject.activeSelf)
                     continue;
@@ -70,16 +61,16 @@ namespace NomaiVR
                 var offset = transform.TransformVector(LocalOffset);
                 var distance = Vector3.Distance(transform.position + offset, other.position);
 
-                if (!_isInside[i] && distance <= MinDistance)
+                if (!isInside[i] && distance <= MinDistance)
                 {
                     OnEnter?.Invoke(other);
-                    _isInside[i] = true;
+                    isInside[i] = true;
                 }
 
-                if (_isInside[i] && distance > MinDistance + ExitThreshold)
+                if (isInside[i] && distance > MinDistance + ExitThreshold)
                 {
                     OnExit?.Invoke(other);
-                    _isInside[i] = false;
+                    isInside[i] = false;
                 }
             }
         }

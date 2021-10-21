@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SpatialTracking;
 using UnityEngine.UI;
 
 namespace NomaiVR
@@ -112,7 +113,7 @@ namespace NomaiVR
                 //Logo Fade-In Animation
                 var logoFader = logoParentTranform.gameObject.AddComponent<TitleMenuLogoFader>();
                 var logoAnimator = logoParentTranform.GetComponentInChildren<Animator>();
-                logoFader.BeginFade(1, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true);
+                logoFader.BeginFade(1f, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true); //FIXME: Broke, too fast
 
                 FindObjectOfType<TitleAnimationController>().OnTitleLogoAnimationComplete += () =>
                 {
@@ -214,7 +215,7 @@ namespace NomaiVR
             // this workaround fixes their position;
             private static void AdjustModConfigButtons(Canvas canvas)
             {
-                var selectables = canvas.GetComponentsInChildren<TooltipSelectable>(true);
+                var selectables = canvas.GetComponentsInChildren<TooltipDisplay>(true);
                 foreach (var selectable in selectables)
                 {
                     selectable.transform.localPosition = new Vector3(851.5f, -35f, 0);
@@ -275,7 +276,7 @@ namespace NomaiVR
                         patchedCanvases.Add(canvas);
                     }
 
-                    if (isScreenSpaceOverlay || isPatched)
+                    if ((isScreenSpaceOverlay || isPatched) && !SceneHelper.IsInPostCredits())
                     {
                         AddFollowTarget(canvas);
                     }
@@ -291,13 +292,13 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ProfileMenuManager>("PopulateProfiles", nameof(PostPopulateProfiles));
-                    Postfix<CanvasMarkerManager>("Start", nameof(PostMarkerManagerStart));
-                    Postfix<TitleScreenAnimation>("FadeInMusic", nameof(PostTitleScreenFadeInMusic));
-                    Postfix<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
+                    Postfix<ProfileMenuManager>(nameof(ProfileMenuManager.PopulateProfiles), nameof(PostPopulateProfiles));
+                    Postfix<CanvasMarkerManager>(nameof(CanvasMarkerManager.Start), nameof(PostMarkerManagerStart));
+                    Postfix<TitleScreenAnimation>(nameof(TitleScreenAnimation.FadeInMusic), nameof(PostTitleScreenFadeInMusic));
+                    Postfix<PopupMenu>(nameof(PopupMenu.SetUpPopupCommands), nameof(PostSetPopupCommands));
                 }
 
-                private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
+                private static void PostSetPopupCommands(IInputCommands okCommand, ref IInputCommands ____okCommand)
                 {
                     if (okCommand == InputLibrary.select)
                     {

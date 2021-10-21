@@ -12,6 +12,7 @@ namespace NomaiVR
         private const float k_GloveSkeletonBlendAmmount = 0.275f;
 
         public event Action Initialized;
+        public event Action SkeletonBlendReset;
         public GameObject handPrefab;
         public SteamVR_Action_Pose pose;
         public SteamVR_Skeleton_Pose fallbackPoint;
@@ -47,12 +48,16 @@ namespace NomaiVR
 
             GlobalMessenger.AddListener("SuitUp", OnSuitChanged);
             GlobalMessenger.AddListener("RemoveSuit", OnSuitChanged);
+            GlobalMessenger.AddListener("SimulationEnter", OnSimulationEnter);
+            GlobalMessenger.AddListener("SimulationExit", OnSimulationExit);
         }
 
         internal void OnDestroy()
         {
             GlobalMessenger.RemoveListener("SuitUp", OnSuitChanged);
             GlobalMessenger.RemoveListener("RemoveSuit", OnSuitChanged);
+            GlobalMessenger.RemoveListener("SimulationEnter", OnSimulationEnter);
+            GlobalMessenger.RemoveListener("SimulationExit", OnSimulationExit);
         }
 
         private void SetUpModel()
@@ -77,6 +82,22 @@ namespace NomaiVR
 
 
             handObject.SetActive(true);
+        }
+
+        private void OnSimulationEnter()
+        {
+            _handRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
+            _gloveRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
+            SetUpShaders(_handRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace", "Outer Wilds/Environment/Invisible Planet/Cyberspace");
+            SetUpShaders(_gloveRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace");
+        }
+
+        private void OnSimulationExit()
+        {
+            _handRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            _gloveRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            SetUpShaders(_handRenderer, "Outer Wilds/Character/Skin", "Outer Wilds/Character/Skin");
+            SetUpShaders(_gloveRenderer, "Outer Wilds/Character/Clothes");
         }
 
         private void SetUpShaders(Renderer renderer, params string[] shader)
@@ -243,6 +264,8 @@ namespace NomaiVR
 
             _lastHandState = _handState;
             _handState = EHandState.Free;
+
+            SkeletonBlendReset?.Invoke();
         }
 
         internal void BlendToReach(SteamVR_Skeleton_Poser overrideReachPoser = null, float time = 0.1f)

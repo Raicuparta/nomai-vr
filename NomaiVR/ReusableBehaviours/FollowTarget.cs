@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace NomaiVR
 {
@@ -12,7 +13,17 @@ namespace NomaiVR
         private Quaternion rotationVelocity;
         private Vector3 positionVelocity;
 
-        internal void LateUpdate()
+        private void Awake()
+        {
+            Camera.onPreCull += UpdatePosition;
+        }
+
+        private void OnDestroy()
+        {
+            Camera.onPreCull -= UpdatePosition;
+        }
+
+        private void UpdatePosition(Camera camera)
         {
             if (!target)
             {

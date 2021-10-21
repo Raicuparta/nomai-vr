@@ -1,4 +1,4 @@
-﻿using OWML.Utils;
+﻿
 using UnityEngine;
 
 namespace NomaiVR
@@ -59,7 +59,7 @@ namespace NomaiVR
                 SetupReticule(_reticule);
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.75f, 0));
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.15f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
                 SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.05f, 0));
@@ -78,7 +78,7 @@ namespace NomaiVR
             private static void SetupSignalscopeUI(Transform parent, Vector3 position)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                parent.parent = _signalscope.transform;
+                parent.SetParent(_signalscope.transform, false);
                 parent.localScale = Vector3.one * 0.0005f;
                 parent.localPosition = position;
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
@@ -156,7 +156,7 @@ namespace NomaiVR
 
             private void UpdateSignalscipeZoom()
             {
-                if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
+                if (OWInput.IsNewlyPressed(InputLibrary.toolActionPrimary, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
                     _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
 
@@ -169,10 +169,10 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<OWInput>("ChangeInputMode", nameof(ChangeInputMode));
-                    Postfix<QuantumInstrument>("Update", nameof(PostQuantumInstrumentUpdate));
-                    Empty<Signalscope>("EnterSignalscopeZoom");
-                    Empty<Signalscope>("ExitSignalscopeZoom");
+                    Prefix<OWInput>(nameof(OWInput.ChangeInputMode), nameof(ChangeInputMode));
+                    Postfix<QuantumInstrument>(nameof(QuantumInstrument.Update), nameof(PostQuantumInstrumentUpdate));
+                    Empty<Signalscope>(nameof(Signalscope.EnterSignalscopeZoom));
+                    Empty<Signalscope>(nameof(Signalscope.ExitSignalscopeZoom));
                 }
 
                 private static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)

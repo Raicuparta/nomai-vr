@@ -1,6 +1,8 @@
-﻿using OWML.Utils;
+﻿
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
+using static NomaiVR.Tools.AutopilotButtonPatch;
 
 namespace NomaiVR
 {
@@ -16,6 +18,7 @@ namespace NomaiVR
             private static ShipMonitorInteraction _probe;
             private static ShipMonitorInteraction _signalscope;
             private static ShipMonitorInteraction _landingCam;
+            private static ShipMonitorInteraction _autoPilot;
             private static ShipCockpitController _cockpitController;
             private static bool _isLandingCamEnabled;
 
@@ -43,10 +46,10 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     Postfix<ShipBody>("Start", nameof(ShipStart));
-                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PreFindFrame));
-                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInLineOfSight", nameof(PostFindFrame));
-                    Prefix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PreFindFrame));
-                    Postfix<ReferenceFrameTracker>("FindReferenceFrameInMapView", nameof(PostFindFrame));
+                    Prefix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInLineOfSight), nameof(PreFindFrame));
+                    Postfix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInLineOfSight), nameof(PostFindFrame));
+                    Prefix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInMapView), nameof(PreFindFrame));
+                    Postfix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInMapView), nameof(PostFindFrame));
                     Empty<PlayerCameraController>("OnEnterLandingView");
                     Empty<PlayerCameraController>("OnExitLandingView");
                     Empty<PlayerCameraController>("OnEnterShipComputer");
@@ -163,7 +166,7 @@ namespace NomaiVR
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
                     _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipMonitorInteraction>();
-                    _landingCam.button = JoystickButton.DPadDown;
+                    _landingCam.button = InputConsts.InputCommandType.LANDING_CAMERA;
                     _landingCam.skipPressCallback = () =>
                     {
                         if (_isLandingCamEnabled)
@@ -189,40 +192,42 @@ namespace NomaiVR
                     landingText.alignment = TextAnchor.MiddleCenter;
                     landingText.fontSize = 8;
                     landingText.font = font;
+
+                    _autoPilot = cockpitTech.GetComponentInChildren<AutopilotButton>().GetComponent<ShipMonitorInteraction>();
                 }
 
                 private static Vector3 _cameraPosition;
                 private static Quaternion _cameraRotation;
 
-                private static void PreFindFrame(
-                    OWCamera ____activeCam,
-                    bool ____isLandingView,
-                    bool ____isMapView
-                )
+                private static void PreFindFrame(ReferenceFrameTracker __instance)
                 {
-                    if (____isLandingView)
+                    if (__instance._isLandingView)
                     {
                         return;
                     }
 
-                    _cameraPosition = ____activeCam.transform.position;
-                    _cameraRotation = ____activeCam.transform.rotation;
+                    var activeCam = __instance._activeCam.transform;
+                    _cameraPosition = activeCam.position;
+                    _cameraRotation = activeCam.rotation;
 
-                    if (____isMapView)
+                    if (__instance._isMapView)
                     {
-                        ____activeCam.transform.position = _mapGridRenderer.position + _mapGridRenderer.up * 10000;
-                        ____activeCam.transform.rotation = Quaternion.LookRotation(_mapGridRenderer.up * -1);
+                        activeCam.position = _mapGridRenderer.position + _mapGridRenderer.up * 10000;
+                        activeCam.rotation = Quaternion.LookRotation(_mapGridRenderer.up * -1);
                     }
                     else
                     {
-                        ____activeCam.transform.position = LaserPointer.Behaviour.Laser.position;
-                        ____activeCam.transform.rotation = LaserPointer.Behaviour.Laser.rotation;
+                        activeCam.position = LaserPointer.Behaviour.Laser.position;
+                        activeCam.rotation = LaserPointer.Behaviour.Laser.rotation;
                     }
                 }
 
                 private static bool IsAnyInteractionFocused()
                 {
-                    return _probe.IsFocused() || _signalscope.IsFocused() || _landingCam.IsFocused();
+                    return (_probe != null && _probe.IsFocused()) || 
+                           (_signalscope != null && _signalscope.IsFocused()) || 
+                           (_landingCam != null && _landingCam.IsFocused()) ||
+                           (_autoPilot != null && _autoPilot.IsFocused());
                 }
 
                 private static bool PreUntargetFrame()
@@ -230,27 +235,15 @@ namespace NomaiVR
                     return !IsAnyInteractionFocused();
                 }
 
-                private static ReferenceFrame PostFindFrame(
-                    ReferenceFrame __result,
-                    OWCamera ____activeCam,
-                    ReferenceFrame ____currentReferenceFrame,
-                    bool ____isLandingView
-                )
+                private static ReferenceFrame PostFindFrame(ReferenceFrame __result, ReferenceFrameTracker __instance)
                 {
-                    if (____isLandingView)
-                    {
-                        return __result;
-                    }
+                    if (__instance._isLandingView) return __result;
 
-                    ____activeCam.transform.position = _cameraPosition;
-                    ____activeCam.transform.rotation = _cameraRotation;
+                    var activeCam = __instance._activeCam.transform;
+                    activeCam.position = _cameraPosition;
+                    activeCam.rotation = _cameraRotation;
 
-                    if (IsAnyInteractionFocused())
-                    {
-                        return ____currentReferenceFrame;
-                    }
-
-                    return __result;
+                    return IsAnyInteractionFocused() ? __instance._currentReferenceFrame : __result;
                 }
             }
         }

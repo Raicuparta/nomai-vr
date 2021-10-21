@@ -1,4 +1,4 @@
-﻿using OWML.Utils;
+﻿
 using UnityEngine;
 
 namespace NomaiVR
@@ -21,7 +21,7 @@ namespace NomaiVR
 
                 var holdProbeLauncher = probeLauncher.gameObject.AddComponent<Holdable>();
                 holdProbeLauncher.SetPositionOffset(new Vector3(-0.0014f, 0.2272f, -0.0593f));
-                holdProbeLauncher.SetPoses(AssetLoader.Poses["grabbing_probelauncher"], AssetLoader.Poses["grabbing_probelauncher_gloves"]);
+                holdProbeLauncher.SetPoses("grabbing_probelauncher", "grabbing_probelauncher_gloves");
                 holdProbeLauncher.CanFlipX = false;
 
                 _probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
@@ -145,7 +145,7 @@ namespace NomaiVR
 
                 private static void PreLoseFocus()
                 {
-                    ToolMode? toolMode = ToolHelper.Swapper.GetValue<ToolMode>("_currentToolMode");
+                    ToolMode? toolMode = ToolHelper.Swapper._currentToolMode;
                     if (toolMode == null)
                     {
                         return;
@@ -160,7 +160,7 @@ namespace NomaiVR
                     {
                         return;
                     }
-                    ToolHelper.Swapper.SetValue("_currentToolMode", currentToolMode);
+                    ToolHelper.Swapper._currentToolMode = (ToolMode)currentToolMode;
                 }
 
                 private static void PreGainFocus()
