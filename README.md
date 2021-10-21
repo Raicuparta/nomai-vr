@@ -89,4 +89,4 @@ NomaiVR is made by **[Raicuparta](https://github.com/Raicuparta)** and **[artumi
 
 ## Development Setup
 
-See [NomaiVR Development Setup](setup.md)
+See [NomaiVR Development Setup](SETUP.md)
