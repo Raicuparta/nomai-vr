@@ -10,14 +10,12 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static float _expectedTimestep = 1f/90f;
             internal void Awake()
             {
                 UpdateGameLogging();
                 ModSettings.OnConfigChange += UpdateGameLogging;
                 SetResolution();
                 SetFov();
-                ResetInputsToDefault();
                 UnlockMouse();
             }
 
@@ -56,40 +54,17 @@ namespace NomaiVR
                 GraphicSettings.s_fovMax = GraphicSettings.s_fovMin = Camera.main.fieldOfView;
             }
 
-            private static void ResetInputsToDefault()
-            {
-                Logs.WriteWarning("Failed to reset inputs to default");
-                //try
-                //{
-                //    FindObjectOfType<KeyRebindingElement>().OnApplyDefaultsSubmit();
-                //}
-                //catch
-                //{
-                //    Logs.WriteWarning("Failed to reset inputs to default");
-                //}
-            }
-
-            //private static void UpdateActiveController()
-            //{
-            //    if (OWInput.GetActivePadNumber() != 0)
-            //    {
-            //        Logs.WriteWarning("Wrong gamepad selected. Resetting to 0");
-            //        OWInput.SetActiveGamePad(0);
-            //    }
-            //}
-
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<GraphicSettings>("ApplyAllGraphicSettings", nameof(PostApplySettings));
-                    //Empty<InputRebindableLibrary>("SetKeyBindings");
+                    Postfix<GraphicSettings>(nameof(GraphicSettings.ApplyAllGraphicSettings), nameof(PostApplySettings));
                     Postfix<SteamVR_Render>("Update", nameof(UpdateOWTimestep));
-                    Empty<GraphicSettings>("SetSliderValFOV");
+                    Empty<GraphicSettings>(nameof(GraphicSettings.SetSliderValFOV));
                     
                     if (ModSettings.PreventCursorLock)
                     {
-                        Empty<CursorManager>("Update");
+                        Empty<CursorManager>(nameof(CursorManager.Update));
                     }
                 }
 
