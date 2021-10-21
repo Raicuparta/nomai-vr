@@ -8,7 +8,9 @@
   - [Uninstalling](#uninstalling)
 - [Requirements](#requirements)
 - [Troubleshooting](#troubleshooting)
+  - [Error when starting game](#error-when-starting-game)
   - [VR Controller Inputs](#vr-controller-inputs)
+  - [Missing button icons](#missing-button-icons)
   - [Poor performance](#poor-performance)
   - [Game doesn't work after removing NomaiVR](#game-doesnt-work-after-removing-nomaivr)
   - [Game doesn't start in VR / Desktop Game Theatre shenanigans](#game-doesnt-start-in-vr--desktop-game-theatre-shenanigans)
@@ -51,6 +53,13 @@
 - Not compatible with any other mods.
 
 ## Troubleshooting
+
+### Error when starting game
+
+If you get an error saying something like "Failed to initialize player" or "Failed to load PlayerSettings", you need to verify the integrity of your game files before installing NomaiVR:
+
+- **Steam**: Library > Right-click Outer Wilds > Properties > Local Files > Verify integrity of game files.
+- **Epic**: Library > Click three dots under Outer Wilds > Verify.
 
 ### VR Controller Inputs
 
