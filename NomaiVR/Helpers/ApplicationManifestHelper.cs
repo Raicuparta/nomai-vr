@@ -20,18 +20,25 @@ namespace NomaiVR
                                                 ""last_played_time"":""{CurrentUnixTimestamp()}"",
                                                 ""strings"": {{
                                                     ""en_us"": {{
-                                                        ""name"": { JsonConvert.ToString(name) },
-                                                        ""description"": { JsonConvert.ToString(description) }
+                                                        ""name"": { JsonConvert.ToString(name) }
                                                     }}
                                                 }}
                                             }}]
                                         }}";
+
             File.WriteAllText(manifestPath, appManifestContent);
-            OpenVR.Applications.RemoveApplicationManifest(manifestPath);
+
             var error = OpenVR.Applications.AddApplicationManifest(manifestPath, false);
             if (error != EVRApplicationError.None)
             {
                 Logs.WriteError("Failed to set AppManifest " + error);
+            }
+
+            int processId = System.Diagnostics.Process.GetCurrentProcess().Id;
+            EVRApplicationError applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint)processId, appKey);
+            if (applicationIdentifyErr != EVRApplicationError.None)
+            {
+                Logs.WriteError("Error identifying application: " + applicationIdentifyErr.ToString());
             }
         }
 
