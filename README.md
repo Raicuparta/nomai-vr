@@ -9,8 +9,8 @@
 - [Requirements](#requirements)
 - [VR Controller Inputs](#vr-controller-inputs)
 - [Performance](#performance)
-- [People](#people)
 - [Support](#support)
+- [People](#people)
 - [Development Setup](#development-setup)
 
 ## Installation
