@@ -61,6 +61,8 @@ If you get an error saying something like "Failed to initialize player" or "Fail
 - **Steam**: Library > Right-click Outer Wilds > Properties > Local Files > Verify integrity of game files.
 - **Epic**: Library > Click three dots under Outer Wilds > Verify.
 
+If all else fails, try completely deleting the game folder (not just uninstalling from Steam / Epic). And then install it again. Your saves are in another folder, so you won't lose them.
+
 ### VR Controller Inputs
 
 The mod tries its best to teach you how to play the game in VR, but it's not always easy with all the hacky stuff going on:
