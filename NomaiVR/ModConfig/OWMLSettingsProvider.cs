@@ -37,16 +37,21 @@ namespace NomaiVR.ModConfig
             EnableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
             EnableHandLaser = config.GetSettingsValue<bool>("showHandLaser");
             EnableFeetMarker = config.GetSettingsValue<bool>("showFeetMarker");
-            PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
             DebugMode = config.GetSettingsValue<bool>("debug");
             AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
             HudScale = config.GetSettingsValue<float>("hudScale");
-            HudOpacity = config.GetSettingsValue<float>("hudOpacity");
-            BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");
 
             // OWML doesn't support negative slider values so I subtract it here.
             ToolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
 
+            // Disabled these until we can fix scrolling in mod config menu.
+            // PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
+            // HudOpacity = config.GetSettingsValue<float>("hudOpacity");
+            // BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");
+            PreventCursorLock = true;
+            HudOpacity = 1f;
+            BypassFatalErrors = true;
+            
             OnConfigChange?.Invoke();
         }
     }
