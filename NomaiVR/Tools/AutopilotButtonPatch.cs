@@ -1,5 +1,4 @@
-﻿using System;
-using NomaiVR.Assets;
+﻿using NomaiVR.Assets;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;

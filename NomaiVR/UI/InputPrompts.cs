@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using NomaiVR.Assets;
 using NomaiVR.Input;
 using NomaiVR.Input.ActionInputs;
 using UnityEngine;
 using Valve.VR;
-using static InputConsts;
 
 namespace NomaiVR.UI
 {
     internal class InputPrompts : NomaiVRModule<InputPrompts.Behaviour, InputPrompts.Behaviour.Patch>
     {
-        public static InputPrompts.Behaviour Instance { get; internal set; }
+        public static Behaviour Instance { get; internal set; }
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => AllScenes;
 
@@ -30,7 +27,7 @@ namespace NomaiVR.UI
 
         public class Behaviour : MonoBehaviour
         {
-            private const string kBaseAssetPath = "Assets/VRBindings/Texture2D";
+            private const string baseAssetPath = "Assets/VRBindings/Texture2D";
 
             public ActiveVRPlatform Platform { get; private set; }
             private Dictionary<string, Texture2D> textureCache;
@@ -96,9 +93,10 @@ namespace NomaiVR.UI
                 }
             }
 
-            private void InvalidateButtonImages()
+            private static void InvalidateButtonImages()
             {
-                Manager?.OnButtonImagesChanged();
+                if (Manager == null) return;
+                Manager.OnButtonImagesChanged();
             }
 
             public string GetCachedPartName(ISteamVR_Action action)
@@ -146,7 +144,7 @@ namespace NomaiVR.UI
                     if(vrInputAction is EmptyActionInput emptyInput
                         && !String.IsNullOrEmpty(emptyInput.TexturePath))
                     {
-                        var emptyActionTexture = Instance.GetTexture($"{kBaseAssetPath}/{emptyInput.TexturePath}");
+                        var emptyActionTexture = Instance.GetTexture($"{baseAssetPath}/{emptyInput.TexturePath}");
                         if (emptyActionTexture != null) __instance.textureList.Add(emptyActionTexture);
                         return __instance.textureList.Count == 0;
                     }
@@ -171,7 +169,7 @@ namespace NomaiVR.UI
 
                         //Special actions modifiers
                         if (vrInputAction is Vector2ActionInput vectorAction &&
-                            !String.IsNullOrEmpty(vectorAction.TextureModifier))
+                            !string.IsNullOrEmpty(vectorAction.TextureModifier))
                         {
                             name += "_" + vectorAction.TextureModifier;
                         }
@@ -185,11 +183,11 @@ namespace NomaiVR.UI
 
                         Instance.SetCachedPartName(steamVrAction, name);
                     }
-                    if (String.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
+                    if (string.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
 
                     Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
                     
-                    var texture = Instance.GetTexture($"{kBaseAssetPath}/{Instance.Platform}/{name}");
+                    var texture = Instance.GetTexture($"{baseAssetPath}/{Instance.Platform}/{name}");
                     if(texture != null) __instance.textureList.Add(texture);
                     return __instance.textureList.Count == 0;
                 }

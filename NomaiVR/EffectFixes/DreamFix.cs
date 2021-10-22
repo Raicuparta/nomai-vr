@@ -1,8 +1,6 @@
 ﻿using NomaiVR.Helpers;
-using NomaiVR.ReusableBehaviours;
 using NomaiVR.ReusableBehaviours.Dream;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace NomaiVR.EffectFixes
 {

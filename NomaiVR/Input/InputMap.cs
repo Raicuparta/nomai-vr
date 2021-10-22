@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NomaiVR.Input.ActionInputs;
-using UnityEngine;
 using Valve.VR;
 using static InputConsts;
 

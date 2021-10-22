@@ -1,6 +1,5 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
-using System.IO;
 using NomaiVR.Loaders.Harmony;
 using NomaiVR.ModConfig;
 
