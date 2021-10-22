@@ -18,7 +18,7 @@ namespace NomaiVR.EffectFixes
             {
                 if (__instance._peepholeCamera.transform.parent.name != "VROffsetFixer")
                 {
-                    Transform peepHoleParent = __instance._peepholeCamera.transform.parent;
+                    var peepHoleParent = __instance._peepholeCamera.transform.parent;
                     var playerTransform = Locator.GetPlayerTransform();
                     var playerHeight = playerTransform.InverseTransformVector(Locator.GetPlayerCamera().transform.position - playerTransform.position);
                     var parent = new GameObject("VROffsetFixer").transform;

@@ -11,7 +11,7 @@ namespace NomaiVR.ReusableBehaviours
 {
     public class Holdable : MonoBehaviour
     {
-        public bool IsOffhand { get; set; } = false;
+        public bool IsOffhand { get; set; }
         public bool CanFlipX { get; set; } = true;
         public event Action<bool> OnFlipped;
         public event Action<bool> OnHoldStateChanged;
@@ -136,10 +136,10 @@ namespace NomaiVR.ReusableBehaviours
             //Listen for events to start poses
             if (activeObserver == null)
             {
-                Transform solveToolsTransform = transform.Find("Props_HEA_Signalscope") ??
-                                                transform.Find("Props_HEA_ProbeLauncher") ??
-                                                transform.Find("TranslatorGroup/Props_HEA_Translator") ??
-                                                transform.GetComponentInChildren<DreamLanternController>()?.transform; //Tried to find the first renderer but the probelauncher has multiple of them, doing it this way for now...
+                var solveToolsTransform = transform.Find("Props_HEA_Signalscope") ??
+                                          transform.Find("Props_HEA_ProbeLauncher") ??
+                                          transform.Find("TranslatorGroup/Props_HEA_Translator") ??
+                                          transform.GetComponentInChildren<DreamLanternController>()?.transform; //Tried to find the first renderer but the probelauncher has multiple of them, doing it this way for now...
                 activeObserver = transform.GetComponent<IActiveObserver>();
                 if (activeObserver == null)
                 {
@@ -255,9 +255,9 @@ namespace NomaiVR.ReusableBehaviours
             //Assures canvases are always scaled with x > 0
             Array.ForEach(transform.GetComponentsInChildren<Canvas>(true), canvas =>
             {
-                Transform canvasTransform = canvas.transform;
-                Vector3 canvasScale = canvasTransform.localScale;
-                float tagetScale = Mathf.Abs(canvasScale.x);
+                var canvasTransform = canvas.transform;
+                var canvasScale = canvasTransform.localScale;
+                var tagetScale = Mathf.Abs(canvasScale.x);
                 if (!isRight) tagetScale *= -1;
                 canvasTransform.localScale = new Vector3(tagetScale, canvasScale.y, canvasScale.z);
             });

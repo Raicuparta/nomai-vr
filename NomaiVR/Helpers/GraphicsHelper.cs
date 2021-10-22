@@ -19,7 +19,7 @@ namespace NomaiVR.Helpers
 
 		public static Matrix4x4 HmdMatrix44ToMatrix4X4(HmdMatrix44_t mat)
 		{
-			Matrix4x4 m = new Matrix4x4();
+			var m = new Matrix4x4();
 			m.m00 = mat.m0;
 			m.m01 = mat.m1;
 			m.m02 = mat.m2;

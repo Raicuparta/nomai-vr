@@ -41,7 +41,7 @@ namespace NomaiVR.EffectFixes
                     var camtr = cam.transform;
                     cam.CalculateFrustumCorners(new Rect(0, 0, 1, 1), cam.farClipPlane, eye, frustumCornersBuffer);
 
-                    Matrix4x4 frustumMatrix = Matrix4x4.identity;
+                    var frustumMatrix = Matrix4x4.identity;
                     frustumMatrix.SetRow(0, camtr.TransformVector(frustumCornersBuffer[1])); //topLeft
                     frustumMatrix.SetRow(1, camtr.TransformVector(frustumCornersBuffer[2])); //topRight
                     frustumMatrix.SetRow(2, camtr.TransformVector(frustumCornersBuffer[3])); //bottomRight
@@ -66,13 +66,13 @@ namespace NomaiVR.EffectFixes
                     {
                         __instance.fogMaterial.SetMatrix("_FrustumCornersWS", FrustumCornersMatrix(__instance._camera, __instance._camera.stereoActiveEye));
 
-                        PlanetaryFogController activeFogSphere = PlanetaryFogController.GetActiveFogSphere();
+                        var activeFogSphere = PlanetaryFogController.GetActiveFogSphere();
                         if (activeFogSphere != null && activeFogSphere.isRingworldFog)
                         {
-                            Vector3 position = activeFogSphere.transform.position;
-                            Vector3 up = activeFogSphere.transform.up;
-                            Plane plane = new Plane(up, position - up * activeFogSphere.ringworldPlaneDist1);
-                            Plane plane2 = new Plane(-up, position + up * activeFogSphere.ringworldPlaneDist2);
+                            var position = activeFogSphere.transform.position;
+                            var up = activeFogSphere.transform.up;
+                            var plane = new Plane(up, position - up * activeFogSphere.ringworldPlaneDist1);
+                            var plane2 = new Plane(-up, position + up * activeFogSphere.ringworldPlaneDist2);
                             __instance.fogMaterial.EnableKeyword("USE_RINGWORLD_LIGHTING");
                             __instance.fogMaterial.SetVector(propIDRingworldFogClipPlane1, new Vector4(plane.normal.x, plane.normal.y, plane.normal.z, plane.distance));
                             __instance.fogMaterial.SetVector(propIDRingworldFogClipPlane2, new Vector4(plane2.normal.x, plane2.normal.y, plane2.normal.z, plane2.distance));

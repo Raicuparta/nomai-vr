@@ -11,18 +11,18 @@ namespace NomaiVR.UI
     {
         private List<Material> materialsToFade;
         private float duration = -1;
-        private float elapsedTime = 0.0f;
+        private float elapsedTime;
         private float fadeTo = -1;
-        private bool forceOff = false;
+        private bool forceOff;
         private Func<bool> activationFunc;
         private Func<float, float> fadeFunc;
 
         internal void Start()
         {
-            Renderer[] childRenderers = GetComponentsInChildren<Renderer>(true);
+            var childRenderers = GetComponentsInChildren<Renderer>(true);
 
             materialsToFade = new List<Material>();
-            foreach(Renderer renderer in childRenderers)
+            foreach(var renderer in childRenderers)
                 materialsToFade.Add(renderer.material);
         }
 
@@ -58,7 +58,7 @@ namespace NomaiVR.UI
             if(duration >= 0 && activationFunc == null)
             {
                 elapsedTime += Time.deltaTime;
-                float percentage = elapsedTime / duration;
+                var percentage = elapsedTime / duration;
 
                 if (fadeFunc != null)
                     percentage = fadeFunc.Invoke(percentage);

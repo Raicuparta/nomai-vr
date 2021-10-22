@@ -15,7 +15,7 @@ namespace NomaiVR.ReusableBehaviours.Dream
         private Transform eyeDome;
 
         private Color currentColor = new Color(0, 0, 0, 0);
-        private Material fadeMaterial = null;
+        private Material fadeMaterial;
         private int fadeMaterialColorID = -1;
         private Material projectionMaterial;
 
@@ -29,7 +29,7 @@ namespace NomaiVR.ReusableBehaviours.Dream
             var dome = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             GameObject.Destroy(dome.GetComponent<Collider>());
             GameObject.Destroy(dome.GetComponent<Rigidbody>());
-            Mesh domeMesh = dome.GetComponent<MeshFilter>().mesh;
+            var domeMesh = dome.GetComponent<MeshFilter>().mesh;
             domeMesh.triangles = domeMesh.triangles.Reverse().ToArray(); //We need a reverse dome
             dome.name = "MindProjectorEyeDome";
 

@@ -65,7 +65,7 @@ namespace NomaiVR.UI
 
             internal void ParentToDominantHand()
             {
-                Transform dominantHand = HandsController.Behaviour.DominantHandBehaviour.Palm;
+                var dominantHand = HandsController.Behaviour.DominantHandBehaviour.Palm;
                 holdTransform.SetParent(dominantHand, false);
                 UpdateHandPosition();
             }
@@ -108,14 +108,14 @@ namespace NomaiVR.UI
 
             private void SetPositionToHand()
             {
-                bool isRightHanded = holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
+                var isRightHanded = holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
                 promptCanvas.transform.localPosition = new Vector3(-0.1f, -0.05f, 0.1f);
                 isTranslatorPosition = false;
             }
 
             private void SetPositionToTranslator()
             {
-                bool isRightHanded = holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
+                var isRightHanded = holdTransform.parent == HandsController.Behaviour.RightHandBehaviour.Palm;
                 promptCanvas.transform.localPosition = Vector3.down * 0.1f;
                 isTranslatorPosition = true;
             }

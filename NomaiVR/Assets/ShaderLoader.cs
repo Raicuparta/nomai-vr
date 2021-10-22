@@ -5,7 +5,7 @@ namespace NomaiVR.Assets
 {
     public class ShaderLoader
     {
-        private static ShaderLoader instance = null;
+        private static ShaderLoader instance;
         public static ShaderLoader Instance => instance ?? (instance = new ShaderLoader());
 
         private readonly Dictionary<string, Shader> shaderCache;

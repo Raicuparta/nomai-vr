@@ -7,7 +7,7 @@ namespace NomaiVR.ModConfig
     {
         public event Action OnConfigChange;
 
-        public bool LeftHandDominant { get; private set; } = false;
+        public bool LeftHandDominant { get; private set; }
         public bool DebugMode { get; private set; } = true;
         public bool PreventCursorLock { get; private set; }
         public bool ShowHelmet { get; private set; }

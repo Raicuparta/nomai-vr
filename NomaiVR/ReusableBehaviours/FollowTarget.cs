@@ -8,8 +8,8 @@ namespace NomaiVR.ReusableBehaviours
         public Transform target;
         public Vector3 localPosition;
         public Quaternion localRotation = Quaternion.identity;
-        public float positionSmoothTime = 0;
-        public float rotationSmoothTime = 0;
+        public float positionSmoothTime;
+        public float rotationSmoothTime;
         private Quaternion rotationVelocity;
         private Vector3 positionVelocity;
 

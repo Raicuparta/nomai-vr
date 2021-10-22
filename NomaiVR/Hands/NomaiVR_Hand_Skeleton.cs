@@ -5,8 +5,8 @@ namespace NomaiVR.Hands
 {
     public class NomaiVRHandSkeleton : SteamVR_Behaviour_Skeleton
     {
-        public float BasePoseInfluence { get; set; } = 0f;
-        private bool snapshotCleanRequested = false;
+        public float BasePoseInfluence { get; set; }
+        private bool snapshotCleanRequested;
 
         public void OnDestroy()
         {

@@ -34,8 +34,8 @@ namespace NomaiVR.Helpers
                 Logs.WriteError("Failed to set AppManifest " + error);
             }
 
-            int processId = System.Diagnostics.Process.GetCurrentProcess().Id;
-            EVRApplicationError applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint)processId, appKey);
+            var processId = System.Diagnostics.Process.GetCurrentProcess().Id;
+            var applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint)processId, appKey);
             if (applicationIdentifyErr != EVRApplicationError.None)
             {
                 Logs.WriteError("Error identifying application: " + applicationIdentifyErr.ToString());
@@ -50,8 +50,8 @@ namespace NomaiVR.Helpers
 
         private static string GetBinaryLaunchString()
         {
-            string workingDir = Directory.GetCurrentDirectory();
-            string executablePath = Assembly.GetExecutingAssembly().Location;
+            var workingDir = Directory.GetCurrentDirectory();
+            var executablePath = Assembly.GetExecutingAssembly().Location;
             return $@"""launch_type"": ""binary"",
                       ""binary_path_windows"": {JsonConvert.ToString(executablePath)},
                       ""working_directory"": {JsonConvert.ToString(workingDir)},";
@@ -59,7 +59,7 @@ namespace NomaiVR.Helpers
 
         private static long CurrentUnixTimestamp()
         {
-            DateTime foo = DateTime.Now;
+            var foo = DateTime.Now;
             return ((DateTimeOffset)foo).ToUnixTimeSeconds();
         }
     }

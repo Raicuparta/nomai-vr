@@ -34,7 +34,7 @@ namespace NomaiVR.Helpers
         {
             Logs.Write(depth == 0 ? $"Childs of {parent.name}:" 
                                   : parent.name.PadLeft(parent.name.Length + depth, '-'));
-            for (int i = 0; i < parent.childCount; i++)
+            for (var i = 0; i < parent.childCount; i++)
                 PrintHierarchy(parent.GetChild(i), depth + 1);
         }
     }

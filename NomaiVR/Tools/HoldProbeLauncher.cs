@@ -129,8 +129,8 @@ namespace NomaiVR.Tools
 
             public class Patch : NomaiVRPatch
             {
-                private static ToolMode? currentToolMode = null;
-                private static bool isWearingSuit = false;
+                private static ToolMode? currentToolMode;
+                private static bool isWearingSuit;
 
                 public override void ApplyPatches()
                 {

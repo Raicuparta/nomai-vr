@@ -33,7 +33,7 @@ namespace NomaiVR.Tools
 
                 holdable.OnFlipped += (isRight) =>
                 {
-                    float tagetScale = Mathf.Abs(translatorBeams.localScale.x);
+                    var tagetScale = Mathf.Abs(translatorBeams.localScale.x);
                     if (!isRight) tagetScale *= -1;
                     translatorBeams.localScale = new Vector3(tagetScale, translatorBeams.localScale.y, translatorBeams.localScale.z);
 

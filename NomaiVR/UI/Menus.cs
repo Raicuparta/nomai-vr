@@ -22,7 +22,7 @@ namespace NomaiVR.UI
             private Camera flashbackCamera;
             private Transform flashbackCameraParent;
             private bool isCanvasObjectsActive;
-            private bool fadeInLogo = false;
+            private bool fadeInLogo;
 
             internal void Start()
             {
@@ -103,8 +103,8 @@ namespace NomaiVR.UI
 
             private void FixOuterWildsLogo()
             {
-                Transform logoParentTranform = GameObject.Find("TitleCanvasHack/TitleLayoutGroup").transform;
-                Transform canvasHack = logoParentTranform.parent;
+                var logoParentTranform = GameObject.Find("TitleCanvasHack/TitleLayoutGroup").transform;
+                var canvasHack = logoParentTranform.parent;
                 Destroy(canvasHack.GetComponent<CanvasScaler>()); //Remove Canvas Scaler
                 canvasHack.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 logoParentTranform.localPosition = Vector3.left * 400;

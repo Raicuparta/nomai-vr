@@ -13,7 +13,7 @@ namespace NomaiVR.Input
 
         public class Behaviour : MonoBehaviour
         {
-            private static InputField inputField = null;
+            private static InputField inputField;
 
             internal void Awake()
             {
@@ -27,7 +27,7 @@ namespace NomaiVR.Input
 
             private void OnKeyboardClosed(VREvent_t evt)
             {
-                StringBuilder text = new StringBuilder(256);
+                var text = new StringBuilder(256);
                 inputField.caretPosition = (int)SteamVR.instance.overlay.GetKeyboardText(text, 256);
                 inputField.text = text.ToString();
             }

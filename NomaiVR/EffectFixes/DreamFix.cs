@@ -9,7 +9,7 @@ namespace NomaiVR.EffectFixes
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
         private static float prePauseFovFactor = 1;
-        private static bool isPaused = false;
+        private static bool isPaused;
 
         public class Patch : NomaiVRPatch
         {
@@ -74,9 +74,9 @@ namespace NomaiVR.EffectFixes
             public static bool UpdateZoomInFOVScale(LanternZoomPoint __instance)
             {
                 if (!UpdatePauseFov()) return false;
-                float time = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 0.5f, Time.time);
-                float t = __instance._zoomInCurve.Evaluate(time);
-                float targetFieldOfView = Mathf.Lerp(Locator.GetPlayerCameraController().GetOrigFieldOfView(), __instance._startFOV, t);
+                var time = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 0.5f, Time.time);
+                var t = __instance._zoomInCurve.Evaluate(time);
+                var targetFieldOfView = Mathf.Lerp(Locator.GetPlayerCameraController().GetOrigFieldOfView(), __instance._startFOV, t);
                 CameraHelper.SetFieldOfViewFactor(Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView);
                 if (Time.time > __instance._stateChangeTime + 0.5f)
                 {
@@ -89,14 +89,14 @@ namespace NomaiVR.EffectFixes
             public static bool UpdateRetrozoomFOVScale(LanternZoomPoint __instance)
             {
                 if (!UpdatePauseFov()) return false;
-                float num = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 1.2f, Time.time);
-                float focus = Mathf.Pow(Mathf.SmoothStep(0f, 1f, 1f - num), 0.2f);
+                var num = Mathf.InverseLerp(__instance._stateChangeTime, __instance._stateChangeTime + 1.2f, Time.time);
+                var focus = Mathf.Pow(Mathf.SmoothStep(0f, 1f, 1f - num), 0.2f);
                 __instance._playerLantern.GetLanternController().SetFocus(focus);
-                float t = __instance._retroZoomCurve.Evaluate(num);
-                float targetFieldOfView = Mathf.Lerp(__instance._startFOV, Locator.GetPlayerCameraController().GetOrigFieldOfView(), t);
+                var t = __instance._retroZoomCurve.Evaluate(num);
+                var targetFieldOfView = Mathf.Lerp(__instance._startFOV, Locator.GetPlayerCameraController().GetOrigFieldOfView(), t);
                 CameraHelper.SetFieldOfViewFactor(Locator.GetPlayerCamera().mainCamera.fieldOfView / targetFieldOfView);
-                float d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
-                Vector3 vector = __instance._startLocalPos - __instance._endLocalPos;
+                var d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
+                var vector = __instance._startLocalPos - __instance._endLocalPos;
                 __instance._attachPoint.transform.localPosition = __instance._endLocalPos + vector.normalized * d;
                 if (num >= 1f)
                 {
@@ -131,8 +131,8 @@ namespace NomaiVR.EffectFixes
             {
                 var playerPos = Locator.GetPlayerTransform().position;
                 var heading = (__instance.transform.position - playerPos).normalized;
-                float d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
-                Vector3 position = playerPos + heading * d;
+                var d = __instance._imageHalfWidth / Mathf.Tan(Locator.GetPlayerCamera().fieldOfView * 0.017453292f * 0.5f);
+                var position = playerPos + heading * d;
                 __instance._endLocalPos = __instance.transform.InverseTransformPoint(position);
             }
 

@@ -73,13 +73,13 @@ namespace NomaiVR.Assets
         private void LoadPoses()
         {
             Poses = new Dictionary<string, SteamVR_Skeleton_Pose>();
-            string posesPath = NomaiVR.ModFolderPath + "/poses";
-            string[] fileNames = Directory.GetFiles(posesPath);
+            var posesPath = NomaiVR.ModFolderPath + "/poses";
+            var fileNames = Directory.GetFiles(posesPath);
 
             foreach(var fileName in fileNames)
             {
                 var path = Path.Combine(posesPath, fileName);
-                FileInfo fileInfo = new FileInfo(path);
+                var fileInfo = new FileInfo(path);
 
                 if (fileInfo.Extension == ".json")
                 {
@@ -95,7 +95,7 @@ namespace NomaiVR.Assets
 
         private T LoadModAssetFromJson<T>(string modAssetPath)
         {
-            string fullPath = NomaiVR.ModFolderPath + modAssetPath;
+            var fullPath = NomaiVR.ModFolderPath + modAssetPath;
             if (!File.Exists(fullPath))
                 return default(T);
 

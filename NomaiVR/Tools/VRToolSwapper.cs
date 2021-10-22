@@ -10,7 +10,7 @@ namespace NomaiVR.Tools
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
-        private static bool isBuccklingUp = false;
+        private static bool isBuccklingUp;
         public static Hand InteractingHand { get; private set; }
         public static Hand NonInteractingHand { get; private set; }
 

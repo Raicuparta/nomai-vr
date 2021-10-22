@@ -77,7 +77,7 @@ namespace NomaiVR.Hands
                 UpdateLineVisibility();
                 UpdateLineAppearance();
 
-                RaycastHit raycast = DoUIRaycast(menuLineLength);
+                var raycast = DoUIRaycast(menuLineLength);
 
                 if (raycast.transform != null)
                 {

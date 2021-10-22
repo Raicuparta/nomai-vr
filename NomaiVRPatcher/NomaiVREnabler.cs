@@ -70,7 +70,7 @@ namespace NomaiVRPatcher
         private static void CopyGameFiles(string gamePath, string filesPath)
         {
             // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(filesPath);
+            var dir = new DirectoryInfo(filesPath);
 
             if (!dir.Exists)
             {
@@ -79,53 +79,53 @@ namespace NomaiVRPatcher
                     + filesPath);
             }
 
-            DirectoryInfo[] dirs = dir.GetDirectories();
+            var dirs = dir.GetDirectories();
 
             // If the destination directory doesn't exist, create it.       
             Directory.CreateDirectory(gamePath);
 
             // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
+            var files = dir.GetFiles();
+            foreach (var file in files)
             {
-                string tempPath = Path.Combine(gamePath, file.Name);
+                var tempPath = Path.Combine(gamePath, file.Name);
                 file.CopyTo(tempPath, true);
             }
 
-            foreach (DirectoryInfo subdir in dirs)
+            foreach (var subdir in dirs)
             {
-                string tempPath = Path.Combine(gamePath, subdir.Name);
+                var tempPath = Path.Combine(gamePath, subdir.Name);
                 CopyGameFiles(tempPath, subdir.FullName);
             }
         }
 
         private static void PatchGlobalGameManagers(string gameManagersPath, string gameManagersBackup, string patchFilesPath)
         {
-            AssetsManager assetsManager = new AssetsManager();
+            var assetsManager = new AssetsManager();
             assetsManager.LoadClassPackage(Path.Combine(patchFilesPath, "classdata.tpk"));
-            AssetsFileInstance assetsFileInstance = assetsManager.LoadAssetsFile(gameManagersBackup, false);
-            AssetsFile assetsFile = assetsFileInstance.file;
-            AssetsFileTable assetsFileTable = assetsFileInstance.table;
+            var assetsFileInstance = assetsManager.LoadAssetsFile(gameManagersBackup, false);
+            var assetsFile = assetsFileInstance.file;
+            var assetsFileTable = assetsFileInstance.table;
             assetsManager.LoadClassDatabaseFromPackage(assetsFile.typeTree.unityVersion);
 
-            List<AssetsReplacer> replacers = new List<AssetsReplacer>();
+            var replacers = new List<AssetsReplacer>();
 
-            AssetFileInfoEx playerSettings = assetsFileTable.GetAssetInfo(1);
-            AssetTypeValueField playerSettingsBase = assetsManager.GetTypeInstance(assetsFile, playerSettings).GetBaseField();
-            AssetTypeValueField disableOldInputManagerSupport = playerSettingsBase.Get("enableNativePlatformBackendsForNewInputSystem");
+            var playerSettings = assetsFileTable.GetAssetInfo(1);
+            var playerSettingsBase = assetsManager.GetTypeInstance(assetsFile, playerSettings).GetBaseField();
+            var disableOldInputManagerSupport = playerSettingsBase.Get("enableNativePlatformBackendsForNewInputSystem");
             disableOldInputManagerSupport.value = new AssetTypeValue(EnumValueTypes.ValueType_Bool, false);
             replacers.Add(new AssetsReplacerFromMemory(0, playerSettings.index, (int)playerSettings.curFileType, 0xffff, playerSettingsBase.WriteToByteArray()));
 
 
-            AssetFileInfoEx buildSettings = assetsFileTable.GetAssetInfo(11);
-            AssetTypeValueField buildSettingsBase = assetsManager.GetTypeInstance(assetsFile, buildSettings).GetBaseField();
-            AssetTypeValueField enabledVRDevices = buildSettingsBase.Get("enabledVRDevices").Get("Array");
-            AssetTypeTemplateField stringTemplate = enabledVRDevices.templateField.children[1];
-            AssetTypeValueField[] vrDevicesList = new AssetTypeValueField[] { StringField("OpenVR", stringTemplate) };
+            var buildSettings = assetsFileTable.GetAssetInfo(11);
+            var buildSettingsBase = assetsManager.GetTypeInstance(assetsFile, buildSettings).GetBaseField();
+            var enabledVRDevices = buildSettingsBase.Get("enabledVRDevices").Get("Array");
+            var stringTemplate = enabledVRDevices.templateField.children[1];
+            var vrDevicesList = new AssetTypeValueField[] { StringField("OpenVR", stringTemplate) };
             enabledVRDevices.SetChildrenList(vrDevicesList);
             replacers.Add(new AssetsReplacerFromMemory(0, buildSettings.index, (int)buildSettings.curFileType, 0xffff, buildSettingsBase.WriteToByteArray()));
 
-            using (AssetsFileWriter writer = new AssetsFileWriter(File.OpenWrite(gameManagersPath)))
+            using (var writer = new AssetsFileWriter(File.OpenWrite(gameManagersPath)))
             {
                 assetsFile.Write(writer, 0, replacers, 0);
             }

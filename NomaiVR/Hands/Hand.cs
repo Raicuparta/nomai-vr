@@ -107,8 +107,8 @@ namespace NomaiVR.Hands
             if (shader.Length == 0)
                 return;
 
-            Shader[] toAssign = shader.Select(x => Shader.Find(x)).ToArray();
-            for (int i = 0; i < renderer.materials.Length; i++)
+            var toAssign = shader.Select(x => Shader.Find(x)).ToArray();
+            for (var i = 0; i < renderer.materials.Length; i++)
                 renderer.materials[i].shader = toAssign[Mathf.Clamp(i, 0, toAssign.Length)];
         }
 
@@ -124,16 +124,16 @@ namespace NomaiVR.Hands
         
         private static string FingerBoneName(string fingerName, int depth)
         {
-            string name = $"finger_{fingerName}_meta_r";
-            for (int i = 0; i < depth; i++)
+            var name = $"finger_{fingerName}_meta_r";
+            for (var i = 0; i < depth; i++)
                 name += $"/finger_{fingerName}_{i}_r";
             return name;
         }
 
         private static string ThumbBoneName(string fingerName, int depth)
         {
-            string name = $"finger_{fingerName}_0_r";
-            for (int i = 0; i < depth; i++)
+            var name = $"finger_{fingerName}_0_r";
+            for (var i = 0; i < depth; i++)
                 name += $"/finger_{fingerName}_{i + 1}_r";
             return name;
         }
@@ -153,7 +153,7 @@ namespace NomaiVR.Hands
             if (isLeft)
             {
                 //Flip X axis of skeleton and skinned meshes
-                for (int i = 0; i < prefabTransform.childCount; i++)
+                for (var i = 0; i < prefabTransform.childCount; i++)
                     prefabTransform.GetChild(i).localScale = new Vector3(-1, 1, 1);
 
                 //Flip back palm
@@ -249,7 +249,7 @@ namespace NomaiVR.Hands
 
         internal void UpdateSkeletonBlendAmmount()
         {
-            float blendAmmount = ShouldRenderGloves() ? gloveSkeletonBlendAmmount : handSkeletonBlendAmmount;
+            var blendAmmount = ShouldRenderGloves() ? gloveSkeletonBlendAmmount : handSkeletonBlendAmmount;
             skeleton.BlendTo(blendAmmount, 0.1f);
             skeleton.ClearSnapshot();
         }

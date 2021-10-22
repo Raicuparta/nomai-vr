@@ -13,17 +13,17 @@ namespace NomaiVR.Helpers
 
         private void Update()
         {
-            for (int fingerIndex = 0; fingerIndex < fingers.Length; fingerIndex++)
+            for (var fingerIndex = 0; fingerIndex < fingers.Length; fingerIndex++)
             {
-                Finger finger = fingers[fingerIndex];
+                var finger = fingers[fingerIndex];
                 finger.metacarpal.destination.rotation = finger.metacarpal.source.rotation;
                 finger.proximal.destination.rotation = finger.proximal.source.rotation;
                 finger.middle.destination.rotation = finger.middle.source.rotation;
                 finger.distal.destination.rotation = finger.distal.source.rotation;
             }
-            for (int thumbIndex = 0; thumbIndex < thumbs.Length; thumbIndex++)
+            for (var thumbIndex = 0; thumbIndex < thumbs.Length; thumbIndex++)
             {
-                Thumb thumb = thumbs[thumbIndex];
+                var thumb = thumbs[thumbIndex];
                 thumb.metacarpal.destination.rotation = thumb.metacarpal.source.rotation;
                 thumb.middle.destination.rotation = thumb.middle.source.rotation;
                 thumb.distal.destination.rotation = thumb.distal.source.rotation;

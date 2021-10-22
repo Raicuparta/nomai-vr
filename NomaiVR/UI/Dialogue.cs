@@ -14,7 +14,7 @@ namespace NomaiVR.UI
         public class Behaviour : MonoBehaviour
         {
             private static Transform canvasTransform;
-            private static Transform attentionPoint = null;
+            private static Transform attentionPoint;
             private const float dialogeRenderSize = 0.0015f;
 
             internal void Start()

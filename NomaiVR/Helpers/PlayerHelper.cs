@@ -4,7 +4,7 @@ namespace NomaiVR.Helpers
 {
     public static class PlayerHelper
     {
-        private static Transform playerHead = null;
+        private static Transform playerHead;
         public static Transform PlayerHead
         {
             get {
