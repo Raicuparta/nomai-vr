@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using Valve.VR;
 
-namespace NomaiVR
+namespace NomaiVR.Input
 {
     internal class VirtualKeyboard : NomaiVRModule<VirtualKeyboard.Behaviour, VirtualKeyboard.Behaviour.Patch>
     {
@@ -16,7 +13,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static InputField _inputField = null;
+            private static InputField inputField = null;
 
             internal void Awake()
             {
@@ -25,14 +22,14 @@ namespace NomaiVR
 
             private static void OpenKeyboard()
             {
-                SteamVR.instance.overlay.ShowKeyboard(0, 0, 0, "Input Text", 256, _inputField.text, 1);
+                SteamVR.instance.overlay.ShowKeyboard(0, 0, 0, "Input Text", 256, inputField.text, 1);
             }
 
             private void OnKeyboardClosed(VREvent_t evt)
             {
                 StringBuilder text = new StringBuilder(256);
-                _inputField.caretPosition = (int)SteamVR.instance.overlay.GetKeyboardText(text, 256);
-                _inputField.text = text.ToString();
+                inputField.caretPosition = (int)SteamVR.instance.overlay.GetKeyboardText(text, 256);
+                inputField.text = text.ToString();
             }
 
             public class Patch : NomaiVRPatch
@@ -45,13 +42,13 @@ namespace NomaiVR
 
                 private static void PostActivatePopupInput(InputField __instance)
                 {
-                    _inputField = __instance;
+                    inputField = __instance;
                     OpenKeyboard();
                 }
 
                 private static void PostDeactivatePopupInput()
                 {
-                    _inputField = null;
+                    inputField = null;
                 }
             }
         }

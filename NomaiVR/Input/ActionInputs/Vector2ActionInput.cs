@@ -26,10 +26,10 @@ namespace NomaiVR.Input.ActionInputs
         {
             get
             {
-                var axis = yOnly ? specificAction.axis.y : specificAction.axis.x;
+                var axis = yOnly ? SpecificAction.axis.y : SpecificAction.axis.x;
                 var rawValue = invert ? -axis : axis;
                 var clampedValue = clamp ? Mathf.Clamp(rawValue, 0f, 1f) : rawValue;
-                return new Vector2(clampedValue, (yOnly || yZero) ? 0f : specificAction.axis.y);
+                return new Vector2(clampedValue, (yOnly || yZero) ? 0f : SpecificAction.axis.y);
             }
         }
 
@@ -38,9 +38,9 @@ namespace NomaiVR.Input.ActionInputs
             get
             {
                 var state = isEitherHand
-                    ? specificAction.GetActive(SteamVR_Input_Sources.LeftHand) ||
-                      specificAction.GetActive(SteamVR_Input_Sources.RightHand)
-                    : specificAction.active;
+                    ? SpecificAction.GetActive(SteamVR_Input_Sources.LeftHand) ||
+                      SpecificAction.GetActive(SteamVR_Input_Sources.RightHand)
+                    : SpecificAction.active;
                 return state;
             }
         }
@@ -50,9 +50,9 @@ namespace NomaiVR.Input.ActionInputs
             get
             {
                 var state = isEitherHand
-                    ? (SteamVR_Input_Sources)((int)specificAction.GetActiveDevice(SteamVR_Input_Sources.LeftHand) +
-                                              (int)specificAction.GetActiveDevice(SteamVR_Input_Sources.RightHand))
-                    : specificAction.activeDevice;
+                    ? (SteamVR_Input_Sources)((int)SpecificAction.GetActiveDevice(SteamVR_Input_Sources.LeftHand) +
+                                              (int)SpecificAction.GetActiveDevice(SteamVR_Input_Sources.RightHand))
+                    : SpecificAction.activeDevice;
                 return state;
             }
         }

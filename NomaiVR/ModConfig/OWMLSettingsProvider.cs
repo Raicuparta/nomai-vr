@@ -3,7 +3,7 @@ using System;
 
 namespace NomaiVR.ModConfig
 {
-    public class OWMLSettingsProvider : IModSettingProvider
+    public class OwmlSettingsProvider : IModSettingProvider
     {
         public event Action OnConfigChange;
 
@@ -22,8 +22,8 @@ namespace NomaiVR.ModConfig
         public float HudScale { get; private set; }
         public float HudOpacity { get; private set; }
 
-        private IModConfig config;
-        public OWMLSettingsProvider(IModConfig config)
+        private readonly IModConfig config;
+        public OwmlSettingsProvider(IModConfig config)
         {
             this.config = config;
         }

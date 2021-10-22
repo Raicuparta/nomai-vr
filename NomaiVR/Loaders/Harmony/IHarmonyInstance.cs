@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace NomaiVR.Loaders
+namespace NomaiVR.Loaders.Harmony
 {
     public interface IHarmonyInstance
     {

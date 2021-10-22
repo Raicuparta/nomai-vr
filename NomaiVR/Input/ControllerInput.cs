@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using NomaiVR.ModConfig;
+using NomaiVR.Tools;
 using UnityEngine;
 using Valve.VR;
 using static InputConsts;

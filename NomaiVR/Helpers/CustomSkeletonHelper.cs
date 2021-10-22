@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace Valve.VR.Helpers
+namespace NomaiVR.Helpers
 {
     public class CustomSkeletonHelper : MonoBehaviour
     {

@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     public class SmoothFollowCameraRotation : MonoBehaviour
     {
-        private Quaternion _lastFrameRotation;
-        private readonly float _speed = 0.5f;
+        private Quaternion lastFrameRotation;
+        private readonly float speed = 0.5f;
 
         internal void Start()
         {
-            _lastFrameRotation = transform.rotation;
+            lastFrameRotation = transform.rotation;
         }
 
         internal void LateUpdate()
@@ -20,11 +20,11 @@ namespace NomaiVR
             }
 
             var targetRotation = Camera.main.transform.rotation;
-            var difference = Mathf.Abs(Quaternion.Angle(_lastFrameRotation, targetRotation));
+            var difference = Mathf.Abs(Quaternion.Angle(lastFrameRotation, targetRotation));
 
-            var step = _speed * Time.unscaledDeltaTime * difference * difference;
-            transform.rotation = Quaternion.RotateTowards(_lastFrameRotation, targetRotation, step);
-            _lastFrameRotation = transform.rotation;
+            var step = speed * Time.unscaledDeltaTime * difference * difference;
+            transform.rotation = Quaternion.RotateTowards(lastFrameRotation, targetRotation, step);
+            lastFrameRotation = transform.rotation;
         }
     }
 }

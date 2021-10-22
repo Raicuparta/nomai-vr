@@ -1,41 +1,41 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class ConditionalRenderer : MonoBehaviour, IActiveObserver
     {
-        public Func<bool> getShouldRender;
-        private bool _shouldRender;
-        private Vector3 _scale;
-        private Renderer _renderer;
+        public Func<bool> GETShouldRender;
+        private bool shouldRender;
+        private Vector3 scale;
+        private Renderer renderer;
 
         public event Action OnActivate;
         public event Action OnDeactivate;
 
-        public bool IsActive => _shouldRender;
+        public bool IsActive => shouldRender;
 
         internal void Start()
         {
-            _scale = transform.localScale;
-            _renderer = GetComponent<Renderer>();
+            scale = transform.localScale;
+            renderer = GetComponent<Renderer>();
             SetShow(false);
         }
 
         internal void OnDisable()
         {
-            _shouldRender = false;
+            shouldRender = false;
             OnDeactivate?.Invoke();
         }
 
         protected virtual void SetShow(bool show)
         {
-            _shouldRender = show;
+            shouldRender = show;
 
-            if (_renderer != null)
-                _renderer.enabled = show;
+            if (renderer != null)
+                renderer.enabled = show;
             else
-                transform.localScale = show ? _scale : Vector3.zero;
+                transform.localScale = show ? scale : Vector3.zero;
 
             if (show)
                 OnActivate?.Invoke();
@@ -45,12 +45,12 @@ namespace NomaiVR
 
         internal void Update()
         {
-            var shouldRender = getShouldRender.Invoke();
-            if (!_shouldRender && shouldRender)
+            var shouldRender = GETShouldRender.Invoke();
+            if (!this.shouldRender && shouldRender)
             {
                 SetShow(true);
             }
-            if (_shouldRender && !shouldRender)
+            if (this.shouldRender && !shouldRender)
             {
                 SetShow(false);
             }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class LayerHelper
     {

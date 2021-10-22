@@ -1,15 +1,17 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
 using System.IO;
+using NomaiVR.Loaders.Harmony;
+using NomaiVR.ModConfig;
 
 namespace NomaiVR.Loaders
 {
-    public class NomaiVRLoaderOWML : ModBehaviour
+    public class NomaiVRLoaderOwml : ModBehaviour
     {
         private IModHelper Helper { get; set; }
         internal void Start()
         {
-            NomaiVR.HarmonyInstance = new OWMLHarmonyInstance(ModHelper);
+            NomaiVR.HarmonyInstance = new OwmlHarmonyInstance(ModHelper);
             NomaiVR.ModFolderPath = Helper.Manifest.ModFolderPath;
             NomaiVR.GameDataPath = Helper.OwmlConfig.DataPath;
             NomaiVR.ApplyMod();
@@ -18,7 +20,7 @@ namespace NomaiVR.Loaders
         public override void Configure(IModConfig config)
         {
             Helper = ModHelper;
-            var settingsProvider = new ModConfig.OWMLSettingsProvider(config);
+            var settingsProvider = new ModConfig.OwmlSettingsProvider(config);
             ModSettings.SetProvider(settingsProvider);
         }
     }

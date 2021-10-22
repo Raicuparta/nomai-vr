@@ -1,81 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.UI
 {
     /// <summary>
     /// Hacky component to prevent the title logo screen being akwardly visible
     /// </summary>
     internal class TitleMenuLogoFader : MonoBehaviour
     {
-        private List<Material> _materialsToFade;
-        private float _duration = -1;
-        private float _elapsedTime = 0.0f;
-        private float _fadeTo = -1;
-        private bool _forceOff = false;
-        private Func<bool> _activationFunc;
-        private Func<float, float> _fadeFunc;
+        private List<Material> materialsToFade;
+        private float duration = -1;
+        private float elapsedTime = 0.0f;
+        private float fadeTo = -1;
+        private bool forceOff = false;
+        private Func<bool> activationFunc;
+        private Func<float, float> fadeFunc;
 
         internal void Start()
         {
             Renderer[] childRenderers = GetComponentsInChildren<Renderer>(true);
 
-            _materialsToFade = new List<Material>();
+            materialsToFade = new List<Material>();
             foreach(Renderer renderer in childRenderers)
-                _materialsToFade.Add(renderer.material);
+                materialsToFade.Add(renderer.material);
         }
 
         internal void OnEnable()
         {
-            _elapsedTime = 0;
+            elapsedTime = 0;
             FadeTo(0);
         }
 
         internal void OnDisable()
         {
-            _elapsedTime = _duration;
-            FadeTo(_fadeTo);
+            elapsedTime = duration;
+            FadeTo(fadeTo);
         }
 
         public void BeginFade(float fade, float duration, Func<bool> activationFunc, Func<float, float> fadeFunc = null, bool forceOff = false)
         {
-            _fadeTo = fade;
-            _duration = duration;
-            _fadeFunc = fadeFunc;
-            _activationFunc = activationFunc;
-            _forceOff = forceOff;
+            fadeTo = fade;
+            this.duration = duration;
+            this.fadeFunc = fadeFunc;
+            this.activationFunc = activationFunc;
+            this.forceOff = forceOff;
             this.enabled = true;
         }
 
         private void FadeTo(float value)
         {
-            _materialsToFade?.ForEach(m =>  m.SetAlpha(value));
+            materialsToFade?.ForEach(m =>  m.SetAlpha(value));
         }
 
         internal void Update()
         {
-            if(_duration >= 0 && _activationFunc == null)
+            if(duration >= 0 && activationFunc == null)
             {
-                _elapsedTime += Time.deltaTime;
-                float percentage = _elapsedTime / _duration;
+                elapsedTime += Time.deltaTime;
+                float percentage = elapsedTime / duration;
 
-                if (_fadeFunc != null)
-                    percentage = _fadeFunc.Invoke(percentage);
+                if (fadeFunc != null)
+                    percentage = fadeFunc.Invoke(percentage);
 
-                FadeTo(_fadeTo * Mathf.Clamp(percentage, 0, 1));
+                FadeTo(fadeTo * Mathf.Clamp(percentage, 0, 1));
 
                 if (percentage >= 1)
                     this.enabled = false;
             }
-            else if(_activationFunc != null && _activationFunc.Invoke())
+            else if(activationFunc != null && activationFunc.Invoke())
             {
-                _activationFunc = null;
+                activationFunc = null;
                 OnEnable();
             }
-            else if(_forceOff)
+            else if(forceOff)
             {
                 FadeTo(0);
             }

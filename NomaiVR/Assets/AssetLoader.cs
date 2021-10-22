@@ -1,11 +1,10 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-using Valve.VR;
 using Valve.Newtonsoft.Json;
-using System.Collections.Generic;
-using NomaiVR.Assets;
+using Valve.VR;
 
-namespace NomaiVR
+namespace NomaiVR.Assets
 {
     public class AssetLoader
     {

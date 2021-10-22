@@ -1,11 +1,12 @@
 ﻿using System.Linq;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
 namespace NomaiVR
 {
-    internal abstract class NomaiVRModule<Behaviour, Patch>
-        where Patch : NomaiVRPatch, new()
-        where Behaviour : MonoBehaviour
+    internal abstract class NomaiVRModule<TBehaviour, TPatch>
+        where TPatch : NomaiVRPatch, new()
+        where TBehaviour : MonoBehaviour
     {
         protected static OWScene[] PlayableScenes = new[] { OWScene.SolarSystem, OWScene.EyeOfTheUniverse };
         protected static OWScene[] TitleScene = new[] { OWScene.TitleScreen };
@@ -15,7 +16,7 @@ namespace NomaiVR
         protected abstract bool IsPersistent { get; }
         protected abstract OWScene[] Scenes { get; }
 
-        private bool _isPersistentBehaviourSetUp;
+        private bool isPersistentBehaviourSetUp;
 
         public NomaiVRModule()
         {
@@ -44,31 +45,31 @@ namespace NomaiVR
 
         private void SetupBehaviour()
         {
-            if (_isPersistentBehaviourSetUp || typeof(Behaviour) == typeof(NomaiVRModule.EmptyBehaviour))
+            if (isPersistentBehaviourSetUp || typeof(TBehaviour) == typeof(NomaiVRModule.EmptyBehaviour))
             {
                 return;
             }
 
             Logs.WriteInfo($"Creating NomaiVR behaviour for {GetType().Name}");
             var gameObject = new GameObject();
-            gameObject.AddComponent<Behaviour>();
+            gameObject.AddComponent<TBehaviour>();
 
             if (IsPersistent)
             {
                 gameObject.AddComponent<PersistObject>();
-                _isPersistentBehaviourSetUp = true;
+                isPersistentBehaviourSetUp = true;
             }
         }
 
         private void SetupPatch()
         {
-            if (typeof(Patch) == typeof(NomaiVRModule.EmptyPatch))
+            if (typeof(TPatch) == typeof(NomaiVRModule.EmptyPatch))
             {
                 return;
             }
 
             Logs.WriteInfo($"Applying NomaiVR patches for {GetType().Name}");
-            var patch = new Patch();
+            var patch = new TPatch();
             patch.ApplyPatches();
         }
     }

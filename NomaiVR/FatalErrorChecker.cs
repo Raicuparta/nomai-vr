@@ -28,7 +28,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private bool _isSteamVRInitialized;
+            private bool isSteamVRInitialized;
 
             internal void Start()
             {
@@ -37,18 +37,18 @@ namespace NomaiVR
 
             internal void Update()
             {
-                if (_isSteamVRInitialized || SteamVR.initializing)
+                if (isSteamVRInitialized || SteamVR.initializing)
                 {
                     return;
                 }
                 if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
                 {
                     ThrowSteamVRError();
-                    _isSteamVRInitialized = true;
+                    isSteamVRInitialized = true;
                 }
                 else if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess)
                 {
-                    _isSteamVRInitialized = true;
+                    isSteamVRInitialized = true;
                 }
             }
 

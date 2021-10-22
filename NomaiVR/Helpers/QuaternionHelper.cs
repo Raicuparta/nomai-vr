@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class QuaternionHelper
     {

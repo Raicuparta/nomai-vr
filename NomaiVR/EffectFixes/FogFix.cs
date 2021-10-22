@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Helpers;
+using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class FogFix : NomaiVRModule<FogFix.Behaviour, FogFix.Behaviour.Patch>
     {
@@ -34,21 +35,21 @@ namespace NomaiVR
                     Prefix<HeightmapAmbientLightRenderer>(nameof(HeightmapAmbientLightRenderer.CalcFrustumCorners), nameof(Patch.Prefix_HeightmapAmbientLightRenderer_CalcFrustumCorners));
                 }
 
-                private static Vector3[] _frustumCornersBuffer = new Vector3[4];
+                private static readonly Vector3[] frustumCornersBuffer = new Vector3[4];
                 private static Matrix4x4 FrustumCornersMatrix(Camera cam, Camera.MonoOrStereoscopicEye eye)
                 {
                     var camtr = cam.transform;
-                    cam.CalculateFrustumCorners(new Rect(0, 0, 1, 1), cam.farClipPlane, eye, _frustumCornersBuffer);
+                    cam.CalculateFrustumCorners(new Rect(0, 0, 1, 1), cam.farClipPlane, eye, frustumCornersBuffer);
 
                     Matrix4x4 frustumMatrix = Matrix4x4.identity;
-                    frustumMatrix.SetRow(0, camtr.TransformVector(_frustumCornersBuffer[1])); //topLeft
-                    frustumMatrix.SetRow(1, camtr.TransformVector(_frustumCornersBuffer[2])); //topRight
-                    frustumMatrix.SetRow(2, camtr.TransformVector(_frustumCornersBuffer[3])); //bottomRight
-                    frustumMatrix.SetRow(3, camtr.TransformVector(_frustumCornersBuffer[0])); //bottomLeft
+                    frustumMatrix.SetRow(0, camtr.TransformVector(frustumCornersBuffer[1])); //topLeft
+                    frustumMatrix.SetRow(1, camtr.TransformVector(frustumCornersBuffer[2])); //topRight
+                    frustumMatrix.SetRow(2, camtr.TransformVector(frustumCornersBuffer[3])); //bottomRight
+                    frustumMatrix.SetRow(3, camtr.TransformVector(frustumCornersBuffer[0])); //bottomLeft
                     return frustumMatrix;
                 }
-                private static readonly int _propID_RingworldFogClipPlane1 = Shader.PropertyToID("_RingworldFogClipPlane1");
-                private static readonly int _propID_RingworldFogClipPlane2 = Shader.PropertyToID("_RingworldFogClipPlane2");
+                private static readonly int propIDRingworldFogClipPlane1 = Shader.PropertyToID("_RingworldFogClipPlane1");
+                private static readonly int propIDRingworldFogClipPlane2 = Shader.PropertyToID("_RingworldFogClipPlane2");
                 private static bool PreFogImageEffectRenderImage(RenderTexture source, RenderTexture destination, PlanetaryFogImageEffect __instance)
                 {
                     if (__instance._camera == null)
@@ -73,8 +74,8 @@ namespace NomaiVR
                             Plane plane = new Plane(up, position - up * activeFogSphere.ringworldPlaneDist1);
                             Plane plane2 = new Plane(-up, position + up * activeFogSphere.ringworldPlaneDist2);
                             __instance.fogMaterial.EnableKeyword("USE_RINGWORLD_LIGHTING");
-                            __instance.fogMaterial.SetVector(_propID_RingworldFogClipPlane1, new Vector4(plane.normal.x, plane.normal.y, plane.normal.z, plane.distance));
-                            __instance.fogMaterial.SetVector(_propID_RingworldFogClipPlane2, new Vector4(plane2.normal.x, plane2.normal.y, plane2.normal.z, plane2.distance));
+                            __instance.fogMaterial.SetVector(propIDRingworldFogClipPlane1, new Vector4(plane.normal.x, plane.normal.y, plane.normal.z, plane.distance));
+                            __instance.fogMaterial.SetVector(propIDRingworldFogClipPlane2, new Vector4(plane2.normal.x, plane2.normal.y, plane2.normal.z, plane2.distance));
                         }
                         else
                         {

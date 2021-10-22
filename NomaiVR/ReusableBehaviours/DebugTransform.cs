@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class DebugTransform : MonoBehaviour
     {
-        private bool _angleMode;
+        private bool angleMode;
         public float positionDelta = 0.02f;
         public float angleDelta = 10f;
         public Vector3 scaleDelta = Vector3.one * 0.02f;

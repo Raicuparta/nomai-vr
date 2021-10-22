@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Assets;
+using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class PostCreditsFix : NomaiVRModule<PostCreditsFix.Behaviour, NomaiVRModule.EmptyPatch>
     {

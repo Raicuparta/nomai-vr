@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using NomaiVR.Hands;
+using NomaiVR.Helpers;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class VRToolSwapper : NomaiVRModule<NomaiVRModule.EmptyBehaviour, VRToolSwapper.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
-        private static bool _isBuccklingUp = false;
+        private static bool isBuccklingUp = false;
         public static Hand InteractingHand { get; private set; }
         public static Hand NonInteractingHand { get; private set; }
 
@@ -17,18 +19,18 @@ namespace NomaiVR
         public static event Action Equipped;
         public static event Action UnEquipped;
 
-        private static readonly Dictionary<ToolMode, bool> _toolsAllowedToEquip = new Dictionary<ToolMode, bool>() {
+        private static readonly Dictionary<ToolMode, bool> toolsAllowedToEquip = new Dictionary<ToolMode, bool>() {
             { ToolMode.Item, true }
         };
 
         public static void Equip(ToolMode mode, Hand interactingHand)
         {
-            _toolsAllowedToEquip[mode] = true;
+            toolsAllowedToEquip[mode] = true;
             ToolHelper.Swapper.EquipToolMode(mode);
             UpdateHand(interactingHand);
             Equipped?.Invoke();
             if (mode != ToolMode.Item && mode != ToolMode.None && InputHelper.IsHandheldTool()) ToolEquipped?.Invoke();
-            _toolsAllowedToEquip[mode] = false;
+            toolsAllowedToEquip[mode] = false;
         }
 
         public static void Unequip()
@@ -56,12 +58,12 @@ namespace NomaiVR
 
         public static bool IsAllowedToEquip(ToolMode mode)
         {
-            if (_isBuccklingUp || (OWInput.IsInputMode(InputMode.ShipCockpit) && mode == ToolMode.None))
+            if (isBuccklingUp || (OWInput.IsInputMode(InputMode.ShipCockpit) && mode == ToolMode.None))
             {
-                _isBuccklingUp = false;
+                isBuccklingUp = false;
                 return true;
             }
-            return _toolsAllowedToEquip.ContainsKey(mode) && _toolsAllowedToEquip[mode];
+            return toolsAllowedToEquip.ContainsKey(mode) && toolsAllowedToEquip[mode];
         }
 
         public class Patch : NomaiVRPatch
@@ -74,7 +76,7 @@ namespace NomaiVR
 
             private static void PreShipCockpitController()
             {
-                _isBuccklingUp = true;
+                isBuccklingUp = true;
             }
 
             private static bool PreEquipTool(ToolMode mode)

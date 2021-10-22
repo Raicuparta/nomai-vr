@@ -1,4 +1,6 @@
-﻿namespace NomaiVR
+﻿using NomaiVR.ModConfig;
+
+namespace NomaiVR
 {
     public enum MessageType
     {

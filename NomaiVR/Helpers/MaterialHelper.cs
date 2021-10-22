@@ -4,20 +4,20 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class MaterialHelper
     {
-        private static Material _overlayMaterial;
+        private static Material overlayMaterial;
 
         public static Material GetOverlayMaterial()
         {
-            if (_overlayMaterial == null)
+            if (overlayMaterial == null)
             {
-                _overlayMaterial = new Material(Canvas.GetDefaultCanvasMaterial());
-                MakeMaterialDrawOnTop(_overlayMaterial);
+                overlayMaterial = new Material(Canvas.GetDefaultCanvasMaterial());
+                MakeMaterialDrawOnTop(overlayMaterial);
             }
-            return _overlayMaterial;
+            return overlayMaterial;
         }
 
         public static void MakeMaterialDrawOnTop(Material material)

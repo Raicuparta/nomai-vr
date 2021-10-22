@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class PeepholeCameraFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, PeepholeCameraFix.Patch>
     {

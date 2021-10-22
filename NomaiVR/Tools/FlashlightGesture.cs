@@ -1,4 +1,5 @@
-﻿using NomaiVR.Input;
+﻿using NomaiVR.Hands;
+using NomaiVR.Input;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
