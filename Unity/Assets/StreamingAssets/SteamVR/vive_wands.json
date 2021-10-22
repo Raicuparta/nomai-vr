@@ -1,5 +1,5 @@
 {
-   "action_manifest_version" : 1,
+   "action_manifest_version" : 2,
    "alias_info" : {},
    "app_key" : "steam.app.753640",
    "bindings" : {
