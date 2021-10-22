@@ -1,13 +1,13 @@
-﻿using OWML.Common;
-using System;
+﻿using System;
 using System.Reflection;
+using OWML.Common;
 
-namespace NomaiVR.Loaders
+namespace NomaiVR.Loaders.Harmony
 {
-    public class OWMLHarmonyInstance : IHarmonyInstance
+    public class OwmlHarmonyInstance : IHarmonyInstance
     {
-        private IModHelper modHelper;
-        public OWMLHarmonyInstance(IModHelper modHelper)
+        private readonly IModHelper modHelper;
+        public OwmlHarmonyInstance(IModHelper modHelper)
         {
             this.modHelper = modHelper;
         }

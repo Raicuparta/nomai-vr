@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR.Helpers
@@ -17,10 +14,10 @@ namespace NomaiVR.Helpers
 
 		public static Matrix4x4 GetSteamVREyeProjection(Camera cam, EVREye eye)
 		{
-			return HmdMatrix44ToMatrix4x4(SteamVR.instance.hmd.GetProjectionMatrix(eye, cam.nearClipPlane, cam.farClipPlane));
+			return HmdMatrix44ToMatrix4X4(SteamVR.instance.hmd.GetProjectionMatrix(eye, cam.nearClipPlane, cam.farClipPlane));
 		}
 
-		public static Matrix4x4 HmdMatrix44ToMatrix4x4(HmdMatrix44_t mat)
+		public static Matrix4x4 HmdMatrix44ToMatrix4X4(HmdMatrix44_t mat)
 		{
 			Matrix4x4 m = new Matrix4x4();
 			m.m00 = mat.m0;

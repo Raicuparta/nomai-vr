@@ -1,7 +1,7 @@
-﻿using System;
+﻿using NomaiVR.Helpers;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class FollowTarget : MonoBehaviour
     {

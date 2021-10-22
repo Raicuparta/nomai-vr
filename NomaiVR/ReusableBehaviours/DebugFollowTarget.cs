@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class DebugFollowTarget : MonoBehaviour
     {
@@ -8,19 +8,19 @@ namespace NomaiVR
         public float angleDelta = 10f;
         public Vector3 scaleDelta = Vector3.one * 0.0002f;
 
-        private bool _angleMode;
-        private FollowTarget _followTarget;
+        private bool angleMode;
+        private FollowTarget followTarget;
 
         internal void Awake()
         {
-            _followTarget = gameObject.GetComponent<FollowTarget>();
+            followTarget = gameObject.GetComponent<FollowTarget>();
         }
 
         internal void Update()
         {
-            var position = _followTarget.localPosition;
+            var position = followTarget.localPosition;
 
-            if (!_angleMode)
+            if (!angleMode)
             {
                 //FIXME
                 //if (Input.GetKeyDown(KeyCode.Keypad7))
@@ -49,9 +49,9 @@ namespace NomaiVR
                 //}
             }
 
-            var rotation = _followTarget.localRotation;
+            var rotation = followTarget.localRotation;
 
-            if (_angleMode)
+            if (angleMode)
             {
                 //FIXME
                 //if (Input.GetKeyDown(KeyCode.Keypad7))

@@ -1,21 +1,16 @@
-﻿using NomaiVR.Assets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
+using NomaiVR.Assets;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UI;
-using Valve.VR;
 
-namespace NomaiVR.ReusableBehaviours
+namespace NomaiVR.ReusableBehaviours.Dream
 {
     //Some code from SteamVR_Fade behaviour
     public class VRMindProjectorImageEffect : MonoBehaviour
     {
-        private readonly int _shaderPropID_UnscaledTime = Shader.PropertyToID("_UnscaledTime");
+        private readonly int shaderPropIDUnscaledTime = Shader.PropertyToID("_UnscaledTime");
 
-        public float eyeOpenness { get; set; }
+        public float EyeOpenness { get; set; }
         private Transform quadTransform;
         private Transform eyeDome;
 
@@ -82,12 +77,12 @@ namespace NomaiVR.ReusableBehaviours
             eyeDome?.gameObject.SetActive(false);
         }
 
-        void Update()
+        private void Update()
         {
             currentColor = Color.black;
-            currentColor.a = (1 - eyeOpenness*eyeOpenness);
+            currentColor.a = (1 - EyeOpenness*EyeOpenness);
             fadeMaterial.SetColor(fadeMaterialColorID, currentColor);
-            this.projectionMaterial.SetFloat(_shaderPropID_UnscaledTime, Time.unscaledTime);
+            this.projectionMaterial.SetFloat(shaderPropIDUnscaledTime, Time.unscaledTime);
         }
     }
 }

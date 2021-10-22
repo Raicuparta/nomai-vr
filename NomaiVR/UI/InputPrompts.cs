@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using NomaiVR.Assets;
 using NomaiVR.Input;
 using NomaiVR.Input.ActionInputs;
 using UnityEngine;
 using Valve.VR;
-using static InputConsts;
 
 namespace NomaiVR.UI
 {
     internal class InputPrompts : NomaiVRModule<InputPrompts.Behaviour, InputPrompts.Behaviour.Patch>
     {
-        public static InputPrompts.Behaviour Instance { get; internal set; }
+        public static Behaviour Instance { get; internal set; }
         protected override bool IsPersistent => true;
         protected override OWScene[] Scenes => AllScenes;
 
@@ -23,31 +21,31 @@ namespace NomaiVR.UI
             Oculus, //G2 and oculus style controllers should be bound here
             Index,
             Vive,
-            WMR,
+            Wmr,
             Generic
         }
 
         public class Behaviour : MonoBehaviour
         {
-            private const string k_baseAssetPath = "Assets/VRBindings/Texture2D";
+            private const string baseAssetPath = "Assets/VRBindings/Texture2D";
 
             public ActiveVRPlatform Platform { get; private set; }
-            private Dictionary<string, Texture2D> _textureCache;
-            private Dictionary<ISteamVR_Action, string> _pathCache;
+            private Dictionary<string, Texture2D> textureCache;
+            private Dictionary<ISteamVR_Action, string> pathCache;
 
             public void Awake()
             {
                 Instance = this;
                 Platform = ActiveVRPlatform.Generic;
 
-                _textureCache = new Dictionary<string, Texture2D>();
-                _pathCache = new Dictionary<ISteamVR_Action, string>();
+                textureCache = new Dictionary<string, Texture2D>();
+                pathCache = new Dictionary<ISteamVR_Action, string>();
                 foreach (var texturePath in AssetLoader.VRBindingTextures.GetAllAssetNames())
                 {
                     var assetPath = texturePath.Substring(0, texturePath.LastIndexOf('.'));
-                    _textureCache.Add(assetPath.ToLower(), AssetLoader.VRBindingTextures.LoadAsset<Texture2D>(texturePath));
+                    textureCache.Add(assetPath.ToLower(), AssetLoader.VRBindingTextures.LoadAsset<Texture2D>(texturePath));
                 }
-                _textureCache.Add("empty", new Texture2D(0, 0));
+                textureCache.Add("empty", new Texture2D(0, 0));
 
                 RegisterToControllerChanges();
             }
@@ -78,7 +76,7 @@ namespace NomaiVR.UI
                         Platform = ActiveVRPlatform.Index;
                         break;
                     case "holographic_controller":
-                        Platform = ActiveVRPlatform.WMR;
+                        Platform = ActiveVRPlatform.Wmr;
                         break;
                     case "<unknown>":
                         return;
@@ -90,27 +88,28 @@ namespace NomaiVR.UI
                 Logs.Write($"Controller platform: {Platform}");
                 if (currentPlatform != Platform)
                 {
-                    _pathCache.Clear(); //Invalidate learned paths
+                    pathCache.Clear(); //Invalidate learned paths
                     InvalidateButtonImages();
                 }
             }
 
-            private void InvalidateButtonImages()
+            private static void InvalidateButtonImages()
             {
-                Manager?.OnButtonImagesChanged();
+                if (Manager == null) return;
+                Manager.OnButtonImagesChanged();
             }
 
             public string GetCachedPartName(ISteamVR_Action action)
             {
-                _pathCache.TryGetValue(action, out var path);
+                pathCache.TryGetValue(action, out var path);
                 return path;
             }
 
-            public void SetCachedPartName(ISteamVR_Action action, string path) => _pathCache[action] = path;
+            public void SetCachedPartName(ISteamVR_Action action, string path) => pathCache[action] = path;
 
             public Texture2D GetTexture(string path)
             {
-                _textureCache.TryGetValue(path.ToLower(), out var outTexture);
+                textureCache.TryGetValue(path.ToLower(), out var outTexture);
                 return outTexture;
             }
 
@@ -118,12 +117,12 @@ namespace NomaiVR.UI
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.GetUITextures), nameof(GetVRUITextures));
-                    Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.GetUITextures), nameof(GetVRUITextures));
-                    Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.GetUITextures), nameof(GetVRUITextures));
+                    Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.GetUITextures), nameof(GetVruiTextures));
+                    Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.GetUITextures), nameof(GetVruiTextures));
+                    Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.GetUITextures), nameof(GetVruiTextures));
                 }
 
-                public static bool GetVRUITextures(bool gamepad, bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
+                public static bool GetVruiTextures(bool gamepad, bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
                 {
                     __result = __instance.textureList;
 
@@ -145,7 +144,7 @@ namespace NomaiVR.UI
                     if(vrInputAction is EmptyActionInput emptyInput
                         && !String.IsNullOrEmpty(emptyInput.TexturePath))
                     {
-                        var emptyActionTexture = Instance.GetTexture($"{k_baseAssetPath}/{emptyInput.TexturePath}");
+                        var emptyActionTexture = Instance.GetTexture($"{baseAssetPath}/{emptyInput.TexturePath}");
                         if (emptyActionTexture != null) __instance.textureList.Add(emptyActionTexture);
                         return __instance.textureList.Count == 0;
                     }
@@ -170,7 +169,7 @@ namespace NomaiVR.UI
 
                         //Special actions modifiers
                         if (vrInputAction is Vector2ActionInput vectorAction &&
-                            !String.IsNullOrEmpty(vectorAction.TextureModifier))
+                            !string.IsNullOrEmpty(vectorAction.TextureModifier))
                         {
                             name += "_" + vectorAction.TextureModifier;
                         }
@@ -184,11 +183,11 @@ namespace NomaiVR.UI
 
                         Instance.SetCachedPartName(steamVrAction, name);
                     }
-                    if (String.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
+                    if (string.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
 
                     Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
                     
-                    var texture = Instance.GetTexture($"{k_baseAssetPath}/{Instance.Platform}/{name}");
+                    var texture = Instance.GetTexture($"{baseAssetPath}/{Instance.Platform}/{name}");
                     if(texture != null) __instance.textureList.Add(texture);
                     return __instance.textureList.Count == 0;
                 }

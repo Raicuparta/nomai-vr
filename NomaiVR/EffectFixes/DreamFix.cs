@@ -1,8 +1,6 @@
 ﻿using NomaiVR.Helpers;
-using NomaiVR.ReusableBehaviours;
 using NomaiVR.ReusableBehaviours.Dream;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace NomaiVR.EffectFixes
 {
@@ -10,8 +8,8 @@ namespace NomaiVR.EffectFixes
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
-        private static float _prePauseFovFactor = 1;
-        private static bool _isPaused = false;
+        private static float prePauseFovFactor = 1;
+        private static bool isPaused = false;
 
         public class Patch : NomaiVRPatch
         {
@@ -64,7 +62,7 @@ namespace NomaiVR.EffectFixes
             {
                 var vrProjector = __instance.GetComponent<VRMindProjectorImageEffect>();
                 if(!vrProjector.enabled) vrProjector.enabled = true;
-                vrProjector.eyeOpenness = value;
+                vrProjector.EyeOpenness = value;
             }
 
             public static void SetSlideTexture(MindProjectorImageEffect __instance, Texture value)
@@ -112,19 +110,19 @@ namespace NomaiVR.EffectFixes
             {
                 if (InputHelper.IsUIInteractionMode())
                 {
-                    if(!_isPaused)
+                    if(!isPaused)
                     {
-                        _isPaused = true;
-                        _prePauseFovFactor = CameraHelper.GetFieldOfViewFactor();
+                        isPaused = true;
+                        prePauseFovFactor = CameraHelper.GetFieldOfViewFactor();
                         ResetScaleFactor();
                     }
                     return false;
                 }
 
-                if (!InputHelper.IsUIInteractionMode() && _isPaused)
+                if (!InputHelper.IsUIInteractionMode() && isPaused)
                 {
-                    CameraHelper.SetFieldOfViewFactor(_prePauseFovFactor);
-                    _isPaused = false;
+                    CameraHelper.SetFieldOfViewFactor(prePauseFovFactor);
+                    isPaused = false;
                 }
                 return true;
             }

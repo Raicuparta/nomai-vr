@@ -1,8 +1,7 @@
 ﻿using System;
-using NomaiVR.ModConfig;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ModConfig
 {
     public static class ModSettings
     {

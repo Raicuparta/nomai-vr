@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Hands;
+using NomaiVR.Helpers;
+using UnityEngine;
 using Valve.VR;
 
-namespace NomaiVR
+namespace NomaiVR.UI
 {
     internal class ControllerModels : NomaiVRModule<ControllerModels.Behaviour, NomaiVRModule.EmptyPatch>
     {
@@ -11,9 +13,9 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private SteamVR_RenderModel _leftRenderModel;
-            private SteamVR_RenderModel _rightRenderModel;
-            private bool _isVisible;
+            private SteamVR_RenderModel leftRenderModel;
+            private SteamVR_RenderModel rightRenderModel;
+            private bool isVisible;
 
             internal void Start()
             {
@@ -29,11 +31,11 @@ namespace NomaiVR
             private void UpdateVisibility()
             {
                 var shouldShow = !SteamVR_Input.isStartupFrame && IsPaused();
-                if (!_isVisible && shouldShow)
+                if (!isVisible && shouldShow)
                 {
                     Show();
                 }
-                else if (_isVisible && !shouldShow)
+                else if (isVisible && !shouldShow)
                 {
                     Hide();
                 }
@@ -41,8 +43,8 @@ namespace NomaiVR
 
             private void SetUp()
             {
-                _leftRenderModel = CreateModel(HandsController.Behaviour.LeftHand, SteamVR_Input_Sources.LeftHand, SteamVR_Actions.default_LeftHand);
-                _rightRenderModel = CreateModel(HandsController.Behaviour.RightHand, SteamVR_Input_Sources.RightHand, SteamVR_Actions.default_RightHand);
+                leftRenderModel = CreateModel(HandsController.Behaviour.LeftHand, SteamVR_Input_Sources.LeftHand, SteamVR_Actions.default_LeftHand);
+                rightRenderModel = CreateModel(HandsController.Behaviour.RightHand, SteamVR_Input_Sources.RightHand, SteamVR_Actions.default_RightHand);
             }
 
             private bool IsPaused()
@@ -68,20 +70,20 @@ namespace NomaiVR
 
             private void Show()
             {
-                _isVisible = true;
+                isVisible = true;
                 HandsController.Behaviour.LeftHandBehaviour.SetLimitRangeOfMotion(true);
-                _leftRenderModel.gameObject.SetActive(true);
+                leftRenderModel.gameObject.SetActive(true);
                 HandsController.Behaviour.RightHandBehaviour.SetLimitRangeOfMotion(true);
-                _rightRenderModel.gameObject.SetActive(true);
+                rightRenderModel.gameObject.SetActive(true);
             }
 
             private void Hide()
             {
-                _isVisible = false;
+                isVisible = false;
                 HandsController.Behaviour.LeftHandBehaviour.SetLimitRangeOfMotion(false);
-                _leftRenderModel.gameObject.SetActive(false);
+                leftRenderModel.gameObject.SetActive(false);
                 HandsController.Behaviour.RightHandBehaviour.SetLimitRangeOfMotion(false);
-                _rightRenderModel.gameObject.SetActive(false);
+                rightRenderModel.gameObject.SetActive(false);
             }
         }
     }

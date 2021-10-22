@@ -1,9 +1,9 @@
-﻿
-using System;
+﻿using System;
+using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class HoldMallowStick : NomaiVRModule<HoldMallowStick.Behaviour, HoldMallowStick.Behaviour.Patch>
     {
@@ -14,26 +14,26 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private RoastingStickController _stickController;
-            private Holdable _holdableStick;
+            private RoastingStickController stickController;
+            private Holdable holdableStick;
 
             internal void Start()
             {
 
                 var scale = Vector3.one * 0.75f;
-                _stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
+                stickController = Locator.GetPlayerBody().transform.Find("RoastingSystem").GetComponent<RoastingStickController>();
 
                 // Move the stick forward while not pressing RT.
-                _stickController._stickMinZ = 1f;
+                stickController._stickMinZ = 1f;
 
-                var stickRoot = _stickController.transform.Find("Stick_Root/Stick_Pivot");
+                var stickRoot = stickController.transform.Find("Stick_Root/Stick_Pivot");
                 stickRoot.localScale = scale;
 
-                _holdableStick = stickRoot.gameObject.AddComponent<Holdable>();
-                _holdableStick.SetPositionOffset(new Vector3(-0.029f, -0.174f, -0.29f));
-                _holdableStick.SetRotationOffset(Quaternion.Euler(-20f, 0, 0));
-                _holdableStick.SetPoses("holding_roastingstick_tip", "holding_roastingstick_tip");
-                _holdableStick.SetBlendPoses("holding_roastingstick_gloves", blendSpeed: 10);
+                holdableStick = stickRoot.gameObject.AddComponent<Holdable>();
+                holdableStick.SetPositionOffset(new Vector3(-0.029f, -0.174f, -0.29f));
+                holdableStick.SetRotationOffset(Quaternion.Euler(-20f, 0, 0));
+                holdableStick.SetPoses("holding_roastingstick_tip", "holding_roastingstick_tip");
+                holdableStick.SetBlendPoses("holding_roastingstick_gloves", blendSpeed: 10);
 
                 var mallow = stickRoot.Find("Stick_Tip/Mallow_Root").GetComponent<Marshmallow>();
 
@@ -60,7 +60,7 @@ namespace NomaiVR
 
                 bool ShouldRenderMallowClone()
                 {
-                    return ShouldRenderStick() && _stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
+                    return ShouldRenderStick() && stickController.enabled && mallow.GetState() == Marshmallow.MallowState.Gone;
                 }
 
                 // Eat mallow by moving it to player head.
@@ -76,8 +76,8 @@ namespace NomaiVR
 
                 //Render stick only when outside menus
                 var stickRenderer = meshes.Find("RoastingStick_Stick").gameObject.AddComponent<ConditionalRenderer>();
-                stickRenderer.getShouldRender += ShouldRenderStick;
-                _holdableStick.SetActiveObserver(stickRenderer);
+                stickRenderer.GETShouldRender += ShouldRenderStick;
+                holdableStick.SetActiveObserver(stickRenderer);
 
                 // Hold mallow in left hand for replacing the one in the stick.
                 var mallowModel = mallow.transform.Find("Props_HEA_Marshmallow");
@@ -97,7 +97,7 @@ namespace NomaiVR
                 replaceDetector.OnEnter += ReplaceMallow;
 
                 // Render left hand mallow only when right hand mallow is not present.
-                mallowClone.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderMallowClone;
+                mallowClone.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender += ShouldRenderMallowClone;
 
                 //Register for blending updates
                 StickExtensionUpdated += OnStickExtensionUpdate;
@@ -110,8 +110,8 @@ namespace NomaiVR
 
             internal void OnStickExtensionUpdate()
             {
-                if (_stickController != null && _holdableStick != null)
-                    _holdableStick.UpdateBlending(_stickController._extendFraction);
+                if (stickController != null && holdableStick != null)
+                    holdableStick.UpdateBlending(stickController._extendFraction);
             }
 
             public class Patch : NomaiVRPatch

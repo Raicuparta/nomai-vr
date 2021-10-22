@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class PlayerHelper
     {
-        private static Transform _playerHead = null;
+        private static Transform playerHead = null;
         public static Transform PlayerHead
         {
             get {
-                if (_playerHead == null)
+                if (playerHead == null)
                 {
-                    _playerHead = GameObject.FindObjectOfType<ToolModeUI>().transform;
+                    playerHead = GameObject.FindObjectOfType<ToolModeUI>().transform;
                 }
-                return _playerHead;
+                return playerHead;
             }
         }
 

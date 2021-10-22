@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NomaiVR.ModConfig;
+using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR
@@ -59,7 +60,7 @@ namespace NomaiVR
                 public override void ApplyPatches()
                 {
                     Postfix<GraphicSettings>(nameof(GraphicSettings.ApplyAllGraphicSettings), nameof(PostApplySettings));
-                    Postfix<SteamVR_Render>("Update", nameof(UpdateOWTimestep));
+                    Postfix<SteamVR_Render>("Update", nameof(UpdateOwTimestep));
                     Empty<GraphicSettings>(nameof(GraphicSettings.SetSliderValFOV));
                     
                     if (ModSettings.PreventCursorLock)
@@ -68,7 +69,7 @@ namespace NomaiVR
                     }
                 }
 
-                private static void UpdateOWTimestep()
+                private static void UpdateOwTimestep()
                 {
                     OWTime.s_fixedTimestep = Time.fixedDeltaTime;
                 }

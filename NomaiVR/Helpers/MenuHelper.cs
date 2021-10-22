@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class MenuHelper
     {

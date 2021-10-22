@@ -1,9 +1,10 @@
-﻿using NomaiVR.Input;
+﻿using System.Collections.Generic;
+using NomaiVR.Hands;
+using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class HoldItem : NomaiVRModule<HoldItem.Behaviour, NomaiVRModule.EmptyPatch>
     {
@@ -12,13 +13,13 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private ItemTool _itemTool;
-            private List<ProximityDetector> _detectors = new List<ProximityDetector>();
+            private ItemTool itemTool;
+            private readonly List<ProximityDetector> detectors = new List<ProximityDetector>();
 
             internal void Start()
             {
-                _itemTool = FindObjectOfType<ItemTool>();
-                _itemTool.transform.localScale = 1.8f * Vector3.one;
+                itemTool = FindObjectOfType<ItemTool>();
+                itemTool.transform.localScale = 1.8f * Vector3.one;
                 
                 HoldWordStone();
                 HoldSimpleLantern();
@@ -40,7 +41,7 @@ namespace NomaiVR
 
             private void OnInteractingHandChanged()
             {
-                _detectors.ForEach(x => x.Other = HandsController.Behaviour.OffHand);
+                detectors.ForEach(x => x.Other = HandsController.Behaviour.OffHand);
             }
 
             private void HoldWordStone()
@@ -127,7 +128,7 @@ namespace NomaiVR
             
             private Holdable MakeSocketHoldable(string socketName)
             {
-                var socketTransform = _itemTool.transform.Find(socketName);
+                var socketTransform = itemTool.transform.Find(socketName);
                 if (socketTransform != null) return socketTransform.gameObject.AddComponent<Holdable>();
                 Logs.WriteError($"Could not find socket with name {socketName}");
                 return null;
@@ -135,7 +136,7 @@ namespace NomaiVR
 
             private void SetActive(bool active)
             {
-                var heldItem = _itemTool.GetHeldItem();
+                var heldItem = itemTool.GetHeldItem();
                 if (!heldItem)
                 {
                     return;
@@ -145,7 +146,7 @@ namespace NomaiVR
 
             private bool IsActive()
             {
-                var heldItem = _itemTool.GetHeldItem();
+                var heldItem = itemTool.GetHeldItem();
                 if (!heldItem)
                 {
                     return false;

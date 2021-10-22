@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class MapFix : NomaiVRModule<MapFix.Behaviour, NomaiVRModule.EmptyPatch>
     {
@@ -10,14 +10,14 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private MapController _mapController;
+            private MapController mapController;
 
             internal void Start()
             {
                 var mapCameraTransform = Locator.GetRootTransform().Find("MapCamera");
 
                 var originalCamera = mapCameraTransform.GetComponent<Camera>();
-                var originalOWCamera = mapCameraTransform.GetComponent<OWCamera>();
+                var originalOwCamera = mapCameraTransform.GetComponent<OWCamera>();
 
                 var newCamera = new GameObject().transform;
                 newCamera.gameObject.SetActive(false);
@@ -45,13 +45,13 @@ namespace NomaiVR
                 Destroy(mapCameraTransform.GetComponent<FlareLayer>());
                 Destroy(mapCameraTransform.GetComponent<FlashbackScreenGrabImageEffect>());
                 Destroy(mapCameraTransform.GetComponent("PostProcessingBehaviour"));
-                Destroy(originalOWCamera);
+                Destroy(originalOwCamera);
                 Destroy(originalCamera);
 
-                _mapController = mapCameraTransform.GetComponent<MapController>();
+                mapController = mapCameraTransform.GetComponent<MapController>();
 
                 newCamera.gameObject.SetActive(true);
-                _mapController._mapCamera = owCamera;
+                mapController._mapCamera = owCamera;
 
                 var markerManager = mapCameraTransform.Find("MarkerManager").GetComponent<Canvas>();
                 var lockOnCanvas = mapCameraTransform.Find("MapLockOnCanvas").GetComponent<Canvas>();
@@ -70,7 +70,7 @@ namespace NomaiVR
             {
                 if (PlayerState.InMapView())
                 {
-                    _mapController.ExitMapView();
+                    mapController.ExitMapView();
                 }
             }
         }

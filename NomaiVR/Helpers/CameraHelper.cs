@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.XR;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     internal static class CameraHelper
     {
-        private static float _fovFactor = 1.0f;
+        private static float fovFactor = 1.0f;
 
         public static bool IsOnScreen(Vector3 position)
         {
@@ -20,15 +20,15 @@ namespace NomaiVR
 
         public static void SetFieldOfViewFactor(float fovFactor, bool applyChange = false)
         {
-            _fovFactor = fovFactor;
+            CameraHelper.fovFactor = fovFactor;
             XRDevice.fovZoomFactor = applyChange ? fovFactor : 1;
         }
 
-        public static float GetFieldOfViewFactor() => _fovFactor;
+        public static float GetFieldOfViewFactor() => fovFactor;
 
         public static float GetScaledFieldOfView(Camera camera)
         {
-            return camera.fieldOfView / _fovFactor;
+            return camera.fieldOfView / fovFactor;
         }
     }
 }

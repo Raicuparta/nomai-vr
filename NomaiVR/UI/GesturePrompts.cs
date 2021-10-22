@@ -1,20 +1,24 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Hands;
+using NomaiVR.Helpers;
+using NomaiVR.ModConfig;
+using NomaiVR.ReusableBehaviours;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR
+namespace NomaiVR.UI
 {
     internal class GesturePrompts : NomaiVRModule<GesturePrompts.Behaviour, GesturePrompts.Behaviour.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
-        private const string k_flashLightTutorialStep = "flashlight";
-        private const string k_hasUsedTranslatorCondition = "HAS_USED_TRANSLATOR";
+        private const string flashLightTutorialStep = "flashlight";
+        private const string hasUsedTranslatorCondition = "HAS_USED_TRANSLATOR";
 
         public class Behaviour : MonoBehaviour
         {
-            private static Text _text;
-            private Canvas _canvas;
+            private static Text text;
+            private Canvas canvas;
 
             internal void Start()
             {
@@ -32,21 +36,21 @@ namespace NomaiVR
 
             private void SetUpCanvas()
             {
-                _canvas = new GameObject().AddComponent<Canvas>();
-                _canvas.renderMode = RenderMode.WorldSpace;
-                var followTarget = _canvas.gameObject.AddComponent<FollowTarget>();
-                _canvas.transform.localScale = Vector3.one * 0.0015f;
+                canvas = new GameObject().AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.WorldSpace;
+                var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
+                canvas.transform.localScale = Vector3.one * 0.0015f;
                 followTarget.target = Locator.GetPlayerCamera().transform;
                 followTarget.localPosition = Vector3.forward * 4;
                 followTarget.rotationSmoothTime = 0.5f;
                 followTarget.positionSmoothTime = 0.5f;
-                _canvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRender;
+                canvas.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = ShouldRender;
 
                 SetUpBackground();
                 SetUpText();
 
-                MaterialHelper.MakeGraphicChildrenDrawOnTop(_canvas.gameObject);
-                LayerHelper.ChangeLayerRecursive(_canvas.gameObject, LayerMask.NameToLayer("UI"));
+                MaterialHelper.MakeGraphicChildrenDrawOnTop(canvas.gameObject);
+                LayerHelper.ChangeLayerRecursive(canvas.gameObject, LayerMask.NameToLayer("UI"));
             }
 
             private void SetUpBackground()
@@ -55,14 +59,14 @@ namespace NomaiVR
 
                 // Background that draws on top of everything;
                 var background = new GameObject().AddComponent<Image>();
-                background.transform.SetParent(_canvas.transform, false);
+                background.transform.SetParent(canvas.transform, false);
                 background.transform.localScale = size;
                 background.transform.localPosition = Vector3.forward;
                 background.color = Color.black;
 
                 // Quad to block distortions on text;
                 var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                quad.transform.SetParent(_canvas.transform, false);
+                quad.transform.SetParent(canvas.transform, false);
                 quad.transform.localScale = size * 100;
                 Destroy(quad.GetComponent<Collider>());
                 var material = quad.GetComponent<MeshRenderer>().material;
@@ -71,28 +75,28 @@ namespace NomaiVR
 
             private void SetUpText()
             {
-                _text = new GameObject().AddComponent<Text>();
-                _text.color = Color.white;
-                _text.transform.SetParent(_canvas.transform, false);
-                _text.fontSize = 50;
-                _text.font = FindObjectOfType<DialogueBoxVer2>().GetComponentInChildren<Text>().font;
-                _text.verticalOverflow = VerticalWrapMode.Overflow;
-                _text.horizontalOverflow = HorizontalWrapMode.Overflow;
-                _text.alignment = TextAnchor.MiddleCenter;
+                text = new GameObject().AddComponent<Text>();
+                text.color = Color.white;
+                text.transform.SetParent(canvas.transform, false);
+                text.fontSize = 50;
+                text.font = FindObjectOfType<DialogueBoxVer2>().GetComponentInChildren<Text>().font;
+                text.verticalOverflow = VerticalWrapMode.Overflow;
+                text.horizontalOverflow = HorizontalWrapMode.Overflow;
+                text.alignment = TextAnchor.MiddleCenter;
             }
 
             private bool ShouldRender()
             {
-                return ModSettings.EnableGesturePrompts && _text.text != GestureText.None;
+                return ModSettings.EnableGesturePrompts && text.text != GestureText.None;
             }
 
-            private static void SetText(string text)
+            private static void SetText(string newText)
             {
-                if (_text.text == text)
+                if (text.text == newText)
                 {
                     return;
                 }
-                _text.text = text;
+                text.text = newText;
             }
 
             private void OnEnterProbePromptTrigger()
@@ -110,12 +114,12 @@ namespace NomaiVR
 
             private static bool IsShowing(string text)
             {
-                return _text.text == text;
+                return Behaviour.text.text == text;
             }
 
             private void UpdateTranslatorPrompt(RaycastHit hit)
             {
-                if (PlayerData.GetPersistentCondition(k_hasUsedTranslatorCondition))
+                if (PlayerData.GetPersistentCondition(hasUsedTranslatorCondition))
                 {
                     return;
                 }
@@ -187,7 +191,7 @@ namespace NomaiVR
                 {
                     return;
                 }
-                var hasUsedFlashlight = NomaiVR.Save.tutorialSteps.Contains(k_flashLightTutorialStep);
+                var hasUsedFlashlight = NomaiVR.Save.TutorialSteps.Contains(flashLightTutorialStep);
                 var isMainVisbileDark = main.IsVisible() && PlayerState.InDarkZone();
                 var shouldShowText = (center.IsVisible() || isMainVisbileDark) && !hasUsedFlashlight;
                 if (!isShowingText && shouldShowText)
@@ -199,7 +203,7 @@ namespace NomaiVR
                     SetText(GestureText.None);
                     if (PlayerState.IsFlashlightOn())
                     {
-                        NomaiVR.Save.AddTutorialStep(k_flashLightTutorialStep);
+                        NomaiVR.Save.AddTutorialStep(flashLightTutorialStep);
                     }
                 }
             }
@@ -281,7 +285,7 @@ namespace NomaiVR
             public const string Flashlight = "Touch the side of your head to toggle <color=orange>Flashlight</color>.";
             public const string WakeUp = "Look at your <color=orange>main hand</color>.";
 
-            public static string GetToolBeltPrompt(string toolName, string slot)
+            private static string GetToolBeltPrompt(string toolName, string slot)
             {
                 return $"Grab <color=orange>{toolName}</color> from tool belt\n({slot} slot.)";
             }

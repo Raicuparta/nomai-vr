@@ -1,10 +1,13 @@
 ManifestFileVersion: 0
-CRC: 546150449
+CRC: 3113668302
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: xrmanager
+      Name: autopilot-button
       Dependencies: {}
     Info_1:
       Name: vrbindings-textures
+      Dependencies: {}
+    Info_2:
+      Name: steamvr-shaders
       Dependencies: {}

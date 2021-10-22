@@ -6,17 +6,17 @@ namespace NomaiVR
 {
 	public static class TypeExtensions
 	{
-		private const BindingFlags Flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
+		private const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
 
 		public static MethodInfo GetAnyMethod(this Type type, string name) =>
-			type.GetMethod(name, Flags) ??
-			type.BaseType?.GetMethod(name, Flags) ??
-			type.BaseType?.BaseType?.GetMethod(name, Flags);
+			type.GetMethod(name, flags) ??
+			type.BaseType?.GetMethod(name, flags) ??
+			type.BaseType?.BaseType?.GetMethod(name, flags);
 
 		public static MemberInfo GetAnyMember(this Type type, string name) =>
-			type.GetMember(name, Flags).FirstOrDefault() ??
-			type.BaseType?.GetMember(name, Flags).FirstOrDefault() ??
-			type.BaseType?.BaseType?.GetMember(name, Flags).FirstOrDefault();
+			type.GetMember(name, flags).FirstOrDefault() ??
+			type.BaseType?.GetMember(name, flags).FirstOrDefault() ??
+			type.BaseType?.BaseType?.GetMember(name, flags).FirstOrDefault();
 
 		public static void SetValue(this object obj, string name, object value)
 		{

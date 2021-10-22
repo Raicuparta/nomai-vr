@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace NomaiVR.Assets
 {
     public class ShaderLoader
     {
-        private static ShaderLoader _instance = null;
-        public static ShaderLoader Instance => _instance ?? (_instance = new ShaderLoader());
+        private static ShaderLoader instance = null;
+        public static ShaderLoader Instance => instance ?? (instance = new ShaderLoader());
 
-        private Dictionary<string, Shader> _shaderCache;
+        private readonly Dictionary<string, Shader> shaderCache;
 
         private ShaderLoader() 
         {
-            _shaderCache = new Dictionary<string, Shader>();
+            shaderCache = new Dictionary<string, Shader>();
         }
 
         private void LoadAllFromBundle(AssetBundle bundle)
@@ -23,13 +21,13 @@ namespace NomaiVR.Assets
             foreach(var shader in bundle.LoadAllAssets<Shader>())
             {
                 Logs.Write("Shader loaded: " + shader.name);
-                _shaderCache[shader.name] = shader;
+                shaderCache[shader.name] = shader;
             }
         }
 
         private Shader GetCachedShader(string shaderName)
         {
-            return _shaderCache[shaderName];
+            return shaderCache[shaderName];
         }
 
         public static Shader GetShader(string shaderName) => ShaderLoader.Instance.GetCachedShader(shaderName);

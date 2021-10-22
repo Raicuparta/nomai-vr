@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Valve.VR;
 using Valve.Newtonsoft.Json;
+using Valve.VR;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class ApplicationManifestHelper
     {

@@ -1,8 +1,9 @@
-﻿
+﻿using NomaiVR.Helpers;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class HoldTranslator : NomaiVRModule<HoldTranslator.Behaviour, HoldTranslator.Behaviour.Patch>
     {
@@ -11,17 +12,17 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private Transform _translatorBeams;
-            private MeshRenderer _originalLeftArrowRenderer;
-            private MeshRenderer _originalRightArrowRenderer;
-            private NomaiTranslatorProp _translatorProp;
+            private Transform translatorBeams;
+            private MeshRenderer originalLeftArrowRenderer;
+            private MeshRenderer originalRightArrowRenderer;
+            private NomaiTranslatorProp translatorProp;
 
             internal void Start()
             {
                 var translator = SetUpTranslator();
-                _translatorProp = translator.GetComponent<NomaiTranslatorProp>();
-                _originalLeftArrowRenderer = _translatorProp._leftPageArrowRenderer;
-                _originalRightArrowRenderer = _translatorProp._rightPageArrowRenderer;
+                translatorProp = translator.GetComponent<NomaiTranslatorProp>();
+                originalLeftArrowRenderer = translatorProp._leftPageArrowRenderer;
+                originalRightArrowRenderer = translatorProp._rightPageArrowRenderer;
                 var holdable = SetUpHoldable(translator);
                 var translatorGroup = SetUpTranslatorGroup(translator);
                 var translatorModel = SetUpTranslatorModel(translatorGroup);
@@ -32,16 +33,16 @@ namespace NomaiVR
 
                 holdable.OnFlipped += (isRight) =>
                 {
-                    float tagetScale = Mathf.Abs(_translatorBeams.localScale.x);
+                    float tagetScale = Mathf.Abs(translatorBeams.localScale.x);
                     if (!isRight) tagetScale *= -1;
-                    _translatorBeams.localScale = new Vector3(tagetScale, _translatorBeams.localScale.y, _translatorBeams.localScale.z);
+                    translatorBeams.localScale = new Vector3(tagetScale, translatorBeams.localScale.y, translatorBeams.localScale.z);
 
-                    _translatorProp.TurnOffArrowEmission();
+                    translatorProp.TurnOffArrowEmission();
 
-                    _translatorProp._leftPageArrowRenderer = isRight ? _originalLeftArrowRenderer : _originalRightArrowRenderer;
-                    _translatorProp._rightPageArrowRenderer = isRight ? _originalRightArrowRenderer : _originalLeftArrowRenderer;
+                    translatorProp._leftPageArrowRenderer = isRight ? originalLeftArrowRenderer : originalRightArrowRenderer;
+                    translatorProp._rightPageArrowRenderer = isRight ? originalRightArrowRenderer : originalLeftArrowRenderer;
 
-                    _translatorProp.SetNomaiAudioArrowEmissions();
+                    translatorProp.SetNomaiAudioArrowEmissions();
                 };
             }
 
@@ -66,8 +67,8 @@ namespace NomaiVR
                 var translatorGroup = translator.Find("TranslatorGroup");
                 translatorGroup.localPosition = Vector3.zero;
                 translatorGroup.localRotation = Quaternion.identity;
-                _translatorBeams = translatorGroup.Find("TranslatorBeams");
-                _translatorBeams.localScale = Vector3.one / 0.3f;
+                translatorBeams = translatorGroup.Find("TranslatorBeams");
+                translatorBeams.localScale = Vector3.one / 0.3f;
                 return translatorGroup;
             }
 
@@ -110,7 +111,7 @@ namespace NomaiVR
                 lineObject.transform.localPosition = new Vector3(0.74f, 0.37f, 0f);
                 lineObject.transform.localRotation = Quaternion.Euler(0f, 353f, 0f);
 
-                lineObject.AddComponent<ConditionalRenderer>().getShouldRender = () => ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
+                lineObject.AddComponent<ConditionalRenderer>().GETShouldRender = () => ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
 
                 translator.GetComponent<NomaiTranslator>()._raycastTransform = lineObject.transform;
 

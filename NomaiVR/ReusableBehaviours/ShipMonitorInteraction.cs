@@ -1,9 +1,10 @@
-﻿
-using System;
+﻿using System;
+using NomaiVR.Helpers;
 using NomaiVR.Input;
+using NomaiVR.Tools;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class ShipMonitorInteraction : MonoBehaviour
     {
@@ -11,14 +12,14 @@ namespace NomaiVR
         public InputConsts.InputCommandType button;
         public UITextType text;
         public InteractReceiver receiver;
-        public Func<bool> skipPressCallback;
-        private BoxCollider _collider;
+        public Func<bool> SkipPressCallback;
+        private BoxCollider collider;
 
         internal void Start()
         {
-            _collider = gameObject.AddComponent<BoxCollider>();
-            _collider.isTrigger = true;
-            _collider.enabled = false;
+            collider = gameObject.AddComponent<BoxCollider>();
+            collider.isTrigger = true;
+            collider.enabled = false;
 
             receiver = gameObject.AddComponent<InteractReceiver>();
             receiver.SetInteractRange(2);
@@ -32,13 +33,13 @@ namespace NomaiVR
         {
             var isInShip = OWInput.IsInputMode(InputMode.ShipCockpit);
             var isUsingTool = mode != ToolMode.None && ToolHelper.Swapper.IsInToolMode(mode, ToolGroup.Ship);
-            if (!_collider.enabled && isInShip && !isUsingTool)
+            if (!collider.enabled && isInShip && !isUsingTool)
             {
-                _collider.enabled = true;
+                collider.enabled = true;
             }
-            if (_collider.enabled && (!isInShip || isUsingTool))
+            if (collider.enabled && (!isInShip || isUsingTool))
             {
-                _collider.enabled = false;
+                collider.enabled = false;
             }
         }
 
@@ -49,7 +50,7 @@ namespace NomaiVR
 
         private void OnPress()
         {
-            if (skipPressCallback != null && skipPressCallback.Invoke()) return;
+            if (SkipPressCallback != null && SkipPressCallback.Invoke()) return;
             if (mode != ToolMode.None)
             {
                 VRToolSwapper.Equip(mode, null);

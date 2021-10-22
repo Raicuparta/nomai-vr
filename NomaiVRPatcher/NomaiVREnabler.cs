@@ -131,7 +131,7 @@ namespace NomaiVRPatcher
             }
         }
 
-        static AssetTypeValueField StringField(string str, AssetTypeTemplateField template)
+        private static AssetTypeValueField StringField(string str, AssetTypeTemplateField template)
         {
             return new AssetTypeValueField()
             {

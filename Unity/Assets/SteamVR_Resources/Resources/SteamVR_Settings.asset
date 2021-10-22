@@ -20,7 +20,7 @@ MonoBehaviour:
   inputUpdateMode: 2
   poseUpdateMode: 8
   activateFirstActionSetOnStart: 1
-  editorAppKey: steam.app.753640
+  editorAppKey: 
   autoEnableVR: 1
   legacyMixedRealityCamera: 1
   mixedRealityCameraPose:
@@ -28,7 +28,5 @@ MonoBehaviour:
     needsReinit: 1
   mixedRealityCameraInputSource: 11
   mixedRealityActionSetAutoEnable: 1
-  previewHandLeft: {fileID: 1000013348574242, guid: 638779290bce1af49b356f33dcc6fccf,
-    type: 3}
-  previewHandRight: {fileID: 3898887254349111745, guid: 6f808b50dc490744980f6d2954782cbf,
-    type: 3}
+  previewHandLeft: {fileID: 0}
+  previewHandRight: {fileID: 0}

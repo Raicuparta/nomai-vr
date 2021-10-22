@@ -1,12 +1,15 @@
-﻿using NomaiVR.Input;
-using System;
+﻿using System;
+using NomaiVR.Helpers;
+using NomaiVR.Input;
+using NomaiVR.ModConfig;
+using NomaiVR.Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Valve.VR;
 using static InputConsts;
 
-namespace NomaiVR
+namespace NomaiVR.Hands
 {
     internal class LaserPointer : NomaiVRModule<LaserPointer.Behaviour, LaserPointer.Behaviour.Patch>
     {
@@ -19,17 +22,17 @@ namespace NomaiVR
             public static Transform Laser;
             public static Transform OffHandLaser;
             public static Transform MovementLaser;
-            public FirstPersonManipulator Manipulator => _manipulator;
+            public FirstPersonManipulator Manipulator => manipulator;
             
 
-            private static FirstPersonManipulator _manipulator;
-            private LineRenderer _lineRenderer;
-            private const float _gameLineLength = 0.5f;
-            private const float _menuLineLength = 3f;
-            private bool _rightMainHand;
-            private OWMenuInputModule _inputModule;
-            private DialogueBoxVer2 _dialogueBox;
-            private PointerModelExposed _fakePointer;
+            private static FirstPersonManipulator manipulator;
+            private LineRenderer lineRenderer;
+            private const float gameLineLength = 0.5f;
+            private const float menuLineLength = 3f;
+            private bool rightMainHand;
+            private OWMenuInputModule inputModule;
+            private DialogueBoxVer2 dialogueBox;
+            private PointerModelExposed fakePointer;
 
             internal void Start()
             {
@@ -48,7 +51,7 @@ namespace NomaiVR
                 if (SceneHelper.IsInGame())
                 {
                     SetUpFirstPersonManipulator();
-                    _dialogueBox = FindObjectOfType<DialogueBoxVer2>();
+                    dialogueBox = FindObjectOfType<DialogueBoxVer2>();
                 }
 
                 ModSettings.OnConfigChange += ToDominantHand;
@@ -57,8 +60,8 @@ namespace NomaiVR
                 //FIXME: Change movement to movement hand
                 //ControllerInput.Behaviour.BindingsChanged += UpdateMovementLaser;
 
-                _fakePointer = new PointerModelExposed(new ExtendedPointerEventData(EventSystem.current));
-                _inputModule = FindObjectOfType<OWMenuInputModule>();
+                fakePointer = new PointerModelExposed(new ExtendedPointerEventData(EventSystem.current));
+                inputModule = FindObjectOfType<OWMenuInputModule>();
             }
 
             internal void OnDestroy()
@@ -74,7 +77,7 @@ namespace NomaiVR
                 UpdateLineVisibility();
                 UpdateLineAppearance();
 
-                RaycastHit raycast = DoUIRaycast(_menuLineLength);
+                RaycastHit raycast = DoUIRaycast(menuLineLength);
 
                 if (raycast.transform != null)
                 {
@@ -88,23 +91,23 @@ namespace NomaiVR
                     }
 
                     //Send fake events
-                    _fakePointer.screenPosition = Camera.main.WorldToScreenPoint(raycast.point);
-                    _fakePointer.leftButton.isPressed = SteamVR_Actions._default.UISelect.stateDown;
-                    _fakePointer.changedThisFrame = SteamVR_Actions._default.UISelect.stateDown;
-                    _inputModule.ProcessPointer(ref _fakePointer);
+                    fakePointer.screenPosition = Camera.main.WorldToScreenPoint(raycast.point);
+                    fakePointer.leftButton.isPressed = SteamVR_Actions._default.UISelect.stateDown;
+                    fakePointer.changedThisFrame = SteamVR_Actions._default.UISelect.stateDown;
+                    inputModule.ProcessPointer(ref fakePointer);
                 }
             }
 
             private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
             {
-                if (_dialogueBox._revealingOptions)
+                if (dialogueBox._revealingOptions)
                 {
                     return;
                 }
-                var selectedOption = _dialogueBox.GetSelectedOption();
-                var options = _dialogueBox._optionsUIElements;
+                var selectedOption = dialogueBox.GetSelectedOption();
+                var options = dialogueBox._optionsUIElements;
                 options[selectedOption].SetSelected(false);
-                _dialogueBox._selectedOption = options.IndexOf(dialogueOption);
+                dialogueBox._selectedOption = options.IndexOf(dialogueOption);
                 dialogueOption.SetSelected(true);
             }
 
@@ -125,34 +128,34 @@ namespace NomaiVR
 
             private void SetUpLineRenderer()
             {
-                _lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
-                _lineRenderer.useWorldSpace = false;
-                _lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
-                _lineRenderer.startWidth = 0.005f;
-                _lineRenderer.endWidth = 0.001f;
-                _lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
-                _lineRenderer.startColor = Color.clear;
+                lineRenderer = Laser.gameObject.AddComponent<LineRenderer>();
+                lineRenderer.useWorldSpace = false;
+                lineRenderer.SetPositions(new[] { Vector3.zero, Vector3.zero });
+                lineRenderer.startWidth = 0.005f;
+                lineRenderer.endWidth = 0.001f;
+                lineRenderer.endColor = new Color(1, 1, 1, 0.3f);
+                lineRenderer.startColor = Color.clear;
             }
 
             private void SetUpFirstPersonManipulator()
             {
                 FindObjectOfType<FirstPersonManipulator>().enabled = false;
-                _manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
+                manipulator = Laser.gameObject.AddComponent<FirstPersonManipulator>();
             }
 
             private void ToDominantHand() => ForceHand(HandsController.Behaviour.DominantHand);
             private void ForceHand(Transform mainHand)
             {
-                _rightMainHand = HandsController.Behaviour.RightHand == mainHand;
+                rightMainHand = HandsController.Behaviour.RightHand == mainHand;
                 Laser.transform.SetParent(mainHand, false);
-                OffHandLaser.SetParent(_rightMainHand ? HandsController.Behaviour.LeftHand : HandsController.Behaviour.RightHand, false);
+                OffHandLaser.SetParent(rightMainHand ? HandsController.Behaviour.LeftHand : HandsController.Behaviour.RightHand, false);
                 UpdateMovementLaser();
             }
 
             private void UpdateMovementLaser()
             {
-                var rightHandLaser = _rightMainHand ? Laser : OffHandLaser;
-                var leftHandLaser = !_rightMainHand ? Laser : OffHandLaser;
+                var rightHandLaser = rightMainHand ? Laser : OffHandLaser;
+                var leftHandLaser = !rightMainHand ? Laser : OffHandLaser;
                 var movementOnLeftHand = InputMap.GetActionInput(InputCommandType.MOVE_X)?.Action?.activeDevice == SteamVR_Input_Sources.LeftHand;
                 MovementLaser = movementOnLeftHand ? leftHandLaser : rightHandLaser;
             }
@@ -167,7 +170,7 @@ namespace NomaiVR
 
             private void SetLineLength(float length)
             {
-                _lineRenderer.SetPosition(1, Vector3.forward * length);
+                lineRenderer.SetPosition(1, Vector3.forward * length);
 
             }
 
@@ -175,31 +178,31 @@ namespace NomaiVR
             {
                 if (InputHelper.IsUIInteractionMode(true))
                 {
-                    SetLineLength(_menuLineLength);
-                    _lineRenderer.material.shader = Shader.Find("Unlit/Color");
-                    _lineRenderer.material.SetColor("_Color", new Color(0.8f, 0.8f, 0.8f));
+                    SetLineLength(menuLineLength);
+                    lineRenderer.material.shader = Shader.Find("Unlit/Color");
+                    lineRenderer.material.SetColor("_Color", new Color(0.8f, 0.8f, 0.8f));
                 }
                 else
                 {
-                    SetLineLength(_gameLineLength);
-                    _lineRenderer.material.shader = Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply");
+                    SetLineLength(gameLineLength);
+                    lineRenderer.material.shader = Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply");
                 }
             }
 
             private void UpdateLineVisibility()
             {
                 var isUsingTool = SceneHelper.IsInGame() && ToolHelper.IsUsingAnyTool(ToolGroup.Suit);
-                if (_lineRenderer.enabled && isUsingTool)
+                if (lineRenderer.enabled && isUsingTool)
                 {
-                    _lineRenderer.enabled = false;
+                    lineRenderer.enabled = false;
                 }
-                else if (!_lineRenderer.enabled && InputHelper.IsUIInteractionMode(true))
+                else if (!lineRenderer.enabled && InputHelper.IsUIInteractionMode(true))
                 {
-                    _lineRenderer.enabled = true;
+                    lineRenderer.enabled = true;
                 }
-                else if (!isUsingTool && !InputHelper.IsUIInteractionMode(true) && _lineRenderer.enabled != ModSettings.EnableHandLaser)
+                else if (!isUsingTool && !InputHelper.IsUIInteractionMode(true) && lineRenderer.enabled != ModSettings.EnableHandLaser)
                 {
-                    _lineRenderer.enabled = ModSettings.EnableHandLaser;
+                    lineRenderer.enabled = ModSettings.EnableHandLaser;
                 }
             }
 
@@ -266,7 +269,7 @@ namespace NomaiVR
                 {
                     if (hitObj.CompareTag("PlayerDetector"))
                     {
-                        _manipulator.OnEnterInteractZone(__instance);
+                        manipulator.OnEnterInteractZone(__instance);
                     }
                     return false;
                 }
@@ -275,27 +278,27 @@ namespace NomaiVR
                 {
                     if (hitObj.CompareTag("PlayerDetector"))
                     {
-                        _manipulator.OnExitInteractZone(__instance);
+                        manipulator.OnExitInteractZone(__instance);
                     }
                     return false;
                 }
 
                 private static void PreToolModeUpdate(ref FirstPersonManipulator ____firstPersonManipulator)
                 {
-                    if (____firstPersonManipulator != _manipulator)
+                    if (____firstPersonManipulator != manipulator)
                     {
-                        ____firstPersonManipulator = _manipulator;
+                        ____firstPersonManipulator = manipulator;
                     }
                 }
 
-                private static Quaternion _cameraRotation;
-                private static Vector3 _cameraPosition;
+                private static Quaternion cameraRotation;
+                private static Vector3 cameraPosition;
 
                 private static void PreUpdateIsDroppable()
                 {
                     var camera = Locator.GetPlayerCamera();
-                    _cameraRotation = camera.transform.rotation;
-                    _cameraPosition = camera.transform.position;
+                    cameraRotation = camera.transform.rotation;
+                    cameraPosition = camera.transform.position;
                     camera.transform.position = Laser.position;
                     camera.transform.forward = Laser.forward;
                 }
@@ -303,8 +306,8 @@ namespace NomaiVR
                 private static void PostUpdateIsDroppable()
                 {
                     var camera = Locator.GetPlayerCamera();
-                    camera.transform.position = _cameraPosition;
-                    camera.transform.rotation = _cameraRotation;
+                    camera.transform.position = cameraPosition;
+                    camera.transform.rotation = cameraRotation;
                 }
             }
         }

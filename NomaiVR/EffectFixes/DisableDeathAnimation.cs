@@ -1,4 +1,4 @@
-﻿namespace NomaiVR
+﻿namespace NomaiVR.EffectFixes
 {
     internal class DisableDeathAnimation : NomaiVRModule<NomaiVRModule.EmptyBehaviour, DisableDeathAnimation.Patch>
     {

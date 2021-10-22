@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class EnableObserver : MonoBehaviour, IActiveObserver
     {

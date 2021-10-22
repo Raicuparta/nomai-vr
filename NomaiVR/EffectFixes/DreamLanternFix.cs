@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using NomaiVR.Helpers;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class DreamLanternFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, DreamLanternFix.Patch>
     {
@@ -14,17 +13,17 @@ namespace NomaiVR
 
         public class Patch : NomaiVRPatch
         {
-            static Shader prepassShader = Shader.Find("Outer Wilds/Utility/View Model Prepass");
-            static Shader standardVM = Shader.Find("Outer Wilds/Utility/View Model");
-            static Shader standard = Shader.Find("Standard");
-            static Shader standardTranslucent = Shader.Find("Standard (Translucent)");
-            static Shader flameVM = Shader.Find("Outer Wilds/Effects/Flame (View Model)");
-            static Shader flame = Shader.Find("Outer Wilds/Effects/Flame"); 
+            private static readonly Shader prepassShader = Shader.Find("Outer Wilds/Utility/View Model Prepass");
+            private static readonly Shader standardVm = Shader.Find("Outer Wilds/Utility/View Model");
+            private static readonly Shader standard = Shader.Find("Standard");
+            private static readonly Shader standardTranslucent = Shader.Find("Standard (Translucent)");
+            private static readonly Shader flameVm = Shader.Find("Outer Wilds/Effects/Flame (View Model)");
+            private static readonly Shader flame = Shader.Find("Outer Wilds/Effects/Flame");
 
-            static Dictionary<Shader, Shader> s_dreamShaderFix = new Dictionary<Shader, Shader>()
+            private static readonly Dictionary<Shader, Shader> dreamShaderFix = new Dictionary<Shader, Shader>()
             {
-                [standardVM] = standard,
-                [flameVM] = flame
+                [standardVm] = standard,
+                [flameVm] = flame
             };
 
             public override void ApplyPatches()
@@ -57,7 +56,7 @@ namespace NomaiVR
                 MaterialHelper.DisableRenderersWithShaderInChildren(__instance.gameObject, prepassShader);
 
                 //Replace all the others
-                MaterialHelper.ReplaceShadersInChildren(__instance.gameObject, s_dreamShaderFix);
+                MaterialHelper.ReplaceShadersInChildren(__instance.gameObject, dreamShaderFix);
 
                 //Change the glass material to be translucent again
                 var glassElement = viewModelTransform?.Find("artifact_glass");
@@ -79,12 +78,12 @@ namespace NomaiVR
                 }
             }
 
-            private static bool _itemToolUpdateInteractCalled = false;
-            public static void PreItemToolSwapperUpdate() => _itemToolUpdateInteractCalled = false;
-            public static void PreItemToolUpdateInteract() => _itemToolUpdateInteractCalled = true;
+            private static bool itemToolUpdateInteractCalled = false;
+            public static void PreItemToolSwapperUpdate() => itemToolUpdateInteractCalled = false;
+            public static void PreItemToolUpdateInteract() => itemToolUpdateInteractCalled = true;
             public static void AllowLanternDropWhenFocusing(ToolModeSwapper __instance)
             {
-                if (_itemToolUpdateInteractCalled) return; //Avoid calling UpdateInteract twice when unsocketing the lantern
+                if (itemToolUpdateInteractCalled) return; //Avoid calling UpdateInteract twice when unsocketing the lantern
 
                 if (__instance._shipDestroyed && __instance._currentToolGroup == ToolGroup.Ship)
                 {

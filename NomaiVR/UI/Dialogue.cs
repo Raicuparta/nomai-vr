@@ -1,8 +1,10 @@
-﻿
+﻿using NomaiVR.Assets;
+using NomaiVR.Helpers;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR
+namespace NomaiVR.UI
 {
     internal class Dialogue : NomaiVRModule<Dialogue.Behaviour, Dialogue.Behaviour.Patch>
     {
@@ -11,35 +13,35 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static Transform _canvasTransform;
-            private static Transform _attentionPoint = null;
-            private const float _dialogeRenderSize = 0.0015f;
+            private static Transform canvasTransform;
+            private static Transform attentionPoint = null;
+            private const float dialogeRenderSize = 0.0015f;
 
             internal void Start()
             {
-                _canvasTransform = GameObject.Find("DialogueCanvas").transform;
+                canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
-                _canvasTransform.localScale *= _dialogeRenderSize;
+                canvasTransform.localScale *= dialogeRenderSize;
 
                 // Prevent dialogue box from flying off after a while.
-                _canvasTransform.parent = new GameObject().transform;
-                _canvasTransform.parent.gameObject.AddComponent<FollowTarget>().target = Locator.GetPlayerTransform();
+                canvasTransform.parent = new GameObject().transform;
+                canvasTransform.parent.gameObject.AddComponent<FollowTarget>().target = Locator.GetPlayerTransform();
 
-                var canvas = _canvasTransform.gameObject.GetComponent<Canvas>();
+                var canvas = canvasTransform.gameObject.GetComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
             }
 
             internal void Update()
             {
-                if (_attentionPoint != null && _canvasTransform != null)
+                if (attentionPoint != null && canvasTransform != null)
                 {
                     var headPosition = PlayerHelper.PlayerHead.position;
 
-                    _canvasTransform.LookAt(2 * _attentionPoint.position - headPosition, PlayerHelper.PlayerHead.up);
+                    canvasTransform.LookAt(2 * attentionPoint.position - headPosition, PlayerHelper.PlayerHead.up);
 
                     // Move so it is 1 unit away from the player
-                    var offset = (_attentionPoint.position - headPosition).normalized;
-                    _canvasTransform.position = headPosition + offset;
+                    var offset = (attentionPoint.position - headPosition).normalized;
+                    canvasTransform.position = headPosition + offset;
                 }
             }
 
@@ -77,17 +79,17 @@ namespace NomaiVR
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)
                 {
-                    _attentionPoint = __instance._attentionPoint;
+                    attentionPoint = __instance._attentionPoint;
                 }
 
                 private static void PostStartConversation()
                 {
-                    MaterialHelper.MakeGraphicChildrenDrawOnTop(_canvasTransform.gameObject);
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(canvasTransform.gameObject);
                 }
 
                 private static void PreEndConversation()
                 {
-                    _attentionPoint = null;
+                    attentionPoint = null;
                 }
             }
         }

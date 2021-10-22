@@ -1,7 +1,9 @@
 ﻿
+using NomaiVR.Helpers;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class HoldProbeLauncher : NomaiVRModule<HoldProbeLauncher.Behaviour, HoldProbeLauncher.Behaviour.Patch>
     {
@@ -10,9 +12,9 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private Transform _probeLauncherModel;
-            private GameObject _probeLauncherHolster;
-            private static ProbeLauncherUI _probeUI;
+            private Transform probeLauncherModel;
+            private GameObject probeLauncherHolster;
+            private static ProbeLauncherUI probeUI;
 
             internal void Start()
             {
@@ -24,13 +26,13 @@ namespace NomaiVR
                 holdProbeLauncher.SetPoses("grabbing_probelauncher", "grabbing_probelauncher_gloves");
                 holdProbeLauncher.CanFlipX = false;
 
-                _probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
-                _probeLauncherModel.gameObject.layer = 0;
-                _probeLauncherModel.localPosition = Vector3.zero;
-                _probeLauncherModel.localRotation = Quaternion.identity;
+                probeLauncherModel = probeLauncher.Find("Props_HEA_ProbeLauncher");
+                probeLauncherModel.gameObject.layer = 0;
+                probeLauncherModel.localPosition = Vector3.zero;
+                probeLauncherModel.localRotation = Quaternion.identity;
 
-                _probeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
-                _probeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
+                probeLauncherModel.Find("Props_HEA_ProbeLauncher_Prepass").gameObject.SetActive(false);
+                probeLauncherModel.Find("Props_HEA_Probe_Prelaunch/Props_HEA_Probe_Prelaunch_Prepass").gameObject.SetActive(false);
 
                 var renderers = probeLauncher.gameObject.GetComponentsInChildren<MeshRenderer>(true);
 
@@ -53,14 +55,14 @@ namespace NomaiVR
 
                 // This transform defines the origin and direction of the launched probe.
                 var launchOrigin = Camera.main.transform.Find("ProbeLauncherTransform").transform;
-                launchOrigin.parent = _probeLauncherModel;
+                launchOrigin.parent = probeLauncherModel;
                 launchOrigin.localPosition = Vector3.forward * 0.2f;
                 launchOrigin.localRotation = Quaternion.identity;
 
                 // Create and adjust hip holster model.
-                _probeLauncherHolster = Instantiate(_probeLauncherModel).gameObject;
-                _probeLauncherHolster.SetActive(false);
-                var holster = _probeLauncherHolster.AddComponent<HolsterTool>();
+                probeLauncherHolster = Instantiate(probeLauncherModel).gameObject;
+                probeLauncherHolster.SetActive(false);
+                var holster = probeLauncherHolster.AddComponent<HolsterTool>();
                 holster.position = new Vector3(0, 0, 0.2f);
                 holster.mode = ToolMode.Probe;
                 holster.scale = 0.15f;
@@ -70,11 +72,11 @@ namespace NomaiVR
                 var playerHUD = GameObject.Find("PlayerHUD").transform;
                 var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
                 display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                display.parent = _probeLauncherModel;
+                display.parent = probeLauncherModel;
                 display.localScale = Vector3.one * 0.0014f;
                 display.localRotation = Quaternion.identity;
                 display.localPosition = Vector3.forward * -0.8f;
-                _probeUI = display.GetComponent<ProbeLauncherUI>();
+                probeUI = display.GetComponent<ProbeLauncherUI>();
 
                 var uiCanvas = playerHUD.Find("HelmetOnUI/UICanvas");
                 uiCanvas.Find("HUDProbeDisplay/Image").gameObject.SetActive(false);
@@ -111,17 +113,17 @@ namespace NomaiVR
 
             private void OnSuitUp()
             {
-                if (_probeLauncherHolster)
+                if (probeLauncherHolster)
                 {
-                    _probeLauncherHolster.SetActive(true);
+                    probeLauncherHolster.SetActive(true);
                 }
             }
 
             private void OnRemoveSuit()
             {
-                if (_probeLauncherHolster)
+                if (probeLauncherHolster)
                 {
-                    _probeLauncherHolster.SetActive(false);
+                    probeLauncherHolster.SetActive(false);
                 }
             }
 
@@ -185,12 +187,12 @@ namespace NomaiVR
 
                 private static void SuitUp()
                 {
-                    _probeUI._nonSuitUI = false;
+                    probeUI._nonSuitUI = false;
                 }
 
                 private static void RemoveSuit()
                 {
-                    _probeUI._nonSuitUI = true;
+                    probeUI._nonSuitUI = true;
                 }
             }
         }

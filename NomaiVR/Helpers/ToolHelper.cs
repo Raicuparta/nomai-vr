@@ -1,4 +1,4 @@
-﻿namespace NomaiVR
+﻿namespace NomaiVR.Helpers
 {
     public static class ToolHelper
     {

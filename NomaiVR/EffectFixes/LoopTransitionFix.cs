@@ -1,8 +1,7 @@
-﻿
+﻿using NomaiVR.Helpers;
 using UnityEngine;
-using UnityEngine.XR;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class LoopTransitionFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, LoopTransitionFix.Patch>
     {
@@ -11,7 +10,7 @@ namespace NomaiVR
 
         public class Patch : NomaiVRPatch
         {
-            private static Transform _focus;
+            private static Transform focus;
 
             public override void ApplyPatches()
             {
@@ -35,9 +34,9 @@ namespace NomaiVR
 
             private static void PostUpdateMemoryLink()
             {
-                if (_focus != null)
+                if (focus != null)
                 {
-                    _focus.LookAt(Camera.main.transform, Locator.GetPlayerTransform().up);
+                    focus.LookAt(Camera.main.transform, Locator.GetPlayerTransform().up);
                 }
             }
 
@@ -57,18 +56,18 @@ namespace NomaiVR
                 var uplinkTrigger = GameObject.FindObjectOfType<MemoryUplinkTrigger>();
                 var statue = uplinkTrigger._lockOnTransform;
                 var eye = statue.Find("Props_NOM_StatueHead/eyelid_mid");
-                _focus = new GameObject().transform;
-                _focus.SetParent(eye, false);
+                focus = new GameObject().transform;
+                focus.SetParent(eye, false);
 
                 var streams = ____reverseStreams.transform;
                 LayerHelper.ChangeLayerRecursive(____reverseStreams, LayerMask.NameToLayer("UI"));
-                streams.SetParent(_focus, false);
+                streams.SetParent(focus, false);
                 streams.Rotate(0, 180, 0);
                 streams.localScale *= 0.5f;
 
                 var screen = ____screenTransform;
                 LayerHelper.ChangeLayerRecursive(screen.gameObject, LayerMask.NameToLayer("UI"));
-                screen.SetParent(_focus, false);
+                screen.SetParent(focus, false);
                 screen.localRotation = Quaternion.identity;
                 screen.localScale = scale;
             }

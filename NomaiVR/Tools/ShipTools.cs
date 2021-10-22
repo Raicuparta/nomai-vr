@@ -1,10 +1,11 @@
-﻿
+﻿using NomaiVR.Hands;
+using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
 using static NomaiVR.Tools.AutopilotButtonPatch;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class ShipTools : NomaiVRModule<ShipTools.Behaviour, ShipTools.Behaviour.Patch>
     {
@@ -13,31 +14,31 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private ReferenceFrameTracker _referenceFrameTracker;
-            private static Transform _mapGridRenderer;
-            private static ShipMonitorInteraction _probe;
-            private static ShipMonitorInteraction _signalscope;
-            private static ShipMonitorInteraction _landingCam;
-            private static ShipMonitorInteraction _autoPilot;
-            private static ShipCockpitController _cockpitController;
-            private static bool _isLandingCamEnabled;
+            private ReferenceFrameTracker referenceFrameTracker;
+            private static Transform mapGridRenderer;
+            private static ShipMonitorInteraction probe;
+            private static ShipMonitorInteraction signalscope;
+            private static ShipMonitorInteraction landingCam;
+            private static ShipMonitorInteraction autoPilot;
+            private static ShipCockpitController cockpitController;
+            private static bool isLandingCamEnabled;
 
             internal void Awake()
             {
-                _referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
-                _cockpitController = FindObjectOfType<ShipCockpitController>();
-                _mapGridRenderer = FindObjectOfType<MapController>()._gridRenderer.transform;
+                referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
+                cockpitController = FindObjectOfType<ShipCockpitController>();
+                mapGridRenderer = FindObjectOfType<MapController>()._gridRenderer.transform;
             }
 
             internal void Update()
             {
-                if (_referenceFrameTracker.isActiveAndEnabled && ToolHelper.IsUsingAnyTool())
+                if (referenceFrameTracker.isActiveAndEnabled && ToolHelper.IsUsingAnyTool())
                 {
-                    _referenceFrameTracker.enabled = false;
+                    referenceFrameTracker.enabled = false;
                 }
-                else if (!_referenceFrameTracker.isActiveAndEnabled && !ToolHelper.IsUsingAnyTool())
+                else if (!referenceFrameTracker.isActiveAndEnabled && !ToolHelper.IsUsingAnyTool())
                 {
-                    _referenceFrameTracker.enabled = true;
+                    referenceFrameTracker.enabled = true;
                 }
             }
 
@@ -64,7 +65,7 @@ namespace NomaiVR
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    ____shipSystemsCtrlr._usingLandingCam = _isLandingCamEnabled;
+                    ____shipSystemsCtrlr._usingLandingCam = isLandingCamEnabled;
                 }
 
                 private static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
@@ -79,7 +80,7 @@ namespace NomaiVR
                     ShipAudioController ____shipAudioController
                 )
                 {
-                    _isLandingCamEnabled = true;
+                    isLandingCamEnabled = true;
                     ____landingCam.enabled = true;
                     ____landingLight.SetOn(true);
 
@@ -101,7 +102,7 @@ namespace NomaiVR
                     ShipAudioController ____shipAudioController
                 )
                 {
-                    _isLandingCamEnabled = false;
+                    isLandingCamEnabled = false;
                     ____landingCam.enabled = false;
                     ____landingLight.SetOn(false);
                     ____shipAudioController.PlayLandingCamOff();
@@ -124,15 +125,15 @@ namespace NomaiVR
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
 
                     var probeScreenPivot = cockpitUI.Find("ProbeScreen/ProbeScreenPivot");
-                    _probe = probeScreenPivot.Find("ProbeScreen").gameObject.AddComponent<ShipMonitorInteraction>();
-                    _probe.mode = ToolMode.Probe;
-                    _probe.text = UITextType.ScoutModePrompt;
+                    probe = probeScreenPivot.Find("ProbeScreen").gameObject.AddComponent<ShipMonitorInteraction>();
+                    probe.mode = ToolMode.Probe;
+                    probe.text = UITextType.ScoutModePrompt;
 
                     var font = Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular");
 
                     var probeCamDisplay = probeScreenPivot.Find("ProbeCamDisplay");
                     var probeScreenText = new GameObject().AddComponent<Text>();
-                    probeScreenText.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderScreenText;
+                    probeScreenText.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = ShouldRenderScreenText;
                     probeScreenText.transform.SetParent(probeCamDisplay.transform, false);
                     probeScreenText.transform.localScale = Vector3.one * 0.0035f;
                     probeScreenText.transform.localRotation = Quaternion.Euler(0, 0, 90);
@@ -143,13 +144,13 @@ namespace NomaiVR
                     probeScreenText.font = font;
 
                     var signalScreenPivot = cockpitUI.Find("SignalScreen/SignalScreenPivot");
-                    _signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ShipMonitorInteraction>();
-                    _signalscope.mode = ToolMode.SignalScope;
-                    _signalscope.text = UITextType.UISignalscope;
+                    signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ShipMonitorInteraction>();
+                    signalscope.mode = ToolMode.SignalScope;
+                    signalscope.text = UITextType.UISignalscope;
 
                     var sigScopeDisplay = signalScreenPivot.Find("SigScopeDisplay");
                     var scopeTextCanvas = new GameObject().AddComponent<Canvas>();
-                    scopeTextCanvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = ShouldRenderScreenText;
+                    scopeTextCanvas.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = ShouldRenderScreenText;
                     scopeTextCanvas.transform.SetParent(sigScopeDisplay.transform.parent, false);
                     scopeTextCanvas.transform.localPosition = sigScopeDisplay.transform.localPosition;
                     scopeTextCanvas.transform.localRotation = sigScopeDisplay.transform.localRotation;
@@ -165,22 +166,22 @@ namespace NomaiVR
 
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
-                    _landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipMonitorInteraction>();
-                    _landingCam.button = InputConsts.InputCommandType.LANDING_CAMERA;
-                    _landingCam.skipPressCallback = () =>
+                    landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipMonitorInteraction>();
+                    landingCam.button = InputConsts.InputCommandType.LANDING_CAMERA;
+                    landingCam.SkipPressCallback = () =>
                     {
-                        if (_isLandingCamEnabled)
+                        if (isLandingCamEnabled)
                         {
-                            _cockpitController.ExitLandingView();
+                            cockpitController.ExitLandingView();
                             return true;
                         }
                         return false;
                     };
-                    _landingCam.text = UITextType.ShipLandingPrompt;
+                    landingCam.text = UITextType.ShipLandingPrompt;
 
                     var landingTextCanvas = new GameObject().AddComponent<Canvas>();
-                    landingTextCanvas.transform.SetParent(_landingCam.transform.parent, false);
-                    landingTextCanvas.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => ShouldRenderScreenText() && !_isLandingCamEnabled;
+                    landingTextCanvas.transform.SetParent(landingCam.transform.parent, false);
+                    landingTextCanvas.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = () => ShouldRenderScreenText() && !isLandingCamEnabled;
                     landingTextCanvas.transform.localPosition = new Vector3(-0.017f, 3.731f, 5.219f);
                     landingTextCanvas.transform.localRotation = Quaternion.Euler(53.28f, 0, 0);
                     landingTextCanvas.transform.localScale = Vector3.one * 0.007f;
@@ -193,11 +194,11 @@ namespace NomaiVR
                     landingText.fontSize = 8;
                     landingText.font = font;
 
-                    _autoPilot = cockpitTech.GetComponentInChildren<AutopilotButton>().GetComponent<ShipMonitorInteraction>();
+                    autoPilot = cockpitTech.GetComponentInChildren<AutopilotButton>().GetComponent<ShipMonitorInteraction>();
                 }
 
-                private static Vector3 _cameraPosition;
-                private static Quaternion _cameraRotation;
+                private static Vector3 cameraPosition;
+                private static Quaternion cameraRotation;
 
                 private static void PreFindFrame(ReferenceFrameTracker __instance)
                 {
@@ -207,13 +208,13 @@ namespace NomaiVR
                     }
 
                     var activeCam = __instance._activeCam.transform;
-                    _cameraPosition = activeCam.position;
-                    _cameraRotation = activeCam.rotation;
+                    cameraPosition = activeCam.position;
+                    cameraRotation = activeCam.rotation;
 
                     if (__instance._isMapView)
                     {
-                        activeCam.position = _mapGridRenderer.position + _mapGridRenderer.up * 10000;
-                        activeCam.rotation = Quaternion.LookRotation(_mapGridRenderer.up * -1);
+                        activeCam.position = mapGridRenderer.position + mapGridRenderer.up * 10000;
+                        activeCam.rotation = Quaternion.LookRotation(mapGridRenderer.up * -1);
                     }
                     else
                     {
@@ -224,10 +225,10 @@ namespace NomaiVR
 
                 private static bool IsAnyInteractionFocused()
                 {
-                    return (_probe != null && _probe.IsFocused()) || 
-                           (_signalscope != null && _signalscope.IsFocused()) || 
-                           (_landingCam != null && _landingCam.IsFocused()) ||
-                           (_autoPilot != null && _autoPilot.IsFocused());
+                    return (probe != null && probe.IsFocused()) || 
+                           (signalscope != null && signalscope.IsFocused()) || 
+                           (landingCam != null && landingCam.IsFocused()) ||
+                           (autoPilot != null && autoPilot.IsFocused());
                 }
 
                 private static bool PreUntargetFrame()
@@ -240,8 +241,8 @@ namespace NomaiVR
                     if (__instance._isLandingView) return __result;
 
                     var activeCam = __instance._activeCam.transform;
-                    activeCam.position = _cameraPosition;
-                    activeCam.rotation = _cameraRotation;
+                    activeCam.position = cameraPosition;
+                    activeCam.rotation = cameraRotation;
 
                     return IsAnyInteractionFocused() ? __instance._currentReferenceFrame : __result;
                 }
