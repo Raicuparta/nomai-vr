@@ -12,8 +12,8 @@ namespace NomaiVR.UI
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
-        private const string kFlashLightTutorialStep = "flashlight";
-        private const string kHasUsedTranslatorCondition = "HAS_USED_TRANSLATOR";
+        private const string flashLightTutorialStep = "flashlight";
+        private const string hasUsedTranslatorCondition = "HAS_USED_TRANSLATOR";
 
         public class Behaviour : MonoBehaviour
         {
@@ -90,13 +90,13 @@ namespace NomaiVR.UI
                 return ModSettings.EnableGesturePrompts && text.text != GestureText.None;
             }
 
-            private static void SetText(string text)
+            private static void SetText(string newText)
             {
-                if (Behaviour.text.text == text)
+                if (text.text == newText)
                 {
                     return;
                 }
-                Behaviour.text.text = text;
+                text.text = newText;
             }
 
             private void OnEnterProbePromptTrigger()
@@ -119,7 +119,7 @@ namespace NomaiVR.UI
 
             private void UpdateTranslatorPrompt(RaycastHit hit)
             {
-                if (PlayerData.GetPersistentCondition(kHasUsedTranslatorCondition))
+                if (PlayerData.GetPersistentCondition(hasUsedTranslatorCondition))
                 {
                     return;
                 }
@@ -191,7 +191,7 @@ namespace NomaiVR.UI
                 {
                     return;
                 }
-                var hasUsedFlashlight = NomaiVR.Save.TutorialSteps.Contains(kFlashLightTutorialStep);
+                var hasUsedFlashlight = NomaiVR.Save.TutorialSteps.Contains(flashLightTutorialStep);
                 var isMainVisbileDark = main.IsVisible() && PlayerState.InDarkZone();
                 var shouldShowText = (center.IsVisible() || isMainVisbileDark) && !hasUsedFlashlight;
                 if (!isShowingText && shouldShowText)
@@ -203,7 +203,7 @@ namespace NomaiVR.UI
                     SetText(GestureText.None);
                     if (PlayerState.IsFlashlightOn())
                     {
-                        NomaiVR.Save.AddTutorialStep(kFlashLightTutorialStep);
+                        NomaiVR.Save.AddTutorialStep(flashLightTutorialStep);
                     }
                 }
             }
@@ -285,7 +285,7 @@ namespace NomaiVR.UI
             public const string Flashlight = "Touch the side of your head to toggle <color=orange>Flashlight</color>.";
             public const string WakeUp = "Look at your <color=orange>main hand</color>.";
 
-            public static string GetToolBeltPrompt(string toolName, string slot)
+            private static string GetToolBeltPrompt(string toolName, string slot)
             {
                 return $"Grab <color=orange>{toolName}</color> from tool belt\n({slot} slot.)";
             }
