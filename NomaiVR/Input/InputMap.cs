@@ -72,7 +72,7 @@ namespace NomaiVR.Input
                 { InputCommandType.INTERACT, ActionInputDefinitions.Empty },
             };
         
-        public static readonly Dictionary<InputCommandType, IActionInput> ShipSignalscopeMap =
+        public static readonly Dictionary<InputCommandType, IActionInput> ShipSignalscopeInputMap =
             new Dictionary<InputCommandType, IActionInput>
             {
                 { InputCommandType.TOOL_RIGHT, ActionInputDefinitions.Empty },
@@ -82,12 +82,12 @@ namespace NomaiVR.Input
 
         public static IActionInput GetActionInput(InputCommandType commandType)
         {
-            if (ToolHelper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship) && ShipSignalscopeMap.ContainsKey(commandType))
+            if (ShouldUseShipSignalscopeMap && ShipSignalscopeInputMap.ContainsKey(commandType))
             {
-                return ShipSignalscopeMap[commandType];
+                return ShipSignalscopeInputMap[commandType];
             }
             
-            if (ToolsActive && ToolsInputMap.ContainsKey(commandType))
+            if (ShouldUseToolsMap && ToolsInputMap.ContainsKey(commandType))
             {
                 return ToolsInputMap[commandType];
             }
@@ -96,7 +96,10 @@ namespace NomaiVR.Input
             return actionInput;
         }
         
-        private static bool ToolsActive => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
+        private static bool ShouldUseToolsMap => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
                                         || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
+
+        private static bool ShouldUseShipSignalscopeMap =>
+            ToolHelper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship);
     }
 }
