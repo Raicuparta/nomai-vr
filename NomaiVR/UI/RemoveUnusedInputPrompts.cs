@@ -83,7 +83,6 @@ namespace NomaiVR.UI
 
                 private static void RemoveToolModePrompts(ToolModeUI __instance)
                 {
-                    // Manager.RemoveScreenPrompt(__instance._freeLookPrompt);
                     Manager.RemoveScreenPrompt(__instance._probePrompt);
                     Manager.RemoveScreenPrompt(__instance._signalscopePrompt);
                     Manager.RemoveScreenPrompt(__instance._flashlightPrompt);
@@ -132,10 +131,13 @@ namespace NomaiVR.UI
                 {
                     if (!isVisible) return true;
 
-                    return !(from commandType in __instance._commandIdList
-                        let actionInput = InputMap.GetActionInput(commandType)
-                        where actionInput == null || actionInput == ActionInputDefinitions.Empty
-                        select commandType).Any();
+                    foreach (var commandType in __instance._commandIdList)
+                    {
+                        var actionInput = InputMap.GetActionInput(commandType);
+                        if (actionInput == null || actionInput == ActionInputDefinitions.Empty) return true;
+                    }
+
+                    return false;
                 }
             }
         }
