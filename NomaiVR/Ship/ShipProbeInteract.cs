@@ -9,7 +9,7 @@ namespace NomaiVR.Ship
     public class ShipProbeInteract: ShipInteractReceiver
     {
         protected override UITextType Text => UITextType.ScoutModePrompt;
-        protected override string ChildName => "ProbeScreen";
+        protected override GameObject ComponentContainer => transform.Find("ProbeScreen").gameObject;
 
         protected override void Initialize()
         {

@@ -10,8 +10,8 @@ namespace NomaiVR.Ship
     public class ShipLandingCamInteract: ShipInteractReceiver
     {
         protected override UITextType Text => UITextType.ShipLandingPrompt;
-        protected override string ChildName => "";
-        private InputConsts.InputCommandType inputCommandType = InputConsts.InputCommandType.LANDING_CAMERA;
+        protected override GameObject ComponentContainer => gameObject;
+        private const InputConsts.InputCommandType inputCommandType = InputConsts.InputCommandType.LANDING_CAMERA;
         private static ShipCockpitController cockpitController;
 
         protected override void Initialize()

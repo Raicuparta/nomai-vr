@@ -1,4 +1,5 @@
-﻿using NomaiVR.Hands;
+﻿using NomaiVR.Assets;
+using NomaiVR.Hands;
 using NomaiVR.Helpers;
 using UnityEngine;
 
@@ -113,16 +114,14 @@ namespace NomaiVR.Ship
                 private static void ShipStart(ShipBody __instance)
                 {
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
-
-                    probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot").gameObject.AddComponent<ShipProbeInteract>();
-                    
-                    signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot").gameObject.AddComponent<ShipSignalscopeInteract>();
-
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
+                    probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot").gameObject.AddComponent<ShipProbeInteract>();
+                    signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot").gameObject.AddComponent<ShipSignalscopeInteract>();
                     landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipLandingCamInteract>();
-
-                    // autoPilot = cockpitTech.GetComponentInChildren<AutopilotButton>().GetComponent<ShipInteractReceiver>();
+                    
+                    var autopilotButton = Instantiate(AssetLoader.AutopilotButtonPrefab, cockpitTech, false);
+                    autoPilot = autopilotButton.AddComponent<AutopilotButtonInteract>();
                 }
 
                 private static Vector3 cameraPosition;

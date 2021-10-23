@@ -5,34 +5,32 @@ namespace NomaiVR.Ship
     public abstract class ShipInteractReceiver : MonoBehaviour
     {
         protected abstract UITextType Text { get; }
-        protected abstract string ChildName { get;  }
+        protected abstract GameObject ComponentContainer { get; }
         protected static readonly Font MonitorPromptFont = Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular");
-        private InteractReceiver receiver;
+        protected InteractReceiver Receiver;
         private BoxCollider collider;
         
         private void Awake()
         {
             Initialize();
-
-            var child = string.IsNullOrEmpty(ChildName) ? gameObject : transform.Find(ChildName).gameObject;
             
-            collider = child.AddComponent<BoxCollider>();
+            collider = ComponentContainer.AddComponent<BoxCollider>();
             collider.isTrigger = true;
             collider.enabled = false;
 
-            receiver = child.AddComponent<InteractReceiver>();
-            receiver.SetInteractRange(2);
-            receiver._usableInShip = true;
-            receiver.SetPromptText(Text);
-            receiver.OnPressInteract += OnPress;
-            receiver.OnReleaseInteract += () =>
+            Receiver = ComponentContainer.AddComponent<InteractReceiver>();
+            Receiver.SetInteractRange(2);
+            Receiver._usableInShip = true;
+            Receiver.SetPromptText(Text);
+            Receiver.OnPressInteract += OnPress;
+            Receiver.OnReleaseInteract += () =>
             {
                 OnRelease();
-                receiver.ResetInteraction();
+                Receiver.ResetInteraction();
             };
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             var isInShip = OWInput.IsInputMode(InputMode.ShipCockpit);
             var isUsingTool = IsUsingTool();
@@ -48,7 +46,7 @@ namespace NomaiVR.Ship
 
         public bool IsFocused()
         {
-            return receiver && receiver.IsFocused();
+            return Receiver && Receiver.IsFocused();
         }
 
         protected abstract void Initialize();

@@ -9,7 +9,7 @@ namespace NomaiVR.Ship
     public class ShipSignalscopeInteract: ShipInteractReceiver
     {
         protected override UITextType Text => UITextType.UISignalscope;
-        protected override string ChildName => "SignalScopeScreenFrame_geo";
+        protected override GameObject ComponentContainer => transform.Find("SignalScopeScreenFrame_geo").gameObject;
 
         protected override void Initialize()
         {
