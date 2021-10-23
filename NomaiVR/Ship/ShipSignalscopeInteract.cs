@@ -1,4 +1,5 @@
 ﻿using NomaiVR.Helpers;
+using NomaiVR.Input;
 using NomaiVR.ReusableBehaviours;
 using NomaiVR.Tools;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace NomaiVR.Ship
     {
         protected override UITextType Text => UITextType.UISignalscope;
         protected override GameObject ComponentContainer => transform.Find("SignalScopeScreenFrame_geo").gameObject;
+        private const InputConsts.InputCommandType changeFrequencyCommand = InputConsts.InputCommandType.TOOL_RIGHT;
 
         protected override void Initialize()
         {
@@ -38,16 +40,27 @@ namespace NomaiVR.Ship
 
         protected override void OnPress()
         {
-            VRToolSwapper.Equip(ToolMode.SignalScope, null);
+            if (ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship))
+            {
+                ControllerInput.SimulateInput(changeFrequencyCommand, true);
+            }
+            else
+            {
+                VRToolSwapper.Equip(ToolMode.SignalScope, null);
+            }
         }
 
         protected override void OnRelease()
         {
+            if (ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship))
+            {
+                ControllerInput.SimulateInput(changeFrequencyCommand, false);
+            }
         }
 
-        protected override bool IsUsingTool()
+        protected override bool ShouldDisable()
         {
-            return  ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship);
+            return false;
         }
     }
 }

@@ -57,7 +57,7 @@ namespace NomaiVR.Ship
             ControllerInput.SimulateInput(inputCommandType, false);
         }
 
-        protected override bool IsUsingTool()
+        protected override bool ShouldDisable()
         {
             return false;
         }

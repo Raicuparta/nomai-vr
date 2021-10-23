@@ -33,12 +33,12 @@ namespace NomaiVR.Ship
         protected virtual void Update()
         {
             var isInShip = OWInput.IsInputMode(InputMode.ShipCockpit);
-            var isUsingTool = IsUsingTool();
-            if (!collider.enabled && isInShip && !isUsingTool)
+            var shouldDisable = ShouldDisable();
+            if (!collider.enabled && isInShip && !shouldDisable)
             {
                 collider.enabled = true;
             }
-            if (collider.enabled && (!isInShip || isUsingTool))
+            if (collider.enabled && (!isInShip || shouldDisable))
             {
                 collider.enabled = false;
             }
@@ -52,7 +52,7 @@ namespace NomaiVR.Ship
         protected abstract void Initialize();
         protected abstract void OnPress();
         protected abstract void OnRelease();
-        protected abstract bool IsUsingTool();
+        protected abstract bool ShouldDisable();
         
         protected static bool ShouldRenderScreenText()
         {

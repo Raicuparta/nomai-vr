@@ -38,7 +38,7 @@ namespace NomaiVR.Ship
         {
         }
 
-        protected override bool IsUsingTool()
+        protected override bool ShouldDisable()
         {
             return  ToolHelper.Swapper.IsInToolMode(ToolMode.Probe, ToolGroup.Ship);
         }
