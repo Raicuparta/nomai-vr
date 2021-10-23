@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NomaiVR.Assets;
+using NomaiVR.Helpers;
 using NomaiVR.Input;
 using NomaiVR.Input.ActionInputs;
 using UnityEngine;
@@ -120,9 +120,10 @@ namespace NomaiVR.UI
                     Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.GetUITextures), nameof(GetVruiTextures));
                     Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.GetUITextures), nameof(GetVruiTextures));
                     Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.GetUITextures), nameof(GetVruiTextures));
+                    Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(MakePromptsDrawOnTop));
                 }
 
-                public static bool GetVruiTextures(bool gamepad, bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
+                public static bool GetVruiTextures(bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
                 {
                     __result = __instance.textureList;
 
@@ -142,7 +143,7 @@ namespace NomaiVR.UI
                     }
 
                     if(vrInputAction is EmptyActionInput emptyInput
-                        && !String.IsNullOrEmpty(emptyInput.TexturePath))
+                        && !string.IsNullOrEmpty(emptyInput.TexturePath))
                     {
                         var emptyActionTexture = Instance.GetTexture($"{baseAssetPath}/{emptyInput.TexturePath}");
                         if (emptyActionTexture != null) __instance.textureList.Add(emptyActionTexture);
@@ -183,13 +184,18 @@ namespace NomaiVR.UI
 
                         Instance.SetCachedPartName(steamVrAction, name);
                     }
-                    if (string.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
+                    if (string.IsNullOrEmpty(name)) name = Instance.GetCachedPartName(steamVrAction);
 
                     Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
                     
                     var texture = Instance.GetTexture($"{baseAssetPath}/{Instance.Platform}/{name}");
                     if(texture != null) __instance.textureList.Add(texture);
                     return __instance.textureList.Count == 0;
+                }
+                
+                private static void MakePromptsDrawOnTop(ScreenPromptElement __instance)
+                {
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(__instance.gameObject);
                 }
             }
         }

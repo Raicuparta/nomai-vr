@@ -76,8 +76,8 @@ namespace NomaiVR.Hands
             SetUpShaders(handRenderer, "Outer Wilds/Character/Skin", "Outer Wilds/Character/Skin");
             SetUpShaders(gloveRenderer, "Outer Wilds/Character/Clothes");
             
-            handRenderer.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender += ShouldRenderHands;
-            gloveRenderer.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender += ShouldRenderGloves;
+            handRenderer.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender += ShouldRenderHands;
+            gloveRenderer.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender += ShouldRenderGloves;
 
             SetUpModel(hand);
             skeleton = SetUpSkeleton(handObject, hand);

@@ -130,7 +130,7 @@ namespace NomaiVR.UI
             {
                 var logo = GameObject.Find(objectName).transform;
                 logo.localRotation *= Quaternion.Euler(30, 0, 0);
-                logo.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = () => shouldRenderStarLogos;
+                logo.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => shouldRenderStarLogos;
             }
 
             private static void FixStarLogos()
@@ -152,7 +152,7 @@ namespace NomaiVR.UI
 
                 // Hide the main menu while other menus are open,
                 // to prevent selecting with laser.
-                titleCanvas.Find("TitleLayoutGroup").gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = () =>
+                titleCanvas.Find("TitleLayoutGroup").gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () =>
                     MenuStackManager.SharedInstance.GetMenuCount() == 0;
 
                 // Cant't get the footer to look good, so I'm hiding it.

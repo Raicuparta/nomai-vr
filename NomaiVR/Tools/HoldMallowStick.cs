@@ -76,7 +76,7 @@ namespace NomaiVR.Tools
 
                 //Render stick only when outside menus
                 var stickRenderer = meshes.Find("RoastingStick_Stick").gameObject.AddComponent<ConditionalRenderer>();
-                stickRenderer.GETShouldRender += ShouldRenderStick;
+                stickRenderer.GetShouldRender += ShouldRenderStick;
                 holdableStick.SetActiveObserver(stickRenderer);
 
                 // Hold mallow in left hand for replacing the one in the stick.
@@ -97,7 +97,7 @@ namespace NomaiVR.Tools
                 replaceDetector.OnEnter += ReplaceMallow;
 
                 // Render left hand mallow only when right hand mallow is not present.
-                mallowClone.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender += ShouldRenderMallowClone;
+                mallowClone.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender += ShouldRenderMallowClone;
 
                 //Register for blending updates
                 StickExtensionUpdated += OnStickExtensionUpdate;

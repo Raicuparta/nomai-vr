@@ -44,7 +44,7 @@ namespace NomaiVR.UI
                 followTarget.localPosition = Vector3.forward * 4;
                 followTarget.rotationSmoothTime = 0.5f;
                 followTarget.positionSmoothTime = 0.5f;
-                canvas.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = ShouldRender;
+                canvas.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = ShouldRender;
 
                 SetUpBackground();
                 SetUpText();

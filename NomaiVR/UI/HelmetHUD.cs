@@ -95,7 +95,7 @@ namespace NomaiVR.UI
                 LayerHelper.ChangeLayerRecursive(helmetModel, "VisibleToPlayer");
                 Destroy(helmetModelParent.Find("Helmet").gameObject);
                 Destroy(helmetModelParent.Find("HelmetFrame").gameObject);
-                helmetModel.AddComponent<ConditionalRenderer>().GETShouldRender += () => ModSettings.ShowHelmet && Locator.GetPlayerSuit().IsWearingHelmet();
+                helmetModel.AddComponent<ConditionalRenderer>().GetShouldRender += () => ModSettings.ShowHelmet && Locator.GetPlayerSuit().IsWearingHelmet();
             }
 
             private void AdjustHudRenderer(HUDHelmetAnimator helmetAnimator)
@@ -103,7 +103,7 @@ namespace NomaiVR.UI
                 var hudRenderer = helmetAnimator._hudRenderer.transform;
                 hudRenderer.localScale = Vector3.one * 3.28f;
                 hudRenderer.localPosition = new Vector3(-0.06f, -0.44f, 0.1f);
-                hudRenderer.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = () => Locator.GetPlayerSuit().IsWearingHelmet();
+                hudRenderer.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => Locator.GetPlayerSuit().IsWearingHelmet();
                 var notifications = FindObjectOfType<SuitNotificationDisplay>().GetComponent<RectTransform>();
                 notifications.anchoredPosition = new Vector2(-200, -100);
 
@@ -138,7 +138,7 @@ namespace NomaiVR.UI
                     {
                         continue;
                     }
-                    child.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = ShouldRenderHudParts;
+                    child.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = ShouldRenderHudParts;
                 }
             }
 

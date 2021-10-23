@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NomaiVR.Helpers;
+using NomaiVR.Input;
+using NomaiVR.Input.ActionInputs;
 using UnityEngine;
 
 namespace NomaiVR.UI
@@ -50,19 +53,14 @@ namespace NomaiVR.UI
                     Postfix<PlayerSpawner>(nameof(PlayerSpawner.Awake), nameof(RemoveJoystickPrompts));
                     Postfix<RoastingStickController>(nameof(RoastingStickController.LateInitialize), nameof(RemoveRoastingStickPrompts));
                     Postfix<ToolModeUI>(nameof(ToolModeUI.LateInitialize), nameof(RemoveToolModePrompts));
-                    
-                    Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(PostScreenPromptVisibility)); // TODO move this elswhere.
+
+                    Prefix<ScreenPrompt>(nameof(ScreenPrompt.SetVisibility), nameof(PreventShowingUnusedPrompt));
 
                     // Prevent probe launcher from moving the prompts around.
                     Empty<PromptManager>(nameof(PromptManager.OnProbeSnapshot));
                     Empty<PromptManager>(nameof(PromptManager.OnProbeSnapshotRemoved));
                     Empty<PromptManager>(nameof(PromptManager.OnProbeLauncherEquipped));
                     Empty<PromptManager>(nameof(PromptManager.OnProbeLauncherUnequipped));
-                }
-
-                private static void PostScreenPromptVisibility(ScreenPromptElement __instance)
-                {
-                    MaterialHelper.MakeGraphicChildrenDrawOnTop(__instance.gameObject);
                 }
 
                 private static void RemoveJoystickPrompts(PlayerSpawner __instance)
@@ -78,7 +76,6 @@ namespace NomaiVR.UI
 
                 private static void RemoveToolModePrompts(ToolModeUI __instance)
                 {
-                    // Manager.RemoveScreenPrompt(__instance._freeLookPrompt);
                     Manager.RemoveScreenPrompt(__instance._probePrompt);
                     Manager.RemoveScreenPrompt(__instance._signalscopePrompt);
                     Manager.RemoveScreenPrompt(__instance._flashlightPrompt);
@@ -121,6 +118,14 @@ namespace NomaiVR.UI
                 private static void RemoveTranslatorPrompts(NomaiTranslatorProp __instance)
                 {
                     Manager.RemoveScreenPrompt(__instance._unequipPrompt);
+                }
+                
+                private static bool PreventShowingUnusedPrompt(ScreenPrompt __instance, bool isVisible)
+                {
+                    if (!isVisible) return true;
+
+                    return __instance._commandIdList.Select(InputMap.GetActionInput).All(actionInput =>
+                        actionInput != null && actionInput != ActionInputDefinitions.Empty);
                 }
             }
         }
