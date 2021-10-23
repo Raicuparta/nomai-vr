@@ -144,7 +144,7 @@ namespace NomaiVR.UI
                     }
 
                     if(vrInputAction is EmptyActionInput emptyInput
-                        && !String.IsNullOrEmpty(emptyInput.TexturePath))
+                        && !string.IsNullOrEmpty(emptyInput.TexturePath))
                     {
                         var emptyActionTexture = Instance.GetTexture($"{baseAssetPath}/{emptyInput.TexturePath}");
                         if (emptyActionTexture != null) __instance.textureList.Add(emptyActionTexture);
