@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NomaiVR.Helpers;
 using NomaiVR.Input.ActionInputs;
 using Valve.VR;
 using static InputConsts;
@@ -70,9 +71,22 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_LEFT, ActionInputDefinitions.ToolLeft },
                 { InputCommandType.INTERACT, ActionInputDefinitions.Empty },
             };
+        
+        public static readonly Dictionary<InputCommandType, IActionInput> ShipSignalscopeMap =
+            new Dictionary<InputCommandType, IActionInput>
+            {
+                { InputCommandType.TOOL_RIGHT, ActionInputDefinitions.Empty },
+                { InputCommandType.TOOL_X, ActionInputDefinitions.Empty },
+                { InputCommandType.TOOL_LEFT, ActionInputDefinitions.Empty },
+            };
 
         public static IActionInput GetActionInput(InputCommandType commandType)
         {
+            if (ToolHelper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship) && ShipSignalscopeMap.ContainsKey(commandType))
+            {
+                return ShipSignalscopeMap[commandType];
+            }
+            
             if (ToolsActive && ToolsInputMap.ContainsKey(commandType))
             {
                 return ToolsInputMap[commandType];
