@@ -123,7 +123,7 @@ namespace NomaiVR.UI
                     Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(MakePromptsDrawOnTop));
                 }
 
-                public static bool GetVruiTextures(bool gamepad, bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
+                public static bool GetVruiTextures(bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
                 {
                     __result = __instance.textureList;
 
@@ -184,7 +184,7 @@ namespace NomaiVR.UI
 
                         Instance.SetCachedPartName(steamVrAction, name);
                     }
-                    if (string.IsNullOrEmpty(name)) Instance.GetCachedPartName(steamVrAction);
+                    if (string.IsNullOrEmpty(name)) name = Instance.GetCachedPartName(steamVrAction);
 
                     Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
                     
