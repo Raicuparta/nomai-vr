@@ -111,7 +111,7 @@ namespace NomaiVR.Tools
                 lineObject.transform.localPosition = new Vector3(0.74f, 0.37f, 0f);
                 lineObject.transform.localRotation = Quaternion.Euler(0f, 353f, 0f);
 
-                lineObject.AddComponent<ConditionalRenderer>().GETShouldRender = () => ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
+                lineObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
 
                 translator.GetComponent<NomaiTranslator>()._raycastTransform = lineObject.transform;
 

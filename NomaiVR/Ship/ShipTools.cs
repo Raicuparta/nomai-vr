@@ -1,11 +1,8 @@
 ﻿using NomaiVR.Hands;
 using NomaiVR.Helpers;
-using NomaiVR.ReusableBehaviours;
 using UnityEngine;
-using UnityEngine.UI;
-using static NomaiVR.Tools.AutopilotButtonPatch;
 
-namespace NomaiVR.Tools
+namespace NomaiVR.Ship
 {
     internal class ShipTools : NomaiVRModule<ShipTools.Behaviour, ShipTools.Behaviour.Patch>
     {
@@ -16,17 +13,15 @@ namespace NomaiVR.Tools
         {
             private ReferenceFrameTracker referenceFrameTracker;
             private static Transform mapGridRenderer;
-            private static ShipMonitorInteraction probe;
-            private static ShipMonitorInteraction signalscope;
-            private static ShipMonitorInteraction landingCam;
-            private static ShipMonitorInteraction autoPilot;
-            private static ShipCockpitController cockpitController;
-            private static bool isLandingCamEnabled;
+            private static ShipInteractReceiver probe;
+            private static ShipInteractReceiver signalscope;
+            private static ShipInteractReceiver landingCam;
+            private static ShipInteractReceiver autoPilot;
+            public static bool IsLandingCamEnabled; // TODO not public please.
 
             internal void Awake()
             {
                 referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
-                cockpitController = FindObjectOfType<ShipCockpitController>();
                 mapGridRenderer = FindObjectOfType<MapController>()._gridRenderer.transform;
             }
 
@@ -65,7 +60,7 @@ namespace NomaiVR.Tools
 
                 private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
                 {
-                    ____shipSystemsCtrlr._usingLandingCam = isLandingCamEnabled;
+                    ____shipSystemsCtrlr._usingLandingCam = IsLandingCamEnabled;
                 }
 
                 private static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
@@ -80,7 +75,7 @@ namespace NomaiVR.Tools
                     ShipAudioController ____shipAudioController
                 )
                 {
-                    isLandingCamEnabled = true;
+                    IsLandingCamEnabled = true;
                     ____landingCam.enabled = true;
                     ____landingLight.SetOn(true);
 
@@ -102,7 +97,7 @@ namespace NomaiVR.Tools
                     ShipAudioController ____shipAudioController
                 )
                 {
-                    isLandingCamEnabled = false;
+                    IsLandingCamEnabled = false;
                     ____landingCam.enabled = false;
                     ____landingLight.SetOn(false);
                     ____shipAudioController.PlayLandingCamOff();
@@ -115,86 +110,19 @@ namespace NomaiVR.Tools
                     __instance.ExitLandingView();
                 }
 
-                private static bool ShouldRenderScreenText()
-                {
-                    return Locator.GetToolModeSwapper().IsInToolMode(ToolMode.None);
-                }
-
                 private static void ShipStart(ShipBody __instance)
                 {
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
 
-                    var probeScreenPivot = cockpitUI.Find("ProbeScreen/ProbeScreenPivot");
-                    probe = probeScreenPivot.Find("ProbeScreen").gameObject.AddComponent<ShipMonitorInteraction>();
-                    probe.mode = ToolMode.Probe;
-                    probe.text = UITextType.ScoutModePrompt;
-
-                    var font = Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular");
-
-                    var probeCamDisplay = probeScreenPivot.Find("ProbeCamDisplay");
-                    var probeScreenText = new GameObject().AddComponent<Text>();
-                    probeScreenText.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = ShouldRenderScreenText;
-                    probeScreenText.transform.SetParent(probeCamDisplay.transform, false);
-                    probeScreenText.transform.localScale = Vector3.one * 0.0035f;
-                    probeScreenText.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                    probeScreenText.text = "<color=grey>PROBE LAUNCHER</color>\n\ninteract with screen\nto activate";
-                    probeScreenText.color = new Color(1, 1, 1, 0.1f);
-                    probeScreenText.alignment = TextAnchor.MiddleCenter;
-                    probeScreenText.fontSize = 8;
-                    probeScreenText.font = font;
-
-                    var signalScreenPivot = cockpitUI.Find("SignalScreen/SignalScreenPivot");
-                    signalscope = signalScreenPivot.Find("SignalScopeScreenFrame_geo").gameObject.AddComponent<ShipMonitorInteraction>();
-                    signalscope.mode = ToolMode.SignalScope;
-                    signalscope.text = UITextType.UISignalscope;
-
-                    var sigScopeDisplay = signalScreenPivot.Find("SigScopeDisplay");
-                    var scopeTextCanvas = new GameObject().AddComponent<Canvas>();
-                    scopeTextCanvas.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = ShouldRenderScreenText;
-                    scopeTextCanvas.transform.SetParent(sigScopeDisplay.transform.parent, false);
-                    scopeTextCanvas.transform.localPosition = sigScopeDisplay.transform.localPosition;
-                    scopeTextCanvas.transform.localRotation = sigScopeDisplay.transform.localRotation;
-                    scopeTextCanvas.transform.localScale = sigScopeDisplay.transform.localScale;
-                    var scopeScreenText = new GameObject().AddComponent<Text>();
-                    scopeScreenText.transform.SetParent(scopeTextCanvas.transform, false);
-                    scopeScreenText.transform.localScale = Vector3.one * 0.5f;
-                    scopeScreenText.text = "<color=grey>SIGNALSCOPE</color>\n\ninteract with screen to activate";
-                    scopeScreenText.color = new Color(1, 1, 1, 0.1f);
-                    scopeScreenText.alignment = TextAnchor.MiddleCenter;
-                    scopeScreenText.fontSize = 8;
-                    scopeScreenText.font = font;
+                    probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot").gameObject.AddComponent<ShipProbeInteract>();
+                    
+                    signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot").gameObject.AddComponent<ShipSignalscopeInteract>();
 
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
-                    landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipMonitorInteraction>();
-                    landingCam.button = InputConsts.InputCommandType.LANDING_CAMERA;
-                    landingCam.SkipPressCallback = () =>
-                    {
-                        if (isLandingCamEnabled)
-                        {
-                            cockpitController.ExitLandingView();
-                            return true;
-                        }
-                        return false;
-                    };
-                    landingCam.text = UITextType.ShipLandingPrompt;
+                    landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipLandingCamInteract>();
 
-                    var landingTextCanvas = new GameObject().AddComponent<Canvas>();
-                    landingTextCanvas.transform.SetParent(landingCam.transform.parent, false);
-                    landingTextCanvas.gameObject.AddComponent<ConditionalRenderer>().GETShouldRender = () => ShouldRenderScreenText() && !isLandingCamEnabled;
-                    landingTextCanvas.transform.localPosition = new Vector3(-0.017f, 3.731f, 5.219f);
-                    landingTextCanvas.transform.localRotation = Quaternion.Euler(53.28f, 0, 0);
-                    landingTextCanvas.transform.localScale = Vector3.one * 0.007f;
-                    var landingText = new GameObject().AddComponent<Text>();
-                    landingText.transform.SetParent(landingTextCanvas.transform, false);
-                    landingText.transform.localScale = Vector3.one * 0.6f;
-                    landingText.text = "<color=grey>LANDING CAMERA</color>\n\ninteract with screen\nto activate";
-                    landingText.color = new Color(1, 1, 1, 0.1f);
-                    landingText.alignment = TextAnchor.MiddleCenter;
-                    landingText.fontSize = 8;
-                    landingText.font = font;
-
-                    autoPilot = cockpitTech.GetComponentInChildren<AutopilotButton>().GetComponent<ShipMonitorInteraction>();
+                    // autoPilot = cockpitTech.GetComponentInChildren<AutopilotButton>().GetComponent<ShipInteractReceiver>();
                 }
 
                 private static Vector3 cameraPosition;

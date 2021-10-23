@@ -9,6 +9,7 @@ using NomaiVR.UI;
 using NomaiVR.Loaders.Harmony;
 using NomaiVR.Player;
 using NomaiVR.Saves;
+using NomaiVR.Ship;
 
 namespace NomaiVR
 {
@@ -46,7 +47,7 @@ namespace NomaiVR
             new VRToolSwapper();
             new HandsController();
             new ShipTools();
-            new AutopilotButtonPatch();
+            // new AutopilotButtonPatch();
             new FlashlightGesture();
             new HoldMallowStick();
             new HoldProbeLauncher();

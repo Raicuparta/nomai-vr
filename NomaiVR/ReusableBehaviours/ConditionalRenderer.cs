@@ -5,7 +5,7 @@ namespace NomaiVR.ReusableBehaviours
 {
     internal class ConditionalRenderer : MonoBehaviour, IActiveObserver
     {
-        public Func<bool> GETShouldRender;
+        public Func<bool> GetShouldRender;
         private bool shouldRender;
         private Vector3 scale;
         private Renderer renderer;
@@ -45,7 +45,7 @@ namespace NomaiVR.ReusableBehaviours
 
         internal void Update()
         {
-            var shouldRender = GETShouldRender.Invoke();
+            var shouldRender = GetShouldRender.Invoke();
             if (!this.shouldRender && shouldRender)
             {
                 SetShow(true);
