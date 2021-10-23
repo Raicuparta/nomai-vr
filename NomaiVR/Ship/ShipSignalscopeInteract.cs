@@ -37,6 +37,24 @@ namespace NomaiVR.Ship
             monitorTextTransform.SetParent(canvasTransform, false);
             monitorTextTransform.localScale = Vector3.one * 0.5f;
         }
+        
+        protected override void Update()
+        {
+            base.Update();
+
+            if (!Receiver) return;
+
+            var isUsingSignaslcope = ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship);
+            
+            if (isUsingSignaslcope && Receiver._textID != UITextType.SignalscopeFrequencyPrompt)
+            {
+                Receiver.SetPromptText(UITextType.SignalscopeFrequencyPrompt);
+            }
+            else if (!isUsingSignaslcope && Receiver._textID != UITextType.UISignalscope)
+            {
+                Receiver.SetPromptText(UITextType.UISignalscope);
+            }
+        }
 
         protected override void OnPress()
         {
