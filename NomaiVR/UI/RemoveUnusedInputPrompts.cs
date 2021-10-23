@@ -131,13 +131,8 @@ namespace NomaiVR.UI
                 {
                     if (!isVisible) return true;
 
-                    foreach (var commandType in __instance._commandIdList)
-                    {
-                        var actionInput = InputMap.GetActionInput(commandType);
-                        if (actionInput == null || actionInput == ActionInputDefinitions.Empty) return true;
-                    }
-
-                    return false;
+                    return __instance._commandIdList.Select(InputMap.GetActionInput)
+                        .Any(actionInput => actionInput == null || actionInput == ActionInputDefinitions.Empty);
                 }
             }
         }
