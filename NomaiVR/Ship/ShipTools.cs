@@ -18,7 +18,6 @@ namespace NomaiVR.Ship
             private static ShipInteractReceiver signalscope;
             private static ShipInteractReceiver landingCam;
             private static ShipInteractReceiver autoPilot;
-            public static bool IsLandingCamEnabled; // TODO not public please.
 
             internal void Awake()
             {
@@ -59,9 +58,9 @@ namespace NomaiVR.Ship
                     Prefix(typeof(ReferenceFrameTracker).GetMethod("UntargetReferenceFrame", new[] { typeof(bool) }), nameof(PreUntargetFrame));
                 }
 
-                private static void PreCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
+                private static void PreCockpitUIUpdate(ShipCockpitUI __instance)
                 {
-                    ____shipSystemsCtrlr._usingLandingCam = IsLandingCamEnabled;
+                    __instance._shipSystemsCtrlr._usingLandingCam = __instance._shipSystemsCtrlr._landingCam.enabled;
                 }
 
                 private static void PostCockpitUIUpdate(ShipCockpitController ____shipSystemsCtrlr)
@@ -69,39 +68,23 @@ namespace NomaiVR.Ship
                     ____shipSystemsCtrlr._usingLandingCam = false;
                 }
 
-                private static bool PreEnterLandingView(
-                    LandingCamera ____landingCam,
-                    ShipLight ____landingLight,
-                    ShipCameraComponent ____landingCamComponent,
-                    ShipAudioController ____shipAudioController
-                )
+                private static bool PreEnterLandingView(ShipCockpitController __instance)
                 {
-                    IsLandingCamEnabled = true;
-                    ____landingCam.enabled = true;
-                    ____landingLight.SetOn(true);
+                    __instance._landingCam.enabled = true;
+                    __instance._landingLight.SetOn(true);
 
-                    if (____landingCamComponent.isDamaged)
-                    {
-                        ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamStatic_LP);
-                    }
-                    else
-                    {
-                        ____shipAudioController.PlayLandingCamOn(AudioType.ShipCockpitLandingCamAmbient_LP);
-                    }
+                    __instance._shipAudioController.PlayLandingCamOn(__instance._landingCamComponent.isDamaged
+                        ? AudioType.ShipCockpitLandingCamStatic_LP
+                        : AudioType.ShipCockpitLandingCamAmbient_LP);
 
                     return false;
                 }
 
-                private static bool PreExitLandingView(
-                    LandingCamera ____landingCam,
-                    ShipLight ____landingLight,
-                    ShipAudioController ____shipAudioController
-                )
+                private static bool PreExitLandingView(ShipCockpitController __instance)
                 {
-                    IsLandingCamEnabled = false;
-                    ____landingCam.enabled = false;
-                    ____landingLight.SetOn(false);
-                    ____shipAudioController.PlayLandingCamOff();
+                    __instance._landingCam.enabled = false;
+                    __instance._landingLight.SetOn(false);
+                    __instance._shipAudioController.PlayLandingCamOff();
 
                     return false;
                 }
@@ -140,8 +123,9 @@ namespace NomaiVR.Ship
 
                     if (__instance._isMapView)
                     {
-                        activeCam.position = mapGridRenderer.position + mapGridRenderer.up * 10000;
-                        activeCam.rotation = Quaternion.LookRotation(mapGridRenderer.up * -1);
+                        var up = mapGridRenderer.up;
+                        activeCam.position = mapGridRenderer.position + up * 10000;
+                        activeCam.rotation = Quaternion.LookRotation(up * -1);
                     }
                     else
                     {

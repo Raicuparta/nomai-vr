@@ -19,7 +19,7 @@ namespace NomaiVR.Ship
             cockpitController = FindObjectOfType<ShipCockpitController>();
                 
             var canvas = new GameObject().AddComponent<Canvas>();
-            canvas.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => ShouldRenderScreenText() && !ShipTools.Behaviour.IsLandingCamEnabled;
+            canvas.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => ShouldRenderScreenText() && !cockpitController._landingCam.enabled;
 
             var canvasTransform = canvas.transform;
             canvasTransform.SetParent(transform.parent, false);
@@ -41,7 +41,7 @@ namespace NomaiVR.Ship
 
         protected override void OnPress()
         {
-            if (ShipTools.Behaviour.IsLandingCamEnabled)
+            if (cockpitController._landingCam.enabled)
             {
                 cockpitController.ExitLandingView();
             }
