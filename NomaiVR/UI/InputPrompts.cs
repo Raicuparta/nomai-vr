@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NomaiVR.Assets;
+using NomaiVR.Helpers;
 using NomaiVR.Input;
 using NomaiVR.Input.ActionInputs;
 using UnityEngine;
@@ -120,6 +121,7 @@ namespace NomaiVR.UI
                     Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.GetUITextures), nameof(GetVruiTextures));
                     Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.GetUITextures), nameof(GetVruiTextures));
                     Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.GetUITextures), nameof(GetVruiTextures));
+                    Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(MakePromptsDrawOnTop));
                 }
 
                 public static bool GetVruiTextures(bool gamepad, bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
@@ -190,6 +192,11 @@ namespace NomaiVR.UI
                     var texture = Instance.GetTexture($"{baseAssetPath}/{Instance.Platform}/{name}");
                     if(texture != null) __instance.textureList.Add(texture);
                     return __instance.textureList.Count == 0;
+                }
+                
+                private static void MakePromptsDrawOnTop(ScreenPromptElement __instance)
+                {
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(__instance.gameObject);
                 }
             }
         }
