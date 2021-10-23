@@ -13,12 +13,15 @@ namespace NomaiVR.Hands
 {
     internal class LaserPointer : NomaiVRModule<LaserPointer.Behaviour, LaserPointer.Behaviour.Patch>
     {
+        private static readonly int color = Shader.PropertyToID("_Color");
+        private static readonly Shader brightShader = Shader.Find("Unlit/Color");
+        private static readonly Shader fadedShader = Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply");
+        private static readonly Color brightColor = new Color(0.8f, 0.8f, 0.8f);
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => AllScenes;
 
         public class Behaviour : MonoBehaviour
         {
-            public static Behaviour Instance { get; private set; }
             public static Transform Laser;
             public static Transform OffHandLaser;
             public static Transform MovementLaser;
@@ -36,7 +39,6 @@ namespace NomaiVR.Hands
 
             internal void Start()
             {
-                Instance = this;
                 SetUpLaserObject();
                 SetUpOffHandLaser();
                 ToDominantHand();
@@ -176,16 +178,16 @@ namespace NomaiVR.Hands
 
             private void UpdateLineAppearance()
             {
-                if (InputHelper.IsUIInteractionMode(true))
+                SetLineLength(InputHelper.IsUIInteractionMode(true) ? menuLineLength : gameLineLength);
+                
+                if (InputHelper.IsUIInteractionMode(true) || (manipulator && manipulator.HasFocusedInteractible()))
                 {
-                    SetLineLength(menuLineLength);
-                    lineRenderer.material.shader = Shader.Find("Unlit/Color");
-                    lineRenderer.material.SetColor("_Color", new Color(0.8f, 0.8f, 0.8f));
+                    lineRenderer.material.shader = brightShader;
+                    lineRenderer.material.SetColor(color, brightColor);
                 }
                 else
                 {
-                    SetLineLength(gameLineLength);
-                    lineRenderer.material.shader = Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply");
+                    lineRenderer.material.shader = fadedShader;
                 }
             }
 
