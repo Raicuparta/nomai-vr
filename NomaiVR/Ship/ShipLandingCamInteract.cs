@@ -1,7 +1,6 @@
 ﻿using NomaiVR.Helpers;
 using NomaiVR.Input;
 using NomaiVR.ReusableBehaviours;
-using NomaiVR.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 

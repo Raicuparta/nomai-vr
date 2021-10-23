@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NomaiVR.Assets;
 using NomaiVR.Helpers;
 using NomaiVR.Input;
