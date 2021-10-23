@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NomaiVR.Helpers;
+using NomaiVR.Input;
+using NomaiVR.Input.ActionInputs;
 using UnityEngine;
 
 namespace NomaiVR.UI
@@ -52,6 +55,8 @@ namespace NomaiVR.UI
                     Postfix<ToolModeUI>(nameof(ToolModeUI.LateInitialize), nameof(RemoveToolModePrompts));
                     
                     Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(PostScreenPromptVisibility)); // TODO move this elswhere.
+
+                    Prefix<ScreenPrompt>(nameof(ScreenPrompt.SetVisibility), nameof(PreventShowingUnusedPrompt));
 
                     // Prevent probe launcher from moving the prompts around.
                     Empty<PromptManager>(nameof(PromptManager.OnProbeSnapshot));
@@ -121,6 +126,16 @@ namespace NomaiVR.UI
                 private static void RemoveTranslatorPrompts(NomaiTranslatorProp __instance)
                 {
                     Manager.RemoveScreenPrompt(__instance._unequipPrompt);
+                }
+                
+                private static bool PreventShowingUnusedPrompt(ScreenPrompt __instance, bool isVisible)
+                {
+                    if (!isVisible) return true;
+
+                    return !(from commandType in __instance._commandIdList
+                        let actionInput = InputMap.GetActionInput(commandType)
+                        where actionInput == null || actionInput == ActionInputDefinitions.Empty
+                        select commandType).Any();
                 }
             }
         }
