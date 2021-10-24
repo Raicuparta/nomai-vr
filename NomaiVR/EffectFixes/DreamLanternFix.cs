@@ -71,9 +71,7 @@ namespace NomaiVR.EffectFixes
             {
                 var originalCheck = __instance._lanternController != null && (__instance._lanternController.IsFocused(0.1f) || __instance._lanternController.IsConcealed());
                 if (__result || originalCheck) return;
-                var flag1 = Vector3.SignedAngle(Locator.GetPlayerTransform().forward, __instance.transform.forward, Locator.GetPlayerTransform().forward) < -70f;
-                var flag2 = Locator.GetPlayerController().GetRelativeGroundVelocity().sqrMagnitude < Locator.GetPlayerController().GetWalkSpeedMagnitude() * Locator.GetPlayerController().GetWalkSpeedMagnitude();
-                __result = flag1 && flag2;
+                __result = Locator.GetPlayerController().GetRelativeGroundVelocity().sqrMagnitude < Locator.GetPlayerController().GetWalkSpeedMagnitude() * Locator.GetPlayerController().GetWalkSpeedMagnitude();
             }
 
             private static bool itemToolUpdateInteractCalled;
