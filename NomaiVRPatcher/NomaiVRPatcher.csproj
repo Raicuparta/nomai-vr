@@ -21,7 +21,8 @@
     <Exec Command="copy /y &quot;$(TargetDir)\Mono*.dll&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\ClassDatabase\*&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\StreamingAssets\SteamVR&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Plugins\x86_64\openvr_api.dll&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_api.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\OpenVrFsr\openvr_api.dll&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_api.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\OpenVrFsr\openvr_mod.cfg&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_mod.cfg&quot;" />
   </Target>
 
   <ItemGroup>
