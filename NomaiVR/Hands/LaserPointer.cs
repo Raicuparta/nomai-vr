@@ -1,5 +1,4 @@
-﻿using System;
-using NomaiVR.Helpers;
+﻿using NomaiVR.Helpers;
 using NomaiVR.Input;
 using NomaiVR.ModConfig;
 using NomaiVR.Tools;
@@ -25,8 +24,6 @@ namespace NomaiVR.Hands
             public static Transform Laser;
             public static Transform OffHandLaser;
             public static Transform MovementLaser;
-            public FirstPersonManipulator Manipulator => manipulator;
-            
 
             private static FirstPersonManipulator manipulator;
             private LineRenderer lineRenderer;
@@ -124,6 +121,7 @@ namespace NomaiVR.Hands
             private static void SetUpOffHandLaser()
             {
                 OffHandLaser = new GameObject("OffHandLaser").transform;
+                OffHandLaser.gameObject.layer = LayerMask.NameToLayer("UI");
                 OffHandLaser.localPosition = new Vector3(0f, -0.05f, 0.01f);
                 OffHandLaser.localRotation = Quaternion.Euler(45f, 0, 0);
             }
@@ -254,17 +252,21 @@ namespace NomaiVR.Hands
 
             public class Patch : NomaiVRPatch
             {
-                private static IntPtr pointerUpdateInteractVolume;
-
                 public override void ApplyPatches()
                 {
                     Prefix<InteractZone>(nameof(InteractZone.OnEntry), nameof(PreInteractZoneEntry));
                     Prefix<InteractZone>(nameof(InteractZone.OnExit), nameof(PreInteractZoneExit));
                     Prefix<ToolModeSwapper>(nameof(ToolModeSwapper.Update), nameof(PreToolModeUpdate));
-                    Prefix<ItemTool>(nameof(ItemTool.UpdateIsDroppable), nameof(PreUpdateIsDroppable));
-                    Postfix<ItemTool>(nameof(ItemTool.UpdateIsDroppable), nameof(PostUpdateIsDroppable));
 
-                    pointerUpdateInteractVolume = typeof(SingleInteractionVolume).GetMethod("UpdateInteractVolume").MethodHandle.GetFunctionPointer();
+                    Prefix<ItemTool>(nameof(ItemTool.UpdateIsDroppable), nameof(MoveCameraToLaser));
+                    Prefix<InteractZone>(nameof(InteractZone.UpdateInteractVolume), nameof(MoveCameraToLaser));
+                    Prefix<InteractReceiver>(nameof(InteractReceiver.Observe), nameof(MoveCameraToLaser));
+                    Prefix<MultiInteractReceiver>(nameof(MultiInteractReceiver.Observe), nameof(MoveCameraToLaser));
+                    
+                    Postfix<ItemTool>(nameof(ItemTool.UpdateIsDroppable), nameof(ResetCamera));
+                    Postfix<InteractZone>(nameof(InteractZone.UpdateInteractVolume), nameof(ResetCamera));
+                    Postfix<InteractReceiver>(nameof(InteractReceiver.Observe), nameof(ResetCamera));
+                    Postfix<MultiInteractReceiver>(nameof(MultiInteractReceiver.Observe), nameof(ResetCamera));
                 }
 
                 private static bool PreInteractZoneEntry(GameObject hitObj, InteractZone __instance)
@@ -285,31 +287,28 @@ namespace NomaiVR.Hands
                     return false;
                 }
 
-                private static void PreToolModeUpdate(ref FirstPersonManipulator ____firstPersonManipulator)
+                private static void PreToolModeUpdate(ToolModeSwapper __instance)
                 {
-                    if (____firstPersonManipulator != manipulator)
-                    {
-                        ____firstPersonManipulator = manipulator;
-                    }
+                    __instance._firstPersonManipulator = manipulator;
                 }
 
                 private static Quaternion cameraRotation;
                 private static Vector3 cameraPosition;
 
-                private static void PreUpdateIsDroppable()
+                private static void MoveCameraToLaser()
                 {
-                    var camera = Locator.GetPlayerCamera();
-                    cameraRotation = camera.transform.rotation;
-                    cameraPosition = camera.transform.position;
-                    camera.transform.position = Laser.position;
-                    camera.transform.forward = Laser.forward;
+                    var camera = Locator.GetPlayerCamera().transform;
+                    cameraRotation = camera.rotation;
+                    cameraPosition = camera.position;
+                    camera.position = Laser.position;
+                    camera.forward = Laser.forward;
                 }
 
-                private static void PostUpdateIsDroppable()
+                private static void ResetCamera()
                 {
-                    var camera = Locator.GetPlayerCamera();
-                    camera.transform.position = cameraPosition;
-                    camera.transform.rotation = cameraRotation;
+                    var camera = Locator.GetPlayerCamera().transform;
+                    camera.position = cameraPosition;
+                    camera.rotation = cameraRotation;
                 }
             }
         }
