@@ -7,6 +7,7 @@
   - [Manual installation](#manual-installation)
   - [Uninstalling](#uninstalling)
 - [Requirements](#requirements)
+- [Enabling FSR](#enabling-fsr)
 - [Troubleshooting](#troubleshooting)
   - [Error when starting game](#error-when-starting-game)
   - [VR Controller Inputs](#vr-controller-inputs)
@@ -52,6 +53,10 @@
 - Strong VR legs (it can be a very intense VR experience);
 - Not compatible with any other mods.
 
+## Enabling FSR
+
+NomaiVR is shipped with [openvr_fsr](https://github.com/fholger/openvr_fsr), which can greatly improve performance. It is disabled by default. To enable it and change its settings, navigate to `Raicuparta.NomaiVR\patcher\files\OuterWilds_Data\Plugins\x86_64` and edit `openvr_mod.cfg`. Change the line `"enabled": false,` to `"enabled": true,`. Read the [openvr_fsr documentation](https://github.com/fholger/openvr_fsr) to learn more.
+
 ## Troubleshooting
 
 ### Error when starting game
@@ -79,6 +84,8 @@ The mod tries its best to teach you how to play the game in VR, but it's not alw
 Some controllers, like WMR, might be missing icons in the prompts. If you have one of these devices and want to help, please [contact us](#support) so we can add these icons in.
 
 ### Poor performance
+
+See [Enabling FSR](#enabling-fsr) for an easy way to improve performance.
 
 This game was not developed with VR in mind. It was also never a super lightweight game, and shoving VR down its throat isn't helping. You'll probably need to lower your quality settings to get acceptable performance.
 
