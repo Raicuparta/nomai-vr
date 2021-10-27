@@ -57,6 +57,8 @@
 
 NomaiVR is shipped with [openvr_fsr](https://github.com/fholger/openvr_fsr), which can greatly improve performance. It is disabled by default. To enable it and change its settings, navigate to `Raicuparta.NomaiVR\patcher\files\OuterWilds_Data\Plugins\x86_64` and edit `openvr_mod.cfg`. Change the line `"enabled": false,` to `"enabled": true,`. Read the [openvr_fsr documentation](https://github.com/fholger/openvr_fsr) to learn more.
 
+These settings will be reset every time you update or reinstall NomaiVR.
+
 ## Troubleshooting
 
 ### Error when starting game
