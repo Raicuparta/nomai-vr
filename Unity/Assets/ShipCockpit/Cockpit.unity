@@ -436,7 +436,7 @@ PrefabInstance:
     - target: {fileID: 6090104873234971453, guid: 080f952311bc8ca4c82819590051bb90,
         type: 3}
       propertyPath: m_Name
-      value: ArrowButtons
+      value: ProbeScreenButtons
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 080f952311bc8ca4c82819590051bb90, type: 3}
