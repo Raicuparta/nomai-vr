@@ -78,6 +78,10 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_RIGHT, ActionInputDefinitions.Empty },
                 { InputCommandType.TOOL_X, ActionInputDefinitions.Empty },
                 { InputCommandType.TOOL_LEFT, ActionInputDefinitions.Empty },
+                { InputCommandType.TOOL_UP, ActionInputDefinitions.Empty },
+                { InputCommandType.TOOL_DOWN, ActionInputDefinitions.Empty },
+                { InputCommandType.TOOL_Y, ActionInputDefinitions.Empty },
+                { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Empty },
             };
 
         public static IActionInput GetActionInput(InputCommandType commandType)
@@ -100,6 +104,6 @@ namespace NomaiVR.Input
                                         || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
 
         private static bool ShouldUseShipSignalscopeMap =>
-            ToolHelper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship);
+            ToolHelper.IsUsingAnyTool(ToolGroup.Ship);
     }
 }
