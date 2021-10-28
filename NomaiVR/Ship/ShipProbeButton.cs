@@ -1,11 +1,13 @@
-﻿using NomaiVR.Input;
+﻿using System;
+using NomaiVR.Input;
 using UnityEngine;
+using static InputConsts;
 
 namespace NomaiVR.Ship
 {
     public class ShipProbeButton: MonoBehaviour
     {
-        private InputConsts.InputCommandType inputCommandType;
+        private InputCommandType inputCommandType;
 
         private void Awake()
         {
@@ -27,21 +29,7 @@ namespace NomaiVR.Ship
 
         private void SetUpInputCommandType()
         {
-            switch (name)
-            {
-                case "ArrowButtonUp":
-                    inputCommandType = InputConsts.InputCommandType.TOOL_UP;
-                    return;
-                case "ArrowButtonDown":
-                    inputCommandType = InputConsts.InputCommandType.TOOL_DOWN;
-                    return;
-                case "ArrowButtonLeft":
-                    inputCommandType = InputConsts.InputCommandType.TOOL_LEFT;
-                    return;
-                case "ArrowButtonRight":
-                    inputCommandType = InputConsts.InputCommandType.TOOL_RIGHT;
-                    return;
-            }
+            inputCommandType = (InputCommandType) Enum.Parse(typeof(InputCommandType), name);
         }
     }
 }
