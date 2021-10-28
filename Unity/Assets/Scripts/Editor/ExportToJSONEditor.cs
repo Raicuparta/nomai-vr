@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExportToJSONEditor : Editor
 {
-    [MenuItem("Assets/JSON/To JSON", false, 30)]
+    [MenuItem("Tools/To JSON", false, 30)]
     public static void ExportToJSON()
     {
         if(Selection.activeObject == null)
