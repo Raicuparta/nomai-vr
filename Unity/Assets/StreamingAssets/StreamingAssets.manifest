@@ -1,13 +1,16 @@
 ManifestFileVersion: 0
-CRC: 3113668302
+CRC: 3984509787
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: autopilot-button
-      Dependencies: {}
-    Info_1:
       Name: vrbindings-textures
       Dependencies: {}
-    Info_2:
+    Info_1:
       Name: steamvr-shaders
+      Dependencies: {}
+    Info_2:
+      Name: autopilot-button
+      Dependencies: {}
+    Info_3:
+      Name: cockpit-buttons
       Dependencies: {}

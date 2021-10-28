@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 4018405703
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c790dec6c116b57da6d50e1473c5190b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f84699563d2dd09d978bf6c2e03adf13
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ShipCockpit/ProbeScreenButtons/ProbeScreenButtons.prefab
+- Assets/ShipCockpit/ProbeScreenButtons/ArrowButton.mat
+- Assets/ShipCockpit/ProbeScreenButtons/ArrowButton.prefab
+- Assets/ShipCockpit/ProbeScreenButtons/ArrowButton.fbx
+Dependencies: []

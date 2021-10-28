@@ -23,6 +23,7 @@ namespace NomaiVR.Assets
         public static GameObject HelmetPrefab;
         public static GameObject LookArrowPrefab;
         public static GameObject AutopilotButtonPrefab;
+        public static GameObject ProbeScreenButtonsPrefab;
         public static AssetBundle VRBindingTextures;
         public static Sprite SplashSprite;
         public static Texture2D EmptyTexture;
@@ -58,6 +59,9 @@ namespace NomaiVR.Assets
             var autopilotBundle = LoadBundle("autopilot-button");
             AutopilotButtonPrefab = LoadAsset<GameObject>(autopilotBundle, "models/tools/autopilot/autopilot_button.prefab");
 
+            var cockpitButtonsBundle = LoadBundle("cockpit-buttons");
+            ProbeScreenButtonsPrefab = LoadAsset<GameObject>(cockpitButtonsBundle, "shipcockpit/probescreenbuttons/probescreenbuttons.prefab");
+            
             var splashBundle = LoadBundle("splash-screen");
             SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");
 
