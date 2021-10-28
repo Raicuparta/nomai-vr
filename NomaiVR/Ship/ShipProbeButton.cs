@@ -31,22 +31,18 @@ namespace NomaiVR.Ship
             switch (name)
             {
                 case "ArrowButtonUp":
-                    Debug.LogError("##### ArrowButtonUp");
                     inputCommandType = InputConsts.InputCommandType.TOOL_UP;
                     promptText = UITextType.UpPrompt;
                     return;
                 case "ArrowButtonDown":
-                    Debug.LogError("##### ArrowButtonDown");
                     inputCommandType = InputConsts.InputCommandType.TOOL_DOWN;
                     promptText = UITextType.DownPrompt;
                     return;
                 case "ArrowButtonLeft":
-                    Debug.LogError("##### ArrowButtonLeft");
                     inputCommandType = InputConsts.InputCommandType.TOOL_LEFT;
                     promptText = UITextType.RebindLeft;
                     return;
                 case "ArrowButtonRight":
-                    Debug.LogError("##### ArrowButtonRight");
                     inputCommandType = InputConsts.InputCommandType.RIGHT;
                     promptText = UITextType.RebindRight;
                     return;
