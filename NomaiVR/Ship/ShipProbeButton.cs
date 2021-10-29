@@ -19,8 +19,8 @@ namespace NomaiVR.Ship
         private static readonly int shaderColor = Shader.PropertyToID("_Color");
         private static readonly Color enabledColor = new Color(2.12f,1.57f,1.33f,0.04f);
         private static readonly Color activeColor = new Color(2.11f,1.67f,1.33f,0.2f);
-        private static readonly Color disabledColor = new Color(0,0,0);
-        private static readonly Color hoverColor = new Color(0,0,0);
+        private static readonly Color disabledColor = new Color(0.6f,0.6f,0.6f,0.46f);
+        private static readonly Color hoverColor =  new Color(2.12f,1.67f,1.33f,0.1f);
         private ButtonState buttonState = ButtonState.PreInit;
         private Material buttonMaterial;
         
@@ -54,9 +54,12 @@ namespace NomaiVR.Ship
                 receiver.ResetInteraction();
                 SetState(ButtonState.Enabled);
             };
+            receiver.OnGainFocus += () =>
+            {
+                SetState(ButtonState.Hover);
+            };
             receiver.OnLoseFocus += () =>
             {
-                if (buttonState != ButtonState.Active) return;
                 ControllerInput.SimulateInput(inputCommandType, false);
                 receiver.ResetInteraction();
                 SetState(ButtonState.Enabled);
@@ -73,6 +76,12 @@ namespace NomaiVR.Ship
             if (state == buttonState) return;
             switch (state)
             {
+                case ButtonState.Disabled:
+                    SetButtonColor(disabledColor);
+                    break;
+                case ButtonState.Hover:
+                    SetButtonColor(hoverColor);
+                    break;
                 case ButtonState.Active:
                     SetButtonColor(activeColor);
                     break;
