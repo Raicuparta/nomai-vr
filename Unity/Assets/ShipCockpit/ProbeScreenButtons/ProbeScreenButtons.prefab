@@ -166,7 +166,7 @@ PrefabInstance:
     - target: {fileID: 6878973625976030914, guid: 52673da16b3de7d4e8088915a4cd8be4,
         type: 3}
       propertyPath: m_Name
-      value: PROBELAUNCH
+      value: PROBERETRIEVE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52673da16b3de7d4e8088915a4cd8be4, type: 3}
@@ -420,6 +420,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5953107176761929132, guid: 52673da16b3de7d4e8088915a4cd8be4,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.09774339
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953107176761929132, guid: 52673da16b3de7d4e8088915a4cd8be4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.01562043
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953107176761929132, guid: 52673da16b3de7d4e8088915a4cd8be4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.09774339
+      objectReference: {fileID: 0}
+    - target: {fileID: 5953107176761929132, guid: 52673da16b3de7d4e8088915a4cd8be4,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -481,7 +496,7 @@ PrefabInstance:
     - target: {fileID: 6878973625976030914, guid: 52673da16b3de7d4e8088915a4cd8be4,
         type: 3}
       propertyPath: m_Name
-      value: PROBERETRIEVE
+      value: TOOL_PRIMARY
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52673da16b3de7d4e8088915a4cd8be4, type: 3}

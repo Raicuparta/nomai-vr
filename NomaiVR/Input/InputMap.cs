@@ -82,6 +82,8 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_DOWN, ActionInputDefinitions.Empty },
                 { InputCommandType.TOOL_Y, ActionInputDefinitions.Empty },
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Empty },
+                { InputCommandType.PROBELAUNCH, ActionInputDefinitions.Empty },
+                { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.Empty },
             };
 
         public static IActionInput GetActionInput(InputCommandType commandType)
