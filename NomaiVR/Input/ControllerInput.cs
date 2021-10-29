@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NomaiVR.Helpers;
 using NomaiVR.ModConfig;
 using NomaiVR.Tools;
 using UnityEngine;
@@ -34,6 +35,9 @@ namespace NomaiVR.Input
                 Prefix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
                 Postfix<InputManager>(nameof(InputManager.IsGamepadEnabled), nameof(ForceGamepadEnabled));
                 Postfix<InputManager>(nameof(InputManager.UsingGamepad), nameof(ForceGamepadEnabled));
+                
+                Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(ForceHasSameBindingFalse));
+                Postfix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.HasSameBinding), nameof(ForceHasSameBindingFalse));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
@@ -87,6 +91,16 @@ namespace NomaiVR.Input
             private static void ForceGamepadEnabled(ref bool __result)
             {
                 __result = true;
+            }
+            
+            private static void ForceHasSameBindingFalse(ref bool __result, IInputCommands __instance, IInputCommands compare)
+            {
+                if (ToolHelper.IsUsingAnyTool(ToolGroup.Ship) && (__instance.CommandType == InputCommandType.TOOL_PRIMARY ||
+                    compare.CommandType == InputCommandType.PROBERETRIEVE))
+                {
+                    __result = false;
+                }
+
             }
         }
     }
