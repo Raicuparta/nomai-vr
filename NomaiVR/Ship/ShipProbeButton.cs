@@ -23,47 +23,105 @@ namespace NomaiVR.Ship
         private static readonly Color hoverColor =  new Color(2.12f,1.67f,1.33f,0.1f);
         private ButtonState buttonState = ButtonState.PreInit;
         private Material buttonMaterial;
+        private Collider collider;
+        private InputCommandType inputCommandType;
+        private InteractReceiver receiver;
         
         private void Awake()
         {
-            var inputCommandType = GetInputCommandType();
-            SetUpReceiver(inputCommandType);
+            // TODO cleanup events.
+            inputCommandType = GetInputCommandType();
+            SetUpReceiver();
             buttonMaterial = GetComponent<Renderer>().material;
-            SetState(ButtonState.Disabled);
+            collider = GetComponent<Collider>();
+            SetInitialState();
+            SetUpAnchorEvents();
         }
 
-        private InputCommandType GetInputCommandType()
+        private void OnDestroy()
         {
-            return (InputCommandType) Enum.Parse(typeof(InputCommandType), name);
+            receiver.OnPressInteract -= OnPressInteract;
+            receiver.OnReleaseInteract -= OnReleaseInteract;
+            receiver.OnGainFocus -= OnGainFocus;
+            receiver.OnLoseFocus -= OnLoseFocus;
+            Locator.GetProbe().OnAnchorProbe -= OnAnchorProbe;
+            Locator.GetProbe().OnUnanchorProbe -= OnUnanchorProbe;
+            Locator.GetProbe().OnRetrieveProbe -= OnUnanchorProbe;
+            Locator.GetProbe().OnProbeDestroyed -= OnUnanchorProbe;
         }
 
-        private void SetUpReceiver(InputCommandType inputCommandType)
+        private void SetInitialState()
         {
-            var receiver = gameObject.AddComponent<InteractReceiver>();
+            if (inputCommandType != InputCommandType.TOOL_PRIMARY && inputCommandType != InputCommandType.PROBERETRIEVE)
+            {
+                SetState(ButtonState.Disabled);
+            }
+            else
+            {
+                SetState(ButtonState.Enabled);
+            }
+        }
+        
+        private void SetUpReceiver()
+        {
+            receiver = gameObject.AddComponent<InteractReceiver>();
             receiver.SetInteractRange(2);
             receiver._usableInShip = true;
             receiver.SetPromptText(UITextType.ProbeRotatePrompt);
-            receiver.OnPressInteract += () =>
-            {
-                ControllerInput.SimulateInput(inputCommandType, true);
-                SetState(ButtonState.Active);
-            };
-            receiver.OnReleaseInteract += () =>
-            {
-                ControllerInput.SimulateInput(inputCommandType, false);
-                receiver.ResetInteraction();
-                SetState(ButtonState.Enabled);
-            };
-            receiver.OnGainFocus += () =>
-            {
-                SetState(ButtonState.Hover);
-            };
-            receiver.OnLoseFocus += () =>
-            {
-                ControllerInput.SimulateInput(inputCommandType, false);
-                receiver.ResetInteraction();
-                SetState(ButtonState.Enabled);
-            };
+            receiver.OnPressInteract += OnPressInteract;
+            receiver.OnReleaseInteract += OnReleaseInteract;
+            receiver.OnGainFocus += OnGainFocus;
+            receiver.OnLoseFocus += OnLoseFocus;
+        }
+
+        private void SetUpAnchorEvents()
+        {
+            Locator.GetProbe().OnAnchorProbe += OnAnchorProbe;
+            Locator.GetProbe().OnUnanchorProbe += OnUnanchorProbe;
+            Locator.GetProbe().OnRetrieveProbe += OnUnanchorProbe;
+            Locator.GetProbe().OnProbeDestroyed += OnUnanchorProbe;
+        }
+
+        private void OnPressInteract()
+        {
+            ControllerInput.SimulateInput(inputCommandType, true);
+            SetState(ButtonState.Active);
+        }
+
+        private void OnReleaseInteract()
+        {
+            ControllerInput.SimulateInput(inputCommandType, false);
+            receiver.ResetInteraction();
+            SetState(ButtonState.Enabled);
+        }
+
+        private void OnGainFocus()
+        {
+            SetState(ButtonState.Hover);
+        }
+        
+        private void OnLoseFocus()
+        {
+            ControllerInput.SimulateInput(inputCommandType, false);
+            receiver.ResetInteraction();
+            SetState(ButtonState.Enabled);
+        }
+
+        private void OnAnchorProbe()
+        {
+            if (inputCommandType == InputCommandType.TOOL_PRIMARY) return;
+            SetState(ButtonState.Enabled);
+        }
+
+        private void OnUnanchorProbe()
+        {
+            if (inputCommandType == InputCommandType.TOOL_PRIMARY) return;
+            SetState(ButtonState.Disabled);
+        }
+        
+        private InputCommandType GetInputCommandType()
+        {
+            return (InputCommandType) Enum.Parse(typeof(InputCommandType), name);
         }
         
         private void SetButtonColor(Color color)
@@ -74,6 +132,7 @@ namespace NomaiVR.Ship
         private void SetState(ButtonState state)
         {
             if (state == buttonState) return;
+            collider.enabled = state != ButtonState.Disabled;
             switch (state)
             {
                 case ButtonState.Disabled:
