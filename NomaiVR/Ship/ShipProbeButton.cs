@@ -6,7 +6,7 @@ using static InputConsts;
 
 namespace NomaiVR.Ship
 {
-    public class ShipProbeButton: MonoBehaviour
+    public class ShipProbeButton : MonoBehaviour
     {
         private enum ButtonState
         {
@@ -16,18 +16,18 @@ namespace NomaiVR.Ship
             Focused,
             Active,
         }
-        
+
         private static readonly int shaderColor = Shader.PropertyToID("_Color");
-        private static readonly Color enabledColor = new Color(2.12f,1.57f,1.33f,0.04f);
-        private static readonly Color activeColor = new Color(2.11f,1.67f,1.33f,0.2f);
-        private static readonly Color disabledColor = new Color(0,0,0,0);
-        private static readonly Color hoverColor =  new Color(2.12f,1.67f,1.33f,0.1f);
+        private static readonly Color enabledColor = new Color(2.12f, 1.57f, 1.33f, 0.04f);
+        private static readonly Color activeColor = new Color(2.11f, 1.67f, 1.33f, 0.2f);
+        private static readonly Color disabledColor = new Color(0, 0, 0, 0);
+        private static readonly Color hoverColor = new Color(2.12f, 1.67f, 1.33f, 0.1f);
         private ButtonState buttonState = ButtonState.PreInit;
         private Material buttonMaterial;
         private Collider collider;
         private InputCommandType inputCommandType;
         private InteractReceiver receiver;
-        
+
         private void Awake()
         {
             inputCommandType = GetInputCommandType();
@@ -65,7 +65,7 @@ namespace NomaiVR.Ship
             receiver.OnReleaseInteract -= OnReleaseInteract;
             receiver.OnLoseFocus -= OnReleaseInteract;
         }
-        
+
         private void SetUpReceiver()
         {
             receiver = gameObject.AddComponent<InteractReceiver>();
@@ -87,22 +87,22 @@ namespace NomaiVR.Ship
             ControllerInput.SimulateInput(inputCommandType, false);
             receiver.ResetInteraction();
         }
-        
+
         private InputCommandType GetInputCommandType()
         {
             return (InputCommandType) Enum.Parse(typeof(InputCommandType), name);
         }
-        
+
         private void SetButtonColor(Color color)
         {
             buttonMaterial.SetColor(shaderColor, color);
         }
-        
+
         private void SetState(ButtonState nextState, ButtonState? previousState = null)
         {
             if (nextState == buttonState) return;
             if (previousState != null && previousState != buttonState) return;
-            
+
             collider.enabled = nextState != ButtonState.Disabled;
             switch (nextState)
             {
@@ -119,6 +119,7 @@ namespace NomaiVR.Ship
                     SetButtonColor(enabledColor);
                     break;
             }
+
             buttonState = nextState;
         }
     }
