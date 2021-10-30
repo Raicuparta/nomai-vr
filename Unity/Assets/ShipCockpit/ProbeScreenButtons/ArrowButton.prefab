@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4228712170088985310}
   - component: {fileID: 936956277417409915}
   - component: {fileID: 3090678312433453489}
-  - component: {fileID: 1118819822877696499}
+  - component: {fileID: 5495378138093489504}
   m_Layer: 0
   m_Name: ArrowButton
   m_TagString: Untagged
@@ -80,8 +80,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1118819822877696499
-BoxCollider:
+--- !u!135 &5495378138093489504
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -91,5 +91,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.007223004, y: 0.061103873, z: 0.041063927}
-  m_Center: {x: 0.007993611, y: 1.5334204e-12, z: 0.0003441572}
+  m_Radius: 0.018000005
+  m_Center: {x: 0.00799361, y: 0, z: 1.4199504e-16}

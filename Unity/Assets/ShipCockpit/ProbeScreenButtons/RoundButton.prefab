@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5953107176761929132}
   - component: {fileID: 8099891902496496987}
   - component: {fileID: 3708014356192162465}
-  - component: {fileID: 6915502381938010126}
+  - component: {fileID: 1605281234563535393}
   m_Layer: 10
   m_Name: RoundButton
   m_TagString: Untagged
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6915502381938010126
-BoxCollider:
+--- !u!135 &1605281234563535393
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -96,5 +96,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.8268163, y: 2.4110453, z: 1.8246083}
-  m_Center: {x: -0.00000089406956, y: 0.000030517573, z: -0.00000008940698}
+  m_Radius: 1
+  m_Center: {x: 0.000000059604645, y: -0.00000023841858, z: -0.00000008940697}
