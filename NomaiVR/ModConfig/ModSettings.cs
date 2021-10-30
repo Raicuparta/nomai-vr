@@ -18,7 +18,6 @@ namespace NomaiVR.ModConfig
         public static bool EnableFeetMarker => settingsProvider.EnableFeetMarker;
         public static bool ControllerOrientedMovement => settingsProvider.ControllerOrientedMovement;
         public static bool AutoHideToolbelt => settingsProvider.AutoHideToolbelt;
-        public static bool BypassFatalErrors => settingsProvider.BypassFatalErrors;
         public static float ToolbeltHeight => settingsProvider.ToolbeltHeight;
         public static float HudScale => settingsProvider.HudScale;
         public static float HudOpacity => settingsProvider.HudOpacity;

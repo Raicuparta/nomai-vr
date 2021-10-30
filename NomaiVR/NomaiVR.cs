@@ -23,7 +23,6 @@ namespace NomaiVR
         internal static void ApplyMod()
         {
             Save = ModSaveFile.LoadSaveFile();
-            new FatalErrorChecker();
             new AssetLoader();
 
             InitSteamVR();
@@ -70,26 +69,19 @@ namespace NomaiVR
 
         private static void InitSteamVR()
         {
-            try
-            {
-                SteamVR_Actions.PreInitialize();
-                SteamVR.Initialize();
-                SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
+            SteamVR_Actions.PreInitialize();
+            SteamVR.Initialize();
+            SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
 
-                ApplicationManifestHelper.UpdateManifest(GameDataPath + @"\StreamingAssets\outerwilds.vrmanifest",
-                                                        "steam.app.753640",
-                                                        "https://steamcdn-a.akamaihd.net/steam/apps/753640/header.jpg",
-                                                        "Outer Wilds VR",
-                                                        "NomaiVR mod for Outer Wilds",
-                                                        steamBuild: SteamManager.Initialized,
-                                                        steamAppId: 753640);
+            ApplicationManifestHelper.UpdateManifest(GameDataPath + @"\StreamingAssets\outerwilds.vrmanifest",
+                                                    "steam.app.753640",
+                                                    "https://steamcdn-a.akamaihd.net/steam/apps/753640/header.jpg",
+                                                    "Outer Wilds VR",
+                                                    "NomaiVR mod for Outer Wilds",
+                                                    steamBuild: SteamManager.Initialized,
+                                                    steamAppId: 753640);
 
-                OpenVR.Input.SetActionManifestPath(ModFolderPath + @"\bindings\actions.json");
-            }
-            catch
-            {
-                FatalErrorChecker.ThrowSteamVRError();
-            }
+            OpenVR.Input.SetActionManifestPath(ModFolderPath + @"\bindings\actions.json");
         }
     }
 }

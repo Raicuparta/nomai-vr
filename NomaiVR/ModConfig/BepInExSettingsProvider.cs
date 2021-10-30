@@ -38,9 +38,6 @@ namespace NomaiVR.ModConfig
         private ConfigEntry<bool> autoHideToolbelt;
         public bool AutoHideToolbelt => autoHideToolbelt.Value;
 
-        private ConfigEntry<bool> bypassFatalErrors;
-        public bool BypassFatalErrors => bypassFatalErrors.Value;
-
         private ConfigEntry<float> toolbeltHeight;
         public float ToolbeltHeight => toolbeltHeight.Value;
 
@@ -73,7 +70,6 @@ namespace NomaiVR.ModConfig
             preventCursorLock = config.Bind(section, "disableCursorLock", true, "");
             debugMode = config.Bind(section, "debug", false, "");
             autoHideToolbelt = config.Bind(section, "autoHideToolbelt", false, "");
-            bypassFatalErrors = config.Bind(section, "bypassFatalErrors", false, "");
 
             OnConfigChange?.Invoke();
         }

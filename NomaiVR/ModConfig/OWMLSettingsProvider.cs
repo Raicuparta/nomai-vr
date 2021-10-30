@@ -17,7 +17,6 @@ namespace NomaiVR.ModConfig
         public bool EnableFeetMarker { get; private set; }
         public bool ControllerOrientedMovement { get; private set; }
         public bool AutoHideToolbelt { get; private set; }
-        public bool BypassFatalErrors { get; private set; }
         public float ToolbeltHeight { get; private set; }
         public float HudScale { get; private set; }
         public float HudOpacity { get; private set; }
@@ -47,10 +46,8 @@ namespace NomaiVR.ModConfig
             // Disabled these until we can fix scrolling in mod config menu.
             // PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
             // HudOpacity = config.GetSettingsValue<float>("hudOpacity");
-            // BypassFatalErrors = config.GetSettingsValue<bool>("bypassFatalErrors");
             PreventCursorLock = true;
             HudOpacity = 1f;
-            BypassFatalErrors = true;
             
             OnConfigChange?.Invoke();
         }

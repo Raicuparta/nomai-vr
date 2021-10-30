@@ -16,7 +16,6 @@ namespace NomaiVR.ModConfig
         bool EnableFeetMarker { get; }
         bool ControllerOrientedMovement { get; }
         bool AutoHideToolbelt { get; }
-        bool BypassFatalErrors { get; }
         float ToolbeltHeight { get; }
         float HudScale { get; }
         float HudOpacity { get; }
