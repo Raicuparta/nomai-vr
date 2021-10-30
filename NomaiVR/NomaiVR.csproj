@@ -222,7 +222,7 @@
 
     <Exec Command="copy /y &quot;$(ProjectDir)\Hands\Poses\*.json&quot; &quot;$(OwmlDir)\$(ModDir)\poses&quot;" />
 
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\*&quot; &quot;$(OwmlDir)\$(ModDir)\assets&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Assets\StreamingAssets\*&quot; &quot;$(OwmlDir)\$(ModDir)\assets&quot;" />
 
     <Exec Command="copy /y &quot;$(ProjectDir)\Assets\AssetFiles\*&quot; &quot;$(OwmlDir)\$(ModDir)\assets&quot;" />
 
