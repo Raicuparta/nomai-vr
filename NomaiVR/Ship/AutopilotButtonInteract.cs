@@ -30,8 +30,9 @@ namespace NomaiVR.Ship
         protected override UITextType Text => UITextType.ShipAutopilotPrompt;
         protected override GameObject ComponentContainer => gameObject;
         
-        protected override void Initialize()
+        protected override void Awake()
         {
+            base.Awake();
             cockpitController = FindObjectOfType<ShipCockpitController>();
             
             //Add autopilot button

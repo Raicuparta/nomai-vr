@@ -7,13 +7,11 @@ namespace NomaiVR.Ship
         protected abstract UITextType Text { get; }
         protected abstract GameObject ComponentContainer { get; }
         protected static readonly Font MonitorPromptFont = Resources.Load<Font>(@"fonts/english - latin/SpaceMono-Regular");
-        protected InteractReceiver Receiver;
+        protected InteractReceiver Receiver { get; private set; }
         private BoxCollider collider;
         
-        private void Awake()
+        protected virtual void Awake()
         {
-            Initialize();
-            
             collider = ComponentContainer.AddComponent<BoxCollider>();
             collider.isTrigger = true;
             collider.enabled = false;
@@ -44,12 +42,6 @@ namespace NomaiVR.Ship
             }
         }
 
-        public bool IsFocused()
-        {
-            return Receiver && Receiver.IsFocused();
-        }
-
-        protected abstract void Initialize();
         protected abstract void OnPress();
         protected abstract void OnRelease();
         protected abstract bool ShouldDisable();

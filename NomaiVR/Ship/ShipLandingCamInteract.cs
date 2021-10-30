@@ -13,8 +13,9 @@ namespace NomaiVR.Ship
         private const InputConsts.InputCommandType inputCommandType = InputConsts.InputCommandType.LANDING_CAMERA;
         private static ShipCockpitController cockpitController;
 
-        protected override void Initialize()
+        protected override void Awake()
         {
+            base.Awake();
             cockpitController = FindObjectOfType<ShipCockpitController>();
                 
             var canvas = new GameObject().AddComponent<Canvas>();
