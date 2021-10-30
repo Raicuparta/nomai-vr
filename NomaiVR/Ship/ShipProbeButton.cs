@@ -1,63 +1,40 @@
 ﻿using NomaiVR.Helpers;
 using NomaiVR.Input;
-using UnityEngine;
 using static InputConsts;
 
 namespace NomaiVR.Ship
 {
-    public class ShipProbeButton : MonoBehaviour
+    public class ShipProbeButton : GlowyButton
     {
-        private enum ButtonState
-        {
-            PreInit,
-            Disabled,
-            Enabled,
-            Focused,
-            Active,
-        }
-
-        private static readonly int shaderColor = Shader.PropertyToID("_Color");
-        private static readonly Color enabledColor = new Color(2.12f, 1.57f, 1.33f, 0.04f);
-        private static readonly Color activeColor = new Color(2.11f, 1.67f, 1.33f, 0.2f);
-        private static readonly Color disabledColor = new Color(0, 0, 0, 0);
-        private static readonly Color hoverColor = new Color(2.12f, 1.67f, 1.33f, 0.1f);
-        private ButtonState buttonState = ButtonState.PreInit;
-        private Material buttonMaterial;
-        private Collider collider;
         private InteractReceiver receiver;
-        private InputCommandType inputCommandType;
         private UITextType promptText;
+        private InputCommandType inputCommandType;
 
-        private void Awake()
+        protected override void Initialize()
         {
-            buttonMaterial = GetComponentInChildren<Renderer>().material;
-            collider = GetComponent<Collider>();
-            SetUpCommands();
+            SetUpButtonAction();
             SetUpReceiver();
         }
 
-        private void Update()
+        protected override bool IsButtonActive()
         {
-            if (ToolHelper.IsInToolMode(ToolMode.Probe, ToolGroup.Ship))
+            return receiver._isInteractPressed;
+        }
+
+        protected override bool IsButtonFocused()
+        {
+            var isFocused = receiver.IsFocused();
+            if (isFocused)
             {
-                if (receiver._isInteractPressed)
-                {
-                    SetState(ButtonState.Active);
-                }
-                else if (receiver.IsFocused())
-                {
-                    SetState(ButtonState.Focused);
-                    UpdatePrimaryPrompt();
-                }
-                else
-                {
-                    SetState(ButtonState.Enabled);
-                }
+                UpdatePrimaryPrompt();
             }
-            else
-            {
-                SetState(ButtonState.Disabled);
-            }
+
+            return isFocused;
+        }
+
+        protected override bool IsButtonEnabled()
+        {
+            return ToolHelper.IsInToolMode(ToolMode.Probe, ToolGroup.Ship);
         }
 
         private void OnDestroy()
@@ -103,7 +80,7 @@ namespace NomaiVR.Ship
             receiver.OnLoseFocus += OnReleaseInteract;
         }
 
-        private void SetUpCommands()
+        private void SetUpButtonAction()
         {
             switch (name)
             {
@@ -131,36 +108,6 @@ namespace NomaiVR.Ship
                     promptText = UITextType.ProbeRetrievePrompt;
                     break;
             }
-        }
-
-        private void SetButtonColor(Color color)
-        {
-            buttonMaterial.SetColor(shaderColor, color);
-        }
-
-        private void SetState(ButtonState nextState, ButtonState? previousState = null)
-        {
-            if (nextState == buttonState) return;
-            if (previousState != null && previousState != buttonState) return;
-
-            collider.enabled = nextState != ButtonState.Disabled;
-            switch (nextState)
-            {
-                case ButtonState.Disabled:
-                    SetButtonColor(disabledColor);
-                    break;
-                case ButtonState.Focused:
-                    SetButtonColor(hoverColor);
-                    break;
-                case ButtonState.Active:
-                    SetButtonColor(activeColor);
-                    break;
-                default:
-                    SetButtonColor(enabledColor);
-                    break;
-            }
-
-            buttonState = nextState;
         }
     }
 }
