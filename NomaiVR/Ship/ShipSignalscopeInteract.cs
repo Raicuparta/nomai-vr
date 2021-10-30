@@ -1,4 +1,5 @@
-﻿using NomaiVR.Helpers;
+﻿using NomaiVR.Assets;
+using NomaiVR.Helpers;
 using NomaiVR.Input;
 using NomaiVR.ReusableBehaviours;
 using NomaiVR.Tools;
@@ -36,6 +37,12 @@ namespace NomaiVR.Ship
             var monitorTextTransform = monitorText.transform;
             monitorTextTransform.SetParent(canvasTransform, false);
             monitorTextTransform.localScale = Vector3.one * 0.5f;
+            
+            var signalscopeScreenButtons = Instantiate(AssetLoader.SignalscopeScreenButtonsPrefab, sigScopeDisplay);
+            foreach (Transform signalscopeScreenButton in signalscopeScreenButtons.transform)
+            {
+                signalscopeScreenButton.gameObject.AddComponent<ShipSignalscopeButton>();
+            }
         }
         
         protected override void Update()
