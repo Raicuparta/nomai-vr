@@ -34,7 +34,6 @@ namespace NomaiVR.Ship
             SetUpReceiver();
             buttonMaterial = GetComponent<Renderer>().material;
             collider = GetComponent<Collider>();
-            SetState(ButtonState.Disabled);
         }
 
         private void Update()
