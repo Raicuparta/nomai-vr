@@ -30,7 +30,7 @@ namespace NomaiVR.Ship
 
         private void Awake()
         {
-            buttonMaterial = GetComponent<Renderer>().material;
+            buttonMaterial = GetComponentInChildren<Renderer>().material;
             collider = GetComponent<Collider>();
             SetUpCommands();
             SetUpReceiver();
