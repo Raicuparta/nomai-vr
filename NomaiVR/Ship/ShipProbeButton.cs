@@ -1,4 +1,5 @@
 ﻿using System;
+using NomaiVR.Helpers;
 using NomaiVR.Input;
 using UnityEngine;
 using static InputConsts;
@@ -12,7 +13,7 @@ namespace NomaiVR.Ship
             PreInit,
             Disabled,
             Enabled,
-            Hover,
+            Focused,
             Active,
         }
         
@@ -29,37 +30,41 @@ namespace NomaiVR.Ship
         
         private void Awake()
         {
-            // TODO cleanup events.
             inputCommandType = GetInputCommandType();
             SetUpReceiver();
             buttonMaterial = GetComponent<Renderer>().material;
             collider = GetComponent<Collider>();
-            SetInitialState();
-            SetUpAnchorEvents();
+            SetState(ButtonState.Disabled);
+        }
+
+        private void Update()
+        {
+            if (ToolHelper.IsInToolMode(ToolMode.Probe, ToolGroup.Ship))
+            {
+                if (receiver._isInteractPressed)
+                {
+                    SetState(ButtonState.Active);
+                }
+                else if (receiver.IsFocused())
+                {
+                    SetState(ButtonState.Focused);
+                }
+                else
+                {
+                    SetState(ButtonState.Enabled);
+                }
+            }
+            else
+            {
+                SetState(ButtonState.Disabled);
+            }
         }
 
         private void OnDestroy()
         {
             receiver.OnPressInteract -= OnPressInteract;
             receiver.OnReleaseInteract -= OnReleaseInteract;
-            receiver.OnGainFocus -= OnGainFocus;
-            receiver.OnLoseFocus -= OnLoseFocus;
-            Locator.GetProbe().OnAnchorProbe -= OnAnchorProbe;
-            Locator.GetProbe().OnUnanchorProbe -= OnUnanchorProbe;
-            Locator.GetProbe().OnRetrieveProbe -= OnUnanchorProbe;
-            Locator.GetProbe().OnProbeDestroyed -= OnUnanchorProbe;
-        }
-
-        private void SetInitialState()
-        {
-            if (inputCommandType != InputCommandType.TOOL_PRIMARY && inputCommandType != InputCommandType.PROBERETRIEVE)
-            {
-                SetState(ButtonState.Disabled);
-            }
-            else
-            {
-                SetState(ButtonState.Enabled);
-            }
+            receiver.OnLoseFocus -= OnReleaseInteract;
         }
         
         private void SetUpReceiver()
@@ -70,53 +75,18 @@ namespace NomaiVR.Ship
             receiver.SetPromptText(UITextType.ProbeRotatePrompt);
             receiver.OnPressInteract += OnPressInteract;
             receiver.OnReleaseInteract += OnReleaseInteract;
-            receiver.OnGainFocus += OnGainFocus;
-            receiver.OnLoseFocus += OnLoseFocus;
-        }
-
-        private void SetUpAnchorEvents()
-        {
-            Locator.GetProbe().OnAnchorProbe += OnAnchorProbe;
-            Locator.GetProbe().OnUnanchorProbe += OnUnanchorProbe;
-            Locator.GetProbe().OnRetrieveProbe += OnUnanchorProbe;
-            Locator.GetProbe().OnProbeDestroyed += OnUnanchorProbe;
+            receiver.OnLoseFocus += OnReleaseInteract;
         }
 
         private void OnPressInteract()
         {
             ControllerInput.SimulateInput(inputCommandType, true);
-            SetState(ButtonState.Active);
         }
 
         private void OnReleaseInteract()
         {
             ControllerInput.SimulateInput(inputCommandType, false);
             receiver.ResetInteraction();
-            SetState(ButtonState.Enabled);
-        }
-
-        private void OnGainFocus()
-        {
-            SetState(ButtonState.Hover);
-        }
-        
-        private void OnLoseFocus()
-        {
-            ControllerInput.SimulateInput(inputCommandType, false);
-            receiver.ResetInteraction();
-            SetState(ButtonState.Enabled);
-        }
-
-        private void OnAnchorProbe()
-        {
-            if (inputCommandType == InputCommandType.TOOL_PRIMARY) return;
-            SetState(ButtonState.Enabled);
-        }
-
-        private void OnUnanchorProbe()
-        {
-            if (inputCommandType == InputCommandType.TOOL_PRIMARY) return;
-            SetState(ButtonState.Disabled);
         }
         
         private InputCommandType GetInputCommandType()
@@ -129,16 +99,18 @@ namespace NomaiVR.Ship
             buttonMaterial.SetColor(shaderColor, color);
         }
         
-        private void SetState(ButtonState state)
+        private void SetState(ButtonState nextState, ButtonState? previousState = null)
         {
-            if (state == buttonState) return;
-            collider.enabled = state != ButtonState.Disabled;
-            switch (state)
+            if (nextState == buttonState) return;
+            if (previousState != null && previousState != buttonState) return;
+            
+            collider.enabled = nextState != ButtonState.Disabled;
+            switch (nextState)
             {
                 case ButtonState.Disabled:
                     SetButtonColor(disabledColor);
                     break;
-                case ButtonState.Hover:
+                case ButtonState.Focused:
                     SetButtonColor(hoverColor);
                     break;
                 case ButtonState.Active:
@@ -148,7 +120,7 @@ namespace NomaiVR.Ship
                     SetButtonColor(enabledColor);
                     break;
             }
-            buttonState = state;
+            buttonState = nextState;
         }
     }
 }
