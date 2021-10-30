@@ -25,12 +25,13 @@ namespace NomaiVR.Ship
         private ButtonState buttonState = ButtonState.PreInit;
         private Material buttonMaterial;
         private Collider collider;
-        private InputCommandType inputCommandType;
         private InteractReceiver receiver;
+        private InputCommandType inputCommandType;
+        private UITextType promptText;
 
         private void Awake()
         {
-            inputCommandType = GetInputCommandType();
+            SetUpCommands();
             SetUpReceiver();
             buttonMaterial = GetComponent<Renderer>().material;
             collider = GetComponent<Collider>();
@@ -71,7 +72,7 @@ namespace NomaiVR.Ship
             receiver = gameObject.AddComponent<InteractReceiver>();
             receiver.SetInteractRange(2);
             receiver._usableInShip = true;
-            receiver.SetPromptText(UITextType.ProbeRotatePrompt);
+            receiver.SetPromptText(promptText);
             receiver.OnPressInteract += OnPressInteract;
             receiver.OnReleaseInteract += OnReleaseInteract;
             receiver.OnLoseFocus += OnReleaseInteract;
@@ -88,9 +89,35 @@ namespace NomaiVR.Ship
             receiver.ResetInteraction();
         }
 
-        private InputCommandType GetInputCommandType()
+        private void SetUpCommands()
         {
-            return (InputCommandType) Enum.Parse(typeof(InputCommandType), name);
+            switch (name)
+            {
+                case "Up":
+                    inputCommandType = InputCommandType.TOOL_UP;
+                    promptText = UITextType.ProbeRotatePrompt;
+                    break;
+                case "Down":
+                    inputCommandType = InputCommandType.TOOL_DOWN;
+                    promptText = UITextType.ProbeRotatePrompt;
+                    break;
+                case "Left":
+                    inputCommandType = InputCommandType.TOOL_LEFT;
+                    promptText = UITextType.ProbeRotatePrompt;
+                    break;
+                case "Right":
+                    inputCommandType = InputCommandType.TOOL_RIGHT;
+                    promptText = UITextType.ProbeRotatePrompt;
+                    break;
+                case "Shoot":
+                    inputCommandType = InputCommandType.TOOL_PRIMARY;
+                    promptText = UITextType.ProbeLaunchPrompt;
+                    break;
+                case "Retrieve":
+                    inputCommandType = InputCommandType.PROBERETRIEVE;
+                    promptText = UITextType.ProbeRetrievePrompt;
+                    break;
+            }
         }
 
         private void SetButtonColor(Color color)
