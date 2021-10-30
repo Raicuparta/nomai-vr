@@ -1,5 +1,4 @@
-﻿using System;
-using NomaiVR.Helpers;
+﻿using NomaiVR.Helpers;
 using NomaiVR.Input;
 using UnityEngine;
 using static InputConsts;
@@ -31,10 +30,10 @@ namespace NomaiVR.Ship
 
         private void Awake()
         {
-            SetUpCommands();
-            SetUpReceiver();
             buttonMaterial = GetComponent<Renderer>().material;
             collider = GetComponent<Collider>();
+            SetUpCommands();
+            SetUpReceiver();
         }
 
         private void Update()
@@ -48,6 +47,7 @@ namespace NomaiVR.Ship
                 else if (receiver.IsFocused())
                 {
                     SetState(ButtonState.Focused);
+                    UpdatePrimaryPrompt();
                 }
                 else
                 {
@@ -62,20 +62,14 @@ namespace NomaiVR.Ship
 
         private void OnDestroy()
         {
+            CleanupReceiverEvents();
+        }
+
+        private void CleanupReceiverEvents()
+        {            
             receiver.OnPressInteract -= OnPressInteract;
             receiver.OnReleaseInteract -= OnReleaseInteract;
             receiver.OnLoseFocus -= OnReleaseInteract;
-        }
-
-        private void SetUpReceiver()
-        {
-            receiver = gameObject.AddComponent<InteractReceiver>();
-            receiver.SetInteractRange(2);
-            receiver._usableInShip = true;
-            receiver.SetPromptText(promptText);
-            receiver.OnPressInteract += OnPressInteract;
-            receiver.OnReleaseInteract += OnReleaseInteract;
-            receiver.OnLoseFocus += OnReleaseInteract;
         }
 
         private void OnPressInteract()
@@ -87,6 +81,26 @@ namespace NomaiVR.Ship
         {
             ControllerInput.SimulateInput(inputCommandType, false);
             receiver.ResetInteraction();
+        }
+
+        private void UpdatePrimaryPrompt()
+        {
+            if (name != "Shoot") return;
+            var isProbeLaunched = Locator.GetProbe() && Locator.GetProbe().IsLaunched();
+            receiver.SetPromptText(isProbeLaunched
+                ? UITextType.ProbeSnapshotPrompt
+                : UITextType.ProbeLaunchPrompt);
+        }
+
+        private void SetUpReceiver()
+        {
+            receiver = gameObject.AddComponent<InteractReceiver>();
+            receiver.SetInteractRange(2);
+            receiver._usableInShip = true;
+            receiver.SetPromptText(promptText);
+            receiver.OnPressInteract += OnPressInteract;
+            receiver.OnReleaseInteract += OnReleaseInteract;
+            receiver.OnLoseFocus += OnReleaseInteract;
         }
 
         private void SetUpCommands()
@@ -111,7 +125,6 @@ namespace NomaiVR.Ship
                     break;
                 case "Shoot":
                     inputCommandType = InputCommandType.TOOL_PRIMARY;
-                    promptText = UITextType.ProbeLaunchPrompt;
                     break;
                 case "Retrieve":
                     inputCommandType = InputCommandType.PROBERETRIEVE;
