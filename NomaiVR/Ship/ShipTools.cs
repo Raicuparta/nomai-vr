@@ -12,7 +12,6 @@ namespace NomaiVR.Ship
 
         public class Behaviour : MonoBehaviour
         {
-            private ReferenceFrameTracker referenceFrameTracker;
             private static Transform mapGridRenderer;
             private static ShipInteractReceiver probe;
             private static ShipInteractReceiver signalscope;
@@ -21,20 +20,7 @@ namespace NomaiVR.Ship
 
             internal void Awake()
             {
-                referenceFrameTracker = FindObjectOfType<ReferenceFrameTracker>();
                 mapGridRenderer = FindObjectOfType<MapController>()._gridRenderer.transform;
-            }
-
-            internal void Update()
-            {
-                if (referenceFrameTracker.isActiveAndEnabled && ToolHelper.IsUsingAnyTool())
-                {
-                    referenceFrameTracker.enabled = false;
-                }
-                else if (!referenceFrameTracker.isActiveAndEnabled && !ToolHelper.IsUsingAnyTool())
-                {
-                    referenceFrameTracker.enabled = true;
-                }
             }
 
             public class Patch : NomaiVRPatch
@@ -134,17 +120,9 @@ namespace NomaiVR.Ship
                     }
                 }
 
-                private static bool IsAnyInteractionFocused()
-                {
-                    return (probe != null && probe.IsFocused()) || 
-                           (signalscope != null && signalscope.IsFocused()) || 
-                           (landingCam != null && landingCam.IsFocused()) ||
-                           (autoPilot != null && autoPilot.IsFocused());
-                }
-
                 private static bool PreUntargetFrame()
                 {
-                    return !IsAnyInteractionFocused();
+                    return !LaserPointer.Behaviour.HasFocusedInteractible();
                 }
 
                 private static ReferenceFrame PostFindFrame(ReferenceFrame __result, ReferenceFrameTracker __instance)
@@ -155,7 +133,7 @@ namespace NomaiVR.Ship
                     activeCam.position = cameraPosition;
                     activeCam.rotation = cameraRotation;
 
-                    return IsAnyInteractionFocused() ? __instance._currentReferenceFrame : __result;
+                    return LaserPointer.Behaviour.HasFocusedInteractible() ? __instance._currentReferenceFrame : __result;
                 }
             }
         }

@@ -97,6 +97,11 @@ namespace NomaiVR.Hands
                 }
             }
 
+            public static bool HasFocusedInteractible()
+            {
+                return manipulator && manipulator.HasFocusedInteractible();
+            }
+
             private void HandleDialogueOptionHit(DialogueOptionUI dialogueOption)
             {
                 if (dialogueBox._revealingOptions)
@@ -178,7 +183,7 @@ namespace NomaiVR.Hands
             {
                 SetLineLength(InputHelper.IsUIInteractionMode(true) ? menuLineLength : gameLineLength);
                 
-                if (InputHelper.IsUIInteractionMode(true) || (manipulator && manipulator.HasFocusedInteractible()))
+                if (InputHelper.IsUIInteractionMode(true) || HasFocusedInteractible())
                 {
                     lineRenderer.material.shader = brightShader;
                     lineRenderer.material.SetColor(color, brightColor);
