@@ -1,6 +1,5 @@
 ﻿using NomaiVR.Assets;
 using NomaiVR.Hands;
-using NomaiVR.Helpers;
 using UnityEngine;
 
 namespace NomaiVR.Ship
@@ -13,10 +12,6 @@ namespace NomaiVR.Ship
         public class Behaviour : MonoBehaviour
         {
             private static Transform mapGridRenderer;
-            private static ShipInteractReceiver probe;
-            private static ShipInteractReceiver signalscope;
-            private static ShipInteractReceiver landingCam;
-            private static ShipInteractReceiver autoPilot;
 
             internal void Awake()
             {
@@ -85,12 +80,12 @@ namespace NomaiVR.Ship
                     var cockpitUI = __instance.transform.Find("Module_Cockpit/Systems_Cockpit/ShipCockpitUI");
                     var cockpitTech = __instance.transform.Find("Module_Cockpit/Geo_Cockpit/Cockpit_Tech/Cockpit_Tech_Interior");
 
-                    probe = cockpitUI.Find("ProbeScreen/ProbeScreenPivot").gameObject.AddComponent<ShipProbeInteract>();
-                    signalscope = cockpitUI.Find("SignalScreen/SignalScreenPivot").gameObject.AddComponent<ShipSignalscopeInteract>();
-                    landingCam = cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipLandingCamInteract>();
+                    cockpitUI.Find("ProbeScreen/ProbeScreenPivot").gameObject.AddComponent<ShipProbeInteract>();
+                    cockpitUI.Find("SignalScreen/SignalScreenPivot").gameObject.AddComponent<ShipSignalscopeInteract>();
+                    cockpitTech.Find("LandingCamScreen").gameObject.AddComponent<ShipLandingCamInteract>();
                     
                     var autopilotButton = Instantiate(AssetLoader.AutopilotButtonPrefab, cockpitTech, false);
-                    autoPilot = autopilotButton.AddComponent<AutopilotButtonInteract>();
+                    autopilotButton.AddComponent<AutopilotButtonInteract>();
                 }
 
                 private static Vector3 cameraPosition;

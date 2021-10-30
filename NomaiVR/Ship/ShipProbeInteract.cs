@@ -12,8 +12,9 @@ namespace NomaiVR.Ship
         protected override UITextType Text => UITextType.ScoutModePrompt;
         protected override GameObject ComponentContainer => transform.Find("ProbeScreen").gameObject;
 
-        protected override void Initialize()
+        protected override void Awake()
         {
+            base.Awake();
             var probeCamDisplay = transform.Find("ProbeCamDisplay");
 
             var monitorText = new GameObject().AddComponent<Text>();
@@ -47,7 +48,7 @@ namespace NomaiVR.Ship
 
         protected override bool ShouldDisable()
         {
-            return  ToolHelper.Swapper.IsInToolMode(ToolMode.Probe, ToolGroup.Ship);
+            return ToolHelper.Swapper.IsInToolMode(ToolMode.Probe, ToolGroup.Ship);
         }
     }
 }

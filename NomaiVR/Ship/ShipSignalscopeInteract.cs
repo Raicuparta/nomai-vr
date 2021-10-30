@@ -5,6 +5,7 @@ using NomaiVR.ReusableBehaviours;
 using NomaiVR.Tools;
 using UnityEngine;
 using UnityEngine.UI;
+using static InputConsts;
 
 namespace NomaiVR.Ship
 {
@@ -12,10 +13,12 @@ namespace NomaiVR.Ship
     {
         protected override UITextType Text => UITextType.UISignalscope;
         protected override GameObject ComponentContainer => transform.Find("SignalScopeScreenFrame_geo").gameObject;
-        private const InputConsts.InputCommandType changeFrequencyCommand = InputConsts.InputCommandType.TOOL_RIGHT;
 
-        protected override void Initialize()
+        protected override void Awake()
         {
+            base.Awake();
+            Receiver.SetPromptText(UITextType.UISignalscope);
+            
             var sigScopeDisplay = transform.Find("SigScopeDisplay");
 
             var canvas = new GameObject().AddComponent<Canvas>();
@@ -44,48 +47,19 @@ namespace NomaiVR.Ship
                 signalscopeScreenButton.gameObject.AddComponent<ShipSignalscopeButton>();
             }
         }
-        
-        protected override void Update()
-        {
-            base.Update();
-
-            if (!Receiver) return;
-
-            var isUsingSignaslcope = ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship);
-            
-            if (isUsingSignaslcope && Receiver._textID != UITextType.SignalscopeFrequencyPrompt)
-            {
-                Receiver.SetPromptText(UITextType.SignalscopeFrequencyPrompt);
-            }
-            else if (!isUsingSignaslcope && Receiver._textID != UITextType.UISignalscope)
-            {
-                Receiver.SetPromptText(UITextType.UISignalscope);
-            }
-        }
 
         protected override void OnPress()
         {
-            if (ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship))
-            {
-                ControllerInput.SimulateInput(changeFrequencyCommand, true);
-            }
-            else
-            {
-                VRToolSwapper.Equip(ToolMode.SignalScope, null);
-            }
+           VRToolSwapper.Equip(ToolMode.SignalScope, null);
         }
 
         protected override void OnRelease()
         {
-            if (ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship))
-            {
-                ControllerInput.SimulateInput(changeFrequencyCommand, false);
-            }
         }
 
         protected override bool ShouldDisable()
         {
-            return false;
+            return ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Ship);
         }
     }
 }
