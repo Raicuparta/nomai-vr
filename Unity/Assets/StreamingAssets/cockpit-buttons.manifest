@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3363740503
+CRC: 2083990975
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f9b27cc0a6385b418ee5f3a62a8eab9a
+    Hash: 1195717d2efdbb88c068cc16139e482d
   TypeTreeHash:
     serializedVersion: 2
     Hash: c7c5dc534e7357b33d15743fbed05b86
@@ -27,12 +27,10 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/ShipCockpit/ProbeScreenButtons/ToolButtonActive.mat
 - Assets/ShipCockpit/ProbeScreenButtons/ProbeScreenButtons.prefab
 - Assets/ShipCockpit/ProbeScreenButtons/ReturnARrowButton.fbx
 - Assets/ShipCockpit/ProbeScreenButtons/ToolButtonEnabled.mat
 - Assets/ShipCockpit/ProbeScreenButtons/PrimaryButton.fbx
 - Assets/ShipCockpit/ProbeScreenButtons/ArrowButton.prefab
-- Assets/ShipCockpit/ProbeScreenButtons/ToolButtonHover.mat
 - Assets/ShipCockpit/ProbeScreenButtons/ArrowButton.fbx
 Dependencies: []
