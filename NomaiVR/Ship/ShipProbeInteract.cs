@@ -1,4 +1,5 @@
-﻿using NomaiVR.Helpers;
+﻿using NomaiVR.Assets;
+using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
 using NomaiVR.Tools;
 using UnityEngine;
@@ -27,6 +28,12 @@ namespace NomaiVR.Ship
             monitorTextTransform.SetParent(probeCamDisplay.transform, false);
             monitorTextTransform.localScale = Vector3.one * 0.0035f;
             monitorTextTransform.localRotation = Quaternion.Euler(0, 0, 90);
+
+            var probeScreenButtons = Instantiate(AssetLoader.ProbeScreenButtonsPrefab, probeCamDisplay);
+            foreach (Transform probeScreenButton in probeScreenButtons.transform)
+            {
+                probeScreenButton.gameObject.AddComponent<ShipProbeButton>();
+            }
         }
 
         protected override void OnPress()
