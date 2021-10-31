@@ -90,9 +90,7 @@ namespace NomaiVR.Input
         public static readonly Dictionary<InputCommandType, IActionInput> FlashLightInputMap =
             new Dictionary<InputCommandType, IActionInput>
             {
-                { InputCommandType.FLASHLIGHT, ActionInputDefinitions.Interact },
-                { InputCommandType.INTERACT, ActionInputDefinitions.Empty },
-                { InputCommandType.LOCKON, ActionInputDefinitions.Empty },
+                { InputCommandType.FLASHLIGHT, ActionInputDefinitions.Grip },
             };
 
         public static IActionInput GetActionInput(InputCommandType commandType)
