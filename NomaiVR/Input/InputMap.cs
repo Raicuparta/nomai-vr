@@ -85,6 +85,7 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Empty },
                 { InputCommandType.PROBELAUNCH, ActionInputDefinitions.Empty },
                 { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.Empty },
+                { InputCommandType.SIGNALSCOPE, ActionInputDefinitions.Empty },
             };
 
         public static readonly Dictionary<InputCommandType, IActionInput> FlashLightInputMap =
