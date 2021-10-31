@@ -24,6 +24,7 @@ namespace NomaiVR.Tools
 
                 fillLight.localPosition = spotLight.localPosition = flashLight.transform.localPosition = new Vector3(0, 0.05f, 0.05f);
                 fillLight.localRotation = spotLight.localRotation = flashLight.transform.localRotation = Quaternion.identity;
+                this.enabled = false;
             }
 
             private void SetupDetector(Transform hand, Vector3 offset)
@@ -31,16 +32,36 @@ namespace NomaiVR.Tools
                 var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
                 detector.Other = hand;
                 detector.LocalOffset = offset;
-                detector.OnEnter += FlashlightPress;
-                detector.OnExit += FlashlightRelease;
+                detector.OnEnter += HandEnter;
+                detector.OnExit += HandExit;
             }
 
-            private void FlashlightPress(Transform hand)
+            private void HandEnter(Transform hand)
+            {
+                this.enabled = true;
+                ToggleFlashLight();
+            }
+
+            private void HandExit(Transform hand)
+            {
+                this.enabled = false;
+            }
+
+            private void Update()
+            {
+                if(OWInput.IsNewlyPressed(InputLibrary.interact) || OWInput.IsNewlyPressed(InputLibrary.toolActionPrimary))
+                {
+                    ToggleFlashLight();
+                }
+            }
+
+            private void ToggleFlashLight()
             {
                 ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, true);
+                Invoke(nameof(ReleaseFlashLight), 0.2f);
             }
 
-            private void FlashlightRelease(Transform hand)
+            private void ReleaseFlashLight()
             {
                 ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, false);
             }
