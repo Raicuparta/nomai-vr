@@ -50,11 +50,12 @@ namespace NomaiVR.Ship
 
         protected override void OnPress()
         {
-           VRToolSwapper.Equip(ToolMode.SignalScope, null);
+           ControllerInput.SimulateInput(InputCommandType.SIGNALSCOPE, true);
         }
 
         protected override void OnRelease()
         {
+            ControllerInput.SimulateInput(InputCommandType.SIGNALSCOPE, false);
         }
 
         protected override bool ShouldDisable()

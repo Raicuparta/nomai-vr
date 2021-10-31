@@ -118,7 +118,7 @@ namespace NomaiVR.Input
                                         || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
 
         private static bool ShouldUseShipToolsMap =>
-            ToolHelper.IsUsingAnyTool(ToolGroup.Ship);
+            OWInput.IsInputMode(InputMode.ShipCockpit);
 
         private static bool ShouldUseFlashLightMap =>
             FlashlightGesture.Instance != null && FlashlightGesture.Instance.IsControllingFlashlight();
