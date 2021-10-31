@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NomaiVR.Helpers;
 using NomaiVR.Input.ActionInputs;
+using NomaiVR.Tools;
 using Valve.VR;
 using static InputConsts;
 
@@ -86,11 +87,24 @@ namespace NomaiVR.Input
                 { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.Empty },
             };
 
+        public static readonly Dictionary<InputCommandType, IActionInput> FlashLightInputMap =
+            new Dictionary<InputCommandType, IActionInput>
+            {
+                { InputCommandType.FLASHLIGHT, ActionInputDefinitions.Interact },
+                { InputCommandType.INTERACT, ActionInputDefinitions.Empty },
+                { InputCommandType.LOCKON, ActionInputDefinitions.Empty },
+            };
+
         public static IActionInput GetActionInput(InputCommandType commandType)
         {
             if (ShouldUseShipToolsMap && ShipToolsInputMap.ContainsKey(commandType))
             {
                 return ShipToolsInputMap[commandType];
+            }
+
+            if(ShouldUseFlashLightMap && FlashLightInputMap.ContainsKey(commandType))
+            {
+                return FlashLightInputMap[commandType];
             }
             
             if (ShouldUseToolsMap && ToolsInputMap.ContainsKey(commandType))
@@ -107,5 +121,8 @@ namespace NomaiVR.Input
 
         private static bool ShouldUseShipToolsMap =>
             ToolHelper.IsUsingAnyTool(ToolGroup.Ship);
+
+        private static bool ShouldUseFlashLightMap =>
+            FlashlightGesture.Instance != null && FlashlightGesture.Instance.IsControllingFlashlight();
     }
 }
