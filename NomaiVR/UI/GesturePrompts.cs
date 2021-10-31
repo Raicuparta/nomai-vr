@@ -282,7 +282,7 @@ namespace NomaiVR.UI
             public static readonly string Probe = GetToolBeltPrompt("Probe Launcher", "Middle");
             public static readonly string Signalscope = GetToolBeltPrompt("Signalscope", "Right");
             public static readonly string Translator = GetToolBeltPrompt("Translator", "Left");
-            public const string Flashlight = "Touch the side of your head to toggle <color=orange>Flashlight</color>. Press <color=" + TextHelper.Blue + ">Interact</color> to toggle it again.";
+            public const string Flashlight = "Touch the side of your head to toggle <color=orange>Flashlight</color>. Press <color=" + TextHelper.Blue + ">Grip</color> to toggle it again.";
             public const string WakeUp = "Look at your <color=orange>main hand</color>.";
 
             private static string GetToolBeltPrompt(string toolName, string slot)
