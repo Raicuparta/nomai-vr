@@ -1,6 +1,8 @@
 ﻿using NomaiVR.Hands;
 using NomaiVR.Input;
 using NomaiVR.ReusableBehaviours;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace NomaiVR.Tools
@@ -10,8 +12,18 @@ namespace NomaiVR.Tools
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
+        public static Behaviour Instance { get; private set; }
+
         public class Behaviour : MonoBehaviour
         {
+            private List<ProximityDetector> proximityDetectors;
+
+            internal void Awake()
+            {
+                Instance = this;
+                proximityDetectors = new List<ProximityDetector>(2);
+            }
+
             internal void Start()
             {
                 SetupDetector(HandsController.Behaviour.RightHand, Vector3.right * 0.15f);
@@ -24,6 +36,7 @@ namespace NomaiVR.Tools
 
                 fillLight.localPosition = spotLight.localPosition = flashLight.transform.localPosition = new Vector3(0, 0.05f, 0.05f);
                 fillLight.localRotation = spotLight.localRotation = flashLight.transform.localRotation = Quaternion.identity;
+                this.enabled = false;
             }
 
             private void SetupDetector(Transform hand, Vector3 offset)
@@ -31,16 +44,27 @@ namespace NomaiVR.Tools
                 var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
                 detector.Other = hand;
                 detector.LocalOffset = offset;
-                detector.OnEnter += FlashlightPress;
-                detector.OnExit += FlashlightRelease;
+                detector.OnEnter += HandEnter;
+                proximityDetectors.Add(detector);
             }
 
-            private void FlashlightPress(Transform hand)
+            public bool IsControllingFlashlight()
+            {
+                return proximityDetectors.Any(x => x.IsInside());
+            }
+
+            private void HandEnter(Transform hand)
+            {
+                ToggleFlashLight();
+            }
+
+            private void ToggleFlashLight()
             {
                 ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, true);
+                Invoke(nameof(ReleaseFlashLight), 0.2f);
             }
 
-            private void FlashlightRelease(Transform hand)
+            private void ReleaseFlashLight()
             {
                 ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, false);
             }
