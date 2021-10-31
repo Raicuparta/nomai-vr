@@ -85,6 +85,7 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Empty },
                 { InputCommandType.PROBELAUNCH, ActionInputDefinitions.Empty },
                 { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.Empty },
+                { InputCommandType.SIGNALSCOPE, ActionInputDefinitions.Empty },
             };
 
         public static readonly Dictionary<InputCommandType, IActionInput> FlashLightInputMap =
@@ -118,7 +119,7 @@ namespace NomaiVR.Input
                                         || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
 
         private static bool ShouldUseShipToolsMap =>
-            ToolHelper.IsUsingAnyTool(ToolGroup.Ship);
+            OWInput.IsInputMode(InputMode.ShipCockpit);
 
         private static bool ShouldUseFlashLightMap =>
             FlashlightGesture.Instance != null && FlashlightGesture.Instance.IsControllingFlashlight();
