@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 185533360
+CRC: 3306926955
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 70d188041d413a3b3b62047d98533a32
+    Hash: 6cc7af397f1a064081a7ac7afcccefd1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a8d3d02d32e7a2b7037277cfb99be447
+    Hash: c7c5dc534e7357b33d15743fbed05b86
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,10 +21,13 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
 - Class: 135
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/HandheldTools/Models/ChangePhotoMode.fbx
 - Assets/HandheldTools/TranslatorHandheldButtons.prefab
 - Assets/HandheldTools/ProbeLauncherButtons.prefab
 - Assets/HandheldTools/SignalscopeButtons.prefab
