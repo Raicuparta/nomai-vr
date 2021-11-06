@@ -3,6 +3,7 @@ using NomaiVR.Input;
 using NomaiVR.Tools;
 using System;
 using UnityEngine;
+using Valve.VR;
 using static InputConsts;
 
 namespace NomaiVR.ReusableBehaviours
@@ -68,14 +69,25 @@ namespace NomaiVR.ReusableBehaviours
 
         private void FingertipEnter(Transform indexTip)
         {
+            if(!isFingertipInside && State != ButtonState.Disabled)
+            {
+                ControllerInput.SimulateInput(inputToSimulate, true);
+                Hand offHand = VRToolSwapper.NonInteractingHand ?? HandsController.Behaviour.OffHandBehaviour;
+                SteamVR_Actions.default_Haptic.Execute(0, 0.2f, 300, .2f * ModConfig.ModSettings.VibrationStrength, offHand.InputSource);
+                SteamVR_Actions.default_Haptic.Execute(0.1f, 0.2f, 100, .1f * ModConfig.ModSettings.VibrationStrength, offHand.InputSource);
+            }
             isFingertipInside = true;
-            ControllerInput.SimulateInput(inputToSimulate, true);
         }
 
         private void FingertipExit(Transform indexTip)
         {
+            if (isFingertipInside && State != ButtonState.Disabled)
+            {
+                ControllerInput.SimulateInput(inputToSimulate, false);
+                Hand offHand = VRToolSwapper.NonInteractingHand ?? HandsController.Behaviour.OffHandBehaviour;
+                SteamVR_Actions.default_Haptic.Execute(0, 0.1f, 100, .05f * ModConfig.ModSettings.VibrationStrength, offHand.InputSource);
+            }
             isFingertipInside = false;
-            ControllerInput.SimulateInput(inputToSimulate, false);
         }
 
         private float CalculateFingerTipDistance()
