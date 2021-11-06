@@ -14,6 +14,7 @@ namespace NomaiVR.Hands
         public const float k_minimumPointDistance = 0.1f;
         private const float handSkeletonBlendAmmount = 0.5f;
         private const float gloveSkeletonBlendAmmount = 0.275f;
+        private static readonly Vector3 gloveIndexTipOffset = new Vector3(0.034f, 0.0002f, 0.0003f);
 
         public event Action Initialized;
         public event Action SkeletonBlendReset;
@@ -26,7 +27,7 @@ namespace NomaiVR.Hands
 
         public SteamVR_Input_Sources InputSource { get; private set; }
         public Transform Palm { get; private set; }
-        public Transform IndexTip => skeleton.indexTip;
+        public Transform IndexTip { get; private set; }
 
         private Renderer handRenderer;
         private Renderer gloveRenderer;
@@ -150,6 +151,13 @@ namespace NomaiVR.Hands
             return name;
         }
 
+        private static Transform FingerEnd(Transform source, string fingerName)
+        {
+            Transform parent = source.Find($"finger_{fingerName}_meta_r");
+            while (parent.childCount > 0) parent = parent.GetChild(0);
+            return parent;
+        }
+
         private static string ThumbBoneName(string fingerName, int depth)
         {
             var name = $"finger_{fingerName}_0_r";
@@ -268,6 +276,11 @@ namespace NomaiVR.Hands
                 value = 0
             });
 
+            IndexTip = new GameObject("IndexTip").transform;
+            IndexTip.parent = FingerEnd(targetWristTransform, "index");
+            IndexTip.localPosition = Vector3.zero;
+            IndexTip.localRotation = Quaternion.identity;
+
             return skeletonDriver;
         }
 
@@ -278,6 +291,8 @@ namespace NomaiVR.Hands
                 UpdateSkeletonBlendAmmount();
             if(handState == EHandState.Reaching)
                 skeleton.BasePoseInfluence = ShouldRenderGloves() ? gloveSkeletonBlendAmmount : handSkeletonBlendAmmount;
+
+            IndexTip.localPosition = ShouldRenderGloves() ? gloveIndexTipOffset : Vector3.zero;
         }
 
         internal void UpdateSkeletonBlendAmmount()

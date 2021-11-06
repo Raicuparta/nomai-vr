@@ -52,11 +52,6 @@ namespace NomaiVR
             }
         }
 
-        private void OnDisable()
-        {
-            SetState(ButtonState.Disabled);
-        }
-
         protected abstract void Initialize();
         protected abstract bool IsButtonActive();
         protected abstract bool IsButtonFocused();
@@ -67,7 +62,7 @@ namespace NomaiVR
             buttonMaterial.SetColor(shaderColor, color);
         }
 
-        protected virtual void SetState(ButtonState nextState, ButtonState? previousState = null)
+        private void SetState(ButtonState nextState, ButtonState? previousState = null)
         {
             if (nextState == buttonState) return;
             if (previousState != null && previousState != buttonState) return;
