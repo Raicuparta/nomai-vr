@@ -1,4 +1,5 @@
-﻿using NomaiVR.Helpers;
+﻿using NomaiVR.Assets;
+using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,7 @@ namespace NomaiVR.Tools
                 RemoveTextMaterials(translator);
                 SetUpHolster(translatorModel);
                 SetUpLaser(translator);
+                SetUpTranslatorButtons(translator);
 
                 holdable.OnFlipped += (isRight) =>
                 {
@@ -116,6 +118,20 @@ namespace NomaiVR.Tools
                 translator.GetComponent<NomaiTranslator>()._raycastTransform = lineObject.transform;
 
                 return lineObject.transform;
+            }
+
+            private Transform SetUpTranslatorButtons(Transform translator)
+            {
+                var buttons = Instantiate(AssetLoader.TranslatorHandheldButtonsPrefab).transform;
+                buttons.parent = translator.Find("TranslatorGroup/Props_HEA_Translator");
+                buttons.localScale = Vector3.one;
+                buttons.localPosition = Vector3.zero;
+                buttons.localRotation = Quaternion.identity;
+
+                for (int i = 0; i < buttons.childCount; i++)
+                    buttons.GetChild(i).gameObject.AddComponent<TouchButton>();
+
+                return buttons;
             }
 
             private void RemoveTextMaterials(Transform translator)

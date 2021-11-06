@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using NomaiVR.Assets;
 using NomaiVR.Helpers;
@@ -10,6 +11,7 @@ namespace NomaiVR.Hands
 {
     public class Hand : MonoBehaviour
     {
+        public const float k_minimumPointDistance = 0.1f;
         private const float handSkeletonBlendAmmount = 0.5f;
         private const float gloveSkeletonBlendAmmount = 0.275f;
 
@@ -32,7 +34,9 @@ namespace NomaiVR.Hands
         private EHandState lastHandState = EHandState.Free;
         private NomaiVRHandSkeleton skeleton;
         private SteamVR_Skeleton_Poser reachPoser;
+        private SteamVR_Skeleton_Poser pointPoser;
         private EVRSkeletalMotionRange rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
+        private float closestPointable = float.PositiveInfinity;
 
         internal enum EHandState
         {
@@ -52,6 +56,22 @@ namespace NomaiVR.Hands
             GlobalMessenger.AddListener("RemoveSuit", OnSuitChanged);
             GlobalMessenger.AddListener("SimulationEnter", OnSimulationEnter);
             GlobalMessenger.AddListener("SimulationExit", OnSimulationExit);
+        }
+
+        internal void LateUpdate()
+        {
+            float pointAmmount = 1f - Mathf.Clamp(closestPointable / k_minimumPointDistance, 0, 1);
+            if(pointAmmount > float.Epsilon && handState != EHandState.Holding)
+            {
+                pointPoser.SetBlendingBehaviourValue("pointable_distance", pointAmmount);
+                var pointSnapshot = pointPoser.GetBlendedPose(skeleton, skeleton.BonePositions, skeleton.BoneRotations);
+                for (int i = 0; i < pointSnapshot.bonePositions.Length; i++)
+                    skeleton.SetBonePosition(i, pointSnapshot.bonePositions[i]);
+                for (int i = 0; i < pointSnapshot.boneRotations.Length; i++)
+                    skeleton.SetBoneRotation(i, pointSnapshot.boneRotations[i]);
+            }
+
+            closestPointable = float.PositiveInfinity;
         }
 
         internal void OnDestroy()
@@ -197,7 +217,6 @@ namespace NomaiVR.Hands
                 ),
             };
 
-
             var skeletonPoser = skeletonDriver.fallbackPoser;
             skeletonPoser.skeletonMainPose = fallbackRelax;
             skeletonPoser.skeletonAdditionalPoses.Add(fallbackPoint);
@@ -234,6 +253,20 @@ namespace NomaiVR.Hands
             //Setup Limit/Reach Poser
             reachPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
             reachPoser.skeletonMainPose = AssetLoader.ReachForPose;
+
+            //Point poser for handheld buttons interaction
+            pointPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
+            pointPoser.skeletonMainPose = AssetLoader.FallbackRelaxedPose;
+            pointPoser.skeletonAdditionalPoses.Add(AssetLoader.FallbackPointPose);
+            pointPoser.blendingBehaviours.Add(new SteamVR_Skeleton_Poser.PoseBlendingBehaviour()
+            {
+                type = SteamVR_Skeleton_Poser.PoseBlendingBehaviour.BlenderTypes.Manual,
+                enabled = true,
+                pose = 1,
+                name = "pointable_distance",
+                smoothingSpeed = 0.5f,
+                value = 0
+            });
 
             return skeletonDriver;
         }
@@ -328,6 +361,11 @@ namespace NomaiVR.Hands
             rangeOfMotion = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
             skeleton?.SetRangeOfMotion(rangeOfMotion); // Back to main menu we have a nullreference here
             ResetSkeletonBlend();
+        }
+
+        public void NotifyPointable(float distance)
+        {
+            if (distance < closestPointable) closestPointable = distance;
         }
 
         private bool ShouldRenderGloves()

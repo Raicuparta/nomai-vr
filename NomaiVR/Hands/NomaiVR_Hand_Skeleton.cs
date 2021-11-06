@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR.Hands
@@ -6,6 +7,8 @@ namespace NomaiVR.Hands
     public class NomaiVRHandSkeleton : SteamVR_Behaviour_Skeleton
     {
         public float BasePoseInfluence { get; set; }
+        public Vector3[] BonePositions { get; private set; }
+        public Quaternion[] BoneRotations{ get; private set; }
         private bool snapshotCleanRequested;
 
         public void OnDestroy()
@@ -21,7 +24,12 @@ namespace NomaiVR.Hands
 
         public override void UpdateSkeletonTransforms(Vector3[] bonePositions, Quaternion[] boneRotations)
         {
+            Stopwatch stopWatch = new Stopwatch();
+
             base.UpdateSkeletonTransforms(bonePositions, boneRotations);
+
+            BonePositions = bonePositions;
+            BoneRotations = boneRotations; 
 
             if(snapshotCleanRequested && !isBlending && skeletonBlend > 0 && temporaryRangeOfMotion == null && rangeOfMotion == EVRSkeletalMotionRange.WithoutController)
             {
