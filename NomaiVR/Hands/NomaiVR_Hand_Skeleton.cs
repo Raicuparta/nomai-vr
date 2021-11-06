@@ -24,8 +24,6 @@ namespace NomaiVR.Hands
 
         public override void UpdateSkeletonTransforms(Vector3[] bonePositions, Quaternion[] boneRotations)
         {
-            Stopwatch stopWatch = new Stopwatch();
-
             base.UpdateSkeletonTransforms(bonePositions, boneRotations);
 
             BonePositions = bonePositions;
