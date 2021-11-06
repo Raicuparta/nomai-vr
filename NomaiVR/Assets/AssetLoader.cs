@@ -26,6 +26,8 @@ namespace NomaiVR.Assets
         public static GameObject ProbeScreenButtonsPrefab;
         public static GameObject SignalscopeScreenButtonsPrefab;
         public static GameObject TranslatorHandheldButtonsPrefab;
+        public static GameObject ProbeLauncherHandheldButtonsPrefab;
+        public static GameObject SignalscopeHandheldButtonsPrefab;
         public static AssetBundle VRBindingTextures;
         public static Sprite SplashSprite;
         public static Texture2D EmptyTexture;
@@ -67,6 +69,8 @@ namespace NomaiVR.Assets
 
             var handheldButtonsBundle = LoadBundle("handheld-buttons");
             TranslatorHandheldButtonsPrefab = LoadAsset<GameObject>(handheldButtonsBundle, "handheldtools/translatorhandheldbuttons.prefab");
+            ProbeLauncherHandheldButtonsPrefab = LoadAsset<GameObject>(handheldButtonsBundle, "handheldtools/probelauncherbuttons.prefab");
+            SignalscopeHandheldButtonsPrefab = LoadAsset<GameObject>(handheldButtonsBundle, "handheldtools/signalscopebuttons.prefab");
 
             var splashBundle = LoadBundle("splash-screen");
             SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");

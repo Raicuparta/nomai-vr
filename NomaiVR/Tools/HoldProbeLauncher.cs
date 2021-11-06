@@ -1,7 +1,9 @@
 ﻿
+using NomaiVR.Assets;
 using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NomaiVR.Tools
 {
@@ -100,6 +102,21 @@ namespace NomaiVR.Tools
                 bracketImage.localPosition = Vector3.zero;
                 bracketImage.localRotation = Quaternion.identity;
                 bracketImage.localScale *= 0.5f;
+
+                var probeLauncherButtons = Instantiate(AssetLoader.ProbeLauncherHandheldButtonsPrefab).transform;
+                probeLauncherButtons.parent = probeLauncherModel;
+                probeLauncherButtons.localPosition = Vector3.zero;
+                probeLauncherButtons.localScale = Vector3.one;
+                probeLauncherButtons.localRotation = Quaternion.identity;
+                var probeLauncherImage = displayImage.GetComponent<Image>();
+                for (int i = 0; i < probeLauncherButtons.childCount; i++)
+                {
+                    var touchButton = probeLauncherButtons.GetChild(i).gameObject.AddComponent<TouchButton>();
+                    if (i < 4)
+                        touchButton.CheckEnabled = () => probeLauncherImage.enabled;
+                    else
+                        touchButton.CheckEnabled = () => !probeLauncherImage.enabled;
+                }
 
                 GlobalMessenger.AddListener("SuitUp", OnSuitUp);
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);

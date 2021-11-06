@@ -12,7 +12,7 @@ namespace NomaiVR.Input.ActionInputs
         private readonly bool isEitherHand;
         private readonly string textureModifier;
 
-        public Vector2ActionInput(SteamVR_Action_Vector2 action, bool yOnly = false, bool invert = false, bool clamp = false, bool yZero = false, bool eitherHand = false, string textureModifier = null): base(action)
+        public Vector2ActionInput(SteamVR_Action_Vector2 action, bool optional = false, bool yOnly = false, bool invert = false, bool clamp = false, bool yZero = false, bool eitherHand = false, string textureModifier = null): base(action, optional)
         {
             this.yOnly = yOnly;
             this.invert = invert;

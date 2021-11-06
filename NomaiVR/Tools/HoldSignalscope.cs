@@ -63,12 +63,13 @@ namespace NomaiVR.Tools
                 SetupReticule(Reticule);
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.15f, 0));
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.1714f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
                 SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.05f, 0));
                 LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
                 SetupScopeLens();
+                SetupButtons(signalScopeModel);
             }
 
             private static void SetupReticule(Transform reticule)
@@ -86,6 +87,18 @@ namespace NomaiVR.Tools
                 parent.localScale = Vector3.one * 0.0005f;
                 parent.localPosition = position;
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
+            }
+
+            private static void SetupButtons(Transform signalscopeModel)
+            {
+                var buttons = Instantiate(AssetLoader.SignalscopeHandheldButtonsPrefab).transform;
+                buttons.parent = signalscopeModel;
+                buttons.localPosition = Vector3.zero;
+                buttons.localScale = Vector3.one;
+                buttons.localRotation = Quaternion.identity;
+
+                for (int i = 0; i < buttons.childCount; i++)
+                    buttons.GetChild(i).gameObject.AddComponent<TouchButton>();
             }
 
             private void OnUnequip()

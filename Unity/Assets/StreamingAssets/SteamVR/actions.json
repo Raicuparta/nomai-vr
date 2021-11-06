@@ -123,7 +123,8 @@
     },
     {
       "name": "/actions/tools/in/DPad",
-      "type": "vector2"
+      "type": "vector2",
+      "requirement": "optional"
     },
     {
       "name": "/actions/tools/in/Use",
