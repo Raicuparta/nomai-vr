@@ -26,10 +26,11 @@ namespace NomaiVR.EffectFixes
             {
                 if (__instance._initialSpawnPoint == null || LoadManager.GetCurrentScene() != OWScene.SolarSystem) return;
                 var playerTransform = __instance._playerBody.transform;
-		        var vector2 = - playerTransform.position;
-		        var vector3 = vector2 - Vector3.Project(vector2, playerTransform.up);
-		        var lhs = Quaternion.AngleAxis(Vector3.Angle(playerTransform.forward, vector3) * 45, playerTransform.up);
-		        playerTransform.rotation = lhs * playerTransform.rotation;
+		        var playerPosition = playerTransform.position;
+                var playerUp = playerTransform.up;
+		        var projectedPosition = Vector3.Project(playerPosition, playerUp) - playerPosition;
+		        var rotationOffset = Quaternion.AngleAxis(Vector3.Angle(playerTransform.forward, projectedPosition) * 40, playerUp);
+		        playerTransform.rotation = rotationOffset * playerTransform.rotation;
                 
             }
         }
