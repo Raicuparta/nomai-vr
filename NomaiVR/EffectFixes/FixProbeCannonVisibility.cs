@@ -19,7 +19,11 @@ namespace NomaiVR.EffectFixes
             {
                 if (__instance._name != AstroObject.Name.TimberHearth) return;
 
+                var shipTransform = GameObject.FindWithTag("Ship").transform;
+                var shipParent = shipTransform.parent;
+                shipTransform.SetParent(__instance.transform);
                 __instance.transform.eulerAngles += new Vector3(37, 18, 0);
+                shipTransform.SetParent(shipParent);
             }
 
             private static void RotatePlayer(PlayerSpawner __instance)
@@ -31,7 +35,6 @@ namespace NomaiVR.EffectFixes
 		        var projectedPosition = Vector3.Project(playerPosition, playerUp) - playerPosition;
 		        var rotationOffset = Quaternion.AngleAxis(Vector3.Angle(playerTransform.forward, projectedPosition) * 40, playerUp);
 		        playerTransform.rotation = rotationOffset * playerTransform.rotation;
-                
             }
         }
     }
