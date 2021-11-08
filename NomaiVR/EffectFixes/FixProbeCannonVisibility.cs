@@ -2,6 +2,9 @@
 
 namespace NomaiVR.EffectFixes
 {
+    // Seeing the Probe Cannon explosion when waking up from each loop is a pretty important detail in the game.
+    // In VR, the player no longer wakes up facing the sky, so this detail is much easier to miss.
+    // By rotating TH, we can make GD show at an angle that's visible while looking straight ahead.
     internal class FixProbeCannonVisibility: NomaiVRModule<NomaiVRModule.EmptyBehaviour, FixProbeCannonVisibility.Patch>
     {
         protected override bool IsPersistent => false;
