@@ -35,8 +35,13 @@ namespace NomaiVR.EffectFixes
                 var playerTransform = __instance._playerBody.transform;
 		        var playerPosition = playerTransform.position;
                 var playerUp = playerTransform.up;
+                var playerForward = playerTransform.forward;
 		        var projectedPosition = Vector3.Project(playerPosition, playerUp) - playerPosition;
-		        var rotationOffset = Quaternion.AngleAxis(Vector3.Angle(playerTransform.forward, projectedPosition) * 40, playerUp);
+                var giantsDeepPosition = Locator.GetAstroObject(AstroObject.Name.GiantsDeep).transform.position;
+                var projectedForward = Vector3.Project(playerForward, playerUp);
+                var siantsDeepDirection = Vector3.Project(giantsDeepPosition - playerPosition, playerUp);
+                var angle = Vector3.Angle(projectedForward, siantsDeepDirection);
+		        var rotationOffset = Quaternion.AngleAxis(Vector3.Angle(playerForward, projectedPosition) + angle, playerUp);
 		        playerTransform.rotation = rotationOffset * playerTransform.rotation;
             }
         }
