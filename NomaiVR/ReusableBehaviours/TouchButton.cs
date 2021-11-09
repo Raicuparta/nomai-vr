@@ -108,7 +108,7 @@ namespace NomaiVR.ReusableBehaviours
 
         protected override bool IsButtonFocused()
         {
-            return CalculateFingerTipDistance() < Hand.k_minimumPointDistance;
+            return CalculateFingerTipDistance() < Hand.minimumPointDistance;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace NomaiVR.Hands
 {
     public class Hand : MonoBehaviour
     {
-        public const float k_minimumPointDistance = 0.1f;
+        public const float minimumPointDistance = 0.1f;
         private const float handSkeletonBlendAmmount = 0.5f;
         private const float gloveSkeletonBlendAmmount = 0.275f;
         private static readonly Vector3 gloveIndexTipOffset = new Vector3(0.034f, 0.0002f, 0.0003f);
@@ -61,7 +61,7 @@ namespace NomaiVR.Hands
 
         internal void LateUpdate()
         {
-            float pointAmmount = 1f - Mathf.Clamp(closestPointable / k_minimumPointDistance, 0, 1);
+            float pointAmmount = 1f - Mathf.Clamp(closestPointable / minimumPointDistance, 0, 1);
             if(pointAmmount > float.Epsilon && handState != EHandState.Holding)
             {
                 pointPoser.SetBlendingBehaviourValue("pointable_distance", pointAmmount);
