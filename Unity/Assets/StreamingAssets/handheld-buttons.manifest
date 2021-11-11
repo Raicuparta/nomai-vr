@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3306926955
+CRC: 1854541389
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6cc7af397f1a064081a7ac7afcccefd1
+    Hash: 49f8294fe136d136cc8a821a0a75bd25
   TypeTreeHash:
     serializedVersion: 2
     Hash: c7c5dc534e7357b33d15743fbed05b86
@@ -32,4 +32,4 @@ Assets:
 - Assets/HandheldTools/ProbeLauncherButtons.prefab
 - Assets/HandheldTools/SignalscopeButtons.prefab
 Dependencies:
-- E:/ArtumRepos/Modding/OuterWilds/nomai-upstream/Unity/Assets/StreamingAssets/cockpit-buttons
+- C:/Users/rai/Repos/nomai-vr/Unity/Assets/StreamingAssets/cockpit-buttons
