@@ -38,6 +38,8 @@ namespace NomaiVR.Hands
         private SteamVR_Skeleton_Poser pointPoser;
         private EVRSkeletalMotionRange rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
         private float closestPointable = float.PositiveInfinity;
+        private float currentPointAmmount = 0.0f;
+        private float currentPointBlendVelocity = 0.0f;
 
         internal enum EHandState
         {
@@ -62,14 +64,14 @@ namespace NomaiVR.Hands
         internal void LateUpdate()
         {
             float pointAmmount = 1f - Mathf.Clamp(closestPointable / minimumPointDistance, 0, 1);
-            if(pointAmmount > float.Epsilon && handState != EHandState.Holding)
+            currentPointAmmount = Mathf.SmoothDamp(currentPointAmmount, pointAmmount, ref currentPointBlendVelocity, 0.05f);
+            if (currentPointAmmount > float.Epsilon && handState != EHandState.Holding)
             {
-                pointPoser.SetBlendingBehaviourValue("pointable_distance", pointAmmount);
                 var pointSnapshot = pointPoser.GetBlendedPose(skeleton, skeleton.BonePositions, skeleton.BoneRotations);
                 for (int i = 0; i < pointSnapshot.bonePositions.Length; i++)
-                    skeleton.SetBonePosition(i, pointSnapshot.bonePositions[i]);
+                    skeleton.BlendBonePosition(i, pointSnapshot.bonePositions[i], currentPointAmmount);
                 for (int i = 0; i < pointSnapshot.boneRotations.Length; i++)
-                    skeleton.SetBoneRotation(i, pointSnapshot.boneRotations[i]);
+                    skeleton.BlendBoneRotation(i, pointSnapshot.boneRotations[i], currentPointAmmount);
             }
 
             closestPointable = float.PositiveInfinity;
@@ -264,17 +266,7 @@ namespace NomaiVR.Hands
 
             //Point poser for handheld buttons interaction
             pointPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
-            pointPoser.skeletonMainPose = AssetLoader.FallbackRelaxedPose;
-            pointPoser.skeletonAdditionalPoses.Add(AssetLoader.FallbackPointPose);
-            pointPoser.blendingBehaviours.Add(new SteamVR_Skeleton_Poser.PoseBlendingBehaviour()
-            {
-                type = SteamVR_Skeleton_Poser.PoseBlendingBehaviour.BlenderTypes.Manual,
-                enabled = true,
-                pose = 1,
-                name = "pointable_distance",
-                smoothingSpeed = 0.5f,
-                value = 0
-            });
+            pointPoser.skeletonMainPose = AssetLoader.FallbackPointPose;
 
             IndexTip = new GameObject("IndexTip").transform;
             IndexTip.parent = FingerEnd(targetWristTransform, "index");

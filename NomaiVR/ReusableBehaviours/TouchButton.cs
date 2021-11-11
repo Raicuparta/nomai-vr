@@ -93,8 +93,11 @@ namespace NomaiVR.ReusableBehaviours
         private float CalculateFingerTipDistance()
         {
             Hand offHand = VRToolSwapper.NonInteractingHand ?? HandsController.Behaviour.OffHandBehaviour;
-            float offHandDistance = Vector3.Distance(offHand.IndexTip.position, transform.position + transform.TransformVector(proximityDetector.LocalOffset));
-            offHand.NotifyPointable(offHandDistance);
+            Vector3 touchableCenter = transform.position + transform.TransformVector(proximityDetector.LocalOffset);
+            Vector3 touchableClosestPoint = touchableCenter + (offHand.IndexTip.position - touchableCenter).normalized * interactRadius;
+            float distanceFromCenter = Vector3.Distance(offHand.IndexTip.position, touchableCenter);
+            float offHandDistance = Vector3.Distance(offHand.IndexTip.position, touchableClosestPoint);
+            offHand.NotifyPointable(distanceFromCenter < interactRadius ? 0 : offHandDistance);
             return offHandDistance;
         }
 
@@ -108,7 +111,7 @@ namespace NomaiVR.ReusableBehaviours
 
         protected override bool IsButtonFocused()
         {
-            return CalculateFingerTipDistance() < Hand.minimumPointDistance;
+            return CalculateFingerTipDistance() < Hand.minimumPointDistance*1.5f;
         }
     }
 }
