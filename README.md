@@ -45,7 +45,7 @@
 ## Requirements
 
 - Version 1.1.10+ of the game installed (both Epic and Steam are supported).
-- Echoes of the Eye DLC is supported and fully playable, although not thoroughly tested;
+- Echoes of the Eye DLC is fully supported but not required;
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
