@@ -33,11 +33,22 @@ namespace NomaiVR.ReusableBehaviours
         {
             switch (name)
             {
-                case "Up": inputToSimulate = InputCommandType.TOOL_UP; break;
-                case "Down": inputToSimulate = InputCommandType.TOOL_DOWN; break;
-                case "Left": inputToSimulate = InputCommandType.TOOL_LEFT; break;
-                case "Right": inputToSimulate = InputCommandType.TOOL_RIGHT; break;
-                default: inputToSimulate = InputCommandType.TOOL_PRIMARY; break;
+                case "Up":
+                    inputToSimulate = InputCommandType.TOOL_UP;
+                    break;
+                case "Down":
+                    inputToSimulate = InputCommandType.TOOL_DOWN;
+                    break;
+                case "Left":
+                case "Camera":
+                    inputToSimulate = InputCommandType.TOOL_LEFT;
+                    break;
+                case "Right":
+                    inputToSimulate = InputCommandType.TOOL_RIGHT;
+                    break;
+                default:
+                    inputToSimulate = InputCommandType.TOOL_PRIMARY;
+                    break;
             }
         }
 
