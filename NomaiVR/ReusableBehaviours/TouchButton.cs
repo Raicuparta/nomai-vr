@@ -46,6 +46,12 @@ namespace NomaiVR.ReusableBehaviours
                 case "Right":
                     inputToSimulate = InputCommandType.TOOL_RIGHT;
                     break;
+                case "Shoot":
+                    inputToSimulate = InputCommandType.TOOL_PRIMARY;
+                    break;
+                case "Retrieve":
+                    inputToSimulate = InputCommandType.PROBERETRIEVE;
+                    break;
                 default:
                     inputToSimulate = InputCommandType.TOOL_PRIMARY;
                     break;
@@ -82,6 +88,7 @@ namespace NomaiVR.ReusableBehaviours
         {
             if(!isFingertipInside && State != ButtonState.Disabled)
             {
+                Logs.WriteWarning($"Pressing a button {name}");
                 ControllerInput.SimulateInput(inputToSimulate, true);
                 Hand offHand = VRToolSwapper.NonInteractingHand ?? HandsController.Behaviour.OffHandBehaviour;
                 SteamVR_Actions.default_Haptic.Execute(0, 0.2f, 300, .2f * ModConfig.ModSettings.VibrationStrength, offHand.InputSource);

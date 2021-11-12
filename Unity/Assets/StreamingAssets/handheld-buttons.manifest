@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 299415986
+CRC: 3807058754
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6caf6cee28991bc9682d56f220ca3cc9
+    Hash: 337649b4a5155e9cfad5c88a36628907
   TypeTreeHash:
     serializedVersion: 2
     Hash: 324cf51e7c109ef9f5775c15083e4aba
@@ -32,7 +32,8 @@ Assets:
 - Assets/HandheldTools/ProbeLauncherScreenFrame.mat
 - Assets/HandheldTools/Models/ChangePhotoMode.fbx
 - Assets/HandheldTools/TranslatorHandheldButtons.prefab
-- Assets/HandheldTools/ProbeLauncherButtons.prefab
+- Assets/HandheldTools/TouchButton.prefab
+- Assets/HandheldTools/ProbeLauncherScreen.prefab
 - Assets/HandheldTools/SignalscopeButtons.prefab
 - Assets/HandheldTools/Models/ProbeLauncherScreen.fbx
 Dependencies:
