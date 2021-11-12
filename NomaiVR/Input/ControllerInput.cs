@@ -36,8 +36,8 @@ namespace NomaiVR.Input
                 Postfix<InputManager>(nameof(InputManager.IsGamepadEnabled), nameof(ForceGamepadEnabled));
                 Postfix<InputManager>(nameof(InputManager.UsingGamepad), nameof(ForceGamepadEnabled));
                 
-                Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(ForceHasSameBindingFalse));
-                Postfix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.HasSameBinding), nameof(ForceHasSameBindingFalse));
+                Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
+                Postfix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
@@ -57,11 +57,16 @@ namespace NomaiVR.Input
                 }
             }
 
+            private static bool GetSimulatedInput(InputCommandType commandType)
+            {
+                var commandTypeKey = (int)commandType;
+                return simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey];
+            }
+            
             private static void PatchInputCommands(AbstractCommands __instance)
             {
                 var commandType = __instance.CommandType;
-                var commandTypeKey = (int)commandType;
-                if (simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey])
+                if (GetSimulatedInput(commandType))
                 {
                     __instance.AxisValue = new Vector2(1f, 0f);
                     return;
@@ -93,10 +98,9 @@ namespace NomaiVR.Input
                 __result = true;
             }
             
-            private static void ForceHasSameBindingFalse(ref bool __result, IInputCommands __instance, IInputCommands compare)
+            private static void PreventSimulatedHasSameBinding(ref bool __result, IInputCommands __instance, IInputCommands compare)
             {
-                if (__instance.CommandType == InputCommandType.TOOL_PRIMARY &&
-                    compare.CommandType == InputCommandType.PROBERETRIEVE)
+                if (GetSimulatedInput(__instance.CommandType) || GetSimulatedInput(compare.CommandType))
                 {
                     __result = false;
                 }
