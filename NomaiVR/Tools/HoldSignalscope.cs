@@ -111,7 +111,7 @@ namespace NomaiVR.Tools
             {
                 lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 lens.parent = Signalscope.transform;
-                lens.localPosition = new Vector3(0, 0.1f, 0.14f);
+                lens.localPosition = new Vector3(0, 0.1f, 0.16f);
                 lens.localRotation = Quaternion.identity;
                 lens.localScale = Vector3.one * 2f;
                 lens.gameObject.SetActive(false);
