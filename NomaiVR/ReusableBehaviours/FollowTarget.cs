@@ -12,10 +12,12 @@ namespace NomaiVR.ReusableBehaviours
         public float rotationSmoothTime;
         private Quaternion rotationVelocity;
         private Vector3 positionVelocity;
+        private Camera mainCamera;
 
         private void Awake()
         {
             Camera.onPreCull += UpdatePosition;
+            mainCamera = Locator.GetPlayerCamera().mainCamera;
         }
 
         private void OnDestroy()
@@ -25,7 +27,7 @@ namespace NomaiVR.ReusableBehaviours
 
         private void UpdatePosition(Camera camera)
         {
-            if (!target)
+            if (!target || camera != mainCamera)
             {
                 return;
             }
