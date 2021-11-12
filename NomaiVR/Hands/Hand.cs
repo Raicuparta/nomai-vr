@@ -81,7 +81,7 @@ namespace NomaiVR.Hands
         internal void LateUpdate()
         {
             float pointAmmount = 1f - Mathf.Clamp(closestPointable / minimumPointDistance, 0, 1);
-            currentPointAmmount = Mathf.SmoothDamp(currentPointAmmount, pointAmmount, ref currentPointBlendVelocity, 0.05f);
+            currentPointAmmount = MathHelper.SmoothDamp(currentPointAmmount, pointAmmount, ref currentPointBlendVelocity, 0.05f);
             if (currentPointAmmount > float.Epsilon && handState != EHandState.Holding)
             {
                 var pointSnapshot = pointPoser.GetBlendedPose(skeleton, skeleton.BonePositions, skeleton.BoneRotations);
