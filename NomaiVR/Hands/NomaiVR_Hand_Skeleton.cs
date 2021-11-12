@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR.Hands
@@ -6,6 +7,8 @@ namespace NomaiVR.Hands
     public class NomaiVRHandSkeleton : SteamVR_Behaviour_Skeleton
     {
         public float BasePoseInfluence { get; set; }
+        public Vector3[] BonePositions { get; private set; }
+        public Quaternion[] BoneRotations{ get; private set; }
         private bool snapshotCleanRequested;
 
         public void OnDestroy()
@@ -22,6 +25,9 @@ namespace NomaiVR.Hands
         public override void UpdateSkeletonTransforms(Vector3[] bonePositions, Quaternion[] boneRotations)
         {
             base.UpdateSkeletonTransforms(bonePositions, boneRotations);
+
+            BonePositions = bonePositions;
+            BoneRotations = boneRotations; 
 
             if(snapshotCleanRequested && !isBlending && skeletonBlend > 0 && temporaryRangeOfMotion == null && rangeOfMotion == EVRSkeletalMotionRange.WithoutController)
             {
@@ -42,6 +48,18 @@ namespace NomaiVR.Hands
             if (BasePoseInfluence > 0)
                 localRotation = Quaternion.Lerp(bones[boneIndex].localRotation, localRotation, BasePoseInfluence);
              base.SetBoneRotation(boneIndex, localRotation);
+        }
+
+        public void BlendBonePosition(int boneIndex, Vector3 blendPosition, float ammount)
+        {
+            blendPosition = Vector3.Lerp(bones[boneIndex].localPosition, blendPosition, ammount);
+            this.SetBonePosition(boneIndex, blendPosition);
+        }
+
+        public void BlendBoneRotation(int boneIndex, Quaternion blendRotation, float ammount)
+        {
+            blendRotation = Quaternion.Lerp(bones[boneIndex].localRotation, blendRotation, ammount);
+            this.SetBoneRotation(boneIndex, blendRotation);
         }
     }
 }

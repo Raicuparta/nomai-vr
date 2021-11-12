@@ -1,5 +1,7 @@
-﻿using NomaiVR.Helpers;
+﻿using NomaiVR.Assets;
+using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,8 +15,10 @@ namespace NomaiVR.Tools
         public class Behaviour : MonoBehaviour
         {
             private Transform translatorBeams;
+            private NomaiTranslator nomaiTranslator;
             private MeshRenderer originalLeftArrowRenderer;
             private MeshRenderer originalRightArrowRenderer;
+            private List<TouchButton> handheldButtons;
             private NomaiTranslatorProp translatorProp;
 
             internal void Start()
@@ -30,6 +34,7 @@ namespace NomaiVR.Tools
                 RemoveTextMaterials(translator);
                 SetUpHolster(translatorModel);
                 SetUpLaser(translator);
+                SetUpTranslatorButtons(translator);
 
                 holdable.OnFlipped += (isRight) =>
                 {
@@ -42,6 +47,11 @@ namespace NomaiVR.Tools
                     translatorProp._leftPageArrowRenderer = isRight ? originalLeftArrowRenderer : originalRightArrowRenderer;
                     translatorProp._rightPageArrowRenderer = isRight ? originalRightArrowRenderer : originalLeftArrowRenderer;
 
+                    if (isRight) 
+                        handheldButtons.ForEach(b => b.ResetInputs());
+                    else 
+                        handheldButtons.ForEach(b => b.MirrorInputs());
+
                     translatorProp.SetNomaiAudioArrowEmissions();
                 };
             }
@@ -49,6 +59,7 @@ namespace NomaiVR.Tools
             private Transform SetUpTranslator()
             {
                 var translator = Locator.GetPlayerCamera().transform.Find("NomaiTranslatorProp");
+                nomaiTranslator = translator.GetComponent<NomaiTranslator>();
                 translator.localScale = Vector3.one * 0.3f;
                 return translator;
             }
@@ -113,9 +124,31 @@ namespace NomaiVR.Tools
 
                 lineObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => ToolHelper.Swapper.IsInToolMode(ToolMode.Translator, ToolGroup.Suit);
 
-                translator.GetComponent<NomaiTranslator>()._raycastTransform = lineObject.transform;
+                nomaiTranslator._raycastTransform = lineObject.transform;
 
                 return lineObject.transform;
+            }
+
+            private Transform SetUpTranslatorButtons(Transform translator)
+            {
+                handheldButtons = new List<TouchButton>(4);
+                var buttons = Instantiate(AssetLoader.TranslatorHandheldButtonsPrefab).transform;
+                buttons.parent = translator.Find("TranslatorGroup/Props_HEA_Translator");
+                buttons.localScale = Vector3.one;
+                buttons.localPosition = Vector3.zero;
+                buttons.localRotation = Quaternion.identity;
+
+                for (int i = 0; i < buttons.childCount; i++)
+                {
+                    var touchButton = buttons.GetChild(i).gameObject.AddComponent<TouchButton>();
+
+                    if (touchButton.name == "Up" || touchButton.name == "Down")
+                        touchButton.CheckEnabled = () => nomaiTranslator._translatorProp._scrollRect.verticalScrollbar.isActiveAndEnabled;
+
+                    handheldButtons.Add(touchButton);
+                }
+
+                return buttons;
             }
 
             private void RemoveTextMaterials(Transform translator)

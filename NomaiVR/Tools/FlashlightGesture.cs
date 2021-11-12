@@ -36,7 +36,7 @@ namespace NomaiVR.Tools
 
                 fillLight.localPosition = spotLight.localPosition = flashLight.transform.localPosition = new Vector3(0, 0.05f, 0.05f);
                 fillLight.localRotation = spotLight.localRotation = flashLight.transform.localRotation = Quaternion.identity;
-                this.enabled = false;
+                enabled = false;
             }
 
             private void SetupDetector(Transform hand, Vector3 offset)
@@ -55,18 +55,7 @@ namespace NomaiVR.Tools
 
             private void HandEnter(Transform hand)
             {
-                ToggleFlashLight();
-            }
-
-            private void ToggleFlashLight()
-            {
-                ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, true);
-                Invoke(nameof(ReleaseFlashLight), 0.2f);
-            }
-
-            private void ReleaseFlashLight()
-            {
-                ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT, false);
+                ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT);
             }
         }
     }

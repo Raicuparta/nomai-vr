@@ -14,15 +14,24 @@ namespace NomaiVR.Input
         protected override OWScene[] Scenes => TitleScene;
 
         private static readonly Dictionary<int, bool> simulatedBoolInputs = new Dictionary<int, bool>();
+        private static readonly List<InputCommandType> inputsToClear = new List<InputCommandType>();
 
         public static void SimulateInput(InputCommandType commandType, bool value)
         {
-            if (!value)
+            if (value)
             {
-                // TODO maybe not good to keep adding and removing from dictionary.
-                simulatedBoolInputs.Remove((int) commandType);
-            } 
-            simulatedBoolInputs[(int)commandType] = value;
+                simulatedBoolInputs[(int)commandType] = true;
+            }
+            else
+            {
+                simulatedBoolInputs.Remove((int)commandType);
+            }
+        }
+        
+        public static void SimulateInput(InputCommandType commandType)
+        {
+            inputsToClear.Add(commandType);
+            simulatedBoolInputs[(int)commandType] = true;
         }
 
         public class Patch : NomaiVRPatch
@@ -36,20 +45,20 @@ namespace NomaiVR.Input
                 Postfix<InputManager>(nameof(InputManager.IsGamepadEnabled), nameof(ForceGamepadEnabled));
                 Postfix<InputManager>(nameof(InputManager.UsingGamepad), nameof(ForceGamepadEnabled));
                 
-                Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(ForceHasSameBindingFalse));
-                Postfix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.HasSameBinding), nameof(ForceHasSameBindingFalse));
+                Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
+                Postfix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
             }
 
-            private void OnToolUnequipped()
+            private static void OnToolUnequipped()
             {
                 SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
             }
 
-            private void OnToolEquipped()
+            private static void OnToolEquipped()
             {
                 if (VRToolSwapper.InteractingHand != null)
                 {
@@ -57,12 +66,26 @@ namespace NomaiVR.Input
                 }
             }
 
+            private static bool GetSimulatedInput(InputCommandType commandType)
+            {
+                return simulatedBoolInputs.ContainsKey((int)commandType) && simulatedBoolInputs[(int)commandType];
+            }
+
+            private static void ClearSimulatedInputs()
+            {
+                foreach (var inputToClear in inputsToClear)
+                {
+                    SimulateInput(inputToClear, false);
+                }
+                inputsToClear.Clear();
+            }
+            
             private static void PatchInputCommands(AbstractCommands __instance)
             {
                 var commandType = __instance.CommandType;
-                var commandTypeKey = (int)commandType;
-                if (simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey])
+                if (GetSimulatedInput(commandType))
                 {
+                    ClearSimulatedInputs();
                     __instance.AxisValue = new Vector2(1f, 0f);
                     return;
                 }
@@ -93,14 +116,12 @@ namespace NomaiVR.Input
                 __result = true;
             }
             
-            private static void ForceHasSameBindingFalse(ref bool __result, IInputCommands __instance, IInputCommands compare)
+            private static void PreventSimulatedHasSameBinding(ref bool __result, IInputCommands __instance, IInputCommands compare)
             {
-                if (ToolHelper.IsUsingAnyTool(ToolGroup.Ship) && (__instance.CommandType == InputCommandType.TOOL_PRIMARY ||
-                    compare.CommandType == InputCommandType.PROBERETRIEVE))
+                if (GetSimulatedInput(__instance.CommandType) || GetSimulatedInput(compare.CommandType))
                 {
                     __result = false;
                 }
-
             }
         }
     }
