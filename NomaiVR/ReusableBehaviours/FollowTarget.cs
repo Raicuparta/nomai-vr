@@ -21,21 +21,14 @@ namespace NomaiVR.ReusableBehaviours
         private Vector3 positionVelocity;
         private Camera mainCamera;
 
-        private void Awake()
+        private void Start()
         {
-            mainCamera = Camera.main;
-            if (updateType == UpdateType.PreCull)
-            {
-                Camera.onPreCull += HandleCameraPrecull;
-            }
+            if (updateType == UpdateType.PreCull) SetUpPreCull();
         }
 
         private void OnDestroy()
         {
-            if (updateType == UpdateType.PreCull)
-            {
-                Camera.onPreCull -= HandleCameraPrecull;
-            }
+            if (updateType == UpdateType.PreCull) CleanUpPreCull();
         }
 
         private void LateUpdate()
@@ -49,6 +42,17 @@ namespace NomaiVR.ReusableBehaviours
             if (!Target || camera != mainCamera) return;
 
             UpdateTransform();
+        }
+
+        private void SetUpPreCull()
+        {
+            mainCamera = Camera.main;
+            Camera.onPreCull += HandleCameraPrecull;
+        }
+
+        private void CleanUpPreCull()
+        {
+            Camera.onPreCull -= HandleCameraPrecull;
         }
 
         private void UpdateTransform()
