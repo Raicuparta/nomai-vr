@@ -49,7 +49,6 @@ namespace NomaiVR.Input
                 { InputCommandType.THRUST_UP, ActionInputDefinitions.ThrustUp },
                 { InputCommandType.THRUST_DOWN, ActionInputDefinitions.ThrustDown },
                 { InputCommandType.PROBELAUNCH, ActionInputDefinitions.StationaryUse },
-                { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.StationaryUse },
                 { InputCommandType.SCOPEVIEW, ActionInputDefinitions.StationaryUse },
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.StationaryUse },
                 { InputCommandType.TOOL_UP, ActionInputDefinitions.StationaryUp },
@@ -62,7 +61,6 @@ namespace NomaiVR.Input
             new Dictionary<InputCommandType, IActionInput>
             {
                 { InputCommandType.PROBELAUNCH, ActionInputDefinitions.ToolUse },
-                { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.ToolUse },
                 { InputCommandType.SIGNALSCOPE, ActionInputDefinitions.ToolUse },
                 { InputCommandType.SCOPEVIEW, ActionInputDefinitions.ToolUse },
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.ToolUse },
@@ -84,7 +82,6 @@ namespace NomaiVR.Input
                 { InputCommandType.TOOL_Y, ActionInputDefinitions.Empty },
                 { InputCommandType.TOOL_PRIMARY, ActionInputDefinitions.Empty },
                 { InputCommandType.PROBELAUNCH, ActionInputDefinitions.Empty },
-                { InputCommandType.PROBERETRIEVE, ActionInputDefinitions.Empty },
             };
 
         public static readonly Dictionary<InputCommandType, IActionInput> FlashLightInputMap =
