@@ -25,7 +25,7 @@ namespace NomaiVR.UI
 
                 // Prevent dialogue box from flying off after a while.
                 canvasTransform.parent = new GameObject().transform;
-                canvasTransform.parent.gameObject.AddComponent<FollowTarget>().target = Locator.GetPlayerTransform();
+                canvasTransform.parent.gameObject.AddComponent<FollowTarget>().Target = Locator.GetPlayerTransform();
 
                 var canvas = canvasTransform.gameObject.GetComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;

@@ -170,22 +170,23 @@ namespace NomaiVR.UI
             {
                 canvasObjectsToHide.Add(canvas.gameObject);
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
+                followTarget.updateType = FollowTarget.UpdateType.PreCull;
                 if (SceneHelper.IsInGame())
                 {
-                    followTarget.target = Locator.GetPlayerTransform();
-                    followTarget.localPosition = new Vector3(0, 0.75f, 1.5f);
+                    followTarget.Target = Locator.GetPlayerTransform();
+                    followTarget.LocalPosition = new Vector3(0, 0.75f, 1.5f);
                 }
                 else if (SceneHelper.IsInTitle())
                 {
-                    followTarget.target = Camera.main.transform.parent;
-                    followTarget.localPosition = new Vector3(-0.2f, 1.3f, 2f);
+                    followTarget.Target = Camera.main.transform.parent;
+                    followTarget.LocalPosition = new Vector3(-0.2f, 1.3f, 2f);
                 }
                 else
                 {
-                    followTarget.target = Camera.main.transform;
-                    followTarget.localPosition = new Vector3(0, 0, 2f);
-                    followTarget.positionSmoothTime = 0.5f;
-                    followTarget.rotationSmoothTime = 0.5f;
+                    followTarget.Target = Camera.main.transform;
+                    followTarget.LocalPosition = new Vector3(0, 0, 2f);
+                    followTarget.PositionSmoothTime = 0.5f;
+                    followTarget.RotationSmoothTime = 0.5f;
                 }
 
                 canvas.gameObject.AddComponent<DestroyObserver>().OnDestroyed += () =>

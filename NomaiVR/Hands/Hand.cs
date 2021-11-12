@@ -68,13 +68,13 @@ namespace NomaiVR.Hands
         {
             if (VRToolSwapper.InteractingHand == this)
             {
-                followPose.positionSmoothTime = 0.1f;
-                followPose.rotationSmoothTime = 0.1f;
+                followPose.PositionSmoothTime = 0.1f;
+                followPose.RotationSmoothTime = 0.1f;
             }
             else
             {
-                followPose.positionSmoothTime = 0.02f;
-                followPose.rotationSmoothTime = 0.02f;
+                followPose.PositionSmoothTime = 0.02f;
+                followPose.RotationSmoothTime = 0.02f;
             }
         }
 
@@ -375,9 +375,9 @@ namespace NomaiVR.Hands
             var poseObject = new GameObject($"SteamVrBehavourPose");
             poseObject.transform.SetParent(transform.parent, false);
             followPose = gameObject.AddComponent<FollowTarget>();
-            followPose.target = poseObject.transform;
-            followPose.positionSmoothTime = 0.05f;
-            followPose.rotationSmoothTime = 0.05f;
+            followPose.Target = poseObject.transform;
+            followPose.PositionSmoothTime = 0.05f;
+            followPose.RotationSmoothTime = 0.05f;
             
             poseObject.SetActive(false);
 

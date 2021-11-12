@@ -40,10 +40,10 @@ namespace NomaiVR.UI
                 canvas.renderMode = RenderMode.WorldSpace;
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 canvas.transform.localScale = Vector3.one * 0.0015f;
-                followTarget.target = Locator.GetPlayerCamera().transform;
-                followTarget.localPosition = Vector3.forward * 4;
-                followTarget.rotationSmoothTime = 0.5f;
-                followTarget.positionSmoothTime = 0.5f;
+                followTarget.Target = Locator.GetPlayerCamera().transform;
+                followTarget.LocalPosition = Vector3.forward * 4;
+                followTarget.RotationSmoothTime = 0.5f;
+                followTarget.PositionSmoothTime = 0.5f;
                 canvas.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = ShouldRender;
 
                 SetUpBackground();
