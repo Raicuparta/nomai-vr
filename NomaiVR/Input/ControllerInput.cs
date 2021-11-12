@@ -14,15 +14,24 @@ namespace NomaiVR.Input
         protected override OWScene[] Scenes => TitleScene;
 
         private static readonly Dictionary<int, bool> simulatedBoolInputs = new Dictionary<int, bool>();
+        private static readonly List<InputCommandType> inputsToClear = new List<InputCommandType>();
 
         public static void SimulateInput(InputCommandType commandType, bool value)
         {
-            if (!value)
+            if (value)
             {
-                // TODO maybe not good to keep adding and removing from dictionary.
-                simulatedBoolInputs.Remove((int) commandType);
-            } 
-            simulatedBoolInputs[(int)commandType] = value;
+                simulatedBoolInputs[(int)commandType] = true;
+            }
+            else
+            {
+                simulatedBoolInputs.Remove((int)commandType);
+            }
+        }
+        
+        public static void SimulateInput(InputCommandType commandType)
+        {
+            inputsToClear.Add(commandType);
+            simulatedBoolInputs[(int)commandType] = true;
         }
 
         public class Patch : NomaiVRPatch
@@ -43,13 +52,13 @@ namespace NomaiVR.Input
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
             }
 
-            private void OnToolUnequipped()
+            private static void OnToolUnequipped()
             {
                 SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.LeftHand);
                 SteamVR_Actions.tools.Deactivate(SteamVR_Input_Sources.RightHand);
             }
 
-            private void OnToolEquipped()
+            private static void OnToolEquipped()
             {
                 if (VRToolSwapper.InteractingHand != null)
                 {
@@ -59,8 +68,16 @@ namespace NomaiVR.Input
 
             private static bool GetSimulatedInput(InputCommandType commandType)
             {
-                var commandTypeKey = (int)commandType;
-                return simulatedBoolInputs.ContainsKey(commandTypeKey) && simulatedBoolInputs[commandTypeKey];
+                return simulatedBoolInputs.ContainsKey((int)commandType) && simulatedBoolInputs[(int)commandType];
+            }
+
+            private static void ClearSimulatedInputs()
+            {
+                foreach (var inputToClear in inputsToClear)
+                {
+                    SimulateInput(inputToClear, false);
+                }
+                inputsToClear.Clear();
             }
             
             private static void PatchInputCommands(AbstractCommands __instance)
@@ -68,6 +85,7 @@ namespace NomaiVR.Input
                 var commandType = __instance.CommandType;
                 if (GetSimulatedInput(commandType))
                 {
+                    ClearSimulatedInputs();
                     __instance.AxisValue = new Vector2(1f, 0f);
                     return;
                 }
