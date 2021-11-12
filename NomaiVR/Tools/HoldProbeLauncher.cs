@@ -118,6 +118,8 @@ namespace NomaiVR.Tools
                         touchButton.CheckEnabled = () => probeUI._probeLauncher.GetActiveProbe() != null;
                 }
 
+                LayerHelper.ChangeLayerRecursive(probeLauncher.gameObject, "VisibleToPlayer");
+
                 GlobalMessenger.AddListener("SuitUp", OnSuitUp);
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);
             }
