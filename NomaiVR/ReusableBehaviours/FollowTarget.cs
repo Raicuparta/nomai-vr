@@ -17,7 +17,7 @@ namespace NomaiVR.ReusableBehaviours
         private void Awake()
         {
             Camera.onPreCull += UpdatePosition;
-            mainCamera = Locator.GetPlayerCamera().mainCamera;
+            mainCamera = Camera.main;
         }
 
         private void OnDestroy()
