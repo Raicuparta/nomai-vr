@@ -75,7 +75,7 @@ namespace NomaiVR.Tools
                 var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
                 display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 display.parent = probeLauncherModel;
-                display.localScale = Vector3.one * 0.0014f;
+                display.localScale = Vector3.one * 0.0011f;
                 display.localRotation = Quaternion.identity;
                 display.localPosition = Vector3.forward * -0.8f;
                 probeUI = display.GetComponent<ProbeLauncherUI>();
@@ -101,7 +101,7 @@ namespace NomaiVR.Tools
                 bracketImage.transform.parent = display;
                 bracketImage.localPosition = Vector3.zero;
                 bracketImage.localRotation = Quaternion.identity;
-                bracketImage.localScale *= 0.5f;
+                bracketImage.localScale *= 0.4f;
 
                 var probeLauncherScreen = Instantiate(AssetLoader.ProbeLauncherHandheldScreenPrefab).transform;
                 probeLauncherScreen.parent = probeLauncherModel;
