@@ -114,7 +114,7 @@ namespace NomaiVR.Tools
                     var touchButton = child.gameObject.AddComponent<TouchButton>();
                     if (child.name == "Camera")
                         touchButton.CheckEnabled = () => probeUI._probeLauncher.GetActiveProbe() == null;
-                    else
+                    else if (child.name != "Shoot")
                         touchButton.CheckEnabled = () => probeUI._probeLauncher.GetActiveProbe() != null;
                 }
 
