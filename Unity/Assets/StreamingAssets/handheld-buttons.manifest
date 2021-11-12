@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2794275356
+CRC: 299415986
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5ce3c06abb09c027bd186b741341ad59
+    Hash: 6caf6cee28991bc9682d56f220ca3cc9
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c7c5dc534e7357b33d15743fbed05b86
+    Hash: 324cf51e7c109ef9f5775c15083e4aba
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,13 +23,17 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
 - Class: 135
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/HandheldTools/ProbeLauncherScreenFrame.mat
 - Assets/HandheldTools/Models/ChangePhotoMode.fbx
 - Assets/HandheldTools/TranslatorHandheldButtons.prefab
 - Assets/HandheldTools/ProbeLauncherButtons.prefab
 - Assets/HandheldTools/SignalscopeButtons.prefab
+- Assets/HandheldTools/Models/ProbeLauncherScreen.fbx
 Dependencies:
 - C:/Users/rai/Repos/nomai-vr/Unity/Assets/StreamingAssets/cockpit-buttons
