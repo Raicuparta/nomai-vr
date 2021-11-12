@@ -372,7 +372,7 @@ namespace NomaiVR.Hands
 
         private void SetUpVrPose()
         {
-            var poseObject = new GameObject($"SteamVrBehavourPose");
+            var poseObject = new GameObject("SteamVrBehavourPose");
             poseObject.transform.SetParent(transform.parent, false);
             followPose = gameObject.AddComponent<FollowTarget>();
             followPose.Target = poseObject.transform;
