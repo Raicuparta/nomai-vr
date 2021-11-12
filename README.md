@@ -1,4 +1,4 @@
-# NomaiVR - Outer Wilds VR Mod
+# ![NomaiVR](RepoAssets/banner.png)
 
 [![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=flat-square&color=%23e85b46&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=flat-square&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
 
@@ -44,8 +44,8 @@
 
 ## Requirements
 
-- Version 1.10.0+ of the game installed (both Epic and Steam are supported).
-- Echoes of the Eye DLC is supported and fully playable, although not thoroughly tested;
+- Version 1.1.10+ of the game installed (both Epic and Steam are supported).
+- Echoes of the Eye DLC is fully supported but not required;
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;

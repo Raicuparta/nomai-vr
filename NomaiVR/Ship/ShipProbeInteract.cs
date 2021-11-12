@@ -1,5 +1,6 @@
 ﻿using NomaiVR.Assets;
 using NomaiVR.Helpers;
+using NomaiVR.Input;
 using NomaiVR.ReusableBehaviours;
 using NomaiVR.Tools;
 using UnityEngine;
@@ -39,11 +40,12 @@ namespace NomaiVR.Ship
 
         protected override void OnPress()
         {
-            VRToolSwapper.Equip(ToolMode.Probe, null);
+            ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, true);
         }
 
         protected override void OnRelease()
         {
+            ControllerInput.SimulateInput(InputConsts.InputCommandType.TOOL_PRIMARY, false);
         }
 
         protected override bool ShouldDisable()

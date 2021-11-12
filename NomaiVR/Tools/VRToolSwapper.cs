@@ -58,7 +58,7 @@ namespace NomaiVR.Tools
 
         public static bool IsAllowedToEquip(ToolMode mode)
         {
-            if (isBuccklingUp || (OWInput.IsInputMode(InputMode.ShipCockpit) && mode == ToolMode.None))
+            if (isBuccklingUp || OWInput.IsInputMode(InputMode.ShipCockpit))
             {
                 isBuccklingUp = false;
                 return true;
