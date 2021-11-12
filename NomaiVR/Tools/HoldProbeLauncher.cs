@@ -103,11 +103,12 @@ namespace NomaiVR.Tools
                 bracketImage.localRotation = Quaternion.identity;
                 bracketImage.localScale *= 0.5f;
 
-                var probeLauncherButtons = Instantiate(AssetLoader.ProbeLauncherHandheldButtonsPrefab).transform;
-                probeLauncherButtons.parent = probeLauncherModel;
-                probeLauncherButtons.localPosition = Vector3.zero;
-                probeLauncherButtons.localScale = Vector3.one;
-                probeLauncherButtons.localRotation = Quaternion.identity;
+                var probeLauncherScreen = Instantiate(AssetLoader.ProbeLauncherHandheldScreenPrefab).transform;
+                probeLauncherScreen.parent = probeLauncherModel;
+                probeLauncherScreen.localPosition = Vector3.zero;
+                probeLauncherScreen.localScale = Vector3.one;
+                probeLauncherScreen.localRotation = Quaternion.identity;
+                var probeLauncherButtons = probeLauncherScreen.Find("Buttons");
                 var probeLauncherImage = displayImage.GetComponent<Image>();
                 foreach (Transform child in probeLauncherButtons)
                 {
