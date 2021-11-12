@@ -100,7 +100,6 @@ namespace NomaiVR.Input
                 {
                     __result = false;
                 }
-
             }
         }
     }
