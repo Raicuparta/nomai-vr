@@ -109,14 +109,13 @@ namespace NomaiVR.Tools
                 probeLauncherScreen.localScale = Vector3.one;
                 probeLauncherScreen.localRotation = Quaternion.identity;
                 var probeLauncherButtons = probeLauncherScreen.Find("Buttons");
-                var probeLauncherImage = displayImage.GetComponent<Image>();
                 foreach (Transform child in probeLauncherButtons)
                 {
                     var touchButton = child.gameObject.AddComponent<TouchButton>();
                     if (child.name == "Camera")
-                        touchButton.CheckEnabled = () => !probeLauncherImage.enabled;
+                        touchButton.CheckEnabled = () => probeUI._probeLauncher.GetActiveProbe() == null;
                     else
-                        touchButton.CheckEnabled = () => probeLauncherImage.enabled;
+                        touchButton.CheckEnabled = () => probeUI._probeLauncher.GetActiveProbe() != null;
                 }
 
                 GlobalMessenger.AddListener("SuitUp", OnSuitUp);
