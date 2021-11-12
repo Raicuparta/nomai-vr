@@ -95,8 +95,8 @@ namespace NomaiVR.Input
             
             private static void ForceHasSameBindingFalse(ref bool __result, IInputCommands __instance, IInputCommands compare)
             {
-                if (ToolHelper.IsUsingAnyTool(ToolGroup.Ship) && (__instance.CommandType == InputCommandType.TOOL_PRIMARY ||
-                    compare.CommandType == InputCommandType.PROBERETRIEVE))
+                if (__instance.CommandType == InputCommandType.TOOL_PRIMARY &&
+                    compare.CommandType == InputCommandType.PROBERETRIEVE)
                 {
                     __result = false;
                 }
