@@ -4,6 +4,8 @@ using System.Linq;
 using NomaiVR.Assets;
 using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
+using NomaiVR.Tools;
+using Steamworks;
 using UnityEngine;
 using Valve.VR;
 
@@ -37,6 +39,7 @@ namespace NomaiVR.Hands
         private SteamVR_Skeleton_Poser reachPoser;
         private SteamVR_Skeleton_Poser pointPoser;
         private EVRSkeletalMotionRange rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
+        private FollowTarget followPose;
         private float closestPointable = float.PositiveInfinity;
         private float currentPointAmmount = 0.0f;
         private float currentPointBlendVelocity = 0.0f;
@@ -59,6 +62,20 @@ namespace NomaiVR.Hands
             GlobalMessenger.AddListener("RemoveSuit", OnSuitChanged);
             GlobalMessenger.AddListener("SimulationEnter", OnSimulationEnter);
             GlobalMessenger.AddListener("SimulationExit", OnSimulationExit);
+        }
+
+        private void Update()
+        {
+            if (VRToolSwapper.InteractingHand == this)
+            {
+                followPose.positionSmoothTime = 0.1f;
+                followPose.rotationSmoothTime = 0.1f;
+            }
+            else
+            {
+                followPose.positionSmoothTime = 0.02f;
+                followPose.rotationSmoothTime = 0.02f;
+            }
         }
 
         internal void LateUpdate()
@@ -355,12 +372,19 @@ namespace NomaiVR.Hands
 
         private void SetUpVrPose()
         {
-            gameObject.SetActive(false);
+            var poseObject = new GameObject($"SteamVrBehavourPose");
+            poseObject.transform.SetParent(transform.parent, false);
+            followPose = gameObject.AddComponent<FollowTarget>();
+            followPose.target = poseObject.transform;
+            followPose.positionSmoothTime = 0.05f;
+            followPose.rotationSmoothTime = 0.05f;
+            
+            poseObject.SetActive(false);
 
-            var poseDriver = transform.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            var poseDriver = poseObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseDriver.poseAction = pose;
 
-            gameObject.SetActive(true);
+            poseObject.SetActive(true);
         }
 
         public void SetLimitRangeOfMotion(bool isShown)
