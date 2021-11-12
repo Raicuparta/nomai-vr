@@ -58,24 +58,14 @@ namespace NomaiVR.ReusableBehaviours
         private void UpdateTransform()
         {
             var targetRotation = Target.rotation * LocalRotation;
-            if (RotationSmoothTime > 0 && Time.timeScale > 0)
-            {
-                transform.rotation = QuaternionHelper.SmoothDamp(transform.rotation, targetRotation, ref rotationVelocity, RotationSmoothTime);
-            }
-            else
-            {
-                transform.rotation = targetRotation;
-            }
+            transform.rotation = RotationSmoothTime > 0
+                ? MathHelper.SmoothDamp(transform.rotation, targetRotation, ref rotationVelocity, RotationSmoothTime)
+                : targetRotation;
 
             var targetPosition = Target.TransformPoint(LocalPosition);
-            if (PositionSmoothTime > 0 && Time.timeScale > 0)
-            {
-                transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, RotationSmoothTime);
-            }
-            else
-            {
-                transform.position = targetPosition;
-            }
+            transform.position = PositionSmoothTime > 0
+                ? MathHelper.SmoothDamp(transform.position, targetPosition, ref positionVelocity, RotationSmoothTime)
+                : targetPosition;
         }
     }
 }
