@@ -8,7 +8,7 @@
     "title": "Before playing NomaiVR, some information:",
     "body": "- Click the NomaiVR readme button in the Mod Manager for information about troubleshooting, requirements, performance, how to uninstall, etc.\n\n- Some VR controllers will have missing icons. Message us if you want to help us add icons for these devices.\n\n- If you have the game on Steam:\n--- Right-click Outer Wilds on your Steam library\n--- Select 'Properties...'\n--- Disable 'Use Desktop Game Theatre.'"
   },
-  "version": "2.3.2",
+  "version": "2.4.0",
   "owmlVersion": "2.1.0",
   "requireVR": true
 }
