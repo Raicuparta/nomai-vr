@@ -259,7 +259,7 @@
                   }
                },
                "mode": "joystick",
-               "path": "/user/hand/right/input/joystick"
+               "path": "/user/hand/left/input/joystick"
             },
             {
                "inputs": {
