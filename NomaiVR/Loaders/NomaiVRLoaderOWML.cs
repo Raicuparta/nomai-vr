@@ -7,7 +7,7 @@ namespace NomaiVR.Loaders
 {
     public class NomaiVRLoaderOwml : ModBehaviour
     {
-        private IModHelper Helper { get; set; }
+        public static IModHelper Helper { get; private set; }
         internal void Start()
         {
             NomaiVR.HarmonyInstance = new OwmlHarmonyInstance(ModHelper);
