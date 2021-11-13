@@ -1,7 +1,9 @@
 ﻿
+using NomaiVR.Assets;
 using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NomaiVR.Tools
 {
@@ -73,7 +75,7 @@ namespace NomaiVR.Tools
                 var display = playerHUD.Find("HelmetOffUI/ProbeDisplay");
                 display.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 display.parent = probeLauncherModel;
-                display.localScale = Vector3.one * 0.0014f;
+                display.localScale = Vector3.one * 0.0011f;
                 display.localRotation = Quaternion.identity;
                 display.localPosition = Vector3.forward * -0.8f;
                 probeUI = display.GetComponent<ProbeLauncherUI>();
@@ -99,7 +101,24 @@ namespace NomaiVR.Tools
                 bracketImage.transform.parent = display;
                 bracketImage.localPosition = Vector3.zero;
                 bracketImage.localRotation = Quaternion.identity;
-                bracketImage.localScale *= 0.5f;
+                bracketImage.localScale *= 0.4f;
+
+                var probeLauncherScreen = Instantiate(AssetLoader.ProbeLauncherHandheldScreenPrefab).transform;
+                probeLauncherScreen.parent = probeLauncherModel;
+                probeLauncherScreen.localPosition = Vector3.zero;
+                probeLauncherScreen.localScale = Vector3.one;
+                probeLauncherScreen.localRotation = Quaternion.identity;
+                var probeLauncherButtons = probeLauncherScreen.Find("Buttons");
+                foreach (Transform child in probeLauncherButtons)
+                {
+                    var touchButton = child.gameObject.AddComponent<TouchButton>();
+                    if (child.name == "Camera")
+                        touchButton.CheckEnabled = () => probeUI._probeLauncher.GetActiveProbe() == null;
+                    else if (child.name != "Shoot")
+                        touchButton.CheckEnabled = () => probeUI._probeLauncher.GetActiveProbe() != null;
+                }
+
+                LayerHelper.ChangeLayerRecursive(probeLauncher.gameObject, "VisibleToPlayer");
 
                 GlobalMessenger.AddListener("SuitUp", OnSuitUp);
                 GlobalMessenger.AddListener("RemoveSuit", OnRemoveSuit);

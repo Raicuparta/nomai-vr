@@ -63,12 +63,13 @@ namespace NomaiVR.Tools
                 SetupReticule(Reticule);
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.15f, 0));
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.1714f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
                 SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.05f, 0));
                 LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
                 SetupScopeLens();
+                SetupButtons(signalScopeModel);
             }
 
             private static void SetupReticule(Transform reticule)
@@ -88,6 +89,18 @@ namespace NomaiVR.Tools
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
             }
 
+            private static void SetupButtons(Transform signalscopeModel)
+            {
+                var buttons = Instantiate(AssetLoader.SignalscopeHandheldButtonsPrefab).transform;
+                buttons.parent = signalscopeModel;
+                buttons.localPosition = Vector3.zero;
+                buttons.localScale = Vector3.one;
+                buttons.localRotation = Quaternion.identity;
+
+                for (int i = 0; i < buttons.childCount; i++)
+                    buttons.GetChild(i).gameObject.AddComponent<TouchButton>();
+            }
+
             private void OnUnequip()
             {
                 owLensCamera.SetEnabled(false);
@@ -98,7 +111,7 @@ namespace NomaiVR.Tools
             {
                 lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
                 lens.parent = Signalscope.transform;
-                lens.localPosition = new Vector3(0, 0.1f, 0.14f);
+                lens.localPosition = new Vector3(0, 0.1f, 0.16f);
                 lens.localRotation = Quaternion.identity;
                 lens.localScale = Vector3.one * 2f;
                 lens.gameObject.SetActive(false);
@@ -108,11 +121,7 @@ namespace NomaiVR.Tools
                 lensCamera.cullingMask = CameraMaskFix.Behaviour.DefaultCullingMask;
                 lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI")) & ~(1 << LayerMask.NameToLayer("VisibleToPlayer"));
                 lensCamera.fieldOfView = 5;
-                lensCamera.transform.parent = null;
-                var followTarget = lensCamera.gameObject.AddComponent<FollowTarget>();
-                followTarget.target = lens;
-                followTarget.rotationSmoothTime = 0.1f;
-                followTarget.positionSmoothTime = 0.1f;
+                lensCamera.transform.SetParent(lens, false);
 
                 owLensCamera = lensCamera.gameObject.AddComponent<OWCamera>();
                 owLensCamera.useFarCamera = true;

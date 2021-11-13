@@ -1,5 +1,5 @@
 {
-   "action_manifest_version": 2,
+   "action_manifest_version": 4,
    "alias_info": {},
    "app_key": "steam.app.753640",
    "bindings": {
@@ -259,7 +259,7 @@
                   }
                },
                "mode": "joystick",
-               "path": "/user/hand/right/input/joystick"
+               "path": "/user/hand/left/input/joystick"
             },
             {
                "inputs": {
@@ -287,30 +287,12 @@
          "sources": [
             {
                "inputs": {
-                  "position": {
-                     "output": "/actions/tools/in/dpad"
-                  }
-               },
-               "mode": "joystick",
-               "path": "/user/hand/left/input/joystick"
-            },
-            {
-               "inputs": {
                   "click": {
                      "output": "/actions/tools/in/use"
                   }
                },
                "mode": "button",
                "path": "/user/hand/left/input/y"
-            },
-            {
-               "inputs": {
-                  "position": {
-                     "output": "/actions/tools/in/dpad"
-                  }
-               },
-               "mode": "joystick",
-               "path": "/user/hand/right/input/joystick"
             },
             {
                "inputs": {

@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2728909105
+CRC: 1052433192
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -14,3 +14,7 @@ AssetBundleManifest:
     Info_3:
       Name: cockpit-buttons
       Dependencies: {}
+    Info_4:
+      Name: handheld-buttons
+      Dependencies:
+        Dependency_0: cockpit-buttons

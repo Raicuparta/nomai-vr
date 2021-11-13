@@ -18,7 +18,7 @@ namespace NomaiVR.ReusableBehaviours
 
         internal void Update()
         {
-            var position = followTarget.localPosition;
+            var position = followTarget.LocalPosition;
 
             if (!angleMode)
             {
@@ -49,7 +49,7 @@ namespace NomaiVR.ReusableBehaviours
                 //}
             }
 
-            var rotation = followTarget.localRotation;
+            var rotation = followTarget.LocalRotation;
 
             if (angleMode)
             {

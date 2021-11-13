@@ -96,16 +96,24 @@ namespace NomaiVR.Input
 
         public static IActionInput GetActionInput(InputCommandType commandType)
         {
+            var returnAction = TryGetActionInput(commandType);
+            if (returnAction != null && returnAction.Optional && !returnAction.Active) 
+                return ActionInputDefinitions.Empty;
+            return returnAction;
+        }
+
+        private static IActionInput TryGetActionInput(InputCommandType commandType)
+        {
             if (ShouldUseShipToolsMap && ShipToolsInputMap.ContainsKey(commandType))
             {
                 return ShipToolsInputMap[commandType];
             }
 
-            if(ShouldUseFlashLightMap && FlashLightInputMap.ContainsKey(commandType))
+            if (ShouldUseFlashLightMap && FlashLightInputMap.ContainsKey(commandType))
             {
                 return FlashLightInputMap[commandType];
             }
-            
+
             if (ShouldUseToolsMap && ToolsInputMap.ContainsKey(commandType))
             {
                 return ToolsInputMap[commandType];
@@ -114,7 +122,7 @@ namespace NomaiVR.Input
             DefaultInputMap.TryGetValue(commandType, out var actionInput);
             return actionInput;
         }
-        
+
         private static bool ShouldUseToolsMap => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
                                         || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
 

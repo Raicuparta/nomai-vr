@@ -4,7 +4,7 @@ namespace NomaiVR
 {
     public abstract class GlowyButton : MonoBehaviour
     {
-        private enum ButtonState
+        public enum ButtonState
         {
             PreInit,
             Disabled,
@@ -21,6 +21,8 @@ namespace NomaiVR
         private ButtonState buttonState = ButtonState.PreInit;
         private Material buttonMaterial;
         private Collider collider;
+
+        public ButtonState State => buttonState;
 
         private void Awake()
         {
