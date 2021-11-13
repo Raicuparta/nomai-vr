@@ -20,12 +20,15 @@ namespace NomaiVR.EffectFixes
             
                 public override void ApplyPatches()
                 {
+                    // OWRigidBody will unparent every physics object, so the rotation of Timber Hearth needs to happen
+                    // before OWRigidBody.Awake. Otherwise those objects would stay behind.
                     Prefix<OWRigidbody>(nameof(OWRigidbody.Awake), nameof(RotateTimberHearth));
                     Postfix<PlayerSpawner>(nameof(PlayerSpawner.SpawnPlayer), nameof(RotatePlayer));
                     
                     LoadManager.OnStartSceneLoad += (scene, loadScene) => isInitialized = false;
                 }
                 
+                // Rotate Timber Hearth so that Giand's Deep is visible without the player looking up.
                 private static void RotateTimberHearth()
                 {
                     if (isInitialized) return;
@@ -40,6 +43,7 @@ namespace NomaiVR.EffectFixes
                     timberHearth.transform.eulerAngles += new Vector3(37, 18, 0);
                 }
 
+                // Rotate player around their Y axis so that they start facing Giant's Deep.
                 private static void RotatePlayer(PlayerSpawner __instance)
                 {
                     if (__instance._initialSpawnPoint == null || LoadManager.GetCurrentScene() != OWScene.SolarSystem) return;
