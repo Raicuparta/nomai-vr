@@ -28,10 +28,15 @@ namespace NomaiVR.EffectFixes
                 
                 private static void RotateTimberHearth()
                 {
-                    if (isInitialized || !SceneHelper.IsInSolarSystem()) return;
+                    if (isInitialized) return;
                     isInitialized = true;
-                    var timberHearth = FindObjectsOfType<AstroObject>().First(astroObject => astroObject.GetAstroObjectName() == AstroObject.Name.TimberHearth);
+                    
+                    if (!SceneHelper.IsInSolarSystem()) return;
+
+                    var timberHearth = FindObjectsOfType<AstroObject>().First(astroObject =>
+                        astroObject.GetAstroObjectName() == AstroObject.Name.TimberHearth);
                     if (!timberHearth) return;
+
                     timberHearth.transform.eulerAngles += new Vector3(37, 18, 0);
                 }
 
