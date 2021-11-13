@@ -65,6 +65,7 @@ namespace NomaiVR
             new DisableDeathAnimation();
             new VirtualKeyboard();
             new Menus();
+            new FixProbeCannonVisibility();
         }
 
         private static void InitSteamVR()
