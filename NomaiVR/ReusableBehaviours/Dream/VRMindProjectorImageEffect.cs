@@ -22,13 +22,13 @@ namespace NomaiVR.ReusableBehaviours.Dream
         private void Start()
         {
             var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            GameObject.Destroy(quad.GetComponent<Collider>());
-            GameObject.Destroy(quad.GetComponent<Rigidbody>());
+            Destroy(quad.GetComponent<Collider>());
+            Destroy(quad.GetComponent<Rigidbody>());
             quad.name = "MindProjectorPlane";
 
             var dome = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            GameObject.Destroy(dome.GetComponent<Collider>());
-            GameObject.Destroy(dome.GetComponent<Rigidbody>());
+            Destroy(dome.GetComponent<Collider>());
+            Destroy(dome.GetComponent<Rigidbody>());
             var domeMesh = dome.GetComponent<MeshFilter>().mesh;
             domeMesh.triangles = domeMesh.triangles.Reverse().ToArray(); //We need a reverse dome
             dome.name = "MindProjectorEyeDome";
@@ -60,7 +60,7 @@ namespace NomaiVR.ReusableBehaviours.Dream
             eyeDome.localPosition = Vector3.zero;
             eyeDome.localScale = Vector3.one * 10;
 
-            this.enabled = false;
+            enabled = false;
         }
 
         private void OnEnable()
@@ -82,7 +82,7 @@ namespace NomaiVR.ReusableBehaviours.Dream
             currentColor = Color.black;
             currentColor.a = (1 - EyeOpenness*EyeOpenness);
             fadeMaterial.SetColor(fadeMaterialColorID, currentColor);
-            this.projectionMaterial.SetFloat(shaderPropIDUnscaledTime, Time.unscaledTime);
+            projectionMaterial.SetFloat(shaderPropIDUnscaledTime, Time.unscaledTime);
         }
     }
 }

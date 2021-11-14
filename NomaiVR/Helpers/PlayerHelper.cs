@@ -10,7 +10,7 @@ namespace NomaiVR.Helpers
             get {
                 if (playerHead == null)
                 {
-                    playerHead = GameObject.FindObjectOfType<ToolModeUI>().transform;
+                    playerHead = Object.FindObjectOfType<ToolModeUI>().transform;
                 }
                 return playerHead;
             }

@@ -53,7 +53,7 @@ namespace NomaiVR.EffectFixes
                 ____origScreenScale *= 0.5f;
                 var scale = ____origScreenScale;
 
-                var uplinkTrigger = GameObject.FindObjectOfType<MemoryUplinkTrigger>();
+                var uplinkTrigger = Object.FindObjectOfType<MemoryUplinkTrigger>();
                 var statue = uplinkTrigger._lockOnTransform;
                 var eye = statue.Find("Props_NOM_StatueHead/eyelid_mid");
                 focus = new GameObject().transform;

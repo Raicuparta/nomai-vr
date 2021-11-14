@@ -12,23 +12,23 @@ namespace NomaiVR.EffectFixes
             public override void ApplyPatches()
             {
                 //Solve (1x)PreCull->(2x)PostRender conflicts
-                Prefix<CSMTextureCacher>(nameof(CSMTextureCacher.OnAnyCameraPostRender), nameof(Patch.PreOnAnyCameraPostRender));
-                Prefix<RingworldShadowsOverride>(nameof(RingworldShadowsOverride.OnCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<CloudEffectBubbleController>(nameof(CloudEffectBubbleController.OnTargetCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<FogWarpEffectBubbleController>(nameof(FogWarpEffectBubbleController.OnTargetCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<QuantumFogEffectBubbleController>(nameof(QuantumFogEffectBubbleController.OnTargetCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<SandEffectBubbleController>(nameof(SandEffectBubbleController.OnTargetCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<UnderwaterEffectBubbleController>(nameof(UnderwaterEffectBubbleController.OnTargetCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<PerCameraRendererState>(nameof(PerCameraRendererState.OnOWCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<GeyserWaterVillageHack>(nameof(GeyserWaterVillageHack.OnPlayerCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<LightLOD>(nameof(LightLOD.RevertLODSettings), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<RingworldSunController>(nameof(RingworldSunController.OnOWCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<IPExteriorVisualsManager>(nameof(IPExteriorVisualsManager.OnOWCameraPostRender), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<TessellatedSphereRenderer>(nameof(TessellatedSphereRenderer.Clear), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<TessellatedPlaneRenderer>(nameof(TessellatedPlaneRenderer.Clear), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<TessellatedRingRenderer>(nameof(TessellatedRingRenderer.Clear), nameof(Patch.OwCameraPostRenderDisabler));
-                Prefix<UnderwaterCurrentFadeController>(nameof(UnderwaterCurrentFadeController.OnAnyPrerender), nameof(Patch.Pre_UnderwaterCurrentFadeController_OnAnyPrerender));
-                Prefix<UnderwaterCurrentFadeController>(nameof(UnderwaterCurrentFadeController.OnAnyPostrender), nameof(Patch.Pre_UnderwaterCurrentFadeController_OnAnyPostRender));
+                Prefix<CSMTextureCacher>(nameof(CSMTextureCacher.OnAnyCameraPostRender), nameof(PreOnAnyCameraPostRender));
+                Prefix<RingworldShadowsOverride>(nameof(RingworldShadowsOverride.OnCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<CloudEffectBubbleController>(nameof(CloudEffectBubbleController.OnTargetCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<FogWarpEffectBubbleController>(nameof(FogWarpEffectBubbleController.OnTargetCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<QuantumFogEffectBubbleController>(nameof(QuantumFogEffectBubbleController.OnTargetCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<SandEffectBubbleController>(nameof(SandEffectBubbleController.OnTargetCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<UnderwaterEffectBubbleController>(nameof(UnderwaterEffectBubbleController.OnTargetCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<PerCameraRendererState>(nameof(PerCameraRendererState.OnOWCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<GeyserWaterVillageHack>(nameof(GeyserWaterVillageHack.OnPlayerCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<LightLOD>(nameof(LightLOD.RevertLODSettings), nameof(OwCameraPostRenderDisabler));
+                Prefix<RingworldSunController>(nameof(RingworldSunController.OnOWCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<IPExteriorVisualsManager>(nameof(IPExteriorVisualsManager.OnOWCameraPostRender), nameof(OwCameraPostRenderDisabler));
+                Prefix<TessellatedSphereRenderer>(nameof(TessellatedSphereRenderer.Clear), nameof(OwCameraPostRenderDisabler));
+                Prefix<TessellatedPlaneRenderer>(nameof(TessellatedPlaneRenderer.Clear), nameof(OwCameraPostRenderDisabler));
+                Prefix<TessellatedRingRenderer>(nameof(TessellatedRingRenderer.Clear), nameof(OwCameraPostRenderDisabler));
+                Prefix<UnderwaterCurrentFadeController>(nameof(UnderwaterCurrentFadeController.OnAnyPrerender), nameof(Pre_UnderwaterCurrentFadeController_OnAnyPrerender));
+                Prefix<UnderwaterCurrentFadeController>(nameof(UnderwaterCurrentFadeController.OnAnyPostrender), nameof(Pre_UnderwaterCurrentFadeController_OnAnyPostRender));
             }
 
             private static bool OwCameraPostRenderDisabler(OWCamera owCamera)

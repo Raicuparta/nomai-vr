@@ -9,7 +9,7 @@ namespace NomaiVR.Helpers
         {
             var layer = LayerMask.NameToLayer(layerName);
             var ret = new List<GameObject>();
-            var all = GameObject.FindObjectsOfType<GameObject>();
+            var all = Object.FindObjectsOfType<GameObject>();
 
             foreach (var t in all)
             {

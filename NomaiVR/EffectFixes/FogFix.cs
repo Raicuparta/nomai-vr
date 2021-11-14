@@ -27,12 +27,12 @@ namespace NomaiVR.EffectFixes
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<PlanetaryFogController>(nameof(PlanetaryFogController.ResetFogSettings), nameof(Patch.PatchResetFog));
-                    Prefix<PlanetaryFogController>(nameof(PlanetaryFogController.UpdateFogSettings), nameof(Patch.PatchUpdateFog));
-                    Prefix<FogOverrideVolume>(nameof(FogOverrideVolume.OverrideFogSettings), nameof(Patch.PatchOverrideFog));
-                    Prefix<PlanetaryFogImageEffect>(nameof(PlanetaryFogImageEffect.OnRenderImage), nameof(Patch.PreFogImageEffectRenderImage));
-                    Prefix<PlanetaryFogRenderer>(nameof(PlanetaryFogRenderer.CalcFrustumCorners), nameof(Patch.PreCalcFrustumCorners));
-                    Prefix<HeightmapAmbientLightRenderer>(nameof(HeightmapAmbientLightRenderer.CalcFrustumCorners), nameof(Patch.Prefix_HeightmapAmbientLightRenderer_CalcFrustumCorners));
+                    Prefix<PlanetaryFogController>(nameof(PlanetaryFogController.ResetFogSettings), nameof(PatchResetFog));
+                    Prefix<PlanetaryFogController>(nameof(PlanetaryFogController.UpdateFogSettings), nameof(PatchUpdateFog));
+                    Prefix<FogOverrideVolume>(nameof(FogOverrideVolume.OverrideFogSettings), nameof(PatchOverrideFog));
+                    Prefix<PlanetaryFogImageEffect>(nameof(PlanetaryFogImageEffect.OnRenderImage), nameof(PreFogImageEffectRenderImage));
+                    Prefix<PlanetaryFogRenderer>(nameof(PlanetaryFogRenderer.CalcFrustumCorners), nameof(PreCalcFrustumCorners));
+                    Prefix<HeightmapAmbientLightRenderer>(nameof(HeightmapAmbientLightRenderer.CalcFrustumCorners), nameof(Prefix_HeightmapAmbientLightRenderer_CalcFrustumCorners));
                 }
 
                 private static readonly Vector3[] frustumCornersBuffer = new Vector3[4];

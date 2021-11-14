@@ -53,13 +53,13 @@ namespace NomaiVR.Hands
         public void BlendBonePosition(int boneIndex, Vector3 blendPosition, float ammount)
         {
             blendPosition = Vector3.Lerp(bones[boneIndex].localPosition, blendPosition, ammount);
-            this.SetBonePosition(boneIndex, blendPosition);
+            SetBonePosition(boneIndex, blendPosition);
         }
 
         public void BlendBoneRotation(int boneIndex, Quaternion blendRotation, float ammount)
         {
             blendRotation = Quaternion.Lerp(bones[boneIndex].localRotation, blendRotation, ammount);
-            this.SetBoneRotation(boneIndex, blendRotation);
+            SetBoneRotation(boneIndex, blendRotation);
         }
     }
 }

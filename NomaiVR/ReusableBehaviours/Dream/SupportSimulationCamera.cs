@@ -15,61 +15,61 @@ namespace NomaiVR.ReusableBehaviours.Dream
 
         private void Awake()
         {
-            this.camera = gameObject.AddComponent<Camera>();
-            this.camera.stereoTargetEye = StereoTargetEyeMask.Right;
-            this.simulationRenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.sRGB);
-            this.simulationRenderTexture.name = "SimulationRenderTexture_R";
-            this.simulationRenderTexture.useDynamicScale = true;
-            this.enabled = false;
+            camera = gameObject.AddComponent<Camera>();
+            camera.stereoTargetEye = StereoTargetEyeMask.Right;
+            simulationRenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.sRGB);
+            simulationRenderTexture.name = "SimulationRenderTexture_R";
+            simulationRenderTexture.useDynamicScale = true;
+            enabled = false;
         }
 
         public void SetupSimulationCameraParent(SimulationCamera simulationCamera)
         {
             this.simulationCamera = simulationCamera;
-            this.gameObject.layer = simulationCamera.gameObject.layer;
-            this.camera.cullingMask = simulationCamera._camera.cullingMask;
-            this.camera.depthTextureMode = DepthTextureMode.Depth;
-            this.camera.allowMSAA = false;
-            this.camera.clearFlags = simulationCamera._camera.clearFlags;
-            this.camera.backgroundColor = simulationCamera._camera.backgroundColor;
-            this.camera.renderingPath = simulationCamera._camera.renderingPath;
-            this.camera.depth = simulationCamera._camera.depth;
-            this.camera.nearClipPlane = simulationCamera._camera.nearClipPlane;
-            this.camera.farClipPlane = simulationCamera._camera.farClipPlane;
-            this.camera.allowDynamicResolution = simulationCamera._camera.allowDynamicResolution;
+            gameObject.layer = simulationCamera.gameObject.layer;
+            camera.cullingMask = simulationCamera._camera.cullingMask;
+            camera.depthTextureMode = DepthTextureMode.Depth;
+            camera.allowMSAA = false;
+            camera.clearFlags = simulationCamera._camera.clearFlags;
+            camera.backgroundColor = simulationCamera._camera.backgroundColor;
+            camera.renderingPath = simulationCamera._camera.renderingPath;
+            camera.depth = simulationCamera._camera.depth;
+            camera.nearClipPlane = simulationCamera._camera.nearClipPlane;
+            camera.farClipPlane = simulationCamera._camera.farClipPlane;
+            camera.allowDynamicResolution = simulationCamera._camera.allowDynamicResolution;
             simulationCamera._simulationMaskMaterial.shader = ShaderLoader.GetShader("Hidden/StereoBlitSimulationMask");
             simulationCamera._simulationCompositeMaterial.shader = ShaderLoader.GetShader("Hidden/StereoBlitSimulationComposite");
-            simulationCamera._simulationMaskMaterial.SetTexture("_RightTex", this.simulationRenderTexture);
-            simulationCamera._simulationCompositeMaterial.SetTexture("_RightTex", this.simulationRenderTexture);
+            simulationCamera._simulationMaskMaterial.SetTexture("_RightTex", simulationRenderTexture);
+            simulationCamera._simulationCompositeMaterial.SetTexture("_RightTex", simulationRenderTexture);
         }
 
         private void OnEnable()
         {
-            this.camera.enabled = true;
+            camera.enabled = true;
         }
 
         private void OnDisable()
         {
-            this.camera.enabled = false;
+            camera.enabled = false;
         }
 
         public void AllocateTexture()
         {
-            this.simulationRenderTexture.Create();
-            this.camera.targetTexture = this.simulationRenderTexture;
+            simulationRenderTexture.Create();
+            camera.targetTexture = simulationRenderTexture;
         }
 
         public void DeallocateTexture()
         {
-            this.camera.targetTexture = null;
-            this.simulationRenderTexture.Release();
+            camera.targetTexture = null;
+            simulationRenderTexture.Release();
         }
 
         private void OnDestroy()
         {
-            this.simulationRenderTexture.Release();
-            GameObject.Destroy(this.simulationRenderTexture);
-            this.simulationRenderTexture = null;
+            simulationRenderTexture.Release();
+            Destroy(simulationRenderTexture);
+            simulationRenderTexture = null;
         }
 
         public void VerifyRenderTexResolution(Camera targetCamera)
@@ -78,26 +78,26 @@ namespace NomaiVR.ReusableBehaviours.Dream
             {
                 return;
             }
-            if (this.simulationRenderTexture.width == targetCamera.pixelWidth && this.simulationRenderTexture.height == targetCamera.pixelHeight)
+            if (simulationRenderTexture.width == targetCamera.pixelWidth && simulationRenderTexture.height == targetCamera.pixelHeight)
             {
                 return;
             }
-            if (this.simulationRenderTexture.IsCreated())
+            if (simulationRenderTexture.IsCreated())
             {
-                this.simulationRenderTexture.Release();
-                this.simulationRenderTexture.width = targetCamera.pixelWidth;
-                this.simulationRenderTexture.height = targetCamera.pixelHeight;
-                this.simulationRenderTexture.Create();
+                simulationRenderTexture.Release();
+                simulationRenderTexture.width = targetCamera.pixelWidth;
+                simulationRenderTexture.height = targetCamera.pixelHeight;
+                simulationRenderTexture.Create();
                 return;
             }
-            this.simulationRenderTexture.width = targetCamera.pixelWidth;
-            this.simulationRenderTexture.height = targetCamera.pixelHeight;
+            simulationRenderTexture.width = targetCamera.pixelWidth;
+            simulationRenderTexture.height = targetCamera.pixelHeight;
         }
 
         private void OnPreRender()
         {
-            if (this.simulationCamera == null || this.simulationCamera._targetCamera == null) return;
-            GraphicsHelper.ForceCameraToEye(this.camera, this.simulationCamera._targetCamera.mainCamera, Valve.VR.EVREye.Eye_Right);
+            if (simulationCamera == null || simulationCamera._targetCamera == null) return;
+            GraphicsHelper.ForceCameraToEye(camera, simulationCamera._targetCamera.mainCamera, Valve.VR.EVREye.Eye_Right);
         }
     }
 }
