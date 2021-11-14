@@ -1,4 +1,6 @@
-﻿namespace NomaiVR.Helpers
+﻿using UnityEngine;
+
+namespace NomaiVR.Helpers
 {
     public static class InputHelper
     {
@@ -25,6 +27,14 @@
                 InputMode.Character |
                 InputMode.ScopeZoom
             );
+        }
+
+        public static Vector2 ApplyDeadzones(Vector2 rawInputValue)
+        {
+            // These hardcoded values are copied from the Outer Wilds source code.
+            return OWInputProcessorUtil.ApplyOWDoubleAxisDeadzones(rawInputValue,
+                0.2f * OWInputProcessorUtil.InnerDeadZoneMultiplier,
+                0.05f * OWInputProcessorUtil.OuterDeadZoneMultiplier);
         }
     }
 }

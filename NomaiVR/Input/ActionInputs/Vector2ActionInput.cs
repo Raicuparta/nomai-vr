@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Helpers;
+using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR.Input.ActionInputs
@@ -10,7 +11,6 @@ namespace NomaiVR.Input.ActionInputs
         private readonly bool yOnly;
         private readonly bool yZero;
         private readonly bool isEitherHand;
-        private readonly string textureModifier;
 
         public Vector2ActionInput(SteamVR_Action_Vector2 action, bool optional = false, bool yOnly = false, bool invert = false, bool clamp = false, bool yZero = false, bool eitherHand = false, string textureModifier = null): base(action, optional)
         {
@@ -18,8 +18,8 @@ namespace NomaiVR.Input.ActionInputs
             this.invert = invert;
             this.clamp = clamp;
             this.yZero = yZero;
-            this.isEitherHand = eitherHand;
-            this.textureModifier = textureModifier;
+            isEitherHand = eitherHand;
+            TextureModifier = textureModifier;
         }
 
         public override Vector2 Value
@@ -29,7 +29,8 @@ namespace NomaiVR.Input.ActionInputs
                 var axis = yOnly ? SpecificAction.axis.y : SpecificAction.axis.x;
                 var rawValue = invert ? -axis : axis;
                 var clampedValue = clamp ? Mathf.Clamp(rawValue, 0f, 1f) : rawValue;
-                return new Vector2(clampedValue, (yOnly || yZero) ? 0f : SpecificAction.axis.y);
+                var preDeadzoneValue = new Vector2(clampedValue, yOnly || yZero ? 0f : SpecificAction.axis.y);
+                return InputHelper.ApplyDeadzones(preDeadzoneValue);
             }
         }
 
@@ -57,6 +58,6 @@ namespace NomaiVR.Input.ActionInputs
             }
         }
 
-        public string TextureModifier => this.textureModifier;
+        public string TextureModifier { get; }
     }
 }
