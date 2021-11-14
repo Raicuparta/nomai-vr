@@ -138,7 +138,7 @@ namespace NomaiVR.Tools
                 buttons.localPosition = Vector3.zero;
                 buttons.localRotation = Quaternion.identity;
 
-                for (int i = 0; i < buttons.childCount; i++)
+                for (var i = 0; i < buttons.childCount; i++)
                 {
                     var touchButton = buttons.GetChild(i).gameObject.AddComponent<TouchButton>();
 

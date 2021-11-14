@@ -80,14 +80,14 @@ namespace NomaiVR.Hands
 
         internal void LateUpdate()
         {
-            float pointAmmount = 1f - Mathf.Clamp(closestPointable / minimumPointDistance, 0, 1);
+            var pointAmmount = 1f - Mathf.Clamp(closestPointable / minimumPointDistance, 0, 1);
             currentPointAmmount = MathHelper.SmoothDamp(currentPointAmmount, pointAmmount, ref currentPointBlendVelocity, 0.05f);
             if (currentPointAmmount > float.Epsilon && handState != EHandState.Holding)
             {
                 var pointSnapshot = pointPoser.GetBlendedPose(skeleton, skeleton.BonePositions, skeleton.BoneRotations);
-                for (int i = 0; i < pointSnapshot.bonePositions.Length; i++)
+                for (var i = 0; i < pointSnapshot.bonePositions.Length; i++)
                     skeleton.BlendBonePosition(i, pointSnapshot.bonePositions[i], currentPointAmmount);
-                for (int i = 0; i < pointSnapshot.boneRotations.Length; i++)
+                for (var i = 0; i < pointSnapshot.boneRotations.Length; i++)
                     skeleton.BlendBoneRotation(i, pointSnapshot.boneRotations[i], currentPointAmmount);
             }
 
@@ -172,7 +172,7 @@ namespace NomaiVR.Hands
 
         private static Transform FingerEnd(Transform source, string fingerName)
         {
-            Transform parent = source.Find($"finger_{fingerName}_meta_r");
+            var parent = source.Find($"finger_{fingerName}_meta_r");
             while (parent.childCount > 0) parent = parent.GetChild(0);
             return parent;
         }

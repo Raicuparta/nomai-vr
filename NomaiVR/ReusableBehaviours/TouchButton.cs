@@ -89,7 +89,7 @@ namespace NomaiVR.ReusableBehaviours
             if(!isFingertipInside && State != ButtonState.Disabled)
             {
                 ControllerInput.SimulateInput(inputToSimulate, true);
-                Hand offHand = VRToolSwapper.NonInteractingHand ?? HandsController.Behaviour.OffHandBehaviour;
+                var offHand = VRToolSwapper.NonInteractingHand ? VRToolSwapper.NonInteractingHand : HandsController.Behaviour.OffHandBehaviour;
                 SteamVR_Actions.default_Haptic.Execute(0, 0.2f, 300, .2f * ModConfig.ModSettings.VibrationStrength, offHand.InputSource);
                 SteamVR_Actions.default_Haptic.Execute(0.1f, 0.2f, 100, .1f * ModConfig.ModSettings.VibrationStrength, offHand.InputSource);
             }
@@ -101,7 +101,7 @@ namespace NomaiVR.ReusableBehaviours
             if (isFingertipInside && State != ButtonState.Disabled)
             {
                 ControllerInput.SimulateInput(inputToSimulate, false);
-                Hand offHand = VRToolSwapper.NonInteractingHand ?? HandsController.Behaviour.OffHandBehaviour;
+                var offHand = VRToolSwapper.NonInteractingHand ? VRToolSwapper.NonInteractingHand : HandsController.Behaviour.OffHandBehaviour;
                 SteamVR_Actions.default_Haptic.Execute(0, 0.1f, 100, .05f * ModConfig.ModSettings.VibrationStrength, offHand.InputSource);
             }
             isFingertipInside = false;
@@ -109,11 +109,11 @@ namespace NomaiVR.ReusableBehaviours
 
         private float CalculateFingerTipDistance()
         {
-            Hand offHand = VRToolSwapper.NonInteractingHand ?? HandsController.Behaviour.OffHandBehaviour;
-            Vector3 touchableCenter = transform.position + transform.TransformVector(proximityDetector.LocalOffset);
-            Vector3 touchableClosestPoint = touchableCenter + (offHand.IndexTip.position - touchableCenter).normalized * interactRadius;
-            float distanceFromCenter = Vector3.Distance(offHand.IndexTip.position, touchableCenter);
-            float offHandDistance = Vector3.Distance(offHand.IndexTip.position, touchableClosestPoint);
+            var offHand = VRToolSwapper.NonInteractingHand ? VRToolSwapper.NonInteractingHand : HandsController.Behaviour.OffHandBehaviour;
+            var touchableCenter = transform.position + transform.TransformVector(proximityDetector.LocalOffset);
+            var touchableClosestPoint = touchableCenter + (offHand.IndexTip.position - touchableCenter).normalized * interactRadius;
+            var distanceFromCenter = Vector3.Distance(offHand.IndexTip.position, touchableCenter);
+            var offHandDistance = Vector3.Distance(offHand.IndexTip.position, touchableClosestPoint);
             offHand.NotifyPointable(distanceFromCenter < interactRadius ? 0 : offHandDistance);
             return offHandDistance;
         }

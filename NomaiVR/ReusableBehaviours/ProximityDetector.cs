@@ -77,7 +77,7 @@ namespace NomaiVR.ReusableBehaviours
 
         internal void OnDisable()
         {
-            for (int i = 0; i < trackedObjects.Length; i++)
+            for (var i = 0; i < trackedObjects.Length; i++)
                 if (isInside[i]) OnExit?.Invoke(trackedObjects[i]);
         }
     }
