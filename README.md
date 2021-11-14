@@ -84,8 +84,8 @@ The mod tries its best to teach you how to play the game in VR, but it's not alw
 - You can interact with most stuff by aiming with your dominant hand laser and pressing the interact button;
 - Always pay attention to the input prompts on your hand;
 - Make sure you don't have the input prompts disabled in the game options when trying VR for the first time;
-- Depending on the hand you use to hold tools, movement or rotation will be disabled to allow you to interact with the tools functions. Controllers that have an additional trackpad will not suffer from this shortcoming (Index and old WMR controllers);
 - Left hand mode is currently in the game but you need to manually change the SteamVR bindings;
+- If something is very broken with the controls, go to SteamVR settings while the game is running, and reset the input bindings. Make sure you're using the default bindings and not some custom bindings (because a NomaiVR update can break your custom bindings).
 
 ### Missing button icons
 
