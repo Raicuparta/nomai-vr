@@ -101,10 +101,10 @@ namespace NomaiVR.Player
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PostCharacterTurning));
-                    Postfix<JetpackThrusterController>("FixedUpdate", nameof(Patch.PostThrusterUpdate));
-                    Prefix<OWCamera>("set_fieldOfView", nameof(Patch.PatchOwCameraFOV));
-                    Prefix<OWCamera>("get_fieldOfView", nameof(Patch.GetOwCameraFOVScaled));
+                    Postfix<PlayerCharacterController>("UpdateTurning", nameof(PostCharacterTurning));
+                    Postfix<JetpackThrusterController>("FixedUpdate", nameof(PostThrusterUpdate));
+                    Prefix<OWCamera>("set_fieldOfView", nameof(PatchOwCameraFOV));
+                    Prefix<OWCamera>("get_fieldOfView", nameof(GetOwCameraFOVScaled));
                 }
 
                 private static void PostThrusterUpdate(Vector3 ____rotationalInput)

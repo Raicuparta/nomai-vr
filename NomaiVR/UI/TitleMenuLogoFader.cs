@@ -45,7 +45,7 @@ namespace NomaiVR.UI
             this.fadeFunc = fadeFunc;
             this.activationFunc = activationFunc;
             this.forceOff = forceOff;
-            this.enabled = true;
+            enabled = true;
         }
 
         private void FadeTo(float value)
@@ -66,7 +66,7 @@ namespace NomaiVR.UI
                 FadeTo(fadeTo * Mathf.Clamp(percentage, 0, 1));
 
                 if (percentage >= 1)
-                    this.enabled = false;
+                    enabled = false;
             }
             else if(activationFunc != null && activationFunc.Invoke())
             {

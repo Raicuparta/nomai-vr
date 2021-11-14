@@ -30,7 +30,7 @@ namespace NomaiVR.Assets
             return shaderCache[shaderName];
         }
 
-        public static Shader GetShader(string shaderName) => ShaderLoader.Instance.GetCachedShader(shaderName);
-        public static void LoadBundle(AssetBundle bundle) => ShaderLoader.Instance.LoadAllFromBundle(bundle);
+        public static Shader GetShader(string shaderName) => Instance.GetCachedShader(shaderName);
+        public static void LoadBundle(AssetBundle bundle) => Instance.LoadAllFromBundle(bundle);
     }
 }

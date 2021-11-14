@@ -124,7 +124,7 @@ namespace NomaiVR.Assets
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
         }
 
-        private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object
+        private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : Object
         {
             return bundle.LoadAsset<T>($"assets/{prefabName}");
         }

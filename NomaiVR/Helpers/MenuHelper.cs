@@ -9,14 +9,14 @@ namespace NomaiVR.Helpers
         {
             var pauseItems = pauseMenu._pauseMenu.transform.Find("PauseMenuItemsLayout");
             var buttonTemplate = pauseItems.Find("Button-Options").gameObject;
-            var newPauseMenuButton = GameObject.Instantiate(buttonTemplate);
+            var newPauseMenuButton = Object.Instantiate(buttonTemplate);
             newPauseMenuButton.transform.SetParent(pauseItems);
             newPauseMenuButton.transform.SetSiblingIndex(order);
 
             var text = newPauseMenuButton.GetComponentInChildren<Text>(true);
-            GameObject.Destroy(newPauseMenuButton.GetComponent<Menu>());
-            GameObject.Destroy(newPauseMenuButton.GetComponent<SubmitActionMenu>());
-            GameObject.Destroy(text.gameObject.GetComponent<LocalizedText>());
+            Object.Destroy(newPauseMenuButton.GetComponent<Menu>());
+            Object.Destroy(newPauseMenuButton.GetComponent<SubmitActionMenu>());
+            Object.Destroy(text.gameObject.GetComponent<LocalizedText>());
             var submitAction = newPauseMenuButton.AddComponent<SubmitAction>();
             submitAction.OnSubmitAction += onSubmit;
             text.text = name;

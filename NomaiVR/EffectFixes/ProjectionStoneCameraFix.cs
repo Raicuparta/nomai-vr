@@ -11,7 +11,7 @@ namespace NomaiVR.EffectFixes
         {
             public override void ApplyPatches()
             {
-                Postfix<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", nameof(Patch.SwitchToRemoteCamera));
+                Postfix<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", nameof(SwitchToRemoteCamera));
             }
 
             private static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)

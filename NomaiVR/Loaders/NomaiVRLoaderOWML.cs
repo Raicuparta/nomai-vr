@@ -19,7 +19,7 @@ namespace NomaiVR.Loaders
         public override void Configure(IModConfig config)
         {
             Helper = ModHelper;
-            var settingsProvider = new ModConfig.OwmlSettingsProvider(config);
+            var settingsProvider = new OwmlSettingsProvider(config);
             ModSettings.SetProvider(settingsProvider);
         }
     }
