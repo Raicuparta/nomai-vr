@@ -158,6 +158,7 @@ namespace NomaiVR.EffectFixes
                 if (__instance._targetCamera != null && __instance._targetCamera.mainCamera.stereoEnabled)
                 {
                     __instance.GetComponentInChildren<SupportSimulationCamera>().enabled = true;
+                    GraphicsHelper.SetCameraEyeProjectionMatrix(__instance._camera, Valve.VR.EVREye.Eye_Left);
                 }
 
                 GlobalMessenger.FireEvent("SimulationEnter");
@@ -179,7 +180,7 @@ namespace NomaiVR.EffectFixes
                 {
                     return;
                 }
-                GraphicsHelper.ForceCameraToEye(__instance._camera, __instance._targetCamera.mainCamera, Valve.VR.EVREye.Eye_Left);
+                GraphicsHelper.ForceCameraToEye(__instance._camera, __instance._targetCamera.mainCamera.transform, Valve.VR.EVREye.Eye_Left);
             }
 
             private static void Pre_SimulationCamera_VerifyRenderTexResolution(SimulationCamera __instance)

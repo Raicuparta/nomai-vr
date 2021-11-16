@@ -130,8 +130,8 @@ namespace NomaiVR.Hands
         {
             handRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
             gloveRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
-            SetUpShaders(handRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace", "Outer Wilds/Environment/Invisible Planet/Cyberspace");
-            SetUpShaders(gloveRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace");
+            SetUpShaders(handRenderer, "Outer Wilds/Environment/Invisible Planet/Additive Pan", "Outer Wilds/Environment/Invisible Planet/Additive Pan");
+            SetUpShaders(gloveRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace Ceiling Rocks");
         }
 
         private void OnSimulationExit()
