@@ -10,6 +10,7 @@ namespace NomaiVR.EffectFixes
         protected override OWScene[] Scenes => PlayableScenes;
         private static float prePauseFovFactor = 1;
         private static bool isPaused;
+        internal static Material totemEyeMaterial;
 
         public class Patch : NomaiVRPatch
         {
@@ -38,6 +39,9 @@ namespace NomaiVR.EffectFixes
                 Postfix<SimulationCamera>(nameof(SimulationCamera.DeallocateRenderTex), nameof(Post_SimulationCamera_DeallocateRenderTex));
                 Prefix<SimulationCamera>(nameof(SimulationCamera.AllocateRenderTex), nameof(Pre_SimulationCamera_AllocateRenderTex));
                 Prefix<SimulationCamera>(nameof(SimulationCamera.VerifyRenderTexResolution), nameof(Pre_SimulationCamera_VerifyRenderTexResolution));
+
+                //Hand materials
+                Postfix<AlarmTotem>(nameof(AlarmTotem.Start), nameof(Post_AlarmTotem_Start));
             }
 
             public static void DisableScreenSpaceReflections(PostProcessingGameplaySettings __instance)
@@ -196,6 +200,12 @@ namespace NomaiVR.EffectFixes
             private static void Post_SimulationCamera_DeallocateRenderTex(SimulationCamera __instance)
             {
                 __instance.GetComponentInChildren<SupportSimulationCamera>().DeallocateTexture();
+            }
+
+            private static void Post_AlarmTotem_Start(AlarmTotem __instance)
+            {
+                if (totemEyeMaterial == null) 
+                    totemEyeMaterial = new Material(__instance._origSimEyeMaterial);
             }
         }
     }
