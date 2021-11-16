@@ -69,7 +69,7 @@ namespace NomaiVR
             if (nextState == buttonState) return;
             if (previousState != null && previousState != buttonState) return;
 
-            collider.enabled = nextState != ButtonState.Disabled;
+            if(collider != null) collider.enabled = nextState != ButtonState.Disabled;
             switch (nextState)
             {
                 case ButtonState.Disabled:

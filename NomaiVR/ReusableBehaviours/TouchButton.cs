@@ -24,6 +24,7 @@ namespace NomaiVR.ReusableBehaviours
             {
                 interactRadius = localSphereCollider.radius;
                 interactOffset = localSphereCollider.center;
+                Destroy(localSphereCollider);
             }
 
             ResetInputs();
