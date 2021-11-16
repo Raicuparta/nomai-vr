@@ -10,10 +10,6 @@ namespace NomaiVR
         {
             private void Update()
             {
-#if UNITYEXPLORER
-                UnityExplorer.ExplorerStandalone.CreateInstance();
-#endif
-
                 if (!SteamVR_Actions.default_Jump.state || !SteamVR_Actions.default_Back.state) return;
 
                 if(SteamVR_Actions.default_Map.stateDown)
