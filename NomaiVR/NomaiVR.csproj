@@ -67,6 +67,9 @@
     <Reference Include="Assembly-CSharp_publicized">
       <HintPath>$(GameDir)\OuterWilds_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
+    <Reference Include="UnityExplorer.STANDALONE.Mono">
+      <HintPath>$(GameDir)\OuterWilds_Data\Managed\UnityExplorer.STANDALONE.Mono.dll</HintPath>
+    </Reference>
     <Reference Include="BepInEx">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
