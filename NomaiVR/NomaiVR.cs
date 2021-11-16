@@ -66,6 +66,11 @@ namespace NomaiVR
             new VirtualKeyboard();
             new Menus();
             new FixProbeCannonVisibility();
+
+            //Load UnityExplorer if enabled
+#if UNITYEXPLORER
+                UnityExplorer.ExplorerStandalone.CreateInstance();
+#endif
         }
 
         private static void InitSteamVR()

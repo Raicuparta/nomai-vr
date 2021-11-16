@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using NomaiVR.Assets;
+using NomaiVR.EffectFixes;
 using NomaiVR.Helpers;
 using NomaiVR.ReusableBehaviours;
 using NomaiVR.Tools;
@@ -33,6 +34,8 @@ namespace NomaiVR.Hands
 
         private Renderer handRenderer;
         private Renderer gloveRenderer;
+        private Material[] originalHandMaterials;
+        private Material[] originalGloveMaterials;
         private EHandState handState = EHandState.Free;
         private EHandState lastHandState = EHandState.Free;
         private NomaiVRHandSkeleton skeleton;
@@ -130,16 +133,32 @@ namespace NomaiVR.Hands
         {
             handRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
             gloveRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
-            SetUpShaders(handRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace", "Outer Wilds/Environment/Invisible Planet/Cyberspace");
-            SetUpShaders(gloveRenderer, "Outer Wilds/Environment/Invisible Planet/Cyberspace");
+
+            if(originalHandMaterials == null) 
+                originalHandMaterials = handRenderer.sharedMaterials;
+            if (originalGloveMaterials == null)
+                originalGloveMaterials = gloveRenderer.sharedMaterials;
+
+            handRenderer.sharedMaterials = MakeSimulationMaterials(originalHandMaterials.Length);
+            gloveRenderer.sharedMaterials = MakeSimulationMaterials(originalGloveMaterials.Length);
+        }
+
+        private Material[] MakeSimulationMaterials(int size)
+        {
+            Material[] mats = new Material[size];
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = DreamFix.totemEyeMaterial;
+            return mats;
         }
 
         private void OnSimulationExit()
         {
             handRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
             gloveRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
-            SetUpShaders(handRenderer, "Outer Wilds/Character/Skin", "Outer Wilds/Character/Skin");
-            SetUpShaders(gloveRenderer, "Outer Wilds/Character/Clothes");
+            handRenderer.sharedMaterials = originalHandMaterials;
+            gloveRenderer.sharedMaterials = originalGloveMaterials;
+            originalHandMaterials = null;
+            originalGloveMaterials = null;
         }
 
         private void SetUpShaders(Renderer renderer, params string[] shader)

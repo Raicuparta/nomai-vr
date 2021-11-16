@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using Valve.VR;
 
 namespace NomaiVR
@@ -19,13 +20,14 @@ namespace NomaiVR
                 // Wake up in dream (requires invincibility).
                 if (SteamVR_Actions.default_Interact.stateDown)
                 {
+                    var workingLantern = FindObjectsOfType<DreamLanternItem>().Where(x => x._lanternType == DreamLanternType.Functioning).FirstOrDefault();
                     var dreamWorldController = FindObjectOfType<DreamWorldController>();
                     dreamWorldController._dreamCampfire = FindObjectOfType<DreamCampfire>();
                     dreamWorldController._dreamArrivalPoint = FindObjectOfType<DreamArrivalPoint>();
                     dreamWorldController._relativeSleepLocation = new RelativeLocationData(new Vector3(0f, 1f, -2f), Quaternion.identity, Vector3.zero);
-                    dreamWorldController._playerLantern = FindObjectOfType<DreamLanternItem>();
+                    dreamWorldController._playerLantern = workingLantern;
                     dreamWorldController._enteringDream = true;
-                    FindObjectOfType<ItemTool>().MoveItemToCarrySocket(FindObjectOfType<DreamLanternItem>());
+                    FindObjectOfType<ItemTool>().MoveItemToCarrySocket(workingLantern);
                 }
                 
                 // Start mind projection.

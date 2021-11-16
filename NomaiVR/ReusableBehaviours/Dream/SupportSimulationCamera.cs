@@ -46,6 +46,7 @@ namespace NomaiVR.ReusableBehaviours.Dream
         private void OnEnable()
         {
             camera.enabled = true;
+            GraphicsHelper.SetCameraEyeProjectionMatrix(camera, Valve.VR.EVREye.Eye_Right);
         }
 
         private void OnDisable()
@@ -97,7 +98,7 @@ namespace NomaiVR.ReusableBehaviours.Dream
         private void OnPreRender()
         {
             if (simulationCamera == null || simulationCamera._targetCamera == null) return;
-            GraphicsHelper.ForceCameraToEye(camera, simulationCamera._targetCamera.mainCamera, Valve.VR.EVREye.Eye_Right);
+            GraphicsHelper.ForceCameraToEye(camera, simulationCamera._targetCamera.mainCamera.transform, Valve.VR.EVREye.Eye_Right);
         }
     }
 }

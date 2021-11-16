@@ -57,8 +57,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="netstandard">
-      <HintPath>$(GameDir)\OuterWilds_Data\Managed\netstandard.dll</HintPath>
+    <Reference Include="UnityExplorer.STANDALONE.Mono">
+      <HintPath>$(OwmlDir)\$(ModDir)\UnityExplorer.STANDALONE.Mono.dll</HintPath>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>

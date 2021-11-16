@@ -110,11 +110,13 @@ namespace NomaiVRPatcher
 
             var replacers = new List<AssetsReplacer>();
 
+            #if !UNITYEXPLORER
             var playerSettings = assetsFileTable.GetAssetInfo(1);
             var playerSettingsBase = assetsManager.GetTypeInstance(assetsFile, playerSettings).GetBaseField();
             var disableOldInputManagerSupport = playerSettingsBase.Get("enableNativePlatformBackendsForNewInputSystem");
             disableOldInputManagerSupport.value = new AssetTypeValue(EnumValueTypes.ValueType_Bool, false);
             replacers.Add(new AssetsReplacerFromMemory(0, playerSettings.index, (int)playerSettings.curFileType, 0xffff, playerSettingsBase.WriteToByteArray()));
+            #endif
 
 
             var buildSettings = assetsFileTable.GetAssetInfo(11);
