@@ -25,7 +25,7 @@ namespace NomaiVRPatcher
 
             CopyGameFiles(AppDomain.CurrentDomain.BaseDirectory, Path.Combine(basePath, "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
+            //PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
         }
 
         // List of assemblies to patch
@@ -46,7 +46,7 @@ namespace NomaiVRPatcher
 
             CopyGameFiles(executablePath, Path.Combine(patchersPath, "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, backupPath, patchersPath);
+            //PatchGlobalGameManagers(gameManagersPath, backupPath, patchersPath);
         }
 
         // Clean up files left from previous versions of the mod

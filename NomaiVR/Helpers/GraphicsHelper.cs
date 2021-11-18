@@ -6,6 +6,7 @@ namespace NomaiVR.Helpers
     public static class GraphicsHelper
     {
 		private static readonly Matrix4x4 scaleBiasDXToGL = Matrix4x4.TRS(Vector3.back, Quaternion.identity, new Vector3(1, 1, 2));
+		private static readonly Matrix4x4 scaleBiasGLToDX = Matrix4x4.TRS(Vector3.forward, Quaternion.identity, new Vector3(1, 1, 0.5f));
 		public static void ForceCameraToEye(Camera targetCamera, Transform headTransform, EVREye eye)
         {
 			targetCamera.transform.position = headTransform.TransformPoint(SteamVR.instance.eyes[(int)eye].pos);
@@ -14,12 +15,17 @@ namespace NomaiVR.Helpers
 
 		public static void SetCameraEyeProjectionMatrix(Camera targetCamera, EVREye eye)
         {
-			targetCamera.projectionMatrix = scaleBiasDXToGL * GetSteamVREyeProjection(targetCamera, eye);
+			targetCamera.projectionMatrix = GetSteamVREyeProjection(targetCamera, eye);
+		}
+
+		public static Matrix4x4 ToDX(Matrix4x4 matrix)
+        {
+			return scaleBiasGLToDX * matrix;
 		}
 
 		public static Matrix4x4 GetSteamVREyeProjection(Camera cam, EVREye eye)
 		{
-			return HmdMatrix44ToMatrix4X4(SteamVR.instance.hmd.GetProjectionMatrix(eye, cam.nearClipPlane, cam.farClipPlane));
+			return scaleBiasDXToGL * HmdMatrix44ToMatrix4X4(SteamVR.instance.hmd.GetProjectionMatrix(eye, cam.nearClipPlane, cam.farClipPlane));
 		}
 
 		public static Matrix4x4 HmdMatrix44ToMatrix4X4(HmdMatrix44_t mat)
