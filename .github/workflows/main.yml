@@ -29,7 +29,7 @@ jobs:
         with:
           projectPath: Unity
           buildMethod: BuildCommands.PerformBuild
-          targetPlatform: Win64
+          targetPlatform: StandaloneWindows64
 
       # Output
       - uses: actions/upload-artifact@v2
