@@ -47,6 +47,9 @@ namespace NomaiVR.ModConfig
         private ConfigEntry<float> hudOpacity;
         public float HudOpacity => hudOpacity.Value;
 
+        private ConfigEntry<bool> hudSmoothFollow;
+        public bool HudSmoothFollow => hudSmoothFollow.value;
+
         private ConfigFile config;
         public BepInExSettingsProvider(ConfigFile config)
         {
@@ -63,6 +66,7 @@ namespace NomaiVR.ModConfig
             showHelmet = config.Bind(section, "helmetVisibility", true, "");
             hudScale = config.Bind(section, "hudScale", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0.2f, 1.8f)));
             hudOpacity = config.Bind(section, "hudOpacity", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 1f)));
+            hudSmoothFollow = config.Bind(section, "hudSmoothFollow", true, "");
             controllerOrientedMovement = config.Bind(section, "movementControllerOriented", false, "");
             enableGesturePrompts = config.Bind(section, "showGesturePrompts", true, "");
             enableHandLaser = config.Bind(section, "showHandLaser", true, "");

@@ -20,6 +20,7 @@ namespace NomaiVR.ModConfig
         public float ToolbeltHeight { get; private set; }
         public float HudScale { get; private set; }
         public float HudOpacity { get; private set; }
+        public bool HudSmoothFollow { get; private set; } = true;
 
         private readonly IModConfig config;
         public OwmlSettingsProvider(IModConfig config)
@@ -39,6 +40,7 @@ namespace NomaiVR.ModConfig
             DebugMode = config.GetSettingsValue<bool>("debug");
             AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
             HudScale = config.GetSettingsValue<float>("hudScale");
+            HudSmoothFollow = config.GetSettingsValue<bool>("hudSmoothFollow");
 
             // OWML doesn't support negative slider values so I subtract it here.
             ToolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
