@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class ProjectionStoneCameraFix : NomaiVRModule<NomaiVRModule.EmptyBehaviour, ProjectionStoneCameraFix.Patch>
     {
@@ -11,7 +11,7 @@ namespace NomaiVR
         {
             public override void ApplyPatches()
             {
-                Postfix<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", nameof(Patch.SwitchToRemoteCamera));
+                Postfix<NomaiRemoteCameraPlatform>("SwitchToRemoteCamera", nameof(SwitchToRemoteCamera));
             }
 
             private static void SwitchToRemoteCamera(NomaiRemoteCameraPlatform ____slavePlatform, Transform ____playerHologram)

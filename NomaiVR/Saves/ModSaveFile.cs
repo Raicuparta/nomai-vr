@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
+using NomaiVR.Helpers;
 
-namespace NomaiVR
+namespace NomaiVR.Saves
 {
     public class ModSaveFile
     {
-        public HashSet<string> tutorialSteps = new HashSet<string>();
-        private const string _fileName = "save.json";
+        public HashSet<string> TutorialSteps = new HashSet<string>();
+        private const string fileName = "save.json";
 
         public void AddTutorialStep(string step)
         {
-            tutorialSteps.Add(step);
+            TutorialSteps.Add(step);
             Save();
         }
 
         private void Save()
         {
-            NomaiVR.Helper.Storage.Save(this, _fileName);
+            StorageHelper.Save(this, fileName);
         }
 
         public static ModSaveFile LoadSaveFile()
         {
-            var save = NomaiVR.Helper.Storage.Load<ModSaveFile>(_fileName);
+            var save = StorageHelper.Load<ModSaveFile>(fileName);
             return save ?? new ModSaveFile();
         }
     }

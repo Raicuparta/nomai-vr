@@ -1,14 +1,14 @@
 {
   "filename": "NomaiVR.dll",
+  "patcher": "patcher/NomaiVRPatcher.dll",
   "author": "Raicuparta",
   "name": "NomaiVR",
   "uniqueName": "Raicuparta.NomaiVR",
-  "description": "Outer Wilds VR mod, with full motion control support.",
   "warning": {
-    "title": "Follow these steps before starting the game in VR:",
-    "body": "- NomaiVR is not compatible with the Echoes of the Eye DLC yet. Wait for a NomaiVR update if you want to play the DLC;\n\n - Disable all other mods (can heavily affect performance);\n\n- Close SteamVR (let the game open SteamVR automatically);\n\n- Make sure your headset and both of your VR controllers are connected and working;\n\n- If you have the game on Steam:\n--- Right-click Outer Wilds on your Steam library\n--- Select 'Properties...'\n--- Disable 'Use Desktop Game Theatre.'"
+    "title": "Before playing NomaiVR, some information:",
+    "body": "- Click the NomaiVR readme button in the Mod Manager for information about troubleshooting, requirements, performance, how to uninstall, etc.\n\n- Some VR controllers will have missing icons. Message us if you want to help us add icons for these devices.\n\n- If you have the game on Steam:\n--- Right-click Outer Wilds on your Steam library\n--- Select 'Properties...'\n--- Disable 'Use Desktop Game Theatre.'"
   },
-  "version": "1.2.3",
-  "owmlVersion": "1.0.1",
+  "version": "2.4.2",
+  "owmlVersion": "2.1.0",
   "requireVR": true
 }

@@ -1,0 +1,306 @@
+{
+   "action_manifest_version": 4,
+   "alias_info": {},
+   "app_key": "steam.app.753640",
+   "bindings": {
+      "/actions/default": {
+         "chords": [],
+         "haptics": [
+            {
+               "output": "/actions/default/out/haptic",
+               "path": "/user/hand/left/output/haptic"
+            },
+            {
+               "output": "/actions/default/out/haptic",
+               "path": "/user/hand/right/output/haptic"
+            }
+         ],
+         "poses": [
+            {
+               "output": "/actions/default/in/lefthand",
+               "path": "/user/hand/left/pose/raw"
+            },
+            {
+               "output": "/actions/default/in/righthand",
+               "path": "/user/hand/right/pose/raw"
+            }
+         ],
+         "skeleton": [
+            {
+               "output": "/actions/default/in/skeletonlefthand",
+               "path": "/user/hand/left/input/skeleton/left"
+            },
+            {
+               "output": "/actions/default/in/skeletonrighthand",
+               "path": "/user/hand/right/input/skeleton/right"
+            }
+         ],
+         "sources": [
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/RollMode"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/left/input/grip"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/RollMode"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/grip"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/grabpinch"
+                  }
+               },
+               "mode": "button",
+               "parameters": {
+                  "click_activate_threshold": "0.75",
+                  "click_deactivate_threshold": "0.7",
+                  "force_input": "value"
+               },
+               "path": "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/map"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/left/input/application_menu"
+            },
+            {
+               "inputs": {
+                  "pull": {
+                     "output": "/actions/default/in/ThrustDown"
+                  }
+               },
+               "mode": "trigger",
+               "path": "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs": {
+                  "position": {
+                     "output": "/actions/default/in/move"
+                  }
+               },
+               "mode": "trackpad",
+               "path": "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/Interact"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/application_menu"
+            },
+            {
+               "inputs": {
+                  "position": {
+                     "output": "/actions/default/in/look"
+                  }
+               },
+               "mode": "trackpad",
+               "path": "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "north": {
+                     "output": "/actions/default/in/menu"
+                  },
+                  "south": {
+                     "output": "/actions/default/in/back"
+                  }
+               },
+               "mode": "dpad",
+               "parameters": {
+                  "sub_mode": "click"
+               },
+               "path": "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/jump"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/grip"
+                  }
+               },
+               "mode": "toggle_button",
+               "path": "/user/hand/right/input/grip"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/grabpinch"
+                  }
+               },
+               "mode": "button",
+               "parameters": {
+                  "click_activate_threshold": "0.75",
+                  "click_deactivate_threshold": "0.7"
+               },
+               "path": "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs": {
+                  "pull": {
+                     "output": "/actions/default/in/squeeze"
+                  }
+               },
+               "mode": "trigger",
+               "path": "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs": {
+                  "pull": {
+                     "output": "/actions/default/in/squeeze"
+                  }
+               },
+               "mode": "trigger",
+               "path": "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/grip"
+                  }
+               },
+               "mode": "toggle_button",
+               "path": "/user/hand/left/input/grip"
+            },
+            {
+               "inputs": {
+                  "pull": {
+                     "output": "/actions/default/in/thrustup"
+                  }
+               },
+               "mode": "trigger",
+               "path": "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/uiselect"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs": {
+                  "position": {
+                     "output": "/actions/default/in/stationarydpad"
+                  }
+               },
+               "mode": "trackpad",
+               "path": "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/stationaryuse"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/application_menu"
+            },
+            {
+               "inputs": {
+                  "position": {
+                     "output": "/actions/default/in/uidpad"
+                  }
+               },
+               "mode": "trackpad",
+               "path": "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "east": {
+                     "output": "/actions/default/in/uisubtabright"
+                  },
+                  "north": {
+                     "output": "/actions/default/in/uitabright"
+                  },
+                  "south": {
+                     "output": "/actions/default/in/uitableft"
+                  },
+                  "west": {
+                     "output": "/actions/default/in/uisubtableft"
+                  }
+               },
+               "mode": "dpad",
+               "parameters": {
+                  "sub_mode": "touch"
+               },
+               "path": "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/secondaryinteract"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/grip"
+            }
+         ]
+      },
+      "/actions/inverted": {
+         "chords": [],
+         "haptics": [],
+         "poses": [],
+         "skeleton": [],
+         "sources": []
+      },
+      "/actions/tools": {
+         "chords": [],
+         "haptics": [],
+         "poses": [],
+         "skeleton": [],
+         "sources": [
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/tools/in/use"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/left/input/application_menu"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/tools/in/use"
+                  }
+               },
+               "mode": "button",
+               "path": "/user/hand/right/input/application_menu"
+            }
+         ]
+      }
+   },
+   "category": "steamvr_input",
+   "controller_type": "vive_controller",
+   "description": "",
+   "name": "Outer Wilds Vive Wands Bindings",
+   "options": {},
+   "simulated_actions": []
+}

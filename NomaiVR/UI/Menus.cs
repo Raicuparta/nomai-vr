@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NomaiVR.Assets;
+using NomaiVR.Helpers;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NomaiVR
+namespace NomaiVR.UI
 {
     internal class Menus : NomaiVRModule<Menus.Behaviour, Menus.Behaviour.Patch>
     {
@@ -12,14 +15,14 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private static bool _shouldRenderStarLogos;
+            private static bool shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
-            private static readonly string[] _ignoredCanvases = { "LoadManagerFadeCanvas", "PauseBackdropCanvas", "Reticule", "ExplorerCanvas" };
-            private readonly List<GameObject> _canvasObjectsToHide = new List<GameObject>();
-            private Camera _flashbackCamera;
-            private Transform _flashbackCameraParent;
-            private bool _isCanvasObjectsActive;
-            private bool _fadeInLogo = false;
+            private static readonly string[] ignoredCanvases = { "LoadManagerFadeCanvas", "PauseBackdropCanvas", "Reticule", "ExplorerCanvas" };
+            private readonly List<GameObject> canvasObjectsToHide = new List<GameObject>();
+            private Camera flashbackCamera;
+            private Transform flashbackCameraParent;
+            private bool isCanvasObjectsActive;
+            private bool fadeInLogo;
 
             internal void Start()
             {
@@ -51,12 +54,12 @@ namespace NomaiVR
 
             private void UpdateCanvasObjectsActive()
             {
-                if (_isCanvasObjectsActive && !IsMenuInteractionAllowed())
+                if (isCanvasObjectsActive && !IsMenuInteractionAllowed())
                 {
                     SetCanvasObjectsActive(false);
                     return;
                 }
-                if (!_isCanvasObjectsActive && IsMenuInteractionAllowed())
+                if (!isCanvasObjectsActive && IsMenuInteractionAllowed())
                 {
                     SetCanvasObjectsActive(true);
                     return;
@@ -65,8 +68,8 @@ namespace NomaiVR
 
             private void SetCanvasObjectsActive(bool active)
             {
-                _canvasObjectsToHide.ForEach(canvasObject => canvasObject.SetActive(active));
-                _isCanvasObjectsActive = active;
+                canvasObjectsToHide.ForEach(canvasObject => canvasObject.SetActive(active));
+                isCanvasObjectsActive = active;
             }
 
             private bool IsMenuInteractionAllowed()
@@ -76,20 +79,20 @@ namespace NomaiVR
 
             private void SetUpFlashbackCameraParent()
             {
-                _flashbackCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
-                if (!_flashbackCameraParent)
+                flashbackCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
+                if (!flashbackCameraParent)
                 {
-                    _flashbackCameraParent = new GameObject().transform;
+                    flashbackCameraParent = new GameObject().transform;
                 }
-                if (_flashbackCamera.transform.parent == null)
+                if (flashbackCamera.transform.parent == null)
                 {
-                    _flashbackCamera.transform.SetParent(_flashbackCameraParent);
+                    flashbackCamera.transform.SetParent(flashbackCameraParent);
                 }
                 // FlashbackCamera objects starts really far from Vector3.zero.
                 // Far enough to cause floating point imprecision glitches.
                 // Usually the game would move the camera to Vector3.zero, but camera movement isn't possible in VR.
                 // So we need to apply the inverse position to make it move to Vector3.zero.
-                _flashbackCameraParent.position = _flashbackCamera.transform.localPosition * -1;
+                flashbackCameraParent.position = flashbackCamera.transform.localPosition * -1;
             }
 
             private static void StopCameraRotation()
@@ -100,26 +103,26 @@ namespace NomaiVR
 
             private void FixOuterWildsLogo()
             {
-                Transform logoParentTranform = GameObject.Find("TitleCanvasHack/TitleLayoutGroup").transform;
-                Transform canvasHack = logoParentTranform.parent;
+                var logoParentTranform = GameObject.Find("TitleCanvasHack/TitleLayoutGroup").transform;
+                var canvasHack = logoParentTranform.parent;
                 Destroy(canvasHack.GetComponent<CanvasScaler>()); //Remove Canvas Scaler
                 canvasHack.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
                 logoParentTranform.localPosition = Vector3.left * 400;
-                _fadeInLogo = false;
+                fadeInLogo = false;
 
                 LayerHelper.ChangeLayerRecursive(logoParentTranform.gameObject, "VisibleToPlayer");
 
                 //Logo Fade-In Animation
                 var logoFader = logoParentTranform.gameObject.AddComponent<TitleMenuLogoFader>();
                 var logoAnimator = logoParentTranform.GetComponentInChildren<Animator>();
-                logoFader.BeginFade(1, 3, () => _fadeInLogo, x => Mathf.Pow(x, 3), true);
+                logoFader.BeginFade(1f, 3, () => fadeInLogo, x => Mathf.Pow(x, 3), true); //FIXME: Broke, too fast
 
                 FindObjectOfType<TitleAnimationController>().OnTitleLogoAnimationComplete += () =>
                 {
                     canvasHack.localScale = Vector3.one * 0.126f;
                     canvasHack.position = new Vector3(17.344f, 136.154f, 10.499f);
                     canvasHack.rotation = Quaternion.Euler(342.012f, 116.613f, 325.473f);
-                    _fadeInLogo = true;
+                    fadeInLogo = true;
                 };
             }
 
@@ -127,7 +130,7 @@ namespace NomaiVR
             {
                 var logo = GameObject.Find(objectName).transform;
                 logo.localRotation *= Quaternion.Euler(30, 0, 0);
-                logo.gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () => _shouldRenderStarLogos;
+                logo.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => shouldRenderStarLogos;
             }
 
             private static void FixStarLogos()
@@ -149,7 +152,7 @@ namespace NomaiVR
 
                 // Hide the main menu while other menus are open,
                 // to prevent selecting with laser.
-                titleCanvas.Find("TitleLayoutGroup").gameObject.AddComponent<ConditionalRenderer>().getShouldRender = () =>
+                titleCanvas.Find("TitleLayoutGroup").gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () =>
                     MenuStackManager.SharedInstance.GetMenuCount() == 0;
 
                 // Cant't get the footer to look good, so I'm hiding it.
@@ -165,29 +168,30 @@ namespace NomaiVR
 
             private void AddFollowTarget(Canvas canvas)
             {
-                _canvasObjectsToHide.Add(canvas.gameObject);
+                canvasObjectsToHide.Add(canvas.gameObject);
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
+                followTarget.updateType = FollowTarget.UpdateType.PreCull;
                 if (SceneHelper.IsInGame())
                 {
-                    followTarget.target = Locator.GetPlayerTransform();
-                    followTarget.localPosition = new Vector3(0, 0.75f, 1.5f);
+                    followTarget.Target = Locator.GetPlayerTransform();
+                    followTarget.LocalPosition = new Vector3(0, 0.75f, 1.5f);
                 }
                 else if (SceneHelper.IsInTitle())
                 {
-                    followTarget.target = Camera.main.transform.parent;
-                    followTarget.localPosition = new Vector3(-0.2f, 1.3f, 2f);
+                    followTarget.Target = Camera.main.transform.parent;
+                    followTarget.LocalPosition = new Vector3(-0.2f, 1.3f, 2f);
                 }
                 else
                 {
-                    followTarget.target = Camera.main.transform;
-                    followTarget.localPosition = new Vector3(0, 0, 2f);
-                    followTarget.positionSmoothTime = 0.5f;
-                    followTarget.rotationSmoothTime = 0.5f;
+                    followTarget.Target = Camera.main.transform;
+                    followTarget.LocalPosition = new Vector3(0, 0, 2f);
+                    followTarget.PositionSmoothTime = 0.5f;
+                    followTarget.RotationSmoothTime = 0.5f;
                 }
 
                 canvas.gameObject.AddComponent<DestroyObserver>().OnDestroyed += () =>
                 {
-                    _canvasObjectsToHide.Remove(canvas.gameObject);
+                    canvasObjectsToHide.Remove(canvas.gameObject);
                 };
             }
 
@@ -214,7 +218,7 @@ namespace NomaiVR
             // this workaround fixes their position;
             private static void AdjustModConfigButtons(Canvas canvas)
             {
-                var selectables = canvas.GetComponentsInChildren<TooltipSelectable>(true);
+                var selectables = canvas.GetComponentsInChildren<TooltipDisplay>(true);
                 foreach (var selectable in selectables)
                 {
                     selectable.transform.localPosition = new Vector3(851.5f, -35f, 0);
@@ -229,7 +233,7 @@ namespace NomaiVR
 
             private bool IsIgnoredCanvas(Canvas canvas)
             {
-                return _ignoredCanvases.Contains(canvas.name);
+                return ignoredCanvases.Contains(canvas.name);
             }
 
             private bool IsOwmlModConfigMenuCanvas(Canvas canvas)
@@ -241,7 +245,7 @@ namespace NomaiVR
             private void SetUpDeathTextCanvas(Canvas canvas)
             {
                 canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                canvas.worldCamera = _flashbackCamera;
+                canvas.worldCamera = flashbackCamera;
                 canvas.planeDistance = 15f;
                 var scaler = canvas.GetComponent<CanvasScaler>();
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
@@ -275,7 +279,7 @@ namespace NomaiVR
                         patchedCanvases.Add(canvas);
                     }
 
-                    if (isScreenSpaceOverlay || isPatched)
+                    if ((isScreenSpaceOverlay || isPatched) && !SceneHelper.IsInPostCredits())
                     {
                         AddFollowTarget(canvas);
                     }
@@ -291,13 +295,13 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ProfileMenuManager>("PopulateProfiles", nameof(PostPopulateProfiles));
-                    Postfix<CanvasMarkerManager>("Start", nameof(PostMarkerManagerStart));
-                    Postfix<TitleScreenAnimation>("FadeInMusic", nameof(PostTitleScreenFadeInMusic));
-                    Postfix<PopupMenu>("SetUpPopupCommands", nameof(PostSetPopupCommands));
+                    Postfix<ProfileMenuManager>(nameof(ProfileMenuManager.PopulateProfiles), nameof(PostPopulateProfiles));
+                    Postfix<CanvasMarkerManager>(nameof(CanvasMarkerManager.Start), nameof(PostMarkerManagerStart));
+                    Postfix<TitleScreenAnimation>(nameof(TitleScreenAnimation.FadeInMusic), nameof(PostTitleScreenFadeInMusic));
+                    Postfix<PopupMenu>(nameof(PopupMenu.SetUpPopupCommands), nameof(PostSetPopupCommands));
                 }
 
-                private static void PostSetPopupCommands(SingleAxisCommand okCommand, ref SingleAxisCommand ____okCommand)
+                private static void PostSetPopupCommands(IInputCommands okCommand, ref IInputCommands ____okCommand)
                 {
                     if (okCommand == InputLibrary.select)
                     {
@@ -307,7 +311,7 @@ namespace NomaiVR
 
                 private static void PostTitleScreenFadeInMusic()
                 {
-                    _shouldRenderStarLogos = true;
+                    shouldRenderStarLogos = true;
                 }
 
                 private static void PostPopulateProfiles(GameObject ____profileListRoot)

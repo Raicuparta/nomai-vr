@@ -1,34 +1,34 @@
 ﻿using System;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     internal class ChildThresholdObserver : MonoBehaviour, IActiveObserver
     {
-        public bool IsActive => _wasActive;
+        public bool IsActive => wasActive;
         public event Action OnActivate;
         public event Action OnDeactivate;
         public int childThreshold = 1;
 
-        private bool _wasActive;
-        private Transform _transform;
+        private bool wasActive;
+        private Transform selfTransform;
 
         internal void Start()
         {
-            _transform = transform;
+            selfTransform = ((Component) this).transform;
         }
 
         internal void OnTransformChildrenChanged()
         {
-            if (!_wasActive && _transform.childCount >= childThreshold)
+            if (!wasActive && selfTransform.childCount >= childThreshold)
             {
-                _wasActive = true;
+                wasActive = true;
                 OnActivate?.Invoke();
             }    
-            else if(_wasActive && _transform.childCount < childThreshold)
+            else if(wasActive && selfTransform.childCount < childThreshold)
             {
                 OnDeactivate?.Invoke();
-                _wasActive = false;
+                wasActive = false;
             }
         }
     }

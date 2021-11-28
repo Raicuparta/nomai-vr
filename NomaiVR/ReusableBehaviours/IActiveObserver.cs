@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     public interface IActiveObserver
     {

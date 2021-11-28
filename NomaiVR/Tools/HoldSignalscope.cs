@@ -1,7 +1,11 @@
-﻿using OWML.Utils;
+﻿
+using NomaiVR.Assets;
+using NomaiVR.EffectFixes;
+using NomaiVR.Helpers;
+using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class HoldSignalscope : NomaiVRModule<HoldSignalscope.Behaviour, HoldSignalscope.Behaviour.Patch>
     {
@@ -10,27 +14,27 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            protected static Transform _reticule;
-            protected static Transform _shipWindshield;
-            protected static Signalscope _signalscope;
-            private static Camera _lensCamera;
-            private static Transform _lens;
+            protected static Transform Reticule;
+            protected static Transform ShipWindshield;
+            protected static Signalscope Signalscope;
+            private static Camera lensCamera;
+            private static Transform lens;
 
-            private OWCamera _owLensCamera;
+            private OWCamera owLensCamera;
 
             internal void Start()
             {
                 if (LoadManager.GetCurrentScene() == OWScene.SolarSystem)
                 {
-                    _shipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
+                    ShipWindshield = GameObject.Find("ShipLODTrigger_Cockpit").transform;
                 }
 
-                _signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
+                Signalscope = Camera.main.transform.Find("Signalscope").GetComponent<Signalscope>();
 
-                var holdSignalscope = _signalscope.gameObject.AddComponent<Holdable>();
+                var holdSignalscope = Signalscope.gameObject.AddComponent<Holdable>();
                 holdSignalscope.SetPositionOffset(new Vector3(0.0074f, 0.0808f, 0.1343f), new Vector3(0.0046f, 0.1255f, 0.1625f));
 
-                var signalScopeModel = _signalscope.transform.GetChild(0);
+                var signalScopeModel = Signalscope.transform.GetChild(0);
                 // Tools have a special shader that draws them on top of everything
                 // and screws with perspective. Changing to Standard shader so they look
                 // like a normal 3D object.
@@ -49,27 +53,28 @@ namespace NomaiVR
                 holster.mode = ToolMode.SignalScope;
                 holster.scale = 0.8f;
                 holster.angle = Vector3.right * 90;
-                holster.onUnequip = OnUnequip;
+                holster.ONUnequip = OnUnequip;
 
                 var playerHUD = GameObject.Find("PlayerHUD").transform;
-                _reticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
+                Reticule = playerHUD.Find("HelmetOffUI/SignalscopeReticule");
 
                 // Attatch Signalscope UI to the Signalscope.
-                _reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                SetupReticule(_reticule);
+                Reticule.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+                SetupReticule(Reticule);
 
                 var helmetOff = playerHUD.Find("HelmetOffUI/SignalscopeCanvas");
-                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.75f, 0));
+                SetupSignalscopeUI(helmetOff, new Vector3(-0.05f, 0.1714f, 0));
 
                 var helmetOn = playerHUD.Find("HelmetOnUI/UICanvas/SigScopeDisplay");
                 SetupSignalscopeUI(helmetOn, new Vector3(-0.05f, -0.05f, 0));
                 LayerHelper.ChangeLayerRecursive(helmetOn.gameObject, "UI");
                 SetupScopeLens();
+                SetupButtons(signalScopeModel);
             }
 
             private static void SetupReticule(Transform reticule)
             {
-                reticule.parent = _signalscope.transform;
+                reticule.parent = Signalscope.transform;
                 reticule.localScale = Vector3.one * 0.0003f;
                 reticule.localPosition = new Vector3(0, 0.125f, 0.14f);
                 reticule.localRotation = Quaternion.identity;
@@ -78,57 +83,65 @@ namespace NomaiVR
             private static void SetupSignalscopeUI(Transform parent, Vector3 position)
             {
                 parent.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
-                parent.parent = _signalscope.transform;
+                parent.SetParent(Signalscope.transform, false);
                 parent.localScale = Vector3.one * 0.0005f;
                 parent.localPosition = position;
                 parent.localRotation = Quaternion.Euler(0, 90, 0);
             }
 
+            private static void SetupButtons(Transform signalscopeModel)
+            {
+                var buttons = Instantiate(AssetLoader.SignalscopeHandheldButtonsPrefab).transform;
+                buttons.parent = signalscopeModel;
+                buttons.localPosition = Vector3.zero;
+                buttons.localScale = Vector3.one;
+                buttons.localRotation = Quaternion.identity;
+
+                for (var i = 0; i < buttons.childCount; i++)
+                    buttons.GetChild(i).gameObject.AddComponent<TouchButton>();
+            }
+
             private void OnUnequip()
             {
-                _owLensCamera.SetEnabled(false);
-                _lens.gameObject.SetActive(false);
+                owLensCamera.SetEnabled(false);
+                lens.gameObject.SetActive(false);
             }
 
             private void SetupScopeLens()
             {
-                _lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
-                _lens.parent = _signalscope.transform;
-                _lens.localPosition = new Vector3(0, 0.1f, 0.14f);
-                _lens.localRotation = Quaternion.identity;
-                _lens.localScale = Vector3.one * 2f;
-                _lens.gameObject.SetActive(false);
+                lens = Instantiate(AssetLoader.ScopeLensPrefab).transform;
+                lens.parent = Signalscope.transform;
+                lens.localPosition = new Vector3(0, 0.1f, 0.16f);
+                lens.localRotation = Quaternion.identity;
+                lens.localScale = Vector3.one * 2f;
+                lens.gameObject.SetActive(false);
 
-                _lensCamera = _lens.GetComponentInChildren<Camera>();
-                _lensCamera.gameObject.SetActive(false);
-                _lensCamera.cullingMask = CameraMaskFix.Behaviour.DefaultCullingMask;
-                _lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI")) & ~(1 << LayerMask.NameToLayer("VisibleToPlayer"));
-                _lensCamera.fieldOfView = 5;
-                _lensCamera.transform.parent = null;
-                var followTarget = _lensCamera.gameObject.AddComponent<FollowTarget>();
-                followTarget.target = _lens;
-                followTarget.rotationSmoothTime = 0.1f;
-                followTarget.positionSmoothTime = 0.1f;
+                lensCamera = lens.GetComponentInChildren<Camera>();
+                lensCamera.gameObject.SetActive(false);
+                lensCamera.cullingMask = CameraMaskFix.Behaviour.DefaultCullingMask;
+                lensCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI")) & ~(1 << LayerMask.NameToLayer("VisibleToPlayer"));
+                lensCamera.fieldOfView = 5;
+                lensCamera.transform.SetParent(lens, false);
 
-                _owLensCamera = _lensCamera.gameObject.AddComponent<OWCamera>();
-                _owLensCamera.useFarCamera = true;
-                _owLensCamera.renderSkybox = true;
-                _owLensCamera.useViewmodels = true;
-                _owLensCamera.farCameraDistance = 50000;
-                _owLensCamera.viewmodelFOV = 70;
-                var fogEffect = _lensCamera.gameObject.AddComponent<PlanetaryFogImageEffect>();
+                owLensCamera = lensCamera.gameObject.AddComponent<OWCamera>();
+                owLensCamera.useFarCamera = true;
+                owLensCamera.renderSkybox = true;
+                owLensCamera.useViewmodels = true;
+                owLensCamera.farCameraDistance = 50000;
+                owLensCamera.viewmodelFOV = 70;
+                var fogEffect = lensCamera.gameObject.AddComponent<PlanetaryFogImageEffect>();
                 fogEffect.fogShader = Locator.GetPlayerCamera().GetComponent<PlanetaryFogImageEffect>().fogShader;
-                _lensCamera.farClipPlane = 2000f;
-                _lensCamera.nearClipPlane = 0.1f;
-                _lensCamera.depth = 0f;
-                _lensCamera.clearFlags = CameraClearFlags.Color;
-                _lensCamera.backgroundColor = Color.black;
-                _lensCamera.gameObject.SetActive(true);
+                lensCamera.farClipPlane = 2000f;
+                lensCamera.nearClipPlane = 0.1f;
+                lensCamera.depth = 0f;
+                lensCamera.clearFlags = CameraClearFlags.Color;
+                lensCamera.backgroundColor = Color.black;
+                lensCamera.gameObject.SetActive(true);
 
                 // The camera on this prefab would istantiate an AudioListener enabled by default
                 // which would break 3DAudio and tie it to the hands.
-                _owLensCamera.SetEnabled(false);
-                Destroy(_lensCamera.gameObject.GetComponent<AudioListener>());
+                owLensCamera.SetEnabled(false);
+                Destroy(lensCamera.gameObject.GetComponent<AudioListener>());
             }
 
             internal void Update()
@@ -139,29 +152,29 @@ namespace NomaiVR
 
             private void UpdateSignalscopeReticuleVisibility()
             {
-                if (_reticule == null)
+                if (Reticule == null)
                 {
                     return;
                 }
 
-                if (_reticule.gameObject.activeSelf && OWTime.IsPaused())
+                if (Reticule.gameObject.activeSelf && OWTime.IsPaused())
                 {
-                    _reticule.gameObject.SetActive(false);
+                    Reticule.gameObject.SetActive(false);
                 }
-                else if (!_reticule.gameObject.activeSelf && !OWTime.IsPaused())
+                else if (!Reticule.gameObject.activeSelf && !OWTime.IsPaused())
                 {
-                    _reticule.gameObject.SetActive(true);
+                    Reticule.gameObject.SetActive(true);
                 }
             }
 
             private void UpdateSignalscipeZoom()
             {
-                if (OWInput.IsNewlyPressed(InputLibrary.scopeView, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
+                if (OWInput.IsNewlyPressed(InputLibrary.toolActionPrimary, InputMode.All) && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope, ToolGroup.Suit))
                 {
-                    _lens.gameObject.SetActive(!_lens.gameObject.activeSelf);
+                    lens.gameObject.SetActive(!lens.gameObject.activeSelf);
 
-                    if(_owLensCamera.gameObject != null)
-                        _owLensCamera.SetEnabled(_lens.gameObject.activeSelf);
+                    if(owLensCamera.gameObject != null)
+                        owLensCamera.SetEnabled(lens.gameObject.activeSelf);
                 }
             }
 
@@ -169,19 +182,19 @@ namespace NomaiVR
             {
                 public override void ApplyPatches()
                 {
-                    Prefix<OWInput>("ChangeInputMode", nameof(ChangeInputMode));
-                    Postfix<QuantumInstrument>("Update", nameof(PostQuantumInstrumentUpdate));
-                    Empty<Signalscope>("EnterSignalscopeZoom");
-                    Empty<Signalscope>("ExitSignalscopeZoom");
+                    Prefix<OWInput>(nameof(OWInput.ChangeInputMode), nameof(ChangeInputMode));
+                    Postfix<QuantumInstrument>(nameof(QuantumInstrument.Update), nameof(PostQuantumInstrumentUpdate));
+                    Empty<Signalscope>(nameof(global::Signalscope.EnterSignalscopeZoom));
+                    Empty<Signalscope>(nameof(global::Signalscope.ExitSignalscopeZoom));
                 }
 
                 private static void PostQuantumInstrumentUpdate(QuantumInstrument __instance, bool ____gatherWithScope, bool ____waitToFlickerOut)
                 {
                     if (____gatherWithScope && !____waitToFlickerOut && ToolHelper.Swapper.IsInToolMode(ToolMode.SignalScope))
                     {
-                        var from = __instance.transform.position - _lensCamera.transform.position;
-                        var num = Vector3.Angle(from, _lensCamera.transform.forward);
-                        if (num < 1f && _lens.gameObject.activeSelf)
+                        var from = __instance.transform.position - lensCamera.transform.position;
+                        var num = Vector3.Angle(from, lensCamera.transform.forward);
+                        if (num < 1f && lens.gameObject.activeSelf)
                         {
                             __instance.Gather();
                         }
@@ -190,19 +203,19 @@ namespace NomaiVR
 
                 private static void ChangeInputMode(InputMode mode)
                 {
-                    if (!_reticule || !_shipWindshield || mode == InputMode.Menu || mode == InputMode.Map)
+                    if (!Reticule || !ShipWindshield || mode == InputMode.Menu || mode == InputMode.Map)
                     {
                         return;
                     }
                     if (mode == InputMode.ShipCockpit || mode == InputMode.LandingCam)
                     {
-                        _reticule.parent = _shipWindshield;
-                        _reticule.localScale = Vector3.one * 0.004f;
-                        _reticule.localPosition = Vector3.forward * 3f;
-                        _reticule.localRotation = Quaternion.identity;
+                        Reticule.parent = ShipWindshield;
+                        Reticule.localScale = Vector3.one * 0.004f;
+                        Reticule.localPosition = Vector3.forward * 3f;
+                        Reticule.localRotation = Quaternion.identity;
                     }
                     else
-                        SetupReticule(_reticule);
+                        SetupReticule(Reticule);
                 }
             }
         }

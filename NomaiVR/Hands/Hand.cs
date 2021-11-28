@@ -1,17 +1,26 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using NomaiVR.Assets;
+using NomaiVR.EffectFixes;
+using NomaiVR.Helpers;
+using NomaiVR.ReusableBehaviours;
+using NomaiVR.Tools;
+using Steamworks;
 using UnityEngine;
 using Valve.VR;
-using Valve.VR.Helpers;
 
-namespace NomaiVR
+namespace NomaiVR.Hands
 {
     public class Hand : MonoBehaviour
     {
-        private const float k_HandSkeletonBlendAmmount = 0.5f;
-        private const float k_GloveSkeletonBlendAmmount = 0.275f;
+        public const float minimumPointDistance = 0.1f;
+        private const float handSkeletonBlendAmmount = 0.5f;
+        private const float gloveSkeletonBlendAmmount = 0.275f;
+        private static readonly Vector3 gloveIndexTipOffset = new Vector3(0.034f, 0.0002f, 0.0003f);
 
         public event Action Initialized;
+        public event Action SkeletonBlendReset;
         public GameObject handPrefab;
         public SteamVR_Action_Pose pose;
         public SteamVR_Skeleton_Pose fallbackPoint;
@@ -21,15 +30,22 @@ namespace NomaiVR
 
         public SteamVR_Input_Sources InputSource { get; private set; }
         public Transform Palm { get; private set; }
-        public Transform IndexTip => _skeleton.indexTip;
+        public Transform IndexTip { get; private set; }
 
-        private Renderer _handRenderer;
-        private Renderer _gloveRenderer;
-        private EHandState _handState = EHandState.Free;
-        private EHandState _lastHandState = EHandState.Free;
-        private NomaiVR_Hand_Skeleton _skeleton;
-        private SteamVR_Skeleton_Poser _reachPoser;
-        private EVRSkeletalMotionRange _rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
+        private Renderer handRenderer;
+        private Renderer gloveRenderer;
+        private Material[] originalHandMaterials;
+        private Material[] originalGloveMaterials;
+        private EHandState handState = EHandState.Free;
+        private EHandState lastHandState = EHandState.Free;
+        private NomaiVRHandSkeleton skeleton;
+        private SteamVR_Skeleton_Poser reachPoser;
+        private SteamVR_Skeleton_Poser pointPoser;
+        private EVRSkeletalMotionRange rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
+        private FollowTarget followPose;
+        private float closestPointable = float.PositiveInfinity;
+        private float currentPointAmmount = 0.0f;
+        private float currentPointBlendVelocity = 0.0f;
 
         internal enum EHandState
         {
@@ -47,12 +63,46 @@ namespace NomaiVR
 
             GlobalMessenger.AddListener("SuitUp", OnSuitChanged);
             GlobalMessenger.AddListener("RemoveSuit", OnSuitChanged);
+            GlobalMessenger.AddListener("SimulationEnter", OnSimulationEnter);
+            GlobalMessenger.AddListener("SimulationExit", OnSimulationExit);
+        }
+
+        private void Update()
+        {
+            if (VRToolSwapper.InteractingHand == this)
+            {
+                followPose.PositionSmoothTime = 0.1f;
+                followPose.RotationSmoothTime = 0.1f;
+            }
+            else
+            {
+                followPose.PositionSmoothTime = 0.02f;
+                followPose.RotationSmoothTime = 0.02f;
+            }
+        }
+
+        internal void LateUpdate()
+        {
+            var pointAmmount = 1f - Mathf.Clamp(closestPointable / minimumPointDistance, 0, 1);
+            currentPointAmmount = MathHelper.SmoothDamp(currentPointAmmount, pointAmmount, ref currentPointBlendVelocity, 0.05f);
+            if (currentPointAmmount > float.Epsilon && handState != EHandState.Holding)
+            {
+                var pointSnapshot = pointPoser.GetBlendedPose(skeleton, skeleton.BonePositions, skeleton.BoneRotations);
+                for (var i = 0; i < pointSnapshot.bonePositions.Length; i++)
+                    skeleton.BlendBonePosition(i, pointSnapshot.bonePositions[i], currentPointAmmount);
+                for (var i = 0; i < pointSnapshot.boneRotations.Length; i++)
+                    skeleton.BlendBoneRotation(i, pointSnapshot.boneRotations[i], currentPointAmmount);
+            }
+
+            closestPointable = float.PositiveInfinity;
         }
 
         internal void OnDestroy()
         {
             GlobalMessenger.RemoveListener("SuitUp", OnSuitChanged);
             GlobalMessenger.RemoveListener("RemoveSuit", OnSuitChanged);
+            GlobalMessenger.RemoveListener("SimulationEnter", OnSimulationEnter);
+            GlobalMessenger.RemoveListener("SimulationExit", OnSimulationExit);
         }
 
         private void SetUpModel()
@@ -63,20 +113,52 @@ namespace NomaiVR
             Palm = handObject.transform.Find("skeletal_hand/Root/wrist_r/HoldPoint");
 
             var renderers = handObject.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-            _handRenderer = renderers.Where(r => r.transform.name.Contains("Hand")).FirstOrDefault();
-            _gloveRenderer = renderers.Where(r => r.transform.name.Contains("Glove")).FirstOrDefault();
+            handRenderer = renderers.Where(r => r.transform.name.Contains("Hand")).FirstOrDefault();
+            gloveRenderer = renderers.Where(r => r.transform.name.Contains("Glove")).FirstOrDefault();
 
-            SetUpShaders(_handRenderer, "Outer Wilds/Character/Skin", "Outer Wilds/Character/Skin");
-            SetUpShaders(_gloveRenderer, "Outer Wilds/Character/Clothes");
+            SetUpShaders(handRenderer, "Outer Wilds/Character/Skin", "Outer Wilds/Character/Skin");
+            SetUpShaders(gloveRenderer, "Outer Wilds/Character/Clothes");
             
-            _handRenderer.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderHands;
-            _gloveRenderer.gameObject.AddComponent<ConditionalRenderer>().getShouldRender += ShouldRenderGloves;
+            handRenderer.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender += ShouldRenderHands;
+            gloveRenderer.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender += ShouldRenderGloves;
 
             SetUpModel(hand);
-            _skeleton = SetUpSkeleton(handObject, hand);
+            skeleton = SetUpSkeleton(handObject, hand);
 
 
             handObject.SetActive(true);
+        }
+
+        private void OnSimulationEnter()
+        {
+            handRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
+            gloveRenderer.gameObject.layer = LayerMask.NameToLayer("DreamSimulation");
+
+            if(originalHandMaterials == null) 
+                originalHandMaterials = handRenderer.sharedMaterials;
+            if (originalGloveMaterials == null)
+                originalGloveMaterials = gloveRenderer.sharedMaterials;
+
+            handRenderer.sharedMaterials = MakeSimulationMaterials(originalHandMaterials.Length);
+            gloveRenderer.sharedMaterials = MakeSimulationMaterials(originalGloveMaterials.Length);
+        }
+
+        private Material[] MakeSimulationMaterials(int size)
+        {
+            Material[] mats = new Material[size];
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = DreamFix.totemEyeMaterial;
+            return mats;
+        }
+
+        private void OnSimulationExit()
+        {
+            handRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            gloveRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            handRenderer.sharedMaterials = originalHandMaterials;
+            gloveRenderer.sharedMaterials = originalGloveMaterials;
+            originalHandMaterials = null;
+            originalGloveMaterials = null;
         }
 
         private void SetUpShaders(Renderer renderer, params string[] shader)
@@ -84,8 +166,8 @@ namespace NomaiVR
             if (shader.Length == 0)
                 return;
 
-            Shader[] toAssign = shader.Select(x => Shader.Find(x)).ToArray();
-            for (int i = 0; i < renderer.materials.Length; i++)
+            var toAssign = shader.Select(x => Shader.Find(x)).ToArray();
+            for (var i = 0; i < renderer.materials.Length; i++)
                 renderer.materials[i].shader = toAssign[Mathf.Clamp(i, 0, toAssign.Length)];
         }
 
@@ -101,26 +183,33 @@ namespace NomaiVR
         
         private static string FingerBoneName(string fingerName, int depth)
         {
-            string name = $"finger_{fingerName}_meta_r";
-            for (int i = 0; i < depth; i++)
+            var name = $"finger_{fingerName}_meta_r";
+            for (var i = 0; i < depth; i++)
                 name += $"/finger_{fingerName}_{i}_r";
             return name;
         }
 
+        private static Transform FingerEnd(Transform source, string fingerName)
+        {
+            var parent = source.Find($"finger_{fingerName}_meta_r");
+            while (parent.childCount > 0) parent = parent.GetChild(0);
+            return parent;
+        }
+
         private static string ThumbBoneName(string fingerName, int depth)
         {
-            string name = $"finger_{fingerName}_0_r";
-            for (int i = 0; i < depth; i++)
+            var name = $"finger_{fingerName}_0_r";
+            for (var i = 0; i < depth; i++)
                 name += $"/finger_{fingerName}_{i + 1}_r";
             return name;
         }
 
-        private NomaiVR_Hand_Skeleton SetUpSkeleton(GameObject prefabObject, Transform prefabTransform)
+        private NomaiVRHandSkeleton SetUpSkeleton(GameObject prefabObject, Transform prefabTransform)
         {
-            var skeletonDriver = prefabObject.AddComponent<NomaiVR_Hand_Skeleton>();
+            var skeletonDriver = prefabObject.AddComponent<NomaiVRHandSkeleton>();
             InputSource = isLeft ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
             skeletonDriver.inputSource = InputSource;
-            skeletonDriver.rangeOfMotion = _rangeOfMotion;
+            skeletonDriver.rangeOfMotion = rangeOfMotion;
             skeletonDriver.skeletonRoot = prefabTransform.Find("SourceSkeleton/Root");
             skeletonDriver.updatePose = false;
             skeletonDriver.onlySetRotations = true;
@@ -130,7 +219,7 @@ namespace NomaiVR
             if (isLeft)
             {
                 //Flip X axis of skeleton and skinned meshes
-                for (int i = 0; i < prefabTransform.childCount; i++)
+                for (var i = 0; i < prefabTransform.childCount; i++)
                     prefabTransform.GetChild(i).localScale = new Vector3(-1, 1, 1);
 
                 //Flip back palm
@@ -174,7 +263,6 @@ namespace NomaiVR
                 ),
             };
 
-
             var skeletonPoser = skeletonDriver.fallbackPoser;
             skeletonPoser.skeletonMainPose = fallbackRelax;
             skeletonPoser.skeletonAdditionalPoses.Add(fallbackPoint);
@@ -209,8 +297,17 @@ namespace NomaiVR
             });
 
             //Setup Limit/Reach Poser
-            _reachPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
-            _reachPoser.skeletonMainPose = AssetLoader.ReachForPose;
+            reachPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
+            reachPoser.skeletonMainPose = AssetLoader.ReachForPose;
+
+            //Point poser for handheld buttons interaction
+            pointPoser = prefabObject.AddComponent<SteamVR_Skeleton_Poser>();
+            pointPoser.skeletonMainPose = AssetLoader.FallbackPointPose;
+
+            IndexTip = new GameObject("IndexTip").transform;
+            IndexTip.parent = FingerEnd(targetWristTransform, "index");
+            IndexTip.localPosition = Vector3.zero;
+            IndexTip.localRotation = Quaternion.identity;
 
             return skeletonDriver;
         }
@@ -218,54 +315,58 @@ namespace NomaiVR
         internal void OnSuitChanged()
         {
             //This is done to avoid clipping the gloves when the hand is closed
-            if(_handState == EHandState.Free)
+            if(handState == EHandState.Free)
                 UpdateSkeletonBlendAmmount();
-            if(_handState == EHandState.Reaching)
-                _skeleton.basePoseInfluence = ShouldRenderGloves() ? k_GloveSkeletonBlendAmmount : k_HandSkeletonBlendAmmount;
+            if(handState == EHandState.Reaching)
+                skeleton.BasePoseInfluence = ShouldRenderGloves() ? gloveSkeletonBlendAmmount : handSkeletonBlendAmmount;
+
+            IndexTip.localPosition = ShouldRenderGloves() ? gloveIndexTipOffset : Vector3.zero;
         }
 
         internal void UpdateSkeletonBlendAmmount()
         {
-            float blendAmmount = ShouldRenderGloves() ? k_GloveSkeletonBlendAmmount : k_HandSkeletonBlendAmmount;
-            _skeleton.BlendTo(blendAmmount, 0.1f);
-            _skeleton.ClearSnapshot();
+            var blendAmmount = ShouldRenderGloves() ? gloveSkeletonBlendAmmount : handSkeletonBlendAmmount;
+            skeleton.BlendTo(blendAmmount, 0.1f);
+            skeleton.ClearSnapshot();
         }
 
         internal void ResetSkeletonBlend()
         {
-            if (_skeleton == null)
+            if (skeleton == null)
                 return;
 
-            _skeleton.basePoseInfluence = 0;
-            _skeleton.BlendToSkeleton();
-            _skeleton.ResetTemporaryRangeOfMotion();
+            skeleton.BasePoseInfluence = 0;
+            skeleton.BlendToSkeleton();
+            skeleton.ResetTemporaryRangeOfMotion();
             UpdateSkeletonBlendAmmount();
 
-            _lastHandState = _handState;
-            _handState = EHandState.Free;
+            lastHandState = handState;
+            handState = EHandState.Free;
+
+            SkeletonBlendReset?.Invoke();
         }
 
         internal void BlendToReach(SteamVR_Skeleton_Poser overrideReachPoser = null, float time = 0.1f)
         {
-            _skeleton.BlendToPoser(overrideReachPoser ?? _reachPoser, time);
-            _skeleton.basePoseInfluence = ShouldRenderGloves() ? k_GloveSkeletonBlendAmmount : k_HandSkeletonBlendAmmount;
-            _lastHandState = _handState;
-            _handState = EHandState.Reaching;
+            skeleton.BlendToPoser(overrideReachPoser ?? reachPoser, time);
+            skeleton.BasePoseInfluence = ShouldRenderGloves() ? gloveSkeletonBlendAmmount : handSkeletonBlendAmmount;
+            lastHandState = handState;
+            handState = EHandState.Reaching;
         }
 
         internal void BlendToPoser(SteamVR_Skeleton_Poser poser, float time = 0.1f)
         {
-            _skeleton.basePoseInfluence = 0;
-            _lastHandState = _handState;
-            _handState = EHandState.Holding;
-            _skeleton.BlendToPoser(poser, time);
+            skeleton.BasePoseInfluence = 0;
+            lastHandState = handState;
+            handState = EHandState.Holding;
+            skeleton.BlendToPoser(poser, time);
         }
 
         internal void NotifyReachable(bool canReach, SteamVR_Skeleton_Poser poser = null)
         {
-            if (_handState == EHandState.Holding)
+            if (handState == EHandState.Holding)
             {
-                _lastHandState = canReach ? EHandState.Reaching : EHandState.Free;
+                lastHandState = canReach ? EHandState.Reaching : EHandState.Free;
                 return;
             }
 
@@ -282,7 +383,7 @@ namespace NomaiVR
 
         internal void NotifyDetachedFrom(SteamVR_Skeleton_Poser poser)
         {
-            if(_lastHandState != EHandState.Reaching)
+            if(lastHandState != EHandState.Reaching)
                 ResetSkeletonBlend();
             else
                 BlendToReach();
@@ -290,19 +391,31 @@ namespace NomaiVR
 
         private void SetUpVrPose()
         {
-            gameObject.SetActive(false);
+            var poseObject = new GameObject("SteamVrBehavourPose");
+            poseObject.transform.SetParent(transform.parent, false);
+            followPose = gameObject.AddComponent<FollowTarget>();
+            followPose.Target = poseObject.transform;
+            followPose.PositionSmoothTime = 0.05f;
+            followPose.RotationSmoothTime = 0.05f;
+            
+            poseObject.SetActive(false);
 
-            var poseDriver = transform.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            var poseDriver = poseObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseDriver.poseAction = pose;
 
-            gameObject.SetActive(true);
+            poseObject.SetActive(true);
         }
 
         public void SetLimitRangeOfMotion(bool isShown)
         {
-            _rangeOfMotion = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
-            _skeleton?.SetRangeOfMotion(_rangeOfMotion); // Back to main menu we have a nullreference here
+            rangeOfMotion = isShown ? EVRSkeletalMotionRange.WithController : EVRSkeletalMotionRange.WithoutController;
+            skeleton?.SetRangeOfMotion(rangeOfMotion); // Back to main menu we have a nullreference here
             ResetSkeletonBlend();
+        }
+
+        public void NotifyPointable(float distance)
+        {
+            if (distance < closestPointable) closestPointable = distance;
         }
 
         private bool ShouldRenderGloves()

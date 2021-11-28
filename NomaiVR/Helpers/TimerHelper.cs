@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class TimerHelper
     {

@@ -1,296 +1,201 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using NomaiVR.Assets;
+using NomaiVR.Helpers;
+using NomaiVR.Input;
+using NomaiVR.Input.ActionInputs;
 using UnityEngine;
+using Valve.VR;
 
-namespace NomaiVR
+namespace NomaiVR.UI
 {
     internal class InputPrompts : NomaiVRModule<InputPrompts.Behaviour, InputPrompts.Behaviour.Patch>
     {
-        protected override bool IsPersistent => false;
-        protected override OWScene[] Scenes => PlayableScenes;
+        public static Behaviour Instance { get; internal set; }
+        protected override bool IsPersistent => true;
+        protected override OWScene[] Scenes => AllScenes;
+
+        private static PromptManager Manager => Locator.GetPromptManager();
+
+        public enum ActiveVRPlatform
+        {
+            Oculus, //G2 and oculus style controllers should be bound here
+            Index,
+            Vive,
+            Wmr,
+            Generic
+        }
 
         public class Behaviour : MonoBehaviour
         {
-            private static readonly List<ScreenPrompt> s_toolUnequipPrompts = new List<ScreenPrompt>(2);
-            private static readonly HashSet<ScreenPrompt> s_vrActionPrompts = new HashSet<ScreenPrompt>();
-            private static readonly Dictionary<VRActionInput, HashSet<ScreenPrompt>> s_vrActionPromptDependencies = new Dictionary<VRActionInput, HashSet<ScreenPrompt>>();
-            private static readonly Dictionary<ScreenPrompt, string> s_vrActionProptLastText = new Dictionary<ScreenPrompt, string>();
+            private const string baseAssetPath = "Assets/VRBindings/Texture2D";
 
-            private static PromptManager Manager => Locator.GetPromptManager();
+            public ActiveVRPlatform Platform { get; private set; }
+            private Dictionary<string, Texture2D> textureCache;
+            private Dictionary<ISteamVR_Action, string> pathCache;
 
-            internal void LateUpdate()
+            public void Awake()
             {
-                var isInShip = ToolHelper.Swapper.GetToolGroup() == ToolGroup.Ship;
-                if (!isInShip && !InputHelper.IsStationaryToolMode())
+                Instance = this;
+                Platform = ActiveVRPlatform.Generic;
+
+                textureCache = new Dictionary<string, Texture2D>();
+                pathCache = new Dictionary<ISteamVR_Action, string>();
+                foreach (var texturePath in AssetLoader.VRBindingTextures.GetAllAssetNames())
                 {
-                    //TODO: Maybe a better way than this?
-                    foreach (var prompt in s_toolUnequipPrompts)
-                    {
-                        prompt.SetVisibility(false);
-                    }
+                    var assetPath = texturePath.Substring(0, texturePath.LastIndexOf('.'));
+                    textureCache.Add(assetPath.ToLower(), AssetLoader.VRBindingTextures.LoadAsset<Texture2D>(texturePath));
+                }
+                textureCache.Add("empty", new Texture2D(0, 0));
+
+                RegisterToControllerChanges();
+            }
+
+            private void RegisterToControllerChanges()
+            {
+                Logs.Write($"Registering for controller binding changes");
+                SteamVR_Actions._default.Grip.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => ActiveDeviceChanged(fromAction), SteamVR_Input_Sources.Any);
+                SteamVR_Actions.tools.Use.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => InvalidateButtonImages(), SteamVR_Input_Sources.Any);
+                ActiveDeviceChanged(SteamVR_Actions._default.Grip);
+            }
+
+            private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)
+            {
+                var activeDevice = SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ControllerType_String, fromAction.trackedDeviceIndex);
+                Logs.Write($"#### Got active device: {activeDevice}");
+
+                var currentPlatform = Platform;
+                switch(activeDevice)
+                {
+                    case "oculus_touch":
+                        Platform = ActiveVRPlatform.Oculus;
+                        break;
+                    case "vive_controller":
+                        Platform = ActiveVRPlatform.Vive;
+                        break;
+                    case "knuckles":
+                        Platform = ActiveVRPlatform.Index;
+                        break;
+                    case "holographic_controller":
+                        Platform = ActiveVRPlatform.Wmr;
+                        break;
+                    case "<unknown>":
+                        return;
+                    default:
+                        Platform = ActiveVRPlatform.Generic;
+                        break;
+                }
+
+                Logs.Write($"Controller platform: {Platform}");
+                if (currentPlatform != Platform)
+                {
+                    pathCache.Clear(); //Invalidate learned paths
+                    InvalidateButtonImages();
                 }
             }
 
-            internal void OnDestroy()
+            private static void InvalidateButtonImages()
             {
-                s_toolUnequipPrompts.Clear();
-                s_vrActionPrompts.Clear();
-                s_vrActionPromptDependencies.Clear();
-                s_vrActionProptLastText.Clear();
+                if (Manager == null) return;
+                Manager.OnButtonImagesChanged();
             }
 
-            public static void UpdatePrompts(VRActionInput[] actionsToUpdate)
+            public string GetCachedPartName(ISteamVR_Action action)
             {
-                foreach(var action in actionsToUpdate)
-                {
-                    if(s_vrActionPromptDependencies.ContainsKey(action))
-                    {
-                        foreach (ScreenPrompt prompt in s_vrActionPromptDependencies[action])
-                            prompt.SetText(s_vrActionProptLastText[prompt]);
-                    }
-                }
+                pathCache.TryGetValue(action, out var path);
+                return path;
+            }
+
+            public void SetCachedPartName(ISteamVR_Action action, string path) => pathCache[action] = path;
+
+            public Texture2D GetTexture(string path)
+            {
+                textureCache.TryGetValue(path.ToLower(), out var outTexture);
+                return outTexture;
             }
 
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ProbePromptController>("LateInitialize", nameof(RemoveProbePrompts));
-                    Postfix<ProbePromptController>("Awake", nameof(ChangeProbePrompts));
+                    Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.GetUITextures), nameof(GetVruiTextures));
+                    Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.GetUITextures), nameof(GetVruiTextures));
+                    Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.GetUITextures), nameof(GetVruiTextures));
+                    Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(MakePromptsDrawOnTop));
+                }
 
-                    Postfix<ShipPromptController>("LateInitialize", nameof(RemoveShipPrompts));
-                    Postfix<ShipPromptController>("Awake", nameof(ChangeShipPrompts));
+                public static bool GetVruiTextures(bool forceRefresh, AbstractCommands __instance, ref List<Texture2D> __result)
+                {
+                    __result = __instance.textureList;
 
-                    Postfix<NomaiTranslatorProp>("LateInitialize", nameof(RemoveTranslatorPrompts));
-
-                    Postfix<SignalscopePromptController>("LateInitialize", nameof(RemoveSignalscopePrompts));
-                    Postfix<SignalscopePromptController>("Awake", nameof(ChangeSignalscopePrompts));
-
-                    Postfix<PlayerSpawner>("Awake", nameof(RemoveJoystickPrompts));
-                    Postfix<RoastingStickController>("LateInitialize", nameof(RemoveRoastingStickPrompts));
-                    Postfix<ToolModeUI>("LateInitialize", nameof(RemoveToolModePrompts));
-                    Postfix<ScreenPrompt>("SetVisibility", nameof(PostScreenPromptVisibility));
-
-                    Prefix<ScreenPrompt>("Init", nameof(PrePromptInit));
-                    Prefix<ScreenPrompt>("SetText", nameof(PrePromptSetText));
-                    Postfix<ScreenPromptElement>("BuildTwoCommandScreenPrompt", nameof(PostBuildTwoCommandPromptElement));
-
-                    // Replace Icons with empty version
-                    var getButtonTextureMethod = typeof(ButtonPromptLibrary).GetMethod("GetButtonTexture", new[] { typeof(JoystickButton) });
-                    Postfix(getButtonTextureMethod, nameof(ReturnEmptyTexture));
-                    var getAxisTextureMethods = typeof(ButtonPromptLibrary).GetMethods().Where(method => method.Name == "GetAxisTexture");
-                    foreach (var method in getAxisTextureMethods)
+                    if (__instance.textureList.Count > 0 && !forceRefresh)
                     {
-                        Postfix(method, nameof(ReturnEmptyTexture));
+                        //Cache textures
+                        return false;
                     }
 
-                    // Prevent probe launcher from moving the prompts around.
-                    Empty<PromptManager>("OnProbeSnapshot");
-                    Empty<PromptManager>("OnProbeSnapshotRemoved");
-                    Empty<PromptManager>("OnProbeLauncherEquipped");
-                    Empty<PromptManager>("OnProbeLauncherUnequipped");
-                    Empty<ScreenPromptElement>("BuildInCommandImage");
-                }
+                    __instance.textureList.Clear();
 
-                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
-                private static Texture2D ReturnEmptyTexture(Texture2D __result)
-                {
-                    return AssetLoader.EmptyTexture;
-                }
-
-                [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
-                private static List<string> PostBuildTwoCommandPromptElement(List<string> __result, string promptText)
-                {
-                    var newText = promptText.Replace("<CMD1>", "").Replace("<CMD2>", "");
-                    return new List<string> { newText };
-                }
-
-                private static VRActionInput GetActionInputFromCommand(InputCommand command)
-                {
-                    if (command is SingleAxisCommand singleAxisCommand)
+                    var vrInputAction = InputMap.GetActionInput(__instance.CommandType);
+                    if (vrInputAction == null)
                     {
-                        var gamepadBinding = singleAxisCommand.GetGamepadBinding();
-                        if (gamepadBinding != null)
+                        Logs.Write($"No action currently bound for texture {__instance.CommandType}");
+                        return true;
+                    }
+
+                    if(vrInputAction is EmptyActionInput emptyInput
+                        && !string.IsNullOrEmpty(emptyInput.TexturePath))
+                    {
+                        var emptyActionTexture = Instance.GetTexture($"{baseAssetPath}/{emptyInput.TexturePath}");
+                        if (emptyActionTexture != null) __instance.textureList.Add(emptyActionTexture);
+                        return __instance.textureList.Count == 0;
+                    }
+
+                    var steamVrAction = vrInputAction.Action;
+                    if (steamVrAction == null)
+                    {
+                        __instance.textureList.Add(Instance.GetTexture("empty"));
+                        return __instance.textureList.Count == 0;
+                    }
+
+                    var name = "";
+                    if (vrInputAction.Active)
+                    {
+                        //Solve for hand + controller part
+                        var activeInputDevice = vrInputAction.ActiveSource;
+                        var hand = activeInputDevice == SteamVR_Input_Sources.RightHand
+                            ? "Right"
+                            : "Left";
+                        var partName = steamVrAction.GetRenderModelComponentName(activeInputDevice);
+                        name = $"{hand}/{partName}";
+
+                        //Special actions modifiers
+                        if (vrInputAction is Vector2ActionInput vectorAction &&
+                            !string.IsNullOrEmpty(vectorAction.TextureModifier))
                         {
-                            var button = gamepadBinding.gamepadButtonPos;
-                            if (ControllerInput.buttonActions.ContainsKey(button))
-                                return ControllerInput.buttonActions[button];
-
-                            var axis = gamepadBinding.axisID;
-                            if (ControllerInput.axisActions.ContainsKey(axis))
-                                return ControllerInput.axisActions[axis];
+                            name += "_" + vectorAction.TextureModifier;
                         }
-                    }
-                    else if (command.GetType() == typeof(DoubleAxisCommand))
-                    {
-                        var doubleAxisCommand = (DoubleAxisCommand)command;
-                        var axis = doubleAxisCommand.GetGamepadAxis();
-                        if (ControllerInput.axisActions.ContainsKey(axis))
-                            return ControllerInput.axisActions[axis];
-                    }
-                    return null;
-                }
-
-                private static void RegisterVRActionPrompt(ScreenPrompt screenPrompt)
-                {
-                    if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
-                    {
-                        return;
-                    }
-
-                    foreach (var command in screenPrompt._commandList)
-                    {
-                        var actionInput = GetActionInputFromCommand(command);
-                        //Keep track of prompts tied to VRActionInputs
-                        if (actionInput != null)
+                        else if (vrInputAction is BooleanActionInput booleanAction &&
+                                booleanAction.Clickable &&
+                                (partName == "trackpad" || partName == "thumbstick"))
                         {
-                            if (!s_vrActionPrompts.Contains(screenPrompt)) s_vrActionPrompts.Add(screenPrompt);
-
-                            if (!s_vrActionPromptDependencies.ContainsKey(actionInput))
-                                s_vrActionPromptDependencies.Add(actionInput, new HashSet<ScreenPrompt>());
-                            s_vrActionPromptDependencies[actionInput].Add(screenPrompt);
+                            //This would probably be the place to try and solve for click directions
+                            name += "_click";
                         }
+
+                        Instance.SetCachedPartName(steamVrAction, name);
                     }
+                    if (string.IsNullOrEmpty(name)) name = Instance.GetCachedPartName(steamVrAction);
+
+                    Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
+                    
+                    var texture = Instance.GetTexture($"{baseAssetPath}/{Instance.Platform}/{name}");
+                    if(texture != null) __instance.textureList.Add(texture);
+                    return __instance.textureList.Count == 0;
                 }
-
-                private static void AddTextIfNotExisting(string text, HashSet<string> actionTexts, VRActionInput actionInput, ScreenPrompt screenPrompt)
+                
+                private static void MakePromptsDrawOnTop(ScreenPromptElement __instance)
                 {
-                    var actionInputTexts = actionInput.GetText();
-                    foreach (var inputText in actionInputTexts)
-                    {
-                        if (!text.Contains(inputText))
-                        {
-                            actionTexts.Add(inputText);
-                        }
-                    }
-                }
-
-                private static void AddVRMappingToPrompt(ref string text, ScreenPrompt screenPrompt)
-                {
-                    if (ControllerInput.buttonActions == null || ControllerInput.axisActions == null)
-                    {
-                        return;
-                    }
-
-                    var actionTexts = new HashSet<string>();
-
-                    foreach (var command in screenPrompt._commandList)
-                    {
-                        var actionInput = GetActionInputFromCommand(command);
-                        if (actionInput != null) AddTextIfNotExisting(text, actionTexts, actionInput, screenPrompt);
-                    }
-
-                    actionTexts.Reverse();
-                    var cleanOriginalText = text.Replace("+", "");
-                    var actionText = string.Join(" + ", actionTexts.ToArray());
-                    text = $"{actionText} {cleanOriginalText}";
-                }
-
-                private static void PrePromptSetText(ref string text, ScreenPrompt __instance)
-                {
-                    if (s_vrActionPrompts.Contains(__instance))
-                        s_vrActionProptLastText[__instance] = text;
-
-                    AddVRMappingToPrompt(ref text, __instance); //Only changes the string we pass to the PromptManager
-                }
-
-                private static void PrePromptInit(ref string prompt, ScreenPrompt __instance)
-                {
-                    RegisterVRActionPrompt(__instance);
-
-                    if (s_vrActionPrompts.Contains(__instance))
-                        s_vrActionProptLastText[__instance] = prompt;
-
-                    AddVRMappingToPrompt(ref prompt, __instance);
-                }
-
-                private static void PostScreenPromptVisibility(bool isVisible, ScreenPrompt __instance)
-                {
-                    if (isVisible)
-                    {
-                        MaterialHelper.MakeGraphicChildrenDrawOnTop(Locator.GetPromptManager().gameObject);
-                    }
-                }
-
-                private static void RemoveJoystickPrompts(ref bool ____lookPromptAdded)
-                {
-                    ____lookPromptAdded = true;
-                }
-
-                private static void RemoveRoastingStickPrompts(
-                    ScreenPrompt ____tiltPrompt,
-                    ScreenPrompt ____mallowPrompt
-                )
-                {
-                    Manager.RemoveScreenPrompt(____tiltPrompt);
-                    Manager.RemoveScreenPrompt(____mallowPrompt);
-                }
-
-                private static void RemoveToolModePrompts(
-                    ScreenPrompt ____freeLookPrompt,
-                    ScreenPrompt ____probePrompt,
-                    ScreenPrompt ____signalscopePrompt,
-                    ScreenPrompt ____flashlightPrompt,
-                    ScreenPrompt ____centerFlashlightPrompt,
-                    ScreenPrompt ____centerTranslatePrompt,
-                    ScreenPrompt ____centerProbePrompt,
-                    ScreenPrompt ____centerSignalscopePrompt
-                )
-                {
-                    Manager.RemoveScreenPrompt(____freeLookPrompt);
-                    Manager.RemoveScreenPrompt(____probePrompt);
-                    Manager.RemoveScreenPrompt(____signalscopePrompt);
-                    Manager.RemoveScreenPrompt(____flashlightPrompt);
-                    Manager.RemoveScreenPrompt(____centerFlashlightPrompt);
-                    Manager.RemoveScreenPrompt(____centerTranslatePrompt);
-                    Manager.RemoveScreenPrompt(____centerProbePrompt);
-                    Manager.RemoveScreenPrompt(____centerSignalscopePrompt);
-                }
-
-                private static void ChangeShipPrompts(ref ScreenPrompt ____exitLandingCamPrompt)
-                {
-                    ____exitLandingCamPrompt = new ScreenPrompt(InputLibrary.cancel, ____exitLandingCamPrompt.GetText());
-                }
-
-                private static void RemoveProbePrompts(ScreenPrompt ____unequipPrompt)
-                {
-                    s_toolUnequipPrompts.Add(____unequipPrompt);
-                }
-
-                private static void ChangeProbePrompts(ref ScreenPrompt ____retrievePrompt)
-                {
-                    ____retrievePrompt = new ScreenPrompt(InputLibrary.probeRetrieve, UITextLibrary.GetString(UITextType.ProbeRetrievePrompt) + "   <CMD>");
-                }
-
-
-                private static void ChangeSignalscopePrompts(ref ScreenPrompt ____zoomModePrompt)
-                {
-                    ____zoomModePrompt = new ScreenPrompt(InputLibrary.scopeView, UITextLibrary.GetString(UITextType.SignalscopeZoomInPrompt) + "   <CMD>");
-                }
-
-                private static void RemoveSignalscopePrompts(
-                    ScreenPrompt ____unequipPrompt,
-                    ScreenPrompt ____zoomLevelPrompt
-                )
-                {
-                    s_toolUnequipPrompts.Add(____unequipPrompt);
-                    Manager.RemoveScreenPrompt(____zoomLevelPrompt);
-                }
-
-                private static void RemoveShipPrompts(
-                    ScreenPrompt ____freeLookPrompt,
-                    ScreenPrompt ____landingModePrompt,
-                    ScreenPrompt ____liftoffCamera
-                )
-                {
-                    Manager.RemoveScreenPrompt(____freeLookPrompt);
-                    Manager.RemoveScreenPrompt(____landingModePrompt);
-                    Manager.RemoveScreenPrompt(____liftoffCamera);
-                }
-
-                private static void RemoveTranslatorPrompts(ScreenPrompt ____unequipPrompt)
-                {
-                    Manager.RemoveScreenPrompt(____unequipPrompt);
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(__instance.gameObject);
                 }
             }
         }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Helpers
 {
     public static class LayerHelper
     {
@@ -9,7 +9,7 @@ namespace NomaiVR
         {
             var layer = LayerMask.NameToLayer(layerName);
             var ret = new List<GameObject>();
-            var all = GameObject.FindObjectsOfType<GameObject>();
+            var all = Object.FindObjectsOfType<GameObject>();
 
             foreach (var t in all)
             {

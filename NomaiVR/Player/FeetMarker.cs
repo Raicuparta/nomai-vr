@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Assets;
+using NomaiVR.Helpers;
+using NomaiVR.ModConfig;
+using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Player
 {
     internal class FeetMarker : NomaiVRModule<FeetMarker.Behaviour, NomaiVRModule.EmptyPatch>
     {
@@ -9,7 +12,7 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private SpriteRenderer _renderer;
+            private SpriteRenderer renderer;
 
             internal void Start()
             {
@@ -20,8 +23,8 @@ namespace NomaiVR
                 marker.localScale *= 0.75f;
                 LayerHelper.ChangeLayerRecursive(marker.gameObject, "VisibleToPlayer");
 
-                _renderer = marker.GetComponentInChildren<SpriteRenderer>();
-                _renderer.material = MaterialHelper.GetOverlayMaterial();
+                renderer = marker.GetComponentInChildren<SpriteRenderer>();
+                renderer.material = MaterialHelper.GetOverlayMaterial();
 
                 SetFeetMarkerVisibility();
 
@@ -33,9 +36,9 @@ namespace NomaiVR
                 ModSettings.OnConfigChange -= SetFeetMarkerVisibility;
             }
 
-            void SetFeetMarkerVisibility()
+            private void SetFeetMarkerVisibility()
             {
-                _renderer.enabled = ModSettings.EnableFeetMarker;
+                renderer.enabled = ModSettings.EnableFeetMarker;
             }
         }
     }

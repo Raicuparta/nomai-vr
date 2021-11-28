@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.ReusableBehaviours
 {
     public class PersistObject : MonoBehaviour
     {

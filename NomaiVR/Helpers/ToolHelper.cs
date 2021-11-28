@@ -1,4 +1,4 @@
-﻿namespace NomaiVR
+﻿namespace NomaiVR.Helpers
 {
     public static class ToolHelper
     {
@@ -26,7 +26,22 @@
 
         public static bool IsUsingNoTools()
         {
+            if (Swapper == null)
+            {
+                return true;
+            }
+
             return Swapper.IsInToolMode(ToolMode.None) || Swapper.IsInToolMode(ToolMode.Item);
+        }
+
+        public static bool IsInToolMode(ToolMode mode, ToolGroup group)
+        {
+            return Swapper && Swapper.IsInToolMode(mode, group);
+        }
+
+        public static bool IsInToolMode(ToolMode mode)
+        {
+            return Swapper && Swapper.IsInToolMode(mode);
         }
     }
 }

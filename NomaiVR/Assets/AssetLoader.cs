@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-using Valve.VR;
 using Valve.Newtonsoft.Json;
-using System.Collections.Generic;
+using Valve.VR;
 
-namespace NomaiVR
+namespace NomaiVR.Assets
 {
     public class AssetLoader
     {
@@ -22,6 +22,13 @@ namespace NomaiVR
         public static GameObject ScopeLensPrefab;
         public static GameObject HelmetPrefab;
         public static GameObject LookArrowPrefab;
+        public static GameObject AutopilotButtonPrefab;
+        public static GameObject ProbeScreenButtonsPrefab;
+        public static GameObject SignalscopeScreenButtonsPrefab;
+        public static GameObject TranslatorHandheldButtonsPrefab;
+        public static GameObject ProbeLauncherHandheldScreenPrefab;
+        public static GameObject SignalscopeHandheldButtonsPrefab;
+        public static AssetBundle VRBindingTextures;
         public static Sprite SplashSprite;
         public static Texture2D EmptyTexture;
 
@@ -30,6 +37,9 @@ namespace NomaiVR
             EmptyTexture = new Texture2D(1, 1);
             EmptyTexture.SetPixel(0, 0, Color.clear);
             EmptyTexture.Apply();
+
+            VRBindingTextures = LoadBundle("vrbindings-textures");
+            ShaderLoader.LoadBundle(LoadBundle("steamvr-shaders"));
 
             var postCreditsBundle = LoadBundle("cinema-camera");
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");
@@ -50,6 +60,18 @@ namespace NomaiVR
             var lookArrowBundle = LoadBundle("look-arrow");
             LookArrowPrefab = LoadAsset<GameObject>(lookArrowBundle, "lookarrow.prefab");
 
+            var autopilotBundle = LoadBundle("autopilot-button");
+            AutopilotButtonPrefab = LoadAsset<GameObject>(autopilotBundle, "models/tools/autopilot/autopilot_button.prefab");
+
+            var cockpitButtonsBundle = LoadBundle("cockpit-buttons");
+            ProbeScreenButtonsPrefab = LoadAsset<GameObject>(cockpitButtonsBundle, "shipcockpit/probescreenbuttons/probescreenbuttons.prefab");
+            SignalscopeScreenButtonsPrefab = LoadAsset<GameObject>(cockpitButtonsBundle, "shipcockpit/signalscopescreenbuttons.prefab");
+
+            var handheldButtonsBundle = LoadBundle("handheld-buttons");
+            TranslatorHandheldButtonsPrefab = LoadAsset<GameObject>(handheldButtonsBundle, "handheldtools/translatorhandheldbuttons.prefab");
+            ProbeLauncherHandheldScreenPrefab = LoadAsset<GameObject>(handheldButtonsBundle, "handheldtools/probelauncherscreen.prefab");
+            SignalscopeHandheldButtonsPrefab = LoadAsset<GameObject>(handheldButtonsBundle, "handheldtools/signalscopebuttons.prefab");
+
             var splashBundle = LoadBundle("splash-screen");
             SplashSprite = LoadAsset<Sprite>(splashBundle, "splash.png");
 
@@ -65,13 +87,13 @@ namespace NomaiVR
         private void LoadPoses()
         {
             Poses = new Dictionary<string, SteamVR_Skeleton_Pose>();
-            string posesPath = NomaiVR.Helper.Manifest.ModFolderPath + "poses";
-            string[] fileNames = Directory.GetFiles(posesPath);
+            var posesPath = NomaiVR.ModFolderPath + "/poses";
+            var fileNames = Directory.GetFiles(posesPath);
 
             foreach(var fileName in fileNames)
             {
                 var path = Path.Combine(posesPath, fileName);
-                FileInfo fileInfo = new FileInfo(path);
+                var fileInfo = new FileInfo(path);
 
                 if (fileInfo.Extension == ".json")
                 {
@@ -87,7 +109,7 @@ namespace NomaiVR
 
         private T LoadModAssetFromJson<T>(string modAssetPath)
         {
-            string fullPath = NomaiVR.Helper.Manifest.ModFolderPath + modAssetPath;
+            var fullPath = NomaiVR.ModFolderPath + modAssetPath;
             if (!File.Exists(fullPath))
                 return default(T);
 
@@ -102,14 +124,23 @@ namespace NomaiVR
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
         }
 
-        private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : UnityEngine.Object
+        private T LoadAsset<T>(AssetBundle bundle, string prefabName) where T : Object
         {
             return bundle.LoadAsset<T>($"assets/{prefabName}");
         }
 
-        private AssetBundle LoadBundle(string fileName)
+        private static AssetBundle LoadBundle(string assetName)
         {
-            return NomaiVR.Helper.Assets.LoadBundle($"assets/{fileName}");
+            var myLoadedAssetBundle =
+                AssetBundle.LoadFromFile(
+                    $"{NomaiVR.ModFolderPath}/Assets/{assetName}");
+            if (myLoadedAssetBundle == null)
+            {
+                Logs.WriteError($"Failed to load AssetBundle {assetName}");
+                return null;
+            }
+
+            return myLoadedAssetBundle;
         }
     }
 }

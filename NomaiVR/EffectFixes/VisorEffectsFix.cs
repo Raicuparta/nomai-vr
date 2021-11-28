@@ -1,25 +1,21 @@
-﻿using OWML.Utils;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class VisorEffectsFix : NomaiVRModule<VisorEffectsFix.Behaviour, VisorEffectsFix.Patch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
-        public const float WATER_EXIT_COOLDOWN = 8.0f;
-        public static bool s_canShowCameraWaterEffect = true;
+        public const float WaterExitCooldown = 8.0f;
+        public static bool CanShowCameraWaterEffect = true;
 
         public class Behaviour : MonoBehaviour
         {
-            private IEnumerator _cameraWaterExitEffectCooldown;
+            private IEnumerator cameraWaterExitEffectCooldown;
 
             internal void Start()
             {
-                // Disable underwater distortion.
-                FindObjectOfType<UnderwaterEffectBubbleController>().gameObject.SetActive(false);
-
                 // Disable water entering and exiting effect.
                 var visorEffects = FindObjectOfType<VisorEffectController>();
                 visorEffects._waterClearLength = 1f;
@@ -43,16 +39,16 @@ namespace NomaiVR
 
             internal void OnCameraExitWater()
             {
-                if (_cameraWaterExitEffectCooldown != null)
-                    StopCoroutine(_cameraWaterExitEffectCooldown);
-                StartCoroutine(_cameraWaterExitEffectCooldown = WaitCameraWaterEffectCooldown());
+                if (cameraWaterExitEffectCooldown != null)
+                    StopCoroutine(cameraWaterExitEffectCooldown);
+                StartCoroutine(cameraWaterExitEffectCooldown = WaitCameraWaterEffectCooldown());
             }
 
             internal IEnumerator WaitCameraWaterEffectCooldown()
             {
-                yield return new WaitForSeconds(WATER_EXIT_COOLDOWN);
-                _cameraWaterExitEffectCooldown = null;
-                s_canShowCameraWaterEffect = true;
+                yield return new WaitForSeconds(WaterExitCooldown);
+                cameraWaterExitEffectCooldown = null;
+                CanShowCameraWaterEffect = true;
             }
         }
 
@@ -60,14 +56,24 @@ namespace NomaiVR
         {
             public override void ApplyPatches()
             {
-                Postfix<VisorEffectController>("OnCameraExitWater", nameof(PostOnCameraExitWater));
+                Postfix<VisorEffectController>(nameof(VisorEffectController.OnCameraExitWater), nameof(PostOnCameraExitWater));
+                Postfix<UnderwaterEffectBubbleController>(nameof(UnderwaterEffectBubbleController.LateUpdate), nameof(DisableUnderwaterDistorsion));
             }
 
             public static void PostOnCameraExitWater(VisorEffectController __instance)
             {
-                if (!s_canShowCameraWaterEffect)
+                if (!CanShowCameraWaterEffect)
                     __instance._waterClearTimer = __instance._waterClearLength;
-                s_canShowCameraWaterEffect = false;
+                CanShowCameraWaterEffect = false;
+            }
+
+            public static void DisableUnderwaterDistorsion(UnderwaterEffectBubbleController __instance)
+            {
+                if (__instance._fluidDetector != null)
+                {
+                    __instance._matPropBlock.SetFloat(__instance._propID_DistortMag, 0);
+                    __instance._effectBubbleRenderer.SetPropertyBlock(__instance._matPropBlock);
+                }
             }
         }
     }

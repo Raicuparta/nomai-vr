@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Helpers;
+using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class CameraMaskFix : NomaiVRModule<CameraMaskFix.Behaviour, CameraMaskFix.Behaviour.Patch>
     {
@@ -10,16 +11,16 @@ namespace NomaiVR
         public class Behaviour : MonoBehaviour
         {
             public static int DefaultCullingMask;
-            private OWCamera _camera;
-            private static float _farClipPlane = -1;
-            private static int _prePauseCullingMask = -1;
-            private static int _preSleepCullingMask = -1;
-            private static Behaviour _instance;
-            private bool _isPaused;
+            private OWCamera camera;
+            private static float farClipPlane = -1;
+            private static int prePauseCullingMask = -1;
+            private static int preSleepCullingMask = -1;
+            private static Behaviour instance;
+            private bool isPaused;
 
             internal void Start()
             {
-                _instance = this;
+                instance = this;
 
                 SetUpCamera();
 
@@ -36,20 +37,20 @@ namespace NomaiVR
 
             private void SetUpCamera()
             {
-                _camera = Locator.GetPlayerCamera();
-                _camera.postProcessingSettings.chromaticAberrationEnabled = false;
-                _camera.postProcessingSettings.vignetteEnabled = false;
-                _camera.postProcessingSettings.bloom.intensity = 0.15f;
-                DefaultCullingMask = _camera.cullingMask;
+                camera = Locator.GetPlayerCamera();
+                camera.postProcessingSettings.chromaticAberrationEnabled = false;
+                camera.postProcessingSettings.vignetteEnabled = false;
+                camera.postProcessingSettings.bloom.intensity = 0.15f;
+                DefaultCullingMask = camera.cullingMask;
             }
 
             private void UpdatePauseMask()
             {
-                if (InputHelper.IsUIInteractionMode() && !_isPaused)
+                if (InputHelper.IsUIInteractionMode() && !isPaused)
                 {
                     SetUpPauseMask();
                 }
-                if (!InputHelper.IsUIInteractionMode() && _isPaused)
+                if (!InputHelper.IsUIInteractionMode() && isPaused)
                 {
                     ResetPauseMask();
                 }
@@ -57,26 +58,32 @@ namespace NomaiVR
 
             private void SetUpPauseMask()
             {
-                _isPaused = true;
-                _prePauseCullingMask = Camera.main.cullingMask;
+                isPaused = true;
+                prePauseCullingMask = Camera.main.cullingMask;
                 Camera.main.cullingMask = LayerMask.GetMask("UI");
             }
 
             private void ResetPauseMask()
             {
-                _isPaused = false;
-                Camera.main.cullingMask = _prePauseCullingMask;
+                isPaused = false;
+                Camera.main.cullingMask = prePauseCullingMask;
             }
 
-            private void CloseEyesDelayed()
+            private void CloseEyesDelayed(float animDuration)
             {
-                Invoke(nameof(CloseEyes), 3);
+                Invoke(nameof(CloseEyes), animDuration);
             }
 
             private void CloseEyes()
             {
-                _preSleepCullingMask = Camera.main.cullingMask;
-                _farClipPlane = Camera.main.farClipPlane;
+                CameraHelper.SetFieldOfViewFactor(1, true);
+                //We don't want to save the mask when closing the eyes in the dream world
+                if (Locator.GetDreamWorldController() == null ||
+                    (!Locator.GetDreamWorldController().IsInDream() && !Locator.GetDreamWorldController().IsExitingDream()))
+                {
+                    preSleepCullingMask = Camera.main.cullingMask;
+                    farClipPlane = Camera.main.farClipPlane;
+                }
                 Camera.main.cullingMask = LayerMask.GetMask("VisibleToPlayer", "UI");
                 Camera.main.farClipPlane = 5;
                 Locator.GetPlayerCamera().postProcessingSettings.eyeMaskEnabled = false;
@@ -84,22 +91,22 @@ namespace NomaiVR
 
             private void OpenEyes()
             {
-                Camera.main.cullingMask = _preSleepCullingMask;
-                Camera.main.farClipPlane = _farClipPlane;
+                Camera.main.cullingMask = preSleepCullingMask;
+                Camera.main.farClipPlane = farClipPlane;
             }
 
             public class Patch : NomaiVRPatch
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<Campfire>("StartFastForwarding", nameof(PostStartFastForwarding));
+                    Postfix<Campfire>(nameof(Campfire.StartFastForwarding), nameof(PostStartFastForwarding));
 
                     var openEyesMethod =
                         typeof(PlayerCameraEffectController)
                         .GetMethod("OpenEyes", new[] { typeof(float), typeof(AnimationCurve) });
                     Postfix(openEyesMethod, nameof(PostOpenEyes));
 
-                    Postfix<PlayerCameraEffectController>("CloseEyes", nameof(PostCloseEyes));
+                    Postfix<PlayerCameraEffectController>(nameof(PlayerCameraEffectController.CloseEyes), nameof(PostCloseEyes));
                 }
 
                 private static void PostStartFastForwarding()
@@ -109,12 +116,12 @@ namespace NomaiVR
 
                 private static void PostOpenEyes()
                 {
-                    _instance.OpenEyes();
+                    instance.OpenEyes();
                 }
 
-                private static void PostCloseEyes()
+                private static void PostCloseEyes(float animDuration)
                 {
-                    _instance.CloseEyesDelayed();
+                    instance.CloseEyesDelayed(animDuration);
                 }
             }
         }

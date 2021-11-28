@@ -4,15 +4,9 @@
     "leftHandDominant": {
       "type": "toggle",
       "value": false,
-      "title": "Dominant Hand",
+      "title": "Left Hand Dominant",
       "yes": "Left",
       "no": "Right"
-    },
-    "refreshRateOverride": {
-      "type": "selector",
-      "value": 0,
-      "options": [ 0, 30, 60, 70, 72, 80, 90, 120, 144 ],
-      "title": "Physics refresh rate (zero = sync with HMD)"
     },
     "vibrationIntensity": {
       "type": "slider",
@@ -49,13 +43,6 @@
       "max": 1.8,
       "title": "Helmet HUD scale"
     },
-    "hudOpacity": {
-      "type": "slider",
-      "value": 1,
-      "min": 0,
-      "max": 1,
-      "title": "Helmet HUD Opacity"
-    },
     "hudSmoothFollow": {
       "type": "toggle",
       "value": true,
@@ -66,7 +53,7 @@
     "movementControllerOriented": {
       "type": "toggle",
       "value": false,
-      "title": "Movement orientation",
+      "title": "Controller oriented movement",
       "yes": "Controller",
       "no": "Head"
     },
@@ -91,24 +78,10 @@
       "yes": "Show",
       "no": "Hide"
     },
-    "disableCursorLock": {
-      "type": "toggle",
-      "value": true,
-      "title": "Lock mouse cursor to window",
-      "yes": "Unlocked",
-      "no": "Locked"
-    },
     "debug": {
       "type": "toggle",
       "value": false,
       "title": "Debug mode (more logs)",
-      "yes": "Enabled",
-      "no": "Disabled"
-    },
-    "bypassFatalErrors": {
-      "type": "toggle",
-      "value": false,
-      "title": "Bypass fatal errors",
       "yes": "Enabled",
       "no": "Disabled"
     }

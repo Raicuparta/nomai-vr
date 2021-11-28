@@ -1,19 +1,35 @@
-﻿using OWML.Common;
+﻿using NomaiVR.Loaders;
+using NomaiVR.ModConfig;
 
 namespace NomaiVR
 {
+    public enum MessageType
+    {
+        Message,
+        Info,
+        Success,
+        Warning,
+        Error,
+    }
+
     public static class Logs
     {
-        private const string fatalMessageSufix =
-            "\n\nIf you want to ignore this error and start the game anyway, edit NomaiVR/config.json, find \"bypassFatalErrors\", and set \"value\" to true. " +
-            "But be aware that this will likely face a lot of problems.";
-
         public static void Write(string message, MessageType messageType = MessageType.Message, bool debugOnly = true)
         {
-            var isDebugMode = !debugOnly || ModSettings.DebugMode;
-            if (NomaiVR.Helper != null && isDebugMode)
+            if (debugOnly && !ModSettings.DebugMode) return;
+            switch (messageType)
             {
-                NomaiVR.Helper.Console.WriteLine(message, messageType);
+                case MessageType.Error:
+                    NomaiVRLoaderOwml.Helper.Console.WriteLine(message, OWML.Common.MessageType.Error);
+                    break;
+
+                case MessageType.Warning:
+                    NomaiVRLoaderOwml.Helper.Console.WriteLine(message, OWML.Common.MessageType.Warning);
+                    break;
+
+                default:
+                    NomaiVRLoaderOwml.Helper.Console.WriteLine(message, OWML.Common.MessageType.Info);
+                    break;
             }
         }
 
@@ -35,18 +51,6 @@ namespace NomaiVR
         public static void WriteError(string message)
         {
             Write(message, MessageType.Error, false);
-        }
-
-        public static void WriteFatal(string message)
-        {
-            if (ModSettings.BypassFatalErrors)
-            {
-                WriteError(message);
-            }
-            else
-            {
-                Write(message + fatalMessageSufix, MessageType.Fatal, false);
-            }
         }
     }
 }

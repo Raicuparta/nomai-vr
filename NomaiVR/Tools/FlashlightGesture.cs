@@ -1,14 +1,29 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Hands;
+using NomaiVR.Input;
+using NomaiVR.ReusableBehaviours;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Tools
 {
     internal class FlashlightGesture : NomaiVRModule<FlashlightGesture.Behaviour, NomaiVRModule.EmptyPatch>
     {
         protected override bool IsPersistent => false;
         protected override OWScene[] Scenes => PlayableScenes;
 
+        public static Behaviour Instance { get; private set; }
+
         public class Behaviour : MonoBehaviour
         {
+            private List<ProximityDetector> proximityDetectors;
+
+            internal void Awake()
+            {
+                Instance = this;
+                proximityDetectors = new List<ProximityDetector>(2);
+            }
+
             internal void Start()
             {
                 SetupDetector(HandsController.Behaviour.RightHand, Vector3.right * 0.15f);
@@ -21,6 +36,7 @@ namespace NomaiVR
 
                 fillLight.localPosition = spotLight.localPosition = flashLight.transform.localPosition = new Vector3(0, 0.05f, 0.05f);
                 fillLight.localRotation = spotLight.localRotation = flashLight.transform.localRotation = Quaternion.identity;
+                enabled = false;
             }
 
             private void SetupDetector(Transform hand, Vector3 offset)
@@ -28,18 +44,18 @@ namespace NomaiVR
                 var detector = Locator.GetPlayerCamera().gameObject.AddComponent<ProximityDetector>();
                 detector.Other = hand;
                 detector.LocalOffset = offset;
-                detector.OnEnter += FlashlightPress;
-                detector.OnExit += FlashlightRelease;
+                detector.OnEnter += HandEnter;
+                proximityDetectors.Add(detector);
             }
 
-            private void FlashlightPress(Transform hand)
+            public bool IsControllingFlashlight()
             {
-                ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 1);
+                return proximityDetectors.Any(x => x.IsInside());
             }
 
-            private void FlashlightRelease(Transform hand)
+            private void HandEnter(Transform hand)
             {
-                ControllerInput.Behaviour.SimulateInput(JoystickButton.RightStickClick, 0);
+                ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT);
             }
         }
     }

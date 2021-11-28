@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using NomaiVR.Assets;
+using NomaiVR.Helpers;
 using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.UI
 {
     internal class LookArrow : NomaiVRModule<LookArrow.Behaviour, LookArrow.Behaviour.Patch>
     {
@@ -10,27 +12,27 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
-            private Transform _rightArrow;
-            private Transform _leftArrow;
-            private Transform _wrapper;
+            private Transform rightArrow;
+            private Transform leftArrow;
+            private Transform wrapper;
 
-            private static Transform _target;
-            private static bool _pauseNextFrame;
+            private static Transform target;
+            private static bool pauseNextFrame;
 
             internal void Start()
             {
                 var canvas = Instantiate(AssetLoader.LookArrowPrefab).GetComponent<Canvas>();
-                _wrapper = canvas.transform;
-                _wrapper.parent = Locator.GetPlayerCamera().transform;
-                _wrapper.localPosition = new Vector3(0, 0, 4);
-                _wrapper.localRotation = Quaternion.identity;
+                wrapper = canvas.transform;
+                wrapper.parent = Locator.GetPlayerCamera().transform;
+                wrapper.localPosition = new Vector3(0, 0, 4);
+                wrapper.localRotation = Quaternion.identity;
 
-                _rightArrow = canvas.transform.Find("look-right");
-                _rightArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
-                _rightArrow.gameObject.SetActive(false);
-                _leftArrow = canvas.transform.Find("look-left");
-                _leftArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
-                _leftArrow.gameObject.SetActive(false);
+                rightArrow = canvas.transform.Find("look-right");
+                rightArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
+                rightArrow.gameObject.SetActive(false);
+                leftArrow = canvas.transform.Find("look-left");
+                leftArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
+                leftArrow.gameObject.SetActive(false);
             }
 
             internal void Update()
@@ -41,33 +43,33 @@ namespace NomaiVR
 
             private void ShowArrow()
             {
-                ControllerInput.IsInputEnabled = false;
-                _wrapper.gameObject.SetActive(true);
+                // ControllerInput.IsInputEnabled = false;
+                wrapper.gameObject.SetActive(true);
             }
 
             private void HideArrow()
             {
-                ControllerInput.IsInputEnabled = true;
-                _wrapper.gameObject.SetActive(false);
+                // ControllerInput.IsInputEnabled = true;
+                wrapper.gameObject.SetActive(false);
             }
 
             private void UpdatePause()
             {
-                if (_pauseNextFrame)
+                if (pauseNextFrame)
                 {
                     Time.timeScale = 0;
-                    _pauseNextFrame = false;
+                    pauseNextFrame = false;
                 }
             }
 
             private void UpdateArrow()
             {
-                if (_target == null)
+                if (target == null)
                 {
                     HideArrow();
                     return;
                 }
-                if (CameraHelper.IsOnScreen(_target.position))
+                if (CameraHelper.IsOnScreen(target.position))
                 {
                     HideArrow();
                     return;
@@ -75,7 +77,7 @@ namespace NomaiVR
                 ShowArrow();
 
                 var camera = Locator.GetPlayerCamera().transform;
-                var targetDirection = (_target.position - camera.position).normalized;
+                var targetDirection = (target.position - camera.position).normalized;
                 var perpendicular = Vector3.Cross(camera.forward, targetDirection);
                 var player = Locator.GetPlayerTransform();
                 var dir = Vector3.Dot(perpendicular, player.up);
@@ -83,20 +85,20 @@ namespace NomaiVR
                 var forwardDot = Vector3.Dot(camera.forward, targetDirection);
                 var isInFront = forwardDot > -0.5f;
 
-                _rightArrow.gameObject.SetActive(dir > 0);
-                _leftArrow.gameObject.SetActive(dir < 0);
+                rightArrow.gameObject.SetActive(dir > 0);
+                leftArrow.gameObject.SetActive(dir < 0);
 
                 var playerHead = PlayerHelper.PlayerHead;
                 if (isInFront)
                 {
-                    _wrapper.up = player.up;
-                    _wrapper.LookAt(playerHead.position, targetDirection);
-                    _wrapper.Rotate(new Vector3(0, 180, dir > 0 ? 90 : -90));
+                    wrapper.up = player.up;
+                    wrapper.LookAt(playerHead.position, targetDirection);
+                    wrapper.Rotate(new Vector3(0, 180, dir > 0 ? 90 : -90));
                 }
                 else
                 {
-                    _wrapper.up = player.up;
-                    _wrapper.LookAt(2 * _wrapper.position - playerHead.position, playerHead.up);
+                    wrapper.up = player.up;
+                    wrapper.LookAt(2 * wrapper.position - playerHead.position, playerHead.up);
                 }
             }
 
@@ -122,7 +124,7 @@ namespace NomaiVR
                     if (pauseType == OWTime.PauseType.Reading)
                     {
                         Time.timeScale = 1;
-                        _pauseNextFrame = true;
+                        pauseNextFrame = true;
                     }
                 }
 
@@ -130,14 +132,14 @@ namespace NomaiVR
                 {
                     if (targetTransform.GetComponent<ModelShipController>() == null && targetTransform.name != "NomaiHeadStatue")
                     {
-                        _target = targetTransform;
+                        target = targetTransform;
                     }
                     return false;
                 }
 
                 public static bool PreBreakLock()
                 {
-                    _target = null;
+                    target = null;
                     return false;
                 }
             }

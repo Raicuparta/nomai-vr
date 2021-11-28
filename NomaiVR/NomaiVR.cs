@@ -1,27 +1,34 @@
-﻿using OWML.Common;
-using OWML.ModHelper;
+﻿using NomaiVR.Assets;
 using Valve.VR;
+using NomaiVR.EffectFixes;
+using NomaiVR.Hands;
+using NomaiVR.Helpers;
+using NomaiVR.Input;
+using NomaiVR.Tools;
+using NomaiVR.UI;
+using NomaiVR.Loaders.Harmony;
+using NomaiVR.Player;
+using NomaiVR.Saves;
+using NomaiVR.Ship;
 
 namespace NomaiVR
 {
-    public class NomaiVR : ModBehaviour
+    public class NomaiVR
     {
-        public static IModHelper Helper;
+        public static IHarmonyInstance HarmonyInstance;
         public static ModSaveFile Save;
+        public static string ModFolderPath;
+        public static string GameDataPath;
 
-        internal void Start()
+        internal static void ApplyMod()
         {
-            Helper.Console.WriteLine("Start NomaiVR");
             Save = ModSaveFile.LoadSaveFile();
-            new FatalErrorChecker();
-
-            InitSteamVR();
-
             new AssetLoader();
 
-
-            // Load all modules.
-            // I'm sorry to say that order does matter here.
+            InitSteamVR();
+            
+            //// Load all modules.
+            //// I'm sorry to say that order does matter here.
             new ForceSettings();
             new ControllerInput();
             new Dialogue();
@@ -29,7 +36,10 @@ namespace NomaiVR
             new ShadowsFix();
             new LoopTransitionFix();
             new VisorEffectsFix();
+            new DreamLanternFix();
+            new DreamFix();
             new ProjectionStoneCameraFix();
+            new PeepholeCameraFix();
             new CameraMaskFix();
             new MapFix();
             new PlayerBodyPosition();
@@ -47,32 +57,37 @@ namespace NomaiVR
             new FeetMarker();
             new HelmetHUD();
             new InputPrompts();
+            new RemoveUnusedInputPrompts();
             new ControllerModels();
             new GesturePrompts();
             new PostCreditsFix();
             new LookArrow();
             new DisableDeathAnimation();
+            new VirtualKeyboard();
             new Menus();
+            new FixProbeCannonVisibility();
+
+            //Load UnityExplorer if enabled
+#if UNITYEXPLORER
+                UnityExplorer.ExplorerStandalone.CreateInstance();
+#endif
         }
 
-        private void InitSteamVR()
+        private static void InitSteamVR()
         {
-            try
-            {
-                SteamVR.Initialize();
-                SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
-                OpenVR.Input.SetActionManifestPath(Helper.Manifest.ModFolderPath + @"\bindings\actions.json");
-            }
-            catch
-            {
-                FatalErrorChecker.ThrowSteamVRError();
-            }
-        }
+            SteamVR_Actions.PreInitialize();
+            SteamVR.Initialize();
+            SteamVR_Settings.instance.pauseGameWhenDashboardVisible = true;
 
-        public override void Configure(IModConfig config)
-        {
-            Helper = ModHelper;
-            ModSettings.SetConfig(config);
+            ApplicationManifestHelper.UpdateManifest(GameDataPath + @"\StreamingAssets\outerwilds.vrmanifest",
+                                                    "steam.app.753640",
+                                                    "https://steamcdn-a.akamaihd.net/steam/apps/753640/header.jpg",
+                                                    "Outer Wilds VR",
+                                                    "NomaiVR mod for Outer Wilds",
+                                                    steamBuild: SteamManager.Initialized,
+                                                    steamAppId: 753640);
+
+            OpenVR.Input.SetActionManifestPath(ModFolderPath + @"\bindings\actions.json");
         }
     }
 }

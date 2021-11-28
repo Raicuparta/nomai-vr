@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Assets;
+using NomaiVR.Helpers;
+using NomaiVR.ModConfig;
+using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
 
-namespace NomaiVR
+namespace NomaiVR.Hands
 {
     internal class HandsController : NomaiVRModule<HandsController.Behaviour, NomaiVRModule.EmptyPatch>
     {
@@ -19,7 +22,7 @@ namespace NomaiVR
             public static Hand RightHandBehaviour;
             public static Transform LeftHand;
             public static Hand LeftHandBehaviour;
-            private Transform _wrapper;
+            private Transform wrapper;
 
             internal void Start()
             {
@@ -41,15 +44,15 @@ namespace NomaiVR
             {
                 var activeCamera = Locator.GetActiveCamera();
                 activeCamera.gameObject.SetActive(false);
-                _wrapper = activeCamera.transform.parent;
+                wrapper = activeCamera.transform.parent;
                 var cameraObject = new GameObject();
                 cameraObject.SetActive(false);
                 cameraObject.tag = "MainCamera";
                 var camera = cameraObject.AddComponent<Camera>();
-                camera.transform.parent = _wrapper;
+                camera.transform.parent = wrapper;
                 camera.transform.localPosition = Vector3.zero;
                 camera.transform.localRotation = Quaternion.identity;
-
+                
                 camera.nearClipPlane = activeCamera.nearClipPlane;
                 camera.farClipPlane = activeCamera.farClipPlane;
                 camera.clearFlags = activeCamera.clearFlags;
@@ -60,26 +63,26 @@ namespace NomaiVR
 
                 var owCamera = cameraObject.AddComponent<OWCamera>();
                 owCamera.renderSkybox = true;
-
+                
                 cameraObject.AddComponent<FlareLayer>();
                 cameraObject.SetActive(true);
-
+                
                 cameraObject.AddComponent<Light>();
             }
 
             private void SetUpWrapperInGame()
             {
-                _wrapper = new GameObject().transform;
-                _wrapper.parent = Camera.main.transform.parent;
-                _wrapper.localRotation = Quaternion.identity;
-                _wrapper.localPosition = Camera.main.transform.localPosition;
+                wrapper = new GameObject().transform;
+                wrapper.parent = Camera.main.transform.parent;
+                wrapper.localRotation = Quaternion.identity;
+                wrapper.localPosition = Camera.main.transform.localPosition;
             }
 
             private void SetUpHands()
             {
                 var right = new GameObject().AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
-                right.transform.parent = _wrapper;
+                right.transform.parent = wrapper;
                 right.transform.localPosition = Vector3.zero;
                 right.transform.localRotation = Quaternion.identity;
                 right.handPrefab = AssetLoader.HandPrefab;
@@ -91,7 +94,7 @@ namespace NomaiVR
 
                 var left = new GameObject().AddComponent<Hand>();
                 left.pose = SteamVR_Actions.default_LeftHand;
-                left.transform.parent = _wrapper;
+                left.transform.parent = wrapper;
                 left.transform.localPosition = Vector3.zero;
                 left.transform.localRotation = Quaternion.identity;
                 left.isLeft = true;
@@ -137,9 +140,9 @@ namespace NomaiVR
 
             internal void Update()
             {
-                if (SceneHelper.IsInGame() && _wrapper && Camera.main)
+                if (SceneHelper.IsInGame() && wrapper && Camera.main)
                 {
-                    _wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
+                    wrapper.localPosition = Camera.main.transform.localPosition - InputTracking.GetLocalPosition(XRNode.CenterEye);
                 }
             }
         }

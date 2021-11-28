@@ -1,37 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.Player
 {
     public class VRCameraManipulator : MonoBehaviour
     {
-		private IObservable _lastObservable;
-		private Collider _lastHitCollider;
+		private IObservable lastObservable;
+		private Collider lastHitCollider;
 
 		private RaycastHit ProcessRaycast()
 		{
 			if (Physics.Raycast(transform.position, transform.forward, out var hitInfo, 75f, OWLayerMask.blockableInteractMask))
 			{
-				if (hitInfo.collider != _lastHitCollider)
+				if (hitInfo.collider != lastHitCollider)
 				{
-					_lastHitCollider = hitInfo.collider;
-					if (_lastObservable != null)
+					lastHitCollider = hitInfo.collider;
+					if (lastObservable != null)
 					{
-						_lastObservable.LoseFocus();
+						lastObservable.LoseFocus();
 					}
-					_lastObservable = _lastHitCollider.GetComponent<IObservable>();
+					lastObservable = lastHitCollider.GetComponent<IObservable>();
 				}
 			}
 			else
 			{
-				_lastHitCollider = null;
-				if (_lastObservable != null)
+				lastHitCollider = null;
+				if (lastObservable != null)
 				{
-					_lastObservable.LoseFocus();
-					_lastObservable = null;
+					lastObservable.LoseFocus();
+					lastObservable = null;
 				}
 			}
 
@@ -42,8 +38,8 @@ namespace NomaiVR
 		{
 			var hitInfo = ProcessRaycast();
 
-			if (_lastObservable != null)
-				_lastObservable.Observe(hitInfo, transform.position);
+			if (lastObservable != null)
+				lastObservable.Observe(hitInfo, transform.position);
 		}
 	}
 }

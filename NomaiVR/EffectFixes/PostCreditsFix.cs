@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Assets;
+using UnityEngine;
 
-namespace NomaiVR
+namespace NomaiVR.EffectFixes
 {
     internal class PostCreditsFix : NomaiVRModule<PostCreditsFix.Behaviour, NomaiVRModule.EmptyPatch>
     {
@@ -9,10 +10,25 @@ namespace NomaiVR
 
         public class Behaviour : MonoBehaviour
         {
+            private Transform screenTransform;
+            private Transform cameraTransform;
+            private Transform offsetTransform;
+
             internal void Start()
             {
-                var camera = Instantiate(AssetLoader.PostCreditsPrefab);
-                camera.transform.GetChild(0).parent = null;
+                cameraTransform = Instantiate(AssetLoader.PostCreditsPrefab).transform;
+                screenTransform = cameraTransform.GetChild(0);
+                screenTransform.parent = null;
+
+                offsetTransform = new GameObject("Offset").transform;
+                offsetTransform.parent = cameraTransform;
+                offsetTransform.localPosition = Vector3.zero;
+                offsetTransform.parent = null;
+                offsetTransform.rotation = Quaternion.Euler(0, -cameraTransform.rotation.eulerAngles.y, 0);
+
+                cameraTransform.parent = offsetTransform;
+                cameraTransform.localPosition = Vector3.zero;
+                cameraTransform.localRotation = Quaternion.identity;
 
                 var originalCamera = Camera.main;
                 originalCamera.tag = "Untagged";
@@ -21,6 +37,18 @@ namespace NomaiVR
                 originalCamera.transform.rotation = Quaternion.identity;
                 originalCamera.rect.Set(0, 0, 1, 0.5f);
                 originalCamera.targetTexture = AssetLoader.PostCreditsRenderTexture;
+            }
+
+            internal void Update()
+            {
+                var cameraYForward = cameraTransform.forward;
+                cameraYForward.y = 0;
+                cameraYForward = cameraYForward.normalized;
+                var signedCameraAngle = Vector3.SignedAngle(cameraYForward, -screenTransform.up, Vector3.up);
+                if (Mathf.Abs(signedCameraAngle) > 70)
+                {
+                    offsetTransform.localRotation *= Quaternion.Euler(0, signedCameraAngle, 0);
+                }
             }
         }
     }
