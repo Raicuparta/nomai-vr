@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NomaiVR.ModConfig;
+using UnityEngine;
 
 namespace NomaiVR.ReusableBehaviours
 {
