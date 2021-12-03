@@ -10,35 +10,42 @@ namespace NomaiVR.Helpers
     {
         public static void UpdateManifest(string manifestPath, string appKey, string imagePath, string name, string description, int steamAppId = 0, bool steamBuild = false)
         {
-            var launchType = steamBuild ? GetSteamLaunchString(steamAppId) : GetBinaryLaunchString();
-            var appManifestContent = $@"{{
+            try
+            {
+                var launchType = steamBuild ? GetSteamLaunchString(steamAppId) : GetBinaryLaunchString();
+                var appManifestContent = $@"{{
                                             ""source"": ""builtin"",
                                             ""applications"": [{{
                                                 ""app_key"": {JsonConvert.ToString(appKey)},
-                                                ""image_path"": { JsonConvert.ToString(imagePath) },
+                                                ""image_path"": {JsonConvert.ToString(imagePath)},
                                                 {launchType}
                                                 ""last_played_time"":""{CurrentUnixTimestamp()}"",
                                                 ""strings"": {{
                                                     ""en_us"": {{
-                                                        ""name"": { JsonConvert.ToString(name) }
+                                                        ""name"": {JsonConvert.ToString(name)}
                                                     }}
                                                 }}
                                             }}]
                                         }}";
 
-            File.WriteAllText(manifestPath, appManifestContent);
+                File.WriteAllText(manifestPath, appManifestContent);
 
-            var error = OpenVR.Applications.AddApplicationManifest(manifestPath, false);
-            if (error != EVRApplicationError.None)
-            {
-                Logs.WriteError("Failed to set AppManifest " + error);
+                var error = OpenVR.Applications.AddApplicationManifest(manifestPath, false);
+                if (error != EVRApplicationError.None)
+                {
+                    Logs.WriteError("Failed to set AppManifest " + error);
+                }
+
+                var processId = System.Diagnostics.Process.GetCurrentProcess().Id;
+                var applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint) processId, appKey);
+                if (applicationIdentifyErr != EVRApplicationError.None)
+                {
+                    Logs.WriteError("Error identifying application: " + applicationIdentifyErr.ToString());
+                }
             }
-
-            var processId = System.Diagnostics.Process.GetCurrentProcess().Id;
-            var applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint)processId, appKey);
-            if (applicationIdentifyErr != EVRApplicationError.None)
+            catch (Exception exception)
             {
-                Logs.WriteError("Error identifying application: " + applicationIdentifyErr.ToString());
+                Logs.WriteError("Error updating AppManifest: " + exception);
             }
         }
 
