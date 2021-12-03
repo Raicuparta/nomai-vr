@@ -43,6 +43,13 @@
       "max": 1.8,
       "title": "Helmet HUD scale"
     },
+    "hudSmoothFollow": {
+      "type": "toggle",
+      "value": true,
+      "title": "Helmet HUD smooth follow",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
     "movementControllerOriented": {
       "type": "toggle",
       "value": false,

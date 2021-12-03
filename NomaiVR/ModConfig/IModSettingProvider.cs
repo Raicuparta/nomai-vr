@@ -19,6 +19,7 @@ namespace NomaiVR.ModConfig
         float ToolbeltHeight { get; }
         float HudScale { get; }
         float HudOpacity { get; }
+        bool HudSmoothFollow { get; }
 
         void Configure();
     }

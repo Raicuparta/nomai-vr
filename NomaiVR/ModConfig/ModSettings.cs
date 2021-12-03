@@ -21,6 +21,7 @@ namespace NomaiVR.ModConfig
         public static float ToolbeltHeight => settingsProvider.ToolbeltHeight;
         public static float HudScale => settingsProvider.HudScale;
         public static float HudOpacity => settingsProvider.HudOpacity;
+        public static bool HudSmoothFollow => settingsProvider.HudSmoothFollow;
 
         public static void SetProvider(IModSettingProvider provider)
         {
