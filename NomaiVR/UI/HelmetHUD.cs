@@ -69,7 +69,7 @@ namespace NomaiVR.UI
                 helmet = helmetAnimator.transform;
                 helmet.localPosition = Vector3.forward * -0.07f;
                 helmet.localScale = Vector3.one * 0.5f;
-                helmet.gameObject.AddComponent<SmoothFollowCameraRotation>();
+                helmet.gameObject.AddComponent<HelmetFollowCameraRotation>();
                 return helmet;
             }
 

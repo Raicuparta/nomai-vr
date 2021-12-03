@@ -1,15 +1,15 @@
 ﻿using NomaiVR.ModConfig;
 using UnityEngine;
 
-namespace NomaiVR.ReusableBehaviours
+namespace NomaiVR.UI
 {
-    public class SmoothFollowCameraRotation : MonoBehaviour
+    public class HelmetFollowCameraRotation : MonoBehaviour
     {
         private Quaternion lastFrameRotation;
-        private readonly float speed = 0.5f;
+        private const float speed = 0.5f;
         private bool smoothEnabled = true;
 
-        internal void Start()
+        private void Start()
         {
             lastFrameRotation = transform.rotation;
 
@@ -18,12 +18,12 @@ namespace NomaiVR.ReusableBehaviours
             ModSettings.OnConfigChange += SetSmoothEnabled;
         }
 
-        internal void OnDestroy()
+        private void OnDestroy()
         {
             ModSettings.OnConfigChange -= SetSmoothEnabled;
         }
 
-        internal void LateUpdate()
+        private void LateUpdate()
         {
             if (!Camera.main)
             {
@@ -46,7 +46,7 @@ namespace NomaiVR.ReusableBehaviours
             lastFrameRotation = transform.rotation;
         }
 
-        void SetSmoothEnabled()
+        private void SetSmoothEnabled()
         {
             smoothEnabled = ModSettings.HudSmoothFollow;
         }
