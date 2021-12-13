@@ -92,7 +92,7 @@ namespace NomaiVR.Hands
                     //Send fake events
                     fakePointer.screenPosition = Camera.main.WorldToScreenPoint(raycast.point);
                     fakePointer.leftButton.isPressed = SteamVR_Actions._default.UISelect.stateDown;
-                    fakePointer.changedThisFrame = SteamVR_Actions._default.UISelect.changed;
+                    fakePointer.changedThisFrame = SteamVR_Actions._default.UISelect.stateDown;
                     inputModule.ProcessPointer(ref fakePointer);
                 }
             }
