@@ -46,10 +46,8 @@ namespace NomaiVR.ModConfig
             ToolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
 
             // Disabled these until we can fix scrolling in mod config menu.
-            // PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
-            // HudOpacity = config.GetSettingsValue<float>("hudOpacity");
-            PreventCursorLock = true;
-            HudOpacity = 1f;
+            PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
+            HudOpacity = config.GetSettingsValue<float>("hudOpacity");
             
             OnConfigChange?.Invoke();
         }
