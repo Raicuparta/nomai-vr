@@ -43,6 +43,13 @@
       "max": 1.8,
       "title": "Helmet HUD scale"
     },
+    "hudOpacity": {
+      "type": "slider",
+      "value": 1,
+      "min": 0,
+      "max": 1,
+      "title": "Helmet HUD Opacity"
+    },
     "hudSmoothFollow": {
       "type": "toggle",
       "value": true,
@@ -77,6 +84,13 @@
       "title": "Feet markers",
       "yes": "Show",
       "no": "Hide"
+    },
+    "disableCursorLock": {
+      "type": "toggle",
+      "value": true,
+      "title": "Lock mouse cursor to window",
+      "yes": "Unlocked",
+      "no": "Locked"
     },
     "debug": {
       "type": "toggle",
