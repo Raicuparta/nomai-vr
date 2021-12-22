@@ -119,10 +119,10 @@ namespace NomaiVR.Tools
                 public override void ApplyPatches()
                 {
                     // Stop stick rotation animation.
-                    Empty<RoastingStickController>("UpdateRotation");
+                    Empty<RoastingStickController>(nameof(RoastingStickController.UpdateRotation));
 
                     // Prevent stick from moving on colliding with stuff.
-                    Postfix<RoastingStickController>("CalculateMaxStickExtension", nameof(PostCalculateMaxStickExtension));
+                    Postfix<RoastingStickController>(nameof(RoastingStickController.CalculateMaxStickExtension), nameof(PostCalculateMaxStickExtension));
                 }
 
                 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Result required for return passthrough")]

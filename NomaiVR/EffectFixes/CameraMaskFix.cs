@@ -103,7 +103,7 @@ namespace NomaiVR.EffectFixes
 
                     var openEyesMethod =
                         typeof(PlayerCameraEffectController)
-                        .GetMethod("OpenEyes", new[] { typeof(float), typeof(AnimationCurve) });
+                        .GetMethod(nameof(PlayerCameraEffectController.OpenEyes), new[] { typeof(float), typeof(AnimationCurve) });
                     Postfix(openEyesMethod, nameof(PostOpenEyes));
 
                     Postfix<PlayerCameraEffectController>(nameof(PlayerCameraEffectController.CloseEyes), nameof(PostCloseEyes));

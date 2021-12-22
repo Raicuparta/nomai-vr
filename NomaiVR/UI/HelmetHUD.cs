@@ -146,9 +146,9 @@ namespace NomaiVR.UI
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ThrustAndAttitudeIndicator>("LateUpdate", nameof(FixThrusterHudRotation));
-                    Postfix<HUDCamera>("Awake", nameof(FixHudDistortion));
-                    Postfix<HUDCamera>("OnGraphicSettingsUpdated", nameof(FixHudDistortion));
+                    Postfix<ThrustAndAttitudeIndicator>(nameof(ThrustAndAttitudeIndicator.LateUpdate), nameof(FixThrusterHudRotation));
+                    Postfix<HUDCamera>(nameof(HUDCamera.Awake), nameof(FixHudDistortion));
+                    Postfix<HUDCamera>(nameof(HUDCamera.OnGraphicSettingsUpdated), nameof(FixHudDistortion));
                 }
 
                 private static void FixHudDistortion(Camera ____camera)
