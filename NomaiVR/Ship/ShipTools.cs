@@ -22,21 +22,21 @@ namespace NomaiVR.Ship
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ShipBody>("Start", nameof(ShipStart));
+                    Postfix<ShipBody>(nameof(ShipBody.Start), nameof(ShipStart));
                     Prefix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInLineOfSight), nameof(PreFindFrame));
                     Postfix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInLineOfSight), nameof(PostFindFrame));
                     Prefix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInMapView), nameof(PreFindFrame));
                     Postfix<ReferenceFrameTracker>(nameof(ReferenceFrameTracker.FindReferenceFrameInMapView), nameof(PostFindFrame));
-                    Empty<PlayerCameraController>("OnEnterLandingView");
-                    Empty<PlayerCameraController>("OnExitLandingView");
-                    Empty<PlayerCameraController>("OnEnterShipComputer");
-                    Empty<PlayerCameraController>("OnExitShipComputer");
-                    Prefix<ShipCockpitController>("EnterLandingView", nameof(PreEnterLandingView));
-                    Prefix<ShipCockpitController>("ExitLandingView", nameof(PreExitLandingView));
-                    Postfix<ShipCockpitController>("ExitFlightConsole", nameof(PostExitFlightConsole));
-                    Prefix<ShipCockpitUI>("Update", nameof(PreCockpitUIUpdate));
-                    Postfix<ShipCockpitUI>("Update", nameof(PostCockpitUIUpdate));
-                    Prefix(typeof(ReferenceFrameTracker).GetMethod("UntargetReferenceFrame", new[] { typeof(bool) }), nameof(PreUntargetFrame));
+                    Empty<PlayerCameraController>(nameof(PlayerCameraController.OnEnterLandingView));
+                    Empty<PlayerCameraController>(nameof(PlayerCameraController.OnExitLandingView));
+                    Empty<PlayerCameraController>(nameof(PlayerCameraController.OnEnterShipComputer));
+                    Empty<PlayerCameraController>(nameof(PlayerCameraController.OnExitShipComputer));
+                    Prefix<ShipCockpitController>(nameof(ShipCockpitController.EnterLandingView), nameof(PreEnterLandingView));
+                    Prefix<ShipCockpitController>(nameof(ShipCockpitController.ExitLandingView), nameof(PreExitLandingView));
+                    Postfix<ShipCockpitController>(nameof(ShipCockpitController.ExitFlightConsole), nameof(PostExitFlightConsole));
+                    Prefix<ShipCockpitUI>(nameof(ShipCockpitUI.Update), nameof(PreCockpitUIUpdate));
+                    Postfix<ShipCockpitUI>(nameof(ShipCockpitUI.Update), nameof(PostCockpitUIUpdate));
+                    Prefix(typeof(ReferenceFrameTracker).GetMethod(nameof(ReferenceFrameTracker.UntargetReferenceFrame), new[] { typeof(bool) }), nameof(PreUntargetFrame));
                 }
 
                 private static void PreCockpitUIUpdate(ShipCockpitUI __instance)

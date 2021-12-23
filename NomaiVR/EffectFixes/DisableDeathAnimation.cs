@@ -9,7 +9,7 @@
         {
             public override void ApplyPatches()
             {
-                Prefix<PlayerCharacterController>("OnPlayerDeath", nameof(PrePlayerDeath));
+                Prefix<PlayerCharacterController>(nameof(PlayerCharacterController.OnPlayerDeath), nameof(PrePlayerDeath));
             }
 
             private static bool PrePlayerDeath(DeathType deathType)

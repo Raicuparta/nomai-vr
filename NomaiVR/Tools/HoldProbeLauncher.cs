@@ -153,15 +153,15 @@ namespace NomaiVR.Tools
 
                 public override void ApplyPatches()
                 {
-                    Prefix<PlayerSpacesuit>("SuitUp", nameof(SuitUp));
-                    Prefix<PlayerSpacesuit>("RemoveSuit", nameof(RemoveSuit));
-                    Postfix<ProbeLauncherUI>("HideProbeHUD", nameof(PostHideHUD));
+                    Prefix<PlayerSpacesuit>(nameof(PlayerSpacesuit.SuitUp), nameof(SuitUp));
+                    Prefix<PlayerSpacesuit>(nameof(PlayerSpacesuit.RemoveSuit), nameof(RemoveSuit));
+                    Postfix<ProbeLauncherUI>(nameof(ProbeLauncherUI.HideProbeHUD), nameof(PostHideHUD));
 
                     // Prevent probe prompt zones from equipping / unequipping the probe launcher.
-                    Prefix<ProbePromptReceiver>("LoseFocus", nameof(PreLoseFocus));
-                    Postfix<ProbePromptReceiver>("LoseFocus", nameof(PostLoseFocus));
-                    Prefix<ProbePromptReceiver>("GainFocus", nameof(PreGainFocus));
-                    Postfix<ProbePromptReceiver>("GainFocus", nameof(PostGainFocus));
+                    Prefix<ProbePromptReceiver>(nameof(ProbePromptReceiver.LoseFocus), nameof(PreLoseFocus));
+                    Postfix<ProbePromptReceiver>(nameof(ProbePromptReceiver.LoseFocus), nameof(PostLoseFocus));
+                    Prefix<ProbePromptReceiver>(nameof(ProbePromptReceiver.GainFocus), nameof(PreGainFocus));
+                    Postfix<ProbePromptReceiver>(nameof(ProbePromptReceiver.GainFocus), nameof(PostGainFocus));
                 }
 
                 private static void PreLoseFocus()

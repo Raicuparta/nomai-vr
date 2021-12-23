@@ -253,7 +253,7 @@ namespace NomaiVR.UI
             {
                 public override void ApplyPatches()
                 {
-                    Postfix<ToolModeUI>("Update", nameof(PostToolModeUiUpdate));
+                    Postfix<ToolModeUI>(nameof(ToolModeUI.Update), nameof(PostToolModeUiUpdate));
                 }
 
                 private static void PostToolModeUiUpdate(

@@ -22,8 +22,8 @@ namespace NomaiVR.EffectFixes
                 //Mind Projectors
                 Prefix<MindProjectorImageEffect>(nameof(MindProjectorImageEffect.Awake), nameof(AddVRProjector));
                 Prefix<MindProjectorImageEffect>(nameof(MindProjectorImageEffect.OnRenderImage), nameof(BlitImageEffect));
-                Prefix<MindProjectorImageEffect>("set_eyeOpenness", nameof(SetEyeOpennes));
-                Prefix<MindProjectorImageEffect>("set_slideTexture", nameof(SetSlideTexture));
+                Prefix<MindProjectorImageEffect>("set_" + nameof(MindProjectorImageEffect.eyeOpenness), nameof(SetEyeOpennes));
+                Prefix<MindProjectorImageEffect>("set_" + nameof(MindProjectorImageEffect.slideTexture), nameof(SetSlideTexture));
 
                 //Zoom Points
                 Prefix<LanternZoomPoint>(nameof(LanternZoomPoint.UpdateRetroZoom), nameof(UpdateRetrozoomFOVScale));

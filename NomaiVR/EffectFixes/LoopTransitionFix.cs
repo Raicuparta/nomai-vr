@@ -14,16 +14,16 @@ namespace NomaiVR.EffectFixes
 
             public override void ApplyPatches()
             {
-                Prefix<Flashback>("OnTriggerFlashback", nameof(PatchTriggerFlashback));
-                Prefix<Flashback>("Update", nameof(FlashbackUpdate));
-                Prefix<Flashback>("UpdateMemoryUplink", nameof(PostUpdateMemoryLink));
-                Postfix<Flashback>("OnTriggerMemoryUplink", nameof(PostTriggerMemoryUplink));
+                Prefix<Flashback>(nameof(Flashback.OnTriggerFlashback), nameof(PatchTriggerFlashback));
+                Prefix<Flashback>(nameof(Flashback.Update), nameof(FlashbackUpdate));
+                Prefix<Flashback>(nameof(Flashback.UpdateMemoryUplink), nameof(PostUpdateMemoryLink));
+                Postfix<Flashback>(nameof(Flashback.OnTriggerMemoryUplink), nameof(PostTriggerMemoryUplink));
 
                 // Prevent flashing on energy death.
-                Postfix<Flashback>("OnTriggerFlashback", nameof(PostTriggerFlashback));
+                Postfix<Flashback>(nameof(Flashback.OnTriggerFlashback), nameof(PostTriggerFlashback));
 
                 // Fix loop picture scale.
-                Postfix<Flashback>("Start", nameof(PostFlashbackRecorderAwake));
+                Postfix<Flashback>(nameof(Flashback.Start), nameof(PostFlashbackRecorderAwake));
             }
 
             private static void PostFlashbackRecorderAwake(Transform ____screenTransform, ref Vector3 ____origScreenScale)

@@ -70,8 +70,8 @@ namespace NomaiVR.Tools
         {
             public override void ApplyPatches()
             {
-                Prefix<ToolModeSwapper>("EquipToolMode", nameof(PreEquipTool));
-                Prefix<ShipCockpitController>("OnPressInteract", nameof(PreShipCockpitController));
+                Prefix<ToolModeSwapper>(nameof(ToolModeSwapper.EquipToolMode), nameof(PreEquipTool));
+                Prefix<ShipCockpitController>(nameof(ShipCockpitController.OnPressInteract), nameof(PreShipCockpitController));
             }
 
             private static void PreShipCockpitController()

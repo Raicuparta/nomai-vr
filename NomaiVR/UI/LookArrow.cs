@@ -106,17 +106,17 @@ namespace NomaiVR.UI
             {
                 public override void ApplyPatches()
                 {
-                    var lockOnMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "LockOn");
+                    var lockOnMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == nameof(PlayerLockOnTargeting.LockOn));
                     foreach (var method in lockOnMethods)
                     {
                         Prefix(method, nameof(PreLockOn));
                     }
-                    var breakLockMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == "BreakLock");
+                    var breakLockMethods = typeof(PlayerLockOnTargeting).GetMethods().Where(method => method.Name == nameof(PlayerLockOnTargeting.BreakLock));
                     foreach (var method in breakLockMethods)
                     {
                         Prefix(method, nameof(PreBreakLock));
                     }
-                    Postfix(typeof(OWTime).GetMethod("Pause"), nameof(PostPause));
+                    Postfix(typeof(OWTime).GetMethod(nameof(OWTime.Pause)), nameof(PostPause));
                 }
 
                 public static void PostPause(OWTime.PauseType pauseType)
