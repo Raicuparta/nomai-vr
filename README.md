@@ -44,7 +44,8 @@
 
 ## Requirements
 
-- Version 1.1.10+ of the game installed (both Epic and Steam are supported).
+- Version 1.1.10+ of the game installed;
+- Only Epic and Steam versions are supported. Xbox App / Gamepass version will be supported soon;
 - Echoes of the Eye DLC is fully supported but not required;
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
