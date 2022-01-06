@@ -1,10 +1,8 @@
 ﻿using AssetsTools.NET;
 using AssetsTools.NET.Extra;
-using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace NomaiVRPatcher
 {
@@ -18,41 +16,47 @@ namespace NomaiVRPatcher
         public static void Main(string[] args)
         {
             var basePath = args.Length > 0 ? args[0] : ".";
-            var gameManagersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("OuterWilds_Data", "globalgamemanagers"));
+            var gamePath = AppDomain.CurrentDomain.BaseDirectory;
+            var gameManagersPath = Path.Combine(gamePath, Path.Combine(GetDataPath(gamePath), "globalgamemanagers"));
             var backupPath = BackupFile(gameManagersPath);
 
-            Cleanup(AppDomain.CurrentDomain.BaseDirectory);
+            Cleanup(gamePath);
 
-            CopyGameFiles(AppDomain.CurrentDomain.BaseDirectory, Path.Combine(basePath, "files"));
+            CopyGameFiles(gamePath, Path.Combine(basePath, "files"));
 
             PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
         }
 
-        // List of assemblies to patch
-        public static IEnumerable<string> TargetDLLs { get; } = new string[0];
-
-        // Patches the assemblies
-        public static void Patch(AssemblyDefinition assembly) { }
-
-        // Called by BepInEx
-        public static void Initialize()
+        private static string GetExecutableName(string gamePath)
         {
-            var executablePath = Assembly.GetExecutingAssembly().Location;
-            var gameManagersPath = Path.Combine(Path.Combine(executablePath, "OuterWilds_Data"), "globalgamemanagers");
-            var patchersPath = Path.Combine(Path.Combine(Path.Combine(executablePath, "BepInEx"), "patchers"), "NomaiVR");
-            var backupPath = BackupFile(gameManagersPath);
+            var executableNames = new[] {"Outer Wilds.exe", "OuterWilds.exe"};
+            foreach (var executableName in executableNames)
+            {
+                var executablePath = Path.Combine(gamePath, executableName);
+                if (File.Exists(executablePath))
+                {
+                    return Path.GetFileNameWithoutExtension(executablePath);
+                }
+            }
 
-            Cleanup(executablePath);
+            throw new FileNotFoundException($"Outer Wilds exe file not found in {gamePath}");
+        }
 
-            CopyGameFiles(executablePath, Path.Combine(patchersPath, "files"));
-
-            PatchGlobalGameManagers(gameManagersPath, backupPath, patchersPath);
+        private static string GetDataDirectoryName()
+        {
+            var gamePath = AppDomain.CurrentDomain.BaseDirectory;
+            return $"{GetExecutableName(gamePath)}_Data";
+        }
+        
+        private static string GetDataPath(string gamePath)
+        {
+            return Path.Combine(gamePath, $"{GetDataDirectoryName()}");
         }
 
         // Clean up files left from previous versions of the mod
         private static void Cleanup(string gamePath)
         {
-            var dataPath = Path.Combine(gamePath, "OuterWilds_Data");
+            var dataPath = GetDataPath(gamePath);
             var managedPath = Path.Combine(dataPath, "Managed");
             var pluginsPath = Path.Combine(dataPath, "Plugins");
             var toDelete = new[]
@@ -95,7 +99,7 @@ namespace NomaiVRPatcher
             foreach (var subdir in dirs)
             {
                 var tempPath = Path.Combine(gamePath, subdir.Name);
-                CopyGameFiles(tempPath, subdir.FullName);
+                CopyGameFiles(tempPath.Replace("OuterWilds_Data", GetDataDirectoryName()), subdir.FullName);
             }
         }
 
