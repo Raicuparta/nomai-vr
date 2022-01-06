@@ -5,6 +5,7 @@
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
   - [Manual installation](#manual-installation)
+  - [Xbox app / Game Pass version](#xbox-app--game-pass-version)
   - [Uninstalling](#uninstalling)
 - [Requirements](#requirements)
 - [Enabling FSR](#enabling-fsr)
@@ -34,6 +35,33 @@
 - [Download the latest NomaiVR release (Raicuparta.NomaiVR.zip)](https://github.com/Raicuparta/NomaiVR/releases/latest);
 - Extract the `Raicuparta.NomaiVR` directory to the `OWML/Mods` directory;
 - Run `OWML.Launcher.exe` to start the game.
+
+### Xbox app / Game Pass version
+
+If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscription, you'll need to follow some steps to make the game moddable:
+
+- Close the Xbox app (close it in the system tray too, to make sure it's gone completely).
+- Get the [Xbox Insider Hub app](https://www.microsoft.com/en-us/p/xbox-insider-hub/9pldpg46g47z).
+- Start the Xbox Insider Hub app.
+- Select "Previews", and then "Windows Gaming".
+- Click "Join" and wait for the process to finish.
+- At this point, you might need to let the Xbox app install some updates, I'm not sure. I opened the Windows App Store and let it install all pending updates just to be sure.
+- Open the Xbox app.
+- On the top right, click your avatar, then, "Settings".
+- Select "General".
+- Under "Game install options", check "Use advanced installation and management features".
+- Exit the settings menu.
+- Select Outer Wilds in your library.
+- Open the three dots menu, and select "Manage".
+- Under "Advanced management features", click "Enable".
+- Wait for the process to finish.
+- In the same "Manage" menu, go to the "Files" tab.
+- Click "Browse...". This should open a folder with your Xbox PC games.
+- Open the Outer Wilds folder, and then the Content folder.
+- You should now see the game files, including Outer Wilds.exe.
+- Now start the [ Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager), install NomaiVR, and try to start the game.
+- It should automatically detect that you have the Xbox app version of the game, unless you have multiple versions of the game.
+- If the manager has trouble finding it, you can go to the mod manager's options and change the game path to that "Content" folder I mentioned before.
 
 ### Uninstalling
 
