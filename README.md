@@ -86,7 +86,7 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 
 ## Enabling Fixed Foveated Rendering
 
-For RXT Cards, you can [install the Fixed Foveated Rendering addon](https://github.com/artumino/NomaiVR-FixedFoveatedRendering) to get better performance.
+For RXT Cards, you can [install the Fixed Foveated Rendering addon](https://outerwildsmods.com/mods/nomaivrffr) to get better performance.
 
 ## Enabling FSR
 
