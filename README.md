@@ -8,6 +8,7 @@
   - [Xbox app / Game Pass version](#xbox-app--game-pass-version)
   - [Uninstalling](#uninstalling)
 - [Requirements](#requirements)
+- [Enabling Fixed Foveated Rendering](#enabling-fixed-foveated-rendering)
 - [Enabling FSR](#enabling-fsr)
 - [Troubleshooting](#troubleshooting)
   - [Error when starting game](#error-when-starting-game)
@@ -82,6 +83,10 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 - Steam and SteamVR installed (even if you have the Epic version);
 - Strong VR legs (it can be a very intense VR experience);
 - Not compatible with any other mods.
+
+## Enabling Fixed Foveated Rendering
+
+For RXT Cards, you can [install the Fixed Foveated Rendering addon](https://github.com/artumino/NomaiVR-FixedFoveatedRendering) to get better performance.
 
 ## Enabling FSR
 
