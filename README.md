@@ -61,6 +61,7 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 - Now start the [ Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager), install NomaiVR, and try to start the game.
 - It should automatically detect that you have the Xbox app version of the game, unless you have multiple versions of the game.
 - If the manager has trouble finding it, you can go to the mod manager's options and change the game path to that "Content" folder I mentioned before.
+- You'll have to log in with your Xbox account the first time you launch the game (don't skip it).
 - If the game gets stuck in the initial loading screen, try launching it from the Xbox app, and don't skip the intro logos (seems to be a bug in the base game).
 
 ### Uninstalling
@@ -143,6 +144,8 @@ This only helps if you have the game on Steam:
 ### Stuck in initial loading screen (loading forever)
 
 If the game fails to connect to the launcher/store app (Steam, Epic, or Xbox App), it will be forever stuck in the first loading screen, and won't show any menu options to select. If the game is already loading in VR but you are stuck in this screen before being able to see the main menu, try launching the game from the store app. You'll need to start the game from the Mod Manager at least once, every time you install or update NomaiVR. After that you can go back to launching via the original store app.
+
+This can also happen in the Xbox app / Game Pass version of the game, if you skip the Xbox login prompt. Don't skip this prompt, log in with your Xbox account. It should only request you for this information once, after that it won't show up again.
 
 ## Support
 
