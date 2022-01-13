@@ -20,7 +20,7 @@
   - [Stuck in initial loading screen (loading forever)](#stuck-in-initial-loading-screen-loading-forever)
 - [Support](#support)
 - [People](#people)
-- [Development Setup](#development-setup)## Installation
+- [Development Setup](#development-setup)
 
 ### Easy installation (recommended)
 
