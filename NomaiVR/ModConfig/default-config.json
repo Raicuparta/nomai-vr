@@ -85,6 +85,13 @@
       "yes": "Show",
       "no": "Hide"
     },
+    "showLookArrow": {
+      "type": "toggle",
+      "value": true,
+      "title": "Look Arrow",
+      "yes": "Show",
+      "no": "Hide"
+    },
     "disableCursorLock": {
       "type": "toggle",
       "value": true,
