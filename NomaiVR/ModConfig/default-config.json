@@ -92,6 +92,13 @@
       "yes": "Show",
       "no": "Hide"
     },
+    "preventClipping": {
+      "type": "toggle",
+      "value": true,
+      "title": "Prevent Clipping",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
     "disableCursorLock": {
       "type": "toggle",
       "value": true,
