@@ -88,14 +88,21 @@
     "showLookArrow": {
       "type": "toggle",
       "value": true,
-      "title": "Look Arrow",
+      "title": "Look arrow",
       "yes": "Show",
       "no": "Hide"
     },
     "preventClipping": {
       "type": "toggle",
       "value": true,
-      "title": "Prevent Clipping",
+      "title": "Prevent clipping",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
+    "flashlightGesture": {
+      "type": "toggle",
+      "value": true,
+      "title": "Flashlight gesture",
       "yes": "Enabled",
       "no": "Disabled"
     },

@@ -4,6 +4,7 @@ using NomaiVR.ReusableBehaviours;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using NomaiVR.ModConfig;
 
 namespace NomaiVR.Tools
 {
@@ -55,7 +56,9 @@ namespace NomaiVR.Tools
 
             private void HandEnter(Transform hand)
             {
-                ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT);
+                if (ModSettings.FlashlightGesture) {
+                    ControllerInput.SimulateInput(InputConsts.InputCommandType.FLASHLIGHT);
+                }
             }
         }
     }
