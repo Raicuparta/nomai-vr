@@ -1,5 +1,7 @@
 # ![NomaiVR](RepoAssets/banner.png)
 
+NomaiVR is a VR mod for Outer Wilds, with full motion control support.
+
 [![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=flat-square&color=%23e85b46&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=flat-square&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
 
 - [Installation](#installation)
@@ -21,6 +23,8 @@
 - [Support](#support)
 - [People](#people)
 - [Development Setup](#development-setup)
+
+## Installation
 
 ### Easy installation (recommended)
 
@@ -75,14 +79,13 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 ## Requirements
 
 - Version 1.1.10+ of the game installed;
-- Only Epic and Steam versions are supported. Xbox App / Gamepass version will be supported soon;
+- Supports all PC versions of the game (Steam, Epic or Game Pass);
 - Echoes of the Eye DLC is fully supported but not required;
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
-- Steam and SteamVR installed (even if you have the Epic version);
+- Steam and SteamVR installed (even if you're using a non-Steam version of the game);
 - Strong VR legs (it can be a very intense VR experience);
-- Not compatible with any other mods.
 
 ## Enabling Fixed Foveated Rendering
 
