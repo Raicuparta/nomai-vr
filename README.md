@@ -1,6 +1,6 @@
 # ![NomaiVR](RepoAssets/banner.png)
 
-NomaiVR is a VR mod for Outer Wilds, with full motion control support.
+NomaiVR is a VR mod for [Outer Wilds](https://store.steampowered.com/app/753640/Outer_Wilds/), with full motion control support.
 
 [![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=flat-square&color=%23e85b46&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=flat-square&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
 
