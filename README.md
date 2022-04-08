@@ -50,16 +50,19 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 - Select "Previews", and then "Windows Gaming".
 - Click "Join" and wait for the process to finish.
 - At this point, you might need to let the Xbox app install some updates, I'm not sure. I opened the Windows App Store and let it install all pending updates just to be sure.
-- Open the Xbox app.
-- On the top right, click your avatar, then, "Settings".
-- Select "General".
-- Under "Game install options", check "Use advanced installation and management features".
-- Exit the settings menu.
+- **Important**! If you have the most recent updates for the Xbox app and Xbox Gaming Services, then you can skip the following steps because they are [enabled by default](https://www.reddit.com/r/xboxinsiders/comments/szhrjk/comment/hy4lvxn/?utm_source=share&utm_medium=web2x&context=3).
+  - Open the Xbox app.
+  - On the top right, click your avatar, then, "Settings".
+  - Select "General".
+  - Under "Game install options", check "Use advanced installation and management features".
+  - Exit the settings menu.
+  - Select Outer Wilds in your library.
+  - Open the three dots menu, and select "Manage".
+  - Under "Advanced management features", click "Enable".
+  - Wait for the process to finish.
 - Select Outer Wilds in your library.
 - Open the three dots menu, and select "Manage".
-- Under "Advanced management features", click "Enable".
-- Wait for the process to finish.
-- In the same "Manage" menu, go to the "Files" tab.
+- In the "Manage" menu, go to the "Files" tab.
 - Click "Browse...". This should open a folder with your Xbox PC games.
 - Open the Outer Wilds folder, and then the Content folder.
 - You should now see the game files, including Outer Wilds.exe.
