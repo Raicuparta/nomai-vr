@@ -17,7 +17,13 @@ namespace NomaiVR.UI
         {
             private static bool shouldRenderStarLogos;
             private static readonly List<Canvas> patchedCanvases = new List<Canvas>();
-            private static readonly string[] ignoredCanvases = { "LoadManagerFadeCanvas", "PauseBackdropCanvas", "Reticule", "ExplorerCanvas" };
+            private static readonly string[] ignoredCanvases =
+            {
+                "LoadManagerFadeCanvas", 
+                "PauseBackdropCanvas", 
+                "Reticule", 
+                "com.sinai.unityexplorer_Root" // Unity Explorer
+            };
             private readonly List<GameObject> canvasObjectsToHide = new List<GameObject>();
             private Camera flashbackCamera;
             private Transform flashbackCameraParent;
