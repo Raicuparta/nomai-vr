@@ -45,7 +45,7 @@ namespace NomaiVR.Hands
                 var activeCamera = Locator.GetActiveCamera();
                 activeCamera.gameObject.SetActive(false);
                 wrapper = activeCamera.transform.parent;
-                var cameraObject = new GameObject("VrTitleCameraWrapper");
+                var cameraObject = new GameObject("VrTitleStage");
                 cameraObject.SetActive(false);
                 cameraObject.tag = "MainCamera";
                 var camera = cameraObject.AddComponent<Camera>();
@@ -72,7 +72,7 @@ namespace NomaiVR.Hands
 
             private void SetUpWrapperInGame()
             {
-                wrapper = new GameObject("VrGameCameraWrapper").transform;
+                wrapper = new GameObject("VrGameStage").transform;
                 wrapper.parent = Camera.main.transform.parent;
                 wrapper.localRotation = Quaternion.identity;
                 wrapper.localPosition = Camera.main.transform.localPosition;
