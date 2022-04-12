@@ -22,7 +22,7 @@ namespace NomaiVR.Hands
             public static Hand RightHandBehaviour;
             public static Transform LeftHand;
             public static Hand LeftHandBehaviour;
-            private Transform wrapper;
+            public static Transform wrapper; // TODO no static
 
             internal void Start()
             {
@@ -82,7 +82,7 @@ namespace NomaiVR.Hands
             {
                 var right = new GameObject("VrRightHand").AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
-                right.transform.parent = wrapper;
+                right.transform.SetParent(wrapper, true);
                 right.transform.localPosition = Vector3.zero;
                 right.transform.localRotation = Quaternion.identity;
                 right.handPrefab = AssetLoader.HandPrefab;
@@ -94,7 +94,7 @@ namespace NomaiVR.Hands
 
                 var left = new GameObject("VrLeftHand").AddComponent<Hand>();
                 left.pose = SteamVR_Actions.default_LeftHand;
-                left.transform.parent = wrapper;
+                left.transform.SetParent(wrapper, true);
                 left.transform.localPosition = Vector3.zero;
                 left.transform.localRotation = Quaternion.identity;
                 left.isLeft = true;

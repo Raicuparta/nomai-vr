@@ -63,25 +63,49 @@ namespace NomaiVR.Player
                 playerCamera.transform.parent = cameraParent;
                 playerCamera.gameObject.AddComponent<VRCameraManipulator>();
 
-                MoveCameraToPlayerHead();
+                RecenterCameraPosition();
+            }
+            
+            private void RecenterCamera()
+            {
+                RecenterCameraPosition();
+                ScaleCameraToFitPlayerHeight();
+
             }
 
-            private void MoveCameraToPlayerHead()
+            private void RecenterCameraPosition()
             {
                 var movement = PlayerHelper.PlayerHead.position - playerCamera.transform.position;
                 cameraParent.position += movement;
             }
 
+            private void ScaleCameraToFitPlayerHeight()
+            {
+                var handsWrapper = HandsController.Behaviour.wrapper;
+                
+                if (!handsWrapper) return;
+                
+                var playerTransform = Locator.GetPlayerTransform();
+                var baseHeight = Mathf.Abs(playerTransform.Find("Traveller_HEA_Player_v2").localPosition.y * 2);
+                var realPlayerHeight = handsWrapper.InverseTransformPoint(playerCamera.transform.position).y;
+                
+                Logs.WriteInfo($"baseHeight {baseHeight}");
+                Logs.WriteInfo($"realPlayerHeight {realPlayerHeight}");
+
+                cameraParent.localScale = Vector3.one * baseHeight / realPlayerHeight;
+                Logs.WriteInfo($"localScale {cameraParent.localScale}");
+            }
+
             private void CreateRecenterMenuEntry()
             {
-                FindObjectOfType<PauseMenuManager>().AddPauseMenuAction("RECENTER VR", 2, MoveCameraToPlayerHead);
+                FindObjectOfType<PauseMenuManager>().AddPauseMenuAction("RECENTER VR", 2, RecenterCamera);
             }
 
             private void UpdateRecenter()
             {
                 if (recenterAction.stateDown)
                 {
-                    MoveCameraToPlayerHead();
+                    RecenterCamera();
                 }
             }
 
@@ -91,7 +115,7 @@ namespace NomaiVR.Player
 
                 if (cameraToHead.sqrMagnitude > 0.5f)
                 {
-                    MoveCameraToPlayerHead();
+                    RecenterCameraPosition();
                 }
                 
                 UpdateRecenter();
