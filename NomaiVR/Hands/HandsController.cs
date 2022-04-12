@@ -28,7 +28,7 @@ namespace NomaiVR.Hands
             {
                 if (SceneHelper.IsInTitle())
                 {
-                    SetUpWrapperTittle();
+                    SetUpWrapperTitle();
                 }
 
                 if (SceneHelper.IsInGame())
@@ -40,12 +40,12 @@ namespace NomaiVR.Hands
                 SetUpHands();
             }
 
-            private void SetUpWrapperTittle()
+            private void SetUpWrapperTitle()
             {
                 var activeCamera = Locator.GetActiveCamera();
                 activeCamera.gameObject.SetActive(false);
                 wrapper = activeCamera.transform.parent;
-                var cameraObject = new GameObject();
+                var cameraObject = new GameObject("VrTitleCameraWrapper");
                 cameraObject.SetActive(false);
                 cameraObject.tag = "MainCamera";
                 var camera = cameraObject.AddComponent<Camera>();
@@ -72,7 +72,7 @@ namespace NomaiVR.Hands
 
             private void SetUpWrapperInGame()
             {
-                wrapper = new GameObject().transform;
+                wrapper = new GameObject("VrGameCameraWrapper").transform;
                 wrapper.parent = Camera.main.transform.parent;
                 wrapper.localRotation = Quaternion.identity;
                 wrapper.localPosition = Camera.main.transform.localPosition;
@@ -80,7 +80,7 @@ namespace NomaiVR.Hands
 
             private void SetUpHands()
             {
-                var right = new GameObject().AddComponent<Hand>();
+                var right = new GameObject("VrRightHand").AddComponent<Hand>();
                 right.pose = SteamVR_Actions.default_RightHand;
                 right.transform.parent = wrapper;
                 right.transform.localPosition = Vector3.zero;
@@ -92,7 +92,7 @@ namespace NomaiVR.Hands
                 RightHand = right.transform;
                 RightHandBehaviour = right;
 
-                var left = new GameObject().AddComponent<Hand>();
+                var left = new GameObject("VrLeftHand").AddComponent<Hand>();
                 left.pose = SteamVR_Actions.default_LeftHand;
                 left.transform.parent = wrapper;
                 left.transform.localPosition = Vector3.zero;

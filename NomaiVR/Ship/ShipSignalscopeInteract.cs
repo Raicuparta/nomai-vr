@@ -21,7 +21,7 @@ namespace NomaiVR.Ship
             
             var sigScopeDisplay = transform.Find("SigScopeDisplay");
 
-            var canvas = new GameObject().AddComponent<Canvas>();
+            var canvas = new GameObject("VrShipSignalscopeCanvas").AddComponent<Canvas>();
             canvas.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = ShouldRenderScreenText;
 
             var canvasTransform = canvas.transform;
@@ -30,7 +30,7 @@ namespace NomaiVR.Ship
             canvasTransform.localRotation = sigScopeDisplay.localRotation;
             canvasTransform.localScale = sigScopeDisplay.localScale;
 
-            var monitorText = new GameObject().AddComponent<Text>();
+            var monitorText = new GameObject("VrShipSignalscopeText").AddComponent<Text>();
             monitorText.text = "<color=grey>SIGNALSCOPE</color>\n\ninteract with screen to activate";
             monitorText.color = new Color(1, 1, 1, 0.1f);
             monitorText.alignment = TextAnchor.MiddleCenter;

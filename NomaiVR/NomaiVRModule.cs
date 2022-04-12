@@ -51,7 +51,7 @@ namespace NomaiVR
             }
 
             Logs.WriteInfo($"Creating NomaiVR behaviour for {GetType().Name}");
-            var gameObject = new GameObject();
+            var gameObject = new GameObject($"VrModule-{GetType().Name}");
             gameObject.AddComponent<TBehaviour>();
 
             if (IsPersistent)

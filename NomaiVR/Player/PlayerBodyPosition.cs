@@ -53,8 +53,8 @@ namespace NomaiVR.Player
             {
                 // Make an empty parent object for moving the camera around.
                 playerCamera = Locator.GetPlayerCamera();
-                cameraParent = new GameObject().transform;
-                playArea = new GameObject().transform;
+                cameraParent = new GameObject("VrCameraParent").transform;
+                playArea = new GameObject("VrPlayArea").transform;
                 playArea.parent = Locator.GetPlayerTransform();
                 playArea.position = PlayerHelper.PlayerHead.position;
                 playArea.rotation = PlayerHelper.PlayerHead.rotation;

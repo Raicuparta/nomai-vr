@@ -18,7 +18,7 @@ namespace NomaiVR.Ship
             base.Awake();
             var probeCamDisplay = transform.Find("ProbeCamDisplay");
 
-            var monitorText = new GameObject().AddComponent<Text>();
+            var monitorText = new GameObject("VrShipProbeMonitorText").AddComponent<Text>();
             monitorText.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = ShouldRenderScreenText;
             monitorText.text = "<color=grey>PROBE LAUNCHER</color>\n\ninteract with screen\nto activate";
             monitorText.color = new Color(1, 1, 1, 0.1f);

@@ -75,9 +75,9 @@ namespace NomaiVR.ReusableBehaviours
 
         internal void Start()
         {
-            holdableTransform = new GameObject().transform;
+            holdableTransform = new GameObject("VrHoldable").transform;
             holdableTransform.localRotation = Quaternion.identity;
-            rotationTransform = new GameObject().transform;
+            rotationTransform = new GameObject("VrHoldableRotation").transform;
             rotationTransform.SetParent(holdableTransform, false);
             rotationTransform.localPosition = Vector3.zero;
             rotationTransform.localRotation = rotationOffset;

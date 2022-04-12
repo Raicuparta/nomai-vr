@@ -18,7 +18,7 @@ namespace NomaiVR.Ship
             base.Awake();
             cockpitController = FindObjectOfType<ShipCockpitController>();
                 
-            var canvas = new GameObject().AddComponent<Canvas>();
+            var canvas = new GameObject("VrLandingCamCanvas").AddComponent<Canvas>();
             canvas.gameObject.AddComponent<ConditionalRenderer>().GetShouldRender = () => ShouldRenderScreenText() && !cockpitController._landingCam.enabled;
 
             var canvasTransform = canvas.transform;
@@ -27,7 +27,7 @@ namespace NomaiVR.Ship
             canvasTransform.localRotation = Quaternion.Euler(53.28f, 0, 0);
             canvasTransform.localScale = Vector3.one * 0.007f;
             
-            var landingText = new GameObject().AddComponent<Text>();
+            var landingText = new GameObject("VrLandingCamText").AddComponent<Text>();
             landingText.text = "<color=grey>LANDING CAMERA</color>\n\ninteract with screen\nto activate";
             landingText.color = new Color(1, 1, 1, 0.1f);
             landingText.alignment = TextAnchor.MiddleCenter;

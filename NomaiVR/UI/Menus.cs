@@ -88,7 +88,7 @@ namespace NomaiVR.UI
                 flashbackCamera = FindObjectOfType<Flashback>().GetComponent<Camera>();
                 if (!flashbackCameraParent)
                 {
-                    flashbackCameraParent = new GameObject().transform;
+                    flashbackCameraParent = new GameObject("VrFlashbackCameraWrapper").transform;
                 }
                 if (flashbackCamera.transform.parent == null)
                 {
