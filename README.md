@@ -1,4 +1,4 @@
-# ![NomaiVR](RepoAssets/banner.png)
+# ![NomaiVR](RepoAssets/banner.webp)
 
 NomaiVR is a VR mod for [Outer Wilds](https://store.steampowered.com/app/753640/Outer_Wilds/), with full motion control support.
 
