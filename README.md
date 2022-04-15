@@ -20,6 +20,7 @@ NomaiVR is a VR mod for [Outer Wilds](https://store.steampowered.com/app/753640/
   - [Game doesn't work after removing NomaiVR](#game-doesnt-work-after-removing-nomaivr)
   - [Game doesn't start in VR / Desktop Game Theatre shenanigans](#game-doesnt-start-in-vr--desktop-game-theatre-shenanigans)
   - [Stuck in initial loading screen (loading forever)](#stuck-in-initial-loading-screen-loading-forever)
+  - [Keyboard doesn't work](#keyboard-doesnt-work)
 - [Support](#support)
 - [People](#people)
 - [Development Setup](#development-setup)
