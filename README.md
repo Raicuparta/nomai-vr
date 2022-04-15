@@ -149,6 +149,10 @@ If the game fails to connect to the launcher/store app (Steam, Epic, or Xbox App
 
 This can also happen in the Xbox app / Game Pass version of the game, if you skip the Xbox login prompt. Don't skip this prompt, log in with your Xbox account. It should only request you for this information once, after that it won't show up again.
 
+### Keyboard doesn't work
+
+NomaiVR disables the keyboard to work around a bug that kills performance during the end sequence. This means that any mod that relies on keyboard inputs does't work, including any cheats mods. If you want to use these mods, install the latest NomaiVR prerelease. You can do this in the Mod Manager by clicking the three dots icon in the NomaiVR row, and selecting "Install Prerelease". You'll also need to repair the game files (as explained in the [Uninstalling](#uninstalling) instructions) to get the keyboard functionality back.
+
 ## Support
 
 - Via GitHub issues:
