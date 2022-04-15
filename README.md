@@ -152,7 +152,7 @@ This can also happen in the Xbox app / Game Pass version of the game, if you ski
 
 ### Keyboard doesn't work
 
-NomaiVR disables the keyboard to work around a bug that kills performance during the end sequence. This means that any mod that relies on keyboard inputs does't work, including any cheats mods. If you want to use these mods, install the latest NomaiVR prerelease. You can do this in the Mod Manager by clicking the three dots icon in the NomaiVR row, and selecting "Install Prerelease". You'll also need to repair the game files (as explained in the [Uninstalling](#uninstalling) instructions) to get the keyboard functionality back.
+NomaiVR disables the keyboard to work around a bug that kills performance during the end sequence. This means that any mod that relies on keyboard inputs does't work, including any cheats mods. If you want to use these mods, install the latest NomaiVR prerelease. You can do this in the Mod Manager by clicking the three dots icon in the NomaiVR row, and selecting "Install Prerelease". You'll also need to repair the game files (as explained in the [Uninstalling](#uninstalling) instructions) to get the keyboard functionality back. If you do this, you'll have very poor performance in the final sequence of the game, but it shouldn't affect normal gameplay.
 
 ## Support
 
