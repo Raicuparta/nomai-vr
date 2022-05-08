@@ -2,7 +2,7 @@
 
 NomaiVR is a VR mod for [Outer Wilds](https://store.steampowered.com/app/753640/Outer_Wilds/), with full motion control support.
 
-[![Raicuparta's Youtube](https://img.shields.io/endpoint?color=red&label=Youtube&logoColor=red&style=flat-square&url=https%3A%2F%2Fyoutube-channel-badge-orpin.vercel.app%2Fapi%2Fsubscriber)](https://www.youtube.com/c/Raicuparta) [![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=flat-square&color=%23e85b46&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=flat-square&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
+[![Raicuparta's Youtube](https://img.shields.io/endpoint?color=f00&label=Youtube&logoColor=f00&style=flat-square&url=https%3A%2F%2Fyoutube-channel-badge-orpin.vercel.app%2Fapi%2Fsubscriber)](https://www.youtube.com/c/Raicuparta) [![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=flat-square&color=%23ff424d&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=flat-square&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
 
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
