@@ -43,7 +43,7 @@ NomaiVR is a VR mod for [Outer Wilds](https://store.steampowered.com/app/753640/
 
 ### Xbox app / Game Pass version
 
-If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscription, you'll need to follow some steps to make the game moddable:
+If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscription, you'll need to follow some steps to make the game moddable. **You need to do this before installing Outer Wilds. If you've already installed Outer Wilds on the Xbox PC app, uninstall it before following these steps**.
 
 - **Important**! Be sure to have the most recent version of the Xbox app and the GamingServices installed.
 - Close the Xbox app (close it in the system tray too, to make sure it's gone completely).
@@ -51,16 +51,19 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 - Start the Xbox Insider Hub app.
 - Select "Previews", and then "Windows Gaming".
 - Click "Join" and wait for the process to finish.
-- At this point, you might need to let the Xbox app install some updates, I'm not sure. I opened the Windows App Store and let it install all pending updates just to be sure.
+- At this point, you might need to let the Xbox app install some updates. Open Windows App Store and let it install all pending updates just to be sure.
 - Open the Xbox app.
-- Open the three dots menu, and select "Manage".
-- In the "Manage" menu, go to the "Files" tab.
-- Click "Browse...". This should open a folder with your Xbox PC games.
-- Open the Outer Wilds folder, and then the Content folder.
-- You should now see the game files, including Outer Wilds.exe.
-- Now start the [ Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager), install NomaiVR, and try to start the game.
+- Click on your user name on the top left, select "Settings".
+- Under the "General" tab, in the "Game install options" section, confirm that it is showing you a folder where games will be installed. Change it if you want.
+![image](https://user-images.githubusercontent.com/3955124/171329511-aa344df6-df1a-4c2e-a8cf-1a0e2427602c.png)
+- If you don't see this input field, then you probably don't have the insider version of the Xbox app (or they changed how this works again). Make sure the Xbox app is
+updated to the insider version and try again.
+- Install Outer Wilds.
+- Install the [Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager).
+- Start the Mod Manager as administrator (right click the manager shortcut / exe, and select "Run as administrator").
+- Install NomaiVR, and try to start the game by clicking the "Start Game" button in the manager.
 - It should automatically detect that you have the Xbox app version of the game, unless you have multiple versions of the game.
-- If the manager has trouble finding it, you can go to the mod manager's options and change the game path to that "Content" folder I mentioned before.
+- If the manager has trouble finding it, you can go to the mod manager's options and set the game path manually.
 - You'll have to log in with your Xbox account the first time you launch the game (don't skip it).
 - If the game gets stuck in the initial loading screen, try launching it from the Xbox app, and don't skip the intro logos (seems to be a bug in the base game).
 
