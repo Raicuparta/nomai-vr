@@ -3,7 +3,7 @@ CRC: 486693342
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8a843ffc73fb5334b006d9028aaeca26
+    Hash: 88e5d2adc94bd64e72dbef1bac41c0b8
   TypeTreeHash:
     serializedVersion: 2
     Hash: c7c5dc534e7357b33d15743fbed05b86
@@ -35,4 +35,4 @@ Assets:
 - Assets/HandheldTools/SignalscopeButtons.prefab
 - Assets/HandheldTools/Models/ProbeLauncherScreen.fbx
 Dependencies:
-- C:/Users/rai/Repos/nomai-vr/Unity/Assets/StreamingAssets/cockpit-buttons
+- E:/ArtumRepos/Modding/OuterWilds/nomai-upstream/Unity/Assets/StreamingAssets/cockpit-buttons
