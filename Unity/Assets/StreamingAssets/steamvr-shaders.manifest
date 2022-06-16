@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 330592053
+CRC: 1671130502
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ee24843b5bbba524ce8475deff51410d
+    Hash: 081785b8d370b2609b9bfbf11c413c69
   TypeTreeHash:
     serializedVersion: 2
     Hash: 55d48f4ad9c3b13330b9eb5ee5686477
@@ -19,6 +19,7 @@ Assets:
 - Assets/Shaders/SimulationCamera/StereoBlitSimulationMask.shader
 - Assets/Shaders/MindProjectionFix.shader
 - Assets/SteamVR/Resources/SteamVR_Fade_WorldSpace.shader
+- Assets/Shaders/SSSR/stochasticSSR.shader
 - Assets/SteamVR/Resources/SteamVR_SphericalProjection.shader
 - Assets/SteamVR/Resources/SteamVR_AlphaOut.shader
 - Assets/SteamVR/Resources/SteamVR_ColorOut.shader
