@@ -2,6 +2,7 @@
 using System.Linq;
 using NomaiVR.Assets;
 using NomaiVR.Helpers;
+using NomaiVR.ModConfig;
 using NomaiVR.ReusableBehaviours;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +52,24 @@ namespace NomaiVR.UI
                 }
 
                 ScreenCanvasesToWorld();
+
+                ModSettings.OnConfigChange += ModSettings_OnConfigChange;
+            }
+
+            internal void OnDestroy()
+            {
+                ModSettings.OnConfigChange -= ModSettings_OnConfigChange;
+            }
+
+            private void ModSettings_OnConfigChange()
+            {
+                if (Locator.GetMarkerManager() != null)
+                {
+                    foreach (CanvasMarker marker in Locator.GetMarkerManager()._nonFogMarkers)
+                    {
+                        MaterialHelper.ApplyCanvasOpacity(marker._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
+                    }
+                }
             }
 
             internal void Update()
@@ -333,6 +352,11 @@ namespace NomaiVR.UI
                 private static void PostMarkerManagerStart(CanvasMarkerManager __instance)
                 {
                     __instance.GetComponent<Canvas>().planeDistance = 5;
+
+                    foreach (CanvasMarker marker in __instance._nonFogMarkers)
+                    {
+                        MaterialHelper.ApplyCanvasOpacity(marker._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
+                    }
                 }
             }
         }

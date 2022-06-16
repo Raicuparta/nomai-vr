@@ -68,5 +68,20 @@ namespace NomaiVR.Helpers
                 }
             }
         }
+
+        public static void ApplyCanvasOpacity(Canvas canvas, float alpha)
+        {
+            CanvasGroup opacityGroup = canvas.GetComponent<CanvasGroup>();
+            if (opacityGroup == null)
+                opacityGroup = canvas.gameObject.AddComponent<CanvasGroup>();
+            opacityGroup.alpha = alpha;
+
+            foreach (Renderer renderer in canvas.GetComponentsInChildren<Renderer>(true))
+            {
+                var uiColor = renderer.material.color;
+                uiColor.a = alpha; //Squared for more drastic changes
+                renderer.material.SetColor("_Color", uiColor);
+            }
+        }
     }
 }

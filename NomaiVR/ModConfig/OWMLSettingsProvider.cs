@@ -20,6 +20,8 @@ namespace NomaiVR.ModConfig
         public float ToolbeltHeight { get; private set; }
         public float HudScale { get; private set; }
         public float HudOpacity { get; private set; }
+        public float MarkersOpacity { get; private set; }
+        public float LookArrowOpacity { get; private set; }
         public bool HudSmoothFollow { get; private set; } = true;
 
         private readonly IModConfig config;
@@ -41,13 +43,14 @@ namespace NomaiVR.ModConfig
             AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
             HudScale = config.GetSettingsValue<float>("hudScale");
             HudSmoothFollow = config.GetSettingsValue<bool>("hudSmoothFollow");
+            PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
+            HudOpacity = config.GetSettingsValue<float>("hudOpacity");
+            MarkersOpacity = config.GetSettingsValue<float>("markersOpacity");
+            LookArrowOpacity = config.GetSettingsValue<float>("lookArrowOpacity");
 
             // OWML doesn't support negative slider values so I subtract it here.
             ToolbeltHeight = config.GetSettingsValue<float>("toolbeltHeight") - 1f;
 
-            // Disabled these until we can fix scrolling in mod config menu.
-            PreventCursorLock = config.GetSettingsValue<bool>("disableCursorLock");
-            HudOpacity = config.GetSettingsValue<float>("hudOpacity");
             
             OnConfigChange?.Invoke();
         }
