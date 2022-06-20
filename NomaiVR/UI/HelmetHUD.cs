@@ -168,7 +168,7 @@ namespace NomaiVR.UI
                 {
                     if (__instance._offScreenIndicator != null)
                     {
-                        MaterialHelper.ApplyCanvasOpacity(__instance._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
+                        MaterialHelper.SetCanvasAlpha(__instance._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
                     }
                 }
             }

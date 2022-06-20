@@ -67,7 +67,7 @@ namespace NomaiVR.UI
                 {
                     foreach (CanvasMarker marker in Locator.GetMarkerManager()._nonFogMarkers)
                     {
-                        MaterialHelper.ApplyCanvasOpacity(marker._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
+                        MaterialHelper.SetCanvasAlpha(marker._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
                     }
                 }
             }
@@ -355,7 +355,7 @@ namespace NomaiVR.UI
 
                     foreach (CanvasMarker marker in __instance._nonFogMarkers)
                     {
-                        MaterialHelper.ApplyCanvasOpacity(marker._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
+                        MaterialHelper.SetCanvasAlpha(marker._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
                     }
                 }
             }

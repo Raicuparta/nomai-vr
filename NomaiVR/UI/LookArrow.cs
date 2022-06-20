@@ -48,7 +48,7 @@ namespace NomaiVR.UI
 
             internal void SetArrowOpacity()
             {
-                MaterialHelper.ApplyCanvasOpacity(canvas, ModSettings.LookArrowOpacity * ModSettings.LookArrowOpacity);
+                MaterialHelper.SetCanvasAlpha(canvas, ModSettings.LookArrowOpacity * ModSettings.LookArrowOpacity);
             }
 
             internal void Update()

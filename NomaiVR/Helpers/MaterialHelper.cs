@@ -69,7 +69,7 @@ namespace NomaiVR.Helpers
             }
         }
 
-        public static void ApplyCanvasOpacity(Canvas canvas, float alpha)
+        public static void SetCanvasAlpha(Canvas canvas, float alpha)
         {
             CanvasGroup opacityGroup = canvas.GetComponent<CanvasGroup>();
             if (opacityGroup == null)
@@ -79,7 +79,7 @@ namespace NomaiVR.Helpers
             foreach (Renderer renderer in canvas.GetComponentsInChildren<Renderer>(true))
             {
                 var uiColor = renderer.material.color;
-                uiColor.a = alpha; //Squared for more drastic changes
+                uiColor.a = alpha;
                 renderer.material.SetColor("_Color", uiColor);
             }
         }
