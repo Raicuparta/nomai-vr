@@ -1,6 +1,8 @@
-# ![NomaiVR](RepoAssets/banner.png)
+# ![NomaiVR](RepoAssets/banner.webp)
 
-[![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=flat-square&color=%23e85b46&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=flat-square&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
+NomaiVR is a VR mod for [Outer Wilds](https://store.steampowered.com/app/753640/Outer_Wilds/), with full motion control support.
+
+[![Raicuparta's Youtube](https://img.shields.io/endpoint?color=f00&label=Youtube&logoColor=f00&style=flat-square&url=https%3A%2F%2Fyoutube-channel-badge-orpin.vercel.app%2Fapi%2Fsubscriber)](https://www.youtube.com/c/Raicuparta) [![Support on Patreon](https://img.shields.io/badge/dynamic/json?style=flat-square&color=ff424d&label=Patreon&query=data.attributes.patron_count&suffix=%20patrons&url=https%3A%2F%2Fwww.patreon.com%2Fapi%2Fcampaigns%2F7004713&logo=patreon)](https://www.patreon.com/raivr) [![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-blue?style=flat-square&color=blue&logo=paypal)](https://paypal.me/raicuparta/5usd)
 
 - [Installation](#installation)
   - [Easy installation (recommended)](#easy-installation-recommended)
@@ -18,9 +20,12 @@
   - [Game doesn't work after removing NomaiVR](#game-doesnt-work-after-removing-nomaivr)
   - [Game doesn't start in VR / Desktop Game Theatre shenanigans](#game-doesnt-start-in-vr--desktop-game-theatre-shenanigans)
   - [Stuck in initial loading screen (loading forever)](#stuck-in-initial-loading-screen-loading-forever)
+  - [Keyboard doesn't work](#keyboard-doesnt-work)
 - [Support](#support)
 - [People](#people)
 - [Development Setup](#development-setup)
+
+## Installation
 
 ### Easy installation (recommended)
 
@@ -38,30 +43,27 @@
 
 ### Xbox app / Game Pass version
 
-If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscription, you'll need to follow some steps to make the game moddable:
+If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscription, you'll need to follow some steps to make the game moddable. **You need to do this before installing Outer Wilds. If you've already installed Outer Wilds on the Xbox PC app, uninstall it before following these steps**.
 
+- **Important**! Be sure to have the most recent version of the Xbox app and the GamingServices installed.
 - Close the Xbox app (close it in the system tray too, to make sure it's gone completely).
 - Get the [Xbox Insider Hub app](https://www.microsoft.com/en-us/p/xbox-insider-hub/9pldpg46g47z).
 - Start the Xbox Insider Hub app.
 - Select "Previews", and then "Windows Gaming".
 - Click "Join" and wait for the process to finish.
-- At this point, you might need to let the Xbox app install some updates, I'm not sure. I opened the Windows App Store and let it install all pending updates just to be sure.
+- At this point, you might need to let the Xbox app install some updates. Open Windows App Store and let it install all pending updates just to be sure.
 - Open the Xbox app.
-- On the top right, click your avatar, then, "Settings".
-- Select "General".
-- Under "Game install options", check "Use advanced installation and management features".
-- Exit the settings menu.
-- Select Outer Wilds in your library.
-- Open the three dots menu, and select "Manage".
-- Under "Advanced management features", click "Enable".
-- Wait for the process to finish.
-- In the same "Manage" menu, go to the "Files" tab.
-- Click "Browse...". This should open a folder with your Xbox PC games.
-- Open the Outer Wilds folder, and then the Content folder.
-- You should now see the game files, including Outer Wilds.exe.
-- Now start the [ Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager), install NomaiVR, and try to start the game.
+- Click on your user name on the top left, select "Settings".
+- Under the "General" tab, in the "Game install options" section, confirm that it is showing you a folder where games will be installed. Change it if you want.
+![image](https://user-images.githubusercontent.com/3955124/171329511-aa344df6-df1a-4c2e-a8cf-1a0e2427602c.png)
+- If you don't see this input field, then you probably don't have the insider version of the Xbox app (or they changed how this works again). Make sure the Xbox app is
+updated to the insider version and try again.
+- Install Outer Wilds.
+- Install the [Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager).
+- Start the Mod Manager as administrator (right click the manager shortcut / exe, and select "Run as administrator").
+- Install NomaiVR, and try to start the game by clicking the "Start Game" button in the manager.
 - It should automatically detect that you have the Xbox app version of the game, unless you have multiple versions of the game.
-- If the manager has trouble finding it, you can go to the mod manager's options and change the game path to that "Content" folder I mentioned before.
+- If the manager has trouble finding it, you can go to the mod manager's options and set the game path manually.
 - You'll have to log in with your Xbox account the first time you launch the game (don't skip it).
 - If the game gets stuck in the initial loading screen, try launching it from the Xbox app, and don't skip the intro logos (seems to be a bug in the base game).
 
@@ -75,14 +77,13 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 ## Requirements
 
 - Version 1.1.10+ of the game installed;
-- Only Epic and Steam versions are supported. Xbox App / Gamepass version will be supported soon;
+- Supports all PC versions of the game (Steam, Epic or Game Pass);
 - Echoes of the Eye DLC is fully supported but not required;
 - A VR Headset;
 - VR controllers (not playable with a regular game controller);
 - A VR-Ready PC;
-- Steam and SteamVR installed (even if you have the Epic version);
+- Steam and SteamVR installed (even if you're using a non-Steam version of the game);
 - Strong VR legs (it can be a very intense VR experience);
-- Not compatible with any other mods.
 
 ## Enabling Fixed Foveated Rendering
 
@@ -151,6 +152,10 @@ This only helps if you have the game on Steam:
 If the game fails to connect to the launcher/store app (Steam, Epic, or Xbox App), it will be forever stuck in the first loading screen, and won't show any menu options to select. If the game is already loading in VR but you are stuck in this screen before being able to see the main menu, try launching the game from the store app. You'll need to start the game from the Mod Manager at least once, every time you install or update NomaiVR. After that you can go back to launching via the original store app.
 
 This can also happen in the Xbox app / Game Pass version of the game, if you skip the Xbox login prompt. Don't skip this prompt, log in with your Xbox account. It should only request you for this information once, after that it won't show up again.
+
+### Keyboard doesn't work
+
+NomaiVR disables the keyboard to work around a bug that kills performance during the end sequence. This means that any mod that relies on keyboard inputs does't work, including any cheats mods. If you want to use these mods, install the latest NomaiVR prerelease. You can do this in the Mod Manager by clicking the three dots icon in the NomaiVR row, and selecting "Install Prerelease". You'll also need to repair the game files (as explained in the [Uninstalling](#uninstalling) instructions) to get the keyboard functionality back. If you do this, you'll have very poor performance in the final sequence of the game, but it shouldn't affect normal gameplay.
 
 ## Support
 

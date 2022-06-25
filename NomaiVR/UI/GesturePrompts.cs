@@ -36,7 +36,7 @@ namespace NomaiVR.UI
 
             private void SetUpCanvas()
             {
-                canvas = new GameObject().AddComponent<Canvas>();
+                canvas = new GameObject("VrGesturePromptCanvas").AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.WorldSpace;
                 var followTarget = canvas.gameObject.AddComponent<FollowTarget>();
                 canvas.transform.localScale = Vector3.one * 0.0015f;
@@ -58,7 +58,7 @@ namespace NomaiVR.UI
                 var size = new Vector3(13f, 2f, 1);
 
                 // Background that draws on top of everything;
-                var background = new GameObject().AddComponent<Image>();
+                var background = new GameObject("VrGesturePromptBackground").AddComponent<Image>();
                 background.transform.SetParent(canvas.transform, false);
                 background.transform.localScale = size;
                 background.transform.localPosition = Vector3.forward;
@@ -75,7 +75,7 @@ namespace NomaiVR.UI
 
             private void SetUpText()
             {
-                text = new GameObject().AddComponent<Text>();
+                text = new GameObject("VrGesturePromptText").AddComponent<Text>();
                 text.color = Color.white;
                 text.transform.SetParent(canvas.transform, false);
                 text.fontSize = 50;

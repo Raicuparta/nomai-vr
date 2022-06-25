@@ -27,7 +27,7 @@ namespace NomaiVR.UI
                 promptCanvas.transform.localPosition = Vector3.zero;
                 promptCanvas.transform.localRotation = Quaternion.identity;
 
-                holdTransform = new GameObject().transform;
+                holdTransform = new GameObject("VrHoldPrompt").transform;
                 HandsController.Behaviour.DominantHandBehaviour.Initialized += ParentToDominantHand;
 
                 promptCanvas.transform.SetParent(holdTransform, false);

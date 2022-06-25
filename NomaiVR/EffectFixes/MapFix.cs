@@ -19,7 +19,7 @@ namespace NomaiVR.EffectFixes
                 var originalCamera = mapCameraTransform.GetComponent<Camera>();
                 var originalOwCamera = mapCameraTransform.GetComponent<OWCamera>();
 
-                var newCamera = new GameObject().transform;
+                var newCamera = new GameObject("VrMapCamera").transform;
                 newCamera.gameObject.SetActive(false);
                 newCamera.parent = mapCameraTransform;
                 newCamera.localPosition = Vector3.zero;

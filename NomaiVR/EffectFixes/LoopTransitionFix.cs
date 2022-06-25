@@ -56,7 +56,7 @@ namespace NomaiVR.EffectFixes
                 var uplinkTrigger = Object.FindObjectOfType<MemoryUplinkTrigger>();
                 var statue = uplinkTrigger._lockOnTransform;
                 var eye = statue.Find("Props_NOM_StatueHead/eyelid_mid");
-                focus = new GameObject().transform;
+                focus = new GameObject("VrMemoryUplinkFocus").transform;
                 focus.SetParent(eye, false);
 
                 var streams = ____reverseStreams.transform;
@@ -79,7 +79,7 @@ namespace NomaiVR.EffectFixes
 
                 if (____screenTransform.parent == __instance.transform)
                 {
-                    parent = new GameObject().transform;
+                    parent = new GameObject("VrFlashbackWrapper").transform;
                     parent.position = __instance.transform.position;
                     parent.rotation = __instance.transform.rotation;
                     foreach (Transform child in __instance.transform)

@@ -19,12 +19,13 @@ namespace NomaiVR.UI
 
             internal void Start()
             {
+                // TODO: Oof, shouldn't rely on GameObject.Find for this.
                 canvasTransform = GameObject.Find("DialogueCanvas").transform;
 
                 canvasTransform.localScale *= dialogeRenderSize;
 
                 // Prevent dialogue box from flying off after a while.
-                canvasTransform.parent = new GameObject().transform;
+                canvasTransform.parent = new GameObject("VrDialogueWrapper").transform;
                 canvasTransform.parent.gameObject.AddComponent<FollowTarget>().Target = Locator.GetPlayerTransform();
 
                 var canvas = canvasTransform.gameObject.GetComponent<Canvas>();

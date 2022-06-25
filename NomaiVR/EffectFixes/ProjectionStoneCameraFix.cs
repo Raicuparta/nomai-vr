@@ -19,7 +19,7 @@ namespace NomaiVR.EffectFixes
                 var camera = ____slavePlatform.GetOwnedCamera().transform;
                 if (camera.parent.name.Contains("Prefab_NOM_RemoteViewer"))
                 {
-                    var parent = new GameObject().transform;
+                    var parent = new GameObject("VrProjectionStoneCameraParent").transform;
                     parent.parent = ____playerHologram;
                     parent.localPosition = new Vector3(0, -2.5f, 0);
                     parent.localRotation = Quaternion.identity;
