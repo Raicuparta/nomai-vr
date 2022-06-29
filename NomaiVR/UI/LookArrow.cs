@@ -80,12 +80,7 @@ namespace NomaiVR.UI
 
             private void UpdateArrow()
             {
-                if (target == null || !ModSettings.EnableLookArrow)
-                {
-                    HideArrow();
-                    return;
-                }
-                if (CameraHelper.IsOnScreen(target.position))
+                if (target == null || CameraHelper.IsOnScreen(target.position))
                 {
                     HideArrow();
                     return;

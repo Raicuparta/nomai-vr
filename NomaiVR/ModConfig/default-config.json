@@ -99,13 +99,6 @@
       "yes": "Show",
       "no": "Hide"
     },
-    "showLookArrow": {
-      "type": "toggle",
-      "value": true,
-      "title": "Look arrow",
-      "yes": "Show",
-      "no": "Hide"
-    },
     "preventClipping": {
       "type": "toggle",
       "value": true,

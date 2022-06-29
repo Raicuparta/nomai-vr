@@ -14,7 +14,6 @@ namespace NomaiVR.ModConfig
         bool EnableGesturePrompts { get; }
         bool EnableHandLaser { get; }
         bool EnableFeetMarker { get; }
-        bool EnableLookArrow { get; }
         bool PreventClipping { get; }
         bool FlashlightGesture { get; }
         bool ControllerOrientedMovement { get; }

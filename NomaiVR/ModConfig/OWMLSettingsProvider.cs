@@ -15,7 +15,6 @@ namespace NomaiVR.ModConfig
         public bool EnableGesturePrompts { get; private set; }
         public bool EnableHandLaser { get; private set; }
         public bool EnableFeetMarker { get; private set; }
-        public bool EnableLookArrow { get; private set; }
         public bool PreventClipping { get; private set; }
         public bool FlashlightGesture { get; private set; }
         public bool ControllerOrientedMovement { get; private set; }
@@ -42,7 +41,6 @@ namespace NomaiVR.ModConfig
             EnableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
             EnableHandLaser = config.GetSettingsValue<bool>("showHandLaser");
             EnableFeetMarker = config.GetSettingsValue<bool>("showFeetMarker");
-            EnableLookArrow = config.GetSettingsValue<bool>("showLookArrow");
             FlashlightGesture = config.GetSettingsValue<bool>("flashlightGesture");
             PreventClipping = config.GetSettingsValue<bool>("preventClipping");
             DebugMode = config.GetSettingsValue<bool>("debug");
