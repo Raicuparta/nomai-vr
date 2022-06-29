@@ -85,6 +85,27 @@
       "yes": "Show",
       "no": "Hide"
     },
+    "showLookArrow": {
+      "type": "toggle",
+      "value": true,
+      "title": "Look arrow",
+      "yes": "Show",
+      "no": "Hide"
+    },
+    "preventClipping": {
+      "type": "toggle",
+      "value": true,
+      "title": "Prevent clipping",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
+    "flashlightGesture": {
+      "type": "toggle",
+      "value": true,
+      "title": "Flashlight gesture",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
     "disableCursorLock": {
       "type": "toggle",
       "value": true,

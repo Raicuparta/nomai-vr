@@ -16,6 +16,9 @@ namespace NomaiVR.ModConfig
         public static bool EnableGesturePrompts => settingsProvider.EnableGesturePrompts;
         public static bool EnableHandLaser => settingsProvider.EnableHandLaser;
         public static bool EnableFeetMarker => settingsProvider.EnableFeetMarker;
+        public static bool EnableLookArrow => settingsProvider.EnableLookArrow;
+        public static bool PreventClipping => settingsProvider.PreventClipping;
+        public static bool FlashlightGesture => settingsProvider.FlashlightGesture;
         public static bool ControllerOrientedMovement => settingsProvider.ControllerOrientedMovement;
         public static bool AutoHideToolbelt => settingsProvider.AutoHideToolbelt;
         public static float ToolbeltHeight => settingsProvider.ToolbeltHeight;

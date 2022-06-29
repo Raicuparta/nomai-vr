@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NomaiVR.Assets;
 using NomaiVR.Helpers;
+using NomaiVR.ModConfig;
 using UnityEngine;
 
 namespace NomaiVR.UI
@@ -64,7 +65,7 @@ namespace NomaiVR.UI
 
             private void UpdateArrow()
             {
-                if (target == null)
+                if (target == null || !ModSettings.EnableLookArrow)
                 {
                     HideArrow();
                     return;
