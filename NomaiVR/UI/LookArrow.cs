@@ -80,7 +80,7 @@ namespace NomaiVR.UI
 
             private void UpdateArrow()
             {
-                if (target == null)
+                if (target == null || !ModSettings.EnableLookArrow)
                 {
                     HideArrow();
                     return;
