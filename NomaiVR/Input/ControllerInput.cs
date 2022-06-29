@@ -44,13 +44,35 @@ namespace NomaiVR.Input
                 Prefix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
                 Postfix<InputManager>(nameof(InputManager.IsGamepadEnabled), nameof(ForceGamepadEnabled));
                 Postfix<InputManager>(nameof(InputManager.UsingGamepad), nameof(ForceGamepadEnabled));
-                
+
+                Prefix<PlayerCharacterController>(nameof(PlayerCharacterController.UpdateMovement), nameof(PreUpdateMovement));
+                Postfix<PlayerCharacterController>(nameof(PlayerCharacterController.UpdateMovement), nameof(PostUpdateMovement));
+
                 Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
                 Postfix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
             }
+
+            private static void PreUpdateMovement(PlayerCharacterController __instance, out float __state)
+            {
+                //Prevents walking when holding tools and lantern
+                __state = __instance._walkSpeed;
+                if(ShouldPreventWalk)
+                    __instance._walkSpeed = __instance._runSpeed;
+            }
+
+            private static void PostUpdateMovement(PlayerCharacterController __instance, float __state)
+            {
+                if (ShouldPreventWalk)
+                    __instance._walkSpeed = __state;
+            }
+
+            private static bool ShouldPreventWalk => IsToolsetActive || Locator.GetToolModeSwapper()?.GetItemCarryTool()?.GetHeldItemType() == ItemType.DreamLantern;
+
+            private static bool IsToolsetActive => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
+                                            || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
 
             private static void OnToolUnequipped()
             {
