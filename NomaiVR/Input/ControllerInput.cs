@@ -36,6 +36,7 @@ namespace NomaiVR.Input
 
         public class Patch : NomaiVRPatch
         {
+            private static bool disableRoll = false;
             public override void ApplyPatches()
             {
                 Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchInputCommands));
@@ -46,6 +47,7 @@ namespace NomaiVR.Input
                 Postfix<InputManager>(nameof(InputManager.UsingGamepad), nameof(ForceGamepadEnabled));
 
                 Prefix<PlayerCharacterController>(nameof(PlayerCharacterController.UpdateMovement), nameof(PreUpdateMovement));
+                Prefix(typeof(OWInput).GetMethod(nameof(OWInput.IsPressed), new System.Type[] { typeof(IInputCommands), typeof(InputMode), typeof(float) }), nameof(ShouldDisableRoll));
                 Postfix<PlayerCharacterController>(nameof(PlayerCharacterController.UpdateMovement), nameof(PostUpdateMovement));
 
                 Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
@@ -55,18 +57,23 @@ namespace NomaiVR.Input
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
             }
 
-            private static void PreUpdateMovement(PlayerCharacterController __instance, out float __state)
+            private static void PreUpdateMovement()
             {
-                //Prevents walking when holding tools and lantern
-                __state = __instance._walkSpeed;
-                if(ShouldPreventWalk)
-                    __instance._walkSpeed = __instance._runSpeed;
+                disableRoll = ShouldPreventWalk;
             }
 
-            private static void PostUpdateMovement(PlayerCharacterController __instance, float __state)
+            private static bool ShouldDisableRoll(IInputCommands command, ref bool __result)
             {
-                if (ShouldPreventWalk)
-                    __instance._walkSpeed = __state;
+                if (!disableRoll || command.CommandType != InputCommandType.ROLL_MODE)
+                    return true;
+
+                __result = false;
+                return false;
+            }
+
+            private static void PostUpdateMovement()
+            {
+                disableRoll = false;
             }
 
             private static bool ShouldPreventWalk => IsToolsetActive || Locator.GetToolModeSwapper()?.GetItemCarryTool()?.GetHeldItemType() == ItemType.DreamLantern;
