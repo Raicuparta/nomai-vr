@@ -36,6 +36,7 @@ namespace NomaiVR.Input
 
         public class Patch : NomaiVRPatch
         {
+            private static bool disableRoll = false;
             public override void ApplyPatches()
             {
                 Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.UpdateFromAction), nameof(PatchInputCommands));
@@ -44,13 +45,41 @@ namespace NomaiVR.Input
                 Prefix<InputManager>(nameof(InputManager.Rumble), nameof(DoRumble));
                 Postfix<InputManager>(nameof(InputManager.IsGamepadEnabled), nameof(ForceGamepadEnabled));
                 Postfix<InputManager>(nameof(InputManager.UsingGamepad), nameof(ForceGamepadEnabled));
-                
+
+                Prefix<PlayerCharacterController>(nameof(PlayerCharacterController.UpdateMovement), nameof(PreUpdateMovement));
+                Prefix(typeof(OWInput).GetMethod(nameof(OWInput.IsPressed), new System.Type[] { typeof(IInputCommands), typeof(InputMode), typeof(float) }), nameof(ShouldDisableRoll));
+                Postfix<PlayerCharacterController>(nameof(PlayerCharacterController.UpdateMovement), nameof(PostUpdateMovement));
+
                 Postfix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
                 Postfix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.HasSameBinding), nameof(PreventSimulatedHasSameBinding));
 
                 VRToolSwapper.ToolEquipped += OnToolEquipped;
                 VRToolSwapper.UnEquipped += OnToolUnequipped;
             }
+
+            private static void PreUpdateMovement()
+            {
+                disableRoll = ShouldPreventWalk;
+            }
+
+            private static bool ShouldDisableRoll(IInputCommands command, ref bool __result)
+            {
+                if (!disableRoll || command.CommandType != InputCommandType.ROLL_MODE)
+                    return true;
+
+                __result = false;
+                return false;
+            }
+
+            private static void PostUpdateMovement()
+            {
+                disableRoll = false;
+            }
+
+            private static bool ShouldPreventWalk => IsToolsetActive || Locator.GetToolModeSwapper()?.GetItemCarryTool()?.GetHeldItemType() == ItemType.DreamLantern;
+
+            private static bool IsToolsetActive => SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.RightHand)
+                                            || SteamVR_Actions.tools.IsActive(SteamVR_Input_Sources.LeftHand);
 
             private static void OnToolUnequipped()
             {
