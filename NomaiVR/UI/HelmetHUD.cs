@@ -1,4 +1,5 @@
 ﻿
+using Harmony;
 using NomaiVR.Assets;
 using NomaiVR.Helpers;
 using NomaiVR.ModConfig;
@@ -149,6 +150,7 @@ namespace NomaiVR.UI
                     Postfix<ThrustAndAttitudeIndicator>(nameof(ThrustAndAttitudeIndicator.LateUpdate), nameof(FixThrusterHudRotation));
                     Postfix<HUDCamera>(nameof(HUDCamera.Awake), nameof(FixHudDistortion));
                     Postfix<HUDCamera>(nameof(HUDCamera.OnGraphicSettingsUpdated), nameof(FixHudDistortion));
+                    Postfix<ReferenceFrameGUI>(nameof(ReferenceFrameGUI.OnEnable), nameof(ApplyReferenceFrameGUIOpacity));
                 }
 
                 private static void FixHudDistortion(Camera ____camera)
@@ -160,6 +162,14 @@ namespace NomaiVR.UI
                 {
                     var rotation = instance.helmet.InverseTransformRotation(Locator.GetPlayerTransform().rotation);
                     thrusterHUD.transform.rotation = rotation;
+                }
+
+                private static void ApplyReferenceFrameGUIOpacity(ReferenceFrameGUI __instance)
+                {
+                    if (__instance._offScreenIndicator != null)
+                    {
+                        MaterialHelper.SetCanvasAlpha(__instance._canvas, ModSettings.MarkersOpacity * ModSettings.MarkersOpacity);
+                    }
                 }
             }
         }

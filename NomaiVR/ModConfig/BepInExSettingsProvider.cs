@@ -47,6 +47,12 @@ namespace NomaiVR.ModConfig
         private ConfigEntry<float> hudOpacity;
         public float HudOpacity => hudOpacity.Value;
 
+        private ConfigEntry<float> markersOpacity;
+        public float MarkersOpacity => markersOpacity.Value;
+
+        private ConfigEntry<float> lookArrowOpacity;
+        public float LookArrowOpacity => lookArrowOpacity.Value;
+
         private ConfigEntry<bool> hudSmoothFollow;
         public bool HudSmoothFollow => hudSmoothFollow.value;
 
@@ -66,6 +72,8 @@ namespace NomaiVR.ModConfig
             showHelmet = config.Bind(section, "helmetVisibility", true, "");
             hudScale = config.Bind(section, "hudScale", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0.2f, 1.8f)));
             hudOpacity = config.Bind(section, "hudOpacity", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 1f)));
+            markersOpacity = config.Bind(section, "markersOpacity", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 1f)));
+            lookArrowOpacity = config.Bind(section, "lookArrowOpacity", 1f, new ConfigDescription("", new AcceptableValueRange<float>(0f, 1f)));
             hudSmoothFollow = config.Bind(section, "hudSmoothFollow", true, "");
             controllerOrientedMovement = config.Bind(section, "movementControllerOriented", false, "");
             enableGesturePrompts = config.Bind(section, "showGesturePrompts", true, "");

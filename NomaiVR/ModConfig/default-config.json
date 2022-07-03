@@ -50,6 +50,20 @@
       "max": 1,
       "title": "Helmet HUD Opacity"
     },
+    "markersOpacity": {
+      "type": "slider",
+      "value": 1,
+      "min": 0,
+      "max": 1,
+      "title": "Markers Opacity"
+    },
+    "lookArrowOpacity": {
+      "type": "slider",
+      "value": 1,
+      "min": 0,
+      "max": 1,
+      "title": "Look Arrow Opacity"
+    },
     "hudSmoothFollow": {
       "type": "toggle",
       "value": true,
@@ -82,13 +96,6 @@
       "type": "toggle",
       "value": true,
       "title": "Feet markers",
-      "yes": "Show",
-      "no": "Hide"
-    },
-    "showLookArrow": {
-      "type": "toggle",
-      "value": true,
-      "title": "Look arrow",
       "yes": "Show",
       "no": "Hide"
     },

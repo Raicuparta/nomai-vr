@@ -14,7 +14,6 @@ namespace NomaiVR.ModConfig
         bool EnableGesturePrompts { get; }
         bool EnableHandLaser { get; }
         bool EnableFeetMarker { get; }
-        bool EnableLookArrow { get; }
         bool PreventClipping { get; }
         bool FlashlightGesture { get; }
         bool ControllerOrientedMovement { get; }
@@ -22,6 +21,8 @@ namespace NomaiVR.ModConfig
         float ToolbeltHeight { get; }
         float HudScale { get; }
         float HudOpacity { get; }
+        float MarkersOpacity { get; }
+        float LookArrowOpacity { get; }
         bool HudSmoothFollow { get; }
 
         void Configure();

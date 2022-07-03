@@ -17,12 +17,14 @@ namespace NomaiVR.UI
             private Transform leftArrow;
             private Transform wrapper;
 
+            private Canvas canvas;
+
             private static Transform target;
             private static bool pauseNextFrame;
 
             internal void Start()
             {
-                var canvas = Instantiate(AssetLoader.LookArrowPrefab).GetComponent<Canvas>();
+                canvas = Instantiate(AssetLoader.LookArrowPrefab).GetComponent<Canvas>();
                 wrapper = canvas.transform;
                 wrapper.parent = Locator.GetPlayerCamera().transform;
                 wrapper.localPosition = new Vector3(0, 0, 4);
@@ -34,6 +36,19 @@ namespace NomaiVR.UI
                 leftArrow = canvas.transform.Find("look-left");
                 leftArrow.GetComponent<SpriteRenderer>().material = MaterialHelper.GetOverlayMaterial();
                 leftArrow.gameObject.SetActive(false);
+
+                SetArrowOpacity();
+                ModSettings.OnConfigChange += SetArrowOpacity;
+            }
+
+            internal void OnDestroy()
+            {
+                ModSettings.OnConfigChange -= SetArrowOpacity;
+            }
+
+            internal void SetArrowOpacity()
+            {
+                MaterialHelper.SetCanvasAlpha(canvas, ModSettings.LookArrowOpacity * ModSettings.LookArrowOpacity);
             }
 
             internal void Update()
@@ -65,12 +80,7 @@ namespace NomaiVR.UI
 
             private void UpdateArrow()
             {
-                if (target == null || !ModSettings.EnableLookArrow)
-                {
-                    HideArrow();
-                    return;
-                }
-                if (CameraHelper.IsOnScreen(target.position))
+                if (target == null || CameraHelper.IsOnScreen(target.position))
                 {
                     HideArrow();
                     return;
