@@ -9,7 +9,6 @@
 - Create the file `NomaiVR/NomaiVR.csproj.user` in your favorite text editor;
 
 ```xml
-<!-- NomaiVR/NomaiVR.csproj.user -->
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
@@ -23,7 +22,7 @@
 ```
 
 - Edit the entry `<GameDir>` to point to the directory where Outer Wilds is installed;
-- Edit the entry `<OwmlDir>` to point to your OWML directory (it is installed inside the Mod Manager directory);
+- Edit the entry `<OwmlDir>` to point to your OWML `Mods` directory (it is installed inside the Mod Manager directory);
 - Edit the entry `<UnityEditor>` to point to your Unity 2019.4.27 editor executable;
 - Open Unity and import the project under `Unity`, some dependencies should be downloaded;
 - When asked about VR support select `Legacy VR`;
