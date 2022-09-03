@@ -104,8 +104,9 @@ namespace NomaiVR.Tools
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
             var isInDream = Locator.GetDreamWorldController() != null && Locator.GetDreamWorldController().IsInDream();
+            var isHoldingVisionTorch = Locator.GetToolModeSwapper()?.GetItemCarryTool()?.GetHeldItemType() == ItemType.VisionTorch;
             var isHandClose = !ModSettings.AutoHideToolbelt || IsHandNear(HandsController.Behaviour.RightHand) || IsHandNear(HandsController.Behaviour.LeftHand);
-            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && !isInDream && isHandClose;
+            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && !isInDream && !isHoldingVisionTorch && isHandClose;
 
             if (!visible && shouldBeVisible)
             {
