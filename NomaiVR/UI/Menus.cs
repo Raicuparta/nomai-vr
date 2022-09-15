@@ -174,6 +174,10 @@ namespace NomaiVR.UI
             {
                 var titleMenu = GameObject.Find("TitleMenu").transform;
                 var titleCanvas = titleMenu.Find("TitleCanvas");
+                var disconnectedCanvas = titleMenu.Find("DisconnectedCanvas");
+
+                disconnectedCanvas.gameObject.SetActive(false);
+                Destroy(disconnectedCanvas.gameObject);
 
                 // Hide the main menu while other menus are open,
                 // to prevent selecting with laser.
