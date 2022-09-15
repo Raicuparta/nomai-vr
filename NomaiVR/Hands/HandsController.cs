@@ -2,6 +2,7 @@
 using NomaiVR.Helpers;
 using NomaiVR.ModConfig;
 using UnityEngine;
+using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -60,6 +61,7 @@ namespace NomaiVR.Hands
                 camera.cullingMask = activeCamera.cullingMask;
                 camera.depth = activeCamera.mainCamera.depth;
                 camera.tag = activeCamera.tag;
+                ActivateCameraTracking(camera);
 
                 var owCamera = cameraObject.AddComponent<OWCamera>();
                 owCamera.renderSkybox = true;
@@ -72,10 +74,19 @@ namespace NomaiVR.Hands
 
             private void SetUpWrapperInGame()
             {
+                ActivateCameraTracking(Camera.main);
                 wrapper = new GameObject("VrGameStage").transform;
                 wrapper.parent = Camera.main.transform.parent;
                 wrapper.localRotation = Quaternion.identity;
                 wrapper.localPosition = Camera.main.transform.localPosition;
+            }
+
+            private void ActivateCameraTracking(Camera camera)
+            {
+                var hmdTracking = camera.gameObject.AddComponent<TrackedPoseDriver>();
+                hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
+                hmdTracking.updateType = TrackedPoseDriver.UpdateType.BeforeRender;
+                hmdTracking.UseRelativeTransform = false;
             }
 
             private void SetUpHands()
