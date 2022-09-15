@@ -6,11 +6,15 @@
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>
     <StartupObject />
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>UNITYEXPLORER</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AssetsTools.NET" Version="2.0.9" />
+    <PackageReference Include="AssetsTools.NET" Version="2.0.12" />
   </ItemGroup>
   
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
