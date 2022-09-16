@@ -95,20 +95,7 @@ namespace Valve.VR
 
         private static void ShowDialog()
         {
-            int shouldInstall = UnityEditor.EditorUtility.DisplayDialogComplex("SteamVR", "The SteamVR Unity Plugin can be used with the legacy Unity VR API (Unity 5.4 - 2019) or with the Unity XR API (2019+). Would you like to install in legacy VR mode or for Unity XR?", "Legacy VR", "Cancel", "Unity XR");
-
-            switch (shouldInstall)
-            {
-                case 0: //legacy vr
-                    SteamVR_AutoEnableVR_UnityPackage.InstallAndEnableUnityVR();
-                    break;
-                case 1: //cancel
-                    break;
-                case 2: //unity xr
-                    SteamVR_AutoEnableVR_UnityXR.InstallAndEnableUnityXR();
-                    break;
-            }
-
+            SteamVR_AutoEnableVR_UnityPackage.InstallAndEnableUnityVR();
             End();
         }
 

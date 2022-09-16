@@ -1,4 +1,5 @@
 ﻿using NomaiVR.Helpers;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NomaiVR.EffectFixes
@@ -11,6 +12,7 @@ namespace NomaiVR.EffectFixes
         public class Patch : NomaiVRPatch
         {
             private static Transform focus;
+            private static List<Transform> toReparent;
 
             public override void ApplyPatches()
             {
@@ -26,10 +28,14 @@ namespace NomaiVR.EffectFixes
                 Postfix<Flashback>(nameof(Flashback.Start), nameof(PostFlashbackRecorderAwake));
             }
 
-            private static void PostFlashbackRecorderAwake(Transform ____screenTransform, ref Vector3 ____origScreenScale)
+            private static void PostFlashbackRecorderAwake(Flashback __instance, Transform ____screenTransform, ref Vector3 ____origScreenScale)
             {
                 var scale = ____screenTransform.localScale;
                 ____origScreenScale = ____screenTransform.localScale = new Vector3(scale.x * 0.75f, scale.y * 1.5f, scale.z);
+
+                toReparent = new List<Transform>(__instance.transform.childCount);
+                foreach (Transform child in __instance.transform)
+                    toReparent.Add(child);
             }
 
             private static void PostUpdateMemoryLink()
@@ -70,6 +76,8 @@ namespace NomaiVR.EffectFixes
                 screen.SetParent(focus, false);
                 screen.localRotation = Quaternion.identity;
                 screen.localScale = scale;
+
+                toReparent = null;
             }
 
             private static void PatchTriggerFlashback(Flashback __instance, Transform ____maskTransform, Transform ____screenTransform)
@@ -82,6 +90,12 @@ namespace NomaiVR.EffectFixes
                     parent = new GameObject("VrFlashbackWrapper").transform;
                     parent.position = __instance.transform.position;
                     parent.rotation = __instance.transform.rotation;
+
+                    foreach (Transform child in toReparent)
+                    {
+                        child.parent = parent;
+                    }
+
                     foreach (Transform child in __instance.transform)
                     {
                         child.parent = parent;
@@ -97,6 +111,7 @@ namespace NomaiVR.EffectFixes
                 parent.rotation = __instance.transform.rotation;
 
                 ____maskTransform.parent = parent;
+                toReparent = null;
             }
 
             private static void FlashbackUpdate(Flashback __instance, Transform ____maskTransform)
