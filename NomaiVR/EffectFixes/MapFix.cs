@@ -1,4 +1,5 @@
 ﻿
+using NomaiVR.Helpers;
 using UnityEngine;
 
 namespace NomaiVR.EffectFixes
@@ -52,6 +53,8 @@ namespace NomaiVR.EffectFixes
 
                 newCamera.gameObject.SetActive(true);
                 mapController._mapCamera = owCamera;
+
+                CameraHelper.ActivateCameraTracking(owCamera.mainCamera);
 
                 var markerManager = mapCameraTransform.Find("MarkerManager").GetComponent<Canvas>();
                 var lockOnCanvas = mapCameraTransform.Find("MapLockOnCanvas").GetComponent<Canvas>();

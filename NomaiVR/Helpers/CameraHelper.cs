@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SpatialTracking;
 using UnityEngine.XR;
 
 namespace NomaiVR.Helpers
@@ -29,6 +30,15 @@ namespace NomaiVR.Helpers
         public static float GetScaledFieldOfView(Camera camera)
         {
             return camera.fieldOfView / fovFactor;
+        }
+
+
+        public static void ActivateCameraTracking(Camera camera, bool relativeTransform = false)
+        {
+            var hmdTracking = camera.gameObject.GetAddComponent<TrackedPoseDriver>();
+            hmdTracking.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
+            hmdTracking.updateType = TrackedPoseDriver.UpdateType.BeforeRender;
+            hmdTracking.UseRelativeTransform = relativeTransform;
         }
     }
 }

@@ -76,6 +76,7 @@ namespace NomaiVR.EffectFixes
             {
                 Transform parent;
                 CameraHelper.SetFieldOfViewFactor(1, true);
+                CameraHelper.ActivateCameraTracking(__instance._flashbackCamera.mainCamera, true);
 
                 if (____screenTransform.parent == __instance.transform)
                 {

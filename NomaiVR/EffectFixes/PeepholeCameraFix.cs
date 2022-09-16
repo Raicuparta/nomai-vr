@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Helpers;
+using UnityEngine;
 
 namespace NomaiVR.EffectFixes
 {
@@ -26,6 +27,7 @@ namespace NomaiVR.EffectFixes
                     parent.localPosition = __instance._peepholeCamera.transform.localPosition - Vector3.up*playerHeight.y + Vector3.forward*0.3f;
                     parent.localRotation = Quaternion.identity;
                     __instance._peepholeCamera.transform.parent = parent;
+                    CameraHelper.ActivateCameraTracking(__instance._peepholeCamera.mainCamera);
                 }
             }
         }
