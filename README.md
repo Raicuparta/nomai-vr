@@ -1,4 +1,4 @@
-# ![NomaiVR](RepoAssets/banner.webp)
+# ![NomaiVR](RepoAssets/banner.avif)
 
 NomaiVR is a VR mod for [Outer Wilds](https://store.steampowered.com/app/753640/Outer_Wilds/), with full motion control support.
 
@@ -58,9 +58,9 @@ If you got the game from the PC Xbox app, or from your PC Xbox Game Pass Subscri
 - Open the Xbox app.
 - Click on your user name on the top left, select "Settings".
 - Under the "General" tab, in the "Game install options" section, confirm that it is showing you a folder where games will be installed. Change it if you want.
-![image](https://user-images.githubusercontent.com/3955124/171329511-aa344df6-df1a-4c2e-a8cf-1a0e2427602c.png)
+  ![image](https://user-images.githubusercontent.com/3955124/171329511-aa344df6-df1a-4c2e-a8cf-1a0e2427602c.png)
 - If you don't see this input field, then you probably don't have the insider version of the Xbox app (or they changed how this works again). Make sure the Xbox app is
-updated to the insider version and try again.
+  updated to the insider version and try again.
 - Install Outer Wilds.
 - Install the [Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager).
 - Start the Mod Manager as administrator (right click the manager shortcut / exe, and select "Run as administrator").
