@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NomaiVR.Helpers;
+using UnityEngine;
 
 namespace NomaiVR.EffectFixes
 {
@@ -25,6 +26,7 @@ namespace NomaiVR.EffectFixes
                     parent.localRotation = Quaternion.identity;
                     ____slavePlatform.GetOwnedCamera().transform.parent = parent;
                     ____playerHologram.Find("Traveller_HEA_Player_v2").gameObject.SetActive(false);
+                    CameraHelper.ActivateCameraTracking(____slavePlatform.GetOwnedCamera()._camera.mainCamera);
                 }
             }
         }

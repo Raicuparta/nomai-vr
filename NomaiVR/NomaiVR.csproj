@@ -65,6 +65,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.XR.OpenVR">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.XR.Management">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll</HintPath>
+    </Reference>
     <Reference Include="SteamVR_Actions">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll</HintPath>
@@ -142,6 +150,8 @@
     <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR.dll&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR_Actions.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.OpenVR.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.XR.OpenVR.dll&quot;" />
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Unity.XR.Management.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Unity.XR.Management.dll&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Valve.Newtonsoft.Json.dll&quot;" />
     
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" />

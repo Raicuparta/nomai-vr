@@ -1,0 +1,27 @@
+ManifestFileVersion: 0
+CRC: 4265235849
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 26c652334b84945946f3677eae9954d9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: d19d84d07ff9ccc7950e324a2b2e401a
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: d236b7d11115f2143951f1e14045df39, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7a32bfe54d957ec4581fa4a630f1647a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5685c6ec3d77efd409c20e6da27a4c72, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4c3631f5e58749a59194e0cf6baf6d5, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/XR/XRGeneralSettings.asset
+- Assets/XR/Loaders/Open VR Loader.asset
+- Assets/XR/Settings/Open VR Settings.asset
+Dependencies: []

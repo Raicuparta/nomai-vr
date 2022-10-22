@@ -29,6 +29,7 @@ namespace NomaiVR.Assets
         public static GameObject ProbeLauncherHandheldScreenPrefab;
         public static GameObject SignalscopeHandheldButtonsPrefab;
         public static AssetBundle VRBindingTextures;
+        public static AssetBundle XRManager;
         public static Sprite SplashSprite;
         public static Texture2D EmptyTexture;
 
@@ -40,6 +41,8 @@ namespace NomaiVR.Assets
 
             VRBindingTextures = LoadBundle("vrbindings-textures");
             ShaderLoader.LoadBundle(LoadBundle("steamvr-shaders"));
+
+            XRManager = LoadBundle("xrmanager");
 
             var postCreditsBundle = LoadBundle("cinema-camera");
             PostCreditsPrefab = LoadAsset<GameObject>(postCreditsBundle, "postcreditscamera.prefab");

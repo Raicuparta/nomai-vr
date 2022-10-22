@@ -24,7 +24,7 @@ namespace NomaiVRPatcher
 
             CopyGameFiles(gamePath, Path.Combine(basePath, "files"));
 
-            PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
+            //PatchGlobalGameManagers(gameManagersPath, backupPath, basePath);
         }
 
         private static string GetExecutableName(string gamePath)
