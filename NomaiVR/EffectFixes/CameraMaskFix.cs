@@ -111,16 +111,23 @@ namespace NomaiVR.EffectFixes
 
                 private static void PostStartFastForwarding()
                 {
-                    Locator.GetPlayerCamera().enabled = true;
+                    var camera = Locator.GetPlayerCamera();
+                    if (camera == null) return;
+
+                    camera.enabled = true;
                 }
 
                 private static void PostOpenEyes()
                 {
+                    if (instance == null) return;
+
                     instance.OpenEyes();
                 }
 
                 private static void PostCloseEyes(float animDuration)
                 {
+                    if (instance == null) return;
+
                     instance.CloseEyesDelayed(animDuration);
                 }
             }
