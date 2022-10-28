@@ -16,26 +16,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetFrameworkProfile />
-    <Configurations>Debug;Release;OWML;DebugOWML</Configurations>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Configurations>OWML;DebugOWML</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OWML|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -156,9 +137,6 @@
     <Exec Command="copy /y &quot;$(ProjectDir)\manifest.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
     
     <Exec Command="xcopy &quot;$(ProjectDir)\..\NomaiVRPatcher\bin\dist\*&quot; &quot;$(OwmlDir)\$(ModDir)\patcher&quot; /s /e /y" />
-  </Target>
-  <Target Name="PreBuild" BeforeTargets="ResolveReferences" Condition=" '$(Configuration)' == 'Release' ">
-    <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />
   </Target>
   <Target Name="PreBuild" BeforeTargets="ResolveReferences" Condition=" '$(Configuration)' == 'OWML' ">
     <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />
