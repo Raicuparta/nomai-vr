@@ -1,5 +1,4 @@
-﻿using NomaiVR.Loaders;
-using NomaiVR.ModConfig;
+﻿using NomaiVR.ModConfig;
 
 namespace NomaiVR
 {
@@ -20,15 +19,15 @@ namespace NomaiVR
             switch (messageType)
             {
                 case MessageType.Error:
-                    NomaiVRLoaderOwml.Helper.Console.WriteLine(message, OWML.Common.MessageType.Error);
+                    NomaiVR.Helper.Console.WriteLine(message, OWML.Common.MessageType.Error);
                     break;
 
                 case MessageType.Warning:
-                    NomaiVRLoaderOwml.Helper.Console.WriteLine(message, OWML.Common.MessageType.Warning);
+                    NomaiVR.Helper.Console.WriteLine(message, OWML.Common.MessageType.Warning);
                     break;
 
                 default:
-                    NomaiVRLoaderOwml.Helper.Console.WriteLine(message, OWML.Common.MessageType.Info);
+                    NomaiVR.Helper.Console.WriteLine(message, OWML.Common.MessageType.Info);
                     break;
             }
         }

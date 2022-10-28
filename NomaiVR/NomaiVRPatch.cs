@@ -34,13 +34,13 @@ namespace NomaiVR
             AddPrefix(GetMethod<T>(methodName), patchType, patchMethodName);
 
         public void AddPrefix(MethodBase original, Type patchType, string patchMethodName) => 
-            NomaiVR.HarmonyInstance.AddPrefix(original, patchType, patchMethodName);
+            NomaiVR.Helper.HarmonyHelper.AddPrefix(original, patchType, patchMethodName);
 
         public void AddPostfix<T>(string methodName, Type patchType, string patchMethodName) =>
             AddPostfix(GetMethod<T>(methodName), patchType, patchMethodName);
 
         public void AddPostfix(MethodBase original, Type patchType, string patchMethodName) =>
-            NomaiVR.HarmonyInstance.AddPostfix(original, patchType, patchMethodName);
+            NomaiVR.Helper.HarmonyHelper.AddPostfix(original, patchType, patchMethodName);
 
         public void EmptyMethod<T>(string methodName) =>
             EmptyMethod(GetMethod<T>(methodName));

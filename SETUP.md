@@ -36,9 +36,7 @@ The project references should now be working. When you build the solution, the d
 
 The available build configurations are:
 
-- `Debug` which compiles only the mod and patcher binaries for BepInEx
 - `DebugOWML` which compiles only the mod and patcher binaries for OWML
-- `Release` which compiles both the unity project and the mod + patcher for BepInEx
 - `OWML` which compiles both the unity project and the mod + patcher for OWML
 
 If for some reason none of this is working, you might have to set everything manually:

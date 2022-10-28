@@ -4,23 +4,39 @@ using NomaiVR.EffectFixes;
 using NomaiVR.Hands;
 using NomaiVR.Helpers;
 using NomaiVR.Input;
+using NomaiVR.ModConfig;
 using NomaiVR.Tools;
 using NomaiVR.UI;
-using NomaiVR.Loaders.Harmony;
 using NomaiVR.Player;
 using NomaiVR.Saves;
 using NomaiVR.Ship;
+using OWML.Common;
+using OWML.ModHelper;
 
 namespace NomaiVR
 {
-    public class NomaiVR
+    public class NomaiVR : ModBehaviour
     {
-        public static IHarmonyInstance HarmonyInstance;
         public static ModSaveFile Save;
         public static string ModFolderPath;
         public static string GameDataPath;
+        public static IModHelper Helper;
 
-        internal static void ApplyMod()
+        internal void Start()
+        {
+            ModFolderPath = ModHelper.Manifest.ModFolderPath;
+            GameDataPath = ModHelper.OwmlConfig.DataPath;
+            Helper = ModHelper;
+            ApplyMod();
+        }
+
+        public override void Configure(IModConfig config)
+        {
+            var settingsProvider = new OwmlSettingsProvider(config);
+            ModSettings.SetProvider(settingsProvider);
+        }
+        
+        internal void ApplyMod()
         {
             Save = ModSaveFile.LoadSaveFile();
             new AssetLoader();
@@ -40,7 +56,12 @@ namespace NomaiVR
             new DreamFix();
             new ProjectionStoneCameraFix();
             new PeepholeCameraFix();
-            new CameraMaskFix();
+
+            // Camera mask patches fuck up the dreamstalker mod, so we're just disabling them and hoping for the best.
+            if (!ModHelper.Interaction.ModExists("xen.Dreamstalker"))
+            {
+                new CameraMaskFix();
+            }
             new MapFix();
             new PlayerBodyPosition();
             new VRToolSwapper();
