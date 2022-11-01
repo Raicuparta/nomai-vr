@@ -3,5 +3,7 @@ packages
 .vs
 NomaiVR/bin
 NomaiVR/obj
+NomaiVR/NomaiVR.csproj.user
 SteamVR/bin
 SteamVR/obj
+Unity/Packages

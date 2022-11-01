@@ -8,7 +8,7 @@
     <StartupObject />
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>UNITYEXPLORER</DefineConstants>
   </PropertyGroup>
@@ -16,18 +16,34 @@
   <ItemGroup>
     <PackageReference Include="AssetsTools.NET" Version="2.0.12" />
   </ItemGroup>
-  
+
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
-    <Exec Command="md &quot;$(TargetDir)\..\..\dist&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\StreamingAssets\SteamVR&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64&quot;" IgnoreExitCode="true" />
-    <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(TargetDir)\..\..\dist\$(TargetName).dll&quot;" />
-    <Exec Command="copy /y &quot;$(TargetDir)\AssetsTools.NET.dll&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
-    <Exec Command="copy /y &quot;$(TargetDir)\Mono*.dll&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\ClassDatabase\*&quot; &quot;$(TargetDir)\..\..\dist&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\StreamingAssets\SteamVR&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\OpenVrFsr\openvr_api.dll&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_api.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\OpenVrFsr\openvr_mod.cfg&quot; &quot;$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_mod.cfg&quot;" />
+    <ItemGroup>
+      <SingleFile Include="$(TargetPath)">
+        <OutputFile>$(TargetDir)\..\..\dist\$(TargetName).dll</OutputFile>
+      </SingleFile>
+      <SingleFile Include="$(TargetDir)\AssetsTools.NET.dll">
+        <OutputFile>$(TargetDir)\..\..\dist\AssetsTools.NET.dll</OutputFile>
+      </SingleFile>
+      <SingleFile Include="$(ProjectDir)\OpenVrFsr\openvr_api.dll">
+        <OutputFile>$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_api.dll</OutputFile>
+      </SingleFile>
+      <SingleFile Include="$(ProjectDir)\OpenVrFsr\openvr_mod.cfg">
+        <OutputFile>$(TargetDir)\..\..\dist\files\OuterWilds_Data\Plugins\x86_64\openvr_mod.cfg</OutputFile>
+      </SingleFile>
+
+      <Globs Include="$(TargetDir)\Mono*.dll">
+        <OutputFolder>$(TargetDir)\..\..\dist</OutputFolder>
+      </Globs>
+      <Globs Include="$(ProjectDir)\ClassDatabase\*">
+        <OutputFolder>$(TargetDir)\..\..\dist</OutputFolder>
+      </Globs>
+      <Globs Include="$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*">
+        <OutputFolder>$(TargetDir)\..\..\dist\files\OuterWilds_Data\StreamingAssets\SteamVR</OutputFolder>
+      </Globs>
+    </ItemGroup>
+    <Copy SourceFiles="@(SingleFile)" DestinationFiles="@(SingleFile->'%(OutputFile)')" />
+    <Copy SourceFiles="@(Globs)" DestinationFiles="@(Globs->'%(OutputFolder)\%(Filename)%(Extension)')" />
   </Target>
 
   <ItemGroup>
