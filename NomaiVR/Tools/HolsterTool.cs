@@ -16,6 +16,7 @@ namespace NomaiVR.Tools
         public float scale;
         private MeshRenderer[] renderers;
         private bool visible = true;
+        private bool showInDream = false;
         private int equippedIndex = -1;
         private Transform hand;
         public Action ONUnequip;
@@ -100,13 +101,22 @@ namespace NomaiVR.Tools
 
         private bool IsHandNear(Transform hand) => (hand.position - cachedTransform.position).sqrMagnitude < minHandDistance;
 
+        private void UpdateDreamVisibility(bool isInDream)
+        {
+            if (!isInDream) showInDream = false;
+            else showInDream |= (mode == ToolMode.Translator && VRToolSwapper.NomaiTextFocused);
+        }
+
         private void UpdateVisibility()
         {
             var isCharacterMode = OWInput.IsInputMode(InputMode.Character);
-            var isInDream = Locator.GetDreamWorldController() != null && Locator.GetDreamWorldController().IsInDream();
             var isHoldingVisionTorch = Locator.GetToolModeSwapper()?.GetItemCarryTool()?.GetHeldItemType() == ItemType.VisionTorch;
             var isHandClose = !ModSettings.AutoHideToolbelt || IsHandNear(HandsController.Behaviour.RightHand) || IsHandNear(HandsController.Behaviour.LeftHand);
-            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && !isInDream && !isHoldingVisionTorch && isHandClose;
+            var isInDream = Locator.GetDreamWorldController() != null && Locator.GetDreamWorldController().IsInDream();
+
+            UpdateDreamVisibility(isInDream);
+
+            var shouldBeVisible = !ToolHelper.IsUsingAnyTool() && isCharacterMode && (!isInDream || showInDream) && !isHoldingVisionTorch && isHandClose;
 
             if (!visible && shouldBeVisible)
             {

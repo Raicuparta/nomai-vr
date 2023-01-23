@@ -19,6 +19,8 @@ namespace NomaiVR.Tools
         public static event Action Equipped;
         public static event Action UnEquipped;
 
+        public static bool NomaiTextFocused = false;
+
         private static readonly Dictionary<ToolMode, bool> toolsAllowedToEquip = new Dictionary<ToolMode, bool>() {
             { ToolMode.Item, true }
         };
@@ -72,6 +74,7 @@ namespace NomaiVR.Tools
             {
                 Prefix<ToolModeSwapper>(nameof(ToolModeSwapper.EquipToolMode), nameof(PreEquipTool));
                 Prefix<ShipCockpitController>(nameof(ShipCockpitController.OnPressInteract), nameof(PreShipCockpitController));
+                Postfix<ToolModeSwapper>(nameof(ToolModeSwapper.IsNomaiTextInFocus), nameof(PreIsNomaiTextInFocus));
             }
 
             private static void PreShipCockpitController()
@@ -82,6 +85,15 @@ namespace NomaiVR.Tools
             private static bool PreEquipTool(ToolMode mode)
             {
                 return IsAllowedToEquip(mode);
+            }
+
+
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Unusued parameter is needed for return value passthrough.")]
+            private static bool PreIsNomaiTextInFocus(bool __result)
+            {
+                NomaiTextFocused = __result;
+                return false;
             }
         }
     }
