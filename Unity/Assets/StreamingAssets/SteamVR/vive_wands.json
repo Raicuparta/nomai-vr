@@ -97,15 +97,6 @@
             },
             {
                "inputs": {
-                  "click": {
-                     "output": "/actions/default/in/Interact"
-                  }
-               },
-               "mode": "button",
-               "path": "/user/hand/right/input/application_menu"
-            },
-            {
-               "inputs": {
                   "position": {
                      "output": "/actions/default/in/look"
                   }
@@ -115,8 +106,8 @@
             },
             {
                "inputs": {
-                  "north": {
-                     "output": "/actions/default/in/menu"
+                  "center": {
+                     "output": "/actions/default/in/Interact"
                   },
                   "south": {
                      "output": "/actions/default/in/back"
@@ -126,12 +117,12 @@
                "parameters": {
                   "sub_mode": "click"
                },
-               "path": "/user/hand/left/input/trackpad"
+               "path": "/user/hand/right/input/trackpad"
             },
             {
                "inputs": {
                   "click": {
-                     "output": "/actions/default/in/jump"
+                     "output": "/actions/default/in/stationaryuse"
                   }
                },
                "mode": "button",
@@ -216,7 +207,7 @@
             {
                "inputs": {
                   "click": {
-                     "output": "/actions/default/in/stationaryuse"
+                     "output": "/actions/default/in/menu"
                   }
                },
                "mode": "button",
@@ -236,12 +227,6 @@
                   "east": {
                      "output": "/actions/default/in/uisubtabright"
                   },
-                  "north": {
-                     "output": "/actions/default/in/uitabright"
-                  },
-                  "south": {
-                     "output": "/actions/default/in/uitableft"
-                  },
                   "west": {
                      "output": "/actions/default/in/uisubtableft"
                   }
@@ -254,12 +239,34 @@
             },
             {
                "inputs": {
-                  "click": {
+				  "north": {
+					 "output": "/actions/default/in/jump"
+				  },
+                  "center": {
                      "output": "/actions/default/in/secondaryinteract"
                   }
                },
-               "mode": "button",
+               "mode": "dpad",
+               "parameters": {
+                  "sub_mode": "click"
+               },
+               "path": "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/uitabright"
+                  }
+               },
                "path": "/user/hand/right/input/grip"
+            },
+            {
+               "inputs": {
+                  "click": {
+                     "output": "/actions/default/in/uitableft"
+                  }
+               },
+               "path": "/user/hand/left/input/grip"
             }
          ]
       },
@@ -283,7 +290,7 @@
                   }
                },
                "mode": "button",
-               "path": "/user/hand/left/input/application_menu"
+               "path": "/user/hand/left/input/trackpad"
             },
             {
                "inputs": {
@@ -292,7 +299,7 @@
                   }
                },
                "mode": "button",
-               "path": "/user/hand/right/input/application_menu"
+               "path": "/user/hand/right/input/trackpad"
             }
          ]
       }

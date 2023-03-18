@@ -111,32 +111,27 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
-    <Exec Command="del &quot;$(OwmlDir)\$(ModDir)\config.json&quot;" IgnoreExitCode="true" />
+    <Delete Files="$(OwmlDir)\$(ModDir)\config.json" />
+    <ItemGroup>
+      <ToModDir Include="$(OwmlDir)\$(ModDir)\SteamVR.dll" />
+      <ToModDir Include="$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll" />
+      <ToModDir Include="$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll" />
+      <ToModDir Include="$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll" />
+      <ToModDir Include="$(ProjectDir)\ModConfig\default-config.json" />
+      <ToModDir Include="$(ProjectDir)\manifest.json" />
 
-    <Exec Command="md &quot;$(OwmlDir)\$(ModDir)&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\assets&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\poses&quot;" IgnoreExitCode="true" />
-    <Exec Command="md &quot;$(OwmlDir)\$(ModDir)\patcher&quot;" IgnoreExitCode="true" />
-    
+      <Globs Include="$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*">
+        <OutputFolder>$(OwmlDir)\$(ModDir)\bindings</OutputFolder>
+      </Globs>
+      <Globs Include="$(ProjectDir)\Hands\Poses\*.json;$(ProjectDir)\Assets\AssetFiles\*">
+        <OutputFolder>$(OwmlDir)\$(ModDir)\poses</OutputFolder>
+      </Globs>
+      <Recurse Include="$(ProjectDir)\..\NomaiVRPatcher\bin\dist\**\*.*" />
+    </ItemGroup>
 
-    <Exec Command="copy /y &quot;$(TargetPath)&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR_Actions.dll&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Valve.Newtonsoft.Json.dll&quot;" />
-    
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" />
-
-    <Exec Command="copy /y &quot;$(ProjectDir)\Hands\Poses\*.json&quot; &quot;$(OwmlDir)\$(ModDir)\poses&quot;" />
-
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Assets\StreamingAssets\*&quot; &quot;$(OwmlDir)\$(ModDir)\assets&quot;" />
-
-    <Exec Command="copy /y &quot;$(ProjectDir)\Assets\AssetFiles\*&quot; &quot;$(OwmlDir)\$(ModDir)\assets&quot;" />
-
-    <Exec Command="copy /y &quot;$(ProjectDir)\ModConfig\default-config.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
-    <Exec Command="copy /y &quot;$(ProjectDir)\manifest.json&quot; &quot;$(OwmlDir)\$(ModDir)&quot;" />
-    
-    <Exec Command="xcopy &quot;$(ProjectDir)\..\NomaiVRPatcher\bin\dist\*&quot; &quot;$(OwmlDir)\$(ModDir)\patcher&quot; /s /e /y" />
+    <Copy SourceFiles="@(ToModDir)" DestinationFolder="$(OwmlDir)\$(ModDir)" />
+    <Copy SourceFiles="@(Globs)" DestinationFiles="@(Globs->'%(OutputFolder)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(Recurse)" DestinationFiles="$(OwmlDir)\$(ModDir)\patcher\%(RecursiveDir)%(Filename)%(Extension)" />
   </Target>
   <Target Name="PreBuild" BeforeTargets="ResolveReferences" Condition=" '$(Configuration)' == 'OWML' ">
     <Exec Command="&quot;$(UnityEditor)&quot; -batchmode -executeMethod BuildCommands.PerformBuild -nographics -projectPath &quot;$(ProjectDir)..\Unity&quot; -buildWindows64Player -quit" />
