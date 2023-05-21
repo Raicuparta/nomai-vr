@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NomaiVR.Helpers;
+using NomaiVR.ModConfig;
 using UnityEngine;
 
 namespace NomaiVR.EffectFixes
@@ -20,6 +21,8 @@ namespace NomaiVR.EffectFixes
             
                 public override void ApplyPatches()
                 {
+                    if (NomaiVR.Helper.Interaction.ModExists("Raicuparta.QuantumSpaceBuddies"))
+                        return;
                     // OWRigidBody will unparent every physics object, so the rotation of Timber Hearth needs to happen
                     // before OWRigidBody.Awake. Otherwise those objects would stay behind.
                     Prefix<OWRigidbody>(nameof(OWRigidbody.Awake), nameof(RotateTimberHearth));
@@ -31,7 +34,7 @@ namespace NomaiVR.EffectFixes
                 // Rotate Timber Hearth so that Giand's Deep is visible without the player looking up.
                 private static void RotateTimberHearth()
                 {
-                    if (isInitialized) return;
+                    if (isInitialized || !ModSettings.RotateTimberHearth) return;
                     isInitialized = true;
                     
                     if (!SceneHelper.IsInSolarSystem()) return;
@@ -46,7 +49,7 @@ namespace NomaiVR.EffectFixes
                 // Rotate player around their Y axis so that they start facing Giant's Deep.
                 private static void RotatePlayer(PlayerSpawner __instance)
                 {
-                    if (__instance._initialSpawnPoint == null || LoadManager.GetCurrentScene() != OWScene.SolarSystem) return;
+                    if (__instance._initialSpawnPoint == null || LoadManager.GetCurrentScene() != OWScene.SolarSystem || !ModSettings.RotateTimberHearth) return;
                     var playerTransform = __instance._playerBody.transform;
 		            var playerPosition = playerTransform.position;
                     var playerUp = playerTransform.up;
@@ -54,8 +57,8 @@ namespace NomaiVR.EffectFixes
 		            var projectedPosition = Vector3.Project(playerPosition, playerUp) - playerPosition;
                     var giantsDeepPosition = Locator.GetAstroObject(AstroObject.Name.GiantsDeep).transform.position;
                     var projectedForward = Vector3.Project(playerForward, playerUp);
-                    var siantsDeepDirection = Vector3.Project(giantsDeepPosition - playerPosition, playerUp);
-                    var angle = Vector3.Angle(projectedForward, siantsDeepDirection);
+                    var giantsDeepDirection = Vector3.Project(giantsDeepPosition - playerPosition, playerUp);
+                    var angle = Vector3.Angle(projectedForward, giantsDeepDirection);
 		            var rotationOffset = Quaternion.AngleAxis(Vector3.Angle(playerForward, projectedPosition) + angle, playerUp);
 		            playerTransform.rotation = rotationOffset * playerTransform.rotation;
                 }

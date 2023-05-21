@@ -17,6 +17,7 @@ namespace NomaiVR.ModConfig
         public bool EnableFeetMarker { get; private set; }
         public bool PreventClipping { get; private set; }
         public bool FlashlightGesture { get; private set; }
+        public bool RotateTimberHearth { get; private set; }
         public bool ControllerOrientedMovement { get; private set; }
         public bool AutoHideToolbelt { get; private set; }
         public float ToolbeltHeight { get; private set; }
@@ -42,6 +43,7 @@ namespace NomaiVR.ModConfig
             EnableHandLaser = config.GetSettingsValue<bool>("showHandLaser");
             EnableFeetMarker = config.GetSettingsValue<bool>("showFeetMarker");
             FlashlightGesture = config.GetSettingsValue<bool>("flashlightGesture");
+            RotateTimberHearth = config.GetSettingsValue<bool>("rotateTimberHearth");
             PreventClipping = config.GetSettingsValue<bool>("preventClipping");
             DebugMode = config.GetSettingsValue<bool>("debug");
             AutoHideToolbelt = config.GetSettingsValue<bool>("autoHideToolbelt");
