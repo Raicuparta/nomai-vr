@@ -113,6 +113,13 @@
       "yes": "Enabled",
       "no": "Disabled"
     },
+    "rotateTimberHearth": {
+      "type": "toggle",
+      "value": true,
+      "title": "Rotate Timber Hearth",
+      "yes": "Enabled",
+      "no": "Disabled"
+    },
     "disableCursorLock": {
       "type": "toggle",
       "value": true,
