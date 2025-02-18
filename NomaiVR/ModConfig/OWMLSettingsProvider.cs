@@ -18,6 +18,8 @@ namespace NomaiVR.ModConfig
         public bool PreventClipping { get; private set; }
         public bool FlashlightGesture { get; private set; }
         public bool ControllerOrientedMovement { get; private set; }
+        public bool SnapTurning { get; private set; }
+        public float SnapTurnIncrement { get; private set; }
         public bool AutoHideToolbelt { get; private set; }
         public float ToolbeltHeight { get; private set; }
         public float HudScale { get; private set; }
@@ -38,6 +40,8 @@ namespace NomaiVR.ModConfig
             VibrationStrength = config.GetSettingsValue<float>("vibrationIntensity");
             ShowHelmet = config.GetSettingsValue<bool>("helmetVisibility");
             ControllerOrientedMovement = config.GetSettingsValue<bool>("movementControllerOriented");
+            SnapTurning = config.GetSettingsValue<bool>("snapTurning");
+            SnapTurnIncrement = config.GetSettingsValue<float>("snapTurnIncrement");
             EnableGesturePrompts = config.GetSettingsValue<bool>("showGesturePrompts");
             EnableHandLaser = config.GetSettingsValue<bool>("showHandLaser");
             EnableFeetMarker = config.GetSettingsValue<bool>("showFeetMarker");
