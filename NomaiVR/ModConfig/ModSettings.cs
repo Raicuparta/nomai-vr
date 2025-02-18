@@ -19,6 +19,8 @@ namespace NomaiVR.ModConfig
         public static bool PreventClipping => settingsProvider.PreventClipping;
         public static bool FlashlightGesture => settingsProvider.FlashlightGesture;
         public static bool ControllerOrientedMovement => settingsProvider.ControllerOrientedMovement;
+        public static bool SnapTurning => settingsProvider.SnapTurning;
+        public static float SnapTurnIncrement => settingsProvider.SnapTurnIncrement;
         public static bool AutoHideToolbelt => settingsProvider.AutoHideToolbelt;
         public static float ToolbeltHeight => settingsProvider.ToolbeltHeight;
         public static float HudScale => settingsProvider.HudScale;
