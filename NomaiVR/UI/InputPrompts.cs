@@ -57,10 +57,31 @@ namespace NomaiVR.UI
                 Logs.Write($"Registering for controller binding changes");
                 SteamVR_Actions._default.Grip.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => ActiveDeviceChanged(fromAction), SteamVR_Input_Sources.Any);
                 SteamVR_Actions.tools.Use.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => InvalidateButtonImages(), SteamVR_Input_Sources.Any);
-                // Controllers without a tools/use binding never fire the listener above, so also refresh when a tool is taken or put away.
+
                 VRToolSwapper.ToolEquipped += InvalidateButtonImages;
                 VRToolSwapper.UnEquipped += InvalidateButtonImages;
+
+                RefreshWhenBindingChanges(
+                    SteamVR_Actions.tools.Secondary,
+                    SteamVR_Actions.tools.DPadUp,
+                    SteamVR_Actions.tools.DPadDown,
+                    SteamVR_Actions.tools.DPadLeft,
+                    SteamVR_Actions.tools.DPadRight,
+                    SteamVR_Actions.ship_tools.Use,
+                    SteamVR_Actions.ship_tools.Secondary,
+                    SteamVR_Actions.ship_tools.DPadUp,
+                    SteamVR_Actions.ship_tools.DPadDown,
+                    SteamVR_Actions.ship_tools.DPadLeft,
+                    SteamVR_Actions.ship_tools.DPadRight);
                 ActiveDeviceChanged(SteamVR_Actions._default.Grip);
+            }
+
+            private static void RefreshWhenBindingChanges(params SteamVR_Action_Boolean[] actions)
+            {
+                foreach (var action in actions)
+                {
+                    action.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => InvalidateButtonImages(), SteamVR_Input_Sources.Any);
+                }
             }
 
             private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)

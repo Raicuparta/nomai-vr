@@ -2,6 +2,7 @@
 using NomaiVR.Helpers;
 using NomaiVR.Input.ActionInputs;
 using NomaiVR.Tools;
+using NomaiVR.UI;
 using Valve.VR;
 using static InputConsts;
 using static Valve.VR.SteamVR_Actions;
@@ -13,8 +14,8 @@ namespace NomaiVR.Input
         private static readonly HandBooleanActionInput ToolUse =
             new HandBooleanActionInput(_default.GripClick, () => InteractingHandSource);
 
-        private static readonly BooleanActionInput ToolSecondary =
-            new BooleanActionInput(action: tools.Secondary, eitherHand: true);
+        private static readonly HandBooleanActionInput ToolSecondary =
+            new HandBooleanActionInput(tools.Secondary, () => InteractingHandSource);
 
         private static readonly BooleanActionInput ToolUp =
             new BooleanActionInput(action: tools.DPadUp, eitherHand: true, clickable: false);
@@ -76,21 +77,21 @@ namespace NomaiVR.Input
 
         public static bool TryGetActionInput(InputCommandType commandType, out IActionInput actionInput)
         {
+            actionInput = null;
+            if (!IsSteamFrame) return false;
+
             var inputMap = ToolHelper.IsUsingAnyTool(ToolGroup.Ship) ? ShipToolsInputMap
-                : IsToolsetActive ? ToolsInputMap
+                : IsHoldingHandheldTool ? ToolsInputMap
                 : null;
 
-            if (inputMap != null && inputMap.TryGetValue(commandType, out actionInput) && actionInput.Active)
-            {
-                return true;
-            }
-
-            actionInput = null;
-            return false;
+            return inputMap != null && inputMap.TryGetValue(commandType, out actionInput);
         }
 
-        private static bool IsToolsetActive => tools.IsActive(SteamVR_Input_Sources.LeftHand)
-                                               || tools.IsActive(SteamVR_Input_Sources.RightHand);
+        private static bool IsSteamFrame => InputPrompts.Instance != null
+                                            && InputPrompts.Instance.Platform == InputPrompts.ActiveVRPlatform.SteamFrame;
+
+        private static bool IsHoldingHandheldTool => VRToolSwapper.InteractingHand != null
+                                                     && InputHelper.IsHandheldTool();
 
         private static SteamVR_Input_Sources InteractingHandSource =>
             VRToolSwapper.InteractingHand != null ? VRToolSwapper.InteractingHand.InputSource : SteamVR_Input_Sources.Any;
