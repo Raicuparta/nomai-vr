@@ -86,6 +86,8 @@ namespace NomaiVR.UI
 
             private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)
             {
+                if (!fromAction.active || fromAction.activeOrigin == 0) return; // prevents switching device during scene load
+
                 var activeDevice = SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ControllerType_String, fromAction.trackedDeviceIndex);
                 Logs.Write($"#### Got active device: {activeDevice}");
 

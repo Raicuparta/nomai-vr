@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2484017312
+CRC: 4291462905
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 441e0cd7fee22b457f17854002275d1d
+    Hash: a074ea72b74a37f557018376c012d59b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7859cd501ea75098bcf7e53f1b477c26
@@ -110,7 +110,7 @@ Assets:
 - Assets/VRBindings/Texture2D/WMR/Left/thumbstick_down.png
 - Assets/VRBindings/Texture2D/WMR/Left/trackpad_down.png
 - Assets/VRBindings/Texture2D/Index/Right/squeeze.png
-- Assets/VRBindings/Texture2D/SteamFrame/Right/grip.png
+- Assets/VRBindings/Texture2D/SteamFrame/Right/button_grip.png
 - Assets/VRBindings/Texture2D/Vive/Left/trackpad_down.png
 - Assets/VRBindings/Texture2D/Generic/Left/trigger.png
 - Assets/VRBindings/Texture2D/SteamFrame/Right/thumbstick_down.png
@@ -164,7 +164,7 @@ Assets:
 - Assets/VRBindings/Texture2D/Oculus/Right/button_menu.png
 - Assets/VRBindings/Texture2D/Generic/Right/trackpad_down.png
 - Assets/VRBindings/Texture2D/Generic/Left/button_grip.png
-- Assets/VRBindings/Texture2D/SteamFrame/Left/grip.png
+- Assets/VRBindings/Texture2D/SteamFrame/Left/button_grip.png
 - Assets/VRBindings/Texture2D/WMR/Left/trackpad_up.png
 - Assets/VRBindings/Texture2D/WMR/Right/thumbstick_right.png
 - Assets/VRBindings/Texture2D/Generic/Right/trackpad_click.png
