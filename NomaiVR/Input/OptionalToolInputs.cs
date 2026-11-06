@@ -2,7 +2,6 @@
 using NomaiVR.Helpers;
 using NomaiVR.Input.ActionInputs;
 using NomaiVR.Tools;
-using NomaiVR.UI;
 using Valve.VR;
 using static InputConsts;
 using static Valve.VR.SteamVR_Actions;
@@ -87,8 +86,7 @@ namespace NomaiVR.Input
             return inputMap != null && inputMap.TryGetValue(commandType, out actionInput);
         }
 
-        private static bool IsSteamFrame => InputPrompts.Instance != null
-                                            && InputPrompts.Instance.Platform == InputPrompts.ActiveVRPlatform.SteamFrame;
+        private static bool IsSteamFrame => ControllerPlatform.Current == ActiveVRPlatform.SteamFrame;
 
         private static bool IsHoldingHandheldTool => VRToolSwapper.InteractingHand != null
                                                      && InputHelper.IsHandheldTool();
