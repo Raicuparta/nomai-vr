@@ -21,6 +21,8 @@ namespace Valve.VR
         
         private static SteamVR_Input_ActionSet_tools p_tools;
         
+        private static SteamVR_Input_ActionSet_ship_tools p_ship_tools;
+        
         public static SteamVR_Input_ActionSet_default _default
         {
             get
@@ -37,13 +39,23 @@ namespace Valve.VR
             }
         }
         
+        public static SteamVR_Input_ActionSet_ship_tools ship_tools
+        {
+            get
+            {
+                return SteamVR_Actions.p_ship_tools.GetCopy<SteamVR_Input_ActionSet_ship_tools>();
+            }
+        }
+        
         private static void StartPreInitActionSets()
         {
             SteamVR_Actions.p__default = ((SteamVR_Input_ActionSet_default)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_default>("/actions/default")));
             SteamVR_Actions.p_tools = ((SteamVR_Input_ActionSet_tools)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_tools>("/actions/tools")));
+            SteamVR_Actions.p_ship_tools = ((SteamVR_Input_ActionSet_ship_tools)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_ship_tools>("/actions/ship_tools")));
             Valve.VR.SteamVR_Input.actionSets = new Valve.VR.SteamVR_ActionSet[] {
                     SteamVR_Actions._default,
-                    SteamVR_Actions.tools};
+                    SteamVR_Actions.tools,
+                    SteamVR_Actions.ship_tools};
         }
     }
 }

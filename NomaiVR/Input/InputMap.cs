@@ -105,6 +105,11 @@ namespace NomaiVR.Input
 
         private static IActionInput TryGetActionInput(InputCommandType commandType)
         {
+            if (OptionalToolInputs.TryGetActionInput(commandType, out var optionalToolInput))
+            {
+                return optionalToolInput;
+            }
+
             if (ShouldUseShipToolsMap && ShipToolsInputMap.ContainsKey(commandType))
             {
                 return ShipToolsInputMap[commandType];

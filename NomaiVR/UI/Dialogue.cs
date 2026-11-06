@@ -53,8 +53,17 @@ namespace NomaiVR.UI
                     Prefix<CharacterDialogueTree>(nameof(CharacterDialogueTree.StartConversation), nameof(PreStartConversation));
                     Postfix<CharacterDialogueTree>(nameof(CharacterDialogueTree.StartConversation), nameof(PostStartConversation));
                     Prefix<CharacterDialogueTree>(nameof(CharacterDialogueTree.EndConversation), nameof(PreEndConversation));
-                    Postfix<DialogueOptionUI>(nameof(DialogueOptionUI.Awake), nameof(PostDialogueOptionAwake));
+                    // DialogueOptionUI.Awake no longer exists in newer game versions, so set up the options once the box creates them.
+                    Postfix<DialogueBoxVer2>(nameof(DialogueBoxVer2.SetUpOptions), nameof(PostSetUpOptions));
                     Postfix<DialogueOptionUI>(nameof(DialogueOptionUI.SetSelected), nameof(PreSetButtonPromptImage));
+                }
+
+                private static void PostSetUpOptions(DialogueBoxVer2 __instance)
+                {
+                    foreach (var option in __instance.GetComponentsInChildren<DialogueOptionUI>(true))
+                    {
+                        if (option.GetComponent<BoxCollider>() == null) SetUpDialogueOption(option);
+                    }
                 }
 
                 private static void PreSetButtonPromptImage(Image ____buttonPromptImage)
@@ -63,10 +72,10 @@ namespace NomaiVR.UI
                     ____buttonPromptImage.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), texture.width);
                 }
 
-                private static void PostDialogueOptionAwake(DialogueOptionUI __instance)
+                private static void SetUpDialogueOption(DialogueOptionUI option)
                 {
-                    var text = __instance.GetComponentInChildren<Text>();
-                    var collider = __instance.gameObject.AddComponent<BoxCollider>();
+                    var text = option.GetComponentInChildren<Text>(true);
+                    var collider = option.gameObject.AddComponent<BoxCollider>();
 
                     var rectTransform = text.GetComponent<RectTransform>();
                     var thickness = 10f;
@@ -75,7 +84,7 @@ namespace NomaiVR.UI
                     collider.size = new Vector3(width, height, thickness);
                     collider.center = new Vector3(0, -height * 0.5f, thickness * 0.5f);
 
-                    MaterialHelper.MakeGraphicChildrenDrawOnTop(__instance.gameObject);
+                    MaterialHelper.MakeGraphicChildrenDrawOnTop(option.gameObject);
                 }
 
                 private static void PreStartConversation(CharacterDialogueTree __instance)

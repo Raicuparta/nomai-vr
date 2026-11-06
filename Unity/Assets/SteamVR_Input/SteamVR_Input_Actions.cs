@@ -73,11 +73,35 @@ namespace Valve.VR
         
         private static SteamVR_Action_Boolean p_default_SecondaryInteract;
         
+        private static SteamVR_Action_Boolean p_default_GripClick;
+        
         private static SteamVR_Action_Vibration p_default_Haptic;
         
         private static SteamVR_Action_Vector2 p_tools_DPad;
         
         private static SteamVR_Action_Boolean p_tools_Use;
+        
+        private static SteamVR_Action_Boolean p_tools_DPadUp;
+        
+        private static SteamVR_Action_Boolean p_tools_DPadDown;
+        
+        private static SteamVR_Action_Boolean p_tools_DPadLeft;
+        
+        private static SteamVR_Action_Boolean p_tools_DPadRight;
+        
+        private static SteamVR_Action_Boolean p_tools_Secondary;
+        
+        private static SteamVR_Action_Boolean p_ship_tools_Use;
+        
+        private static SteamVR_Action_Boolean p_ship_tools_Secondary;
+        
+        private static SteamVR_Action_Boolean p_ship_tools_DPadUp;
+        
+        private static SteamVR_Action_Boolean p_ship_tools_DPadDown;
+        
+        private static SteamVR_Action_Boolean p_ship_tools_DPadLeft;
+        
+        private static SteamVR_Action_Boolean p_ship_tools_DPadRight;
         
         public static SteamVR_Action_Boolean default_Grip
         {
@@ -303,6 +327,14 @@ namespace Valve.VR
             }
         }
         
+        public static SteamVR_Action_Boolean default_GripClick
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_GripClick.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
         public static SteamVR_Action_Vibration default_Haptic
         {
             get
@@ -324,6 +356,94 @@ namespace Valve.VR
             get
             {
                 return SteamVR_Actions.p_tools_Use.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean tools_DPadUp
+        {
+            get
+            {
+                return SteamVR_Actions.p_tools_DPadUp.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean tools_DPadDown
+        {
+            get
+            {
+                return SteamVR_Actions.p_tools_DPadDown.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean tools_DPadLeft
+        {
+            get
+            {
+                return SteamVR_Actions.p_tools_DPadLeft.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean tools_DPadRight
+        {
+            get
+            {
+                return SteamVR_Actions.p_tools_DPadRight.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean tools_Secondary
+        {
+            get
+            {
+                return SteamVR_Actions.p_tools_Secondary.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean ship_tools_Use
+        {
+            get
+            {
+                return SteamVR_Actions.p_ship_tools_Use.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean ship_tools_Secondary
+        {
+            get
+            {
+                return SteamVR_Actions.p_ship_tools_Secondary.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean ship_tools_DPadUp
+        {
+            get
+            {
+                return SteamVR_Actions.p_ship_tools_DPadUp.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean ship_tools_DPadDown
+        {
+            get
+            {
+                return SteamVR_Actions.p_ship_tools_DPadDown.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean ship_tools_DPadLeft
+        {
+            get
+            {
+                return SteamVR_Actions.p_ship_tools_DPadLeft.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean ship_tools_DPadRight
+        {
+            get
+            {
+                return SteamVR_Actions.p_ship_tools_DPadRight.GetCopy<SteamVR_Action_Boolean>();
             }
         }
         
@@ -358,9 +478,21 @@ namespace Valve.VR
                     SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.default_UIDpad,
                     SteamVR_Actions.default_SecondaryInteract,
+                    SteamVR_Actions.default_GripClick,
                     SteamVR_Actions.default_Haptic,
                     SteamVR_Actions.tools_DPad,
-                    SteamVR_Actions.tools_Use};
+                    SteamVR_Actions.tools_Use,
+                    SteamVR_Actions.tools_DPadUp,
+                    SteamVR_Actions.tools_DPadDown,
+                    SteamVR_Actions.tools_DPadLeft,
+                    SteamVR_Actions.tools_DPadRight,
+                    SteamVR_Actions.tools_Secondary,
+                    SteamVR_Actions.ship_tools_Use,
+                    SteamVR_Actions.ship_tools_Secondary,
+                    SteamVR_Actions.ship_tools_DPadUp,
+                    SteamVR_Actions.ship_tools_DPadDown,
+                    SteamVR_Actions.ship_tools_DPadLeft,
+                    SteamVR_Actions.ship_tools_DPadRight};
             Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[] {
                     SteamVR_Actions.default_Grip,
                     SteamVR_Actions.default_ThrustUp,
@@ -390,8 +522,20 @@ namespace Valve.VR
                     SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.default_UIDpad,
                     SteamVR_Actions.default_SecondaryInteract,
+                    SteamVR_Actions.default_GripClick,
                     SteamVR_Actions.tools_DPad,
-                    SteamVR_Actions.tools_Use};
+                    SteamVR_Actions.tools_Use,
+                    SteamVR_Actions.tools_DPadUp,
+                    SteamVR_Actions.tools_DPadDown,
+                    SteamVR_Actions.tools_DPadLeft,
+                    SteamVR_Actions.tools_DPadRight,
+                    SteamVR_Actions.tools_Secondary,
+                    SteamVR_Actions.ship_tools_Use,
+                    SteamVR_Actions.ship_tools_Secondary,
+                    SteamVR_Actions.ship_tools_DPadUp,
+                    SteamVR_Actions.ship_tools_DPadDown,
+                    SteamVR_Actions.ship_tools_DPadLeft,
+                    SteamVR_Actions.ship_tools_DPadRight};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[] {
                     SteamVR_Actions.default_Haptic};
             Valve.VR.SteamVR_Input.actionsVibration = new Valve.VR.SteamVR_Action_Vibration[] {
@@ -417,7 +561,19 @@ namespace Valve.VR
                     SteamVR_Actions.default_UISubtabLeft,
                     SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.default_SecondaryInteract,
-                    SteamVR_Actions.tools_Use};
+                    SteamVR_Actions.default_GripClick,
+                    SteamVR_Actions.tools_Use,
+                    SteamVR_Actions.tools_DPadUp,
+                    SteamVR_Actions.tools_DPadDown,
+                    SteamVR_Actions.tools_DPadLeft,
+                    SteamVR_Actions.tools_DPadRight,
+                    SteamVR_Actions.tools_Secondary,
+                    SteamVR_Actions.ship_tools_Use,
+                    SteamVR_Actions.ship_tools_Secondary,
+                    SteamVR_Actions.ship_tools_DPadUp,
+                    SteamVR_Actions.ship_tools_DPadDown,
+                    SteamVR_Actions.ship_tools_DPadLeft,
+                    SteamVR_Actions.ship_tools_DPadRight};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[] {
                     SteamVR_Actions.default_ThrustUp,
                     SteamVR_Actions.default_ThrustDown,
@@ -457,8 +613,20 @@ namespace Valve.VR
                     SteamVR_Actions.default_UISubtabRight,
                     SteamVR_Actions.default_UIDpad,
                     SteamVR_Actions.default_SecondaryInteract,
+                    SteamVR_Actions.default_GripClick,
                     SteamVR_Actions.tools_DPad,
-                    SteamVR_Actions.tools_Use};
+                    SteamVR_Actions.tools_Use,
+                    SteamVR_Actions.tools_DPadUp,
+                    SteamVR_Actions.tools_DPadDown,
+                    SteamVR_Actions.tools_DPadLeft,
+                    SteamVR_Actions.tools_DPadRight,
+                    SteamVR_Actions.tools_Secondary,
+                    SteamVR_Actions.ship_tools_Use,
+                    SteamVR_Actions.ship_tools_Secondary,
+                    SteamVR_Actions.ship_tools_DPadUp,
+                    SteamVR_Actions.ship_tools_DPadDown,
+                    SteamVR_Actions.ship_tools_DPadLeft,
+                    SteamVR_Actions.ship_tools_DPadRight};
         }
         
         private static void PreInitActions()
@@ -491,9 +659,21 @@ namespace Valve.VR
             SteamVR_Actions.p_default_UISubtabRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UISubtabRight")));
             SteamVR_Actions.p_default_UIDpad = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/default/in/UIDpad")));
             SteamVR_Actions.p_default_SecondaryInteract = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SecondaryInteract")));
+            SteamVR_Actions.p_default_GripClick = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/GripClick")));
             SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
             SteamVR_Actions.p_tools_DPad = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/tools/in/DPad")));
             SteamVR_Actions.p_tools_Use = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/Use")));
+            SteamVR_Actions.p_tools_DPadUp = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/DPadUp")));
+            SteamVR_Actions.p_tools_DPadDown = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/DPadDown")));
+            SteamVR_Actions.p_tools_DPadLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/DPadLeft")));
+            SteamVR_Actions.p_tools_DPadRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/DPadRight")));
+            SteamVR_Actions.p_tools_Secondary = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/tools/in/Secondary")));
+            SteamVR_Actions.p_ship_tools_Use = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/ship_tools/in/Use")));
+            SteamVR_Actions.p_ship_tools_Secondary = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/ship_tools/in/Secondary")));
+            SteamVR_Actions.p_ship_tools_DPadUp = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/ship_tools/in/DPadUp")));
+            SteamVR_Actions.p_ship_tools_DPadDown = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/ship_tools/in/DPadDown")));
+            SteamVR_Actions.p_ship_tools_DPadLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/ship_tools/in/DPadLeft")));
+            SteamVR_Actions.p_ship_tools_DPadRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/ship_tools/in/DPadRight")));
         }
     }
 }

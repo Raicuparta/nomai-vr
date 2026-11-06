@@ -118,6 +118,11 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/GripClick",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -129,6 +134,61 @@
     {
       "name": "/actions/tools/in/Use",
       "type": "boolean"
+    },
+    {
+      "name": "/actions/tools/in/DPadUp",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/tools/in/DPadDown",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/tools/in/DPadLeft",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/tools/in/DPadRight",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/tools/in/Secondary",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/ship_tools/in/Use",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/ship_tools/in/Secondary",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/ship_tools/in/DPadUp",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/ship_tools/in/DPadDown",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/ship_tools/in/DPadLeft",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/ship_tools/in/DPadRight",
+      "type": "boolean",
+      "requirement": "optional"
     }
   ],
   "action_sets": [
@@ -138,6 +198,10 @@
     },
     {
       "name": "/actions/tools",
+      "usage": "single"
+    },
+    {
+      "name": "/actions/ship_tools",
       "usage": "single"
     }
   ],
@@ -157,6 +221,10 @@
     {
       "controller_type": "holographic_controller",
       "binding_url": "wmr-controller.json"
+    },
+    {
+      "controller_type": "frame_controller",
+      "binding_url": "frame_controller.json"
     }
   ],
   "localization": [
@@ -181,6 +249,12 @@
       "/actions/default/out/Haptic": "Haptic",
       "/actions/tools/in/DPad": "DPad (tools)",
       "/actions/tools/in/Use": "Use (tools)",
+      "/actions/tools/in/DPadUp": "DPad Up (tools)",
+      "/actions/tools/in/DPadDown": "DPad Down (tools)",
+      "/actions/tools/in/DPadLeft": "DPad Left (tools)",
+      "/actions/tools/in/DPadRight": "DPad Right (tools)",
+      "/actions/default/in/GripClick": "Grip Full Press (tool use)",
+      "/actions/tools/in/Secondary": "Secondary (tools)",
       "/actions/default/in/Autopilot": "Autopilot",
       "/actions/default/in/Recenter": "Recenter VR",
       "/actions/default/in/UISelect": "Select (UI)",
@@ -191,7 +265,13 @@
       "/actions/default/in/StationaryDpad": "Stationary Tool Dpad",
       "/actions/default/in/UITabLeft": "Tab Left (UI)",
       "/actions/default/in/UIDpad": "Dpad (UI)",
-      "/actions/default/in/SecondaryInteract": "Secondary Interact"
+      "/actions/default/in/SecondaryInteract": "Secondary Interact",
+      "/actions/ship_tools/in/Use": "Use (ship tools)",
+      "/actions/ship_tools/in/Secondary": "Secondary (ship tools)",
+      "/actions/ship_tools/in/DPadUp": "DPad Up (ship tools)",
+      "/actions/ship_tools/in/DPadDown": "DPad Down (ship tools)",
+      "/actions/ship_tools/in/DPadLeft": "DPad Left (ship tools)",
+      "/actions/ship_tools/in/DPadRight": "DPad Right (ship tools)"
     }
   ]
 }

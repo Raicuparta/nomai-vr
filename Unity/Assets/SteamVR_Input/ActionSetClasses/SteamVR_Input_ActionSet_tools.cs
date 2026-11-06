@@ -32,5 +32,45 @@ namespace Valve.VR
                 return SteamVR_Actions.tools_Use;
             }
         }
+        
+        public virtual SteamVR_Action_Boolean DPadUp
+        {
+            get
+            {
+                return SteamVR_Actions.tools_DPadUp;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DPadDown
+        {
+            get
+            {
+                return SteamVR_Actions.tools_DPadDown;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DPadLeft
+        {
+            get
+            {
+                return SteamVR_Actions.tools_DPadLeft;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DPadRight
+        {
+            get
+            {
+                return SteamVR_Actions.tools_DPadRight;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Secondary
+        {
+            get
+            {
+                return SteamVR_Actions.tools_Secondary;
+            }
+        }
     }
 }

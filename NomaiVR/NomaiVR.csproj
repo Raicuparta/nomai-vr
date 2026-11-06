@@ -98,7 +98,7 @@
     <EmbeddedResource Remove="Input\Bindings\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OuterWildsGameLibs" Version="1.1.13.393" />
+    <PackageReference Include="OuterWildsGameLibs" Version="1.1.16.1372" />
     <PackageReference Include="OWML" Version="2.1.0">
     </PackageReference>
   </ItemGroup>
@@ -125,7 +125,8 @@
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\SteamVR_Actions.dll&quot; &quot;$(OwmlDir)\$(ModDir)\SteamVR_Actions.dll&quot;" />
     <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\Managed\Valve.Newtonsoft.Json.dll&quot; &quot;$(OwmlDir)\$(ModDir)\Valve.Newtonsoft.Json.dll&quot;" />
     
-    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Build\OuterWildsVR_Data\StreamingAssets\SteamVR\*&quot; &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" />
+    <!-- Copied from the Unity sources, not Unity\Build, so binding changes don't need a Unity build. -->
+    <Exec Command="copy /y &quot;$(ProjectDir)\..\Unity\Assets\StreamingAssets\SteamVR\*.json&quot; &quot;$(OwmlDir)\$(ModDir)\bindings&quot;" />
 
     <Exec Command="copy /y &quot;$(ProjectDir)\Hands\Poses\*.json&quot; &quot;$(OwmlDir)\$(ModDir)\poses&quot;" />
 

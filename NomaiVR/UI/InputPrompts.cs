@@ -3,6 +3,7 @@ using NomaiVR.Assets;
 using NomaiVR.Helpers;
 using NomaiVR.Input;
 using NomaiVR.Input.ActionInputs;
+using NomaiVR.Tools;
 using UnityEngine;
 using Valve.VR;
 
@@ -16,27 +17,16 @@ namespace NomaiVR.UI
 
         private static PromptManager Manager => Locator.GetPromptManager();
 
-        public enum ActiveVRPlatform
-        {
-            Oculus, //G2 and oculus style controllers should be bound here
-            Index,
-            Vive,
-            Wmr,
-            Generic
-        }
-
         public class Behaviour : MonoBehaviour
         {
             private const string baseAssetPath = "Assets/VRBindings/Texture2D";
 
-            public ActiveVRPlatform Platform { get; private set; }
             private Dictionary<string, Texture2D> textureCache;
             private Dictionary<ISteamVR_Action, string> pathCache;
 
             public void Awake()
             {
                 Instance = this;
-                Platform = ActiveVRPlatform.Generic;
 
                 textureCache = new Dictionary<string, Texture2D>();
                 pathCache = new Dictionary<ISteamVR_Action, string>();
@@ -53,47 +43,43 @@ namespace NomaiVR.UI
             private void RegisterToControllerChanges()
             {
                 Logs.Write($"Registering for controller binding changes");
-                SteamVR_Actions._default.Grip.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => ActiveDeviceChanged(fromAction), SteamVR_Input_Sources.Any);
                 SteamVR_Actions.tools.Use.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => InvalidateButtonImages(), SteamVR_Input_Sources.Any);
-                ActiveDeviceChanged(SteamVR_Actions._default.Grip);
+
+                VRToolSwapper.ToolEquipped += InvalidateButtonImages;
+                VRToolSwapper.UnEquipped += InvalidateButtonImages;
+
+                RefreshWhenBindingChanges(
+                    SteamVR_Actions.tools.Secondary,
+                    SteamVR_Actions.tools.DPadUp,
+                    SteamVR_Actions.tools.DPadDown,
+                    SteamVR_Actions.tools.DPadLeft,
+                    SteamVR_Actions.tools.DPadRight,
+                    SteamVR_Actions.ship_tools.Use,
+                    SteamVR_Actions.ship_tools.Secondary,
+                    SteamVR_Actions.ship_tools.DPadUp,
+                    SteamVR_Actions.ship_tools.DPadDown,
+                    SteamVR_Actions.ship_tools.DPadLeft,
+                    SteamVR_Actions.ship_tools.DPadRight);
+
+                ControllerPlatform.Changed += OnPlatformChanged;
+                ControllerPlatform.Initialize();
             }
 
-            private void ActiveDeviceChanged(SteamVR_Action_Boolean fromAction)
+            private static void RefreshWhenBindingChanges(params SteamVR_Action_Boolean[] actions)
             {
-                var activeDevice = SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ControllerType_String, fromAction.trackedDeviceIndex);
-                Logs.Write($"#### Got active device: {activeDevice}");
-
-                var currentPlatform = Platform;
-                switch(activeDevice)
+                foreach (var action in actions)
                 {
-                    case "oculus_touch":
-                        Platform = ActiveVRPlatform.Oculus;
-                        break;
-                    case "vive_controller":
-                        Platform = ActiveVRPlatform.Vive;
-                        break;
-                    case "knuckles":
-                        Platform = ActiveVRPlatform.Index;
-                        break;
-                    case "holographic_controller":
-                        Platform = ActiveVRPlatform.Wmr;
-                        break;
-                    case "<unknown>":
-                        return;
-                    default:
-                        Platform = ActiveVRPlatform.Generic;
-                        break;
-                }
-
-                Logs.Write($"Controller platform: {Platform}");
-                if (currentPlatform != Platform)
-                {
-                    pathCache.Clear(); //Invalidate learned paths
-                    InvalidateButtonImages();
+                    action.AddOnActiveBindingChangeListener((fromAction, fromSource, active) => InvalidateButtonImages(), SteamVR_Input_Sources.Any);
                 }
             }
 
-            private static void InvalidateButtonImages()
+            private void OnPlatformChanged()
+            {
+                pathCache.Clear(); //Invalidate learned paths
+                InvalidateButtonImages();
+            }
+
+            internal static void InvalidateButtonImages()
             {
                 if (Manager == null) return;
                 Manager.OnButtonImagesChanged();
@@ -119,7 +105,8 @@ namespace NomaiVR.UI
                 {
                     Prefix<AbstractInputCommands<IVectorInputAction>>(nameof(AbstractInputCommands<IVectorInputAction>.GetUITextures), nameof(GetVruiTextures));
                     Prefix<AbstractInputCommands<IAxisInputAction>>(nameof(AbstractInputCommands<IAxisInputAction>.GetUITextures), nameof(GetVruiTextures));
-                    Prefix<CompositeInputCommands>(nameof(CompositeInputCommands.GetUITextures), nameof(GetVruiTextures));
+                    // CompositeInputCommands inherits GetUITextures, Harmony can only patch the declaring class.
+                    Prefix<AbstractCompositeInputCommands<IInputActionPair>>(nameof(AbstractCompositeInputCommands<IInputActionPair>.GetUITextures), nameof(GetVruiTextures));
                     Postfix<ScreenPromptElement>(nameof(ScreenPromptElement.BuildScreenPrompt), nameof(MakePromptsDrawOnTop));
                 }
 
@@ -188,7 +175,7 @@ namespace NomaiVR.UI
 
                     Logs.Write($"Texture for {__instance.CommandType} is '{name}', action is '{steamVrAction.GetShortName()}'");
                     
-                    var texture = Instance.GetTexture($"{baseAssetPath}/{Instance.Platform}/{name}");
+                    var texture = Instance.GetTexture($"{baseAssetPath}/{ControllerPlatform.Current}/{name}");
                     if(texture != null) __instance.textureList.Add(texture);
                     return __instance.textureList.Count == 0;
                 }

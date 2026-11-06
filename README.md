@@ -116,9 +116,12 @@ If all else fails, try completely deleting the game folder (not just uninstallin
 
 The mod tries its best to teach you how to play the game in VR, but it's not always easy with all the hacky stuff going on:
 
-- Your headset might not have any default bindings, in which case you'll have to make your own through SteamVR;
+- Default bindings are included for Index, Oculus Touch, Vive wands, WMR and Steam Frame controllers. Any other headset might not have default bindings, in which case you'll have to make your own through SteamVR;
+- Steam Frame controllers: make sure SteamVR is using the NomaiVR default binding for the Frame controller, not an emulated Oculus Touch binding. If controls feel scrambled, reset the bindings for Outer Wilds in SteamVR;
+- Steam Frame controllers: see [Steam Frame Controls](STEAM_FRAME_CONTROLS.md) for all buttons;
 - You can interact with most stuff by aiming with your dominant hand laser and pressing the interact button;
 - Always pay attention to the input prompts on your hand;
+- See [VR Gestures](VR_GESTURES.md) for the tool belt, the flashlight gesture and other motion controls;
 - Make sure you don't have the input prompts disabled in the game options when trying VR for the first time;
 - Left hand mode is currently in the game but you need to manually change the SteamVR bindings;
 - If something is very broken with the controls, go to SteamVR settings while the game is running, and reset the input bindings. Make sure you're using the default bindings and not some custom bindings (because a NomaiVR update can break your custom bindings).
@@ -178,6 +181,10 @@ NomaiVR is made by **[Raicuparta](https://github.com/Raicuparta)** and **[artumi
 - **No Chill** from the Flatscreen to VR Discord, for helping adapt some of the icons;
 - Everyone over at the **Outer Wilds Discord** server for all the support;
 - **Mobius Digital** for making a neat game.
+
+### Acknowledgements
+
+- **[Kenney](https://kenney.nl/assets/input-prompts)**, for the Steam Frame input prompt icons (Input Prompts 1.5, CC0);
 
 ## Development Setup
 
